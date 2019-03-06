@@ -1,0 +1,466 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1689347153331966}
+  m_IsPrefabAsset: 1
+--- !u!1 &1091405610256854
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4496613493298740}
+  - component: {fileID: 114378391190868652}
+  - component: {fileID: 114297255902072402}
+  - component: {fileID: 114905896545070152}
+  - component: {fileID: 114343152493701064}
+  m_Layer: 0
+  m_Name: SwipeMonitor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1689347153331966
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4117632031519028}
+  m_Layer: 0
+  m_Name: StoryControls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1951175313845048
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4756156563315984}
+  - component: {fileID: 114517594497901818}
+  - component: {fileID: 114243736716487604}
+  - component: {fileID: 114316043640217166}
+  - component: {fileID: 114099096648766678}
+  m_Layer: 0
+  m_Name: SequenceController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4117632031519028
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1689347153331966}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4496613493298740}
+  - {fileID: 4756156563315984}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4496613493298740
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1091405610256854}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4117632031519028}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4756156563315984
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1951175313845048}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4117632031519028}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114099096648766678
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1951175313845048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114517594497901818}
+        m_MethodName: RefreshPauseMomentumSwitches
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &114243736716487604
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1951175313845048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 3d2e067a9dde54b3b904b558a9a88c3b, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114517594497901818}
+        m_MethodName: UpdateSequenceWithSwipe
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &114297255902072402
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1091405610256854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8c8100645ce3444a84b9f5e0164ad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  receivers:
+  - enable: 1
+    triggerType: 0
+    name: On_SwipeStart
+    restricted: 0
+    gameObject: {fileID: 0}
+    otherReceiver: 0
+    gameObjectReceiver: {fileID: 0}
+    eventName: 12
+    methodName: OnSwipeStart
+    parameter: 1
+  - enable: 1
+    triggerType: 0
+    name: On_Swipe
+    restricted: 0
+    gameObject: {fileID: 0}
+    otherReceiver: 0
+    gameObjectReceiver: {fileID: 0}
+    eventName: 13
+    methodName: OnSwipe
+    parameter: 1
+  - enable: 1
+    triggerType: 0
+    name: On_SwipeEnd
+    restricted: 0
+    gameObject: {fileID: 0}
+    otherReceiver: 0
+    gameObjectReceiver: {fileID: 0}
+    eventName: 14
+    methodName: OnSwipeEnd
+    parameter: 1
+  - enable: 1
+    triggerType: 0
+    name: On_TouchDown
+    restricted: 0
+    gameObject: {fileID: 0}
+    otherReceiver: 0
+    gameObjectReceiver: {fileID: 0}
+    eventName: 2
+    methodName: OnTouchDown
+    parameter: 1
+  - enable: 1
+    triggerType: 0
+    name: On_TouchStart
+    restricted: 0
+    gameObject: {fileID: 0}
+    otherReceiver: 0
+    gameObjectReceiver: {fileID: 0}
+    eventName: 1
+    methodName: OnTouchStart
+    parameter: 1
+--- !u!114 &114316043640217166
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1951175313845048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: a2e4c5a50b2c44620a2c0a046f85ab80, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114517594497901818}
+        m_MethodName: UpdateSequenceWithMomentum
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &114343152493701064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1091405610256854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
+  DeveloperDescription: This event requires that the string dictionary values 'fromAxis'
+    and 'toAxis' be passed in an EventPayload instance.
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114378391190868652}
+        m_MethodName: UpdateMomentum
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &114378391190868652
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1091405610256854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c988e76ee47474488013b330da6b32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invertYAxis:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 307bf3fe2474043068fdd4e250f6a84a, type: 2}
+  invertXAxis:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 3e188ea664ddc4003896aefdb9d1fa5f, type: 2}
+  OnTouchStartEvent: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
+  OnLongTouchEvent: {fileID: 11400000, guid: 70b79ca86b9cd48488582825731bcfac, type: 2}
+  OnSwipeEvent: {fileID: 11400000, guid: 3d2e067a9dde54b3b904b558a9a88c3b, type: 2}
+  OnSwipeEndEvent: {fileID: 11400000, guid: bf5075b16b1fc4eddae6ca56d96655e7, type: 2}
+  touchStartPosition:
+    UseConstant: 0
+    ConstantValue: {x: 0, y: 0}
+    Variable: {fileID: 11400000, guid: dc959727c41f448e7862a16e427efe24, type: 2}
+  isFlicked:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 02c56e2aa3ca74ea197b12137c1130e1, type: 2}
+  swipeForce:
+    UseConstant: 0
+    ConstantValue: {x: 0, y: 0, z: 0}
+    Variable: {fileID: 11400000, guid: 83dca11092e3c42a3ac39cf5ea347c2f, type: 2}
+  swipeMinMax:
+    UseConstant: 0
+    ConstantValue: 120
+    Variable: {fileID: 11400000, guid: 8e6d661900bf54fe7895de6c6dfdb2d6, type: 2}
+  xSensitivity:
+    UseConstant: 0
+    ConstantValue: 0.0015
+    Variable: {fileID: 11400000, guid: 53fdf26dbeb8e41b9ad89e195014e0fb, type: 2}
+  ySensitivity:
+    UseConstant: 0
+    ConstantValue: 0.0015
+    Variable: {fileID: 11400000, guid: 70b26216ecfb74cba8dd466f31c042dc, type: 2}
+  zSensitivity:
+    UseConstant: 0
+    ConstantValue: 0.0015
+    Variable: {fileID: 11400000, guid: e01951c8e27824a7aa7a3c16b075d908, type: 2}
+  flickThreshold:
+    UseConstant: 0
+    ConstantValue: 1000
+    Variable: {fileID: 11400000, guid: d73a83a0d85e04ca0bbc17e3d696ce42, type: 2}
+  MomentumUpdate: {fileID: 11400000, guid: a2e4c5a50b2c44620a2c0a046f85ab80, type: 2}
+  MomentumDepleted: {fileID: 11400000, guid: 327c2d62b621b46d491fb9265f17f6ed, type: 2}
+  xMomentumAxis: {fileID: 11400000, guid: f88bf119e8f2c4cf3877691a94127d64, type: 2}
+  yMomentumAxis: {fileID: 11400000, guid: f42a426f4dfb54a94938a16ec1f3c2e3, type: 2}
+  zMomentumAxis: {fileID: 11400000, guid: 0ff6d39eb4be84e459d1db349ebb85bb, type: 2}
+  momentumForce:
+    UseConstant: 0
+    ConstantValue: {x: 0, y: 0, z: 0}
+    Variable: {fileID: 11400000, guid: f622ace9e18b44dddaacabde456d3ef4, type: 2}
+  momentumCache:
+    UseConstant: 0
+    ConstantValue: {x: 0, y: 0, z: 0}
+    Variable: {fileID: 11400000, guid: 1113c0f29734b4d6e870dcbd907d743e, type: 2}
+  momentumMinMax:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 2306cb87b509e4704b699b6f2b21f96c, type: 2}
+  momentumDecay:
+    UseConstant: 0
+    ConstantValue: 0.935
+    Variable: {fileID: 11400000, guid: 4c80310b758254a649b9ade806f99505, type: 2}
+  momentumSensitivity:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: d7155d7d1803b4611ad9443a3a5ffdd7, type: 2}
+  gestureTimeMultiplier:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 3dff8691452404594a8a9276cef79eab, type: 2}
+  cancelMomentumTimeThreshold:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: b47b3254c91bc48179b20cfa1466da09, type: 2}
+  cancelMomentumMagnitudeThreshold:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: d8b8478dca810401b9f9e0d5e8207c52, type: 2}
+  pauseMomentumThreshold:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 452a77e0dd49e4619a28eaebfaf142cb, type: 2}
+  UpdateVarsDebug: {fileID: 11400000, guid: b5db0bb6ad9014cf9ba584a557323906, type: 2}
+  swipeMagnitudeDebug:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: aabf1f51618234aef9ba887ecc9dfaac, type: 2}
+  swipeVectorDebug:
+    UseConstant: 0
+    ConstantValue: {x: 0, y: 0}
+    Variable: {fileID: 11400000, guid: bd322c97c060a4439bf06aa5c7de9159, type: 2}
+  swipeDeltaDebug:
+    UseConstant: 0
+    ConstantValue: {x: 0, y: 0}
+    Variable: {fileID: 11400000, guid: f65eec6165aab4984824456ef9811845, type: 2}
+  gestureActionTimeDebug:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 89226eeb653f84f74be0ec46f6d55269, type: 2}
+--- !u!114 &114517594497901818
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1951175313845048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47978c90b8202407a9d5991ec1134586, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SequenceModified: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
+  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  sequenceList: {fileID: 0}
+  isReversing:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
+  MomentumApplied: {fileID: 11400000, guid: 5d2e39e0dde6d4a07a757b7c25df22fb, type: 2}
+  swipeModifier:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: d8f4b6364c76d41bbac908431ff942bc, type: 2}
+  momentumModifier:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 85f0b43954f014116ac2bc831ac930a4, type: 2}
+  xSwipeAxis: {fileID: 11400000, guid: 78821859800bc4f338b0683018b859c0, type: 2}
+  ySwipeAxis: {fileID: 11400000, guid: 04fddbb3e8a0245bbaf7eb7ac8c54c1a, type: 2}
+  zSwipeAxis: {fileID: 11400000, guid: f545d3f97388040cebfc721fb6b4ff3a, type: 2}
+  transitionAxis: {fileID: 11400000, guid: 70664f08f97744f2bb2fb6f42fbd31d7, type: 2}
+  swipeForce:
+    UseConstant: 0
+    ConstantValue: {x: 0, y: 0, z: 0}
+    Variable: {fileID: 11400000, guid: 83dca11092e3c42a3ac39cf5ea347c2f, type: 2}
+  xMomentumAxis: {fileID: 11400000, guid: f88bf119e8f2c4cf3877691a94127d64, type: 2}
+  yMomentumAxis: {fileID: 11400000, guid: f42a426f4dfb54a94938a16ec1f3c2e3, type: 2}
+  zMomentumAxis: {fileID: 11400000, guid: 0ff6d39eb4be84e459d1db349ebb85bb, type: 2}
+  momentumForce:
+    UseConstant: 0
+    ConstantValue: {x: 0, y: 0, z: 0}
+    Variable: {fileID: 11400000, guid: f622ace9e18b44dddaacabde456d3ef4, type: 2}
+--- !u!114 &114905896545070152
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1091405610256854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114378391190868652}
+        m_MethodName: HaltMomentum
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
