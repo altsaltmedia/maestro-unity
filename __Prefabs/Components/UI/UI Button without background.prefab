@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1426887980614266184}
   - component: {fileID: 56566903457406500}
   m_Layer: 0
-  m_Name: UIButton without Background
+  m_Name: UI Button without background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1332,11 +1332,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 3
   m_hasFontAssetChanged: 0
   m_subTextObjects:
