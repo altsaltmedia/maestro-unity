@@ -82,8 +82,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -509570611
-  m_SortingLayer: 0
+  m_SortingLayerID: 837239871
+  m_SortingLayer: 1
   m_SortingOrder: 0
 --- !u!222 &222410283548027054
 CanvasRenderer:
