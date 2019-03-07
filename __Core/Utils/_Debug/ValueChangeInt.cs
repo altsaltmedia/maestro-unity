@@ -10,11 +10,13 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using UnityEngine;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
 
 namespace AltSalt {
     
     public class ValueChangeInt : ValueChange {
-    
+
+        [ValidateInput("IsPopulated")]
         public IntReference intValue = new IntReference();
 
         protected override void InitValue()
@@ -28,6 +30,11 @@ namespace AltSalt {
         {
             intValue.Variable.SetValue((int)newValue);
             updateVariables.Raise();
+        }
+
+        private static bool IsPopulated(IntReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
         }
 
     }

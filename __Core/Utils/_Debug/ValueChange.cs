@@ -10,12 +10,15 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using UnityEngine;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
 
 namespace AltSalt {
     
 	public class ValueChange : MonoBehaviour {
 
         protected Slider slider;
+
+        [Required]
         public SimpleEvent updateVariables;
 
         protected virtual void Start()

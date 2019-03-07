@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
@@ -11,6 +12,7 @@ namespace AltSalt
 
         // TO DO - abstract this so that it can update both float and text values if needed
         // ALSO... figure out how this script works in conjunction with localization
+        [ValidateInput("IsPopulated")]
         public V2Reference vectorValue = new V2Reference();
 
         // Fade variables
@@ -38,6 +40,11 @@ namespace AltSalt
         void StoreTextRenderer()
         {
             textRenderer = gameObject.GetComponent<TextMeshProUGUI>();
+        }
+
+        private static bool IsPopulated(V2Reference attribute)
+        {
+            return Utils.IsPopulated(attribute);
         }
 
     }
