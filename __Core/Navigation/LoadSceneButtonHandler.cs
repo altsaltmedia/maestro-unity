@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
-    public class TestLoadSceneButtonHandler : MonoBehaviour
+    public class LoadSceneButtonHandler : MonoBehaviour
     {
         [Required]
         [SerializeField]
