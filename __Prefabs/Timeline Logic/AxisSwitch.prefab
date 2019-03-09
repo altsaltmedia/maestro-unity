@@ -45,6 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentClip: {fileID: 0}
+  lockAxis:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: ebada9b8eb2ed4779a59ef713f4e14cf, type: 2}
   axisInflectionPoint:
     UseConstant: 0
     ConstantValue: 0

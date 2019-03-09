@@ -22,6 +22,9 @@ namespace AltSalt
         public Sequence parentClip;
 
         [ValidateInput("IsPopulated")]
+        public BoolReference lockAxis;
+
+        [ValidateInput("IsPopulated")]
         [PropertyOrder(1)]
         public FloatReference axisInflectionPoint = new FloatReference();
 
@@ -78,6 +81,9 @@ namespace AltSalt
 
 
 		public virtual void UpdateActiveAxes () {
+            if(lockAxis.Value == true) {
+                return;
+            }
             
             // Update swipe axes
 

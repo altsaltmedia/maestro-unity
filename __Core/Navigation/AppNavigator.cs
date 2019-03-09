@@ -33,6 +33,10 @@ namespace AltSalt
         [Required]
         SimpleEvent sceneLoadCompleted;
 
+        [SerializeField]
+        [Required]
+        SimpleEvent timescaleChanged;
+
         [Required]
         public LocalizationManager m_localizationManager;
 
@@ -88,20 +92,24 @@ namespace AltSalt
             StartCoroutine(AsyncUnload(unloadSceneName));
         }
 
-            IEnumerator AsyncUnload(string xSceneName)
-            {
-                AsyncOperation asyncLoad = SceneManager.UnloadSceneAsync(xSceneName);
-                while (!asyncLoad.isDone) {
-                    yield return null;
-                }
+        IEnumerator AsyncUnload(string xSceneName)
+        {
+            AsyncOperation asyncLoad = SceneManager.UnloadSceneAsync(xSceneName);
+            while (!asyncLoad.isDone) {
+                yield return null;
             }
-
+        }
 
         public void FadeOutOverlay(string parameter) {
             Debug.Log (parameter);
             UIManager.HideUiElement ("Fader", "Utils");
         }
-        
+
+        public void UpdateTimescale()
+        {
+            Time.timeScale = appSettings.timescale;
+        }
+
         private static bool IsPopulated(StringReference attribute)
         {
             return Utils.IsPopulated(attribute);

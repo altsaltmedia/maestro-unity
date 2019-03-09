@@ -22,9 +22,20 @@ namespace AltSalt
         public BoolReference pauseMomentum;
 
         [ValidateInput("IsPopulated")]
+        public BoolReference lockAxis;
+
+        [ValidateInput("IsPopulated")]
+        public FloatReference timescale;
+
+        [ValidateInput("IsPopulated")]
         public BoolReference editorDebugEventsActive;
 
         private static bool IsPopulated(BoolReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+
+        private static bool IsPopulated(FloatReference attribute)
         {
             return Utils.IsPopulated(attribute);
         }
