@@ -144,7 +144,7 @@ namespace AltSalt {
 
         void SetDuration()
         {
-            if (durationMultiplier.Equals(0)) {
+            if (targetDuration.Equals(0)) {
                 Debug.LogWarning("Multiplying clips by 0! This is not allowed");
                 return;
             }
