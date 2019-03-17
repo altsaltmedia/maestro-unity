@@ -15,20 +15,6 @@ namespace AltSalt
 
         MeshRenderer meshRenderer;
 
-        [Required]
-        [SerializeField]
-        SimpleEvent bufferSequenceCompleted;
-
-        [ValidateInput("IsPopulated")]
-        [SerializeField]
-        IntReference bufferStepInterval;
-
-        [ValidateInput("IsPopulated")]
-        [SerializeField]
-        BoolReference bufferPlayback;
-
-        public bool renderVideo = true;
-
         void Start()
         {
             GetVideoPlayer();
@@ -62,40 +48,7 @@ namespace AltSalt
 
         void TriggerUpdateMaterial(VideoPlayer param, long frameId)
         {
-            if (bufferPlayback.Value == true) {
-                StartCoroutine(UpdateMaterial());
-            } else {
-                if(renderVideo == true) {
-                    meshRenderer.sharedMaterial.mainTexture = videoPlayer.texture;
-                } else {
-                    meshRenderer.sharedMaterial.mainTexture = null;
-                }
-            } 
-        }
-
-        IEnumerator UpdateMaterial() {
-            int bufferCount = 0;
-            Texture texture = videoPlayer.texture;
-            while(bufferCount < bufferStepInterval) {
-                bufferCount++;
-                yield return new WaitForEndOfFrame();
-            }
-            meshRenderer.sharedMaterial.mainTexture = texture;
-        }
-
-        public void BufferVideo()
-        {
-            GetVideoPlayer();
-            videoPlayer.Prepare();
-            videoPlayer.StepForward();
-            videoPlayer.loopPointReached += BufferComplete;
-            videoPlayer.Play();
-        }
-
-        void BufferComplete(VideoPlayer param)
-        {
-            videoPlayer.time = initialTime;
-            bufferSequenceCompleted.Raise();
+            meshRenderer.sharedMaterial.mainTexture = videoPlayer.texture;
         }
 
 #if UNITY_EDITOR

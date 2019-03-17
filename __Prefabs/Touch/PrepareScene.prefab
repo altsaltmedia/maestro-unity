@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4564131476115764}
   - component: {fileID: 114161003571339804}
-  - component: {fileID: 114238744168132730}
   m_Layer: 0
   m_Name: PrepareScene
   m_TagString: Untagged
@@ -79,32 +78,3 @@ MonoBehaviour:
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 9932254243221466bbcd3a046b5454b2, type: 2}
   fadeInTriggered: {fileID: 11400000, guid: dfee30ca42be848fab35ac15ceabe65d, type: 2}
---- !u!114 &114238744168132730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1275555561539938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: e272e4de87f5f4c4eb6f590f9c104553, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114161003571339804}
-        m_MethodName: BufferSequenceCallback
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null

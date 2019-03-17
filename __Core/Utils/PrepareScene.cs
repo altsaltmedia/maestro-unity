@@ -48,17 +48,6 @@ namespace AltSalt {
         int totalSequenceCount = 1;
 
         [SerializeField]
-        [ShowIf("bufferScene")]
-        [Required]
-        SimpleEvent bufferSceneTriggered;
-
-        // Not currently in use, but will need this for bookmarking
-        [SerializeField]
-        [ShowIf("bufferScene")]
-        [Required]
-        SimpleEvent bufferSceneCompleted;
-
-        [SerializeField]
         [Required]
         SimpleEvent prepareSceneCompleted;
 
@@ -104,11 +93,7 @@ namespace AltSalt {
                 fadeInTriggered.Raise();
             }
 
-            if (bufferScene == true) {
-                bufferSceneTriggered.Raise();
-            } else {
-                prepareSceneCompleted.Raise();
-            }
+            prepareSceneCompleted.Raise();
 		}
 
         void TriggerResetSequences()
@@ -120,18 +105,6 @@ namespace AltSalt {
 
             for (int i = 0; i < sequenceList.sequences.Count; i++) {
                 sequenceList.sequences[i].currentTime = 0;
-            }
-        }
-		
-        public void BufferSequenceCallback()
-        {
-            sequencesBuffered++;
-            if(sequencesBuffered > totalSequenceCount) {
-                Debug.LogWarning("More sequences buffered than total count specified. Check " + this.name + ".", this);
-            }
-            if(sequencesBuffered == totalSequenceCount) {
-                bufferSceneCompleted.Raise(); // Not currently in use, but will use this for bookmarking
-                prepareSceneCompleted.Raise();
             }
         }
 

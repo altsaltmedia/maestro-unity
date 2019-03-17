@@ -31,10 +31,6 @@ namespace AltSalt
             [SerializeField]
             public MeshRenderer vpRenderer;
 
-            [ReadOnly]
-            [SerializeField]
-            public MeshRendererSorter meshRendererSorter;
-
             [SerializeField]
             public bool isHidden;
 
@@ -49,9 +45,6 @@ namespace AltSalt
                 if (vpRenderer == null) {
                     vpRenderer = videoObject.GetComponent<MeshRenderer>();
                 }
-                if (meshRendererSorter == null) {
-                    meshRendererSorter = videoObject.GetComponent<MeshRendererSorter>();
-                }
             }
         }
 
@@ -65,22 +58,8 @@ namespace AltSalt
         public VideoPlayerItem reverseVideoInstance;
 
         [SerializeField]
-        [Required]
-        SimpleEvent videoSortingUpdate;
-#endif
-        [SerializeField]
         [ValidateInput("IsPopulated")]
         BoolReference isReversing;
-
-#if UNITY_ANDROID
-        [SerializeField]
-        [OnValueChanged("UpdateHiddenSortingOrder")]
-        int targetSortingOrder;
-
-
-        [SerializeField]
-        [ReadOnly]
-        int hiddenSortingOrder;
 
         bool internalIsReversingValue = false;
         bool mainVideoSwapLoaded = false;
@@ -98,11 +77,13 @@ namespace AltSalt
 #endif
         }
 
-#if UNITY_ANDROID
+#if UNITY_EDITOR
         void Update()
         {
             mainVideoInstance.GetComponents();
+#if UNITY_ANDROID
             reverseVideoInstance.GetComponents();
+#endif
         }
 #endif
 
@@ -131,16 +112,10 @@ namespace AltSalt
 
                 if (isReversing.Value == false) {
                 
-                    //mainVideoInstance.meshRendererSorter.sortingOrder = targetSortingOrder;
-                    //reverseVideoInstance.meshRendererSorter.sortingOrder = hiddenSortingOrder;
-
                     mainVideoSwapLoaded = true;
                 
                 } else {
                 
-                    //mainVideoInstance.meshRendererSorter.sortingOrder = hiddenSortingOrder;
-                    //reverseVideoInstance.meshRendererSorter.sortingOrder = targetSortingOrder;
-
                     reverseVideoSwapLoaded = true;
                 }
 
@@ -164,10 +139,6 @@ namespace AltSalt
 
                 mainVideoInstance.isHidden = false;
                 reverseVideoInstance.isHidden = true;
-                //videoSortingUpdate.Raise();
-                //mainVideoInstance.VPScript.renderVideo = true;
-                //reverseVideoInstance.VPScript.renderVideo = false;
-                //mainVideoSwapLoaded = false;
             }
         }
 
@@ -177,16 +148,7 @@ namespace AltSalt
 
                 mainVideoInstance.isHidden = true;
                 reverseVideoInstance.isHidden = false;
-                //videoSortingUpdate.Raise();
-                //mainVideoInstance.VPScript.renderVideo = false;
-                //reverseVideoInstance.VPScript.renderVideo = true;
-                //reverseVideoSwapLoaded = false;
             }
-        }
-
-        void UpdateHiddenSortingOrder()
-        {
-            hiddenSortingOrder = targetSortingOrder - 1;
         }
 #endif
 

@@ -31,7 +31,9 @@ namespace AltSalt
         void Start()
         {
             easingFunction = EasingFunction.GetEasingFunction(ease);
+#if UNITY_ANDROID
             internalIsReversingVal = isReversing.Value;
+#endif
         }
 
         protected virtual void Update()
