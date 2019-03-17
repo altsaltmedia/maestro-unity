@@ -29,13 +29,15 @@ namespace AltSalt
         {
             SetSortingOrder();
         }
-        
+
+#if UNITY_EDITOR
         void OnGUI()
         {
             SetSortingOrder();
         }
+#endif
 
-        void SetSortingOrder()
+        public void SetSortingOrder()
         {
             meshRenderer.sortingOrder = sortingOrder;
             if(sortingLayer.Length > 0) {

@@ -7,7 +7,7 @@ namespace AltSalt
 {
     [TrackColor(0.245149f, 0.595372f, 0.1679245f)]
     [TrackClipType(typeof(LerpVideoPlayerTimeClip))]
-    [TrackBindingType(typeof(VideoPlayer))]
+    [TrackBindingType(typeof(PlayableVideoPlayerController))]
     public class LerpVideoPlayerTimeTrack : LerpToTargetTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
@@ -28,7 +28,7 @@ namespace AltSalt
             while (iter.NextVisible(true)) {
                 if (iter.hasVisibleChildren)
                     continue;
-                driver.AddFromName<VideoPlayer>(comp.gameObject, iter.propertyPath);
+                driver.AddFromName<PlayableVideoPlayerController>(comp.gameObject, iter.propertyPath);
             }
 #endif
 

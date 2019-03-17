@@ -6,7 +6,7 @@ namespace AltSalt
 {    
     public class LerpVideoPlayerTimeMixerBehaviour : LerpToTargetMixerBehaviour
     {
-        VideoPlayer trackBinding;
+        PlayableVideoPlayerController trackBinding;
         ScriptPlayable<LerpVideoPlayerTimeBehaviour> inputPlayable;
         LerpVideoPlayerTimeBehaviour input;
 
@@ -14,20 +14,16 @@ namespace AltSalt
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            trackBinding = playerData as VideoPlayer;
+            trackBinding = playerData as PlayableVideoPlayerController;
             
             if (!trackBinding)
                 return;
 
-            if (!trackBinding.isPrepared) {
-                trackBinding.Prepare();
-            }
-
-            if(!initialized) {
-                trackBinding.StepForward();
+            if(initialized == false) {
+                trackBinding.PrepareVideos();
                 initialized = true;
             }
-            
+
             inputCount = playable.GetInputCount ();
             
             for (int i = 0; i < inputCount; i++)
@@ -38,19 +34,19 @@ namespace AltSalt
 
                 if (inputWeight >= 1f) {
                     modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
-                    trackBinding.time = (double)Mathf.Lerp(input.initialTime, input.targetTime, input.easingFunction(0f, 1f, modifier));
+                    trackBinding.SetTime((double)Mathf.Lerp(input.initialTime, input.targetTime, input.easingFunction(0f, 1f, modifier)));
                 } else {
                     if (currentTime >= input.endTime) {
-                        trackBinding.time = input.targetTime;
+                        trackBinding.SetTime(input.targetTime);
                     }
                     else if (i == 0 && currentTime <= input.startTime) {
-                        trackBinding.time = input.initialTime;
+                        trackBinding.SetTime(input.initialTime);
                     }
                 }
 
 #if UNITY_EDITOR
                 if (input.debugCurrentTime == true) {
-                    Debug.Log("Current time: " + trackBinding.time.ToString("F4"));
+                    trackBinding.LogTime();
                 }
 #endif
             }

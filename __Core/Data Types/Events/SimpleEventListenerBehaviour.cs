@@ -31,9 +31,14 @@ namespace AltSalt
             Response.Invoke();
         }
 
+        public GameObject GetGameObject()
+        {
+            return gameObject;
+        }
+
         public void LogName(string callingInfo)
         {
-            Debug.Log(callingInfo + name, gameObject);
+            Debug.Log(callingInfo + gameObject, gameObject);
         }
 
         private static bool IsPopulated(UnityEvent attribute)

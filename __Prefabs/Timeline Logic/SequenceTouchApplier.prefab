@@ -53,6 +53,8 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
+  triggerSpinnerShow: {fileID: 11400000, guid: 0b8292f66ecb34b8fa9c17637a06c468, type: 2}
+  triggerSpinnerHide: {fileID: 11400000, guid: 98ca9687c33fe4a69983e6cded0a3598, type: 2}
   MomentumApplied: {fileID: 11400000, guid: 5d2e39e0dde6d4a07a757b7c25df22fb, type: 2}
   swipeModifier:
     UseConstant: 0
@@ -77,6 +79,8 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: {x: 0, y: 0, z: 0}
     Variable: {fileID: 11400000, guid: f622ace9e18b44dddaacabde456d3ef4, type: 2}
+  pauseSequenceComplete: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c,
+    type: 2}
 --- !u!114 &114834371844494940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,7 +156,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114975682343234766}
-        m_MethodName: RefreshPauseMomentumSwitches
+        m_MethodName: RefreshSequenceAttributes
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

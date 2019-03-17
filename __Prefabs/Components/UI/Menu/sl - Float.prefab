@@ -84,7 +84,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8893794466363743699}
   m_Layer: 5
-  m_Name: Float Slider
+  m_Name: sl - Float
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -325,7 +325,7 @@ MonoBehaviour:
   floatValue:
     UseConstant: 0
     ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 70b26216ecfb74cba8dd466f31c042dc, type: 2}
+    Variable: {fileID: 0}
 --- !u!114 &8893794466585951549
 MonoBehaviour:
   m_ObjectHideFlags: 0

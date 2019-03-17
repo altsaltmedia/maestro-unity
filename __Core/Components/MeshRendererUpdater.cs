@@ -6,86 +6,33 @@ using Sirenix.OdinInspector;
 namespace AltSalt
 {
 
-    public enum MaterialAttributeType { Color, Float }
-
-    [Serializable]
-    public class TargetMaterialAttribute
-    {
-        public string targetAttributeName;
-
-        [ValueDropdown("materialTypeValues")]
-        public MaterialAttributeType materialType;
-
-        [ValidateInput("IsPopulated")]
-        ValueDropdownList<MaterialAttributeType> materialTypeValues = new ValueDropdownList<MaterialAttributeType>(){
-            {"Color", MaterialAttributeType.Color },
-            {"Float", MaterialAttributeType.Float }
-        };
-
-        [EnableIf("materialType", MaterialAttributeType.Color)]
-        [ValidateInput("IsPopulated")]
-        public ColorReference _Color;
-
-        [EnableIf("materialType", MaterialAttributeType.Float)]
-        [ValidateInput("IsPopulated")]
-        public FloatReference _Float;
-
-        private bool IsPopulated(ColorReference attribute) {
-            if(materialType == MaterialAttributeType.Color) {
-                if (attribute.UseConstant == true) {
-                    return true;
-                }
-                else {
-                    return attribute.Variable == null ? false : true;
-                }
-            } else {
-                return true;
-            }
-        }
-
-        private bool IsPopulated(FloatReference attribute)
-        {
-            if (materialType == MaterialAttributeType.Float) {
-                if (attribute.UseConstant == true) {
-                    return true;
-                }
-                else {
-                    return attribute.Variable == null ? false : true;
-                }
-            }
-            else {
-                return true;
-            }
-        }
-
-    }
-
 #if UNITY_EDITOR
     [ExecuteInEditMode]
 #endif
     public class MeshRendererUpdater : MonoBehaviour
     {
-        MeshRenderer meshRenderer;
-
-        Material materialInstance;
+        [SerializeField]
+        protected List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
 
         [SerializeField]
-        List<TargetMaterialAttribute> targetMaterialAttributes = new List<TargetMaterialAttribute>();
+        [ReadOnly]
+        protected List<Material> materialInstances =  new List<Material>();
 
-        void Awake()
+        [SerializeField]
+        protected List<TargetMaterialAttribute> targetMaterialAttributes = new List<TargetMaterialAttribute>();
+
+        protected void Start()
         {
-            RefreshRenderer();
+            StoreRenderer();
+            CreateMaterials();
         }
 
-        void Start()
-        {
-            RefreshRenderer();
-        }
-
+#if UNITY_EDITOR
         void OnGUI()
         {
             RefreshRenderer();
         }
+#endif
 
         void Update()
         {
@@ -94,34 +41,53 @@ namespace AltSalt
 
         void RefreshRenderer()
         {
-            StoreRenderer();
+            if(meshRenderers.Count < 1) {
+                return;
+            }
             for (int i = 0; i < targetMaterialAttributes.Count; i++) {
                 if (targetMaterialAttributes[i].materialType == MaterialAttributeType.Color) {
-                    materialInstance.SetColor(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i]._Color.Value);
+                    for (int q = 0; q < materialInstances.Count; q++){
+                        materialInstances[q].SetColor(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i]._Color.Value);
+                    }
                 }
                 else if (targetMaterialAttributes[i].materialType == MaterialAttributeType.Float) {
-                    materialInstance.SetFloat(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i]._Float.Value);
+                    for (int q = 0; q < materialInstances.Count; q++) {
+                        materialInstances[q].SetFloat(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i]._Float.Value);
+                    }
                 }
             }
         }
 
-        void StoreRenderer()
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
+        [InfoBox("Gets the current game object's mesh renderer, then creates and assigns a duplicate material.")]
+        [SerializeField]
+        protected void StoreRenderer()
         {
-            if (meshRenderer == null) {
-                meshRenderer = GetComponent<MeshRenderer>();
-            }
-
-            if (materialInstance == null) {
-                materialInstance = new Material(meshRenderer.sharedMaterial);
-                meshRenderer.sharedMaterial = materialInstance;
+            if (GetComponent<MeshRenderer>() != null) {
+                meshRenderers[0] = GetComponent<MeshRenderer>();
             }
         }
 
-        void Reset()
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
+        [InfoBox("Creates and assigns duplicate materials based on assigned mesh renderers.")]
+        [SerializeField]
+        void CreateMaterials()
         {
-            meshRenderer = GetComponent<MeshRenderer>();
-            materialInstance = new Material(meshRenderer.sharedMaterial);
-            meshRenderer.sharedMaterial = materialInstance;
+            for (int q = 0; q < meshRenderers.Count; q++) {
+                while (materialInstances.Count < meshRenderers.Count) {
+                    materialInstances.Add(null);
+                }
+                materialInstances[q] = new Material(meshRenderers[q].sharedMaterial);
+                meshRenderers[q].sharedMaterial = materialInstances[q];
+            }
+        }
+
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
+        [InfoBox("Reset and remove materials.")]
+        [SerializeField]
+        void RemoveMaterials()
+        {
+            materialInstances.Clear();
         }
 
         private static bool IsPopulated(ColorReference attribute)

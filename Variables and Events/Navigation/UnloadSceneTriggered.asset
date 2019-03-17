@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: UnloadSceneTriggered
   m_EditorClassIdentifier: 
   DeveloperDescription: 
-  LogListenersOnRegister: 1
-  LogListenersOnRaise: 1
+  LogListenersOnRegister: 0
+  LogListenersOnRaise: 0

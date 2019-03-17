@@ -19,6 +19,18 @@ namespace AltSalt
         [ValidateInput("IsPopulated")]
         public BoolReference isReversing;
 
+#if UNITY_ANDROID
+        [SerializeField]
+        [Required]
+        protected SimpleEvent triggerSpinnerShow;
+
+        [SerializeField]
+        [Required]
+        protected SimpleEvent triggerSpinnerHide;
+
+        protected bool internalIsReversingVal = false;
+#endif
+
         protected static bool IsPopulated(BoolReference attribute)
         {
             return Utils.IsPopulated(attribute);

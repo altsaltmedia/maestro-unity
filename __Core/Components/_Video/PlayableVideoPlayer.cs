@@ -27,6 +27,8 @@ namespace AltSalt
         [SerializeField]
         BoolReference bufferPlayback;
 
+        public bool renderVideo = true;
+
         void Start()
         {
             GetVideoPlayer();
@@ -60,10 +62,14 @@ namespace AltSalt
 
         void TriggerUpdateMaterial(VideoPlayer param, long frameId)
         {
-            if(bufferPlayback.Value == true) {
+            if (bufferPlayback.Value == true) {
                 StartCoroutine(UpdateMaterial());
             } else {
-                meshRenderer.sharedMaterial.mainTexture = videoPlayer.texture;
+                if(renderVideo == true) {
+                    meshRenderer.sharedMaterial.mainTexture = videoPlayer.texture;
+                } else {
+                    meshRenderer.sharedMaterial.mainTexture = null;
+                }
             } 
         }
 

@@ -25,8 +25,14 @@ namespace AltSalt
 
     public enum RatioType { Numerator, Denominator }
 
+    public enum MaterialAttributeType { Color, Float }
+
+    public enum BranchName { yNeg, yPos, xNeg, xPos }
+
     public static class Utils
     {
+        public static Color transparent = new Color(1, 1, 1, 0);
+
         public static int GetAxisId(string axisName)
         {
             switch (axisName) {

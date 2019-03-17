@@ -31,6 +31,11 @@ namespace AltSalt
             targetEvent.UnregisterListener(this);
         }
 
+        public GameObject GetGameObject()
+        {
+            return parent;
+        }
+
         public void LogName(string callingInfo)
         {
             Debug.Log(callingInfo + parent, parent);

@@ -31,6 +31,7 @@ namespace AltSalt
         void Start()
         {
             easingFunction = EasingFunction.GetEasingFunction(ease);
+            internalIsReversingVal = isReversing.Value;
         }
 
         protected virtual void Update()
@@ -60,9 +61,7 @@ namespace AltSalt
                                     lerpValue += lerpModifier;
                                 }
                             }
-
                             AutoplaySequence(sequenceList.sequences[i], sequenceList.sequences[i].autoplayThresholds[q]);
-
                             SequenceModified.Raise();
                         }
                     }

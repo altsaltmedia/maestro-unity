@@ -5,32 +5,8 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt {
 
-    public enum BranchName { yNeg, yPos, xNeg, xPos }
-
-    [System.Serializable]
-    public class BranchingPath
-    {
-        public bool isOrigin;
-        public Sequence sequence;
-        public GameObject directorObject;
-
-        [HideInInspector]
-        public DirectorUpdater director;
-
-        [ValueDropdown("branchTypeValues")]
-        public BranchName branchType;
-
-        private ValueDropdownList<BranchName> branchTypeValues = new ValueDropdownList<BranchName>(){
-            {"Y Negative", BranchName.yNeg },
-            {"Y Positive", BranchName.yPos },
-            {"X Negative", BranchName.xNeg },
-            {"X Positive", BranchName.xPos }
-        };
-    }
-
     public class ForkSwitch : MonoBehaviour {
     
-
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Fork Variables", 1)]
         public FloatReference forkInflectionPoint = new FloatReference();

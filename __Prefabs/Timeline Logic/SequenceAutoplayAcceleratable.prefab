@@ -54,6 +54,8 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
+  triggerSpinnerShow: {fileID: 11400000, guid: 0b8292f66ecb34b8fa9c17637a06c468, type: 2}
+  triggerSpinnerHide: {fileID: 11400000, guid: 98ca9687c33fe4a69983e6cded0a3598, type: 2}
   frameStepValue:
     UseConstant: 0
     ConstantValue: 0

@@ -23,10 +23,12 @@ namespace AltSalt
 
         public void Raise(string value)
         {
+            if (LogListenersOnRaise == true) {
+                Debug.Log(this.name + " raised! Following listeners activated:");
+            }
             for (int i = listeners.Count - 1; i >= 0; i--) {
                 if (LogListenersOnRaise == true) {
-                    Debug.Log(this.name + " raised! Following listeners activated:");
-                    Debug.Log(listeners[i]);
+                    Debug.Log(listeners[i], listeners[i].gameObject);
                 }
                 listeners[i].OnEventRaised(new EventPayload(value));
             }
@@ -34,10 +36,12 @@ namespace AltSalt
 
         public void Raise(int value)
         {
+            if (LogListenersOnRaise == true) {
+                Debug.Log(this.name + " raised! Following listeners activated:");
+            }
             for (int i = listeners.Count - 1; i >= 0; i--) {
                 if (LogListenersOnRaise == true) {
-                    Debug.Log(this.name + " raised! Following listeners activated:");
-                    Debug.Log(listeners[i]);
+                    Debug.Log(listeners[i], listeners[i].gameObject);
                 }
                 listeners[i].OnEventRaised(new EventPayload(value));
             }
@@ -45,10 +49,12 @@ namespace AltSalt
 
         public void Raise(bool value)
         {
+            if (LogListenersOnRaise == true) {
+                Debug.Log(this.name + " raised! Following listeners activated:");
+            }
             for (int i = listeners.Count - 1; i >= 0; i--) {
                 if (LogListenersOnRaise == true) {
-                    Debug.Log(this.name + " raised! Following listeners activated:");
-                    Debug.Log(listeners[i]);
+                    Debug.Log(listeners[i], listeners[i].gameObject);
                 }
                 listeners[i].OnEventRaised(new EventPayload(value));
             }
@@ -56,12 +62,14 @@ namespace AltSalt
 
         public void Raise(EventPayload eventPayload)
 		{
-			for (int i = listeners.Count - 1; i >= 0; i--) {
-                if (LogListenersOnRaise == true) {
-                    Debug.Log(this.name + " raised! Following listeners activated:");
-                    Debug.Log(listeners[i]);
-                }
+            if (LogListenersOnRaise == true) {
+                Debug.Log(this.name + " raised! Following listeners activated:");
+            }
+            for (int i = listeners.Count - 1; i >= 0; i--) {
                 listeners[i].OnEventRaised(eventPayload);
+                if (LogListenersOnRaise == true) {
+                    Debug.Log(listeners[i], listeners[i].gameObject);
+                }
 			}
 		}
 		
@@ -69,12 +77,23 @@ namespace AltSalt
 		{
             if (LogListenersOnRegister == true) {
                 Debug.Log(this.name + " - the following listener was registered:");
-                Debug.Log(listener);
+                Debug.Log(listener.gameObject.name, listener.gameObject);
             }
 			listeners.Add(listener);
 		}
-		
-		public void UnregisterListener(ComplexEventListenerBehaviour listener)
+
+#if UNITY_EDITOR
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
+        [InfoBox("Display every object currently listening to this event")]
+#endif
+        public void LogListeners()
+        {
+            for (int i = listeners.Count - 1; i >= 0; i--) {
+                Debug.Log(this.name + " event is registered on " + listeners[i].gameObject.name, listeners[i].gameObject);
+            }
+        }
+
+        public void UnregisterListener(ComplexEventListenerBehaviour listener)
 		{
 			listeners.Remove(listener);
 		}

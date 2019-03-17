@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 114514924441005906}
   - component: {fileID: 114408991256863034}
   - component: {fileID: 114483604270630608}
+  - component: {fileID: 5961701273639827757}
   - component: {fileID: 114198889693866494}
   - component: {fileID: 114743968378624194}
   m_Layer: 0
@@ -54,6 +55,8 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
+  triggerSpinnerShow: {fileID: 11400000, guid: 0b8292f66ecb34b8fa9c17637a06c468, type: 2}
+  triggerSpinnerHide: {fileID: 11400000, guid: 98ca9687c33fe4a69983e6cded0a3598, type: 2}
   frameStepValue:
     UseConstant: 0
     ConstantValue: 0
@@ -108,6 +111,35 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 114514924441005906}
         m_MethodName: ActivateAutoplayIfMomentumPaused
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &5961701273639827757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170332053769480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114514924441005906}
+        m_MethodName: ActivateAutoplay
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

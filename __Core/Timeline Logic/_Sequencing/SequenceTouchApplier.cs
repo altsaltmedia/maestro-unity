@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -54,6 +55,12 @@ namespace AltSalt
         [FoldoutGroup("Momentum Variables")]
         public V3Reference momentumForce;
 
+#if UNITY_ANDROID
+        [SerializeField]
+        [Required]
+        SimpleEvent pauseSequenceComplete;
+#endif
+
         public void UpdateSequenceWithSwipe()
         {
             for (int i = 0; i < sequenceList.sequences.Count; i++) {
@@ -101,8 +108,24 @@ namespace AltSalt
                         swipeModifier.Variable.SetValue(Mathf.Abs(swipeModifier) * -1f);
                     }
 
+#if UNITY_ANDROID
+                    if (sequenceList.sequences[i].VideoSequenceActive == true) {
+                        if (internalIsReversingVal != isReversing.Value) {
+                            internalIsReversingVal = isReversing.Value;
+                            StartCoroutine(PauseSequence(sequenceList.sequences[i], swipeModifier));
+                        } else {
+                            sequenceList.sequences[i].ModifySequenceTime(swipeModifier);
+                            SequenceModified.Raise();
+                        }
+                    } else {
+                        sequenceList.sequences[i].ModifySequenceTime(swipeModifier);
+                        SequenceModified.Raise();
+                    }
+#else
                     sequenceList.sequences[i].ModifySequenceTime(swipeModifier);
                     SequenceModified.Raise();
+#endif
+
                 }
             }
         }
@@ -111,6 +134,11 @@ namespace AltSalt
         {
             for (int i = 0; i < sequenceList.sequences.Count; i++) {
                 if (sequenceList.sequences[i].Active == true && sequenceList.sequences[i].pauseMomentumActive == false || appSettings.pauseMomentum.Value == false) {
+#if UNITY_ANDROID
+                    if(sequenceList.sequences[i].MomentumDisabled == true) {
+                        return;
+                    }
+#endif
                     momentumModifier.Variable.SetValue(0);
 
                     if (yMomentumAxis.Active) {
@@ -146,30 +174,75 @@ namespace AltSalt
             MomentumApplied.Raise();
         }
 
-        public void RefreshPauseMomentumSwitches()
+        public void RefreshSequenceAttributes()
         {
             for (int i = 0; i < sequenceList.sequences.Count; i++) {
                 if (sequenceList.sequences[i].Active == true && sequenceList.sequences[i].hasPauseMomentum == true) {
 
-                    // Check if we're inside a pauseMomentumThreshold
-                    bool withinThreshold = false;
-
-                    for (int q = 0; q < sequenceList.sequences[i].pauseMomentumThresholds.Count; q++) {
-                        if(sequenceList.sequences[i].currentTime >= sequenceList.sequences[i].pauseMomentumThresholds[q].startTime &&
-                          sequenceList.sequences[i].currentTime <= sequenceList.sequences[i].pauseMomentumThresholds[q].endTime) {
-                            withinThreshold = true;
-                            break;
-                        }
-                    }
-
-                    if(withinThreshold) {
-                        sequenceList.sequences[i].pauseMomentumActive = true;
-                    } else {
-                        sequenceList.sequences[i].pauseMomentumActive = false;
-                    }
+                    RefreshVideoSequenceSwitches(sequenceList.sequences[i]);
+                    RefreshPauseMomentumSwitches(sequenceList.sequences[i]);
                 }
             }
         }
+
+        void RefreshVideoSequenceSwitches(Sequence targetSequence)
+        {
+            // Check if we're inside a pauseMomentumThreshold
+            bool withinVideoThreshold = false;
+
+            for (int q = 0; q < targetSequence.autoplayThresholds.Count; q++) {
+                if (targetSequence.currentTime >= targetSequence.autoplayThresholds[q].startTime &&
+                  targetSequence.currentTime <= targetSequence.autoplayThresholds[q].endTime &&
+                    targetSequence.autoplayThresholds[q].isVideoSequence == true) {
+                    withinVideoThreshold = true;
+                    break;
+                }
+            }
+
+            if (withinVideoThreshold == true) {
+                targetSequence.VideoSequenceActive = true;
+            } else {
+                targetSequence.VideoSequenceActive = false;
+            }
+        }
+
+        void RefreshPauseMomentumSwitches(Sequence targetSequence)
+        {
+            // Check if we're inside a pauseMomentumThreshold
+            bool withinThreshold = false;
+
+            for (int q = 0; q < targetSequence.pauseMomentumThresholds.Count; q++) {
+                if(targetSequence.currentTime >= targetSequence.pauseMomentumThresholds[q].startTime &&
+                  targetSequence.currentTime <= targetSequence.pauseMomentumThresholds[q].endTime) {
+                    withinThreshold = true;
+                    break;
+                }
+            }
+
+            if(withinThreshold == true) {
+                targetSequence.pauseMomentumActive = true;
+            } else {
+                targetSequence.pauseMomentumActive = false;
+            }
+        }
+
+#if UNITY_ANDROID
+        // On Android devices, we need to briefly pause the sequence to allow the device
+        // to catch up when in a video sequence and abruptly changing directions.
+        protected IEnumerator PauseSequence(Sequence targetSequence, float modifier)
+        {
+            targetSequence.Active = false;
+            targetSequence.MomentumDisabled = true;
+            triggerSpinnerShow.Raise();
+            yield return new WaitForSeconds(.5f);
+            targetSequence.Active = true;
+            pauseSequenceComplete.Raise();
+            yield return new WaitForSeconds(.5f);
+            triggerSpinnerHide.Raise();
+            yield return new WaitForSeconds(1f);
+            targetSequence.MomentumDisabled = false;
+        }
+#endif
 
         private static bool IsPopulated(V3Reference attribute)
         {

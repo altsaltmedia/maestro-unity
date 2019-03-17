@@ -9,6 +9,7 @@ namespace AltSalt
     {
         public double startTime;
         public double endTime;
+        public bool isVideoSequence = false;
     }
 
     [CreateAssetMenu(menuName = "AltSalt/Sequence")]
@@ -21,6 +22,13 @@ namespace AltSalt
         public bool ForceForward = false;
         [ReadOnly]
         public bool ForceBackward = false;
+        [ReadOnly]
+        public bool VideoSequenceActive = false;
+
+#if UNITY_ANDROID
+        [ReadOnly]
+        public bool MomentumDisabled = false;
+#endif
 
         public bool hasAutoplay = false;
         [ShowIf("hasAutoplay")]
