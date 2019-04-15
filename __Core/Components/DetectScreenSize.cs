@@ -27,9 +27,9 @@ namespace AltSalt {
 
         void SaveScreenValues()
         {
-            screenWidth.Variable.SetValue(Screen.safeArea.width);
-            screenHeight.Variable.SetValue(Screen.safeArea.height);
-            aspectRatio.Variable.SetValue((float)Screen.safeArea.height / Screen.safeArea.width);
+            screenWidth.Variable.SetValue(Screen.width);
+            screenHeight.Variable.SetValue(Screen.height);
+            aspectRatio.Variable.SetValue((float)Screen.height / Screen.width);
         }
 
         #if UNITY_EDITOR
@@ -44,8 +44,8 @@ namespace AltSalt {
 
             public bool ScreenResized()
             {
-                if (Mathf.Approximately(screenWidth.Value, Screen.safeArea.width) == false ||
-                    Mathf.Approximately(screenHeight.Value, Screen.safeArea.height) == false) {
+                if (Mathf.Approximately(screenWidth.Value, Screen.width) == false ||
+                    Mathf.Approximately(screenHeight.Value, Screen.height) == false) {
                     return true;
                 } else {
                     return false;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Playables;
+using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
@@ -17,6 +18,7 @@ namespace AltSalt
         public List<Sequence> sequences = new List<Sequence>();
         public List<PlayableDirector> sequenceDirectors = new List<PlayableDirector>();
 
+        [ReadOnly]
         public List<double> sequenceThresholds = new List<double>();
 
         double maxTime;
