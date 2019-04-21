@@ -62,15 +62,15 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 3e188ea664ddc4003896aefdb9d1fa5f, type: 2}
+  isReversing:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
   orientation: 0
   resetSequences: 0
   sequenceList: {fileID: 0}
   bufferScene: 0
   totalSequenceCount: 1
-  bufferSceneTriggered: {fileID: 11400000, guid: cf30205a07feb468ebdeddcc0e466607,
-    type: 2}
-  bufferSceneCompleted: {fileID: 11400000, guid: d9a56197686394259bddf821fcec01fc,
-    type: 2}
   prepareSceneCompleted: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c,
     type: 2}
   removeOverlayImmediately:

@@ -23,10 +23,11 @@ namespace AltSalt
 
         [Required]
         [SerializeField]
-        ComplexEvent sceneLoadTriggered;
+        ComplexEvent initializeApp;
 
         [InfoBox("Will load this scene immediately following the bootstrapper")]
         [SerializeField]
+        [DisableIf("loadDebugMenu")]
         string firstSceneName;
 
         [SerializeField]
@@ -50,8 +51,7 @@ namespace AltSalt
             } else {
                 eventPayload.Set(EventPayloadType.stringPayload.ToString(), firstSceneName);
             }
-            eventPayload.Set(EventPayloadType.boolPayload.ToString(), true);
-            sceneLoadTriggered.Raise(eventPayload);
+            initializeApp.Raise(eventPayload);
             yield break;
         }
     }

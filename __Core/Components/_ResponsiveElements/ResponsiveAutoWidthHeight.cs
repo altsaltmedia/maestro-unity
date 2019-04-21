@@ -75,8 +75,6 @@ namespace AltSalt
             } else {
                 rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, (float)newDimension - dimensionModifier);
             }
-
-            Debug.Log(rectTransform.sizeDelta.x.ToString("F4")+"/"+rectTransform.sizeDelta.y.ToString("F4"));
         }
     }
 

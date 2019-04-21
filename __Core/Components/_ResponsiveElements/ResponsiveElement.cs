@@ -56,23 +56,19 @@ namespace AltSalt
             }
 
             if (screenWidth.Variable == null) {
-                guids = AssetDatabase.FindAssets("ScreenWidth");
-                path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                screenWidth.Variable = (FloatVariable)AssetDatabase.LoadAssetAtPath(path, typeof(FloatVariable));
+                screenHeight.Variable = aspectRatio.Variable = Utils.GetFloatVariable("ScreenWidth");
             }
 
             if(screenHeight.Variable == null) {
-                guids = AssetDatabase.FindAssets("ScreenHeight");
-                path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                screenHeight.Variable = (FloatVariable)AssetDatabase.LoadAssetAtPath(path, typeof(FloatVariable));
+                screenHeight.Variable = aspectRatio.Variable = Utils.GetFloatVariable("ScreenHeight");
             }
 
             if(aspectRatio.Variable == null) {
-                aspectRatio.Variable = Utils.GetAspectRatio();
+                aspectRatio.Variable = Utils.GetFloatVariable("AspectRatio");
             }
 
             if(screenResized == null) {
-                screenResized = Utils.GetScreenResized();
+                screenResized = Utils.GetSimpleEvent("ScreenResized");
             }
         }
 

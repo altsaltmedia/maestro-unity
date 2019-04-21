@@ -6,24 +6,44 @@ using Sirenix.OdinInspector;
 namespace AltSalt {
     
 	public class PrepareScene : MonoBehaviour {
-		
-		public bool defaultX;
-		public bool defaultY;
-		public bool defaultZ;
 
-        public bool invertYAxis;
-        public bool invertXAxis;
-		
-        public Axis xSwipeAxis;
-        public Axis ySwipeAxis;
-        public Axis zSwipeAxis;
+        [SerializeField]
+        bool defaultX;
+        [SerializeField]
+        bool defaultY;
+        [SerializeField]
+        bool defaultZ;
 
-        public Axis xMomentumAxis;
-        public Axis yMomentumAxis;
-        public Axis zMomentumAxis;
-		
-        public BoolReference _invertYAxis;
-        public BoolReference _invertXAxis;
+        [SerializeField]
+        bool invertYAxis;
+        [SerializeField]
+        bool invertXAxis;
+
+        [SerializeField]
+        Axis xSwipeAxis;
+        [SerializeField]
+        Axis ySwipeAxis;
+        [SerializeField]
+        Axis zSwipeAxis;
+
+        [SerializeField]
+        Axis xMomentumAxis;
+        [SerializeField]
+        Axis yMomentumAxis;
+        [SerializeField]
+        Axis zMomentumAxis;
+
+        [SerializeField]
+        [ValidateInput("IsPopulated")]
+        BoolReference _invertYAxis;
+
+        [SerializeField]
+        [ValidateInput("IsPopulated")]
+        BoolReference _invertXAxis;
+
+        [SerializeField]
+        [ValidateInput("IsPopulated")]
+        BoolReference isReversing;
 
         [ValueDropdown("orientationValues")]
         [SerializeField]
@@ -76,6 +96,8 @@ namespace AltSalt {
 
             _invertYAxis.Variable.Value = invertYAxis;
             _invertXAxis.Variable.Value = invertXAxis;
+
+            isReversing.Variable.Value = false;
 
             Time.timeScale = 1.0f;
 

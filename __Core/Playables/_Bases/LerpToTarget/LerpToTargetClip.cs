@@ -29,7 +29,7 @@ namespace AltSalt
         public ClipCaps clipCaps {
             get { return ClipCaps.None; }
         }
-        
+
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
             template.startTime = startTime;

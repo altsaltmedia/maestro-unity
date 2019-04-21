@@ -9,9 +9,11 @@ https://www.altsalt.com / ricky@altsalt.com
 using UnityEngine;
 using UnityEngine.Timeline;
 using UnityEngine.Playables;
+using System.Linq;
 
 namespace AltSalt
 {    
+    [HideInMenu]
     public class LerpToTargetTrack : TrackAsset {
     
         public void StoreClipStartEndTime()
@@ -29,7 +31,9 @@ namespace AltSalt
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipStartEndTime();
-            return ScriptPlayable<LerpToTargetMixerBehaviour>.Create(graph, inputCount);
+            ScriptPlayable<LerpToTargetMixerBehaviour> trackPlayable = ScriptPlayable<LerpToTargetMixerBehaviour>.Create(graph, inputCount);
+            trackPlayable.GetBehaviour().markers = GetMarkers().ToList();
+            return trackPlayable;
         }
 
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)

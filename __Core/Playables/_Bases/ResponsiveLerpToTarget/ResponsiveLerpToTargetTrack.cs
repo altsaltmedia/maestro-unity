@@ -12,6 +12,7 @@ using UnityEngine.Playables;
 
 namespace AltSalt
 {    
+    [HideInMenu]
     public class ResponsiveLerpToTargetTrack : TrackAsset {
 
         public void StoreClipStartEndTime()

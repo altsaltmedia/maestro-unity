@@ -56,22 +56,17 @@ MonoBehaviour:
     vpScript: {fileID: 352308171004964100}
     vpComponent: {fileID: 3260139102654044801}
     vpRenderer: {fileID: 7765384545820753366}
-    meshRendererSorter: {fileID: 5434392544479805330}
     isHidden: 0
   reverseVideoInstance:
     videoObject: {fileID: 5605975289144988313}
     vpScript: {fileID: 8281539030200065033}
     vpComponent: {fileID: 8448512369978898731}
     vpRenderer: {fileID: 351002992639903556}
-    meshRendererSorter: {fileID: 8767628001873964000}
     isHidden: 1
-  videoSortingUpdate: {fileID: 11400000, guid: c02e88bf58478445998f859a546433bd, type: 2}
   isReversing:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
-  targetSortingOrder: 0
-  hiddenSortingOrder: 0
 --- !u!114 &7697093155523303832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,8 +103,6 @@ GameObject:
   - component: {fileID: 8448512369978898731}
   - component: {fileID: 8767628001873964000}
   - component: {fileID: 8281539030200065033}
-  - component: {fileID: 2103245504603195103}
-  - component: {fileID: 5199630672489833037}
   m_Layer: 0
   m_Name: Reverse Video
   m_TagString: Untagged
@@ -240,75 +233,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialTime: 0
-  bufferSequenceCompleted: {fileID: 11400000, guid: e272e4de87f5f4c4eb6f590f9c104553,
-    type: 2}
-  bufferStepInterval:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 3fdb95174e2274ecfb2f49c2761d52d5, type: 2}
-  bufferPlayback:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: a98dc1467157e403f969efbf1783622e, type: 2}
-  renderVideo: 1
---- !u!114 &2103245504603195103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5605975289144988313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: cf30205a07feb468ebdeddcc0e466607, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8281539030200065033}
-        m_MethodName: BufferVideo
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
---- !u!114 &5199630672489833037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5605975289144988313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: c02e88bf58478445998f859a546433bd, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8767628001873964000}
-        m_MethodName: SetSortingOrder
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!1 &8611712818853803513
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,8 +247,6 @@ GameObject:
   - component: {fileID: 3260139102654044801}
   - component: {fileID: 5434392544479805330}
   - component: {fileID: 352308171004964100}
-  - component: {fileID: 1905880518850806497}
-  - component: {fileID: 3528356934359824873}
   m_Layer: 0
   m_Name: Main Video
   m_TagString: Untagged
@@ -455,72 +377,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialTime: 0
-  bufferSequenceCompleted: {fileID: 11400000, guid: e272e4de87f5f4c4eb6f590f9c104553,
-    type: 2}
-  bufferStepInterval:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 3fdb95174e2274ecfb2f49c2761d52d5, type: 2}
-  bufferPlayback:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: a98dc1467157e403f969efbf1783622e, type: 2}
-  renderVideo: 1
---- !u!114 &1905880518850806497
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8611712818853803513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: cf30205a07feb468ebdeddcc0e466607, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 352308171004964100}
-        m_MethodName: BufferVideo
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
---- !u!114 &3528356934359824873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8611712818853803513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: c02e88bf58478445998f859a546433bd, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5434392544479805330}
-        m_MethodName: SetSortingOrder
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null

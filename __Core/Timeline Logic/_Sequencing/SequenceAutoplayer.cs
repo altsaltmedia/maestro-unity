@@ -75,7 +75,11 @@ namespace AltSalt
         {
             if (isReversing.Value == false) {
                 // Update sequence moving forward
+#if UNITY_EDITOR
+                targetSequence.ModifySequenceTime(Time.smoothDeltaTime * easingModifier);
+#else
                 targetSequence.ModifySequenceTime(frameStepValue.Value * easingModifier);
+#endif
                 if (targetSequence.currentTime > targetAutoplayThreshold.endTime) {
                     targetSequence.autoplayActive = false;
                     lerpValue = 0f;
@@ -84,7 +88,11 @@ namespace AltSalt
             }
             else {
                 // Update sequence moving backward
+#if UNITY_EDITOR
+                targetSequence.ModifySequenceTime(Time.smoothDeltaTime * easingModifier * -1f);
+#else
                 targetSequence.ModifySequenceTime(frameStepValue.Value * easingModifier * -1f);
+#endif
                 if (targetSequence.currentTime < targetAutoplayThreshold.startTime) {
                     targetSequence.autoplayActive = false;
                     lerpValue = 0f;

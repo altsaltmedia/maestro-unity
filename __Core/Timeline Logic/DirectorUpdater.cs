@@ -53,6 +53,10 @@ namespace AltSalt
         void Start()
         {
             GetPlayableDirector();
+            //playableDirector.RebuildGraph();
+            //playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
+            //playableDirector.Play();
+         //   playableDirector.Pause();
         }
 
         void GetPlayableDirector()
@@ -147,7 +151,7 @@ namespace AltSalt
             }
 
             if (screenResized == null) {
-                screenResized = Utils.GetScreenResized();
+                screenResized = Utils.GetSimpleEvent("ScreenResized");
             }
         }
 

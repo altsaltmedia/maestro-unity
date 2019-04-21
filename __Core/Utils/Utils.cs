@@ -67,12 +67,12 @@ namespace AltSalt
             return (AppSettings)AssetDatabase.LoadAssetAtPath(path, typeof(AppSettings));
         }
 
-        public static SimpleEvent GetScreenResized()
+        public static SimpleEvent GetSimpleEvent(string target)
         {
             string[] guids;
             string path;
 
-            guids = AssetDatabase.FindAssets("ScreenResized");
+            guids = AssetDatabase.FindAssets(target);
 
             if (guids.Length > 1) {
                 Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
@@ -83,12 +83,12 @@ namespace AltSalt
             return (SimpleEvent)AssetDatabase.LoadAssetAtPath(path, typeof(SimpleEvent));
         }
 
-        public static FloatVariable GetAspectRatio()
+        public static FloatVariable GetFloatVariable(string target)
         {
             string[] guids;
             string path;
 
-            guids = AssetDatabase.FindAssets("AspectRatio");
+            guids = AssetDatabase.FindAssets(target);
 
             if (guids.Length > 1) {
                 Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
@@ -97,6 +97,22 @@ namespace AltSalt
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
 
             return (FloatVariable)AssetDatabase.LoadAssetAtPath(path, typeof(FloatVariable));
+        }
+
+        public static BoolVariable GetBoolVariable(string target)
+        {
+            string[] guids;
+            string path;
+
+            guids = AssetDatabase.FindAssets(target);
+
+            if (guids.Length > 1) {
+                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+            }
+
+            path = AssetDatabase.GUIDToAssetPath(guids[0]);
+
+            return (BoolVariable)AssetDatabase.LoadAssetAtPath(path, typeof(BoolVariable));
         }
 
         public static void RepaintInspector(System.Type t)

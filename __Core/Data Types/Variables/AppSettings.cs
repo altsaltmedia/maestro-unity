@@ -30,6 +30,9 @@ namespace AltSalt
         [ValidateInput("IsPopulated")]
         public BoolReference editorDebugEventsActive;
 
+        [ValidateInput("IsPopulated")]
+        public BoolReference pillarBoxingEnabled;
+
         private static bool IsPopulated(BoolReference attribute)
         {
             return Utils.IsPopulated(attribute);

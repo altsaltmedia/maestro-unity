@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DeveloperDescription: 
   Value: 80
-  hasDefault: 0
-  DefaultValue: 0
+  hasDefault: 1
+  DefaultValue: 80

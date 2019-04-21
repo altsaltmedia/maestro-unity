@@ -6,7 +6,10 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace AltSalt
 {
@@ -18,6 +21,10 @@ namespace AltSalt
         protected int inputCount;
         protected float inputWeight;
         protected float modifier;
+
+        //public IEnumerable<IMarker> markers;
+
+        public List<IMarker> markers;
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {

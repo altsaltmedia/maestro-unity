@@ -44,3 +44,7 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 5d490100582d64529b80192201dd772f, type: 2}
+  pillarBoxingEnabled:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 92e511ba33ae14ae6affd1b4e2ed44eb, type: 2}

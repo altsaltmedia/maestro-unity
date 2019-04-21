@@ -48,7 +48,16 @@ namespace AltSalt
                 Debug.LogError("Please create and attach an AltSalt localization manager to AppNavigator.");
             }
         }
-        
+
+        // The first scene will always be a single load, done immediately w/o a call to
+        // make a fade out first, so we have a special case for it here
+        public void LoadInitialScene(EventPayload eventPayload) {
+            sceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload.ToString());
+            StartCoroutine(AsyncLoad(sceneName, LoadSceneMode.Single));
+        }
+
+        // Otherwise, single scene loads necessitate doing a fade out before doing the load,
+        // and additive scenes are loaded immediately without a call to the fader
         public void TriggerSceneLoad(EventPayload eventPayload) {
             
             sceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload.ToString());
@@ -59,11 +68,11 @@ namespace AltSalt
             } else {
                 StartCoroutine(AsyncLoad(sceneName, loadMode));
             }
+        
             
             if (!m_localizationManager.texts.ContainsKey(activeScene.Value) && appSettings.localizationActive) {
                 m_localizationManager.LoadLocalizedText(activeScene.Value + "/" + activeScene.Value + "_en.xml", activeScene.Value);
             }
-            
         }
 
         public void FadeOutSceneLoadCallback()

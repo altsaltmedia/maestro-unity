@@ -8,6 +8,9 @@ namespace AltSalt {
 	#endif
     public class DetectScreenSize : MonoBehaviour {
 
+        [Required]
+        public AppSettings appSettings;
+
         [ValidateInput("IsPopulated")]
         public FloatReference screenWidth;
 
@@ -20,6 +23,8 @@ namespace AltSalt {
         [Required]
         public SimpleEvent screenResized;
 
+        float internalHeightValue;
+
 		void Start()
 		{
             SaveScreenValues();
@@ -27,9 +32,20 @@ namespace AltSalt {
 
         void SaveScreenValues()
         {
-            screenWidth.Variable.SetValue(Screen.width);
-            screenHeight.Variable.SetValue(Screen.height);
-            aspectRatio.Variable.SetValue((float)Screen.height / Screen.width);
+            if(appSettings.pillarBoxingEnabled == true) {
+                screenWidth.Variable.SetValue(Screen.safeArea.width);
+                aspectRatio.Variable.SetValue((float)Screen.safeArea.height / Screen.safeArea.width);
+                if(aspectRatio < 1.78f) {
+                    screenHeight.Variable.SetValue(Screen.safeArea.height);
+                } else {
+                    screenHeight.Variable.SetValue((16 * screenWidth.Value) / 9);
+                }
+                internalHeightValue = screenHeight.Value;
+            } else {
+                screenWidth.Variable.SetValue(Screen.width);
+                screenHeight.Variable.SetValue(Screen.height);
+                aspectRatio.Variable.SetValue((float)Screen.height / Screen.width);
+            }
         }
 
         #if UNITY_EDITOR
@@ -44,14 +60,24 @@ namespace AltSalt {
 
             public bool ScreenResized()
             {
-                if (Mathf.Approximately(screenWidth.Value, Screen.width) == false ||
-                    Mathf.Approximately(screenHeight.Value, Screen.height) == false) {
-                    return true;
+                if (appSettings.pillarBoxingEnabled == true) {
+                    if (Mathf.Approximately(screenWidth.Value, Screen.safeArea.width) == false ||
+                        Mathf.Approximately(screenHeight.Value, internalHeightValue) == false) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
                 } else {
-                    return false;
+                    if (Mathf.Approximately(screenWidth.Value, Screen.width) == false ||
+                        Mathf.Approximately(screenHeight.Value, Screen.height) == false) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
                 }
             }
-
         #endif
 
         private static bool IsPopulated(FloatReference attribute)
