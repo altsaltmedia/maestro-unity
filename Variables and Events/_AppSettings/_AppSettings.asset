@@ -48,3 +48,5 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 92e511ba33ae14ae6affd1b4e2ed44eb, type: 2}
+  activeLanguage: {fileID: 11400000, guid: 1aebc24cdcf52416a85c7f55e3a0b433, type: 2}
+  activeLayout: {fileID: 0}

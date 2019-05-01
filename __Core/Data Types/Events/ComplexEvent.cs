@@ -60,6 +60,19 @@ namespace AltSalt
             }
         }
 
+        public void Raise(ScriptableObject value)
+        {
+            if (LogListenersOnRaise == true) {
+                Debug.Log(this.name + " raised! Following listeners activated:");
+            }
+            for (int i = listeners.Count - 1; i >= 0; i--) {
+                if (LogListenersOnRaise == true) {
+                    Debug.Log(listeners[i], listeners[i].gameObject);
+                }
+                listeners[i].OnEventRaised(new EventPayload(value));
+            }
+        }
+
         public void Raise(EventPayload eventPayload)
 		{
             if (LogListenersOnRaise == true) {

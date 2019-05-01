@@ -33,6 +33,12 @@ namespace AltSalt
         [ValidateInput("IsPopulated")]
         public BoolReference pillarBoxingEnabled;
 
+        [Required]
+        public Language activeLanguage;
+
+        [Required]
+        public Layout activeLayout;
+
         private static bool IsPopulated(BoolReference attribute)
         {
             return Utils.IsPopulated(attribute);

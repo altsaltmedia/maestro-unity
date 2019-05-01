@@ -17,7 +17,10 @@ namespace AltSalt
     [System.Serializable]
     public class ComplexUnityEventHandler : UnityEvent<EventPayload> { }
 
-	public class ComplexEventListenerBehaviour : MonoBehaviour
+#if UNITY_EDITOR
+    [ExecuteInEditMode]
+#endif
+    public class ComplexEventListenerBehaviour : MonoBehaviour
 	{
 		[Required]
 		public ComplexEvent Event;

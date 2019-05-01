@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df7551c54cc6d4969a45a8d769935a8e, type: 3}
-  m_Name: SceneLoadTriggered
+  m_Name: LanguageUpdate
   m_EditorClassIdentifier: 
-  DeveloperDescription: 
+  DeveloperDescription: Called whenever we need to update the language. Should be
+    called with a language corpus in the payload.
   LogListenersOnRegister: 0
-  LogListenersOnRaise: 1
+  LogListenersOnRaise: 0

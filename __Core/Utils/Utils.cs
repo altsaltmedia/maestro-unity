@@ -83,6 +83,22 @@ namespace AltSalt
             return (SimpleEvent)AssetDatabase.LoadAssetAtPath(path, typeof(SimpleEvent));
         }
 
+        public static ComplexEvent GetComplexEvent(string target)
+        {
+            string[] guids;
+            string path;
+
+            guids = AssetDatabase.FindAssets(target);
+
+            if (guids.Length > 1) {
+                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+            }
+
+            path = AssetDatabase.GUIDToAssetPath(guids[0]);
+
+            return (ComplexEvent)AssetDatabase.LoadAssetAtPath(path, typeof(ComplexEvent));
+        }
+
         public static FloatVariable GetFloatVariable(string target)
         {
             string[] guids;
@@ -382,6 +398,10 @@ namespace AltSalt
 
         public static bool IsPopulated(List<TargetMaterialAttribute> attribute)
         {
+            return attribute.Count < 1 ? false : true;
+        }
+
+        public static bool IsPopulated(List<LocalizationCorpus> attribute) {
             return attribute.Count < 1 ? false : true;
         }
 

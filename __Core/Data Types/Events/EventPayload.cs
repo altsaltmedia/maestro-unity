@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AltSalt
 {
-    public enum EventPayloadType { stringPayload, floatPayload, boolPayload }
+    public enum EventPayloadType { stringPayload, floatPayload, boolPayload, scriptableObjectPayload }
 
     [Serializable]
     public class EventPayload
@@ -13,6 +13,7 @@ namespace AltSalt
         private Dictionary<string, string> stringDictionary = new Dictionary<string, string>();
         private Dictionary<string, float> floatDictionary = new Dictionary<string, float>();
         private Dictionary<string, bool> boolDictionary = new Dictionary<string, bool>();
+        private Dictionary<string, ScriptableObject> scriptableObjectDictionary = new Dictionary<string, ScriptableObject>();
 
         public EventPayload() {}
 
@@ -31,9 +32,11 @@ namespace AltSalt
             boolDictionary.Add(EventPayloadType.boolPayload.ToString(), value);
         }
 
-        /*
-         * @Set string
-         */
+        public EventPayload(ScriptableObject value)
+        {
+            scriptableObjectDictionary.Add(EventPayloadType.scriptableObjectPayload.ToString(), value);
+        }
+
         public void Set (string key, string value)
         {
             if (stringDictionary.ContainsKey(key)) {
@@ -44,29 +47,30 @@ namespace AltSalt
             }
 		}
 
-        /*
-         * @Set float
-         */
         public void Set(string key, float value)
         {
-            if (stringDictionary.ContainsKey(key)) {
+            if (floatDictionary.ContainsKey(key)) {
                 floatDictionary[key] = value;
-            }
-            else {
+            } else {
                 floatDictionary.Add(key, value);
             }
         }
 
-        /*
-         * @Set bool
-         */
         public void Set(string key, bool value)
         {
-            if (stringDictionary.ContainsKey(key)) {
+            if (boolDictionary.ContainsKey(key)) {
                 boolDictionary[key] = value;
-            }
-            else {
+            } else {
                 boolDictionary.Add(key, value);
+            }
+        }
+
+        public void Set(string key, ScriptableObject value)
+        {
+            if (scriptableObjectDictionary.ContainsKey(key)) {
+                scriptableObjectDictionary[key] = value;
+            } else {
+                scriptableObjectDictionary.Add(key, value);
             }
         }
 
@@ -95,6 +99,15 @@ namespace AltSalt
             } else {
                 return false;
             }
+        }
+
+        public ScriptableObject GetScriptableObjectValue(string key)
+        {
+            ScriptableObject result = null;
+            if (scriptableObjectDictionary.ContainsKey(key)) {
+                result = scriptableObjectDictionary[key];
+            }
+            return result;
         }
 
     }

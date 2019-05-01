@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 222410283548027054}
   - component: {fileID: 114831698138452250}
   - component: {fileID: 114860081495304408}
+  - component: {fileID: 6162087246834992834}
   m_Layer: 0
   m_Name: Standard Text xXX
   m_TagString: textObject
@@ -149,7 +150,6 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_textAlignment: 257
-  m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -176,6 +176,7 @@ MonoBehaviour:
   m_verticalMapping: 0
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
@@ -190,12 +191,9 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
-  m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 23201819280585364}
   m_subTextObjects:
@@ -220,7 +218,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77b51fba603cb4c90930ab6e20a7f652, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: 
-  m_localizationManager: {fileID: 11400000, guid: 74f9190e6a97f4e028ab14a8375d5a49,
-    type: 2}
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  key: 
+  localizationCorpus: {fileID: 0}
+--- !u!114 &6162087246834992834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144127328821010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
+  DeveloperDescription: Should receive an event payload with a scriptable object containing
+    the target corpus that's being updated
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114860081495304408}
+        m_MethodName: RefreshText
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
