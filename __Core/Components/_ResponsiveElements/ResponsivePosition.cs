@@ -6,7 +6,6 @@ namespace AltSalt
 {
     public class ResponsivePosition : ResponsiveRectTransform, IResponsiveSaveable, IResponsiveWithBreakpoints
     {
-        
         public List<Vector2> breakpointAnchorMax = new List<Vector2>();
         public List<Vector2> breakpointAnchorMin = new List<Vector2>();
         public List<Vector3> breakpointAnchoredPosition = new List<Vector3>();

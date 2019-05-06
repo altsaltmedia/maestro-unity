@@ -7,7 +7,9 @@ namespace AltSalt
     {
 #if UNITY_EDITOR
         [Multiline]
-        public string DeveloperDescription = "";
+        [SerializeField]
+        [Header("Vector2 Variable")]
+        string DeveloperDescription = "";
 #endif
         public Vector2 Value;
 

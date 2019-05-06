@@ -9,6 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf7245185f17f486ca1022b09ebf2391, type: 3}
-  m_Name: Localization Manager
+  m_Script: {fileID: 11500000, guid: 2f08fdc7705d242cebb3ab55d42c2198, type: 3}
+  m_Name: _Default
   m_EditorClassIdentifier: 
+  description: 'The standard layout '

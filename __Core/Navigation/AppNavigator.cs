@@ -37,22 +37,13 @@ namespace AltSalt
         [Required]
         SimpleEvent timescaleChanged;
 
-        [Required]
-        public LocalizationManager m_localizationManager;
-
         string sceneName;
         LoadSceneMode loadMode;
-        
-        void Start() {
-            if(m_localizationManager == null) {
-                Debug.LogError("Please create and attach an AltSalt localization manager to AppNavigator.");
-            }
-        }
 
         // The first scene will always be a single load, done immediately w/o a call to
         // make a fade out first, so we have a special case for it here
         public void LoadInitialScene(EventPayload eventPayload) {
-            sceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload.ToString());
+            sceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload);
             StartCoroutine(AsyncLoad(sceneName, LoadSceneMode.Single));
         }
 
@@ -60,18 +51,13 @@ namespace AltSalt
         // and additive scenes are loaded immediately without a call to the fader
         public void TriggerSceneLoad(EventPayload eventPayload) {
             
-            sceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload.ToString());
-            loadMode = eventPayload.GetBoolValue(EventPayloadType.boolPayload.ToString()) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
+            sceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload);
+            loadMode = eventPayload.GetBoolValue(EventPayloadType.boolPayload) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
             if(loadMode == LoadSceneMode.Single) {
                 fadeOutTriggered.Raise();
             } else {
                 StartCoroutine(AsyncLoad(sceneName, loadMode));
-            }
-        
-            
-            if (!m_localizationManager.texts.ContainsKey(activeScene.Value) && appSettings.localizationActive) {
-                m_localizationManager.LoadLocalizedText(activeScene.Value + "/" + activeScene.Value + "_en.xml", activeScene.Value);
             }
         }
 
@@ -97,7 +83,7 @@ namespace AltSalt
 
         public void TriggerUnloadScene(EventPayload eventPayload)
         {
-            string unloadSceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload.ToString());
+            string unloadSceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload);
             StartCoroutine(AsyncUnload(unloadSceneName));
         }
 

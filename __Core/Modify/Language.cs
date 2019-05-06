@@ -9,6 +9,7 @@ namespace AltSalt
     public class Language : ScriptableObject
     {
         [SerializeField]
+        [Header("Language")]
         public SystemLanguage languageType = SystemLanguage.English;
 
         [SerializeField]

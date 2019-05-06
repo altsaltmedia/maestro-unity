@@ -5,15 +5,13 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
-    [CreateAssetMenu(menuName = "AltSalt/Complex Event")]
+    [CreateAssetMenu(menuName = "AltSalt/Events/Complex Event")]
     public class ComplexEvent : ScriptableObject
     {
 
 #if UNITY_EDITOR
-        [ShowInInspector, ReadOnly]
-        readonly string xComplexEvent;
-
         [Multiline]
+        [Header("Complex Event")]
         public string DeveloperDescription = "";
 #endif
         public bool LogListenersOnRegister;
@@ -30,7 +28,7 @@ namespace AltSalt
                 if (LogListenersOnRaise == true) {
                     Debug.Log(listeners[i], listeners[i].gameObject);
                 }
-                listeners[i].OnEventRaised(new EventPayload(value));
+                listeners[i].OnEventRaised(EventPayload.CreateInstance(value));
             }
         }
 
@@ -43,7 +41,7 @@ namespace AltSalt
                 if (LogListenersOnRaise == true) {
                     Debug.Log(listeners[i], listeners[i].gameObject);
                 }
-                listeners[i].OnEventRaised(new EventPayload(value));
+                listeners[i].OnEventRaised(EventPayload.CreateInstance(value));
             }
         }
 
@@ -56,7 +54,7 @@ namespace AltSalt
                 if (LogListenersOnRaise == true) {
                     Debug.Log(listeners[i], listeners[i].gameObject);
                 }
-                listeners[i].OnEventRaised(new EventPayload(value));
+                listeners[i].OnEventRaised(EventPayload.CreateInstance(value));
             }
         }
 
@@ -69,7 +67,7 @@ namespace AltSalt
                 if (LogListenersOnRaise == true) {
                     Debug.Log(listeners[i], listeners[i].gameObject);
                 }
-                listeners[i].OnEventRaised(new EventPayload(value));
+                listeners[i].OnEventRaised(EventPayload.CreateInstance(value));
             }
         }
 

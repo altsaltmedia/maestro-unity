@@ -8,9 +8,15 @@ namespace AltSalt
     [Serializable]
     public class SimpleEventTriggerClip : PlayableAsset, ITimelineClipAsset
     {
-        public new SimpleEventTriggerBehaviour template = new SimpleEventTriggerBehaviour ();
+        public SimpleEventTriggerBehaviour template = new SimpleEventTriggerBehaviour ();
         public double startTime;
         public double endTime;
+
+        public override double duration {
+            get {
+                return 1d;
+            }
+        }
 
         public ClipCaps clipCaps {
             get { return ClipCaps.None; }
@@ -18,10 +24,9 @@ namespace AltSalt
 
         public override Playable CreatePlayable (PlayableGraph graph, GameObject owner)
         {
+            template.startTime = startTime;
+            template.endTime = endTime;
             var playable = ScriptPlayable<SimpleEventTriggerBehaviour>.Create(graph, template);
-            SimpleEventTriggerBehaviour clone = playable.GetBehaviour();
-            clone.startTime = startTime;
-            clone.endTime = endTime;
             return playable;
         }
     }

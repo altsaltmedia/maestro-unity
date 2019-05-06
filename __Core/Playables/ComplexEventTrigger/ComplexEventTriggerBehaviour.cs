@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Playables;
+using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
@@ -13,6 +14,9 @@ namespace AltSalt
         [HideInInspector]
         public double endTime;
 
-        public string stringValue;
+        [HideInInspector]
+        public bool triggered = false;
+
+        public ComplexEventPackager complexEventPackager;
     }
 }

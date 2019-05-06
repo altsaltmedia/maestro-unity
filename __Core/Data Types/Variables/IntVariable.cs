@@ -18,7 +18,9 @@ namespace AltSalt
     {
 #if UNITY_EDITOR
         [Multiline]
-        public string DeveloperDescription = "";
+        [SerializeField]
+        [Header("Int Variable")]
+        string DeveloperDescription = "";
 #endif
         public int Value;
         public bool hasDefault;

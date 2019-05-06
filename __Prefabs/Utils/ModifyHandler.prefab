@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  languageKey: {fileID: 11400000, guid: 50e1418fc483249d28ec61e99441c85d, type: 2}
+  layoutKey: {fileID: 11400000, guid: ff48fb0942cb04a22898ba9c73b13cb7, type: 2}
   localizationCorpora: []
   languageUpdate: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
 --- !u!114 &7484667428570030171

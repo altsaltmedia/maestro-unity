@@ -10,6 +10,7 @@ namespace AltSalt
         #if UNITY_EDITOR
         [SerializeField]
         [Multiline]
+        [Header("Layout")]
         string description;
         #endif
         

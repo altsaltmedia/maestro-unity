@@ -19,7 +19,7 @@ namespace AltSalt
         LocalizationCorpus localizationCorpus;
         Language targetLanguage;
         GameObject rootObject;
-        AppSettings appSettings;
+        ModifySettings modifySettings;
         ComplexEvent languageUpdate;
 
         [MenuItem("Tools/AltSalt/Populate Text")]
@@ -77,11 +77,15 @@ namespace AltSalt
 
             GUILayout.Label("These values are automatically populated via script.");
             EditorGUI.BeginDisabledGroup(true);
-            appSettings = EditorGUILayout.ObjectField("App Settings", appSettings, typeof(AppSettings), false) as AppSettings;
-            appSettings = Utils.GetAppSettings();
+            modifySettings = EditorGUILayout.ObjectField("App Settings", modifySettings, typeof(ModifySettings), false) as ModifySettings;
+            modifySettings = Utils.GetModifySettings();
             languageUpdate = EditorGUILayout.ObjectField("Language Update", languageUpdate, typeof(ComplexEvent), false) as ComplexEvent;
             languageUpdate = Utils.GetComplexEvent("LanguageUpdate");
             EditorGUI.EndDisabledGroup();
+
+            if(modifySettings == null) {
+                GUILayout.Label("WARNING: No Modify Settings found! Please create an instance of Modify Settings.");
+            }
 
             EditorGUI.BeginDisabledGroup(DisableLanguageUpdate());
             if (GUILayout.Button("Trigger Language Update")) {
@@ -150,7 +154,7 @@ namespace AltSalt
 
         bool DisablePopulateGameObjects()
         {
-            if (rootObject == null && localizationCorpus == null) {
+            if (rootObject == null || localizationCorpus == null) {
                 return true;
             } else {
                 return false;
@@ -159,7 +163,7 @@ namespace AltSalt
 
         bool DisablePopulateCorpus()
         {
-            if (filePath.Length == 0 && localizationCorpus == null && targetLanguage == null) {
+            if (filePath.Length == 0 || localizationCorpus == null || targetLanguage == null) {
                 return true;
             } else {
                 return false;
@@ -168,7 +172,7 @@ namespace AltSalt
 
         bool DisableLanguageUpdate()
         {
-            if(localizationCorpus == null && targetLanguage == null) {
+            if (localizationCorpus == null || targetLanguage == null) {
                 return true;
             } else {
                 return false;
@@ -240,7 +244,7 @@ namespace AltSalt
         {
             if (EditorUtility.DisplayDialog("Set active language and update texts?", "This will set the active language to " + targetLanguage.name +
                 " in AppSettings and update all texts that use the " + localizationCorpus.name + " corpus.", "Proceed", "Cancel")) {
-                appSettings.activeLanguage = targetLanguage;
+                modifySettings.activeLanguage = targetLanguage;
                 languageUpdate.Raise(localizationCorpus);
             }
         }

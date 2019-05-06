@@ -15,8 +15,6 @@ namespace AltSalt
         ScriptPlayable<ComplexEventTriggerBehaviour> inputPlayable;
         ComplexEventTriggerBehaviour input;
 
-        bool triggered = false;
-
         public override void PrepareFrame(Playable playable, FrameData info)
         {
             base.PrepareFrame(playable, info);
@@ -38,16 +36,16 @@ namespace AltSalt
                 inputPlayable = (ScriptPlayable<ComplexEventTriggerBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
                 
-                if (inputWeight >= 1 && triggered == false) {
-                    triggered = true;
-                    trackBinding.Raise(input.stringValue);
+                if (inputWeight > 0 && input.triggered == false) {
+                    input.triggered = true;
+                    input.complexEventPackager.RaiseComplexEvent();
                 } else {
                     if (currentTime >= input.endTime) {
-                        triggered = false;
+                        input.triggered = false;
                     }
-                    else if (i == 0 && currentTime <= input.startTime) {
-                        triggered = false;
-                    }
+                    //else if (i == 0 && currentTime <= input.startTime) {
+                    //    triggered = false;
+                    //}
                 }
             }
         }

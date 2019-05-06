@@ -25,6 +25,9 @@ namespace AltSalt
         public AppSettings appSettings;
 
         [Required]
+        public ModifySettings modifySettings;
+
+        [Required]
         public string key;
 
         [Required]
@@ -53,7 +56,9 @@ namespace AltSalt
         public void PopulateWithText()
         {
             GetTextComponent();
-            textComponent.SetText(localizationCorpus.GetText(appSettings.activeLanguage, key), true);
+            if(localizationCorpus != null) {
+                textComponent.SetText(localizationCorpus.GetText(modifySettings.activeLanguage, key), true);
+            }
         }
 
         public void RefreshText(EventPayload eventPayload)
@@ -62,7 +67,7 @@ namespace AltSalt
                 Debug.Log("No localization corpus found!", this);
                 return;
             }
-            LocalizationCorpus targetCorpus = eventPayload.GetScriptableObjectValue(EventPayloadType.scriptableObjectPayload.ToString()) as LocalizationCorpus;
+            LocalizationCorpus targetCorpus = eventPayload.GetScriptableObjectValue(EventPayloadType.scriptableObjectPayload) as LocalizationCorpus;
             if (targetCorpus == localizationCorpus) {
                 PopulateWithText();
             }

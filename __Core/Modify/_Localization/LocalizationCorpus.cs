@@ -12,6 +12,7 @@ namespace AltSalt
     public class LocalizationCorpus : ScriptableObject
     {
         [SerializeField]
+        [Header("Localization Corpus")]
         public LanguageSet languageSet;
 
         public string GetText(Language language, string key)

@@ -18,7 +18,15 @@ namespace AltSalt
     {
         [Required]
         [SerializeField]
-        AppSettings appSettings;
+        ModifySettings modifySettings;
+
+        [Required]
+        [SerializeField]
+        EventPayloadKey languageKey;
+
+        [Required]
+        [SerializeField]
+        EventPayloadKey layoutKey;
 
         [SerializeField]
         [ValidateInput("IsPopulated")]
@@ -27,20 +35,42 @@ namespace AltSalt
         [Required]
         public ComplexEvent languageUpdate;
 
+#if UNITY_EDITOR
         public void Reset()
         {
-            if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
+            if (modifySettings == null) {
+                modifySettings = Utils.GetModifySettings();
+            }
+
+            if(languageKey == null) {
+                languageKey = Utils.GetScriptableObject("LanguageKey") as EventPayloadKey;
+            }
+
+            if (layoutKey == null) {
+                languageKey = Utils.GetScriptableObject("LayoutKey") as EventPayloadKey;
             }
         }
+#endif
 
         public void TriggerModify(EventPayload eventPayload)
         {
-            appSettings.activeLanguage = eventPayload.GetScriptableObjectValue(EventPayloadType.scriptableObjectPayload.ToString()) as Language;
+            modifySettings.activeLanguage = eventPayload.GetScriptableObjectValue(EventPayloadType.scriptableObjectPayload) as Language;
             TriggerLanguageUpdate();
+            if(modifySettings.activeLanguage.layouts.Count == 0) {
+                modifySettings.activeLayout = modifySettings.defaultLayout;
+            } else {
+                bool triggerLayoutChange = true;
+                for(int i=0; i<modifySettings.activeLanguage.layouts.Count; i++) {
+                    if(modifySettings.activeLayout == modifySettings.activeLanguage.layouts[i]) {
+                        triggerLayoutChange = false;
+                    }
+                }
+                if(triggerLayoutChange == true) {
+                    modifySettings.activeLayout = modifySettings.activeLanguage.layouts[0];
+                }
+            }
         }
 
-#if UNITY_EDITOR
         [HorizontalGroup("Split", 0.5f)]
         [InfoBox("Gets text according to active language, corpus, and key.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
@@ -50,7 +80,6 @@ namespace AltSalt
                 languageUpdate.Raise(localizationCorpora[i]);
             }
         }
-#endif
         private static bool IsPopulated(List<LocalizationCorpus> attribute) {
             return Utils.IsPopulated(attribute);
         }

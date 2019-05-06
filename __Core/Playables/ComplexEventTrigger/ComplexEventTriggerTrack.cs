@@ -9,8 +9,20 @@ namespace AltSalt
     [TrackBindingType(typeof(ComplexEvent))]
     public class ComplexEventTriggerTrack : TrackAsset
     {
+        public void StoreClipStartEndTime()
+        {
+            foreach (var clip in GetClips()) {
+                var myAsset = clip.asset as ComplexEventTriggerClip;
+                if (myAsset) {
+                    myAsset.startTime = clip.start;
+                    myAsset.endTime = clip.end;
+                }
+            }
+        }
+
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
+            StoreClipStartEndTime();
             return ScriptPlayable<ComplexEventTriggerMixerBehaviour>.Create (graph, inputCount);
         }
         

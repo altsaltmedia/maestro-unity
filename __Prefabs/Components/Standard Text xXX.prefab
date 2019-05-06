@@ -219,6 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  modifySettings: {fileID: 11400000, guid: 09fba8b7455af408cb2e663bc6591f01, type: 2}
   key: 
   localizationCorpus: {fileID: 0}
 --- !u!114 &6162087246834992834

@@ -29,8 +29,13 @@ namespace AltSalt
 
     public enum BranchName { yNeg, yPos, xNeg, xPos }
 
+    public enum AxisDestination { fromAxis, toAxis }
+
+    public enum EventPayloadType { stringPayload, floatPayload, boolPayload, scriptableObjectPayload }
+
     public static class Utils
     {
+
         public static Color transparent = new Color(1, 1, 1, 0);
 
         public static int GetAxisId(string axisName)
@@ -50,6 +55,12 @@ namespace AltSalt
             }
         }
 
+        public static EventPayload CreateEventPayload()
+        {
+            EventPayload payloadInstance = ScriptableObject.CreateInstance(typeof(EventPayload)) as EventPayload;
+            return payloadInstance;
+        }
+
 #if UNITY_EDITOR
         public static AppSettings GetAppSettings()
         {
@@ -65,6 +76,26 @@ namespace AltSalt
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
 
             return (AppSettings)AssetDatabase.LoadAssetAtPath(path, typeof(AppSettings));
+        }
+
+        public static ModifySettings GetModifySettings()
+        {
+            string[] guids;
+            string path;
+
+            guids = AssetDatabase.FindAssets("t:ModifySettings");
+
+            if(guids.Length == 0) {
+                throw new Exception("Modify Settings not found! You must create an instance of Modify Settings.");
+            }
+
+            if (guids.Length > 1) {
+                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+            }
+
+            path = AssetDatabase.GUIDToAssetPath(guids[0]);
+
+            return (ModifySettings)AssetDatabase.LoadAssetAtPath(path, typeof(ModifySettings));
         }
 
         public static SimpleEvent GetSimpleEvent(string target)
@@ -129,6 +160,22 @@ namespace AltSalt
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
 
             return (BoolVariable)AssetDatabase.LoadAssetAtPath(path, typeof(BoolVariable));
+        }
+
+        public static ScriptableObject GetScriptableObject(string target)
+        {
+            string[] guids;
+            string path;
+
+            guids = AssetDatabase.FindAssets(target);
+
+            if (guids.Length > 1) {
+                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+            }
+
+            path = AssetDatabase.GUIDToAssetPath(guids[0]);
+
+            return (ScriptableObject)AssetDatabase.LoadAssetAtPath(path, typeof(ScriptableObject));
         }
 
         public static void RepaintInspector(System.Type t)

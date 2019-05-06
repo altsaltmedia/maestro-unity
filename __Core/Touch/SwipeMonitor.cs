@@ -316,8 +316,8 @@ namespace AltSalt
 
         public void UpdateMomentum(EventPayload eventPayload)
         {
-            string fromAxis = eventPayload.GetStringValue(AxisDestination.fromAxis.ToString());
-            string toAxis = eventPayload.GetStringValue(AxisDestination.toAxis.ToString());
+            string fromAxis = eventPayload.GetStringValue(AxisDestination.fromAxis);
+            string toAxis = eventPayload.GetStringValue(AxisDestination.toAxis);
 		
    //         Debug.Log("cached momentum at update");
 			//Debug.Log(momentumCache.Value.ToString("F8"));

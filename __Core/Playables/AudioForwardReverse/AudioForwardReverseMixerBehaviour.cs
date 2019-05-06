@@ -46,12 +46,10 @@ namespace AltSalt
                     }
                 } else if(currentTime > input.endTime || currentTime < input.startTime) {
                     input.playingTriggered = false;
+                    trackBinding.Stop();
                     if(currentTime > input.endTime) {
-                        if (trackBinding.isPlaying == false) {
-                            trackBinding.time = input.clipEndTime;
-                        }
+                        trackBinding.time = input.clipEndTime;
                     } else if(currentTime < input.startTime) {
-                        trackBinding.Stop();
                         trackBinding.time = 0;
                     }
                 }

@@ -18,7 +18,9 @@ namespace AltSalt
     {
 #if UNITY_EDITOR
         [Multiline]
-        public string DeveloperDescription = "";
+        [SerializeField]
+        [Header("Color Variable")]
+        string DeveloperDescription = "";
 #endif
         public Color Value = new Color(1,1,1,1);
         public bool hasDefault;

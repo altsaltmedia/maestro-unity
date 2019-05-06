@@ -4,15 +4,13 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
-    [CreateAssetMenu(menuName = "AltSalt/Simple Event")]
+    [CreateAssetMenu(menuName = "AltSalt/Events/Simple Event")]
     public class SimpleEvent : ScriptableObject
     {
 
 #if UNITY_EDITOR
-        [ShowInInspector, ReadOnly]
-        readonly string xSimpleEvent;
-
         [Multiline]
+        [Header("Simple Event")]
         public string DeveloperDescription = "";
 #endif
         public bool LogListenersOnRegister;

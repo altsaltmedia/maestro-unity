@@ -8,10 +8,12 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
+using System;
 using UnityEngine;
 using System.Collections;
 using DoozyUI;
 using Sirenix.OdinInspector;
+using System.Reflection;
 
 namespace AltSalt
 {
@@ -44,14 +46,16 @@ namespace AltSalt
 
             yield return new WaitForSeconds(1);
 
-            EventPayload eventPayload = new EventPayload();
+            EventPayload eventPayload = EventPayload.CreateInstance();
 
             if(loadDebugMenu == true) {
-                eventPayload.Set(EventPayloadType.stringPayload.ToString(), debugMenuName);
+                eventPayload.Set(debugMenuName);
             } else {
-                eventPayload.Set(EventPayloadType.stringPayload.ToString(), firstSceneName);
+                eventPayload.Set(firstSceneName);
             }
             initializeApp.Raise(eventPayload);
+            Destroy(eventPayload);
+
             yield break;
         }
     }

@@ -13,7 +13,6 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
-    public enum AxisDestination { fromAxis, toAxis }
 
 	public class AxisSwitch : MonoBehaviour
     {
@@ -137,16 +136,16 @@ namespace AltSalt
 
             } else if (parentClip.currentTime >= (axisInflectionPoint.Value - momentumTransitionSpread.Value) && parentClip.currentTime < axisInflectionPoint.Value + momentumTransitionSpread.Value) {
 
-                EventPayload eventPayload = new EventPayload();
+                EventPayload eventPayload = EventPayload.CreateInstance();
 
                 if(isReversing.Value == false) {
-                    eventPayload.Set(AxisDestination.fromAxis.ToString(), momentumOriginAxis.Name);
-                    eventPayload.Set(AxisDestination.toAxis.ToString(), momentumDestAxis.Name);
+                    eventPayload.Set(AxisDestination.fromAxis, momentumOriginAxis.Name);
+                    eventPayload.Set(AxisDestination.toAxis, momentumDestAxis.Name);
                     momentumOriginAxis.Active = false;
                     momentumDestAxis.Active = true;
                 } else {
-                    eventPayload.Set(AxisDestination.fromAxis.ToString(), momentumDestAxis.Name);
-                    eventPayload.Set(AxisDestination.toAxis.ToString(), momentumOriginAxis.Name);
+                    eventPayload.Set(AxisDestination.fromAxis, momentumDestAxis.Name);
+                    eventPayload.Set(AxisDestination.toAxis, momentumOriginAxis.Name);
                     momentumOriginAxis.Active = true;
                     momentumDestAxis.Active = false;
                 }
