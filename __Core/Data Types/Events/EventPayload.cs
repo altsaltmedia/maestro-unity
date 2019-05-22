@@ -193,7 +193,8 @@ namespace AltSalt
             if (stringDictionary.ContainsKey(key)) {
                 return stringDictionary[key];
             } else {
-                throw new Exception("Key for string value not found in EventPayload");
+                Debug.Log("Key for string value not found in EventPayload");
+                return null;
             }
         }
 
@@ -202,7 +203,8 @@ namespace AltSalt
             if (floatDictionary.ContainsKey(key)) {
                 return floatDictionary[key];
             } else {
-                throw new Exception("Key for float value not found in EventPayload");
+                Debug.Log("Key for float value not found in EventPayload");
+                return -1f;
             }
         }
 
@@ -220,7 +222,8 @@ namespace AltSalt
             if (scriptableObjectDictionary.ContainsKey(key)) {
                 return scriptableObjectDictionary[key];
             } else {
-                throw new Exception("Key for scriptable object value not found in EventPayload");
+//                Debug.Log("Key for scriptable object value not found in EventPayload");
+                return null;
             }
         }
 

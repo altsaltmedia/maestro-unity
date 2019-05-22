@@ -78,7 +78,12 @@ namespace AltSalt
 #if UNITY_EDITOR
                 targetSequence.ModifySequenceTime(Time.smoothDeltaTime * easingModifier);
 #else
+
+#if UNITY_ANDROID
+                targetSequence.ModifySequenceTime(frameStepValue.Value * 3f * easingModifier);
+#else
                 targetSequence.ModifySequenceTime(frameStepValue.Value * easingModifier);
+#endif
 #endif
                 if (targetSequence.currentTime > targetAutoplayThreshold.endTime) {
                     targetSequence.autoplayActive = false;
@@ -91,7 +96,12 @@ namespace AltSalt
 #if UNITY_EDITOR
                 targetSequence.ModifySequenceTime(Time.smoothDeltaTime * easingModifier * -1f);
 #else
+
+#if UNITY_ANDROID
+                targetSequence.ModifySequenceTime(frameStepValue.Value * 3f * easingModifier * -1f);
+#else
                 targetSequence.ModifySequenceTime(frameStepValue.Value * easingModifier * -1f);
+#endif
 #endif
                 if (targetSequence.currentTime < targetAutoplayThreshold.startTime) {
                     targetSequence.autoplayActive = false;

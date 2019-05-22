@@ -24,8 +24,9 @@ namespace AltSalt
             }
         }
 
-        protected override void ExecuteResponsiveAction()
+        public override void ExecuteResponsiveAction()
         {
+            base.ExecuteResponsiveAction();
             StoreCamera();
         }
     }

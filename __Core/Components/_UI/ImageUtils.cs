@@ -11,11 +11,19 @@ namespace AltSalt
 
         void Start()
         {
-            image = GetComponent<Image>();
+            GetImageComponent();
+        }
+
+        void GetImageComponent()
+        {
+            if(image == null) {
+                image = GetComponent<Image>();
+            }
         }
 
         public void SetColor(ColorVariable colorVariable)
         {
+            GetImageComponent();
             image.color = colorVariable.Value;
         }
     }

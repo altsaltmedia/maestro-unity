@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2e76a98ec24c4152981b4b330cbd961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifySettings: {fileID: 11400000, guid: 09fba8b7455af408cb2e663bc6591f01, type: 2}
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
   screenResized: {fileID: 11400000, guid: 6958e603947ff451aac4f96c5c846b5f, type: 2}
   screenWidth:

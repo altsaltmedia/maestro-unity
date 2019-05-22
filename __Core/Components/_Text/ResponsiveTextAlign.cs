@@ -6,7 +6,7 @@ namespace AltSalt
 {
     public class ResponsiveTextAlign : ResponsiveElement
     {
-        protected override void ExecuteResponsiveAction () {
+        public override void ExecuteResponsiveAction () {
             
         }
     }

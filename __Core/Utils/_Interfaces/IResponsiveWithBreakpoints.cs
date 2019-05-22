@@ -14,7 +14,6 @@ namespace AltSalt {
     {
 #if UNITY_EDITOR
         void Reset();
-        void LogBreakpointMessage();
 #endif
     }
 }

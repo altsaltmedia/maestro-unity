@@ -16,7 +16,7 @@ namespace AltSalt
         public List<Vector2> breakpointSizeDelta = new List<Vector2>();
 
 #if UNITY_EDITOR
-        [HorizontalGroup("Split", 0.5f)]
+        
         [InfoBox("Saves the position at the current breakpoint index.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SaveValue()
@@ -26,23 +26,22 @@ namespace AltSalt
                 return;
             }
 
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int targetBreakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
 
-            Utils.ExpandList(breakpointAnchorMax, breakpointIndex);
-            breakpointAnchorMax[breakpointIndex] = rectTransform.anchorMax;
+            Utils.ExpandList(breakpointAnchorMax, targetBreakpointIndex);
+            breakpointAnchorMax[targetBreakpointIndex] = rectTransform.anchorMax;
 
-            Utils.ExpandList(breakpointAnchorMin, breakpointIndex);
-            breakpointAnchorMin[breakpointIndex] = rectTransform.anchorMin;
+            Utils.ExpandList(breakpointAnchorMin, targetBreakpointIndex);
+            breakpointAnchorMin[targetBreakpointIndex] = rectTransform.anchorMin;
 
-            Utils.ExpandList(breakpointSizeDelta, breakpointIndex);
-            breakpointSizeDelta[breakpointIndex] = rectTransform.sizeDelta;
+            Utils.ExpandList(breakpointSizeDelta, targetBreakpointIndex);
+            breakpointSizeDelta[targetBreakpointIndex] = rectTransform.sizeDelta;
         }
 #endif
 
-        protected override void ExecuteResponsiveAction()
+        public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
             SetValue(breakpointIndex);
         }
 

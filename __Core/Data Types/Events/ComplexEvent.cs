@@ -19,6 +19,19 @@ namespace AltSalt
 
 		private List<ComplexEventListenerBehaviour> listeners = new List<ComplexEventListenerBehaviour>();
 
+        public void Raise()
+        {
+            if (LogListenersOnRaise == true) {
+                Debug.Log(this.name + " raised! Following listeners activated:");
+            }
+            for (int i = listeners.Count - 1; i >= 0; i--) {
+                if (LogListenersOnRaise == true) {
+                    Debug.Log(listeners[i], listeners[i].gameObject);
+                }
+                listeners[i].OnEventRaised(EventPayload.CreateInstance());
+            }
+        }
+
         public void Raise(string value)
         {
             if (LogListenersOnRaise == true) {

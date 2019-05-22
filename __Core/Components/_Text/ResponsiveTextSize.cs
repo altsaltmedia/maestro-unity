@@ -4,12 +4,12 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
-    public class ResponsiveTextSize : ResponsiveText, IResponsiveSaveable, IResponsiveWithBreakpoints
+    public class ResponsiveTextSize : ResponsiveText, IResponsiveSaveable
     {      
         public List<float> breakpointTextSize = new List<float>();
 
 #if UNITY_EDITOR
-        [HorizontalGroup("Split", 0.5f)]
+        
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         [InfoBox("Saves the position at the current breakpoint index.")]
         public void SaveValue()
@@ -19,34 +19,16 @@ namespace AltSalt
                 return;
             }
 
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int targetBreakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
 
-            Utils.ExpandList(breakpointTextSize, breakpointIndex);
-            breakpointTextSize[breakpointIndex] = textMeshPro.fontSize;
-        }
-
-        public override void Reset()
-        {
-            base.Reset();
-            hasBreakpoints = true;
-        }
-
-        public void LogBreakpointMessage()
-        {
-            Debug.Log("Please specify at least one breakpoint and two corresponding values on " + this.name, this);
+            Utils.ExpandList(breakpointTextSize, targetBreakpointIndex);
+            breakpointTextSize[targetBreakpointIndex] = textMeshPro.fontSize;
         }
 #endif
 
-        protected override void ExecuteResponsiveAction()
+        public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
-#if UNITY_EDITOR
-            if (aspectRatioBreakpoints.Count < 1) {
-                LogBreakpointMessage();
-                return;
-            }
-#endif
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
             SetValue(breakpointIndex);
         }
 
@@ -54,7 +36,7 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if (activeIndex >= breakpointTextSize.Count) {
-                LogBreakpointMessage();
+                LogBreakpointError();
                 return;
             }
 #endif

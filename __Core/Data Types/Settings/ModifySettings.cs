@@ -10,10 +10,10 @@ namespace AltSalt
     {
         [Header("Modify Settings")]
         [Required]
-        public Language defaultLanguage;
+        public TextFamily defaultTextFamily;
 
         [Required]
-        public Language activeLanguage;
+        public TextFamily activeTextFamily;
 
         [Required]
         public Layout defaultLayout;

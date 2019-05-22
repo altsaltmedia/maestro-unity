@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DeveloperDescription: After evaluating swipe input, a variable to track whether
     we are moving forward in a timeline or backward.
-  Value: 1
+  Value: 0

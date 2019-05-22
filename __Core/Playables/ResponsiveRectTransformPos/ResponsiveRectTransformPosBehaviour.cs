@@ -31,7 +31,7 @@ namespace AltSalt
         }
 
 #if UNITY_EDITOR
-        [HorizontalGroup("Split", 0.5f)]
+        
         [InfoBox("Creates placeholder values based on number of breakpoints.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SaveValue()

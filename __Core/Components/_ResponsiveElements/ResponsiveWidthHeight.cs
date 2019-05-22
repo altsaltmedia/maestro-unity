@@ -4,13 +4,12 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
-    public class ResponsiveWidthHeight : ResponsiveRectTransform, IResponsiveSaveable, IResponsiveWithBreakpoints
+    public class ResponsiveWidthHeight : ResponsiveRectTransform, IResponsiveSaveable
     {
         
         public List<Vector2> breakpointSizeDelta = new List<Vector2>();
         
 #if UNITY_EDITOR
-        [HorizontalGroup("Split", 0.5f)]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         [InfoBox("Saves the position at the current breakpoint index.")]
         public void SaveValue()
@@ -20,34 +19,16 @@ namespace AltSalt
                 return;
             }
 
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int targetBreakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
 
-            Utils.ExpandList(breakpointSizeDelta, breakpointIndex);
-            breakpointSizeDelta[breakpointIndex] = rectTransform.sizeDelta;
-        }
-
-        public override void Reset()
-        {
-            base.Reset();
-            hasBreakpoints = true;
-        }
-
-        public void LogBreakpointMessage()
-        {
-            Debug.Log("Please specify at least one breakpoint and two corresponding values on " + this.name, this);
+            Utils.ExpandList(breakpointSizeDelta, targetBreakpointIndex);
+            breakpointSizeDelta[targetBreakpointIndex] = rectTransform.sizeDelta;
         }
 #endif
 
-        protected override void ExecuteResponsiveAction()
+        public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
-#if UNITY_EDITOR
-            if (aspectRatioBreakpoints.Count < 1) {
-                LogBreakpointMessage();
-                return;
-            }
-#endif
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
             SetValue(breakpointIndex);
         }
 
@@ -55,7 +36,7 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if (activeIndex >= breakpointSizeDelta.Count) {
-                LogBreakpointMessage();
+                LogBreakpointError();
                 return;
             }
 #endif

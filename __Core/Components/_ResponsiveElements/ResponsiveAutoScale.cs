@@ -11,10 +11,9 @@ namespace AltSalt
 #endif
     public class ResponsiveAutoScale : ResponsiveRectTransform
     {
-
         [ValueDropdown("dimensionValues")]
         [SerializeField]
-        DimensionType baseDimensionType;
+        List<DimensionType> baseDimensionTypes = new List<DimensionType>();
 
         private ValueDropdownList<DimensionType> dimensionValues = new ValueDropdownList<DimensionType>(){
             {"Vertical", DimensionType.Vertical },
@@ -23,7 +22,7 @@ namespace AltSalt
 
         [ValueDropdown("aspectRatioValues")]
         [SerializeField]
-        AspectRatioType objectAspectRatio;
+        List<AspectRatioType> objectAspectRatios = new List <AspectRatioType>();
 
         private ValueDropdownList<AspectRatioType> aspectRatioValues = new ValueDropdownList<AspectRatioType>(){
             {"16 x 9", AspectRatioType.x16x9 },
@@ -33,71 +32,107 @@ namespace AltSalt
 
         [SerializeField]
         [Range(0, 3)]
-        float dimensionPercentage = 1f;
+        List<float> dimensionPercentages = new List<float>();
 
         [SerializeField]
-        float maxDimensionValue;
+        List<float> maxDimensionValues = new List<float>();
 
-        protected override void ExecuteResponsiveAction()
+#if UNITY_EDITOR
+        void OnEnable()
+        {
+            UpdateBreakpointDependencies();
+        }
+
+        protected override void UpdateBreakpointDependencies()
+        {
+            base.UpdateBreakpointDependencies();
+            if (baseDimensionTypes.Count == 0) {
+                baseDimensionTypes.Add(DimensionType.Vertical);
+            }
+            if (objectAspectRatios.Count == 0) {
+                objectAspectRatios.Add(AspectRatioType.x16x9);
+            }
+            if (dimensionPercentages.Count == 0) {
+                dimensionPercentages.Add(1f);
+            }
+            if(maxDimensionValues.Count == 0) {
+                maxDimensionValues.Add(0);
+            }
+
+            if(baseDimensionTypes.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(baseDimensionTypes, aspectRatioBreakpoints.Count);
+            }
+            if(objectAspectRatios.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(objectAspectRatios, aspectRatioBreakpoints.Count);
+            }
+            if (dimensionPercentages.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(dimensionPercentages, aspectRatioBreakpoints.Count);
+            }
+            if (maxDimensionValues.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(maxDimensionValues, aspectRatioBreakpoints.Count);
+            }
+        }
+
+        void OnValidate()
+        {
+            UpdateBreakpointDependencies();
+            ExecuteResponsiveAction();
+        }
+#endif
+
+        public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
+            SetValue(breakpointIndex);
+        }
+
+        void SetValue(int activeIndex)
+        {
             // Custom equation of an exponential function - equation is in the form y = a^x * b
             // It is derived by taking two (X,Y) coordinates along the line, creating two equations
             // in the form above, then dividing one equation by the other to solve for a and b.
             double baseDimension = (Math.Pow(0.561993755433366d, ((double)screenHeight.Value / (double)screenWidth.Value))) * 10.03014554127636d;
-            baseDimension *= dimensionPercentage;
-            if (maxDimensionValue > 0 && baseDimension > maxDimensionValue) {
-                baseDimension = maxDimensionValue;
+            baseDimension *= dimensionPercentages[activeIndex];
+            if (maxDimensionValues[activeIndex] > 0 && baseDimension > maxDimensionValues[activeIndex]) {
+                baseDimension = maxDimensionValues[activeIndex];
             }
 
-            double dependentDimension = 0d;
-            if (baseDimensionType == DimensionType.Vertical) {
-                dependentDimension = GetDependentDimension(objectAspectRatio, baseDimension, RatioType.Denominator);
+            double dependentDimension;
+            if (baseDimensionTypes[activeIndex] == DimensionType.Vertical) {
+                dependentDimension = GetDependentDimension(objectAspectRatios[activeIndex], baseDimension, RatioType.Denominator);
                 rectTransform.localScale = new Vector2((float)dependentDimension, (float)baseDimension);
-            }
-            else {
-                dependentDimension = GetDependentDimension(objectAspectRatio, baseDimension, RatioType.Numerator);
+            } else {
+                dependentDimension = GetDependentDimension(objectAspectRatios[activeIndex], baseDimension, RatioType.Numerator);
                 rectTransform.localScale = new Vector2((float)baseDimension, (float)dependentDimension);
             }
         }
 
         double GetDependentDimension(AspectRatioType referenceAspectRatio, double referenceVal, RatioType ratioType)
         {
-
             if (referenceAspectRatio == AspectRatioType.x16x9) {
 
                 if (ratioType == RatioType.Numerator) {
                     return (referenceVal * 9.0d / 16.0d);
-                }
-                else {
+                } else {
                     return (referenceVal * 16.0d / 9.0d);
                 }
 
-            }
-            else if (referenceAspectRatio == AspectRatioType.x9x16) {
+            } else if (referenceAspectRatio == AspectRatioType.x9x16) {
 
                 if (ratioType == RatioType.Numerator) {
                     return (referenceVal * 16.0d / 9.0d);
-                }
-                else {
+                } else {
                     return (referenceVal * 9.0d / 16.0d);
                 }
 
-            }
-            else {
+            } else {
 
                 if (ratioType == RatioType.Numerator) {
                     return (referenceVal * 3.0d / 4.0d);
-                }
-                else {
+                } else {
                     return (referenceVal * 4.0d / 3.0d);
                 }
             }
-        }
-
-        void OnValidate()
-        {
-            ExecuteResponsiveAction();
         }
 
     }

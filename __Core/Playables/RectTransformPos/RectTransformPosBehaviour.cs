@@ -23,7 +23,7 @@ namespace AltSalt
         public Vector3 targetPosition = new Vector3(0, 0, 0);
 
 #if UNITY_EDITOR
-        [HorizontalGroup("Split", 0.5f)]
+        
         [InfoBox("Saves active object's position as initial.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 0.2f)]
         public void SaveActiveObjectInitialPosition()
@@ -32,7 +32,7 @@ namespace AltSalt
             initialPosition = rectTransform.localPosition;
         }
 
-        [HorizontalGroup("Split", 0.5f)]
+        
         [InfoBox("Saves active object's position as target.")]
         [Button(ButtonSizes.Large), GUIColor(0.2f, 0.2f, 0.5f)]
         public void SaveActiveObjectTargetPosition()

@@ -13,7 +13,10 @@ namespace AltSalt
         public BoolReference paused;
 
         [ValidateInput("IsPopulated")]
-        public BoolReference localizationActive;
+        public BoolReference modifyTextActive;
+
+        [ValidateInput("IsPopulated")]
+        public BoolReference modifyLayoutActive;
 
         [ValidateInput("IsPopulated")]
         public BoolReference autoplayActive;

@@ -9,7 +9,7 @@ namespace AltSalt
         public List<float> breakpointTextSize = new List<float>();
 
 #if UNITY_EDITOR
-        [HorizontalGroup("Split", 0.5f)]
+        
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         [InfoBox("Saves the position at the current breakpoint index.")]
         public void SaveValue()
@@ -19,18 +19,17 @@ namespace AltSalt
                 return;
             }
 
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int targetBreakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
 
-            Utils.ExpandList(breakpointTextSize, breakpointIndex);
-            breakpointTextSize[breakpointIndex] = textMeshProUGUI.fontSize;
+            Utils.ExpandList(breakpointTextSize, targetBreakpointIndex);
+            breakpointTextSize[targetBreakpointIndex] = textMeshProUGUI.fontSize;
 
         }
 #endif
 
-        protected override void ExecuteResponsiveAction()
+        public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
             SetValue(breakpointIndex);
         }
 

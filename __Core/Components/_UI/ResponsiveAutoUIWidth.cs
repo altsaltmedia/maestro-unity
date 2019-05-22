@@ -13,8 +13,6 @@ namespace AltSalt
         [Required]
         public RectTransform referenceWidth;
 
-        int activeBreakpointIndex = -1;
-
         [Range(0,1)]
         public List<float> breakpointWidthMargin = new List<float>();
 
@@ -37,7 +35,6 @@ namespace AltSalt
                 Utils.ExpandList(breakpointWidthMargin, aspectRatioBreakpoints.Count);
             }
 
-            DetermineBreakpointIndex();
             if (ValuesChanged() == true) {
                 ExecuteResponsiveAction();
             }
@@ -45,7 +42,7 @@ namespace AltSalt
 
         bool ValuesChanged()
         {
-            if (Mathf.Approximately(internalWidthMarginValue, breakpointWidthMargin[activeBreakpointIndex]) == false ||
+            if (Mathf.Approximately(internalWidthMarginValue, breakpointWidthMargin[breakpointIndex]) == false ||
                 Mathf.Approximately(internalWidthValue, referenceWidth.sizeDelta.x) == false) {
                 StoreInternalValues();
                 return true;
@@ -58,22 +55,20 @@ namespace AltSalt
         void StoreInternalValues()
         {
             internalWidthValue = referenceWidth.sizeDelta.x;
-            internalWidthMarginValue = breakpointWidthMargin[activeBreakpointIndex];
+            internalWidthMarginValue = breakpointWidthMargin[breakpointIndex];
         }
 
 #endif
-
-        void DetermineBreakpointIndex()
-        {
-            activeBreakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
-        }
-
-        protected override void ExecuteResponsiveAction()
+        public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
-            DetermineBreakpointIndex();
+            SetValue(breakpointIndex);
+        }
+
+        void SetValue(int activeIndex)
+        {
             float width = referenceWidth.sizeDelta.x;
-            float widthModifier = Utils.GetValueFromDesiredPercent(width, breakpointWidthMargin[activeBreakpointIndex]);
+            float widthModifier = Utils.GetValueFromDesiredPercent(width, breakpointWidthMargin[activeIndex]);
 
             rectTransform.sizeDelta = new Vector2(width - widthModifier, rectTransform.sizeDelta.y);
         }

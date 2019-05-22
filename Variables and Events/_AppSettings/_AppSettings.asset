@@ -20,10 +20,14 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: beb98614f83ef43c4903ef214b89dd16, type: 2}
-  localizationActive:
+  modifyTextActive:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: da9523395f3b841e29f5d6c4cc52ae63, type: 2}
+  modifyLayoutActive:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: a3f4ec9668d034f12bdf87f121b39274, type: 2}
   autoplayActive:
     UseConstant: 0
     ConstantValue: 0
@@ -48,5 +52,3 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 92e511ba33ae14ae6affd1b4e2ed44eb, type: 2}
-  activeLanguage: {fileID: 11400000, guid: d396df60c4d8641cdb7f41cbc6ada683, type: 2}
-  activeLayout: {fileID: 11400000, guid: 8a21716b405684ab9ac3faffbd67d597, type: 2}

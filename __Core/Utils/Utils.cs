@@ -37,6 +37,7 @@ namespace AltSalt
     {
 
         public static Color transparent = new Color(1, 1, 1, 0);
+        public static float pageHeight = 6.3f;
 
         public static int GetAxisId(string axisName)
         {
@@ -277,6 +278,24 @@ namespace AltSalt
             }
         }
 
+        public static void ExpandList(List<DimensionType> list, int index)
+        {
+            // Must add 1 to zero-based index in order to compare correctly
+            // with the length of the list
+            while (list.Count < index + 1) {
+                list.Add(new DimensionType());
+            }
+        }
+
+        public static void ExpandList(List<AspectRatioType> list, int index)
+        {
+            // Must add 1 to zero-based index in order to compare correctly
+            // with the length of the list
+            while (list.Count < index + 1) {
+                list.Add(new AspectRatioType());
+            }
+        }
+
         public static float GetValueFromDesiredPercent(float baseNumber, float desiredPercent)
         {
             return baseNumber * desiredPercent;
@@ -448,7 +467,7 @@ namespace AltSalt
             return attribute.Count < 1 ? false : true;
         }
 
-        public static bool IsPopulated(List<LocalizationCorpus> attribute) {
+        public static bool IsPopulated(List<TextCollectionBank> attribute) {
             return attribute.Count < 1 ? false : true;
         }
 

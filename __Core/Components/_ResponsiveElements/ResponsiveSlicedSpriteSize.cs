@@ -10,7 +10,6 @@ namespace AltSalt
 #endif
     public class ResponsiveSlicedSpriteSize : ResponsiveSprite
     {
-
         [Range(0, 1)]
         public float margin = 0f;
 
@@ -59,7 +58,7 @@ namespace AltSalt
 
 #endif
 
-        protected override void ExecuteResponsiveAction()
+        public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
             // Custom equation of an exponential function - equation is in the form y = a^x * b
@@ -72,8 +71,7 @@ namespace AltSalt
 
             if (orientation == DimensionType.Vertical) {
                 spriteRenderer.size = new Vector2((float)newDimension - dimensionModifier, spriteRenderer.size.y);
-            }
-            else {
+            } else {
                 spriteRenderer.size = new Vector2(spriteRenderer.size.x, (float)newDimension - dimensionModifier);
             }
         }

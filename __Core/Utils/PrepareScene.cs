@@ -84,8 +84,15 @@ namespace AltSalt {
             {"Horizontal", DimensionType.Horizontal }
         };
 
-        // Use this for initialization
         void Start () {
+            ResetScene();
+		}
+
+        [HorizontalGroup("Split", 1f)]
+        [InfoBox("Reset scene variables")]
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void ResetScene()
+        {
             xSwipeAxis.Active = defaultX;
             ySwipeAxis.Active = defaultY;
             zSwipeAxis.Active = defaultZ;
@@ -116,7 +123,7 @@ namespace AltSalt {
             }
 
             prepareSceneCompleted.Raise();
-		}
+        }
 
         void TriggerResetSequences()
         {

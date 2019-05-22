@@ -58,11 +58,11 @@ MonoBehaviour:
     vpRenderer: {fileID: 7765384545820753366}
     isHidden: 0
   reverseVideoInstance:
-    videoObject: {fileID: 5605975289144988313}
-    vpScript: {fileID: 8281539030200065033}
-    vpComponent: {fileID: 8448512369978898731}
-    vpRenderer: {fileID: 351002992639903556}
-    isHidden: 1
+    videoObject: {fileID: 0}
+    vpScript: {fileID: 0}
+    vpComponent: {fileID: 0}
+    vpRenderer: {fileID: 0}
+    isHidden: 0
   isReversing:
     UseConstant: 0
     ConstantValue: 0
