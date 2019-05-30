@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 224767354529110132}
   - component: {fileID: 20290996921888062}
-  m_Layer: 2
-  m_Name: Main Camera
+  - component: {fileID: 7582347771626022076}
+  m_Layer: 0
+  m_Name: AltSalt Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,16 +49,17 @@ Camera:
   m_ClearFlags: 2
   m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
   m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_GateFitMode: 2
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1
-    height: 1
+    width: 0
+    height: 0.825
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 63.7
@@ -78,3 +80,56 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &7582347771626022076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892881052307360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9ced0210ec494ceabf10468baa52844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: -1622733632
+  modifySettings: {fileID: 11400000, guid: 09fba8b7455af408cb2e663bc6591f01, type: 2}
+  nonserializedProperties:
+  - id
+  - nonserializedProperties
+  - modifySettings
+  - appSettings
+  - screenResized
+  - layoutUpdate
+  - screenWidth
+  - screenHeight
+  - aspectRatio
+  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  screenResized: {fileID: 11400000, guid: 6958e603947ff451aac4f96c5c846b5f, type: 2}
+  layoutUpdate: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
+  screenWidth:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: f30a66a737e6648e8b1a96d7d6bb77af, type: 2}
+  screenHeight:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: b3d3a094f9cae403cb93cba61a05913b, type: 2}
+  aspectRatio:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 485c485f334ad43f2b87301367c6b4af, type: 2}
+  hasBreakpoints: 1
+  aspectRatioBreakpoints:
+  - 1.78
+  viewportValues:
+  - serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  - serializedVersion: 2
+    x: 0
+    y: 0.09
+    width: 1
+    height: 0.825

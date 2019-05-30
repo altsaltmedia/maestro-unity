@@ -52,7 +52,7 @@ namespace AltSalt
         [Button(ButtonSizes.Large), GUIColor(0.65f, 0.65f, 0.65f)]
         public void TargetBlack()
         {
-            targetColor = new Color(0, 0, 0, initialColor.a);
+            targetColor = new Color(0, 0, 0, targetColor.a);
         }
 
         [HorizontalGroup("Row 4", 0.5f)]
@@ -67,7 +67,7 @@ namespace AltSalt
         [Button(ButtonSizes.Large), GUIColor(1f, 1f, 1f)]
         public void TargetWhite()
         {
-            targetColor = new Color(1, 1, 1, initialColor.a);
+            targetColor = new Color(1, 1, 1, targetColor.a);
         }
 #endif
     }

@@ -29,7 +29,7 @@ namespace AltSalt
         public void SaveActiveObjectInitialPosition()
         {
             RectTransform rectTransform = Selection.activeGameObject.GetComponent<RectTransform>();
-            initialPosition = rectTransform.localPosition;
+            initialPosition = rectTransform.anchoredPosition3D;
         }
 
         
@@ -38,7 +38,7 @@ namespace AltSalt
         public void SaveActiveObjectTargetPosition()
         {
             RectTransform rectTransform = Selection.activeGameObject.GetComponent<RectTransform>();
-            targetPosition = rectTransform.localPosition;
+            targetPosition = rectTransform.anchoredPosition3D;
         }
 #endif
     }

@@ -10,12 +10,23 @@ namespace AltSalt
 
     public class UnityEventTriggerBehaviour : MonoBehaviour
     {
+        [ValueDropdown("boolValueList")]
+        [SerializeField]
+        bool triggerOnStart = true;
+
+        private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
+            {"YES", true },
+            {"NO", false }
+        };
+
         [SerializeField]
         List<ConditionEventPair> conditionEventPairs = new List<ConditionEventPair>();
 
         void Start()
         {
-            ExecuteEvents();
+            if(triggerOnStart == true) {
+                ExecuteEvents();
+            }
         }
 
         [HorizontalGroup("Split", 1f)]

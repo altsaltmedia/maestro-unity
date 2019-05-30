@@ -5,9 +5,7 @@ using System.Linq;
 
 namespace AltSalt
 {
-    #if UNITY_EDITOR
     [ExecuteInEditMode]
-    #endif
     public class RelativeElementController : MonoBehaviour
     {
         RelativeElement[] relativeElements;

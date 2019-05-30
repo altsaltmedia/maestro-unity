@@ -6,9 +6,7 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
-    #if UNITY_EDITOR
     [ExecuteInEditMode]
-    #endif
     public class RelativePage : RelativeElement
     {
         [ValueDropdown("orientationValues")]

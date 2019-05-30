@@ -57,15 +57,11 @@ namespace AltSalt {
         SequenceList sequenceList;
 
         [SerializeField]
-        bool bufferScene;
-
-        [ShowIf("bufferScene")]
-        [ShowInInspector, ReadOnly]
-        int sequencesBuffered = 0;
+        bool delayStart;
 
         [SerializeField]
-        [ShowIf("bufferScene")]
-        int totalSequenceCount = 1;
+        [ShowIf("delayStart")]
+        float delayAmount;
 
         [SerializeField]
         [Required]
@@ -122,6 +118,16 @@ namespace AltSalt {
                 fadeInTriggered.Raise();
             }
 
+            if(delayStart == false) {
+                prepareSceneCompleted.Raise();
+            } else {
+                StartCoroutine(PrepareSceneCompleteTimedDelay());
+            }
+        }
+
+        IEnumerator PrepareSceneCompleteTimedDelay()
+        {
+            yield return new WaitForSeconds(delayAmount);
             prepareSceneCompleted.Raise();
         }
 

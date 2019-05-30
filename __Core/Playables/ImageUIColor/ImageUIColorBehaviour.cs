@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt
 {
     [Serializable]
-    public class TMProColorBehaviour : LerpToTargetBehaviour
+    public class ImageUIColorBehaviour : LerpToTargetBehaviour
     {
         public Color initialColor = new Color(0,0,0,0);
         public Color targetColor = new Color(0,0,0,1);

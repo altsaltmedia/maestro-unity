@@ -6,7 +6,6 @@ namespace AltSalt
 {
     [TrackColor(0.245149f, 0.895372f, 0.5679245f)]
     [TrackClipType(typeof(ComplexEventTriggerClip))]
-    [TrackBindingType(typeof(ComplexEvent))]
     public class ComplexEventTriggerTrack : TrackAsset
     {
         public void StoreClipStartEndTime()

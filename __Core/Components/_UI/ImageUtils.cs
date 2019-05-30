@@ -26,6 +26,12 @@ namespace AltSalt
             GetImageComponent();
             image.color = colorVariable.Value;
         }
+
+        public void SetColor(Color color)
+        {
+            GetImageComponent();
+            image.color = color;
+        }
     }
     
 }
