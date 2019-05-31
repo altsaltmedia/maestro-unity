@@ -92,10 +92,6 @@ namespace AltSalt
 
         public void Drag()
         {
-            Debug.Log("content position: ");
-            Debug.Log(content.anchoredPosition.x);
-            Debug.Log("zero element position: ");
-            Debug.Log(scrollSnapElements[scrollSnapElements.Length - 1].rectTransform.anchoredPosition.x);
             if (activeElementID <= 0 && content.anchoredPosition.x > scrollSnapElements[0].rectTransform.anchoredPosition.x * -1f) {
                 content.anchoredPosition = new Vector2(scrollSnapElements[0].rectTransform.anchoredPosition.x * -1f, content.anchoredPosition.y);
             }
@@ -110,25 +106,6 @@ namespace AltSalt
             if(isLerping == true) {
                 return;
             }
-            //dragging = false;
-
-            //for (int i = 0; i < scrollSnapElements.Length; i++) {
-            //    distances[i] = Mathf.Abs(center.transform.position.x - scrollSnapElements[i].rectTransform.transform.position.x);
-            //}
-
-            //minDistance = float.NaN;
-
-            //for (int q = 0; q < distances.Length; q++) {
-            //    if (q != activeElementID && (float.IsNaN(minDistance) || distances[q] < minDistance)) {
-            //        minDistance = distances[q];
-            //    }
-            //}
-
-            //for (int a = 0; a < scrollSnapElements.Length; a++) {
-            //    if (Mathf.Approximately(minDistance, distances[a])) {
-            //        activeElementID = a;
-            //    }
-            //}
 
             if (content.anchoredPosition.x > previousPosition) {
                 CallLerpToPreviousElement();

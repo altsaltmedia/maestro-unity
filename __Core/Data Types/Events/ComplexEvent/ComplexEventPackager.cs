@@ -168,7 +168,7 @@ namespace AltSalt
                 if(customStringKey == true && stringKeys.Length >= 1) {
                     eventPayload.Set(stringKeys[0], stringValues[0]);
                 } else {
-                    eventPayload.Set(EventPayloadType.stringPayload, stringValues[0]);
+                    eventPayload.Set(DataType.stringType, stringValues[0]);
                 }
             }
             else {
@@ -189,7 +189,7 @@ namespace AltSalt
                 if (customFloatKey == true && floatKeys.Length >= 1) {
                     eventPayload.Set(floatKeys[0], floatValues[0]);
                 } else {
-                    eventPayload.Set(EventPayloadType.floatPayload, floatValues[0]);
+                    eventPayload.Set(DataType.floatType, floatValues[0]);
                 }
             }
             else {
@@ -210,7 +210,7 @@ namespace AltSalt
                 if (customBoolKey == true && boolKeys.Length >= 1) {
                     eventPayload.Set(boolKeys[0], boolValues[0]);
                 } else {
-                    eventPayload.Set(EventPayloadType.boolPayload, boolValues[0]);
+                    eventPayload.Set(DataType.boolType, boolValues[0]);
                 }
             }
             else {
@@ -231,7 +231,7 @@ namespace AltSalt
                 if (customScriptableObjectKey == true && scriptableObjectKeys.Length >= 1) {
                     eventPayload.Set(scriptableObjectKeys[0], scriptableObjectValues[0]);
                 } else {
-                    eventPayload.Set(EventPayloadType.scriptableObjectPayload, scriptableObjectValues[0]);
+                    eventPayload.Set(DataType.scriptableObjectType, scriptableObjectValues[0]);
                 }
             }
             else {

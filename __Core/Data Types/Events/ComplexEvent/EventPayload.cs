@@ -47,28 +47,28 @@ namespace AltSalt
         public static new EventPayload CreateInstance(string value)
         {
             EventPayload payloadInstance = Init();
-            payloadInstance.stringDictionary[EventPayloadType.stringPayload] = value;
+            payloadInstance.stringDictionary[DataType.stringType] = value;
             return payloadInstance;
         }
 
         public static EventPayload CreateInstance(float value)
         {
             EventPayload payloadInstance = Init();
-            payloadInstance.floatDictionary[EventPayloadType.floatPayload] = value;
+            payloadInstance.floatDictionary[DataType.floatType] = value;
             return payloadInstance;
         }
 
         public static EventPayload CreateInstance(bool value)
         {
             EventPayload payloadInstance = Init();
-            payloadInstance.boolDictionary[EventPayloadType.boolPayload] = value;
+            payloadInstance.boolDictionary[DataType.boolType] = value;
             return payloadInstance;
         }
 
         public static EventPayload CreateInstance(ScriptableObject value)
         {
             EventPayload payloadInstance = Init();
-            payloadInstance.scriptableObjectDictionary[EventPayloadType.scriptableObjectPayload] = value;
+            payloadInstance.scriptableObjectDictionary[DataType.scriptableObjectType] = value;
             return payloadInstance;
         }
 
@@ -150,22 +150,22 @@ namespace AltSalt
 
         public void Set(string value)
         {
-            stringDictionary[EventPayloadType.stringPayload] = value;
+            stringDictionary[DataType.stringType] = value;
         }
 
         public void Set(float value)
         {
-            floatDictionary[EventPayloadType.floatPayload] = value;
+            floatDictionary[DataType.floatType] = value;
         }
 
         public void Set(bool value)
         {
-            boolDictionary[EventPayloadType.boolPayload] = value;
+            boolDictionary[DataType.boolType] = value;
         }
 
         public void Set(ScriptableObject value)
         {
-            scriptableObjectDictionary[EventPayloadType.scriptableObjectPayload] = value;
+            scriptableObjectDictionary[DataType.scriptableObjectType] = value;
         }
 
         public void Set (object key, string value)

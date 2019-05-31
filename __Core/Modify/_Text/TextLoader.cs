@@ -65,7 +65,7 @@ namespace AltSalt
             if(textCollectionBank == null) {
                 return;
             }
-            TextCollectionBank targetTextBank = eventPayload.GetScriptableObjectValue(EventPayloadType.scriptableObjectPayload) as TextCollectionBank;
+            TextCollectionBank targetTextBank = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as TextCollectionBank;
 
             // If the textUpdate event was raised without a text bank, then update the text.
             // Otherwise, check to see if this text's bank matches the one slated for update.

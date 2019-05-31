@@ -10,10 +10,8 @@ using SimpleJSON;
 
 namespace AltSalt
 {
-
-    #if UNITY_EDITOR
+    
     [ExecuteInEditMode]
-    #endif
     public abstract class ResponsiveElement : SerializableElement
     {
         [Required]

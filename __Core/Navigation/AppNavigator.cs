@@ -43,7 +43,7 @@ namespace AltSalt
         // The first scene will always be a single load, done immediately w/o a call to
         // make a fade out first, so we have a special case for it here
         public void LoadInitialScene(EventPayload eventPayload) {
-            sceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload);
+            sceneName = eventPayload.GetStringValue(DataType.stringType);
             StartCoroutine(AsyncLoad(sceneName, LoadSceneMode.Single));
         }
 
@@ -51,8 +51,8 @@ namespace AltSalt
         // and additive scenes are loaded immediately without a call to the fader
         public void TriggerSceneLoad(EventPayload eventPayload) {
             
-            sceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload);
-            loadMode = eventPayload.GetBoolValue(EventPayloadType.boolPayload) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
+            sceneName = eventPayload.GetStringValue(DataType.stringType);
+            loadMode = eventPayload.GetBoolValue(DataType.boolType) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
             if(loadMode == LoadSceneMode.Single) {
                 fadeOutTriggered.Raise();
@@ -83,7 +83,7 @@ namespace AltSalt
 
         public void TriggerUnloadScene(EventPayload eventPayload)
         {
-            string unloadSceneName = eventPayload.GetStringValue(EventPayloadType.stringPayload);
+            string unloadSceneName = eventPayload.GetStringValue(DataType.stringType);
             StartCoroutine(AsyncUnload(unloadSceneName));
         }
 

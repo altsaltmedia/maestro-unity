@@ -27,16 +27,27 @@ namespace AltSalt
         [SerializeField]
         ComplexEvent initializeApp;
 
-        [InfoBox("Will load this scene immediately following the bootstrapper")]
         [SerializeField]
         [DisableIf("loadDebugMenu")]
-        string firstSceneName;
+        [BoxGroup("Standard Scenes")]
+        [InfoBox("Loaded when the app first opens")]
+        string initialSceneName;
 
         [SerializeField]
+        [DisableIf("loadDebugMenu")]
+        [BoxGroup("Standard Scenes")]
+        [InfoBox("Loaded upon subsequent openings")]
+        string subsequentSceneName;
+
+        [PropertySpace(1)]
+
+        [SerializeField]
+        [BoxGroup("Debug Scene")]
         bool loadDebugMenu;
 
         [SerializeField]
         [ShowIf("loadDebugMenu")]
+        [BoxGroup("Debug Scene")]
         string debugMenuName;
 
         IEnumerator Start()
@@ -51,7 +62,11 @@ namespace AltSalt
             if(loadDebugMenu == true) {
                 eventPayload.Set(debugMenuName);
             } else {
-                eventPayload.Set(firstSceneName);
+                if(appSettings.hasBeenOpened == false) {
+                    eventPayload.Set(initialSceneName);
+                } else {
+                    eventPayload.Set(subsequentSceneName);
+                }
             }
             initializeApp.Raise(eventPayload);
             Destroy(eventPayload);

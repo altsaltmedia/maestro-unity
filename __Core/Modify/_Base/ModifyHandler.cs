@@ -11,9 +11,7 @@ using UnityEditor;
 namespace AltSalt
 {
 
-#if UNITY_EDITOR
     [ExecuteInEditMode]
-#endif
     public class ModifyHandler : MonoBehaviour
     {
 #if UNITY_EDITOR
@@ -65,8 +63,8 @@ namespace AltSalt
 
         public void TriggerTextModify(EventPayload eventPayload)
         {
-            modifySettings.activeTextFamily = eventPayload.GetScriptableObjectValue(EventPayloadType.scriptableObjectPayload) as TextFamily;
-            TextCollectionBank textCollectionBank = eventPayload.GetScriptableObjectValue(EventPayloadType.scriptableObjectPayload) as TextCollectionBank;
+            modifySettings.activeTextFamily = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as TextFamily;
+            TextCollectionBank textCollectionBank = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as TextCollectionBank;
             TriggerTextUpdate(textCollectionBank);
 
             if(modifySettings.activeTextFamily.supportedLayouts.Count == 0) {
@@ -88,7 +86,7 @@ namespace AltSalt
 
         public void TriggerLayoutModify(EventPayload eventPayload)
         {
-            modifySettings.activeLayout = eventPayload.GetScriptableObjectValue(EventPayloadType.scriptableObjectPayload) as Layout;
+            modifySettings.activeLayout = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as Layout;
             TriggerLayoutUpdate();
 
             if (modifySettings.activeLayout.supportedTextFamilies.Count == 0) {

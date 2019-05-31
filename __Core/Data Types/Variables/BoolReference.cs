@@ -9,6 +9,7 @@ https://www.altsalt.com / ricky@altsalt.com
 **********************************************/
 
 using System;
+using Sirenix.OdinInspector;
 
 namespace AltSalt
 {   
@@ -16,7 +17,20 @@ namespace AltSalt
 	public class BoolReference
 	{
 		public bool UseConstant = false;
+
+        [PropertySpace]
+
+        [ValueDropdown("boolValueList")]
 		public bool ConstantValue;
+
+
+        private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
+            {"TRUE", true },
+            {"FALSE", false }
+        };
+
+        [PropertySpace]
+
 		public BoolVariable Variable;
 		
 		public BoolReference()

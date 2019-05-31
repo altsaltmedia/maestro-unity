@@ -31,7 +31,9 @@ namespace AltSalt
 
     public enum AxisDestination { fromAxis, toAxis }
 
-    public enum EventPayloadType { stringPayload, floatPayload, boolPayload, scriptableObjectPayload }
+    public enum DataType { stringType, floatType, boolType, intType, scriptableObjectType }
+
+    public enum ComparisonValues { GreaterThan, LessThan, EqualTo }
 
     public static class Utils
     {
@@ -63,6 +65,11 @@ namespace AltSalt
         }
 
 #if UNITY_EDITOR
+        static void LogDuplicateAssetWarning(string assetName)
+        {
+            Debug.LogWarning("More than one matching asset found for search " + assetName + ". Please check to see if this is intentional.");
+        }
+
         public static AppSettings GetAppSettings()
         {
             string[] guids;
@@ -71,7 +78,7 @@ namespace AltSalt
             guids = AssetDatabase.FindAssets("t:AppSettings");
 
             if(guids.Length > 1) {
-                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+                Debug.LogWarning("More than one matching App Settings asset found. Please check to see if this is intentional.");
             }
 
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
@@ -91,7 +98,7 @@ namespace AltSalt
             }
 
             if (guids.Length > 1) {
-                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+                Debug.LogWarning("More than one matching Modify Settings asset found. Please check to see if this is intentional.");
             }
 
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
@@ -107,7 +114,7 @@ namespace AltSalt
             guids = AssetDatabase.FindAssets(target);
 
             if (guids.Length > 1) {
-                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+                LogDuplicateAssetWarning(target);
             }
 
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
@@ -123,7 +130,7 @@ namespace AltSalt
             guids = AssetDatabase.FindAssets(target);
 
             if (guids.Length > 1) {
-                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+                LogDuplicateAssetWarning(target);
             }
 
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
@@ -139,7 +146,7 @@ namespace AltSalt
             guids = AssetDatabase.FindAssets(target);
 
             if (guids.Length > 1) {
-                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+                LogDuplicateAssetWarning(target);
             }
 
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
@@ -155,7 +162,7 @@ namespace AltSalt
             guids = AssetDatabase.FindAssets(target);
 
             if (guids.Length > 1) {
-                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+                LogDuplicateAssetWarning(target);
             }
 
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
@@ -171,7 +178,7 @@ namespace AltSalt
             guids = AssetDatabase.FindAssets(target);
 
             if (guids.Length > 1) {
-                Debug.LogWarning("More than one matching file found. Please check to see if this is intentional.");
+                LogDuplicateAssetWarning(target);
             }
 
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
@@ -473,7 +480,15 @@ namespace AltSalt
 
         public static bool IsPopulated(UnityEvent attribute)
         {
-            return attribute.GetPersistentMethodName(0).Length < 1 ? false : true;
+            if(attribute.GetPersistentEventCount() < 1) {
+                return false;
+            }
+
+            if(attribute.GetPersistentMethodName(0).Length < 1) {
+                return false;
+            }
+
+            return true;
         }
 
         public static bool IsPopulated(ComplexUnityEventHandler attribute)
