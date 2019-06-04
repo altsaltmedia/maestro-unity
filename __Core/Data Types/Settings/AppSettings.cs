@@ -19,7 +19,13 @@ namespace AltSalt
         public BoolReference modifyLayoutActive;
 
         [ValidateInput("IsPopulated")]
+        public BoolReference saveDataActive;
+
+        [ValidateInput("IsPopulated")]
         public BoolReference autoplayActive;
+
+        [ValidateInput("IsPopulated")]
+        public BoolReference volumeActive;
 
         [ValidateInput("IsPopulated")]
         public BoolReference pauseMomentum;

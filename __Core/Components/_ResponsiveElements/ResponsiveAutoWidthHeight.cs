@@ -11,9 +11,9 @@ namespace AltSalt
 #endif
     public class ResponsiveAutoWidthHeight : ResponsiveRectTransform
     {
-        [Range(0, 1)]
+        [Range(0, 10)]
         [SerializeField]
-        List<float> margins = new List<float>();
+        List<float> multiplier = new List<float>();
 
         [ValueDropdown("dimensionValues")]
         [SerializeField]
@@ -25,7 +25,7 @@ namespace AltSalt
         };
 
 #if UNITY_EDITOR
-        float internalWidthMarginValue = 0f;
+        float internalMultiplierValue = 0f;
 
         protected override void Start()
         {
@@ -41,14 +41,14 @@ namespace AltSalt
         protected override void UpdateBreakpointDependencies()
         {
             base.UpdateBreakpointDependencies();
-            if (margins.Count == 0) {
-                margins.Add(0);
+            if (multiplier.Count == 0) {
+                multiplier.Add(1f);
             }
             if (orientations.Count == 0) {
                 orientations.Add(DimensionType.Vertical);
             }
-            if(margins.Count <= aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(margins, aspectRatioBreakpoints.Count);
+            if(multiplier.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(multiplier, aspectRatioBreakpoints.Count);
             }
             if(orientations.Count <= aspectRatioBreakpoints.Count) {
                 Utils.ExpandList(orientations, aspectRatioBreakpoints.Count);
@@ -66,7 +66,7 @@ namespace AltSalt
         bool MarginChanged()
         {
             GetBreakpointIndex();
-            if (Mathf.Approximately(internalWidthMarginValue, margins[breakpointIndex]) == false) {
+            if (Mathf.Approximately(internalMultiplierValue, multiplier[breakpointIndex]) == false) {
                 StoreInternalMarginVal();
                 return true;
             } else {
@@ -76,7 +76,7 @@ namespace AltSalt
 
         void StoreInternalMarginVal()
         {
-            internalWidthMarginValue = margins[breakpointIndex];
+            internalMultiplierValue = multiplier[breakpointIndex];
         }
 #endif
 
@@ -89,7 +89,7 @@ namespace AltSalt
         void SetValue(int activeIndex)
         {
 #if UNITY_EDITOR
-            if (activeIndex >= margins.Count || activeIndex >= orientations.Count) {
+            if (activeIndex >= multiplier.Count || activeIndex >= orientations.Count) {
                 LogBreakpointError();
                 return;
             }
@@ -100,12 +100,10 @@ namespace AltSalt
             // in the form above, then dividing one equation by the other to solve for a and b.
             double newDimension = (Math.Pow(0.561993755433366d, ((double)screenHeight.Value / (double)screenWidth.Value))) * 10.03014554127636d;
 
-            float dimensionModifier = Utils.GetValueFromDesiredPercent((float)newDimension, margins[activeIndex]);
-
             if (orientations[activeIndex] == DimensionType.Vertical) {
-                rectTransform.sizeDelta = new Vector2((float)newDimension - dimensionModifier, rectTransform.sizeDelta.y);
+                rectTransform.sizeDelta = new Vector2((float)newDimension * multiplier[activeIndex], rectTransform.sizeDelta.y);
             } else {
-                rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, (float)newDimension - dimensionModifier);
+                rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, (float)newDimension - multiplier[activeIndex]);
             }
         }
     }

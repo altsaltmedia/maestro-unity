@@ -10,10 +10,27 @@ namespace AltSalt
     public class UserDataController : MonoBehaviour
     {
         [SerializeField]
+        [ReadOnly]
+        AppSettings appSettings;
+
+        [SerializeField]
         List<UserDatum> userData = new List<UserDatum>();
+
+#if UNITY_EDITOR
+        void OnEnable()
+        {
+            if(appSettings == null) {
+                appSettings = Utils.GetAppSettings();
+            }
+        }
+#endif
 
         public void CallWriteToStoredData(EventPayload eventPayload)
         {
+            if(appSettings.saveDataActive == false) {
+                return;
+            }
+
             ScriptableObject receivedObject = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType);
             bool valueFound = false;
             for (int i = 0; i < userData.Count; i++) {

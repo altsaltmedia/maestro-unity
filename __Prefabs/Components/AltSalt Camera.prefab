@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 224767354529110132}
   - component: {fileID: 20290996921888062}
   - component: {fileID: 7582347771626022076}
+  - component: {fileID: 6762982322118964362}
   m_Layer: 0
   m_Name: AltSalt Camera
   m_TagString: MainCamera
@@ -93,6 +94,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: -1622733632
+  sceneName: 
+  initialized: 0
   modifySettings: {fileID: 11400000, guid: 09fba8b7455af408cb2e663bc6591f01, type: 2}
   nonserializedProperties:
   - id
@@ -133,3 +136,19 @@ MonoBehaviour:
     y: 0.09
     width: 1
     height: 0.825
+--- !u!114 &6762982322118964362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892881052307360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1690312454, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6cfefc9189b422d8e558b5019449b3, type: 3}
   m_Name: TriggerSpinnerShow
   m_EditorClassIdentifier: 
-  DeveloperDescription: 
+  DeveloperDescription: Used between scene loads, also when reversing direction on
+    Android during video sequences.
   LogListenersOnRegister: 0
   LogListenersOnRaise: 0

@@ -28,10 +28,18 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: a3f4ec9668d034f12bdf87f121b39274, type: 2}
+  saveDataActive:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: a84e6b85ea0a5400583dae82803d3a19, type: 2}
   autoplayActive:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: dbe5ababa40004fbda03725b26b5e0cd, type: 2}
+  volumeActive:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: db585a26fddce4595add506e5f0fc9b8, type: 2}
   pauseMomentum:
     UseConstant: 0
     ConstantValue: 0

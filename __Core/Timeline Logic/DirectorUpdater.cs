@@ -90,9 +90,14 @@ namespace AltSalt
                 }
                 sequence.currentTime = playableDirector.initialTime;
                 return;
-            }
-            else if (sequence.currentTime > playableDirector.duration || Mathf.Approximately((float)sequence.currentTime, (float)playableDirector.duration)) {
+            } else if (sequence.currentTime > playableDirector.duration || Mathf.Approximately((float)sequence.currentTime, (float)playableDirector.duration)) {
                 sequence.currentTime = playableDirector.duration;
+
+                // Putting this in for now so we can get to the end of the sequence smoothly, should revise for the future
+                playableDirector.time = sequence.currentTime;
+                playableDirector.Evaluate();
+                //////
+
                 if (nextSequenceGroup.sequence != null) {
                     sequence.Active = false;
                     nextSequenceGroup.sequence.currentTime = 0.0000f;
@@ -100,8 +105,7 @@ namespace AltSalt
                     nextSequenceGroup.directorObject.SetActive(true);
                     nextSequenceGroup.directorObject.GetComponent<DirectorUpdater>().ForceEvaluate();
                     gameObject.SetActive(false);
-                }
-                else {
+                } else {
                     BoundaryReached.Raise();
                 }
                 return;

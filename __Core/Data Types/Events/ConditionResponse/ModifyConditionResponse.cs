@@ -21,20 +21,10 @@ namespace AltSalt
 
         public override void SyncValues()
         {
-            if (modifySettings == null) {
-                modifySettings = Utils.GetModifySettings();
-            }
+            GetModifySettings();
 
             activeLayoutName = "Active layout: " + modifySettings.activeLayout.name;
             activeTextFamilyName = "Active text family: " + modifySettings.activeTextFamily.name;
-        }
-#endif
-
-        // This is placeholder function and is overriden in children - it is not used. //
-        public override bool CheckCondition()
-        {
-            GetModifySettings();
-            return true;
         }
 
         void GetModifySettings()
@@ -42,6 +32,13 @@ namespace AltSalt
             if (modifySettings == null) {
                 modifySettings = Utils.GetModifySettings();
             }
+        }
+#endif
+
+        // This is placeholder function and is overriden in children - it is not used. //
+        public override bool CheckCondition()
+        {
+            return true;
         }
     }
 }

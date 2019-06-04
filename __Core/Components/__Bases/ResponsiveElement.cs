@@ -66,6 +66,7 @@ namespace AltSalt
             PopulateDependencies();
             PopulateNonSerializedProperties();
             resizedListenerCreated = false;
+            ExecuteLayoutUpdate();
 #endif
             CreateLayoutListener();
         }
@@ -269,7 +270,7 @@ namespace AltSalt
         [PropertyOrder(7)]
         public void SaveData()
         {
-            GenerateID();
+            Initialize();
             string data = JsonUtility.ToJson(this, true);
             var tempObject = JSON.Parse(data);
             for(int i=0; i<nonserializedProperties.Count; i++) {
@@ -292,7 +293,7 @@ namespace AltSalt
 
         protected virtual void LogBreakpointError()
         {
-            Debug.LogError("Please specify at least one breakpoint and corresponding values on " + this.name, this);
+            Debug.LogError("Please specify either 1.) target values for saving OR 2.) breakpoints and corresponding values on " + this.name, this);
         }
 #endif
 
@@ -302,7 +303,7 @@ namespace AltSalt
         [PropertyOrder(7)]
         public void LoadData()
         {
-            var jsonTextFile = Resources.Load<TextAsset>("Layouts/" + SceneManager.GetActiveScene().name + "/" + modifySettings.activeLayout.name + "/" + this.name + id.ToString());
+            var jsonTextFile = Resources.Load<TextAsset>("Layouts/" + sceneName + "/" + modifySettings.activeLayout.name + "/" + this.name + id.ToString());
             if (jsonTextFile != null) {
                 Debug.Log("Populating " + this.name + " with stored data for " + modifySettings.activeLayout.name + " layout", this);
                 JsonUtility.FromJsonOverwrite(jsonTextFile.ToString(), this);

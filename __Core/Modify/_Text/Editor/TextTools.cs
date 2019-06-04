@@ -12,14 +12,14 @@ namespace AltSalt
 {
     public class TextTools : ModifyTools
     {
-        
+        Vector2 scrollPos;
         string filePath = "";
         string fileName = "";
 
         GameObject rootObject;
 
         protected TextCollectionBank textCollectionBank;
-        protected TextFamily textFamily;
+        protected TextFamily targetTextFamily;
 
         [MenuItem("Tools/AltSalt/Text Tools")]
         public static void ShowWindow()
@@ -35,6 +35,8 @@ namespace AltSalt
         protected override void OnGUI()
         {
             base.CreateHeader();
+
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
             GUILayout.Space(10);
 
@@ -67,7 +69,7 @@ namespace AltSalt
 
             GUILayout.Space(20);
 
-            textFamily = EditorGUILayout.ObjectField("Text Family Destination", textFamily, typeof(TextFamily), false) as TextFamily;
+            targetTextFamily = EditorGUILayout.ObjectField("Text Family Destination", targetTextFamily, typeof(TextFamily), false) as TextFamily;
             EditorGUI.BeginDisabledGroup(DisablePopulateCorpus());
             if (GUILayout.Button("Populate Bank")) {
                 PopulateCorpus();
@@ -80,14 +82,23 @@ namespace AltSalt
 
             GUILayout.Space(20);
 
-            if (textFamily != null) {
-                if (textFamily.supportedLayouts.Count > 0) {
-                    loadedLayoutName = textFamily.supportedLayouts[0].name;
+            if (targetTextFamily != null) {
+                if (targetTextFamily.supportedLayouts.Count > 0) {
+                    bool triggerLayoutChange = true;
+                    for (int i = 0; i < targetTextFamily.supportedLayouts.Count; i++) {
+                        if (modifySettings.activeLayout == targetTextFamily.supportedLayouts[i]) {
+                            triggerLayoutChange = false;
+                            loadedLayoutName = modifySettings.activeLayout.name;
+                        }
+                    }
+                    if (triggerLayoutChange == true) {
+                        loadedLayoutName = targetTextFamily.supportedLayouts[0].name;
+                    }
                 } else {
                     loadedLayoutName = modifySettings.defaultLayout.name;
                 }
 
-                GUILayout.Label("'" + textFamily.name + "' text family loaded layout: " + loadedLayoutName);
+                GUILayout.Label("'" + targetTextFamily.name + "' text family loaded layout: " + loadedLayoutName);
             }
 
             EditorGUI.BeginDisabledGroup(DisableTextUpdate());
@@ -101,6 +112,8 @@ namespace AltSalt
                 TriggerTextUpdateAll();
             }
             EditorGUI.EndDisabledGroup();
+
+            EditorGUILayout.EndScrollView();
         }
 
 
@@ -172,7 +185,7 @@ namespace AltSalt
 
         bool DisablePopulateCorpus()
         {
-            if (filePath.Length == 0 || textCollectionBank == null || textFamily == null) {
+            if (filePath.Length == 0 || textCollectionBank == null || targetTextFamily == null) {
                 return true;
             } else {
                 return false;
@@ -182,8 +195,8 @@ namespace AltSalt
         void PopulateCorpus()
         {
             if (filePath != null) {
-                if (EditorUtility.DisplayDialog("Replace " + textFamily.name + " text?", "This will populate the '" + textCollectionBank.name + "' text family '" +
-                        textFamily.name + "' using \n" + filePath, "Proceed", "Cancel")) {
+                if (EditorUtility.DisplayDialog("Replace " + targetTextFamily.name + " text?", "This will populate the '" + textCollectionBank.name + "' text family '" +
+                        targetTextFamily.name + "' using \n" + filePath, "Proceed", "Cancel")) {
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.LoadXml(File.ReadAllText(filePath));
 
@@ -195,10 +208,10 @@ namespace AltSalt
                             parsedText += currentLine.TrimStart(' ', '\t');
                         }
 
-                        if (textCollectionBank.textCollection.ContainsKey(textFamily) == false) {
-                            textCollectionBank.textCollection.Add(textFamily, new TextNodes());
+                        if (textCollectionBank.textCollection.ContainsKey(targetTextFamily) == false) {
+                            textCollectionBank.textCollection.Add(targetTextFamily, new TextNodes());
                         }
-                        textCollectionBank.textCollection[textFamily][textObject.Attributes["key"].Value] = parsedText;
+                        textCollectionBank.textCollection[targetTextFamily][textObject.Attributes["key"].Value] = parsedText;
                     }
                     EditorUtility.SetDirty(textCollectionBank);
                 }
@@ -247,7 +260,7 @@ namespace AltSalt
 
         protected bool DisableTextUpdateAll()
         {
-            if (textFamily == null) {
+            if (targetTextFamily == null) {
                 return true;
             } else {
                 return false;
@@ -256,7 +269,7 @@ namespace AltSalt
 
         protected bool DisableTextUpdate()
         {
-            if (textCollectionBank == null || textFamily == null) {
+            if (textCollectionBank == null || targetTextFamily == null) {
                 return true;
             } else {
                 return false;
@@ -265,22 +278,22 @@ namespace AltSalt
 
         protected void TriggerTextUpdate()
         {
-            if (EditorUtility.DisplayDialog("Set active language and update texts?", "This will set the active language to " + textFamily.name +
-                " in ModifySettings and update texts that use the " + textCollectionBank.name + " text bank, and change the active layout to " + loadedLayoutName + ".", "Proceed", "Cancel")) {
-                modifySettings.activeTextFamily = textFamily;
+            if (EditorUtility.DisplayDialog("Set active language and update texts?", "This will set the active language to " + targetTextFamily.name +
+                " in ModifySettings and update texts that use the " + textCollectionBank.name + " text bank, and (if needed) trigger a layout change to " + loadedLayoutName + ".", "Proceed", "Cancel")) {
+                modifySettings.activeTextFamily = targetTextFamily;
                 textUpdate.Raise(textCollectionBank);
-                if (modifySettings.activeTextFamily.supportedLayouts.Count == 0) {
+                if (targetTextFamily.supportedLayouts.Count == 0) {
                     modifySettings.activeLayout = modifySettings.defaultLayout;
                     layoutUpdate.Raise();
                 } else {
                     bool triggerLayoutChange = true;
-                    for (int i = 0; i < modifySettings.activeTextFamily.supportedLayouts.Count; i++) {
+                    for (int i = 0; i < targetTextFamily.supportedLayouts.Count; i++) {
                         if (modifySettings.activeLayout == modifySettings.activeTextFamily.supportedLayouts[i]) {
                             triggerLayoutChange = false;
                         }
                     }
                     if (triggerLayoutChange == true) {
-                        modifySettings.activeLayout = modifySettings.activeTextFamily.supportedLayouts[0];
+                        modifySettings.activeLayout = targetTextFamily.supportedLayouts[0];
                         layoutUpdate.Raise();
                     }
                 }
@@ -289,22 +302,22 @@ namespace AltSalt
 
         protected void TriggerTextUpdateAll()
         {
-            if (EditorUtility.DisplayDialog("Set active language and update texts?", "This will set the active language to " + textFamily.name +
-                " in ModifySettings and update ALL texts, and change the active layout to " + loadedLayoutName + ".", "Proceed", "Cancel")) {
-                modifySettings.activeTextFamily = textFamily;
+            if (EditorUtility.DisplayDialog("Set active language and update texts?", "This will set the active language to " + targetTextFamily.name +
+                " in ModifySettings and update ALL texts, and (if needed) trigger a layout change to " + loadedLayoutName + ".", "Proceed", "Cancel")) {
+                modifySettings.activeTextFamily = targetTextFamily;
                 textUpdate.Raise();
-                if (modifySettings.activeTextFamily.supportedLayouts.Count == 0) {
+                if (targetTextFamily.supportedLayouts.Count == 0) {
                     modifySettings.activeLayout = modifySettings.defaultLayout;
                     layoutUpdate.Raise();
                 } else {
                     bool triggerLayoutChange = true;
                     for (int i = 0; i < modifySettings.activeTextFamily.supportedLayouts.Count; i++) {
-                        if (modifySettings.activeLayout == modifySettings.activeTextFamily.supportedLayouts[i]) {
+                        if (modifySettings.activeLayout == targetTextFamily.supportedLayouts[i]) {
                             triggerLayoutChange = false;
                         }
                     }
                     if (triggerLayoutChange == true) {
-                        modifySettings.activeLayout = modifySettings.activeTextFamily.supportedLayouts[0];
+                        modifySettings.activeLayout = targetTextFamily.supportedLayouts[0];
                         layoutUpdate.Raise();
                     }
                 }

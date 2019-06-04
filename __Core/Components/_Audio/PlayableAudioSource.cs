@@ -4,9 +4,8 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 namespace AltSalt {
-    #if UNITY_EDITOR
+
     [ExecuteInEditMode]
-    #endif
     public class PlayableAudioSource : MonoBehaviour {
         
         AudioSource audioSource;

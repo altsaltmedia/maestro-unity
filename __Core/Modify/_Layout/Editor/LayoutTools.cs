@@ -38,7 +38,16 @@ namespace AltSalt
 
             if (targetLayout != null) {
                 if (targetLayout.supportedTextFamilies.Count > 0) {
-                    loadedTextFamilyName = targetLayout.supportedTextFamilies[0].name;
+                    bool triggerTextChange = true;
+                    for (int i = 0; i < targetLayout.supportedTextFamilies.Count; i++) {
+                        if (modifySettings.activeTextFamily == targetLayout.supportedTextFamilies[i]) {
+                            triggerTextChange = false;
+                            loadedTextFamilyName = modifySettings.activeTextFamily.name;
+                        }
+                    }
+                    if (triggerTextChange == true) {
+                        loadedTextFamilyName = targetLayout.supportedTextFamilies[0].name;
+                    }
                 } else {
                     loadedTextFamilyName = modifySettings.defaultTextFamily.name;
                 }
@@ -64,21 +73,21 @@ namespace AltSalt
         void TriggerLayoutUpdate()
         {
             if (EditorUtility.DisplayDialog("Set new layout?", "This will set the active layout to " + targetLayout.name +
-                " in ModifySettings and update all responsive elements with corresponding data, and change language to " + loadedTextFamilyName + ".", "Proceed", "Cancel")) {
+                " in ModifySettings and update all responsive elements with corresponding data, and (if needed) trigger text family change to " + loadedTextFamilyName + ".", "Proceed", "Cancel")) {
                 modifySettings.activeLayout = targetLayout;
                 layoutUpdate.Raise();
-                if (modifySettings.activeLayout.supportedTextFamilies.Count == 0) {
+                if (targetLayout.supportedTextFamilies.Count == 0) {
                     modifySettings.activeTextFamily = modifySettings.defaultTextFamily;
                     textUpdate.Raise();
                 } else {
-                    bool triggerLayoutChange = true;
-                    for (int i = 0; i < modifySettings.activeTextFamily.supportedLayouts.Count; i++) {
-                        if (modifySettings.activeTextFamily == modifySettings.activeLayout.supportedTextFamilies[i]) {
-                            triggerLayoutChange = false;
+                    bool triggerTextChange = true;
+                    for (int i = 0; i < targetLayout.supportedTextFamilies.Count; i++) {
+                        if (modifySettings.activeTextFamily == targetLayout.supportedTextFamilies[i]) {
+                            triggerTextChange = false;
                         }
                     }
-                    if (triggerLayoutChange == true) {
-                        modifySettings.activeTextFamily = modifySettings.activeLayout.supportedTextFamilies[0];
+                    if (triggerTextChange == true) {
+                        modifySettings.activeTextFamily = targetLayout.supportedTextFamilies[0];
                         textUpdate.Raise();
                     }
                 }

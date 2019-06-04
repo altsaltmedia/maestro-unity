@@ -15,6 +15,19 @@ namespace AltSalt
         bool readyForUpdate = false;
 
         [SerializeField]
+        EasingFunction.Ease ease = EasingFunction.Ease.EaseInOutQuad;
+
+
+        [SerializeField]
+        [Range(.1f, 1f)]
+        float lerpModifier = .1f;
+
+        float lerpValue = 0f;
+        float easingModifier = 0f;
+
+        EasingFunction.Function easingFunction;
+
+        [SerializeField]
         RectTransform content;
 
         [SerializeField]
@@ -27,6 +40,11 @@ namespace AltSalt
 
         [SerializeField]
         float previousPosition;
+
+        void Start()
+        {
+            easingFunction = EasingFunction.GetEasingFunction(ease);
+        }
 
         public void Activate()
         {
@@ -41,20 +59,29 @@ namespace AltSalt
 
         IEnumerator LerpToElement(int elementID)
         {
+            float initialPosition = content.anchoredPosition.x;
             float targetPosition = scrollSnapElements[elementID].rectTransform.anchoredPosition.x * -1f;
 
             isLerping = true;
             while (isLerping == true) {
-                float newX = Mathf.Lerp(content.anchoredPosition.x, targetPosition, Time.deltaTime * 10f);
-                Vector2 newPosition = new Vector2(newX, content.anchoredPosition.y);
 
+                // Generate a modifier with a little momentum already started
+                easingModifier = easingFunction(.2f, 1f, lerpValue);
+
+                // Calculate and set the new position
+                float newX = Mathf.Lerp(content.anchoredPosition.x, targetPosition, easingModifier);
+                Vector2 newPosition = new Vector2(newX, content.anchoredPosition.y);
                 content.anchoredPosition = newPosition;
 
-                if(Mathf.Abs(content.anchoredPosition.x) >= Mathf.Abs(targetPosition) - 20 && Mathf.Abs(content.anchoredPosition.x) <= Mathf.Abs(targetPosition) + 20) {
+                // Increment our lerp value for the next loop
+                lerpValue += lerpModifier;
+
+                if( Mathf.Approximately(Mathf.Abs(content.anchoredPosition.x), Mathf.Abs(targetPosition)) == true) {
                     content.anchoredPosition = new Vector2(targetPosition, content.anchoredPosition.y);
                     LerpToElementCallback();
                     yield break;
                 }
+
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -68,6 +95,7 @@ namespace AltSalt
             }
             scrollSnapElements[activeElementID].Activate();
             previousPosition = content.anchoredPosition.x;
+            lerpValue = 0f;
             isLerping = false;
         }
 

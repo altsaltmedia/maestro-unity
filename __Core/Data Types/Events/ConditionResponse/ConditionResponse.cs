@@ -21,7 +21,9 @@ namespace AltSalt
         [PropertyOrder(8)]
         protected UnityEvent response;
 
+#if UNITY_EDITOR
         public abstract void SyncValues();
+#endif
 
         public abstract bool CheckCondition();
 

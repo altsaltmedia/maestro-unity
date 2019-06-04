@@ -12,7 +12,7 @@ namespace AltSalt
         FloatReference frameStepValue;
 
         [SerializeField]
-        EasingFunction.Ease ease = EasingFunction.Ease.EaseInOutQuad;
+        EasingFunction.Ease ease = EasingFunction.Ease.EaseOutQuad;
 
         [HideInInspector]
         public EasingFunction.Function easingFunction;

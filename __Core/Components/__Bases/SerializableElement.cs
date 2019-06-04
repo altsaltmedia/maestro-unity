@@ -22,7 +22,13 @@ namespace AltSalt
         [SerializeField]
         protected int id;
 
-        bool idGenerated = false;
+        [ReadOnly]
+        [SerializeField]
+        protected string sceneName = "";
+
+        [ReadOnly]
+        [SerializeField]
+        bool initialized;
 
         [Required]
         [Title("$activeLayoutName")]
@@ -33,28 +39,50 @@ namespace AltSalt
         [ReadOnly]
         protected List<string> nonserializedProperties = new List<string>();
 
-        protected void GenerateID()
-        {
-            if (id == 0 || idGenerated == false) {
-                id = (int)DateTime.Now.Ticks;
-            }
-            idGenerated = true;
-        }
-
-        protected void GenerateID(bool force)
-        {
-            if (force == true) {
-                id = (int)DateTime.Now.Ticks;
-            }
-            idGenerated = true;
-        }
-
         public int GetID()
         {
             return id;
         }
 
 #if UNITY_EDITOR
+        protected void Initialize()
+        {
+            if(initialized == false) {
+                SaveSceneName();
+                GenerateID();
+                initialized = true;
+            }
+        }
+
+        void SaveSceneName()
+        {
+            if(sceneName.Length < 1) {
+                sceneName = SceneManager.GetActiveScene().name;
+            }
+        }
+
+        void SaveSceneName(bool force)
+        {
+            if (force == true) {
+                sceneName = SceneManager.GetActiveScene().name;
+            }
+        }
+
+        void GenerateID()
+        {
+            if (id == 0 || initialized == false) {
+                id = (int)DateTime.Now.Ticks;
+            }
+        }
+
+        void GenerateID(bool force)
+        {
+            if (force == true) {
+                id = (int)DateTime.Now.Ticks;
+            }
+            initialized = true;
+        }
+
         void OnGUI()
         {
             GetActiveLayoutName();
@@ -67,7 +95,7 @@ namespace AltSalt
 
         protected virtual void OnRenderObject()
         {
-            GenerateID();
+            Initialize();
         }
 
         public virtual void Reset()
@@ -77,11 +105,12 @@ namespace AltSalt
             }
         }
 
-        [InfoBox("Force reset of the element's serializable ID.")]
+        [InfoBox("Force reset of the element's scene name and serializable ID.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         [PropertyOrder(10)]
-        public void ResetID()
+        public void Reinitialize()
         {
+            SaveSceneName(true);
             GenerateID(true);
         }
 #endif

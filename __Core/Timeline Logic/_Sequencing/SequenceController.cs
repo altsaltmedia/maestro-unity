@@ -17,19 +17,20 @@ namespace AltSalt
         public SequenceList sequenceList;
 
         [ValidateInput("IsPopulated")]
+        [BoxGroup("Android Dependencies")]
         public BoolReference isReversing;
 
-#if UNITY_ANDROID
         [SerializeField]
         [Required]
+        [BoxGroup("Android Dependencies")]
         protected SimpleEvent triggerSpinnerShow;
 
         [SerializeField]
         [Required]
+        [BoxGroup("Android Dependencies")]
         protected SimpleEvent triggerSpinnerHide;
 
         protected bool internalIsReversingVal = false;
-#endif
 
         protected static bool IsPopulated(BoolReference attribute)
         {

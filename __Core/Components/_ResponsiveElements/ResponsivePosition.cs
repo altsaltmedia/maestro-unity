@@ -15,21 +15,23 @@ namespace AltSalt
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SaveValue()
         {
-            if(aspectRatioBreakpoints.Count < 1) {
-                Debug.LogWarning("You must specify at least one breakpoint to save element values.", this);
-                return;
+            GetBreakpointIndex();
+
+            if(hasBreakpoints == true) {
+                if(aspectRatioBreakpoints.Count < 1) {
+                    Debug.LogWarning("You must specify at least one breakpoint to save element values.", this);
+                    return;
+                }
             }
 
-            int targetBreakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            Utils.ExpandList(breakpointAnchorMax, breakpointIndex);
+            breakpointAnchorMax[breakpointIndex] = rectTransform.anchorMax;
 
-            Utils.ExpandList(breakpointAnchorMax, targetBreakpointIndex);
-            breakpointAnchorMax[targetBreakpointIndex] = rectTransform.anchorMax;
+            Utils.ExpandList(breakpointAnchorMin, breakpointIndex);
+            breakpointAnchorMin[breakpointIndex] = rectTransform.anchorMin;
 
-            Utils.ExpandList(breakpointAnchorMin, targetBreakpointIndex);
-            breakpointAnchorMin[targetBreakpointIndex] = rectTransform.anchorMin;
-
-            Utils.ExpandList(breakpointAnchoredPosition, targetBreakpointIndex);
-            breakpointAnchoredPosition[targetBreakpointIndex] = rectTransform.anchoredPosition3D;
+            Utils.ExpandList(breakpointAnchoredPosition, breakpointIndex);
+            breakpointAnchoredPosition[breakpointIndex] = rectTransform.anchoredPosition3D;
         }
 #endif
 
@@ -42,11 +44,21 @@ namespace AltSalt
         public void SetValue(int activeIndex)
         {
 #if UNITY_EDITOR
-            if (activeIndex >= breakpointAnchorMax.Count ||
-                activeIndex >= breakpointAnchorMin.Count ||
-                activeIndex >= breakpointAnchoredPosition.Count) {
-                LogBreakpointError();
-                return;
+            if(hasBreakpoints == true) {
+
+                if (activeIndex >= breakpointAnchorMax.Count ||
+                    activeIndex >= breakpointAnchorMin.Count ||
+                    activeIndex >= breakpointAnchoredPosition.Count) {
+                    LogBreakpointError();
+                    return;
+                }
+            } else {
+                if (breakpointAnchorMax.Count < 1 ||
+                    breakpointAnchorMin.Count < 1 ||
+                    breakpointAnchoredPosition.Count < 1) {
+                    LogBreakpointError();
+                    return;
+                }
             }
 #endif
             rectTransform.anchorMax = breakpointAnchorMax[activeIndex];

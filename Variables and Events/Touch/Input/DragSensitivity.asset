@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6cfefc9189b422d8e558b5019449b3, type: 3}
-  m_Name: DisableSpinner
+  m_Script: {fileID: 11500000, guid: 48e52ce51209d4a699338a25976e8e00, type: 3}
+  m_Name: DragSensitivity
   m_EditorClassIdentifier: 
   DeveloperDescription: 
-  LogListenersOnRegister: 0
-  LogListenersOnRaise: 0
+  Value: 0.27
+  hasDefault: 1
+  DefaultValue: 0.27

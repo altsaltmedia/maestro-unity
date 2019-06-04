@@ -10,10 +10,12 @@ namespace AltSalt {
     public class AlwaysConditionResponse : ConditionResponse
     {
 
+#if UNITY_EDITOR
         public override void SyncValues()
         {
             conditionEventTitle = "Whenever triggered, this event has no conditions and will always execute.";
-       }
+        }
+#endif
 
         public override bool CheckCondition()
         {

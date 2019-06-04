@@ -42,6 +42,13 @@ namespace AltSalt
         }
 
 #if UNITY_EDITOR
+        void OnEnable()
+        {
+            if(triggerOnStart == true) {
+                CallTriggerResponses();
+            }
+        }
+
         void OnGUI()
         {
             conditionResponseTrigger.CallSyncValues();
