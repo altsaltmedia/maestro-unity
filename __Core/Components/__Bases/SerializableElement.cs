@@ -95,6 +95,9 @@ namespace AltSalt
 
         protected virtual void OnRenderObject()
         {
+            if (modifySettings == null) {
+                modifySettings = Utils.GetModifySettings();
+            }
             Initialize();
         }
 
