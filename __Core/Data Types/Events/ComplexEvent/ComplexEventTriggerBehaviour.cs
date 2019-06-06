@@ -8,16 +8,18 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class ComplexEventPackagerBehaviour : MonoBehaviour
+    public class ComplexEventTriggerBehaviour : MonoBehaviour
     {
         [SerializeField]
-        ComplexEventPackager complexEventPackager;
+        List<ComplexEventTrigger> complexEventTriggers = new List<ComplexEventTrigger>();
 
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         [InfoBox("Raises event")]
-        public void Raise()
+        public void ActivateTriggers()
         {
-            complexEventPackager.RaiseComplexEvent(); 
+            for (int i=0; i<complexEventTriggers.Count; i++) {
+                complexEventTriggers[i].RaiseEvent(this.gameObject);
+            }
         }
 
     }

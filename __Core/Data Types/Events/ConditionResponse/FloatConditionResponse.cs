@@ -13,7 +13,6 @@ namespace AltSalt
         [SerializeField]
         [Title("$conditionEventTitle")]
         [Title("Float Reference")]
-        [ValidateInput("IsPopulated")]
         [InfoBox("Float value that will be compared against condition")]
         FloatReference floatReference;
 
@@ -21,7 +20,6 @@ namespace AltSalt
 
         [SerializeField]
         [Title("Float Condition Variable")]
-        [ValidateInput("IsPopulated")]
         [InfoBox("Condition the reference value will be compared to when determining whether to execute response")]
         FloatReference floatConditionVar;
 
@@ -75,11 +73,6 @@ namespace AltSalt
             }
 
             return false;
-        }
-
-        private static bool IsPopulated(FloatReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
         }
 
     }

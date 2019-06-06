@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 
 namespace AltSalt
 {    
-    public class SimpleEventTriggerMixerBehaviour : PlayableBehaviour
+    public class SimpleEventTimelineTriggerMixerBehaviour : PlayableBehaviour
     {
         // Utility vars - specified here to prevent garbage collection
         double currentTime;
@@ -12,8 +12,8 @@ namespace AltSalt
         protected float modifier;
 
         SimpleEvent trackBinding;
-        ScriptPlayable<SimpleEventTriggerBehaviour> inputPlayable;
-        SimpleEventTriggerBehaviour input;
+        ScriptPlayable<SimpleEventTimelineTriggerBehaviour> inputPlayable;
+        SimpleEventTimelineTriggerBehaviour input;
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {
@@ -33,7 +33,7 @@ namespace AltSalt
             for (int i = 0; i < inputCount; i++)
             {
                 inputWeight = playable.GetInputWeight(i);
-                inputPlayable = (ScriptPlayable<SimpleEventTriggerBehaviour>)playable.GetInput(i);
+                inputPlayable = (ScriptPlayable<SimpleEventTimelineTriggerBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
 
                 if (inputWeight > 0 && input.triggered == false) {

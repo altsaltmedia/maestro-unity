@@ -70,15 +70,16 @@ MonoBehaviour:
   orientation: 0
   resetSequences: 0
   sequenceList: {fileID: 0}
-  bufferScene: 0
-  totalSequenceCount: 1
-  prepareSceneCompleted: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c,
-    type: 2}
+  delayStart: 0
+  delayAmount: 0
+  prepareSceneCompleted:
+    simpleEvent: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c, type: 2}
   removeOverlayImmediately:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 9932254243221466bbcd3a046b5454b2, type: 2}
-  fadeInTriggered: {fileID: 11400000, guid: dfee30ca42be848fab35ac15ceabe65d, type: 2}
+  fadeInTriggered:
+    simpleEvent: {fileID: 11400000, guid: dfee30ca42be848fab35ac15ceabe65d, type: 2}
 --- !u!114 &1002040487642911264
 MonoBehaviour:
   m_ObjectHideFlags: 0

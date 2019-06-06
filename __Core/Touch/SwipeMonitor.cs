@@ -26,19 +26,19 @@ namespace AltSalt
         // Swipe variables
         [Required]
         [FoldoutGroup("Swipe Variables")]
-        public SimpleEvent OnTouchStartEvent;
+        public SimpleEventTrigger OnTouchStartEvent;
 
         [Required]
         [FoldoutGroup("Swipe Variables")]
-        public SimpleEvent OnLongTouchEvent;
+        public SimpleEventTrigger OnLongTouchEvent;
 
         [Required]
         [FoldoutGroup("Swipe Variables")]
-        public SimpleEvent OnSwipeEvent;
+        public SimpleEventTrigger OnSwipeEvent;
 
         [Required]
         [FoldoutGroup("Swipe Variables")]
-        public SimpleEvent OnSwipeEndEvent;
+        public SimpleEventTrigger OnSwipeEndEvent;
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Swipe Variables")]
@@ -79,11 +79,11 @@ namespace AltSalt
         // Momentum variables
         [Required]
         [FoldoutGroup("Momentum Variables")]
-        public SimpleEvent MomentumUpdate;
+        public SimpleEventTrigger MomentumUpdate;
 
         [Required]
         [FoldoutGroup("Momentum Variables")]
-        public SimpleEvent MomentumDepleted;
+        public SimpleEventTrigger MomentumDepleted;
 
         [Required]
         [FoldoutGroup("Momentum Variables")]
@@ -140,7 +140,7 @@ namespace AltSalt
         // Debug variables
         [Required]
         [FoldoutGroup("Debug Variables")]
-		public SimpleEvent UpdateVarsDebug;
+		public SimpleEventTrigger UpdateVarsDebug;
 
         [FoldoutGroup("Debug Variables")]
         public FloatReference swipeMagnitudeDebug = new FloatReference();
@@ -162,10 +162,10 @@ namespace AltSalt
                 // via a momentumCache, which is modified dynamically based on swipe input, decay value, etc.
                 momentumForce.Variable.SetValue(new Vector3(momentumCache.Value.x, momentumCache.Value.y, momentumCache.Value.z));
 				
-				MomentumUpdate.Raise();
+				MomentumUpdate.RaiseEvent(this.gameObject);
 				
 				if (momentumForce.Value.sqrMagnitude < .00001f) {
-                    MomentumDepleted.Raise();
+                    MomentumDepleted.RaiseEvent(this.gameObject);
                     momentumCache.Variable.SetValue(new Vector3(0, 0, 0));
                     momentumActive = false;
 				} else {
@@ -177,13 +177,13 @@ namespace AltSalt
         public void OnTouchStart(Gesture gesture)
         {
             touchStartPosition.Variable.SetValue(gesture.position);
-            OnTouchStartEvent.Raise();
+            OnTouchStartEvent.RaiseEvent(this.gameObject);
         }
 
         public void OnTouchDown(Gesture gesture)
         {
             if (!isSwiping && gesture.actionTime >= pauseMomentumThreshold) {
-                OnLongTouchEvent.Raise();
+                OnLongTouchEvent.RaiseEvent(this.gameObject);
                 HaltMomentum();
             }
         }
@@ -218,7 +218,7 @@ namespace AltSalt
             Vector3 newSwipeForce = NormalizeVectorInfo(swipeVector, swipeMinMax);
 
             swipeForce.Variable.SetValue(newSwipeForce);
-            OnSwipeEvent.Raise();
+            OnSwipeEvent.RaiseEvent(this.gameObject);
         }
 
         public void OnSwipeEnd(Gesture gesture)
@@ -230,19 +230,19 @@ namespace AltSalt
                 isFlicked.Variable.SetValue(false);
             }
 
-            OnSwipeEndEvent.Raise();
+            OnSwipeEndEvent.RaiseEvent(this.gameObject);
 
             // Debug
             /**/ swipeMagnitudeDebug.Variable.SetValue(gesture.deltaPosition.sqrMagnitude);
             /**/ swipeVectorDebug.Variable.SetValue(gesture.swipeVector);
             /**/ swipeDeltaDebug.Variable.SetValue(gesture.deltaPosition);
             /**/ gestureActionTimeDebug.Variable.SetValue(gesture.actionTime);
-            /**/ UpdateVarsDebug.Raise();
+            /**/ UpdateVarsDebug.RaiseEvent(this.gameObject);
 
 
             // Cancel momentum on certain long swipe gestures with low delta at the end of the movement.
             if(gesture.deltaPosition.sqrMagnitude < cancelMomentumMagnitudeThreshold && gesture.actionTime > cancelMomentumTimeThreshold) {
-                MomentumDepleted.Raise();
+                MomentumDepleted.RaiseEvent(this.gameObject);
                 return;
             }
 

@@ -8,7 +8,7 @@ namespace AltSalt
     public abstract class SequenceController : MonoBehaviour
     {
         [Required]
-        public SimpleEvent SequenceModified;
+        public SimpleEventTrigger sequenceModified;
 
         [Required]
         public AppSettings appSettings;
@@ -23,12 +23,12 @@ namespace AltSalt
         [SerializeField]
         [Required]
         [BoxGroup("Android Dependencies")]
-        protected SimpleEvent triggerSpinnerShow;
+        protected SimpleEventTrigger triggerSpinnerShow;
 
         [SerializeField]
         [Required]
         [BoxGroup("Android Dependencies")]
-        protected SimpleEvent triggerSpinnerHide;
+        protected SimpleEventTrigger triggerSpinnerHide;
 
         protected bool internalIsReversingVal = false;
 

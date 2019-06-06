@@ -23,7 +23,7 @@ namespace AltSalt
         [Required]
         public AppSettings appSettings;
         [Required]
-        public SimpleEvent BoundaryReached;
+        public SimpleEventTrigger BoundaryReached;
 
         VideoPlayer video;
 

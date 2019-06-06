@@ -14,7 +14,6 @@ namespace AltSalt
         [Title("$conditionEventTitle")]
         [Title("$activeLayoutName")]
         [Title("Layout Condition")]
-        [Required]
         [InfoBox("ActiveLayout in Modify Settings will be compared against this condition")]
         Layout activeLayoutCondition;
 

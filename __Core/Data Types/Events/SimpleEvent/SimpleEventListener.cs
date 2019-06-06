@@ -3,9 +3,7 @@ using UnityEngine.Events;
 
 namespace AltSalt
 {
-    #if UNITY_EDITOR
     [ExecuteInEditMode]
-    #endif
     public class SimpleEventListener : ISimpleEventListener
     {
         public delegate void OnTargetEventDelegate();

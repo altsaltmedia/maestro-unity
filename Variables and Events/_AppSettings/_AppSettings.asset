@@ -52,7 +52,7 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: beef097a332dc486da519b47115b1e7d, type: 2}
-  editorDebugEventsActive:
+  debugEventsActive:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 5d490100582d64529b80192201dd772f, type: 2}
@@ -60,6 +60,10 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 92e511ba33ae14ae6affd1b4e2ed44eb, type: 2}
+  logEventCallersAndListeners:
+    UseConstant: 1
+    ConstantValue: 1
+    Variable: {fileID: 11400000, guid: 25478f5b2f7eb4aa38e90b01f0525419, type: 2}
   hasBeenOpened:
     UseConstant: 0
     ConstantValue: 0

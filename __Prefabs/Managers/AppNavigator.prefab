@@ -57,9 +57,12 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 
     Variable: {fileID: 11400000, guid: f316a334119564e789e89e3f4ee095da, type: 2}
-  fadeOutTriggered: {fileID: 11400000, guid: 107c34a9a99b24bb889c52dc22dab5c1, type: 2}
-  sceneLoadCompleted: {fileID: 11400000, guid: a3f57b945ac64452ba073911e9ed6db5, type: 2}
-  timescaleChanged: {fileID: 11400000, guid: d92d8301aea8f4df5b499bdc5ed4eb22, type: 2}
+  fadeOutTriggered:
+    simpleEvent: {fileID: 11400000, guid: 107c34a9a99b24bb889c52dc22dab5c1, type: 2}
+  sceneLoadCompleted:
+    simpleEvent: {fileID: 11400000, guid: a3f57b945ac64452ba073911e9ed6db5, type: 2}
+  timescaleChanged:
+    simpleEvent: {fileID: 11400000, guid: d92d8301aea8f4df5b499bdc5ed4eb22, type: 2}
 --- !u!114 &7973420083374359236
 MonoBehaviour:
   m_ObjectHideFlags: 0

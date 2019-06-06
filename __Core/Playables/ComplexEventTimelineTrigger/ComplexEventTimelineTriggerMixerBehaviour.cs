@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 
 namespace AltSalt
 {    
-    public class ComplexEventTriggerMixerBehaviour : PlayableBehaviour
+    public class ComplexEventTimelineTriggerMixerBehaviour : PlayableBehaviour
     {
         // Utility vars - specified here to prevent garbage collection
         double currentTime;
@@ -12,8 +12,8 @@ namespace AltSalt
         protected float modifier;
 
         ComplexEvent trackBinding;
-        ScriptPlayable<ComplexEventTriggerBehaviour> inputPlayable;
-        ComplexEventTriggerBehaviour input;
+        ScriptPlayable<ComplexEventTimelineTriggerBehaviour> inputPlayable;
+        ComplexEventTimelineTriggerBehaviour input;
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {
@@ -28,12 +28,12 @@ namespace AltSalt
             for (int i = 0; i < inputCount; i++)
             {
                 inputWeight = playable.GetInputWeight(i);
-                inputPlayable = (ScriptPlayable<ComplexEventTriggerBehaviour>)playable.GetInput(i);
+                inputPlayable = (ScriptPlayable<ComplexEventTimelineTriggerBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
                 
                 if (inputWeight > 0 && input.triggered == false) {
                     input.triggered = true;
-                    input.complexEventPackager.RaiseComplexEvent();
+                    input.complexEventTrigger.RaiseEvent(playable.GetGraph().GetEditorName() + " director at " + currentTime.ToString("F6"));
                 } else {
                     if (currentTime >= input.endTime) {
                         input.triggered = false;

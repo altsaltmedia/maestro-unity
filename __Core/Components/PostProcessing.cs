@@ -19,7 +19,7 @@ namespace AltSalt
         public FloatReference currentTimescale;
 
         [Required]
-        public SimpleEvent timescaleChanged;
+        public SimpleEventTrigger timescaleChanged;
 
         [RangeAttribute(0, 5)]
         public float duration;
@@ -51,7 +51,7 @@ namespace AltSalt
             currentTimescale.Variable.SetValue(isReversing.Value == false ? timescales[timescaleIndex] : timescales[timescaleIndex] * -1);
 
             Time.timeScale = Mathf.Abs(currentTimescale.Value);
-            timescaleChanged.Raise();
+            timescaleChanged.RaiseEvent(this.gameObject);
             ExecuteEffect();
 
             previousSwipeNegative = isReversing.Value;

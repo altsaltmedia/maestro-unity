@@ -7,7 +7,7 @@ namespace AltSalt
 {
     public class SimpleTimelinePlayer : MonoBehaviour
     {
-        public SimpleEvent animatedCoverFinished;
+        public SimpleEventTrigger animatedCoverFinished;
 
         PlayableDirector playableDirector;
 
@@ -20,7 +20,7 @@ namespace AltSalt
 
         void FireCompleteEvent(PlayableDirector source)
         {
-            animatedCoverFinished.Raise();
+            animatedCoverFinished.RaiseEvent(this.gameObject);
         }
     }
 

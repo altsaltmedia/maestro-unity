@@ -65,7 +65,7 @@ namespace AltSalt {
 
         [SerializeField]
         [Required]
-        SimpleEvent prepareSceneCompleted;
+        SimpleEventTrigger prepareSceneCompleted;
 
         [SerializeField]
         [ValidateInput("IsPopulated")]
@@ -73,7 +73,7 @@ namespace AltSalt {
 
         [SerializeField]
         [Required]
-        SimpleEvent fadeInTriggered;
+        SimpleEventTrigger fadeInTriggered;
 
         private ValueDropdownList<DimensionType> orientationValues = new ValueDropdownList<DimensionType>(){
             {"Vertical", DimensionType.Vertical },
@@ -115,11 +115,11 @@ namespace AltSalt {
             }
 
             if (removeOverlayImmediately.Value == true) {
-                fadeInTriggered.Raise();
+                fadeInTriggered.RaiseEvent(this.gameObject);
             }
 
             if(delayStart == false) {
-                prepareSceneCompleted.Raise();
+                prepareSceneCompleted.RaiseEvent(this.gameObject);
             } else {
                 StartCoroutine(PrepareSceneCompleteTimedDelay());
             }
@@ -128,7 +128,7 @@ namespace AltSalt {
         IEnumerator PrepareSceneCompleteTimedDelay()
         {
             yield return new WaitForSeconds(delayAmount);
-            prepareSceneCompleted.Raise();
+            prepareSceneCompleted.RaiseEvent(this.gameObject);
         }
 
         void TriggerResetSequences()

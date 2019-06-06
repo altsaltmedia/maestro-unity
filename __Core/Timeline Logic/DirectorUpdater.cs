@@ -39,7 +39,7 @@ namespace AltSalt
         [Required]
         public AppSettings appSettings;
         [Required]
-        public SimpleEvent BoundaryReached;
+        public SimpleEventTrigger boundaryReached;
 
         [ValidateInput("IsPopulated", "Note: Previous sequence group not populated. Is this intentional?", InfoMessageType.Warning)]
         public SequenceGroup previousSequenceGroup;
@@ -86,7 +86,7 @@ namespace AltSalt
                     previousSequenceGroup.directorObject.GetComponent<DirectorUpdater>().ForceEvaluate();
                     gameObject.SetActive(false);
                 } else {
-                    BoundaryReached.Raise();
+                    boundaryReached.RaiseEvent(this.gameObject);
                 }
                 sequence.currentTime = playableDirector.initialTime;
                 return;
@@ -106,7 +106,7 @@ namespace AltSalt
                     nextSequenceGroup.directorObject.GetComponent<DirectorUpdater>().ForceEvaluate();
                     gameObject.SetActive(false);
                 } else {
-                    BoundaryReached.Raise();
+                    boundaryReached.RaiseEvent(this.gameObject);
                 }
                 return;
             }
@@ -170,20 +170,20 @@ namespace AltSalt
                 GetPlayableDirector();
             }
 
-            if (editorListenerCreated == false && appSettings.editorDebugEventsActive.Value == true) {
+            if (editorListenerCreated == false && appSettings.debugEventsActive.Value == true) {
                 simpleEventListener = new SimpleEventListener(screenResized, this.gameObject);
                 simpleEventListener.OnTargetEventExecuted += playableDirector.RebuildGraph;
                 editorListenerCreated = true;
             }
 
-            if (editorListenerCreated == true && appSettings.editorDebugEventsActive == false) {
+            if (editorListenerCreated == true && appSettings.debugEventsActive == false) {
                 DisableListener();
             }
         }
 
         void OnDisable()
         {
-            if (editorListenerCreated == true && appSettings.editorDebugEventsActive == true) {
+            if (editorListenerCreated == true && appSettings.debugEventsActive == true) {
                 DisableListener();
             }
         }

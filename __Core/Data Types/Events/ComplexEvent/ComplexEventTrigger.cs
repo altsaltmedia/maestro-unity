@@ -6,11 +6,11 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class ComplexEventPackager
+    public class ComplexEventTrigger
     {
         [Required]
         [SerializeField]
-        ComplexEvent Event;
+        ComplexEvent complexEvent;
 
         [SerializeField]
         [BoxGroup("String Packager")]
@@ -140,7 +140,37 @@ namespace AltSalt
         [BoxGroup("Scriptable Object Packager")]
         ScriptableObject[] scriptableObjectValues;
 
-        public void RaiseComplexEvent()
+        public void RaiseEvent(GameObject caller, string value)
+        {
+            complexEvent.StoreCaller(caller);
+            complexEvent.Raise(value);
+        }
+
+        public void RaiseEvent(GameObject caller, int value)
+        {
+            complexEvent.StoreCaller(caller);
+            complexEvent.Raise(value);
+        }
+
+        public void RaiseEvent(GameObject caller, bool value)
+        {
+            complexEvent.StoreCaller(caller);
+            complexEvent.Raise(value);
+        }
+
+        public void RaiseEvent(GameObject caller, ScriptableObject value)
+        {
+            complexEvent.StoreCaller(caller);
+            complexEvent.Raise(value);
+        }
+
+        public void RaiseEvent(GameObject caller, EventPayload eventPayload)
+        {
+            complexEvent.StoreCaller(caller);
+            complexEvent.Raise(eventPayload);
+        }
+
+        public void RaiseEvent(GameObject caller)
         {
             EventPayload eventPayload = EventPayload.CreateInstance();
             if (hasString) {
@@ -155,7 +185,27 @@ namespace AltSalt
             if (hasScriptableObject) {
                 eventPayload = GetScriptableObjectValues(eventPayload);
             }
-            Event.Raise(eventPayload);
+            complexEvent.StoreCaller(caller);
+            complexEvent.Raise(eventPayload);
+        }
+
+        public void RaiseEvent(string caller)
+        {
+            EventPayload eventPayload = EventPayload.CreateInstance();
+            if (hasString) {
+                eventPayload = GetStringValues(eventPayload);
+            }
+            if (hasFloat) {
+                eventPayload = GetFloatValues(eventPayload);
+            }
+            if (hasBool) {
+                eventPayload = GetBoolValues(eventPayload);
+            }
+            if (hasScriptableObject) {
+                eventPayload = GetScriptableObjectValues(eventPayload);
+            }
+            complexEvent.StoreCaller(caller);
+            complexEvent.Raise(eventPayload);
         }
 
         EventPayload GetStringValues(EventPayload eventPayload)

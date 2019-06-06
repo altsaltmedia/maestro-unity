@@ -21,7 +21,7 @@ namespace AltSalt {
         public FloatReference aspectRatio;
 
         [Required]
-        public SimpleEvent screenResized;
+        public SimpleEventTrigger screenResized;
 
         float internalHeightValue;
 
@@ -54,7 +54,7 @@ namespace AltSalt {
             {
                 if (ScreenResized() == true) {
                     SaveScreenValues();
-                    screenResized.Raise();
+                    screenResized.RaiseEvent(this.gameObject);
                 }
             }
 

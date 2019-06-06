@@ -56,4 +56,5 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 485c485f334ad43f2b87301367c6b4af, type: 2}
-  screenResized: {fileID: 11400000, guid: 6958e603947ff451aac4f96c5c846b5f, type: 2}
+  screenResized:
+    simpleEvent: {fileID: 11400000, guid: 6958e603947ff451aac4f96c5c846b5f, type: 2}

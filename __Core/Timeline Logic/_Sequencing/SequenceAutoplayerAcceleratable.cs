@@ -41,7 +41,7 @@ namespace AltSalt
                             //    }
                             //}
 
-                            SequenceModified.Raise();
+                            sequenceModified.RaiseEvent(this.gameObject);
                         }
                     }
                 }

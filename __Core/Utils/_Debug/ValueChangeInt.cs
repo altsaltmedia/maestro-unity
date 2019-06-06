@@ -29,7 +29,7 @@ namespace AltSalt {
         public void SetValue(float newValue)
         {
             intValue.Variable.SetValue((int)newValue);
-            updateVariables.Raise();
+            updateVariables.RaiseEvent(this.gameObject);
         }
 
         private static bool IsPopulated(IntReference attribute)

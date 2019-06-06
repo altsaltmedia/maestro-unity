@@ -35,11 +35,15 @@ namespace AltSalt
 
     public enum ComparisonValues { GreaterThan, LessThan, EqualTo }
 
+
     public static class Utils
     {
 
         public static Color transparent = new Color(1, 1, 1, 0);
         public static float pageHeight = 6.3f;
+
+        public const string ComplexEventString = "ComplexEvent";
+        public const string SimpleEventString = "SimpleEvent";
 
         public static int GetAxisId(string axisName)
         {

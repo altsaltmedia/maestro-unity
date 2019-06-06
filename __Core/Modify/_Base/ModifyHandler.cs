@@ -33,10 +33,10 @@ namespace AltSalt
         EventPayloadKey layoutKey;
 
         [Required]
-        public ComplexEvent textUpdate;
+        public ComplexEventTrigger textUpdateTrigger;
 
         [Required]
-        public SimpleEvent layoutUpdate;
+        public SimpleEventTrigger layoutUpdateTrigger;
 
 #if UNITY_EDITOR
         void OnGUI()
@@ -69,7 +69,7 @@ namespace AltSalt
 
             if(modifySettings.activeTextFamily.supportedLayouts.Count == 0) {
                 modifySettings.activeLayout = modifySettings.defaultLayout;
-                layoutUpdate.Raise();
+                layoutUpdateTrigger.RaiseEvent(this.gameObject);
             } else {
                 bool triggerLayoutChange = true;
                 for(int i=0; i<modifySettings.activeTextFamily.supportedLayouts.Count; i++) {
@@ -79,7 +79,7 @@ namespace AltSalt
                 }
                 if(triggerLayoutChange == true) {
                     modifySettings.activeLayout = modifySettings.activeTextFamily.supportedLayouts[0];
-                    layoutUpdate.Raise();
+                    layoutUpdateTrigger.RaiseEvent(this.gameObject);
                 }
             }
         }
@@ -90,8 +90,10 @@ namespace AltSalt
             TriggerLayoutUpdate();
 
             if (modifySettings.activeLayout.supportedTextFamilies.Count == 0) {
+
                 modifySettings.activeTextFamily = modifySettings.defaultTextFamily;
-                textUpdate.Raise();
+                textUpdateTrigger.RaiseEvent(this.gameObject);
+
             } else {
                 bool triggerLayoutChange = true;
                 for (int i = 0; i < modifySettings.activeTextFamily.supportedLayouts.Count; i++) {
@@ -101,7 +103,7 @@ namespace AltSalt
                 }
                 if (triggerLayoutChange == true) {
                     modifySettings.activeTextFamily = modifySettings.activeLayout.supportedTextFamilies[0];
-                    textUpdate.Raise();
+                    textUpdateTrigger.RaiseEvent(this.gameObject);
                 }
             }
         }
@@ -109,15 +111,15 @@ namespace AltSalt
         public void TriggerTextUpdate(TextCollectionBank targetBank)
         {
             if(targetBank != null) {
-                textUpdate.Raise(targetBank);
+                textUpdateTrigger.RaiseEvent(this.gameObject, targetBank);
             } else {
-                textUpdate.Raise();
+                textUpdateTrigger.RaiseEvent(this.gameObject);
             }
         }
 
         public void TriggerLayoutUpdate()
         {
-            layoutUpdate.Raise();
+            layoutUpdateTrigger.RaiseEvent(this.gameObject);
         }
 
         private static bool IsPopulated(List<TextCollectionBank> attribute) {

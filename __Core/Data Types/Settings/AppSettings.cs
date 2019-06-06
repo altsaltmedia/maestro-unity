@@ -37,10 +37,13 @@ namespace AltSalt
         public FloatReference timescale;
 
         [ValidateInput("IsPopulated")]
-        public BoolReference editorDebugEventsActive;
+        public BoolReference debugEventsActive;
 
         [ValidateInput("IsPopulated")]
         public BoolReference pillarBoxingEnabled;
+
+        [ValidateInput("IsPopulated")]
+        public BoolReference logEventCallersAndListeners;
 
         [ValidateInput("IsPopulated")]
         public BoolReference hasBeenOpened;

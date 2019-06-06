@@ -11,7 +11,7 @@ namespace AltSalt
     public class SequenceScrubber : MonoBehaviour
     {
 
-        public SimpleEvent sequenceModified;
+        public SimpleEventTrigger sequenceModified;
 
         Slider slider;
 
@@ -52,7 +52,7 @@ namespace AltSalt
                         sequences[i + 1].currentTime = 0;
                     }
 
-                    sequenceModified.Raise();
+                    sequenceModified.RaiseEvent(this.gameObject);
 
 
                     // Deactivate adjacent sequences

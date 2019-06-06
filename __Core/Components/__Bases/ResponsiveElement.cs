@@ -216,7 +216,7 @@ namespace AltSalt
              PopulateNonSerializedProperties();
 
             CreateResizedListener();
-            if (resizedListenerCreated == true && appSettings.editorDebugEventsActive.Value == false) {
+            if (resizedListenerCreated == true && appSettings.debugEventsActive.Value == false) {
                 DisableResizedListener();
             }
 
@@ -224,7 +224,7 @@ namespace AltSalt
 
         void CreateResizedListener()
         {
-            if (resizedListenerCreated == false && appSettings.editorDebugEventsActive.Value == true) {
+            if (resizedListenerCreated == false && appSettings.debugEventsActive.Value == true) {
                 screenResizedListener = new SimpleEventListener(screenResized, this.gameObject);
                 screenResizedListener.OnTargetEventExecuted += ExecuteResponsiveAction;
                 resizedListenerCreated = true;

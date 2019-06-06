@@ -19,7 +19,7 @@ namespace AltSalt {
         protected Slider slider;
 
         [Required]
-        public SimpleEvent updateVariables;
+        public SimpleEventTrigger updateVariables;
 
         protected virtual void Start()
         {
@@ -29,7 +29,7 @@ namespace AltSalt {
 
         protected virtual void InitValue()
         {
-            updateVariables.Raise();
+            updateVariables.RaiseEvent(this.gameObject);
         }
 
 	}

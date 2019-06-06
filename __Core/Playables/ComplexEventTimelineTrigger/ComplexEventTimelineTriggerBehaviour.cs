@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt
 {
     [Serializable]
-    public class ComplexEventTriggerBehaviour : PlayableBehaviour
+    public class ComplexEventTimelineTriggerBehaviour : PlayableBehaviour
     {
         [HideInInspector]
         public double startTime;
@@ -17,6 +17,6 @@ namespace AltSalt
         [HideInInspector]
         public bool triggered = false;
 
-        public ComplexEventPackager complexEventPackager;
+        public ComplexEventTrigger complexEventTrigger;
     }
 }

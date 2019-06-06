@@ -54,10 +54,14 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 3e188ea664ddc4003896aefdb9d1fa5f, type: 2}
-  OnTouchStartEvent: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
-  OnLongTouchEvent: {fileID: 11400000, guid: 70b79ca86b9cd48488582825731bcfac, type: 2}
-  OnSwipeEvent: {fileID: 11400000, guid: 3d2e067a9dde54b3b904b558a9a88c3b, type: 2}
-  OnSwipeEndEvent: {fileID: 11400000, guid: bf5075b16b1fc4eddae6ca56d96655e7, type: 2}
+  OnTouchStartEvent:
+    simpleEvent: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
+  OnLongTouchEvent:
+    simpleEvent: {fileID: 11400000, guid: 70b79ca86b9cd48488582825731bcfac, type: 2}
+  OnSwipeEvent:
+    simpleEvent: {fileID: 11400000, guid: 3d2e067a9dde54b3b904b558a9a88c3b, type: 2}
+  OnSwipeEndEvent:
+    simpleEvent: {fileID: 11400000, guid: bf5075b16b1fc4eddae6ca56d96655e7, type: 2}
   touchStartPosition:
     UseConstant: 0
     ConstantValue: {x: 0, y: 0}
@@ -90,8 +94,10 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 1000
     Variable: {fileID: 11400000, guid: d73a83a0d85e04ca0bbc17e3d696ce42, type: 2}
-  MomentumUpdate: {fileID: 11400000, guid: a2e4c5a50b2c44620a2c0a046f85ab80, type: 2}
-  MomentumDepleted: {fileID: 11400000, guid: 327c2d62b621b46d491fb9265f17f6ed, type: 2}
+  MomentumUpdate:
+    simpleEvent: {fileID: 11400000, guid: a2e4c5a50b2c44620a2c0a046f85ab80, type: 2}
+  MomentumDepleted:
+    simpleEvent: {fileID: 11400000, guid: 327c2d62b621b46d491fb9265f17f6ed, type: 2}
   xMomentumAxis: {fileID: 11400000, guid: f88bf119e8f2c4cf3877691a94127d64, type: 2}
   yMomentumAxis: {fileID: 11400000, guid: f42a426f4dfb54a94938a16ec1f3c2e3, type: 2}
   zMomentumAxis: {fileID: 11400000, guid: 0ff6d39eb4be84e459d1db349ebb85bb, type: 2}
@@ -131,7 +137,8 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 452a77e0dd49e4619a28eaebfaf142cb, type: 2}
-  UpdateVarsDebug: {fileID: 11400000, guid: b5db0bb6ad9014cf9ba584a557323906, type: 2}
+  UpdateVarsDebug:
+    simpleEvent: {fileID: 11400000, guid: b5db0bb6ad9014cf9ba584a557323906, type: 2}
   swipeMagnitudeDebug:
     UseConstant: 0
     ConstantValue: 0

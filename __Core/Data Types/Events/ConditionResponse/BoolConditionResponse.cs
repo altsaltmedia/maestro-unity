@@ -13,7 +13,6 @@ namespace AltSalt
         [SerializeField]
         [Title("$conditionEventTitle")]
         [Title("Bool Reference")]
-        [ValidateInput("IsPopulated")]
         [InfoBox("Bool value that will be compared against condition")]
         BoolReference boolReference;
 
@@ -21,7 +20,6 @@ namespace AltSalt
 
         [SerializeField]
         [Title("Bool Condition")]
-        [ValidateInput("IsPopulated")]
         [InfoBox("Condition the bool value should match in order to execute response")]
         BoolReference boolCondition;
 
@@ -53,11 +51,6 @@ namespace AltSalt
             }
 
             return false;
-        }
-
-        private static bool IsPopulated(BoolReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
         }
     }
 }

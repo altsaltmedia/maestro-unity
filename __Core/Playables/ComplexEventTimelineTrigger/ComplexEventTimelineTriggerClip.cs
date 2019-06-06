@@ -6,9 +6,9 @@ using UnityEngine.Timeline;
 namespace AltSalt
 {
     [Serializable]
-    public class SimpleEventTriggerClip : PlayableAsset, ITimelineClipAsset
+    public class ComplexEventTimelineTriggerClip : PlayableAsset, ITimelineClipAsset
     {
-        public SimpleEventTriggerBehaviour template = new SimpleEventTriggerBehaviour ();
+        public ComplexEventTimelineTriggerBehaviour template = new ComplexEventTimelineTriggerBehaviour ();
         public double startTime;
         public double endTime;
 
@@ -26,7 +26,7 @@ namespace AltSalt
         {
             template.startTime = startTime;
             template.endTime = endTime;
-            var playable = ScriptPlayable<SimpleEventTriggerBehaviour>.Create(graph, template);
+            var playable = ScriptPlayable<ComplexEventTimelineTriggerBehaviour>.Create(graph, template);
             return playable;
         }
     }

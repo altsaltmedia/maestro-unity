@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt
 {
     [CreateAssetMenu(menuName = "AltSalt/Events/Simple Event")]
-    public class SimpleEvent : ScriptableObject
+    public class SimpleEvent : EventBase
     {
 
 #if UNITY_EDITOR
@@ -13,29 +13,51 @@ namespace AltSalt
         [Header("Simple Event")]
         public string DeveloperDescription = "";
 #endif
-        public bool LogListenersOnRegister;
-        public bool LogListenersOnRaise;
 
         readonly List<ISimpleEventListener> listeners = new List<ISimpleEventListener>();
 
-#if UNITY_EDITOR
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         [InfoBox("Raises event")]
-#endif
         public void Raise()
         {
-            for (int i = listeners.Count - 1; i >= 0; i--) {
-                if (LogListenersOnRaise == true) {
-                    Debug.Log(this.name + " event raised on " + listeners[i].GetGameObject().name, listeners[i].GetGameObject());
+            if(CallerRegistered() == true) {
+                if (logCallersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                    LogCaller();
                 }
-                listeners[i].OnEventRaised();
+                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                    LogListenersHeading(listeners.Count);
+                }
+                for (int i = listeners.Count - 1; i >= 0; i--) {
+                    if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                        LogListenerOnRaise(listeners[i]);
+                    }
+                    listeners[i].OnEventRaised();
+                }
+                if(logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                    LogClosingLine();
+                }
+                ClearCaller();
             }
         }
 
-#if UNITY_EDITOR
+        protected override void LogCaller()
+        {
+            if (callerObject != null) {
+                Debug.Log("[event] [" + this.name + "] Simple event raised : " + this.name, this);
+                Debug.Log("[event] [" + this.name + "] " + callerObject.name + " triggered the event", callerObject);
+            } else {
+                Debug.Log("[event] [" + this.name + " Simple event raised : " + this.name, this);
+                Debug.Log("[event] [" + this.name + "] " + callerString + " triggered the event");
+            }
+        }
+
+        void LogListenerOnRaise(ISimpleEventListener simpleEventListener)
+        {
+            Debug.Log("[event] [" + this.name + "] " + simpleEventListener.GetGameObject().name, simpleEventListener.GetGameObject());
+        }
+
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         [InfoBox("Display every object currently listening to this event")]
-#endif
         public void LogListeners()
         {
             for (int i = listeners.Count - 1; i >= 0; i--) {
@@ -45,8 +67,9 @@ namespace AltSalt
 
         public void RegisterListener(ISimpleEventListener listener)
         {
-            if (LogListenersOnRegister == true) {
-                Debug.Log(this.name + " event registered on " + listener.GetGameObject().name, listener.GetGameObject());
+            if (logListenersOnRegister == true) {
+                Debug.Log("The following listener subscribed to simple event " + this.name, this);
+                Debug.Log(listener.GetGameObject().name, listener.GetGameObject());
             }
             listeners.Add(listener);
         }

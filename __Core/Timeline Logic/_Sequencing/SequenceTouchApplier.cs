@@ -9,7 +9,7 @@ namespace AltSalt
     {
 
         [Required]
-        public SimpleEvent MomentumApplied;
+        public SimpleEventTrigger momentumApplied;
 
         [ValidateInput("IsPopulated")]
         public FloatReference swipeModifier;
@@ -55,11 +55,10 @@ namespace AltSalt
         [FoldoutGroup("Momentum Variables")]
         public V3Reference momentumForce;
 
-#if UNITY_ANDROID
         [SerializeField]
         [Required]
-        SimpleEvent pauseSequenceComplete;
-#endif
+        [BoxGroup("Android dependencies")]
+        SimpleEventTrigger pauseSequenceComplete;
 
         public void UpdateSequenceWithSwipe()
         {
@@ -115,15 +114,15 @@ namespace AltSalt
                             StartCoroutine(PauseSequence(sequenceList.sequences[i], swipeModifier));
                         } else {
                             sequenceList.sequences[i].ModifySequenceTime(swipeModifier);
-                            SequenceModified.Raise();
+                            SequenceModified.RaiseEvent(this.gameObject);
                         }
                     } else {
                         sequenceList.sequences[i].ModifySequenceTime(swipeModifier);
-                        SequenceModified.Raise();
+                        SequenceModified.RaiseEvent(this.gameObject);
                     }
 #else
                     sequenceList.sequences[i].ModifySequenceTime(swipeModifier);
-                    SequenceModified.Raise();
+                    sequenceModified.RaiseEvent(this.gameObject);
 #endif
 
                 }
@@ -168,10 +167,10 @@ namespace AltSalt
                     }
 
                     sequenceList.sequences[i].ModifySequenceTime(momentumModifier);
-                    SequenceModified.Raise();
+                    sequenceModified.RaiseEvent(this.gameObject);
                 }
             }
-            MomentumApplied.Raise();
+            momentumApplied.RaiseEvent(this.gameObject);
         }
 
         public void RefreshSequenceAttributes()
@@ -233,12 +232,12 @@ namespace AltSalt
         {
             targetSequence.Active = false;
             targetSequence.MomentumDisabled = true;
-            triggerSpinnerShow.Raise();
+            triggerSpinnerShow.RaiseEvent(this.gameObject);
             yield return new WaitForSeconds(.5f);
             targetSequence.Active = true;
-            pauseSequenceComplete.Raise();
+            pauseSequenceComplete.RaiseEvent(this.gameObject);
             yield return new WaitForSeconds(.5f);
-            triggerSpinnerHide.Raise();
+            triggerSpinnerHide.RaiseEvent(this.gameObject);
             yield return new WaitForSeconds(1f);
             targetSequence.MomentumDisabled = false;
         }

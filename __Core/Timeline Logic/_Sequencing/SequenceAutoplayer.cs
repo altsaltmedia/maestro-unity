@@ -64,7 +64,7 @@ namespace AltSalt
                                 }
                             }
                             AutoplaySequence(sequenceList.sequences[i], sequenceList.sequences[i].autoplayThresholds[q]);
-                            SequenceModified.Raise();
+                            sequenceModified.RaiseEvent(this.gameObject);
                         }
                     }
                 }

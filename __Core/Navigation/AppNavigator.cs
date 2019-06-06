@@ -27,15 +27,15 @@ namespace AltSalt
 
         [SerializeField]
         [Required]
-        SimpleEvent fadeOutTriggered;
+        SimpleEventTrigger fadeOutTriggered;
 
         [SerializeField]
         [Required]
-        SimpleEvent sceneLoadCompleted;
+        SimpleEventTrigger sceneLoadCompleted;
 
         [SerializeField]
         [Required]
-        SimpleEvent timescaleChanged;
+        SimpleEventTrigger timescaleChanged;
 
         string sceneName;
         LoadSceneMode loadMode;
@@ -55,7 +55,7 @@ namespace AltSalt
             loadMode = eventPayload.GetBoolValue(DataType.boolType) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
             if(loadMode == LoadSceneMode.Single) {
-                fadeOutTriggered.Raise();
+                fadeOutTriggered.RaiseEvent(this.gameObject);
             } else {
                 StartCoroutine(AsyncLoad(sceneName, loadMode));
             }
@@ -78,7 +78,7 @@ namespace AltSalt
         
         void SceneLoadCallback(AsyncOperation asyncOperation)
         {
-            sceneLoadCompleted.Raise();
+            sceneLoadCompleted.RaiseEvent(this.gameObject);
         }
 
         public void TriggerUnloadScene(EventPayload eventPayload)

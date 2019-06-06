@@ -12,7 +12,7 @@ namespace AltSalt {
     public class VideoController : MonoBehaviour {
         
         [Required]
-        public SimpleEvent ClipsModifiedEvent;
+        public SimpleEventTrigger ClipsModifiedEvent;
         
         // Swipe variables
         [Required]

@@ -56,7 +56,7 @@ namespace AltSalt
             Application.targetFrameRate = 60;
 
             yield return new WaitForSeconds(1);
-
+            
             EventPayload eventPayload = EventPayload.CreateInstance();
 
             if(loadDebugMenu == true) {
@@ -68,6 +68,7 @@ namespace AltSalt
                     eventPayload.Set(subsequentSceneName);
                 }
             }
+            initializeApp.StoreCaller(this.gameObject);
             initializeApp.Raise(eventPayload);
             Destroy(eventPayload);
 

@@ -14,7 +14,6 @@ namespace AltSalt
         [Title("$conditionEventTitle")]
         [Title("$activeTextFamilyName")]
         [Title("Scriptable Object Reference")]
-        [Required]
         [InfoBox("ActiveTextFamily in Modify Settings will be compared against this condition")]
         TextFamily activeTextFamilyCondition;
 

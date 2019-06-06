@@ -45,6 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
   initializeApp: {fileID: 11400000, guid: 4b7e2330935e64c51a4fd2eb1240e7d8, type: 2}
-  firstSceneName: 
+  initialSceneName: Splash
+  subsequentSceneName: TitlePage
   loadDebugMenu: 0
   debugMenuName: Menus

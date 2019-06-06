@@ -6,9 +6,9 @@ namespace AltSalt
 {
     public class SimpleVideoPlayer : MonoBehaviour
     {
-        public SimpleEvent animatedCoverFinished;
-        public SimpleEvent VideoPlayed;
-        public SimpleEvent VideoPaused;
+        public SimpleEventTrigger animatedCoverFinished;
+        public SimpleEventTrigger VideoPlayed;
+        public SimpleEventTrigger VideoPaused;
 
         VideoPlayer videoPlayer;
 
@@ -24,17 +24,17 @@ namespace AltSalt
 
         void FireCompleteEvent (VideoPlayer source)
         {
-            animatedCoverFinished.Raise();
+            animatedCoverFinished.RaiseEvent(this.gameObject);
         }
 
 		public void TogglePlay()
 		{
             if(videoPlayer.isPlaying) {
                 videoPlayer.Pause();
-                VideoPaused.Raise();
+                VideoPaused.RaiseEvent(this.gameObject);
             } else {
                 videoPlayer.Play();
-                VideoPlayed.Raise();
+                VideoPlayed.RaiseEvent(this.gameObject);
             }
 		}
     }
