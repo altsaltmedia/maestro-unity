@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.SceneManagement;
 
 namespace AltSalt
 {
@@ -150,18 +151,13 @@ namespace AltSalt
 
         protected override void LogCaller()
         {
-            if (callerObject != null) {
-                Debug.Log("[event] [" + this.name + "] Complex event raised : " + this.name, this);
-                Debug.Log("[event] [" + this.name + "] " + callerObject.name + " triggered the event", callerObject);
-            } else {
-                Debug.Log("[event] [" + this.name + "] Complex event raised : " + this.name, this);
-                Debug.Log("[event] [" + this.name + "] " + callerString + " triggered the event");
-            }
+            Debug.Log(string.Format("[event] [{0}] [{1}] {2} triggered complex event...", callerScene, this.name, callerName), callerObject);
+            Debug.Log(string.Format("[event] [{0}] [{1}] {2}", callerScene, this.name, this.name), this);
         }
 
         void LogListenerOnRaise(ComplexEventListenerBehaviour complexEventListenerBehaviour)
         {
-            Debug.Log("[event] [" + this.name + "] " + complexEventListenerBehaviour.name, complexEventListenerBehaviour.gameObject);
+            Debug.Log(string.Format("[event] [{0}] [{1}] {2}", complexEventListenerBehaviour.gameObject.scene.name, this.name, complexEventListenerBehaviour.name), complexEventListenerBehaviour.gameObject);
         }
 
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
@@ -179,6 +175,7 @@ namespace AltSalt
                 Debug.Log("The following listener subscribed to complex event " + this.name, this);
                 Debug.Log(listener.gameObject.name, listener.gameObject);
             }
+            RegisterDependent(listener.gameObject.scene.name, listener.gameObject.name);
             listeners.Add(listener);
         }
 

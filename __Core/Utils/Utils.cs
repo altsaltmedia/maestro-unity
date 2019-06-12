@@ -12,6 +12,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System.IO;
+using System.Text;
+using SimpleJSON;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -42,8 +45,60 @@ namespace AltSalt
         public static Color transparent = new Color(1, 1, 1, 0);
         public static float pageHeight = 6.3f;
 
-        public const string ComplexEventString = "ComplexEvent";
-        public const string SimpleEventString = "SimpleEvent";
+        public static string ComplexEventString = typeof(ComplexEvent).Name;
+        public static string SimpleEventString = typeof(SimpleEvent).Name;
+
+#if UNITY_EDITOR
+        public static string GetProjectPath()
+        {
+            return Application.dataPath + "/__Project";
+        }
+
+        public static string GetDirectory(string[] subfolders)
+        {
+            string directoryPath = GetProjectPath();
+
+            for (int i = 0; i < subfolders.Length; i++) {
+                directoryPath += subfolders[i];
+                if (!Directory.Exists(directoryPath)) {
+                    Directory.CreateDirectory(directoryPath);
+                }
+            }
+            return directoryPath;
+        }
+
+        public static string GetFilePath(string basePath, string fileName, string extension = "")
+        {
+            StringBuilder path = new StringBuilder(basePath);
+            string[] pathComponents = { "/", fileName, extension };
+            for (int i = 0; i < pathComponents.Length; i++) {
+                path.Append(pathComponents[i]);
+            }
+            return path.ToString();
+        }
+#endif
+        public static JSONNode AddToJSONArray(JSONNode node, string key, string value)
+        {
+            if (key.Length < 1) {
+                node.Add(value);
+
+            } else if (node[key] != null) {
+                bool dependencyExists = false;
+                foreach (string childVal in node[key].Children) {
+                    if (childVal == value) {
+                        dependencyExists = true;
+                    }
+                }
+                if (dependencyExists == false) {
+                    node[key].Add(value);
+                }
+
+            } else {
+                Debug.LogWarning("Unable to add to JSON array");
+            }
+
+            return node;
+        }
 
         public static int GetAxisId(string axisName)
         {
@@ -484,6 +539,10 @@ namespace AltSalt
 
         public static bool IsPopulated(UnityEvent attribute)
         {
+            if(attribute == null) {
+                return false;
+            }
+
             if(attribute.GetPersistentEventCount() < 1) {
                 return false;
             }

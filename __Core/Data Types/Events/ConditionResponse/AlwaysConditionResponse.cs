@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace AltSalt {
 
@@ -9,13 +10,12 @@ namespace AltSalt {
     [ExecuteInEditMode]
     public class AlwaysConditionResponse : ConditionResponse
     {
+        [Title("$conditionEventTitle")]
 
-#if UNITY_EDITOR
         public override void SyncValues()
         {
-            conditionEventTitle = "Whenever triggered, this event has no conditions and will always execute.";
+            conditionEventTitle = "Has no conditions and will always execute.";
         }
-#endif
 
         public override bool CheckCondition()
         {

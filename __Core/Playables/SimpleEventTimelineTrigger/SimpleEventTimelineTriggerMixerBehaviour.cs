@@ -38,14 +38,15 @@ namespace AltSalt
 
                 if (inputWeight > 0 && input.triggered == false) {
                     input.triggered = true;
-                    trackBinding.Raise();
+                    for(int q=0; q<input.simpleEventTriggers.Count; q++) {
+                        PlayableDirector playableDirector = playable.GetGraph().GetResolver() as PlayableDirector;
+                        input.simpleEventTriggers[q].RaiseEvent(playableDirector.gameObject, playableDirector.gameObject.scene.name, string.Format("{0} director at {1}", playableDirector.gameObject.name, currentTime.ToString("F2")));
+                        //input.simpleEventTriggers[q].RaiseEvent(playable.GetGraph().GetEditorName() + " director at " + currentTime.ToString("F6"));
+                    }
                 } else {
-                    if (currentTime >= input.endTime) {
+                    if (currentTime >= input.endTime || currentTime < input.startTime) {
                         input.triggered = false;
                     }
-                    //else if (i == 0 && currentTime <= input.startTime) {
-                    //    input.triggered = false;
-                    //}
                 }
             }
         }

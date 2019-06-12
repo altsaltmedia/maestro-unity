@@ -15,7 +15,6 @@ namespace AltSalt
         [SerializeField]
         protected ModifySettings modifySettings;
 
-#if UNITY_EDITOR
         protected string activeLayoutName;
         protected string activeTextFamilyName;
 
@@ -33,7 +32,6 @@ namespace AltSalt
                 modifySettings = Utils.GetModifySettings();
             }
         }
-#endif
 
         // This is placeholder function and is overriden in children - it is not used. //
         public override bool CheckCondition()

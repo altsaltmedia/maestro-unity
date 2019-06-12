@@ -13,15 +13,15 @@ namespace AltSalt
         [SerializeField]
         SimpleEvent simpleEvent;
 
-        public static void RaiseEvent(SimpleEvent targetEvent, GameObject caller)
-        {
-            targetEvent.StoreCaller(caller);
-            targetEvent.Raise();
-        }
-
         public void RaiseEvent(GameObject caller)
         {
             simpleEvent.StoreCaller(caller);
+            simpleEvent.Raise();
+        }
+
+        public void RaiseEvent(GameObject caller, string sourceScene, string sourceName)
+        {
+            simpleEvent.StoreCaller(caller, sourceScene, sourceName);
             simpleEvent.Raise();
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -15,5 +16,7 @@ namespace AltSalt
 
         [HideInInspector]
         public bool triggered = false;
+
+        public List<SimpleEventTrigger> simpleEventTriggers;
     }
 }

@@ -57,14 +57,14 @@ namespace AltSalt
         void SaveSceneName()
         {
             if(sceneName.Length < 1) {
-                sceneName = SceneManager.GetActiveScene().name;
+                sceneName = this.gameObject.scene.name;
             }
         }
 
         void SaveSceneName(bool force)
         {
             if (force == true) {
-                sceneName = SceneManager.GetActiveScene().name;
+                sceneName = this.gameObject.scene.name;
             }
         }
 

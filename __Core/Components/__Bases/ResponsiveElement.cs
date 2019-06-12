@@ -240,30 +240,6 @@ namespace AltSalt
             }
         }
 
-        string GetDirectory()
-        {
-            string directoryPath = Application.dataPath + "/__Project";
-            string[] subfolders = { "/Resources", "/Layouts", "/" + SceneManager.GetActiveScene().name, "/" + modifySettings.activeLayout.name };
-
-            for (int i = 0; i < subfolders.Length; i++) {
-                directoryPath += subfolders[i];
-                if (!Directory.Exists(directoryPath)) {
-                    Directory.CreateDirectory(directoryPath);
-                }
-            }
-            return directoryPath;
-        }
-
-        string GetFilePath(string basePath)
-        {
-            StringBuilder path = new StringBuilder(basePath);
-            string[] pathComponents = { "/", this.name, id.ToString(), ".json" };
-            for (int i = 0; i < pathComponents.Length; i++) {
-                path.Append(pathComponents[i]);
-            }
-            return path.ToString();
-        }
-
         [HorizontalGroup("Data Handler", 0.5f)]
         [InfoBox("Saves data based on current scene and active layout.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
@@ -277,11 +253,13 @@ namespace AltSalt
                 tempObject.Remove(nonserializedProperties[i]);
             }
             data = tempObject.ToString(2);
-            string filePath = GetFilePath(GetDirectory());
+            string directoryPath = Utils.GetDirectory(new string[] { "/Resources", "/Layouts", "/" + SceneManager.GetActiveScene().name, "/" + modifySettings.activeLayout.name });
+            string fileName = this.name + id.ToString();
+            string filePath = Utils.GetFilePath(directoryPath, fileName, ".json");
 
             if(File.Exists(filePath)) {
                 if (EditorUtility.DisplayDialog("Overwrite existing file?",
-                "This will overwrite the existing data at " + GetFilePath(SceneManager.GetActiveScene().name) + ".", "Proceed", "Cancel")) {
+                "This will overwrite the existing data at " + Utils.GetFilePath(SceneManager.GetActiveScene().name, fileName) + ".", "Proceed", "Cancel")) {
                     File.WriteAllText(filePath, data);
                     AssetDatabase.Refresh();
                 }

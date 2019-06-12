@@ -27,7 +27,6 @@ namespace AltSalt
         [SerializeField]
         ComparisonValues operation;
 
-#if UNITY_EDITOR
         public override void SyncValues()
         {
             if (floatReference.Variable == null && floatReference.UseConstant == false) {
@@ -46,7 +45,6 @@ namespace AltSalt
                 conditionEventTitle = "Trigger Condition : " + floatReference.Variable.name + " is " + operation.ToString() + " " + floatConditionVar.Value;
             }
         }
-#endif
 
         public override bool CheckCondition()
         {
@@ -75,5 +73,14 @@ namespace AltSalt
             return false;
         }
 
+        public FloatReference GetReference()
+        {
+            return floatReference;
+        }
+
+        public FloatReference GetCondition()
+        {
+            return floatConditionVar;
+        }
     }
 }

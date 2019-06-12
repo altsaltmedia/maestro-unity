@@ -23,7 +23,6 @@ namespace AltSalt
         [InfoBox("Condition the bool value should match in order to execute response")]
         BoolReference boolCondition;
 
-#if UNITY_EDITOR
         public override void SyncValues()
         {
             if(boolReference.Variable == null && boolReference.UseConstant == false) {
@@ -42,7 +41,6 @@ namespace AltSalt
                 conditionEventTitle = "Trigger Condition : " + boolReference.Variable.name + " is " + boolCondition.Value;
             }
         }
-#endif
 
         public override bool CheckCondition()
         {
@@ -51,6 +49,16 @@ namespace AltSalt
             }
 
             return false;
+        }
+
+        public BoolReference GetReference()
+        {
+            return boolReference;
+        }
+
+        public BoolReference GetCondition()
+        {
+            return boolCondition;
         }
     }
 }

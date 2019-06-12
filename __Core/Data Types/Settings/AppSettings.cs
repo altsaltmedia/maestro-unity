@@ -46,6 +46,9 @@ namespace AltSalt
         public BoolReference logEventCallersAndListeners;
 
         [ValidateInput("IsPopulated")]
+        public BoolReference logConditionResponses;
+
+        [ValidateInput("IsPopulated")]
         public BoolReference hasBeenOpened;
 
         private static bool IsPopulated(BoolReference attribute)

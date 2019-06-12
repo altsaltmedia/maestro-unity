@@ -17,7 +17,6 @@ namespace AltSalt
         [InfoBox("ActiveTextFamily in Modify Settings will be compared against this condition")]
         TextFamily activeTextFamilyCondition;
 
-#if UNITY_EDITOR
         public override void SyncValues()
         {
             base.SyncValues();
@@ -28,7 +27,7 @@ namespace AltSalt
 
             conditionEventTitle = "Trigger Condition : Active text family is " + activeTextFamilyCondition.name;
         }
-#endif
+
         public override bool CheckCondition()
         {
             base.CheckCondition();
@@ -37,6 +36,11 @@ namespace AltSalt
             }
 
             return false;
+        }
+
+        public TextFamily GetCondition()
+        {
+            return activeTextFamilyCondition;
         }
 
     }

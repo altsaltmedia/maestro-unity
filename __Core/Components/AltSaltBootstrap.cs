@@ -25,7 +25,7 @@ namespace AltSalt
 
         [Required]
         [SerializeField]
-        ComplexEvent initializeApp;
+        ComplexEventTrigger initializeAppTrigger;
 
         [SerializeField]
         [DisableIf("loadDebugMenu")]
@@ -56,22 +56,20 @@ namespace AltSalt
             Application.targetFrameRate = 60;
 
             yield return new WaitForSeconds(1);
-            
-            EventPayload eventPayload = EventPayload.CreateInstance();
+
+            string targetScene;
 
             if(loadDebugMenu == true) {
-                eventPayload.Set(debugMenuName);
+                targetScene = debugMenuName;
             } else {
                 if(appSettings.hasBeenOpened == false) {
-                    eventPayload.Set(initialSceneName);
+                    targetScene = initialSceneName;
                 } else {
-                    eventPayload.Set(subsequentSceneName);
+                    targetScene = subsequentSceneName;
                 }
             }
-            initializeApp.StoreCaller(this.gameObject);
-            initializeApp.Raise(eventPayload);
-            Destroy(eventPayload);
 
+            initializeAppTrigger.RaiseEvent(this.gameObject, targetScene);
             yield break;
         }
     }

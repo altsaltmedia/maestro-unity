@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEngine.SceneManagement;
 
 namespace AltSalt
 {
@@ -42,18 +43,13 @@ namespace AltSalt
 
         protected override void LogCaller()
         {
-            if (callerObject != null) {
-                Debug.Log("[event] [" + this.name + "] Simple event raised : " + this.name, this);
-                Debug.Log("[event] [" + this.name + "] " + callerObject.name + " triggered the event", callerObject);
-            } else {
-                Debug.Log("[event] [" + this.name + " Simple event raised : " + this.name, this);
-                Debug.Log("[event] [" + this.name + "] " + callerString + " triggered the event");
-            }
+            Debug.Log(string.Format("[event] [{0}] [{1}] {2} triggered simple event...", callerScene, this.name, callerName), callerObject);
+            Debug.Log(string.Format("[event] [{0}] [{1}] {2}", callerScene, this.name, this.name), this);
         }
 
         void LogListenerOnRaise(ISimpleEventListener simpleEventListener)
         {
-            Debug.Log("[event] [" + this.name + "] " + simpleEventListener.GetGameObject().name, simpleEventListener.GetGameObject());
+            Debug.Log(string.Format("[event] [{0}] [{1}] {2}", simpleEventListener.GetGameObject().scene.name, this.name, simpleEventListener.GetGameObject().name), simpleEventListener.GetGameObject());
         }
 
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
@@ -71,6 +67,7 @@ namespace AltSalt
                 Debug.Log("The following listener subscribed to simple event " + this.name, this);
                 Debug.Log(listener.GetGameObject().name, listener.GetGameObject());
             }
+            RegisterDependent(listener.GetGameObject().scene.name, listener.GetGameObject().name);
             listeners.Add(listener);
         }
 

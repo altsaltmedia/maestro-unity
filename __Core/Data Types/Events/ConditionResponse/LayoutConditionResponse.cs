@@ -17,7 +17,6 @@ namespace AltSalt
         [InfoBox("ActiveLayout in Modify Settings will be compared against this condition")]
         Layout activeLayoutCondition;
 
-#if UNITY_EDITOR
         public override void SyncValues()
         {
             base.SyncValues();
@@ -28,7 +27,7 @@ namespace AltSalt
 
             conditionEventTitle = "Trigger Condition : Active layout is " + activeLayoutCondition.name;
         }
-#endif
+
         public override bool CheckCondition()
         {
             base.CheckCondition();
@@ -38,5 +37,11 @@ namespace AltSalt
 
             return false;
         }
+
+        public Layout GetCondition()
+        {
+            return activeLayoutCondition;
+        }
+
     }
 }

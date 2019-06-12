@@ -32,26 +32,36 @@ namespace AltSalt
             }
         }
 
+        [HorizontalGroup("Split", 1f)]
+        [InfoBox("Trigger the list of events")]
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void CallTriggerResponses()
         {
+            if(conditionResponseTrigger == null) {
+                Debug.Log("Please populate the condition response trigger", this);
+                return;
+            }
+
             if(eventExecutionType == EventExecutionType.ExecuteAll) {
-                conditionResponseTrigger.TriggerAllResponses();
+                conditionResponseTrigger.TriggerAllResponses(this.gameObject, triggerOnStart);
             } else {
-                conditionResponseTrigger.TriggerUntilFirstSuccess();
+                conditionResponseTrigger.TriggerUntilFirstSuccess(this.gameObject, triggerOnStart);
             }
         }
 
 #if UNITY_EDITOR
         void OnEnable()
         {
-            if(triggerOnStart == true) {
+            if (Application.IsPlaying(this.gameObject) == false && triggerOnStart == true) {
                 CallTriggerResponses();
             }
         }
 
         void OnGUI()
         {
-            conditionResponseTrigger.CallSyncValues();
+            if (Application.IsPlaying(this.gameObject) == false) {
+                conditionResponseTrigger.CallSyncValues();
+            }
         }
 #endif
     }

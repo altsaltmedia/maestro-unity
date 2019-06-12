@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
@@ -17,6 +18,6 @@ namespace AltSalt
         [HideInInspector]
         public bool triggered = false;
 
-        public ComplexEventTrigger complexEventTrigger;
+        public List<ComplexEventTriggerPackager> complexEventTriggerPackagers;
     }
 }
