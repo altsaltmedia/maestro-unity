@@ -14,7 +14,7 @@ using UnityEngine;
 namespace AltSalt
 {
     [Serializable]
-    public class ColorReference
+    public class ColorReference : VariableReferenceBase
     {
         public bool UseConstant = false;
         public Color ConstantValue;

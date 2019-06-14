@@ -14,8 +14,8 @@ using Sirenix.OdinInspector;
 namespace AltSalt
 {   
 	[Serializable]
-	public class BoolReference
-	{
+	public class BoolReference : VariableReferenceBase
+    {
 		public bool UseConstant = false;
 
         [PropertySpace]

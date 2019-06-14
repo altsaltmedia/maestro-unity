@@ -3,7 +3,7 @@
 namespace AltSalt
 {
     [CreateAssetMenu(menuName = "AltSalt/Vector3 Variable")]
-    public class V3Variable : ScriptableObject
+    public class V3Variable : VariableBase
     {
 #if UNITY_EDITOR
         [Multiline]

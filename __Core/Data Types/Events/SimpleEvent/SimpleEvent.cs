@@ -67,7 +67,6 @@ namespace AltSalt
                 Debug.Log("The following listener subscribed to simple event " + this.name, this);
                 Debug.Log(listener.GetGameObject().name, listener.GetGameObject());
             }
-            RegisterDependent(listener.GetGameObject().scene.name, listener.GetGameObject().name);
             listeners.Add(listener);
         }
 

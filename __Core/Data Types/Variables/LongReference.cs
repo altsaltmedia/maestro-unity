@@ -13,7 +13,7 @@ using System;
 namespace AltSalt
 {
     [Serializable]
-    public class LongReference
+    public class LongReference : VariableReferenceBase
     {
         public bool UseConstant = false;
         public long ConstantValue;

@@ -14,7 +14,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt
 {
     [CreateAssetMenu(menuName = "AltSalt/Long Variable")]
-    public class LongVariable : ScriptableObject
+    public class LongVariable : VariableBase
     {
 #if UNITY_EDITOR
         [Multiline]

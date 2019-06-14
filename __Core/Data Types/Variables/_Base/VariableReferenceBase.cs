@@ -4,7 +4,5 @@ using UnityEngine;
 
 namespace AltSalt
 {
-    public class DoubleReference : VariableReferenceBase {
-    
-    }
+    public abstract class VariableReferenceBase { }
 }

@@ -13,7 +13,7 @@ using UnityEngine;
 namespace AltSalt
 {
     [CreateAssetMenu(menuName = "AltSalt/Bool Variable")]
-    public class BoolVariable : ScriptableObject
+    public class BoolVariable : VariableBase
     {
 #if UNITY_EDITOR
         [Multiline]

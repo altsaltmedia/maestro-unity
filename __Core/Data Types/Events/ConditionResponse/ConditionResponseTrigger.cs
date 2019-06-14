@@ -10,7 +10,7 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class ConditionResponseTrigger
+    public class ConditionResponseTrigger : TriggerBase
     {
         [Serializable]
         enum ConditionResponseTypes { Always, Bool, Float, Int, TextFamily, Layout }

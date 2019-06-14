@@ -3,7 +3,7 @@
 namespace AltSalt
 {
     [CreateAssetMenu(menuName = "AltSalt/String Variable")]
-    public class StringVariable : ScriptableObject
+    public class StringVariable : VariableBase
     {
 #if UNITY_EDITOR
         [Multiline]

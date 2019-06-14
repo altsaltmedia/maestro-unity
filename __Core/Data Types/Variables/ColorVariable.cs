@@ -14,7 +14,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt
 {
     [CreateAssetMenu(menuName = "AltSalt/Color Variable")]
-    public class ColorVariable : ScriptableObject
+    public class ColorVariable : VariableBase
     {
 #if UNITY_EDITOR
         [Multiline]

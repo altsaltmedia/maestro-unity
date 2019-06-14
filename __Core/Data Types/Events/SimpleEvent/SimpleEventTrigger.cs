@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt
 {
     [Serializable]
-    public class SimpleEventTrigger
+    public class SimpleEventTrigger : TriggerBase
     {
         [Required]
         [SerializeField]

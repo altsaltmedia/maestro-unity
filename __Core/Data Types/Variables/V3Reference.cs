@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AltSalt
 {
     [Serializable]
-    public class V3Reference
+    public class V3Reference : VariableReferenceBase
     {
         public bool UseConstant = false;
         public Vector3 ConstantValue;

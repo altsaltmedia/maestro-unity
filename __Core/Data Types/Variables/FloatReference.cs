@@ -13,7 +13,7 @@ using System;
 namespace AltSalt
 {
     [Serializable]
-    public class FloatReference
+    public class FloatReference : VariableReferenceBase
     {
         public bool UseConstant = false;
         public float ConstantValue;

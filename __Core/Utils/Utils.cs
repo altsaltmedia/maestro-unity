@@ -100,6 +100,49 @@ namespace AltSalt
             return node;
         }
 
+        public static JSONNode AddToJSONArray(JSONNode node, string key, JSONNode value)
+        {
+            if (key.Length < 1) {
+                node.Add(value);
+
+            } else if (node[key] != null) {
+                bool dependencyExists = false;
+                foreach (string childVal in node[key].Children) {
+                    if (childVal == value) {
+                        dependencyExists = true;
+                    }
+                }
+                if (dependencyExists == false) {
+                    node[key].Add(value);
+                }
+
+            } else {
+                Debug.LogWarning("Unable to add to JSON array");
+            }
+
+            return node;
+        }
+
+        public static JSONNode AddToJSONObject(JSONNode node, string key, JSONNode value)
+        {
+            if (node[key] != null) {
+                bool dependencyExists = false;
+                foreach (string childVal in node[key].Children) {
+                    if (childVal == value) {
+                        dependencyExists = true;
+                    }
+                }
+                if (dependencyExists == false) {
+                    node[key].Add(value);
+                }
+
+            } else {
+                Debug.LogWarning("Unable to add to JSON array");
+            }
+
+            return node;
+        }
+
         public static int GetAxisId(string axisName)
         {
             switch (axisName) {

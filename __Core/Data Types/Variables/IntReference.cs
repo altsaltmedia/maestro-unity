@@ -13,7 +13,7 @@ using System;
 namespace AltSalt
 {
     [Serializable]
-    public class IntReference
+    public class IntReference : VariableReferenceBase
     {
         public bool UseConstant = false;
         public int ConstantValue;

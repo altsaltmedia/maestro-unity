@@ -6,7 +6,7 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class ComplexEventTriggerPackager
+    public class ComplexEventTriggerPackager : TriggerBase
     {
         [Required]
         [SerializeField]

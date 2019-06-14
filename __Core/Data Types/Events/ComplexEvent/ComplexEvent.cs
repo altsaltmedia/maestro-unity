@@ -175,7 +175,6 @@ namespace AltSalt
                 Debug.Log("The following listener subscribed to complex event " + this.name, this);
                 Debug.Log(listener.gameObject.name, listener.gameObject);
             }
-            RegisterDependent(listener.gameObject.scene.name, listener.gameObject.name);
             listeners.Add(listener);
         }
 
