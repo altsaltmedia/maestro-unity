@@ -6,16 +6,21 @@ using Sirenix.OdinInspector;
 using UnityEngine.Events;
 using System.Reflection;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class ConditionResponseTrigger : TriggerBase
+    public class ConditionResponseTrigger : TriggerBase, IClearHiddenValues
     {
         [Serializable]
         enum ConditionResponseTypes { Always, Bool, Float, Int, TextFamily, Layout }
 
         [SerializeField]
+        [OnValueChanged("DisplayClearDialogue")]
         ConditionResponseTypes triggerType;
 
         [SerializeField]
@@ -168,6 +173,42 @@ namespace AltSalt
         }
 
 #if UNITY_EDITOR
+        void DisplayClearDialogue()
+        {
+            if (EditorUtility.DisplayDialog("Clear unused values?", "You just changed the condition response type. Would you like to erase unused, hidden values?", "Yes", "No")) {
+                ClearHiddenValues();
+            }
+        }
+
+        [HorizontalGroup("Split", 1f)]
+        [InfoBox("Clear any values that are not currently being used by the trigger")]
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void ClearHiddenValues()
+        {
+            if(triggerType != ConditionResponseTypes.Always) {
+                alwaysEvents.Clear();
+            }
+
+            if (triggerType != ConditionResponseTypes.Bool) {
+                boolEvents.Clear();
+            }
+
+            if (triggerType != ConditionResponseTypes.Float) {
+                floatEvents.Clear();
+            }
+
+            if (triggerType != ConditionResponseTypes.Int) {
+                // Int condition response not yet implemented
+            }
+
+            if (triggerType != ConditionResponseTypes.Layout) {
+                layoutEvents.Clear();
+            }
+
+            if (triggerType != ConditionResponseTypes.TextFamily) {
+                textFamilyEvents.Clear();
+            }
+        }
 
         private bool IsPopulated(List<AlwaysConditionResponse> attribute)
         {

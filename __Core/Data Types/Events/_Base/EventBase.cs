@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace AltSalt
 {
 
-    public abstract class EventBase : ScriptableObject, IDependable
+    public abstract class EventBase : RegisterableScriptableObject, IDependable
     {
 
         [SerializeField]

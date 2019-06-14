@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -33,13 +34,13 @@ namespace AltSalt
         [ShowIf("ShowStringKeys")]
         [ValidateInput("CheckStringKeys", "Keys and Values must be of equal length")]
         [BoxGroup("String Packager")]
-        EventPayloadKey[] stringKeys;
+        List<EventPayloadKey> stringKeys = new List<EventPayloadKey>();
 
         [SerializeField]
         [ShowIf("hasString")]
         [ValidateInput("CheckStringValues", "Keys and Values must be of equal length")]
         [BoxGroup("String Packager")]
-        string[] stringValues;
+        List<string> stringValues = new List<string>();
 
         [PropertySpace]
 
@@ -64,13 +65,13 @@ namespace AltSalt
         [ShowIf("ShowFloatKeys")]
         [ValidateInput("CheckFloatKeys", "Keys and Values must be of equal length")]
         [BoxGroup("Float Packager")]
-        EventPayloadKey[] floatKeys;
+        List<EventPayloadKey> floatKeys = new List<EventPayloadKey>();
 
         [SerializeField]
         [ShowIf("hasFloat")]
         [ValidateInput("CheckFloatValues", "Keys and Values must be of equal length")]
         [BoxGroup("Float Packager")]
-        float[] floatValues;
+        List<float> floatValues = new List <float>();
 
         [PropertySpace]
 
@@ -95,14 +96,14 @@ namespace AltSalt
         [ShowIf("ShowBoolKeys")]
         [ValidateInput("CheckBoolKeys", "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
-        EventPayloadKey[] boolKeys;
+        List<EventPayloadKey> boolKeys = new List<EventPayloadKey>();
 
         [SerializeField]
         [ShowIf("hasBool")]
         [ValueDropdown("boolValueList")]
         [ValidateInput("CheckBoolValues", "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
-        bool[] boolValues;
+        List<bool> boolValues = new List <bool>();
 
         private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
                 {"FALSE", false },
@@ -132,13 +133,13 @@ namespace AltSalt
         [ShowIf("ShowScriptableObjectKeys")]
         [ValidateInput("CheckScriptableObjectKeys", "Keys and Values must be of equal length")]
         [BoxGroup("Scriptable Object Packager")]
-        EventPayloadKey[] scriptableObjectKeys;
+        List<EventPayloadKey> scriptableObjectKeys = new List<EventPayloadKey>();
 
         [SerializeField]
         [ShowIf("hasScriptableObject")]
         [ValidateInput("CheckScriptableObjectValues", "Keys and Values must be of equal length")]
         [BoxGroup("Scriptable Object Packager")]
-        ScriptableObject[] scriptableObjectValues;
+        List<ScriptableObject> scriptableObjectValues = new List<ScriptableObject>();
 
         public void RaiseEvent(GameObject caller)
         {
@@ -180,19 +181,19 @@ namespace AltSalt
 
         EventPayload GetStringValues(EventPayload eventPayload)
         {
-            if (stringValues.Length == 0) {
+            if (stringValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
             }
-            else if (stringValues.Length == 1) {
-                if(customStringKey == true && stringKeys.Length >= 1) {
+            else if (stringValues.Count == 1) {
+                if(customStringKey == true && stringKeys.Count >= 1) {
                     eventPayload.Set(stringKeys[0], stringValues[0]);
                 } else {
                     eventPayload.Set(DataType.stringType, stringValues[0]);
                 }
             }
             else {
-                for (int i = 0; i < stringValues.Length; i++) {
+                for (int i = 0; i < stringValues.Count; i++) {
                     eventPayload.Set(stringKeys[i], stringValues[i]);
                 }
             }
@@ -201,19 +202,19 @@ namespace AltSalt
 
         EventPayload GetFloatValues(EventPayload eventPayload)
         {
-            if (floatValues.Length == 0) {
+            if (floatValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
             }
-            else if (floatValues.Length == 1) {
-                if (customFloatKey == true && floatKeys.Length >= 1) {
+            else if (floatValues.Count == 1) {
+                if (customFloatKey == true && floatKeys.Count >= 1) {
                     eventPayload.Set(floatKeys[0], floatValues[0]);
                 } else {
                     eventPayload.Set(DataType.floatType, floatValues[0]);
                 }
             }
             else {
-                for (int i = 0; i < floatValues.Length; i++) {
+                for (int i = 0; i < floatValues.Count; i++) {
                     eventPayload.Set(floatKeys[i], floatValues[i]);
                 }
             }
@@ -222,19 +223,19 @@ namespace AltSalt
 
         EventPayload GetBoolValues(EventPayload eventPayload)
         {
-            if (boolValues.Length == 0) {
+            if (boolValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
             }
-            else if (boolValues.Length == 1) {
-                if (customBoolKey == true && boolKeys.Length >= 1) {
+            else if (boolValues.Count == 1) {
+                if (customBoolKey == true && boolKeys.Count >= 1) {
                     eventPayload.Set(boolKeys[0], boolValues[0]);
                 } else {
                     eventPayload.Set(DataType.boolType, boolValues[0]);
                 }
             }
             else {
-                for (int i = 0; i < boolValues.Length; i++) {
+                for (int i = 0; i < boolValues.Count; i++) {
                     eventPayload.Set(boolKeys[i], boolValues[i]);
                 }
             }
@@ -243,19 +244,19 @@ namespace AltSalt
 
         EventPayload GetScriptableObjectValues(EventPayload eventPayload)
         {
-            if (scriptableObjectValues.Length == 0) {
+            if (scriptableObjectValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
             }
-            else if (scriptableObjectValues.Length == 1) {
-                if (customScriptableObjectKey == true && scriptableObjectKeys.Length >= 1) {
+            else if (scriptableObjectValues.Count == 1) {
+                if (customScriptableObjectKey == true && scriptableObjectKeys.Count >= 1) {
                     eventPayload.Set(scriptableObjectKeys[0], scriptableObjectValues[0]);
                 } else {
                     eventPayload.Set(DataType.scriptableObjectType, scriptableObjectValues[0]);
                 }
             }
             else {
-                for (int i = 0; i < scriptableObjectValues.Length; i++) {
+                for (int i = 0; i < scriptableObjectValues.Count; i++) {
                     eventPayload.Set(scriptableObjectKeys[i], scriptableObjectValues[i]);
                 }
             }
@@ -270,7 +271,7 @@ namespace AltSalt
 #if UNITY_EDITOR
         bool ShowStringKeys()
         {
-            if (hasString && stringValues != null && stringValues.Length > 1) {
+            if (hasString && stringValues != null && stringValues.Count > 1) {
                 return true;
             }
 
@@ -283,7 +284,7 @@ namespace AltSalt
 
         bool ShowFloatKeys()
         {
-            if (hasFloat && floatValues != null && floatValues.Length > 1) {
+            if (hasFloat && floatValues != null && floatValues.Count > 1) {
                 return true;
             }
 
@@ -296,7 +297,7 @@ namespace AltSalt
 
         bool ShowBoolKeys()
         {
-            if (hasBool && boolValues != null && boolValues.Length > 1) {
+            if (hasBool && boolValues != null && boolValues.Count > 1) {
                 return true;
             }
 
@@ -309,7 +310,7 @@ namespace AltSalt
 
         bool ShowScriptableObjectKeys()
         {
-            if (hasScriptableObject && scriptableObjectValues != null && scriptableObjectValues.Length > 1) {
+            if (hasScriptableObject && scriptableObjectValues != null && scriptableObjectValues.Count > 1) {
                 return true;
             }
 
@@ -322,7 +323,7 @@ namespace AltSalt
 
         bool ShowCustomStringToggle()
         {
-            if(hasString && stringValues.Length <= 1) {
+            if(hasString && stringValues.Count <= 1) {
                 return true;
             } else {
                 return false;
@@ -331,7 +332,7 @@ namespace AltSalt
 
         bool ShowCustomFloatToggle()
         {
-            if (hasFloat && floatValues.Length <= 1) {
+            if (hasFloat && floatValues.Count <= 1) {
                 return true;
             } else {
                 return false;
@@ -340,7 +341,7 @@ namespace AltSalt
 
         bool ShowCustomBoolToggle()
         {
-            if (hasBool && boolValues.Length <= 1) {
+            if (hasBool && boolValues.Count <= 1) {
                 return true;
             } else {
                 return false;
@@ -349,91 +350,91 @@ namespace AltSalt
 
         bool ShowCustomScriptableObjectToggle()
         {
-            if (hasScriptableObject && scriptableObjectValues.Length <= 1) {
+            if (hasScriptableObject && scriptableObjectValues.Count <= 1) {
                 return true;
             } else {
                 return false;
             }
         }
 
-        bool CheckStringKeys(EventPayloadKey[] attribute)
+        bool CheckStringKeys(List<EventPayloadKey> attribute)
         {
-            if(attribute.Length != stringValues.Length) {
+            if(attribute.Count != stringValues.Count) {
                 return false;
             } else {
                 return true;
             }
         }
 
-        bool CheckFloatKeys(EventPayloadKey[] attribute)
+        bool CheckFloatKeys(List<EventPayloadKey> attribute)
         {
-            if (attribute.Length != floatValues.Length) {
+            if (attribute.Count != floatValues.Count) {
                 return false;
             } else {
                 return true;
             }
         }
 
-        bool CheckBoolKeys(EventPayloadKey[] attribute)
+        bool CheckBoolKeys(List<EventPayloadKey> attribute)
         {
-            if (attribute.Length != boolValues.Length) {
+            if (attribute.Count != boolValues.Count) {
                 return false;
             } else {
                 return true;
             }
         }
 
-        bool CheckScriptableObjectKeys(EventPayloadKey[] attribute)
+        bool CheckScriptableObjectKeys(List<EventPayloadKey> attribute)
         {
-            if (attribute.Length != scriptableObjectValues.Length) {
+            if (attribute.Count != scriptableObjectValues.Count) {
                 return false;
             } else {
                 return true;
             }
         }
 
-        bool CheckStringValues(string[] attribute)
+        bool CheckStringValues(List<string> attribute)
         {
-            if(attribute.Length <= 1 && customStringKey == false) {
+            if(attribute.Count <= 1 && customStringKey == false) {
                 return true;
             }
-            if (attribute.Length != stringKeys.Length) {
+            if (attribute.Count != stringKeys.Count) {
                 return false;
             } else {
                 return true;
             }
         }
 
-        bool CheckFloatValues(float[] attribute)
+        bool CheckFloatValues(List<float> attribute)
         {
-            if (attribute.Length <= 1 && customFloatKey == false) {
+            if (attribute.Count <= 1 && customFloatKey == false) {
                 return true;
             }
-            if (attribute.Length != floatKeys.Length) {
+            if (attribute.Count != floatKeys.Count) {
                 return false;
             } else {
                 return true;
             }
         }
 
-        bool CheckBoolValues(bool[] attribute)
+        bool CheckBoolValues(List<bool> attribute)
         {
-            if (attribute.Length <= 1 && customBoolKey == false) {
+            if (attribute.Count <= 1 && customBoolKey == false) {
                 return true;
             }
-            if (attribute.Length != boolKeys.Length) {
+            if (attribute.Count != boolKeys.Count) {
                 return false;
             } else {
                 return true;
             }
         }
 
-        bool CheckScriptableObjectValues(ScriptableObject[] attribute)
+        bool CheckScriptableObjectValues(List<ScriptableObject> attribute)
         {
-            if (attribute.Length <= 1 && customScriptableObjectKey == false) {
+            if (attribute.Count <= 1 && customScriptableObjectKey == false) {
                 return true;
             }
-            if (attribute.Length != scriptableObjectKeys.Length) {
+            if (attribute.Count != scriptableObjectKeys.Count) {
                 return false;
             } else {
                 return true;

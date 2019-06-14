@@ -4,5 +4,5 @@ using UnityEngine;
 
 namespace AltSalt
 {
-    public abstract class VariableBase : ScriptableObject { }
+    public abstract class VariableBase : RegisterableScriptableObject { }
 }
