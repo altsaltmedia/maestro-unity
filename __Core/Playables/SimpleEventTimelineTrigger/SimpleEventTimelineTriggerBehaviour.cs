@@ -6,7 +6,7 @@ using UnityEngine.Playables;
 namespace AltSalt
 {
     [Serializable]
-    public class SimpleEventTimelineTriggerBehaviour : PlayableBehaviour
+    public class SimpleEventTimelineTriggerBehaviour : PlayableBehaviourTriggerBase
     {
         [HideInInspector]
         public double startTime;

@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92fc5b8f2b65a4ecdb030d56a24f704a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  appSettings: {fileID: 0}
   userData:
   - scriptableObject: {fileID: 11400000, guid: 642bc1a393bae4e1c8825c3c45eecd79, type: 2}
     dataType: 2
@@ -79,6 +80,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &97697348217540041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,10 +94,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggerOnStart: 1
+  eventExecutionType: 0
   conditionResponseTrigger:
     triggerType: 0
     alwaysEvents:
-    - response:
+    - conditionEventTitle: 
+      appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+      response:
         m_PersistentCalls:
           m_Calls:
           - m_Target: {fileID: 3144316825054138898}

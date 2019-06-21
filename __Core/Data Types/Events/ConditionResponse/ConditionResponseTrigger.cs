@@ -14,7 +14,7 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class ConditionResponseTrigger : TriggerBase, IClearHiddenValues
+    public class ConditionResponseTrigger : ConditionResponseTriggerBase, IClearHiddenValues
     {
         [Serializable]
         enum ConditionResponseTypes { Always, Bool, Float, Int, TextFamily, Layout }
@@ -97,7 +97,7 @@ namespace AltSalt
 
                 case ConditionResponseTypes.Always:
                     for (int i = 0; i < alwaysEvents.Count; i++) {
-                        if(alwaysEvents[i].CheckCondition() == true) {
+                        if (alwaysEvents[i].CheckCondition() == true) {
                             alwaysEvents[i].TriggerResponse(caller, triggerOnStart);
                             return;
                         }
@@ -106,7 +106,7 @@ namespace AltSalt
 
                 case ConditionResponseTypes.Bool:
                     for (int i = 0; i < boolEvents.Count; i++) {
-                        if(boolEvents[i].CheckCondition() == true) {
+                        if (boolEvents[i].CheckCondition() == true) {
                             boolEvents[i].TriggerResponse(caller, triggerOnStart);
                             return;
                         }
@@ -115,7 +115,7 @@ namespace AltSalt
 
                 case ConditionResponseTypes.Float:
                     for (int i = 0; i < floatEvents.Count; i++) {
-                        if(floatEvents[i].CheckCondition() == true) {
+                        if (floatEvents[i].CheckCondition() == true) {
                             floatEvents[i].TriggerResponse(caller, triggerOnStart);
                             return;
                         }
@@ -133,7 +133,7 @@ namespace AltSalt
 
                 case ConditionResponseTypes.Layout:
                     for (int i = 0; i < layoutEvents.Count; i++) {
-                        if(layoutEvents[i].CheckCondition() == true) {
+                        if (layoutEvents[i].CheckCondition() == true) {
                             layoutEvents[i].TriggerResponse(caller, triggerOnStart);
                             return;
                         }
@@ -145,6 +145,12 @@ namespace AltSalt
         public void CallSyncValues()
         {
             switch (triggerType) {
+
+                case ConditionResponseTypes.Always:
+                    for (int i = 0; i < alwaysEvents.Count; i++) {
+                        alwaysEvents[i].SyncValues();
+                    }
+                    break;
 
                 case ConditionResponseTypes.Bool:
                     for (int i = 0; i < boolEvents.Count; i++) {

@@ -62,7 +62,7 @@ MonoBehaviour:
     Variable: {fileID: 11400000, guid: 92e511ba33ae14ae6affd1b4e2ed44eb, type: 2}
   logEventCallersAndListeners:
     UseConstant: 1
-    ConstantValue: 0
+    ConstantValue: 1
     Variable: {fileID: 11400000, guid: 25478f5b2f7eb4aa38e90b01f0525419, type: 2}
   logConditionResponses:
     UseConstant: 1

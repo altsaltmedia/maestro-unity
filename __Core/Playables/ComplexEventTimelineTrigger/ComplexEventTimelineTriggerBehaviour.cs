@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt
 {
     [Serializable]
-    public class ComplexEventTimelineTriggerBehaviour : PlayableBehaviour
+    public class ComplexEventTimelineTriggerBehaviour : PlayableBehaviourTriggerBase
     {
         [HideInInspector]
         public double startTime;

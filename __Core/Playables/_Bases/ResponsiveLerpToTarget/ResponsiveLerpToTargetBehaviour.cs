@@ -30,7 +30,7 @@ namespace AltSalt
         
         [HideInInspector]
         public double endTime;
-        
+
         [HideInInspector]
         public EasingFunction.Function easingFunction;
 

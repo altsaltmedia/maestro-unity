@@ -5,7 +5,7 @@ using UnityEngine;
 namespace AltSalt
 {
     [CreateAssetMenu(menuName = "AltSalt/Audio Clip Bundle")]
-    public class AudioClipBundle : ScriptableObject
+    public class AudioClipBundle : RegisterableScriptableObject
     {
 #if UNITY_EDITOR
         [Multiline]

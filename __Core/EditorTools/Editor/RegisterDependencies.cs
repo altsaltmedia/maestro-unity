@@ -10,13 +10,16 @@ using SimpleJSON;
 using UnityEngine.Playables;
 using System;
 using UnityEngine.Events;
+using UnityEngine.Timeline;
+using System.Linq;
 
 namespace AltSalt
 {
     public class RegisterDependencies : EditorWindow
     {
         List<ScriptableObject> scriptableObjectList = new List<ScriptableObject>();
-        int counter = 0;
+        string targetScenePath = "";
+        string targetSceneName = "";
         string callbackScenePath = "";
         string callbackSceneName = "";
 
@@ -33,6 +36,49 @@ namespace AltSalt
 
         public void OnGUI()
         {
+            GUILayout.Space(10);
+
+            ShowSingleSceneOptions();
+
+            GUILayout.Space(20);
+
+            ShowAllSceneOptions();
+
+            GUILayout.Space(20);
+
+            if (GUILayout.Button("Remove Dependencies Folder")) {
+                if (EditorUtility.DisplayDialog("Remove dependencies folder?", "This will delete the dependencies folder at " + Utils.GetProjectPath() + "/z_Dependencies", "Proceed", "Cancel")) {
+                    RemoveDependenciesFolder();
+                }
+            }
+        }
+
+        void ShowSingleSceneOptions()
+        {
+            if (targetScenePath.Length > 0) {
+                GUILayout.Label("Ready to find dependencies in '" + targetSceneName + "'.");
+            } else {
+                GUILayout.Label("Please load a target scene.");
+            }
+            if (GUILayout.Button("Load target scene")) {
+                StoreTargetSceneInfo();
+            }
+
+            EditorGUI.BeginDisabledGroup(targetScenePath.Length == 0);
+            if (GUILayout.Button("Register Dependencies (Target Scene)")) {
+                TriggerRegisterDependenciesInTargetScene();
+            }
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUI.BeginDisabledGroup(targetScenePath.Length == 0);
+            if (GUILayout.Button(new GUIContent("Clear Hidden Values (Target Scene)", "If you're finding erroneous dependencies on objects, use this to clear any unused values."))) {
+                ClearHiddenValuesInTargetScene();
+            }
+            EditorGUI.EndDisabledGroup();
+        }
+
+        void ShowAllSceneOptions()
+        {
             if (callbackScenePath.Length > 0) {
                 GUILayout.Label("Callback scene '" + callbackSceneName + "' loaded.");
             } else {
@@ -40,23 +86,31 @@ namespace AltSalt
             }
 
             if (GUILayout.Button("Load callback scene")) {
-                LoadCallbackScene();
+                StoreCallbackSceneInfo();
             }
 
             EditorGUI.BeginDisabledGroup(callbackScenePath.Length == 0);
-            if (GUILayout.Button("Register Dependencies")) {
-                TriggerRegisterDependencies();
+            if (GUILayout.Button("Register Dependencies (All Scenes)")) {
+                TriggerRegisterAllDependencies();
             }
             EditorGUI.EndDisabledGroup();
 
             EditorGUI.BeginDisabledGroup(callbackScenePath.Length == 0);
-            if (GUILayout.Button("Clear Hidden Values in Project")) {
-                ClearHiddenValuesInProject();
+            if (GUILayout.Button(new GUIContent("Clear Hidden Values (All Scenes)", "If you're finding erroneous dependencies on objects, use this to clear any unused values."))) {
+                ClearAllHiddenValues();
             }
             EditorGUI.EndDisabledGroup();
         }
 
-        private void LoadCallbackScene()
+        private void StoreTargetSceneInfo()
+        {
+            targetScenePath = EditorUtility.OpenFilePanel("Select text file", targetScenePath, "unity");
+            if (File.Exists(targetScenePath)) {
+                targetSceneName = Path.GetFileNameWithoutExtension(targetScenePath);
+            }
+        }
+
+        private void StoreCallbackSceneInfo()
         {
             callbackScenePath = EditorUtility.OpenFilePanel("Select text file", callbackScenePath, "unity");
             if (File.Exists(callbackScenePath)) {
@@ -70,148 +124,249 @@ namespace AltSalt
             return sceneGuids;
         }
 
-        void ClearHiddenValuesInProject()
-        {
-            string[] sceneGuids = GetSceneGuids();
-            for (int i = 0; i < sceneGuids.Length; i++) {
-
-                EditorSceneManager.OpenScene(AssetDatabase.GUIDToAssetPath(sceneGuids[i]));
-
-                var components = Resources.FindObjectsOfTypeAll(typeof(IClearHiddenValues)) as IClearHiddenValues[];
-                foreach (IClearHiddenValues component in components) {
-                    component.ClearHiddenValues();
-                }
-            }
-
-            EditorSceneManager.OpenScene(callbackScenePath);
-        }
-
-        void TriggerRegisterDependencies()
+        void PopulateScriptableObjectList()
         {
             string scriptableObjectQuery = typeof(RegisterableScriptableObject).Name;
 
             string[] scriptableObjectGuids = AssetDatabase.FindAssets(string.Format("t:{0}", scriptableObjectQuery));
 
+            int searchCounter = 0;
+
             foreach (string scriptableObjectGuid in scriptableObjectGuids) {
+                EditorUtility.DisplayProgressBar("Scanning project", "Populating scriptable object list", 1.0f / scriptableObjectGuids.Length * searchCounter);
                 string assetPath = AssetDatabase.GUIDToAssetPath(scriptableObjectGuid);
                 ScriptableObject scriptableObject = (ScriptableObject)AssetDatabase.LoadAssetAtPath(assetPath, typeof(ScriptableObject));
                 scriptableObjectList.Add(scriptableObject);
+
+                searchCounter++;
             }
-
-            //string[] sceneGuids = AssetDatabase.FindAssets("t:scene", new string[] { "Assets/__Project" });
-            //for (int i = 0; i < sceneGuids.Length; i++) {
-
-                //EditorUtility.DisplayProgressBar("Scanning project", "Finding dependencies", 1.0f / sceneGuids.Length * i);
-                //Scene scene = EditorSceneManager.OpenScene(AssetDatabase.GUIDToAssetPath(sceneGuids[i]));
-
-                //RegisterComponentDependencies(scriptableObjectGuids, scene.name);
-                RegisterComponentDependencies(scriptableObjectGuids, "Splash");
-                //   RegisterPlayableDependencies(guids, "Splash");
-
-            //}
-            AssetDatabase.Refresh();
             EditorUtility.ClearProgressBar();
-            counter = 0;
         }
 
-        void RegisterComponentDependencies(string[] guids, string sceneName)
+        void ClearScriptableObjectList()
         {
-            var objs = Resources.FindObjectsOfTypeAll(typeof(ConditionResponseTriggerBehaviour)) as Component[];
-            if (objs == null) return;
-            //Debug.Log(string.Format("[{0}] IDependable asset found : {1}", scriptableObject.name, scriptableObject.name));
-            //Debug.Log(string.Format("[{0}] Dependencies: ", scriptableObject.name));
+            scriptableObjectList.Clear();
+        }
 
-            foreach (Component obj in objs) {
-                // Ignore prefabs
-                if (obj.GetType().Namespace != "AltSalt" || EditorUtility.IsPersistent(obj.gameObject) == true || obj == null) {
-                    continue;
+        void TriggerRegisterDependenciesInTargetScene()
+        {
+            string componentRegistryScenePath = Utils.GetProjectPath() + "/z_Dependencies/Components/" + targetSceneName;
+
+            if (EditorUtility.DisplayDialog("Register dependencies from " + targetSceneName + "?", "This will delete the component dependencies folder at " + componentRegistryScenePath + " then scan " + targetSceneName +
+                " for dependencies. \n\nThis will likely put the variables folder out of sync (use all scenes registration to sync all dependencies)", "Proceed", "Cancel")) {
+
+                if (Directory.Exists(componentRegistryScenePath)) {
+                    Directory.Delete(componentRegistryScenePath, true);
+                    AssetDatabase.Refresh();
                 }
-                FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                ParseFieldInfo(fields, obj, obj, sceneName);
+
+                PopulateScriptableObjectList();
+                Scene scene = EditorSceneManager.OpenScene(targetScenePath);
+                FindDependencies(scene.name);
+                AssetDatabase.Refresh();
+                ClearScriptableObjectList();
             }
-            
         }
 
-        void ParseFieldInfo(FieldInfo[] fields, object obj, Component component, string sceneName)
+        void TriggerRegisterAllDependencies()
         {
-            foreach (FieldInfo fieldInfo in fields) {
-                counter++;
+            if (EditorUtility.DisplayDialog("Register dependencies in all scenes?", "This will scan the entire project and recreate the dependencies folder. This cannot be undone.", "Proceed", "Cancel")) {
 
-                //if(counter > 100) {
-                //    return;
-                //}
+                RemoveDependenciesFolder();
+                PopulateScriptableObjectList();
+                string[] sceneGuids = GetSceneGuids();
+                for (int i = 0; i < sceneGuids.Length; i++) {
 
-                //Debug.Log(fieldInfo.GetValue(obj));
+                    Scene scene = EditorSceneManager.OpenScene(AssetDatabase.GUIDToAssetPath(sceneGuids[i]));
+                    EditorUtility.DisplayProgressBar("Scanning project", "Finding dependencies in " + scene.name, 1.0f / sceneGuids.Length * i);
 
-                if (fieldInfo.GetValue(obj) == null) {
+                    FindDependencies(scene.name);
+                }
+                AssetDatabase.Refresh();
+                LoadCallbackScene();
+                EditorUtility.ClearProgressBar();
+                ClearScriptableObjectList();
+            }
+        }
+
+        void FindDependencies(string sceneName)
+        {
+            FindPlayableDependencies(sceneName);
+            FindComponentDependencies(sceneName);
+        }
+
+        void FindPlayableDependencies(string sceneName)
+        {
+            var playableDirectors = Resources.FindObjectsOfTypeAll(typeof(PlayableDirector)) as PlayableDirector[];
+            if (playableDirectors == null) return;
+
+            foreach (PlayableDirector playableDirector in playableDirectors) {
+
+                // Ignore prefabs
+                if (EditorUtility.IsPersistent(playableDirector.gameObject) == true) {
                     continue;
                 }
 
-                Type type = fieldInfo.GetValue(obj).GetType();
+                PlayableAsset playableAsset = playableDirector.playableAsset;
+                IEnumerable<PlayableBinding> playableBindings = playableAsset.outputs;
 
-                //if (recurse == true) {
-                //    Debug.Log(fieldInfo.Name);
-                //    Debug.Log(fieldInfo.GetValue(obj));
-                //    Debug.Log(type.IsArray);
-                //    if(type.IsGenericType) {
-                //        Debug.Log(type);
-                //    }
-                //}
+                foreach (PlayableBinding playableBinding in playableBindings) {
+                    TrackAsset trackAsset = playableBinding.sourceObject as TrackAsset;
 
-                if (fieldInfo.GetValue(obj) is ScriptableObject) {
+                    // Skip playable bindings that don't contain track assets (e.g. markers)
+                    if (trackAsset == null) {
+                        continue;
+                    }
 
-                    foreach(ScriptableObject scriptableObject in scriptableObjectList) {
+                    foreach (TimelineClip clip in trackAsset.GetClips()) {
+                        Type type = clip.asset.GetType();
 
-                        if((ScriptableObject)fieldInfo.GetValue(obj) == scriptableObject && component.gameObject.name == "LockVertSwipeButton") {
-                            Debug.Log(component.gameObject.name, component.gameObject);
-                            Debug.Log(obj, component.gameObject);
-                            Debug.Log(fieldInfo.GetValue(obj), component.gameObject);
-                            Debug.Log(scriptableObject.name, component.gameObject);
-                            RegisterAssetDependent(scriptableObject, component, fieldInfo.DeclaringType.Name, sceneName);
-                            RegisterComponentDependency(scriptableObject, component, fieldInfo.DeclaringType.Name, sceneName);
-                            break;
+                        // Only parse through clips that have been flagged for registration
+                        if (type.IsSubclassOf(typeof(RegisterablePlayableAsset))) {
+                            FieldInfo[] fields = clip.asset.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                            TraverseObjectFields(clip.asset, playableDirector, sceneName);
                         }
                     }
+                }
+            }
+        }
 
-                } else if (type.IsSubclassOf(typeof(EventBase)) || type.IsSubclassOf(typeof(TriggerBase)) || type.IsSubclassOf(typeof(VariableReferenceBase)) || type.IsSubclassOf(typeof(ConditionResponse)) || type is ConditionResponse[]) {
+        void FindComponentDependencies(string sceneName)
+        {
+            var components = Resources.FindObjectsOfTypeAll(typeof(Component)) as Component[];
+            if (components == null) return;
 
-                    FieldInfo[] childFields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            foreach (Component component in components) {
 
-                    //Debug.Log(obj, component.gameObject);
-                    //Debug.Log(fieldInfo.Name, component.gameObject);
-                    //Debug.Log(fieldInfo.GetValue(obj), component.gameObject);
+                Type componentType = component.GetType();
 
+                // Only search for AltSalt custom scripts & ignore boilerplate values from
+                // SerializableElement, prefabs and other miscellaneous components w/o instances
+                if (componentType.Namespace != "AltSalt" || component.GetType().IsSubclassOf(typeof(SerializableElement)) || EditorUtility.IsPersistent(component.gameObject) == true || component == null) {
+                    continue;
+                }
 
-                    //Debug.Log(childFields.Length);
-                    if (childFields.Length > 0) {
-                        ParseFieldInfo(childFields, fieldInfo.GetValue(obj), component, sceneName);
+                // Ignore any components that have been flagged for skipping. Generally these are components
+                // that contain default behaviour - and since we're specifically trying to record all *custom* behaviour,
+                // we don't need to keep track of these defaults.
+                if (componentType.GetInterfaces().Contains(typeof(ISkipRegistration))) {
+                    ISkipRegistration skipRegistration = component as ISkipRegistration;
+                    if (skipRegistration.DoNotRecord == true) {
+                        continue;
                     }
+                }
 
-                } else if (type.IsSubclassOf(typeof(UnityEventBase))) {
+                FieldInfo[] fields = component.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                TraverseObjectFields(component, component, sceneName);
+            }
+        }
 
-                    UnityEventBase unityEvent = fieldInfo.GetValue(obj) as UnityEventBase;
-                    RegisterUnityEventValues(unityEvent, component, sceneName);
+        void TraverseObjectFields(object source, Component rootComponent, string sceneName)
+        {
+            FieldInfo[] fieldInfoList = source.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
-                } else if (typeof(IEnumerable).IsAssignableFrom(type) && type.IsGenericType) {
-                    IEnumerable enumerable = fieldInfo.GetValue(obj) as IEnumerable;
-                    if (enumerable != null) {
-                        //Debug.Log(obj);
-                        foreach (object element in enumerable) {
-                            //if(counter > 17) {
-                            //    Debug.Log(type.DeclaringType);
-                               //Debug.Log(element);
-                            //}
-                            if(element is ScriptableObject) {
-                                foreach (ScriptableObject scriptableObject in scriptableObjectList) {
+            foreach (FieldInfo fieldInfo in fieldInfoList) {
 
-                                    if ((ScriptableObject)element == scriptableObject) {
-                                        RegisterAssetInList(scriptableObject, component, fieldInfo.Name, sceneName);
-                                        break;
-                                    }
+                var fieldValue = fieldInfo.GetValue(source);
+
+                if (fieldValue == null) {
+                    continue;
+                }
+
+                Type fieldType = fieldInfo.GetValue(source).GetType();
+
+                // Continue checking types flagged here and drill down further to look for dependencies
+                if (fieldType.IsSubclassOf(typeof(EventTriggerBase)) || fieldType.IsSubclassOf(typeof(PlayableBehaviourTriggerBase))) {
+
+                    ParseEventTriggerBase(fieldType, fieldValue, rootComponent, sceneName);
+
+                    // Condition responses contain both conditions and 
+                } else if (fieldType.IsSubclassOf(typeof(ConditionResponseTriggerBase))) {
+
+                    ParseConditionResponseTriggerBase(fieldType, fieldValue, rootComponent, sceneName);
+
+                    // Compare any field that is a scriptable object to our master list and register dependencies accordingly
+                } else if (fieldValue is RegisterableScriptableObject) {
+
+                    ParseScriptableObjectReference(fieldValue, fieldInfo, rootComponent, sceneName);
+
+                } else if (fieldType.IsSubclassOf(typeof(VariableReferenceBase))) {
+
+                    ParseVariableReference(fieldType, source, fieldValue, fieldInfo, rootComponent, sceneName);
+
+                    // If the field is an event, register all relevant event info
+                } else if (fieldType.IsSubclassOf(typeof(UnityEventBase))) {
+
+                    ParseUnityEvent(fieldValue, rootComponent, sceneName);
+
+                } else if (typeof(IEnumerable).IsAssignableFrom(fieldType) && fieldType.IsGenericType) {
+
+                    ParseFieldList(fieldValue, fieldInfo, rootComponent, sceneName);
+                }
+            }
+        }
+
+        void ParseEventTriggerBase(Type triggerType, object triggerObject, Component rootComponent, string sceneName)
+        {
+            FieldInfo[] childFieldInfoList = triggerType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (FieldInfo childFieldInfo in childFieldInfoList) {
+
+                var fieldValue = childFieldInfo.GetValue(triggerObject);
+
+                if (fieldValue == null) {
+                    continue;
+                }
+
+                Type fieldType = childFieldInfo.GetValue(triggerObject).GetType();
+
+                if (fieldValue != null && typeof(IEnumerable).IsAssignableFrom(fieldType) && fieldType.IsGenericType) {
+                    ParseFieldList(fieldValue, childFieldInfo, rootComponent, sceneName);
+                } else if (fieldValue is RegisterableScriptableObject) {
+                    ParseScriptableObjectReference(fieldValue, childFieldInfo, rootComponent, sceneName);
+                }
+            }
+        }
+
+        void ParseConditionResponseTriggerBase(Type conditionResponseType, object conditionResponseObject, Component rootComponent, string sceneName)
+        {
+            FieldInfo[] childFieldInfoList = conditionResponseType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (FieldInfo childFieldInfo in childFieldInfoList) {
+
+                var fieldValue = childFieldInfo.GetValue(conditionResponseObject);
+                Type fieldType = childFieldInfo.GetValue(conditionResponseObject).GetType();
+
+                if (fieldValue != null && typeof(IEnumerable).IsAssignableFrom(fieldType) && fieldType.IsGenericType) {
+
+                    IEnumerable conditionResponses = fieldValue as IEnumerable;
+                    if (conditionResponses != null) {
+
+                        foreach (object conditionResponse in conditionResponses) {
+
+                            FieldInfo[] conditionResponseFields = conditionResponse.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+
+                            foreach(FieldInfo conditionResponseField in conditionResponseFields) {
+
+                                var conditionResponseFieldValue = conditionResponseField.GetValue(conditionResponse);
+
+                                if(conditionResponseFieldValue == null) {
+                                    continue;
                                 }
-                            } else {
-                                FieldInfo[] enumerableFields = element.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                                ParseFieldInfo(enumerableFields, element, component, sceneName);
+
+                                Type conditionResponseFieldType = conditionResponseField.GetValue(conditionResponse).GetType();
+
+                                if (conditionResponseFieldType.IsSubclassOf(typeof(VariableReferenceBase))) {
+
+                                    ParseVariableReference(conditionResponseFieldType, conditionResponse, conditionResponseFieldValue, conditionResponseField, rootComponent, sceneName);
+
+                                } else if (conditionResponseFieldType.IsSubclassOf(typeof(UnityEventBase))) {
+
+                                    ParseUnityEvent(conditionResponseFieldValue, rootComponent, sceneName);
+
+                                } else if (conditionResponseFieldValue is string){
+                                    RegisterComponentConditionResponseDesc(conditionResponseFieldValue, rootComponent, sceneName);
+                                }
                             }
                         }
                     }
@@ -219,235 +374,319 @@ namespace AltSalt
             }
         }
 
-        void RegisterAssetDependent(ScriptableObject scriptableObject, Component component, string valueLabel, string sceneName)
+        void ParseScriptableObjectReference(object scriptableObjValue, FieldInfo fieldInfo, Component rootComponent, string sceneName)
         {
-            string[] directoryPath = new string[2];
-            directoryPath[0] = "/z_Dependencies";
+            foreach (ScriptableObject scriptableObject in scriptableObjectList) {
 
-            if (scriptableObject is EventBase) {
-                directoryPath[1] = "/Events";
-            } else if (scriptableObject is VariableBase) {
-                directoryPath[1] = "/Variables";
-            } else {
-                Debug.LogWarning("Scriptable object type not recognized : " + scriptableObject.name);
-                return;
+                if ((ScriptableObject)scriptableObjValue == scriptableObject) {
+
+                    // If the root type name equals the field info name, that means we're
+                    // at the root of the object, so let's use the field name as a label;
+                    // otherwise, use the name of the type that declared the field.
+                    if (rootComponent.GetType().Name == fieldInfo.DeclaringType.Name) {
+                        RegisterAssetReference(scriptableObject, rootComponent, fieldInfo.Name, sceneName);
+                        RegisterComponentDependency(scriptableObject, rootComponent, fieldInfo.Name, sceneName);
+                    } else {
+                        RegisterAssetReference(scriptableObject, rootComponent, fieldInfo.DeclaringType.Name, sceneName);
+                        RegisterComponentDependency(scriptableObject, rootComponent, fieldInfo.DeclaringType.Name, sceneName);
+                    }
+                    break;
+                }
             }
-
-            string registryPath = Utils.GetDirectory(directoryPath);
-            string filePath = Utils.GetFilePath(registryPath, scriptableObject.name, ".json");
-
-            JSONNode mainData;
-
-            if (File.Exists(filePath)) {
-                string savedData = File.ReadAllText(filePath);
-                mainData = JSON.Parse(savedData);
-
-            } else {
-                mainData = JSON.Parse("{}");
-            }
-
-            mainData[sceneName][component.gameObject.name][component.GetType().Name].Add(valueLabel, scriptableObject.name);
-            File.WriteAllText(filePath, mainData.ToString(2));
         }
 
-        void RegisterComponentDependency(ScriptableObject scriptableObject, Component component, string valueLabel, string sceneName)
+        void ParseVariableReference(Type varReferenceType, object parentObject, object variableReferenceObject, FieldInfo parentFieldInfo, Component rootComponent, string sceneName)
         {
-            string componentRegistryPath = Utils.GetDirectory(new string[] { "/z_Dependencies", "/Components", "/" + sceneName });
-            string filePath = Utils.GetFilePath(componentRegistryPath, component.name, ".json");
+            FieldInfo[] varRefFields = varReferenceType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
-            JSONNode jsonData;
+            string referenceLabel = parentFieldInfo.GetValue(parentObject).GetType().Name;
 
-            if (File.Exists(filePath)) {
+            JSONNode varRefData = new JSONObject();
 
-                string savedData = File.ReadAllText(filePath);
-                jsonData = JSON.Parse(savedData);
+            foreach (FieldInfo varRefField in varRefFields) {
 
-            } else {
-                jsonData = JSON.Parse("{}");
+                var varRefFieldValue = varRefField.GetValue(variableReferenceObject);
+
+                if (varRefFieldValue != null) {
+
+                    Type varRefFieldType = varRefFieldValue.GetType();
+
+                    // Skip Sirenix lists and other enumerables
+                    if (typeof(IEnumerable).IsAssignableFrom(varRefFieldType) || varRefFieldType.IsGenericType) {
+                        continue;
+                    } else if (varRefFieldValue is ScriptableObject) {
+                        ScriptableObject childFieldObject = varRefFieldValue as ScriptableObject;
+                        varRefData.Add(varRefField.Name, childFieldObject.name);
+
+                        RegisterAssetReference(childFieldObject, rootComponent, varRefField.DeclaringType.Name, sceneName);
+                    } else {
+                        varRefData.Add(varRefField.Name, varRefFieldValue.ToString());
+                    }
+                }
             }
 
-            jsonData[component.GetType().Name].Add(valueLabel, scriptableObject.name);
-            File.WriteAllText(filePath, jsonData.ToString(2));
+            RegisterComponentVariableReference(referenceLabel, varRefData, rootComponent, sceneName);
         }
 
-        void RegisterAssetInList(ScriptableObject scriptableObject, Component component, string valueLabel, string sceneName)
+        void ParseUnityEvent(object unityEventObject, Component rootComponent, string sceneName)
         {
-            string componentRegistryPath = Utils.GetDirectory(new string[] { "/z_Dependencies", "/Components", "/" + sceneName });
-            string filePath = Utils.GetFilePath(componentRegistryPath, component.name, ".json");
-
-            JSONNode jsonData;
-
-            if (File.Exists(filePath)) {
-
-                string savedData = File.ReadAllText(filePath);
-                jsonData = JSON.Parse(savedData);
-
-            } else {
-                jsonData = JSON.Parse("{}");
-            }
-
-            JSONNode jsonObject = new JSONArray();
-            jsonObject.Add(scriptableObject.name);
-
-            jsonData[component.GetType().Name][valueLabel].Add(scriptableObject.name);
-            File.WriteAllText(filePath, jsonData.ToString(2));
-        }
-
-
-        void RegisterUnityEventValues(UnityEventBase unityEvent, Component component, string sceneName)
-        {
+            UnityEventBase unityEvent = unityEventObject as UnityEventBase;
 
             if (unityEvent != null) {
 
+                JSONNode eventData = new JSONArray();
+
                 for (int i = 0; i < unityEvent.GetPersistentEventCount(); i++) {
 
+                    JSONNode eventItem = new JSONObject();
+
                     UnityEngine.Object target = unityEvent.GetPersistentTarget(i);
-                    JSONNode jsonObject = new JSONObject();
 
                     if (target is ScriptableObject) {
                         foreach (ScriptableObject scriptableObject in scriptableObjectList) {
                             if ((ScriptableObject)target == scriptableObject) {
-                                RegisterAssetDependent(scriptableObject, component, "UnityEventTarget", sceneName);
+                                RegisterAssetReference(scriptableObject, rootComponent, "UnityEventTarget", sceneName);
                                 break;
                             }
                         }
                     }
 
-                    jsonObject.Add("target", target.name);
-                    jsonObject.Add("method", unityEvent.GetPersistentMethodName(i));
-
-                    string componentRegistryPath = Utils.GetDirectory(new string[] { "/z_Dependencies", "/Components", "/" + sceneName });
-                    string filePath = Utils.GetFilePath(componentRegistryPath, component.name, ".json");
-
-                    JSONNode jsonData;
-
-                    if (File.Exists(filePath)) {
-
-                        string savedData = File.ReadAllText(filePath);
-                        jsonData = JSON.Parse(savedData);
-
-                    } else {
-                        jsonData = JSON.Parse("{}");
-                    }
-
-                    jsonData[component.GetType().Name].Add("UnityEvent", jsonObject);
-                    File.WriteAllText(filePath, jsonData.ToString(2));
+                    eventItem.Add("target", target.name);
+                    eventItem.Add("method", unityEvent.GetPersistentMethodName(i));
+                    eventData.Add(eventItem);
                 }
+
+                RegisterComponentUnityEvents(eventData, rootComponent, sceneName);
             }
         }
 
-        void RegisterPlayableDependencies(string[] guids, string sceneName)
+        // If the field is a list, register any scriptable objects in the list. Otherwise, recurse and drill
+        // further into the list to see if it contains one of our types flagged above
+        void ParseFieldList(object enumerableObject, FieldInfo fieldInfo, Component rootComponent, string sceneName)
         {
-            var objs = Resources.FindObjectsOfTypeAll(typeof(PlayableAsset)) as PlayableAsset[];
-            if (objs == null) return;
+            IEnumerable enumerable = enumerableObject as IEnumerable;
+            if (enumerable != null) {
 
-            foreach (string guid in guids) {
+                foreach (object element in enumerable) {
 
-                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                ScriptableObject scriptableObject = (ScriptableObject)AssetDatabase.LoadAssetAtPath(assetPath, typeof(ScriptableObject));
+                    if (element is ScriptableObject) {
+                        foreach (ScriptableObject scriptableObject in scriptableObjectList) {
 
-                //Debug.Log(string.Format("[{0}] IDependable asset found : {1}", scriptableObject.name, scriptableObject.name));
-                //Debug.Log(string.Format("[{0}] Dependencies: ", scriptableObject.name));
-
-                foreach (PlayableAsset obj in objs) {
-
-                    FieldInfo[] fields =
-                        obj.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance |
-                                                BindingFlags.Static);
-                    foreach (FieldInfo fieldInfo in fields) {
-
-                        //Debug.Log(fieldInfo.CustomAttributes);
-                        //Debug.Log(fieldInfo.FieldType);
-                        //Debug.Log(fieldInfo.GetValue(obj));
-                        //Debug.Log(obj.gameObject.scene.name);
-                        //Debug.Log(obj.gameObject.name);
-
-                        if (fieldInfo.GetValue(obj) is ScriptableObject && (ScriptableObject)fieldInfo.GetValue(obj) == scriptableObject) {
-                            Debug.Log(string.Format("[{0}] [{1}] {2}", scriptableObject.name, sceneName, obj.name));
-                            RegisterEventDependent(scriptableObject, sceneName, obj.name);
-                            RegisterComponentDependencyOld(sceneName, obj.name, scriptableObject.name);
+                            if ((ScriptableObject)element == scriptableObject) {
+                                RegisterAssetReference(scriptableObject, rootComponent, fieldInfo.Name, sceneName);
+                                RegisterComponentListDependency(scriptableObject, rootComponent, fieldInfo.Name, sceneName);
+                                break;
+                            }
                         }
+                    } else if (element is string || element is bool || element is float) {
+                        RegisterComponentListDependency(element, rootComponent, fieldInfo.Name, sceneName);
+                    } else {
+                        TraverseObjectFields(element, rootComponent, sceneName);
                     }
                 }
             }
         }
 
-        public void RegisterAssetDependentOld(ScriptableObject asset, string dependentScene, string dependentName)
+        void RegisterAssetReference(ScriptableObject scriptableObject, Component rootComponent, string fieldName, string sceneName)
         {
-            if(asset is EventBase) {
-                RegisterEventDependent(asset, dependentScene, dependentName);
-            } else if (asset is VariableBase) {
-                RegisterVariableDependent(asset, dependentScene, dependentName);
-            } else {
-                Debug.LogWarning("Scriptable object type not recognized : " + asset.name);
+            string filePath = GetAssetRegistryFilePath(scriptableObject);
+
+            JSONNode jsonData = GetRootJsonNode(filePath);
+
+            jsonData[sceneName][rootComponent.gameObject.name][rootComponent.GetType().Name].Add(fieldName);
+
+            WriteData(filePath, jsonData);
+        }
+
+        void RegisterComponentDependency(ScriptableObject scriptableObject, Component rootComponent, string fieldName, string sceneName)
+        {
+            string filePath = GetComponentRegistryFilePath(sceneName, rootComponent.gameObject.name);
+
+            JSONNode jsonData = GetRootJsonNode(filePath);
+
+            jsonData[rootComponent.GetType().Name][fieldName].Add(scriptableObject.name);
+
+            WriteData(filePath, jsonData);
+        }
+
+        void RegisterComponentListDependency(ScriptableObject scriptableObject, Component rootComponent, string fieldName, string sceneName)
+        {
+            string filePath = GetComponentRegistryFilePath(sceneName, rootComponent.gameObject.name);
+
+            JSONNode jsonData = GetRootJsonNode(filePath);
+
+            JSONNode jsonObject = new JSONArray();
+            jsonObject.Add(scriptableObject.name);
+
+            jsonData[rootComponent.GetType().Name][fieldName].Add(scriptableObject.name);
+
+            WriteData(filePath, jsonData);
+        }
+
+        void RegisterComponentListDependency(object valueObject, Component rootComponent, string fieldName, string sceneName)
+        {
+            string filePath = GetComponentRegistryFilePath(sceneName, rootComponent.gameObject.name);
+
+            JSONNode jsonData = GetRootJsonNode(filePath);
+
+            JSONNode jsonObject = new JSONArray();
+            jsonObject.Add(valueObject.ToString());
+
+            jsonData[rootComponent.GetType().Name][fieldName].Add(valueObject.ToString());
+            WriteData(filePath, jsonData);
+        }
+
+        void RegisterComponentVariableReference(string referenceLabel, JSONNode jsonNode, Component rootComponent, string sceneName)
+        {
+            string filePath = GetComponentRegistryFilePath(sceneName, rootComponent.gameObject.name);
+
+            JSONNode jsonData = GetRootJsonNode(filePath);
+
+            jsonData[rootComponent.GetType().Name][referenceLabel].Add(jsonNode);
+
+            WriteData(filePath, jsonData);
+        }
+
+        void RegisterComponentUnityEvents(JSONNode eventData, Component rootComponent, string sceneName)
+        {
+            string filePath = GetComponentRegistryFilePath(sceneName, rootComponent.gameObject.name);
+
+            JSONNode jsonData = GetRootJsonNode(filePath);
+
+            jsonData[rootComponent.GetType().Name]["UnityResponses"].Add(eventData);
+
+            WriteData(filePath, jsonData);
+        }
+
+        void RegisterComponentConditionResponseDesc(object conditionResponseDescObject, Component rootComponent, string sceneName)
+        {
+            string conditionDescription = conditionResponseDescObject as string;
+
+            string filePath = GetComponentRegistryFilePath(sceneName, rootComponent.gameObject.name);
+            JSONNode jsonData = GetRootJsonNode(filePath);
+
+            jsonData[rootComponent.GetType().Name]["Conditions"].Add(conditionDescription);
+
+            WriteData(filePath, jsonData);
+        }
+
+        void ClearHiddenValues(string scenePath)
+        {
+            Scene scene = EditorSceneManager.OpenScene(scenePath);
+
+            var components = Resources.FindObjectsOfTypeAll(typeof(Component)) as Component[];
+            if (components == null) return;
+
+            foreach (Component component in components) {
+
+                if (component.GetType().Namespace != "AltSalt" || component == null) {
+                    continue;
+                }
+
+                FieldInfo[] fields = component.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+
+                foreach (FieldInfo fieldInfo in fields) {
+
+                    if (fieldInfo.GetValue(component) == null) {
+                        continue;
+                    }
+
+                    Type type = fieldInfo.GetValue(component).GetType();
+
+                    if (type.GetInterfaces().Contains(typeof(IClearHiddenValues))) {
+                        IClearHiddenValues clearableField = fieldInfo.GetValue(component) as IClearHiddenValues;
+                        clearableField.ClearHiddenValues();
+                        EditorSceneManager.MarkSceneDirty(scene);
+                    }
+                }
             }
+            EditorSceneManager.SaveScene(scene);
+        }
+
+        void ClearHiddenValuesInTargetScene()
+        {
+            if (EditorUtility.DisplayDialog("Clear hidden values in " + targetSceneName+ "?", "This will search " + targetSceneName + " for hidden values " +
+                "on relevant components and erase them. This action cannot be undone.", "Proceed", "Cancel")) {
+
+                ClearHiddenValues(targetScenePath);
+
+            }
+        }
+
+        void ClearAllHiddenValues()
+        {
+            if (EditorUtility.DisplayDialog("Clear hidden values in all scenes?", "This will search all scenes for hidden values" +
+                "on relevant components and erase them. This action cannot be undone.", "Proceed", "Cancel")) {
+                string[] sceneGuids = GetSceneGuids();
+                for (int i = 0; i < sceneGuids.Length; i++) {
+
+                    Scene scene = EditorSceneManager.OpenScene(AssetDatabase.GUIDToAssetPath(sceneGuids[i]));
+                    EditorUtility.DisplayProgressBar("Scanning project", "Finding hidden values in " + scene.name, 1.0f / sceneGuids.Length * i);
+
+                    ClearHiddenValues(scene.name);
+                }
+                LoadCallbackScene();
+                EditorUtility.ClearProgressBar();
+            }
+        }
+
+        void LoadCallbackScene()
+        {
+            EditorSceneManager.OpenScene(callbackScenePath);
+        }
+
+        void RemoveDependenciesFolder()
+        {
+            string dependenciesFolderPath = Utils.GetProjectPath() + "/z_Dependencies";
+
+            if(Directory.Exists(dependenciesFolderPath)) {
+                Directory.Delete(dependenciesFolderPath, true);
+            }
+            
             AssetDatabase.Refresh();
         }
 
-        public void RegisterComponentDependencyOld(string componentScene, string componentName, string dependencyName)
+        string GetComponentRegistryFilePath(string sceneName, string gameObjectName)
         {
-            string componentRegistryPath = Utils.GetDirectory(new string[] { "/z_Dependencies", "/Components", "/" + componentScene });
-            string filePath = Utils.GetFilePath(componentRegistryPath, componentName, ".json");
-
-            RegisterDependencyOld(filePath, "Dependencies", dependencyName);
+            string registryPath = Utils.GetDirectory(new string[] { "/z_Dependencies", "/Components", "/" + sceneName });
+            return Utils.GetFilePath(registryPath, gameObjectName, ".json");
         }
 
-        public void RegisterComponentDependency(string componentScene, string componentName, JSONNode dependencyNode)
+        string GetAssetRegistryFilePath(ScriptableObject asset)
         {
-            string componentRegistryPath = Utils.GetDirectory(new string[] { "/z_Dependencies", "/Components", "/" + componentScene });
-            string filePath = Utils.GetFilePath(componentRegistryPath, componentName, ".json");
+            string[] directoryPath = new string[3];
+            directoryPath[0] = "/z_Dependencies";
 
-            RegisterDependencyOld(filePath, "Dependencies", dependencyNode);
-        }
-
-        public void RegisterEventDependent(ScriptableObject eventAsset, string dependentScene, string dependentName)
-        {
-            string eventRegistryPath = Utils.GetDirectory(new string[] { "/z_Dependencies", "/Events" });
-            string filePath = Utils.GetFilePath(eventRegistryPath, eventAsset.name, ".json");
-
-            RegisterDependencyOld(filePath, dependentScene, dependentName);
-        }
-
-        public void RegisterVariableDependent(ScriptableObject variableAsset, string dependentScene, string dependentName)
-        {
-            string eventRegistryPath = Utils.GetDirectory(new string[] { "/z_Dependencies", "/Variables" });
-            string filePath = Utils.GetFilePath(eventRegistryPath, variableAsset.name, ".json");
-
-            RegisterDependencyOld(filePath, dependentScene, dependentName);
-        }
-
-        static void RegisterDependencyOld(string filePath, string dependencyKey, string dependencyValue)
-        {
-            if(File.Exists(filePath)) {
-
-                string savedData = File.ReadAllText(filePath);
-                JSONNode dataAsJSON = Utils.AddToJSONArray(JSON.Parse(savedData), dependencyKey, dependencyValue);
-                File.WriteAllText(filePath, dataAsJSON.ToString(2));
-
+            if (asset is EventBase) {
+                directoryPath[1] = "/Events";
             } else {
-
-                var newJSON = JSON.Parse("{}");
-                newJSON[dependencyKey].Add(dependencyValue);
-                File.WriteAllText(filePath, newJSON.ToString(2));
-
+                directoryPath[1] = "/Variables";
             }
+            directoryPath[2] = "/" + asset.GetType().Name;
+
+            string registryPath = Utils.GetDirectory(directoryPath);
+            return Utils.GetFilePath(registryPath, asset.name, ".json");
         }
 
-        static void RegisterDependencyOld(string filePath, string dependencyKey, JSONNode dependencyValue)
+        JSONNode GetRootJsonNode(string filePath)
         {
+            JSONNode rootNode;
+
             if (File.Exists(filePath)) {
-
                 string savedData = File.ReadAllText(filePath);
-                JSONNode dataAsJSON = Utils.AddToJSONArray(JSON.Parse(savedData), dependencyKey, dependencyValue);
-                File.WriteAllText(filePath, dataAsJSON.ToString(2));
+                rootNode = JSON.Parse(savedData);
 
             } else {
-
-                var newJSON = JSON.Parse("{}");
-                newJSON[dependencyKey].Add(dependencyValue);
-                File.WriteAllText(filePath, newJSON.ToString(2));
-
+                rootNode = JSON.Parse("{}");
             }
+
+            return rootNode;
         }
+
+        void WriteData(string filePath, JSONNode jsonData)
+        {
+            File.WriteAllText(filePath, jsonData.ToString(2));
+        }
+
     }
 }

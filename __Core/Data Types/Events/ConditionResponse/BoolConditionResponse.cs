@@ -8,7 +8,7 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class BoolConditionResponse : ConditionResponse
+    public class BoolConditionResponse : ConditionResponseBase
     {
         [SerializeField]
         [Title("$conditionEventTitle")]

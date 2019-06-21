@@ -7,7 +7,7 @@ namespace AltSalt
     #if UNITY_EDITOR
     [ExecuteInEditMode]
     #endif
-    public class SimpleEventListenerBehaviour : MonoBehaviour, ISimpleEventListener
+    public class SimpleEventListenerBehaviour : MonoBehaviour, ISimpleEventListener, ISkipRegistration
     {
         [Required]
         public SimpleEvent Event;
@@ -15,6 +15,15 @@ namespace AltSalt
         [ValidateInput("IsPopulated")]
         public UnityEvent Response;
 
+        [SerializeField]
+        [InfoBox("Specifies whether this dependency should be recorded when the RegisterDependencies tool is used.")]
+        bool doNotRecord;
+
+        public bool DoNotRecord {
+            get {
+                return doNotRecord;
+            }
+        }
 
         private void OnEnable()
         {

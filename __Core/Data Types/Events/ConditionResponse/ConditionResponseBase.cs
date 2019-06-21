@@ -9,8 +9,10 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public abstract class ConditionResponse
+    public abstract class ConditionResponseBase
     {
+        [SerializeField]
+        [HideInInspector]
         protected string conditionEventTitle;
 
         [Required]

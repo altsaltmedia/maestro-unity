@@ -50,18 +50,9 @@ namespace AltSalt
         }
 
 #if UNITY_EDITOR
-        void OnEnable()
-        {
-            if (Application.IsPlaying(this.gameObject) == false && triggerOnStart == true) {
-                CallTriggerResponses();
-            }
-        }
-
-        void OnGUI()
-        {
-            if (Application.IsPlaying(this.gameObject) == false) {
-                conditionResponseTrigger.CallSyncValues();
-            }
+        void Update()
+        {    
+            conditionResponseTrigger.CallSyncValues();
         }
 #endif
     }

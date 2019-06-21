@@ -7,7 +7,7 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class ComplexEventTriggerPackager : TriggerBase
+    public class ComplexEventTriggerPackager : EventTriggerBase
     {
         [Required]
         [SerializeField]
@@ -71,7 +71,7 @@ namespace AltSalt
         [ShowIf("hasFloat")]
         [ValidateInput("CheckFloatValues", "Keys and Values must be of equal length")]
         [BoxGroup("Float Packager")]
-        List<float> floatValues = new List <float>();
+        List<float> floatValues = new List<float>();
 
         [PropertySpace]
 
@@ -103,7 +103,7 @@ namespace AltSalt
         [ValueDropdown("boolValueList")]
         [ValidateInput("CheckBoolValues", "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
-        List<bool> boolValues = new List <bool>();
+        List<bool> boolValues = new List<bool>();
 
         private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
                 {"FALSE", false },
@@ -184,15 +184,13 @@ namespace AltSalt
             if (stringValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
-            }
-            else if (stringValues.Count == 1) {
-                if(customStringKey == true && stringKeys.Count >= 1) {
+            } else if (stringValues.Count == 1) {
+                if (customStringKey == true && stringKeys.Count >= 1) {
                     eventPayload.Set(stringKeys[0], stringValues[0]);
                 } else {
                     eventPayload.Set(DataType.stringType, stringValues[0]);
                 }
-            }
-            else {
+            } else {
                 for (int i = 0; i < stringValues.Count; i++) {
                     eventPayload.Set(stringKeys[i], stringValues[i]);
                 }
@@ -205,15 +203,13 @@ namespace AltSalt
             if (floatValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
-            }
-            else if (floatValues.Count == 1) {
+            } else if (floatValues.Count == 1) {
                 if (customFloatKey == true && floatKeys.Count >= 1) {
                     eventPayload.Set(floatKeys[0], floatValues[0]);
                 } else {
                     eventPayload.Set(DataType.floatType, floatValues[0]);
                 }
-            }
-            else {
+            } else {
                 for (int i = 0; i < floatValues.Count; i++) {
                     eventPayload.Set(floatKeys[i], floatValues[i]);
                 }
@@ -226,15 +222,13 @@ namespace AltSalt
             if (boolValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
-            }
-            else if (boolValues.Count == 1) {
+            } else if (boolValues.Count == 1) {
                 if (customBoolKey == true && boolKeys.Count >= 1) {
                     eventPayload.Set(boolKeys[0], boolValues[0]);
                 } else {
                     eventPayload.Set(DataType.boolType, boolValues[0]);
                 }
-            }
-            else {
+            } else {
                 for (int i = 0; i < boolValues.Count; i++) {
                     eventPayload.Set(boolKeys[i], boolValues[i]);
                 }
@@ -247,15 +241,13 @@ namespace AltSalt
             if (scriptableObjectValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
-            }
-            else if (scriptableObjectValues.Count == 1) {
+            } else if (scriptableObjectValues.Count == 1) {
                 if (customScriptableObjectKey == true && scriptableObjectKeys.Count >= 1) {
                     eventPayload.Set(scriptableObjectKeys[0], scriptableObjectValues[0]);
                 } else {
                     eventPayload.Set(DataType.scriptableObjectType, scriptableObjectValues[0]);
                 }
-            }
-            else {
+            } else {
                 for (int i = 0; i < scriptableObjectValues.Count; i++) {
                     eventPayload.Set(scriptableObjectKeys[i], scriptableObjectValues[i]);
                 }

@@ -17,9 +17,9 @@ namespace AltSalt
             foreach (var clip in GetClips()) {
                 var myAsset = clip.asset as AudioForwardReverseClip;
                 if (myAsset) {
-                    myAsset.template.isReversing.Variable = Utils.GetBoolVariable("IsReversing");
-                    myAsset.template.frameStepValue.Variable = Utils.GetFloatVariable("FrameStepValue");
-                    myAsset.template.swipeModifier.Variable = Utils.GetFloatVariable("SwipeModifier");
+                    myAsset.isReversing.Variable = Utils.GetBoolVariable("IsReversing");
+                    myAsset.frameStepValue.Variable = Utils.GetFloatVariable("FrameStepValue");
+                    myAsset.swipeModifier.Variable = Utils.GetFloatVariable("SwipeModifier");
                 }
             }
         }

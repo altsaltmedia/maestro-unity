@@ -4,5 +4,6 @@ using UnityEngine;
 
 namespace AltSalt
 {
-    public abstract class TriggerBase { }
+    public abstract class ConditionResponseTriggerBase { }
+
 }

@@ -8,7 +8,7 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class FloatConditionResponse : ConditionResponse
+    public class FloatConditionResponse : ConditionResponseBase
     {
         [SerializeField]
         [Title("$conditionEventTitle")]

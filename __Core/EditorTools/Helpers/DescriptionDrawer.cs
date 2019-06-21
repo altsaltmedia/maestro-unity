@@ -12,9 +12,11 @@ namespace AltSalt
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            DescriptionAttribute descriptionStyles = attribute as DescriptionAttribute;
+
             guiStyle.wordWrap = true;
-            guiStyle.alignment = TextAnchor.UpperCenter;
-            guiStyle.fontStyle = FontStyle.Italic;
+            guiStyle.fontStyle = descriptionStyles.fontStyle;
+            guiStyle.alignment = descriptionStyles.textAnchor;
 
             EditorGUI.LabelField(new Rect(position.width * .2f, position.y, position.width * .6f, position.height + 20), property.stringValue, guiStyle);
         }

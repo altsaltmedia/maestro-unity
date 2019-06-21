@@ -212,8 +212,9 @@ namespace AltSalt
         {
             string[] guids;
             string path;
+            string typeName = typeof(SimpleEvent).Name;
 
-            guids = AssetDatabase.FindAssets(target);
+            guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length > 1) {
                 LogDuplicateAssetWarning(target);
@@ -228,8 +229,9 @@ namespace AltSalt
         {
             string[] guids;
             string path;
+            string typeName = typeof(ComplexEvent).Name;
 
-            guids = AssetDatabase.FindAssets(target);
+            guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length > 1) {
                 LogDuplicateAssetWarning(target);
@@ -244,8 +246,9 @@ namespace AltSalt
         {
             string[] guids;
             string path;
+            string typeName = typeof(FloatVariable).Name;
 
-            guids = AssetDatabase.FindAssets(target);
+            guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length > 1) {
                 LogDuplicateAssetWarning(target);
@@ -260,8 +263,9 @@ namespace AltSalt
         {
             string[] guids;
             string path;
+            string typeName = typeof(BoolVariable).Name;
 
-            guids = AssetDatabase.FindAssets(target);
+            guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length > 1) {
                 LogDuplicateAssetWarning(target);
@@ -276,8 +280,9 @@ namespace AltSalt
         {
             string[] guids;
             string path;
+            string typeName = typeof(ScriptableObject).Name;
 
-            guids = AssetDatabase.FindAssets(target);
+            guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length > 1) {
                 LogDuplicateAssetWarning(target);

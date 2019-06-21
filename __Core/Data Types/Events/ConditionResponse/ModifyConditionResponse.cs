@@ -8,7 +8,7 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class ModifyConditionResponse : ConditionResponse
+    public class ModifyConditionResponse : ConditionResponseBase
     {
         [Required]
         [ReadOnly]

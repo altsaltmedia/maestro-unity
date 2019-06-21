@@ -8,6 +8,16 @@ using UnityEditor;
 
 namespace AltSalt
 {
-    public class DescriptionAttribute : PropertyAttribute { }
+    public class DescriptionAttribute : PropertyAttribute {
+
+        public FontStyle fontStyle;
+        public TextAnchor textAnchor;
+
+        public DescriptionAttribute(FontStyle fontStyle, TextAnchor textAnchor)
+        {
+            this.fontStyle = fontStyle;
+            this.textAnchor = textAnchor;
+        }
+    }
 
 }

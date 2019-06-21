@@ -18,7 +18,7 @@ namespace AltSalt
     public class ComplexUnityEventHandler : UnityEvent<EventPayload> { }
 
     [ExecuteInEditMode]
-    public class ComplexEventListenerBehaviour : MonoBehaviour
+    public class ComplexEventListenerBehaviour : MonoBehaviour, ISkipRegistration
 	{
 		[Required]
 		public ComplexEvent Event;
@@ -30,9 +30,19 @@ namespace AltSalt
 		
 		[ValidateInput("IsPopulated")]
 		public ComplexUnityEventHandler Response;
-		
-		// Use this for initialization
-		private void OnEnable()
+
+        [SerializeField]
+        [InfoBox("Specifies whether this dependency should be recorded when the RegisterDependencies tool is used.")]
+        bool doNotRecord;
+
+        public bool DoNotRecord {
+            get {
+                return doNotRecord;
+            }
+        }
+
+        // Use this for initialization
+        private void OnEnable()
 		{
 			Event.RegisterListener(this);
 		}

@@ -6,7 +6,7 @@ using UnityEngine.Timeline;
 namespace AltSalt
 {
     [Serializable]
-    public class ComplexEventTimelineTriggerClip : PlayableAsset, ITimelineClipAsset
+    public class ComplexEventTimelineTriggerClip : RegisterablePlayableAsset, ITimelineClipAsset
     {
         public ComplexEventTimelineTriggerBehaviour template = new ComplexEventTimelineTriggerBehaviour ();
         public double startTime;

@@ -9,13 +9,13 @@ namespace AltSalt
     {
         public float clipEndTime;
 
-        [ValidateInput("IsPopulated")]
+        [HideInInspector]
         public BoolReference isReversing;
 
-        [ValidateInput("IsPopulated")]
+        [HideInInspector]
         public FloatReference frameStepValue;
 
-        [ValidateInput("IsPopulated")]
+        [HideInInspector]
         public FloatReference swipeModifier;
 
         [HideInInspector]

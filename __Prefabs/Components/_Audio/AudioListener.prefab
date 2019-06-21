@@ -72,7 +72,9 @@ MonoBehaviour:
     triggerType: 1
     alwaysEvents: []
     boolEvents:
-    - response:
+    - conditionEventTitle: 
+      appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+      response:
         m_PersistentCalls:
           m_Calls:
           - m_Target: {fileID: 4170645452252380703}
@@ -96,7 +98,9 @@ MonoBehaviour:
         UseConstant: 1
         ConstantValue: 1
         Variable: {fileID: 0}
-    - response:
+    - conditionEventTitle: 
+      appSettings: {fileID: 0}
+      response:
         m_PersistentCalls:
           m_Calls:
           - m_Target: {fileID: 4170645452252380703}
@@ -152,3 +156,4 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
