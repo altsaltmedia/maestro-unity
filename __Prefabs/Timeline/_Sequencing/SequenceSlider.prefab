@@ -128,6 +128,7 @@ MonoBehaviour:
   _Alpha: 1
   _Color: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
   ShaderChange: 0
+  ActiveUpdate: 1
 --- !u!1 &1004811634
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,17 +266,20 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
+    m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 999011880}
@@ -314,11 +318,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4e3309bc5aa426f92e0b77ff29b38b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sequenceModified: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
+  sequenceModified:
+    simpleEvent: {fileID: 0}
   sequences:
-  - {fileID: 11400000, guid: 90d1e1f0049c54d86b0166886d76e224, type: 2}
-  - {fileID: 11400000, guid: d152b38062bb8434fb5bc91dd13f5990, type: 2}
-  - {fileID: 11400000, guid: c790e058d23ed4374948713694e46458, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   sequenceDirectors:
   - {fileID: 0}
   - {fileID: 0}
@@ -450,7 +455,7 @@ GameObject:
   - component: {fileID: 2142339879}
   - component: {fileID: 2142339881}
   m_Layer: 0
-  m_Name: UI Button Panel 1
+  m_Name: Sequence Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -539,7 +544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   elementCategory: Utils
-  elementName: Scrubber
+  elementName: SwipeVariablesPanel
   LANDSCAPE: 1
   PORTRAIT: 1
   startHidden: 1
@@ -858,6 +863,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &2142339881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -887,3 +893,4 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
