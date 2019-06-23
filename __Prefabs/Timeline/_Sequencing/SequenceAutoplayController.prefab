@@ -48,15 +48,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 528675d467ef74060bd2099765db9b2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SequenceModified: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
+  sequenceModified:
+    simpleEvent: {fileID: 0}
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
   sequenceList: {fileID: 0}
   isReversing:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
-  triggerSpinnerShow: {fileID: 11400000, guid: 0b8292f66ecb34b8fa9c17637a06c468, type: 2}
-  triggerSpinnerHide: {fileID: 11400000, guid: 98ca9687c33fe4a69983e6cded0a3598, type: 2}
+  triggerSpinnerShow:
+    simpleEvent: {fileID: 11400000, guid: 1bcec563fe01642e2887c4d0b3d7e637, type: 2}
+  triggerSpinnerHide:
+    simpleEvent: {fileID: 11400000, guid: 314d1b056af624771922e79c1e70422c, type: 2}
   frameStepValue:
     UseConstant: 0
     ConstantValue: 0
@@ -93,6 +96,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &114483604270630608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,6 +126,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &5961701273639827757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +156,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &114198889693866494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,6 +186,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &114743968378624194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,3 +216,4 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
