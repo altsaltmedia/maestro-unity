@@ -265,6 +265,7 @@ namespace AltSalt
         {
             FieldInfo[] fieldInfoList = source.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
+            // Check types flagged here for dependencies and drill down into the fields if necessary
             foreach (FieldInfo fieldInfo in fieldInfoList) {
 
                 var fieldValue = fieldInfo.GetValue(source);
@@ -275,30 +276,32 @@ namespace AltSalt
 
                 Type fieldType = fieldInfo.GetValue(source).GetType();
 
-                // Continue checking types flagged here and drill down further to look for dependencies
+                // Event triggers can contain dependencies at the root level or inside a list
                 if (fieldType.IsSubclassOf(typeof(EventTriggerBase)) || fieldType.IsSubclassOf(typeof(PlayableBehaviourTriggerBase))) {
 
                     ParseEventTriggerBase(fieldType, fieldValue, rootComponent, sceneName);
 
-                    // Condition responses contain both conditions and 
+                // Condition responses contain both conditions, as well as responses in the form of Unity events
                 } else if (fieldType.IsSubclassOf(typeof(ConditionResponseTriggerBase))) {
 
                     ParseConditionResponseTriggerBase(fieldType, fieldValue, rootComponent, sceneName);
 
-                    // Compare any field that is a scriptable object to our master list and register dependencies accordingly
+                // Compare any field that is a scriptable object to our master list and register dependencies accordingly
                 } else if (fieldValue is RegisterableScriptableObject) {
 
                     ParseScriptableObjectReference(fieldValue, fieldInfo, rootComponent, sceneName);
 
+                // If we reach a variable references, such as BoolReference, FloatReference, etc., we don't need to drill further
                 } else if (fieldType.IsSubclassOf(typeof(VariableReferenceBase))) {
 
                     ParseVariableReference(fieldType, source, fieldValue, fieldInfo, rootComponent, sceneName);
 
-                    // If the field is an event, register all relevant event info
+                // If we come to a Unity event, register all relevant event info
                 } else if (fieldType.IsSubclassOf(typeof(UnityEventBase))) {
 
                     ParseUnityEvent(fieldValue, rootComponent, sceneName);
 
+                // If the field is a list, parse and drill down to find dependencies or other flagged types
                 } else if (typeof(IEnumerable).IsAssignableFrom(fieldType) && fieldType.IsGenericType) {
 
                     ParseFieldList(fieldValue, fieldInfo, rootComponent, sceneName);
@@ -431,7 +434,7 @@ namespace AltSalt
         void ParseUnityEvent(object unityEventObject, Component rootComponent, string sceneName)
         {
             UnityEventBase unityEvent = unityEventObject as UnityEventBase;
-
+            
             if (unityEvent != null) {
 
                 JSONNode eventData = new JSONArray();

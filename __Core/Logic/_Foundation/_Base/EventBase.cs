@@ -44,7 +44,6 @@ namespace AltSalt
             callerObject = caller;
             callerScene = caller.scene.name;
             callerName = caller.name;
-            //RegisterDependent(callerScene, callerName);
         }
 
         public void StoreCaller(GameObject caller, string sourceScene, string sourceName)
@@ -52,7 +51,6 @@ namespace AltSalt
             callerObject = caller;
             callerScene = sourceScene;
             callerName = sourceName;
-            //RegisterDependent(callerScene, callerName);
         }
 
         protected bool CallerRegistered()
@@ -101,72 +99,5 @@ namespace AltSalt
             return null;
         }
 
-        string GetDirectory()
-        {
-            string directoryPath = Utils.GetProjectPath();
-            string[] subfolders = { "/z_Dependencies", "/Events" };
-
-            for (int i = 0; i < subfolders.Length; i++) {
-                directoryPath += subfolders[i];
-                if (!Directory.Exists(directoryPath)) {
-                    Directory.CreateDirectory(directoryPath);
-                }
-            }
-            return directoryPath;
-        }
-
-        string GetFilePath()
-        {
-            return GetDirectory() + "/" + this.name + ".json";
-        }
-
-        protected void RegisterDependent(string dependentScene, string dependentName)
-        {
-            if (File.Exists(GetFilePath())) {
-                WriteDependentToExistingFile(dependentScene, dependentName);
-            } else {
-                WriteDependentToNewFile(dependentScene, dependentName);
-            }
-            AssetDatabase.Refresh();
-        }
-
-        void WriteDependentToExistingFile(string dependentScene, string dependentName)
-        {
-            string savedData = File.ReadAllText(GetFilePath());
-            var dataAsJson = JSON.Parse(savedData);
-
-            bool dependencyExists = false;
-            if (dataAsJson[dependentScene] != null) {
-                foreach (string value in dataAsJson[dependentScene].Children) {
-                    if (value == dependentName) {
-                        dependencyExists = true;
-                    }
-                }
-            }
-            if (dependencyExists == false) {
-                dataAsJson[dependentScene].Add(dependentName);
-                File.WriteAllText(GetFilePath(), dataAsJson.ToString(2));
-            }
-        }
-
-        void WriteDependentToNewFile(string dependentScene, string dependentName)
-        {
-            var newData = JSON.Parse("{}");
-            newData[dependentScene].Add(dependentName);
-            File.WriteAllText(GetFilePath(), newData.ToString(2));
-        }
     }
-
-    //public class EventBaseTests
-    //{
-       
-    //    public void _Test_RegisterDependency()
-    //    {
-    //        SimpleEvent simpleEvent = new SimpleEvent();
-
-    //        var savedData = File.Open("/Project/Dependencies/" + simpleEvent.name + ".json", FileMode.Open);
-
-    //    }
-
-    //}
 }
