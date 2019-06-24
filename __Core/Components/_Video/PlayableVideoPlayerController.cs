@@ -52,19 +52,19 @@ namespace AltSalt
         [Required]
         public VideoPlayerItem mainVideoInstance;
 
-#if UNITY_ANDROID
         [SerializeField]
         [Required]
+        [BoxGroup("Android Dependencies")]
         public VideoPlayerItem reverseVideoInstance;
 
         [SerializeField]
         [ValidateInput("IsPopulated")]
+        [BoxGroup("Android Dependencies")]
         BoolReference isReversing;
 
         bool internalIsReversingValue = false;
         bool mainVideoSwapLoaded = false;
         bool reverseVideoSwapLoaded = false;
-#endif
 
         void Start()
         {

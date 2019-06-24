@@ -32,12 +32,14 @@ namespace AltSalt
         [SerializeField]
         protected bool logListenersOnRaise;
 
+#if UNITY_EDITOR
         void Awake()
         {
             if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
+                    appSettings = Utils.GetAppSettings();
+                }
         }
+#endif
 
         public void StoreCaller(GameObject caller)
         {

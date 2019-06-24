@@ -62,7 +62,7 @@ namespace AltSalt
         // Momentum variables
         [Required]
         [FoldoutGroup("Momentum Variables", 3)]
-        public ComplexEvent ConvertMomentum;
+        public ComplexEventTrigger ConvertMomentum;
 
         [Required]
         [FoldoutGroup("Momentum Variables", 3)]
@@ -150,7 +150,7 @@ namespace AltSalt
                     momentumDestAxis.Active = false;
                 }
 
-                ConvertMomentum.Raise(eventPayload);
+                ConvertMomentum.RaiseEvent(this.gameObject, eventPayload);
 
             } else if (parentClip.currentTime >= (axisInflectionPoint.Value + momentumTransitionSpread.Value)
                        && parentClip.currentTime <= (axisInflectionPoint.Value + momentumTransitionSpread.Value + swipeOriginDestSpread.Value)) {

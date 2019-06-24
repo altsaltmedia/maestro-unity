@@ -114,11 +114,11 @@ namespace AltSalt
                             StartCoroutine(PauseSequence(sequenceList.sequences[i], swipeModifier));
                         } else {
                             sequenceList.sequences[i].ModifySequenceTime(swipeModifier);
-                            SequenceModified.RaiseEvent(this.gameObject);
+                            sequenceModified.RaiseEvent(this.gameObject);
                         }
                     } else {
                         sequenceList.sequences[i].ModifySequenceTime(swipeModifier);
-                        SequenceModified.RaiseEvent(this.gameObject);
+                        sequenceModified.RaiseEvent(this.gameObject);
                     }
 #else
                     sequenceList.sequences[i].ModifySequenceTime(swipeModifier);

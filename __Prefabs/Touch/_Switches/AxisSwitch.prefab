@@ -68,7 +68,8 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 36d38cb5ece114eb0bfedc4e4952dabd, type: 2}
-  ConvertMomentum: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
+  ConvertMomentum:
+    complexEvent: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
   momentumOriginAxis: {fileID: 0}
   momentumDestAxis: {fileID: 0}
   momentumTransitionSpread:
@@ -104,3 +105,4 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0

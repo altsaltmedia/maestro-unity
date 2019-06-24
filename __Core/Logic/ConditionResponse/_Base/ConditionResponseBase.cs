@@ -42,9 +42,11 @@ namespace AltSalt
 
         void GetAppSettings()
         {
+#if UNITY_EDITOR
             if(appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
+                    appSettings = Utils.GetAppSettings();
+                }
+#endif
         }
 
         void LogConditionResponse(GameObject callerObject, bool triggerOnStart)

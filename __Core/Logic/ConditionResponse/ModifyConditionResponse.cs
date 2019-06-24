@@ -28,9 +28,11 @@ namespace AltSalt
 
         void GetModifySettings()
         {
+#if UNITY_EDITOR
             if (modifySettings == null) {
                 modifySettings = Utils.GetModifySettings();
             }
+#endif
         }
 
         // This is placeholder function and is overriden in children - it is not used. //

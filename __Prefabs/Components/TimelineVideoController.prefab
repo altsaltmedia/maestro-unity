@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6606845192107337356}
   - component: {fileID: 7697093155523303832}
   m_Layer: 0
-  m_Name: Timeline Video Controller
+  m_Name: TimelineVideoController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

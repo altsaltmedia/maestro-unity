@@ -65,7 +65,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sequence: {fileID: 0}
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  BoundaryReached: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
+  boundaryReached:
+    simpleEvent: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
   previousSequenceGroup:
     sequence: {fileID: 0}
     directorObject: {fileID: 0}
@@ -104,6 +105,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &3825933744865969490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,3 +135,4 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
