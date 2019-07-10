@@ -22,26 +22,29 @@ namespace AltSalt
                 return;
             }
 
-            for (int i = 0; i < sequenceList.sequences.Count; i++) {
+            for(int q=0; q < sequenceLists.Count; q++) {
 
-                if (sequenceList.sequences[i].Active == true && sequenceList.sequences[i].hasAutoplay == true && sequenceList.sequences[i].autoplayActive == true) {
+                for (int i = 0; i < sequenceLists[q].sequences.Count; i++) {
 
-                    for (int q = 0; q < sequenceList.sequences[i].autoplayThresholds.Count; q++) {
+                    if (sequenceLists[q].sequences[i].Active == true && sequenceLists[q].sequences[i].hasAutoplay == true && sequenceLists[q].sequences[i].autoplayActive == true) {
 
-                        if (sequenceList.sequences[i].currentTime >= sequenceList.sequences[i].autoplayThresholds[q].startTime &&
-                            sequenceList.sequences[i].currentTime < sequenceList.sequences[i].autoplayThresholds[q].endTime) {
+                        for (int z = 0; z < sequenceLists[q].sequences[i].autoplayThresholds.Count; z++) {
 
-                            //if(isFlicked.Value == false) {
-                            AutoplaySequence(sequenceList.sequences[i], sequenceList.sequences[i].autoplayThresholds[q]);
-                            //} else {
-                            //    if(currentTimescale.Value >= 0) {
-                            //        AutoplayAcceleratedSequence(sequenceList.sequences[i], sequenceList.sequences[i].autoplayThresholds[q], false);
-                            //    } else {
-                            //        AutoplayAcceleratedSequence(sequenceList.sequences[i], sequenceList.sequences[i].autoplayThresholds[q], true);
-                            //    }
-                            //}
+                            if (sequenceLists[q].sequences[i].currentTime >= sequenceLists[q].sequences[i].autoplayThresholds[z].startTime &&
+                                sequenceLists[q].sequences[i].currentTime < sequenceLists[q].sequences[i].autoplayThresholds[z].endTime) {
 
-                            sequenceModified.RaiseEvent(this.gameObject);
+                                //if(isFlicked.Value == false) {
+                                AutoplaySequence(sequenceLists[q].sequences[i], sequenceLists[q].sequences[i].autoplayThresholds[z]);
+                                //} else {
+                                //    if(currentTimescale.Value >= 0) {
+                                //        AutoplayAcceleratedSequence(sequenceLists[q].sequences[i], sequenceLists[q].sequences[i].autoplayThresholds[q], false);
+                                //    } else {
+                                //        AutoplayAcceleratedSequence(sequenceLists[q].sequences[i], sequenceLists[q].sequences[i].autoplayThresholds[q], true);
+                                //    }
+                                //}
+
+                                sequenceModified.RaiseEvent(this.gameObject);
+                            }
                         }
                     }
                 }

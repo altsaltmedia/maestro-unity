@@ -13,8 +13,8 @@ namespace AltSalt
         [Required]
         public AppSettings appSettings;
 
-        [Required]
-        public SequenceList sequenceList;
+        [ValidateInput("IsPopulated")]
+        public List<SequenceList> sequenceLists = new List<SequenceList>();
 
         [ValidateInput("IsPopulated")]
         [BoxGroup("Android Dependencies")]
@@ -33,6 +33,11 @@ namespace AltSalt
         protected bool internalIsReversingVal = false;
 
         protected static bool IsPopulated(BoolReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+
+        protected static bool IsPopulated(List<SequenceList> attribute)
         {
             return Utils.IsPopulated(attribute);
         }

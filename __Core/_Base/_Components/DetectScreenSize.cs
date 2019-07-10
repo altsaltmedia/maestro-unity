@@ -60,7 +60,7 @@ namespace AltSalt {
 
             public bool ScreenResized()
             {
-                if (appSettings.pillarBoxingEnabled == true) {
+                if (appSettings.pillarBoxingEnabled.Value == true) {
                     if (Mathf.Approximately(screenWidth.Value, Screen.safeArea.width) == false ||
                         Mathf.Approximately(screenHeight.Value, internalHeightValue) == false) {
                         return true;

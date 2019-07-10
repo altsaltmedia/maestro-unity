@@ -76,6 +76,21 @@ namespace AltSalt
             }
             return path.ToString();
         }
+
+        public static string GetAssetPathFromObject(UnityEngine.Object targetObject)
+        {
+            string targetGUID = GetGUIDFromObject(targetObject);
+            return AssetDatabase.GUIDToAssetPath(targetGUID);
+        }
+
+        public static string GetGUIDFromObject(UnityEngine.Object targetObject)
+        {
+            string guid;
+            long file;
+
+            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(targetObject, out guid, out file);
+            return guid;
+        }
 #endif
         public static JSONNode AddToJSONArray(JSONNode node, string key, string value)
         {
@@ -567,6 +582,11 @@ namespace AltSalt
         }
 
         public static bool IsPopulated(List<float> attribute)
+        {
+            return attribute.Count < 1 ? false : true;
+        }
+
+        public static bool IsPopulated(List<SequenceList> attribute)
         {
             return attribute.Count < 1 ? false : true;
         }

@@ -42,29 +42,31 @@ namespace AltSalt
                 return;
             }
 
-            for (int i = 0; i < sequenceList.sequences.Count; i++) {
+            for (int q = 0; q < sequenceLists.Count; q++) {
 
-                if (sequenceList.sequences[i].Active == true && sequenceList.sequences[i].hasAutoplay == true && sequenceList.sequences[i].autoplayActive == true) {
+                for (int i = 0; i < sequenceLists[q].sequences.Count; i++) {
 
-                    for (int q = 0; q < sequenceList.sequences[i].autoplayThresholds.Count; q++) {
+                    if (sequenceLists[q].sequences[i].Active == true && sequenceLists[q].sequences[i].hasAutoplay == true && sequenceLists[q].sequences[i].autoplayActive == true) {
 
-                        if (sequenceList.sequences[i].currentTime >= sequenceList.sequences[i].autoplayThresholds[q].startTime &&
-                            sequenceList.sequences[i].currentTime <= sequenceList.sequences[i].autoplayThresholds[q].endTime) {
+                        for (int z = 0; z < sequenceLists[q].sequences[i].autoplayThresholds.Count; z++) {
 
-                            if (isReversing.Value == true) {
-                                if (sequenceList.sequences[i].currentTime - sequenceList.sequences[i].autoplayThresholds[q].startTime <= easeThreshold) {
-                                    easingModifier = easingFunction(1f, 0f, lerpValue);
-                                    lerpValue += lerpModifier;
+                            if (sequenceLists[q].sequences[i].currentTime >= sequenceLists[q].sequences[i].autoplayThresholds[z].startTime &&
+                                sequenceLists[q].sequences[i].currentTime <= sequenceLists[q].sequences[i].autoplayThresholds[z].endTime) {
+
+                                if (isReversing.Value == true) {
+                                    if (sequenceLists[q].sequences[i].currentTime - sequenceLists[q].sequences[i].autoplayThresholds[z].startTime <= easeThreshold) {
+                                        easingModifier = easingFunction(1f, 0f, lerpValue);
+                                        lerpValue += lerpModifier;
+                                    }
+                                } else {
+                                    if (sequenceLists[q].sequences[i].autoplayThresholds[z].endTime - sequenceLists[q].sequences[i].currentTime <= easeThreshold) {
+                                        easingModifier = easingFunction(1f, 0f, lerpValue);
+                                        lerpValue += lerpModifier;
+                                    }
                                 }
+                                AutoplaySequence(sequenceLists[q].sequences[i], sequenceLists[q].sequences[i].autoplayThresholds[z]);
+                                sequenceModified.RaiseEvent(this.gameObject);
                             }
-                            else {
-                                if (sequenceList.sequences[i].autoplayThresholds[q].endTime - sequenceList.sequences[i].currentTime <= easeThreshold) {
-                                    easingModifier = easingFunction(1f, 0f, lerpValue);
-                                    lerpValue += lerpModifier;
-                                }
-                            }
-                            AutoplaySequence(sequenceList.sequences[i], sequenceList.sequences[i].autoplayThresholds[q]);
-                            sequenceModified.RaiseEvent(this.gameObject);
                         }
                     }
                 }
@@ -113,34 +115,44 @@ namespace AltSalt
 
         public void ActivateAutoplayIfMomentumPaused()
         {
-            for (int i = 0; i < sequenceList.sequences.Count; i++) {
-                if (sequenceList.sequences[i].Active == true && sequenceList.sequences[i].hasAutoplay == true && sequenceList.sequences[i].pauseMomentumActive == true) {
+            for (int q = 0; q < sequenceLists.Count; q++) {
 
-                    sequenceList.sequences[i].autoplayActive = true;
+                for (int i = 0; i < sequenceLists[q].sequences.Count; i++) {
+                    if (sequenceLists[q].sequences[i].Active == true && sequenceLists[q].sequences[i].hasAutoplay == true && sequenceLists[q].sequences[i].pauseMomentumActive == true) {
+
+                        sequenceLists[q].sequences[i].autoplayActive = true;
+                    }
                 }
             }
         }
 
         public void ActivateAutoplay()
         {
-            for (int i = 0; i < sequenceList.sequences.Count; i++) {
-                if (sequenceList.sequences[i].autoplayActive == true) {
-                    continue;
-                }
+            for (int q = 0; q < sequenceLists.Count; q++) {
 
-                if (sequenceList.sequences[i].Active == true && sequenceList.sequences[i].hasAutoplay == true) {
-                    sequenceList.sequences[i].autoplayActive = true;
+                for (int i = 0; i < sequenceLists[q].sequences.Count; i++) {
+
+                    if (sequenceLists[q].sequences[i].autoplayActive == true) {
+                        continue;
+                    }
+
+                    if (sequenceLists[q].sequences[i].Active == true && sequenceLists[q].sequences[i].hasAutoplay == true) {
+                        sequenceLists[q].sequences[i].autoplayActive = true;
+                    }
                 }
             }
         }
 
         public void DeactivateAutoplay()
         {
-            for (int i = 0; i < sequenceList.sequences.Count; i++) {
-                if (sequenceList.sequences[i].Active == true) {
-                    sequenceList.sequences[i].autoplayActive = false;
-                    lerpValue = 0f;
-                    easingModifier = 1f;
+            for (int q = 0; q < sequenceLists.Count; q++) {
+
+                for (int i = 0; i < sequenceLists[q].sequences.Count; i++) {
+                    if (sequenceLists[q].sequences[i].Active == true) {
+                        sequenceLists[q].sequences[i].autoplayActive = false;
+                        lerpValue = 0f;
+                        easingModifier = 1f;
+                    }
                 }
             }
         }
