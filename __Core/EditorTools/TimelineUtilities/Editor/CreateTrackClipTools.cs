@@ -60,7 +60,8 @@ namespace AltSalt
 
                 EditorGUI.BeginDisabledGroup(!TracksSelected());
                 if (GUILayout.Button("Create Clip(s)")) {
-                    TimelineEditor.selectedClips = CreateClips(Selection.objects);
+                    TimelineUtilitiesCore.timelineClips = CreateClips(Selection.objects);
+                    TimelineEditor.selectedClips = TimelineUtilitiesCore.timelineClips.ToArray();
                     TimelineEditor.Refresh(RefreshReason.ContentsModified);
                 }
                 EditorGUI.EndDisabledGroup();
@@ -183,13 +184,31 @@ namespace AltSalt
         static TrackAsset PopulateTrackAsset(TrackAsset targetTrack, GameObject targetGameObject)
         {
             foreach (PlayableBinding playableBinding in targetTrack.outputs) {
-                TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, targetGameObject as UnityEngine.Object);
+
+                switch(targetTrack.GetType().Name) {
+
+                    case nameof(TMProColorTrack):
+                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, targetGameObject.GetComponent<TMP_Text>());
+                        break;
+
+                    case nameof(RectTransformPosTrack):
+                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, targetGameObject.GetComponent<RectTransform>());
+                        break;
+
+                    case nameof(SpriteColorTrack):
+                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, targetGameObject.GetComponent<SpriteRenderer>());
+                        break;
+
+                    default:
+                        Debug.LogError("Track type not supported");
+                        break;
+                }
             }
 
             return targetTrack;
         }
 
-        static TimelineClip[] CreateClips(UnityEngine.Object[] selection)
+        static List<TimelineClip> CreateClips(UnityEngine.Object[] selection)
         {
             List<TimelineClip> timelineClips = new List<TimelineClip>();
             for (int i = 0; i < selection.Length; i++) {
@@ -204,7 +223,7 @@ namespace AltSalt
 
             TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
 
-            return timelineClips.ToArray();
+            return timelineClips;
         }
 
         static PlayableAsset PopulateClip(TrackAsset parentTrack, TimelineClip timelineClip)

@@ -6,15 +6,15 @@ namespace AltSalt
 {
     public class TMProColorMixerBehaviour : LerpToTargetMixerBehaviour
     {
-        TextMeshPro trackBinding;
+        TMP_Text trackBinding;
         ScriptPlayable<TMProColorBehaviour> inputPlayable;
         TMProColorBehaviour input;
-        TextMeshPro trackBindingComponent;
+        TMP_Text trackBindingComponent;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            trackBinding = playerData as TextMeshPro;
-            
+            trackBinding = playerData as TMP_Text;
+
             if (!trackBinding)
                 return;
             
@@ -26,7 +26,7 @@ namespace AltSalt
                 inputPlayable = (ScriptPlayable<TMProColorBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
                 
-                trackBindingComponent = trackBinding.GetComponent<TextMeshPro>();
+                trackBindingComponent = trackBinding.GetComponent<TMP_Text>();
                 
                 if(inputWeight >= 1f) {
                     modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());

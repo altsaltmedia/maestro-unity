@@ -115,7 +115,7 @@ namespace AltSalt
             currentDirector.SetGenericBinding(debugTrack, TimelineUtilitiesCore.GetCurrentTimeReference().Variable);
             debugTrack.CreateDefaultClip();
 
-            TimelineUtilitiesCore.RefreshTimelineWindow();
+            TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
         }
 
         void CollapseGroups()

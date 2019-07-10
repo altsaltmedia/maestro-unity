@@ -7,7 +7,7 @@ namespace AltSalt
 {
     [TrackColor(0.6981132f, 0f, 0.1065063f)]
     [TrackClipType(typeof(TMProColorClip))]
-    [TrackBindingType(typeof(TextMeshPro))]
+    [TrackBindingType(typeof(TMP_Text))]
     public class TMProColorTrack : LerpToTargetTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
@@ -19,7 +19,7 @@ namespace AltSalt
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)
         {
 #if UNITY_EDITOR
-            TextMeshPro trackBinding = director.GetGenericBinding(this) as TextMeshPro;
+            TMP_Text trackBinding = director.GetGenericBinding(this) as TMP_Text;
             if (trackBinding == null)
                 return;
             

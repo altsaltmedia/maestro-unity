@@ -9,6 +9,7 @@ namespace AltSalt
     public static class TimelineUtilitiesCore
     {
         static FloatReference currentTime = new FloatReference();
+        public static List<TimelineClip> timelineClips = new List<TimelineClip>();
 
         public static float CurrentTime {
 
@@ -33,9 +34,19 @@ namespace AltSalt
             return currentTime;
         }
 
-        public static void RefreshTimelineWindow()
+        public static void RefreshTimelineContentsAddedOrRemoved()
         {
             TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
+        }
+
+        public static void RefreshTimelineContentsModified()
+        {
+            TimelineEditor.Refresh(RefreshReason.ContentsModified);
+        }
+
+        public static void RefreshTimelineRedrawWindow()
+        {
+            TimelineEditor.Refresh(RefreshReason.WindowNeedsRedraw);
         }
     }
 }
