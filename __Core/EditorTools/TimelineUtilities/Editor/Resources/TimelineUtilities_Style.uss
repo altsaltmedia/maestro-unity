@@ -1,0 +1,114 @@
+.altsalt {
+	padding: 10px 5px 0 5px;
+	font-size: 10px;
+}
+
+.clipTools Button {
+	height: 20px;
+}
+
+.clipTools IntegerField .unity-integer-field__input {
+	-unity-text-align: middle-center;
+}
+
+.foldout___title___container {
+	position: relative;
+}
+
+.foldout___title {
+	position: absolute;
+	top: 1px;
+	left: 18px;
+}
+
+.section {
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+
+.section > * {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: center;
+	max-width: 275px;
+}
+
+.section___title {
+	font-size: 12px;
+	margin-bottom: 5px;
+}
+
+.section___content {
+	margin-bottom: 10px;
+}
+
+.selection {
+	margin-bottom: 5px;
+}
+
+.selection .select-btn {
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: 57.5px;
+}
+
+.selection .tilde {
+	margin: 0 10px 0 10px;
+	flex-basis: 25px;
+	font-size: 20px;
+	-unity-text-align: middle-center;
+}
+
+.selection .select-count {
+	margin: 0 10px 0 10px;
+	flex-basis: 25px;
+}
+
+.selection .unity-integer-field__input {
+	padding-top: 2px;
+	-unity-text-align: middle-center;
+}
+
+.manipulate .manipulate-toggle-transpose {
+	flex-basis: 200px;
+	justify-content: flex-start;
+	-unity-text-align: middle-right;
+}
+
+.manipulate .manipulate-toggle-transpose .unity-toggle__input {
+	flex-direction: row;
+	flex-basis: 200px;
+	justify-content: flex-start;
+	-unity-text-align: middle-right;
+}
+
+.manipulate .manipulate-col-1 {
+	flex-grow: 1;
+	flex-basis: 70px;
+}
+
+.manipulate .manipulate-col-2 {
+	flex-grow: 1;
+	margin-right: 5px;
+	flex-basis: 35px;
+}
+
+.manipulate .manipulate-col-3 {
+	flex-grow: 1;
+	margin-left: 5px;
+	flex-basis: 77.5px;
+}
+
+
+.manipulate .manipulate-col-1.placeholder {
+	flex-grow: 0;
+	flex-shrink: 1;
+}
+
+.manipulate .manipulate-col-2.placeholder {
+	flex-grow: 0;
+	flex-shrink: 1;
+}

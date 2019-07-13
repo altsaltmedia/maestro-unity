@@ -18,6 +18,10 @@ namespace AltSalt
 
         [Required]
         [SerializeField]
+        public GameObject containerPrefab;
+
+        [Required]
+        [SerializeField]
         public GameObject responsiveContainerPrefab;
 
         [Required]

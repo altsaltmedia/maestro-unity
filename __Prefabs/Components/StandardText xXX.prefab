@@ -16,11 +16,11 @@ GameObject:
   - component: {fileID: 114860081495304408}
   - component: {fileID: 6162087246834992834}
   m_Layer: 0
-  m_Name: Standard Text xXX
+  m_Name: StandardText xXX
   m_TagString: textObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 105
   m_IsActive: 1
 --- !u!224 &224540287842941266
 RectTransform:
@@ -30,7 +30,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144127328821010}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -74,6 +74,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -219,7 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  modifySettings: {fileID: 11400000, guid: 09fba8b7455af408cb2e663bc6591f01, type: 2}
+  modifySettings: {fileID: 0}
   key: 
   textCollectionBank: {fileID: 0}
 --- !u!114 &6162087246834992834

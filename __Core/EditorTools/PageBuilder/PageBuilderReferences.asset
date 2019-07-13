@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: PageBuilderReferences
   m_EditorClassIdentifier: 
   textPrefab: {fileID: 1144127328821010, guid: 3debdbfe67bf74f7d80607d7136b89a9, type: 3}
+  spritePrefab: {fileID: 1590624382284380, guid: f6ea7a8384f124557a34035ef7fb463a,
+    type: 3}
+  containerPrefab: {fileID: 7125739830445330453, guid: b7b71e1ba9e80410c90e267039712909,
+    type: 3}
   responsiveContainerPrefab: {fileID: 1865775484262442, guid: a9aac29e430174582b3f0545758b45f2,
     type: 3}
   sequenceTouchApplier: {fileID: 1187882997373286, guid: a08611f7b640e4826b42e1a84b4a6221,

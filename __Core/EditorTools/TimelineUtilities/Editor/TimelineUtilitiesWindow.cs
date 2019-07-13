@@ -8,6 +8,8 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using System;
 using Sirenix.OdinInspector;
+using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 
 namespace AltSalt
 {
@@ -18,8 +20,9 @@ namespace AltSalt
         int toolbarInt = 0;
         string[] toolbarStrings = { "Clip Tools", "Create Tools" };
 
+        public int newSelectionCount = 1;
+
         bool showTimelineClipTools = false;
-        bool showSequencingTools = false;
         bool showTrackClipTools = false;
 
         [MenuItem("Tools/AltSalt/Timeline Utilities")]
@@ -33,9 +36,16 @@ namespace AltSalt
             EditorWindow.GetWindow(typeof(TimelineUtilitiesWindow)).Show();
         }
 
+        void OnInspectorUpdate()
+        {
+            if (TimelineEditor.inspectedDirector != null) {
+                TimelineEditor.inspectedDirector.time = TimelineUtilitiesCore.CurrentTime;
+                TimelineEditor.inspectedDirector.DeferredEvaluate();
+            }
+        }
+
         public void OnGUI()
         {
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
             GUIStyle guiStyle = new GUIStyle("Label");
             guiStyle.fontStyle = FontStyle.Italic;
@@ -63,27 +73,22 @@ namespace AltSalt
 
                 return;
             }
+            
+            //scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
-            showTimelineClipTools = EditorGUILayout.Foldout(showTimelineClipTools, "Clip Tools");
-            if (showTimelineClipTools == true) {
-                TimelineClipTools.ShowTimelineTools();
-            }
-
-            GUILayout.Space(10);
-
-            showSequencingTools = EditorGUILayout.Foldout(showSequencingTools, "Create Sequences");
-            if (showSequencingTools == true) {
-                CreateSequenceTools.ShowSequenceTools();
-            }
+            //showTimelineClipTools = EditorGUILayout.Foldout(showTimelineClipTools, "Clip Tools");
+            //if (showTimelineClipTools == true) {
+                ClipTools.ShowClipTools(position, rootVisualElement, this);
+            //}
 
             GUILayout.Space(10);
 
-            showTrackClipTools = EditorGUILayout.Foldout(showTrackClipTools, "Tracks and Clips");
-            if (showTrackClipTools == true) {
-                CreateTrackClipTools.ShowTrackClipTools();
-            }
+            //showTrackClipTools = EditorGUILayout.Foldout(showTrackClipTools, "Tracks and Clips");
+            //if (showTrackClipTools == true) {
+            //    CreateTrackClipTools.ShowTrackClipTools();
+            //}
 
-            EditorGUILayout.EndScrollView();
+            //EditorGUILayout.EndScrollView();
         }
 
         static bool FindDebugTrack()

@@ -15,6 +15,9 @@ namespace AltSalt
         public static PageBuilderReferences pageBuilderReferences;
         static List<TrackData> copiedTracks = new List<TrackData>();
 
+        static float newClipDuration = .5f;
+        static bool allowBlankTracks = false;
+
         public static void ShowTrackClipTools()
         {
             var guiStyle = new GUIStyle("Label");
@@ -39,31 +42,57 @@ namespace AltSalt
                 }
                 EditorGUI.EndDisabledGroup();
 
+                GUILayout.Space(10);
 
-                if (GUILayout.Button("New TextMeshPro Color Track(s)")) {
-                    Selection.objects = TriggerCreateTrack(Selection.objects, typeof(TMProColorTrack), Selection.gameObjects);
-                }
+                EditorGUILayout.BeginHorizontal();
+                    allowBlankTracks = EditorGUILayout.Toggle("Allow blank tracks", allowBlankTracks);
+                    if (GUILayout.Button("Refresh")) {
+                        // This button just here as a visual cue - any click inside window will refresh buttons
+                    }
+                EditorGUILayout.EndHorizontal();
 
-                if (GUILayout.Button("New Sprite Color Track(s)")) {
-                    Selection.objects = TriggerCreateTrack(Selection.objects, typeof(SpriteColorTrack), Selection.gameObjects);
-                }
+                GUILayout.Space(5);
 
-                if (GUILayout.Button("New RectTransform Position Track(s)")) {
-                    Selection.objects = TriggerCreateTrack(Selection.objects, typeof(RectTransformPosTrack), Selection.gameObjects);
-                }
+                EditorGUI.BeginDisabledGroup(DisableComponentTrackButton(Selection.gameObjects, typeof(TMP_Text), allowBlankTracks));
+                    if (GUILayout.Button("New TextMeshPro Color Track(s)")) {
+                        Selection.objects = TriggerCreateTrack(Selection.objects, typeof(TMProColorTrack), Selection.gameObjects);
+                    }
+                EditorGUI.EndDisabledGroup();
 
-                if (GUILayout.Button("New Group Track(s)")) {
-                    Selection.activeObject = TriggerCreateGroupTrack(Selection.objects);
-                }
+                EditorGUI.BeginDisabledGroup(DisableComponentTrackButton(Selection.gameObjects, typeof(SpriteRenderer), allowBlankTracks));
+                    if (GUILayout.Button("New Sprite Color Track(s)")) {
+                        Selection.objects = TriggerCreateTrack(Selection.objects, typeof(SpriteColorTrack), Selection.gameObjects);
+                    }
+                EditorGUI.EndDisabledGroup();
+
+                EditorGUI.BeginDisabledGroup(DisableComponentTrackButton(Selection.gameObjects, typeof(RectTransform), allowBlankTracks));
+                    if (GUILayout.Button("New RectTransform Position Track(s)")) {
+                        Selection.objects = TriggerCreateTrack(Selection.objects, typeof(RectTransformPosTrack), Selection.gameObjects);
+                    }
+                EditorGUI.EndDisabledGroup();
+
+                GUILayout.Space(10);
+
+                EditorGUI.BeginDisabledGroup(DisableGroupTrackButton(Selection.gameObjects, allowBlankTracks));
+                    if (GUILayout.Button("New Group Track(s)")) {
+                        Selection.activeObject = TriggerCreateGroupTrack(Selection.objects);
+                    }
+                EditorGUI.EndDisabledGroup();
 
                 GUILayout.Space(10);
 
                 EditorGUI.BeginDisabledGroup(!TracksSelected());
-                if (GUILayout.Button("Create Clip(s)")) {
-                    TimelineUtilitiesCore.timelineClips = CreateClips(Selection.objects);
-                    TimelineEditor.selectedClips = TimelineUtilitiesCore.timelineClips.ToArray();
-                    TimelineEditor.Refresh(RefreshReason.ContentsModified);
-                }
+                    EditorGUI.BeginChangeCheck();
+                        newClipDuration = EditorGUILayout.FloatField("New clip duration :", newClipDuration);
+                    if(EditorGUI.EndChangeCheck() == true && newClipDuration < 0) {
+                        newClipDuration = 0;
+                    }
+
+                    if (GUILayout.Button("Create Clip(s)")) {
+                        TimelineUtilitiesCore.timelineClips = CreateClips(Selection.objects, newClipDuration);
+                        TimelineEditor.selectedClips = TimelineUtilitiesCore.timelineClips.ToArray();
+                        TimelineEditor.Refresh(RefreshReason.ContentsModified);
+                    }
                 EditorGUI.EndDisabledGroup();
             }
         }
@@ -177,7 +206,8 @@ namespace AltSalt
 
         static TrackAsset CreateNewTrack(TrackAsset parentTrack, Type trackType)
         {
-            TrackAsset trackAsset = TimelineEditor.inspectedAsset.CreateTrack(trackType, parentTrack, trackType.Name);
+            TrackAsset trackAsset;    
+            trackAsset = TimelineEditor.inspectedAsset.CreateTrack(trackType, parentTrack, trackType.Name);
             return trackAsset;
         }
 
@@ -208,7 +238,7 @@ namespace AltSalt
             return targetTrack;
         }
 
-        static List<TimelineClip> CreateClips(UnityEngine.Object[] selection)
+        static List<TimelineClip> CreateClips(UnityEngine.Object[] selection, float duration)
         {
             List<TimelineClip> timelineClips = new List<TimelineClip>();
             for (int i = 0; i < selection.Length; i++) {
@@ -216,6 +246,7 @@ namespace AltSalt
                     TrackAsset trackAsset = selection[i] as TrackAsset;
                     TimelineClip newClip = trackAsset.CreateDefaultClip();
                     newClip.start = TimelineUtilitiesCore.CurrentTime;
+                    newClip.duration = duration;
                     PopulateClip(trackAsset, newClip);
                     timelineClips.Add(newClip);
                 }
@@ -264,9 +295,16 @@ namespace AltSalt
         {
             TrackAsset destinationTrack = null;
             for (int q = 0; q < destinationSelection.Length; q++) {
-                if (destinationSelection[q] is TrackAsset) {
+                if (destinationSelection[q] is GroupTrack) {
                     destinationTrack = destinationSelection[q] as TrackAsset;
-                    break;
+                    return destinationTrack;
+                }
+            }
+            for (int q = 0; q < destinationSelection.Length; q++) {
+                TrackAsset trackAsset = destinationSelection[q] as TrackAsset;
+                if (trackAsset != null && trackAsset.parent is GroupTrack) {
+                    destinationTrack = trackAsset.parent as TrackAsset;
+                    return destinationTrack;
                 }
             }
             return destinationTrack;
@@ -294,6 +332,44 @@ namespace AltSalt
             TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
 
             return groupTrack;
+        }
+
+        static bool DisableComponentTrackButton(GameObject[] currentSelection, Type targetType, bool overrideValue)
+        {
+            if(overrideValue == true) {
+                return false;
+            }
+
+            return !TargetComponentSelected(currentSelection, targetType);
+        }
+
+        static bool DisableGroupTrackButton(GameObject[] currentSelection, bool overrideValue)
+        {
+            if (overrideValue == true) {
+                return false;
+            }
+
+            return TargetTypeSelected(currentSelection, typeof(TrackAsset));
+        }
+
+        static bool TargetComponentSelected(GameObject[] currentSelection, Type targetType)
+        {
+            for(int i=0; i<currentSelection.Length; i++) {
+                if(currentSelection[i].GetComponent(targetType) != null) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static bool TargetTypeSelected(GameObject[] currentSelection, Type targetType)
+        {
+            for (int i = 0; i < currentSelection.Length; i++) {
+                if (currentSelection[i].GetType().Name == targetType.Name) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         class TrackData

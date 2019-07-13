@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace AltSalt.PageBuilder
+namespace AltSalt
 {
     public static class SelectionTools
     {

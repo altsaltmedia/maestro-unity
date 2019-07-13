@@ -47,8 +47,35 @@ namespace AltSalt
 
         public static string ComplexEventString = typeof(ComplexEvent).Name;
         public static string SimpleEventString = typeof(SimpleEvent).Name;
+        static GUISkin altSaltSkin;
 
 #if UNITY_EDITOR
+        public static GUISkin AltSaltSkin {
+
+            get {
+                if(altSaltSkin == null) {
+                    altSaltSkin = Resources.Load("AltSaltEditorSkin") as GUISkin;
+                }
+                return altSaltSkin;
+            }
+        }
+
+        public class GameObjectSort : Comparer<GameObject>
+        {
+            public override int Compare(GameObject x, GameObject y)
+            {
+                return x.transform.GetSiblingIndex().CompareTo(y.transform.GetSiblingIndex());
+            }
+        }
+
+        public class TransformSort : Comparer<Transform>
+        {
+            public override int Compare(Transform x, Transform y)
+            {
+                return x.GetSiblingIndex().CompareTo(y.GetSiblingIndex());
+            }
+        }
+
         public static string GetProjectPath()
         {
             return Application.dataPath + "/__Project";

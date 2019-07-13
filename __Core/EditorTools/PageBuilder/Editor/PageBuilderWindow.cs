@@ -4,17 +4,17 @@ using UnityEditor;
 using TMPro;
 using System.Text.RegularExpressions;
 
-namespace AltSalt.PageBuilder
+namespace AltSalt
 {
     public class PageBuilderWindow : EditorWindow
     {
         Vector2 scrollPos;
         public PageBuilderReferences pageBuilderReferences;
-        string objectName;
-
-        int toolbarInt = 0;
-        string[] toolbarStrings = { "Container", "Text", "Image" };
+        string objectName = "[INSERT NAME HERE]";
+        
         bool showSelectionTools = false;
+        bool showSequencingTools = false;
+        bool showCreateTools = false;
 
         bool showTextTools = false;
         string textContent;
@@ -23,6 +23,10 @@ namespace AltSalt.PageBuilder
 
         bool showRectTransformTools = false;
         Vector3 rectTransPosition;
+        Vector3 rectTransTransposePosition;
+
+        bool selectCreatedObject;
+        GameObject createdGameObject;
 
         [MenuItem("Tools/AltSalt/Page Builder")]
         public static void ShowWindow()
@@ -35,44 +39,46 @@ namespace AltSalt.PageBuilder
             EditorWindow.GetWindow(typeof(PageBuilderWindow)).Show();
         }
 
-        void OnEnable()
-        {
-            Selection.selectionChanged += SetObjectNameDefault;
-        }
+        //void OnEnable()
+        //{
+        //    Selection.selectionChanged += SetObjectNameDefault;
+        //}
 
-        void OnDestroy()
-        {
-            Selection.selectionChanged -= SetObjectNameDefault;
-        }
+        //void OnDestroy()
+        //{
+        //    Selection.selectionChanged -= SetObjectNameDefault;
+        //}
 
-        void SetObjectNameDefault()
-        {
-            if(Selection.activeGameObject == null) {
-                return;
-            }
+        //void SetObjectNameDefault()
+        //{
+        //    if(Selection.activeGameObject == null) {
+        //        return;
+        //    }
 
-            string originalName = Selection.activeGameObject.name;
+        //    string originalName = Selection.activeGameObject.name;
             
-            Match match = Regex.Match(originalName, @"[0-9]+", RegexOptions.RightToLeft);
+        //    Match match = Regex.Match(originalName, @"[0-9]+", RegexOptions.RightToLeft);
 
-            string newName = "";
+        //    string newName = "";
 
-            if(match.Value != string.Empty) {
-                int numValue = Int32.Parse(match.Value);
-                numValue++;
-                newName = originalName.Replace(match.Value, numValue.ToString());
-            } else {
-                newName = originalName + " (1)";
-            }
+        //    if(match.Value != string.Empty) {
+        //        int numValue = Int32.Parse(match.Value);
+        //        numValue++;
+        //        newName = originalName.Replace(match.Value, numValue.ToString());
+        //    } else {
+        //        newName = originalName + " (1)";
+        //    }
 
-            objectName = newName;
-        }
+        //    objectName = newName;
+        //}
 
         public void OnGUI()
         {
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
             pageBuilderReferences = Utils.GetScriptableObject("PageBuilderReferences") as PageBuilderReferences;
+
+            GUILayout.Space(10);
 
             showSelectionTools = EditorGUILayout.Foldout(showSelectionTools, "Selection Tools");
             if(showSelectionTools == true) {
@@ -81,13 +87,17 @@ namespace AltSalt.PageBuilder
 
             GUILayout.Space(10);
 
-            objectName = EditorGUILayout.TextField("Object name", objectName);
-
-            toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarStrings);
+            showSequencingTools = EditorGUILayout.Foldout(showSequencingTools, "Create Sequences");
+            if (showSequencingTools == true) {
+                CreateSequenceTools.ShowSequenceTools();
+            }
 
             GUILayout.Space(10);
 
-            ShowCreationTools();
+            showCreateTools = EditorGUILayout.Foldout(showCreateTools, "Create Sequences");
+            if(showCreateTools == true) {
+                ShowCreationTools();
+            }
 
             GUILayout.Space(10);
 
@@ -98,50 +108,61 @@ namespace AltSalt.PageBuilder
 
         void ShowCreationTools()
         {
-            switch (toolbarInt) {
+            objectName = EditorGUILayout.TextField("Object name", objectName);
 
-                case 0:
-                    if (GUILayout.Button("Create Element(s)")) {
-                        CreateNewElement(Selection.activeTransform, pageBuilderReferences.responsiveContainerPrefab, objectName);
-                    }
-                    if (GUILayout.Button("Create Element(s) and Select")) {
-                        Selection.activeGameObject = CreateNewElement(Selection.activeTransform, pageBuilderReferences.responsiveContainerPrefab, objectName);
-                    }
-                    break;
+            GUILayout.Space(5);
 
-                case 1:
-                    if (GUILayout.Button("Create Element(s)")) {
-                        CreateNewElement(Selection.activeTransform, pageBuilderReferences.textPrefab, objectName);
-                    }
-                    if (GUILayout.Button("Create Element(s) and Select")) {
-                        Selection.activeGameObject = CreateNewElement(Selection.activeTransform, pageBuilderReferences.textPrefab, objectName);
-                    }
-                    break;
+            selectCreatedObject = EditorGUILayout.Toggle("Select object after creation", selectCreatedObject);
 
-                case 2:
-                    if (GUILayout.Button("Create Element(s)")) {
-                        CreateNewElement(Selection.activeTransform, pageBuilderReferences.spritePrefab, objectName);
-                    }
-                    if (GUILayout.Button("Create Element(s) and Select")) {
-                        Selection.activeGameObject = CreateNewElement(Selection.activeTransform, pageBuilderReferences.spritePrefab, objectName);
-                    }
-                    break;
+            GUILayout.Space(5);
 
+            EditorGUI.BeginChangeCheck();
+            if (GUILayout.Button("New Text")) {
+                createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.textPrefab, objectName);
             }
+                
+            if (GUILayout.Button("New Sprite")) {
+                createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.spritePrefab, objectName);
+            }
+
+            if (GUILayout.Button("New Container")) {
+                createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.containerPrefab, objectName);
+            }
+
+            if (GUILayout.Button("New Responsive Container")) {
+                createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.responsiveContainerPrefab, objectName);
+            }
+
+            if (EditorGUI.EndChangeCheck() == true) {
+                if (selectCreatedObject == true) {
+                    Selection.activeGameObject = createdGameObject;
+                }
+            }
+
+            GUILayout.Space(10);
 
             if (GUILayout.Button("Rename Element(s)")) {
                 RenameElement(Selection.gameObjects);
             }
+
+            
         }
 
         GameObject[] RenameElement(GameObject[] targetObjects)
         {
+            Array.Sort(targetObjects, new Utils.GameObjectSort());
+
             for(int i=0; i<targetObjects.Length; i++) {
-                if(i == 0) {
-                    targetObjects[i].name = objectName;
+                if (objectName.Contains("{x}")) {
+                    targetObjects[i].name = objectName.Replace("{x}", (i + 1).ToString());
                 } else {
-                    targetObjects[i].name = string.Format("{0} ({1})", objectName, i);
+                    if (i == 0) {
+                        targetObjects[i].name = objectName;
+                    } else {    
+                        targetObjects[i].name = string.Format("{0} ({1})", objectName, i);
+                    }
                 }
+
             }
 
             return targetObjects;
@@ -188,8 +209,8 @@ namespace AltSalt.PageBuilder
 
             if (EditorGUI.EndChangeCheck() == true) {
                 for (int i = 0; i < Selection.gameObjects.Length; i++) {
-                    Undo.RecordObject(Selection.gameObjects[i], "Save text content");
                     TMP_Text textMeshPro = Selection.gameObjects[i].GetComponent<TMP_Text>();
+                    Undo.RecordObject(textMeshPro, "set text content");
                     if (textMeshPro != null) {
                         textMeshPro.text = textContent;
                     }
@@ -201,8 +222,8 @@ namespace AltSalt.PageBuilder
 
             if(EditorGUI.EndChangeCheck() == true) {
                 for(int i=0; i<Selection.gameObjects.Length; i++) {
-                    Undo.RecordObject(Selection.gameObjects[i], "Save font size");
                     TMP_Text textMeshPro = Selection.gameObjects[i].GetComponent<TMP_Text>();
+                    Undo.RecordObject(textMeshPro, "set font size");
                     if (textMeshPro != null) {
                         textMeshPro.fontSize = fontSize;
                     }
@@ -214,8 +235,8 @@ namespace AltSalt.PageBuilder
 
             if (EditorGUI.EndChangeCheck() == true) {
                 for (int i = 0; i < Selection.gameObjects.Length; i++) {
-                    Undo.RecordObject(Selection.gameObjects[i], "Save font color");
                     TMP_Text textMeshPro = Selection.gameObjects[i].GetComponent<TMP_Text>();
+                    Undo.RecordObject(textMeshPro, "set font color");
                     if (textMeshPro != null) {
                         textMeshPro.color = fontColor;
                     }
@@ -236,25 +257,54 @@ namespace AltSalt.PageBuilder
                 for (int i = 0; i < Selection.gameObjects.Length; i++) {
                     RectTransform rectTransform = Selection.gameObjects[i].GetComponent<RectTransform>();
                     if (rectTransform != null) {
+                        Undo.RecordObject(rectTransform, "set rect position");
                         rectTransform.anchoredPosition3D = rectTransPosition;
                     }
                 }
             }
 
+            EditorGUI.BeginChangeCheck();
+            rectTransTransposePosition = EditorGUILayout.Vector3Field("Transpose Rect Position", rectTransTransposePosition);
+
+            if (EditorGUI.EndChangeCheck() == true) {
+                for (int i = 0; i < Selection.gameObjects.Length; i++) {
+                    RectTransform rectTransform = Selection.gameObjects[i].GetComponent<RectTransform>();
+                    if (rectTransform != null) {
+                        Undo.RecordObject(rectTransform, "tranpose rect position");
+                        rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x + rectTransTransposePosition.x, rectTransform.anchoredPosition3D.y + rectTransTransposePosition.y, rectTransform.anchoredPosition3D.z + rectTransTransposePosition.z);
+                    }
+                }
+                rectTransTransposePosition = new Vector3(0, 0, 0);
+            }
+
             GUILayout.Space(10);
         }
 
-        GameObject CreateNewElement(Transform parentTransform, GameObject sourceObject, string elementName)
+        GameObject CreateNewElement(Transform[] selectedTransforms, GameObject sourceObject, string elementName = "")
         {
             GameObject newElement = PrefabUtility.InstantiatePrefab(sourceObject) as GameObject;
-            Undo.RegisterCreatedObjectUndo(newElement, "Create " + sourceObject.name);
-
-            if (parentTransform != null) {
-                newElement.transform.SetParent(parentTransform);
-            }
+            string undoMessage = "create " + sourceObject.name;
+            Undo.RegisterCreatedObjectUndo(newElement, undoMessage);
 
             if (elementName.Length > 0) {
                 newElement.name = elementName;
+            }
+
+            if (selectedTransforms.Length > 1) {
+
+                Array.Sort(selectedTransforms, new Utils.TransformSort());
+                Transform parentTransform = selectedTransforms[0].parent;
+                int sibIndex = selectedTransforms[0].GetSiblingIndex();
+
+                for (int i = 0; i < selectedTransforms.Length; i++) {
+                    Undo.SetTransformParent(selectedTransforms[i], newElement.transform, "set parent on game objects");
+                }
+
+                Undo.SetTransformParent(newElement.transform, parentTransform, "set parent on new element");
+                newElement.transform.SetSiblingIndex(sibIndex);
+
+            } else if (selectedTransforms.Length == 1) {
+                newElement.transform.SetParent(selectedTransforms[0]);
             }
 
             return newElement;
