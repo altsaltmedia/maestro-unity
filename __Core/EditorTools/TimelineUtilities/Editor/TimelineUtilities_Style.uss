@@ -28,6 +28,7 @@
 	justify-content: center;
 }
 
+
 .section > * {
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -102,6 +103,10 @@
 	flex-basis: 77.5px;
 }
 
+.manipulate .manipulate-col-full {
+	flex-grow: 1;
+	flex-basis: 275px;	
+}
 
 .manipulate .manipulate-col-1.placeholder {
 	flex-grow: 0;
@@ -111,4 +116,8 @@
 .manipulate .manipulate-col-2.placeholder {
 	flex-grow: 0;
 	flex-shrink: 1;
+}
+
+.persistent-float-field {
+	background-image: none;
 }

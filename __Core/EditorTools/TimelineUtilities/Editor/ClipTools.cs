@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine.Timeline;
-using UnityEngine.Playables;
 using UnityEditor.Timeline;
-using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
+using UnityEngine.UIElements;
 
 namespace AltSalt
 {
@@ -37,8 +35,7 @@ namespace AltSalt
             windowRoot = rootVisualElement;
             serializedObject = new SerializedObject(parentWindow);
 
-            Debug.Log(parentWindow.newSelectionCount);
-
+            
             AssetDatabase.Refresh();
 
             // Reference to the root of the window.
@@ -67,7 +64,9 @@ namespace AltSalt
             newSelectionCount = selectionCountField;
 
             Button incrementButton = root.Query<Button>("IncrementSelectionCount");
-            incrementButton.clickable.clicked += () => IncrementSelectionCount();
+            incrementButton.clickable.clicked += () => {
+                IncrementSelectionCount();
+            };
 
             Button decrementButton = root.Query<Button>("DecrementSelectionCount");
             decrementButton.clickable.clicked += () => DecrementSelectionCount();
@@ -75,7 +74,6 @@ namespace AltSalt
 
         static void IncrementSelectionCount()
         {
-            Debug.Log(parentWindow.newSelectionCount);
             //newSelectionCount.value += 1;
         }
 
@@ -86,7 +84,7 @@ namespace AltSalt
 
         public static void ShowClipTools(Rect position, VisualElement rootVisualElement, TimelineUtilitiesWindow parent)
         {
-            if(initialized == false) {
+            if (initialized == false) {
                 parentWindow = parent;
                 RenderClipTools(position, rootVisualElement);
                 initialized = true;
@@ -187,12 +185,12 @@ namespace AltSalt
                 GUILayout.Label(TimelineUtilitiesCore.CurrentTime.ToString("N"), labelCenterStyle, GUILayout.Width(position.width * .2f));
 
                 if (GUILayout.Button("Set", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = SetToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, new ClipTimeSort(), callTransposeUnselectedClips, GetTimelineClips().ToArray(), TransposeTargetClips);
+                    TimelineEditor.selectedClips = SetToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
 
                 if (GUILayout.Button("Set (<>)", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = TransposeToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, new ClipTimeSort(), callTransposeUnselectedClips, GetTimelineClips().ToArray(), TransposeTargetClips);
+                    TimelineEditor.selectedClips = TransposeToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
 
@@ -207,13 +205,13 @@ namespace AltSalt
                 GUILayout.Label("", GUILayout.Width(position.width * .2f));
 
                 if (GUILayout.Button("Expand", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = TransposeToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, new ClipTimeSort(), callTransposeUnselectedClips, GetTimelineClips().ToArray(), TransposeTargetClips);
+                    TimelineEditor.selectedClips = TransposeToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
 
 
                 if (GUILayout.Button("Expand (<>)", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = TransposeToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, new ClipTimeSort(), callTransposeUnselectedClips, GetTimelineClips().ToArray(), TransposeTargetClips);
+                    TimelineEditor.selectedClips = TransposeToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
 
@@ -232,11 +230,11 @@ namespace AltSalt
                 }
 
                 if (GUILayout.Button("X", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = MultiplyClips(TimelineEditor.selectedClips, durationMultiplier, new ClipTimeSort(), callTransposeUnselectedClips, GetTimelineClips().ToArray(), TransposeTargetClips);
+                    TimelineEditor.selectedClips = MultiplyDuration(TimelineEditor.selectedClips, durationMultiplier, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
                 if (GUILayout.Button("X (<>)", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = MultiplyAndTranspose(TimelineEditor.selectedClips, durationMultiplier, new ClipTimeSort(), callTransposeUnselectedClips, GetTimelineClips().ToArray(), TransposeTargetClips);
+                    TimelineEditor.selectedClips = MultiplyDurationAndTranspose(TimelineEditor.selectedClips, durationMultiplier, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
 
@@ -255,11 +253,11 @@ namespace AltSalt
                 }
 
                 if (GUILayout.Button("Set", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = SetDuration(TimelineEditor.selectedClips, targetDuration, new ClipTimeSort(), callTransposeUnselectedClips, GetTimelineClips().ToArray(), TransposeTargetClips);
+                    TimelineEditor.selectedClips = SetDuration(TimelineEditor.selectedClips, targetDuration, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
                 if (GUILayout.Button("Set (<>)", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = SetDurationAndTranspose(TimelineEditor.selectedClips, targetDuration, new ClipTimeSort(), callTransposeUnselectedClips, GetTimelineClips().ToArray(), TransposeTargetClips);
+                    TimelineEditor.selectedClips = SetDurationAndTranspose(TimelineEditor.selectedClips, targetDuration, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
 
@@ -274,11 +272,11 @@ namespace AltSalt
                 targetSpacing = EditorGUILayout.FloatField(targetSpacing, textFieldCenterStyle, GUILayout.Width(position.width * .2f));
 
                 if (GUILayout.Button("Set", miniButton, GUILayout.Width(position.width * .225f))) {
-                    SetSpacing(TimelineEditor.selectedClips, targetSpacing, new ClipTimeSort(), callTransposeUnselectedClips, GetTimelineClips().ToArray(), TransposeTargetClips);
+                    SetSpacing(TimelineEditor.selectedClips, targetSpacing, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
                 if (GUILayout.Button("+ / -", miniButton, GUILayout.Width(position.width * .225f))) {
-                    AddSubtractSpacing(TimelineEditor.selectedClips, GetTimelineClips().ToArray(), targetSpacing, new ClipTimeSort());
+                    AddSubtractSpacing(TimelineEditor.selectedClips, GetAllTimelineClips(), targetSpacing);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
 
@@ -289,12 +287,12 @@ namespace AltSalt
             EditorGUILayout.BeginHorizontal();
 
                 if (GUILayout.Button("Sequence", miniButton)) {
-                    SetSequentialOrder(TimelineEditor.selectedClips, GetTimelineClips().ToArray(), new ClipTimeSequentialSort(GetAllTracks()), callTransposeUnselectedClips, TransposeTargetClips);
+                    SetSequentialOrder(TimelineEditor.selectedClips, GetAllTimelineClips(), callTransposeUnselectedClips, TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
 
                 if (GUILayout.Button("Reverse", miniButton)) {
-                    SetSequentialOrderReverse(TimelineEditor.selectedClips, GetTimelineClips().ToArray(), new ClipTimeSequentialSort(GetAllTracks()), callTransposeUnselectedClips, TransposeTargetClips);
+                    SetSequentialOrderReverse(TimelineEditor.selectedClips, GetAllTimelineClips(), callTransposeUnselectedClips, TransposeTargetClips);
                     TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 }
 
@@ -309,6 +307,8 @@ namespace AltSalt
             GUILayout.Space(5);
 
             if (GUILayout.Button("Refresh Timeline Window", miniButton)) {
+                TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
+                TimelineUtilitiesCore.RefreshTimelineContentsModified();
                 TimelineUtilitiesCore.RefreshTimelineRedrawWindow();
             }
 
@@ -319,17 +319,17 @@ namespace AltSalt
             }
         }
 
-        static void DeselectAll()
+        public static void DeselectAll()
         {
             TimelineEditor.selectedClips = new TimelineClip[0];
             Selection.objects = new UnityEngine.Object[0];
             TimelineUtilitiesCore.RefreshTimelineContentsModified();
         }
 
-        static TimelineClip[] SelectEndingBefore(Object[] selection)
+        public static TimelineClip[] SelectEndingBefore(Object[] selection)
         {
             List<TimelineClip> clipSelection = new List<TimelineClip>();
-            foreach (TimelineClip clip in GetTimelineClips(selection)) {
+            foreach (TimelineClip clip in GetTimelineClipsFromSelection(selection)) {
                 if (clip.end < TimelineUtilitiesCore.CurrentTime) {
                     clipSelection.Add(clip);
                 }
@@ -338,10 +338,10 @@ namespace AltSalt
             return clipSelection.ToArray();
         }
 
-        static TimelineClip[] SelectStartingAfter(Object[] selection)
+        public static TimelineClip[] SelectStartingAfter(Object[] selection)
         {
             List<TimelineClip> clipSelection = new List<TimelineClip>();
-            foreach (TimelineClip clip in GetTimelineClips(selection)) {
+            foreach (TimelineClip clip in GetTimelineClipsFromSelection(selection)) {
                 if (clip.start > TimelineUtilitiesCore.CurrentTime) {
                     clipSelection.Add(clip);
                 }
@@ -350,10 +350,10 @@ namespace AltSalt
             return clipSelection.ToArray();
         }
 
-        static TimelineClip[] SelectEndingAfter(Object[] selection)
+        public static TimelineClip[] SelectEndingAfter(Object[] selection)
         {
             List<TimelineClip> clipSelection = new List<TimelineClip>();
-            foreach (TimelineClip clip in GetTimelineClips(selection)) {
+            foreach (TimelineClip clip in GetTimelineClipsFromSelection(selection)) {
                 if (clip.end > TimelineUtilitiesCore.CurrentTime) {
                     clipSelection.Add(clip);
                 }
@@ -362,10 +362,10 @@ namespace AltSalt
             return clipSelection.ToArray();
         }
 
-        static TimelineClip[] SelectStartingBefore(Object[] selection)
+        public static TimelineClip[] SelectStartingBefore(Object[] selection)
         {
             List<TimelineClip> clipSelection = new List<TimelineClip>();
-            foreach (TimelineClip clip in GetTimelineClips(selection)) {
+            foreach (TimelineClip clip in GetTimelineClipsFromSelection(selection)) {
                 if (clip.start < TimelineUtilitiesCore.CurrentTime) {
                     clipSelection.Add(clip);
                 }
@@ -374,55 +374,13 @@ namespace AltSalt
             return clipSelection.ToArray();
         }
 
-        static TimelineClip[] AddNextClipToSelection(TimelineClip[] selectedClips, float timeReference, int clipCount = 0)
-        {
-            List<TimelineClip> newSelection = new List<TimelineClip>();
-            newSelection.AddRange(selectedClips);
-
-            for(int i=0; i<clipCount; i++) {
-                TimelineClip nextClip = GetNextClip(newSelection, GetTimelineClips(), timeReference);
-                newSelection.Add(nextClip);
-            }
-
-            return newSelection.ToArray();
-        }
-
-        static TimelineClip GetNextClip(IEnumerable<TimelineClip> selectedClips, IEnumerable<TimelineClip> sourceClips, float timeReference)
-        {
-            TimelineClip nextClip = null;
-
-            List<TimelineClip> currentSelectionList = new List<TimelineClip>();
-            currentSelectionList.AddRange(selectedClips);
-
-            List<TimelineClip> sourceClipsList = new List<TimelineClip>();
-            sourceClipsList.AddRange(sourceClips);
-
-            for (int i = 0; i < sourceClipsList.Count; i++) {
-
-                TimelineClip clipToCompare = sourceClipsList[i];
-
-                if(currentSelectionList.Contains(clipToCompare) || clipToCompare.start < timeReference) {
-                    continue;
-                }
-
-                if (nextClip == null) {
-                    nextClip = clipToCompare;
-                } else if (Mathf.Abs((float)clipToCompare.start - TimelineUtilitiesCore.CurrentTime) < Mathf.Abs((float)nextClip.start - TimelineUtilitiesCore.CurrentTime)) {
-                    nextClip = clipToCompare;
-                }
-
-            }
-
-            return nextClip;
-        }
-
-        static TimelineClip[] AddPrevClipToSelection(TimelineClip[] selectedClips, float timeReference, int clipCount = 0)
+        public static TimelineClip[] AddPrevClipToSelection(TimelineClip[] selectedClips, float timeReference, int clipCount = 0)
         {
             List<TimelineClip> newSelection = new List<TimelineClip>();
             newSelection.AddRange(selectedClips);
 
             for (int i = 0; i < clipCount; i++) {
-                TimelineClip previousClip = GetPreviousClip(newSelection, GetTimelineClips(), timeReference);
+                TimelineClip previousClip = GetPreviousClip(newSelection, GetAllTimelineClips(), timeReference);
                 newSelection.Add(previousClip);
             }
 
@@ -458,64 +416,61 @@ namespace AltSalt
             return previousClip;
         }
 
-        static List<TimelineClip> GetTimelineClips(Object[] selection)
+        public static TimelineClip[] AddNextClipToSelection(TimelineClip[] selectedClips, float timeReference, int clipCount = 0)
         {
-            List<TimelineClip> selectedTrackClips = new List<TimelineClip>();
-            bool trackAssetSelected = false;
+            List<TimelineClip> newSelection = new List<TimelineClip>();
+            newSelection.AddRange(selectedClips);
 
-            if(selection != null && selection.Length > 0) {
-                for (int i=0; i<selection.Length; i++) {
-                    if(selection[i] is TrackAsset) {
-                        trackAssetSelected = true;
-                        TrackAsset trackAsset = selection[i] as TrackAsset;
-                        if(trackAsset.GetChildTracks() != null) {
-                            selectedTrackClips.AddRange(trackAsset.GetClips());
-                        }
-                    }
-                }
+            for (int i = 0; i < clipCount; i++) {
+                TimelineClip nextClip = GetNextClip(newSelection, GetAllTimelineClips(), timeReference);
+                newSelection.Add(nextClip);
             }
 
-            if(trackAssetSelected == true) {
-                return selectedTrackClips;
-            } else {
-                return GetTimelineClips();
-            }
+            return newSelection.ToArray();
         }
 
-        static List<TimelineClip> GetTimelineClips()
+        static TimelineClip GetNextClip(IEnumerable<TimelineClip> selectedClips, IEnumerable<TimelineClip> sourceClips, float timeReference)
         {
-            IEnumerable<PlayableBinding> playableBindings = TimelineEditor.inspectedAsset.outputs;
+            TimelineClip nextClip = null;
 
-            List<TimelineClip> allClips = new List<TimelineClip>();
+            List<TimelineClip> currentSelectionList = new List<TimelineClip>();
+            currentSelectionList.AddRange(selectedClips);
 
-            foreach (PlayableBinding playableBinding in playableBindings) {
-                TrackAsset trackAsset = playableBinding.sourceObject as TrackAsset;
+            List<TimelineClip> sourceClipsList = new List<TimelineClip>();
+            sourceClipsList.AddRange(sourceClips);
 
-                // Skip playable bindings that don't contain track assets (e.g. markers)
-                if (trackAsset == null || trackAsset.hasClips == false) {
+            for (int i = 0; i < sourceClipsList.Count; i++) {
+
+                TimelineClip clipToCompare = sourceClipsList[i];
+
+                if (currentSelectionList.Contains(clipToCompare) || clipToCompare.end < timeReference) {
                     continue;
                 }
 
-                allClips.AddRange(trackAsset.GetClips());
+                if (nextClip == null) {
+                    nextClip = clipToCompare;
+                } else if (Mathf.Abs((float)clipToCompare.start - TimelineUtilitiesCore.CurrentTime) < Mathf.Abs((float)nextClip.start - TimelineUtilitiesCore.CurrentTime)) {
+                    nextClip = clipToCompare;
+                }
+
             }
-            return allClips;
+
+            return nextClip;
         }
 
-        static TimelineClip[] SetToPlayhead(TimelineClip[] selectedClips, float timeReference, Comparer<TimelineClip> comparer, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
+        public static TimelineClip[] SetToPlayhead(TimelineClip[] selectedClips, float timeReference, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
         {
-            List<TimelineClip> selectedClipsList = new List<TimelineClip>();
-            selectedClipsList.AddRange(selectedClips);
-            selectedClipsList.Sort(comparer);
+            selectedClips = SortClips(selectedClips);
 
             double startTime = timeReference;
             double difference = 0;
 
-            if (selectedClipsList.Count > 0) {
-                startTime = selectedClipsList[0].start;
-                difference = timeReference - selectedClipsList[0].start;
+            if (selectedClips.Length > 0) {
+                startTime = selectedClips[0].start;
+                difference = timeReference - selectedClips[0].start;
             }
 
-            for (int i=0; i<selectedClipsList.Count; i++) {
+            for (int i=0; i<selectedClips.Length; i++) {
                 Undo.RecordObject(selectedClips[i].parentTrack, "set clip(s) start time");
                 selectedClips[i].start = timeReference;
             }
@@ -527,26 +482,24 @@ namespace AltSalt
             return selectedClips;
         }
 
-        static TimelineClip[] TransposeToPlayhead(TimelineClip[] selectedClips, float timeReference, Comparer<TimelineClip> comparer, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
+        public static TimelineClip[] TransposeToPlayhead(TimelineClip[] selectedClips, float timeReference, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
         {
-            List<TimelineClip> selectedClipsList = new List<TimelineClip>();
-            selectedClipsList.AddRange(selectedClips);
-            selectedClipsList.Sort(comparer);
+            selectedClips = SortClips(selectedClips);
 
             double startTime = timeReference;
             double difference = 0;
 
-            if (selectedClipsList.Count > 0) {
-                startTime = selectedClipsList[0].start;
-                difference = timeReference - selectedClipsList[0].start;
+            if (selectedClips.Length > 0) {
+                startTime = selectedClips[0].start;
+                difference = timeReference - selectedClips[0].start;
             }
 
-            for (int i = 0; i < selectedClipsList.Count; i++) {
-                Undo.RecordObject(selectedClipsList[i].parentTrack, "transpose clip(s) to start time");
-                selectedClipsList[i].start += difference;
+            for (int i = 0; i < selectedClips.Length; i++) {
+                Undo.RecordObject(selectedClips[i].parentTrack, "transpose clip(s) to start time");
+                selectedClips[i].start += difference;
 
-                if(i == selectedClipsList.Count - 1) {
-                    selectedClipsList[0].start = timeReference;
+                if(i == selectedClips.Length - 1) {
+                    selectedClips[0].start = timeReference;
                 }
             }
 
@@ -554,25 +507,23 @@ namespace AltSalt
                 transposeClipsCallback(selectedClips, sourceClips, difference, startTime);
             }
 
-            return selectedClipsList.ToArray();
+            return selectedClips;
         }
 
-        static TimelineClip[] MultiplyClips(TimelineClip[] selectedClips, float multiplier, Comparer<TimelineClip> comparer, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
+        public static TimelineClip[] MultiplyDuration(TimelineClip[] selectedClips, float multiplier, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
         {
             if (multiplier.Equals(0)) {
                 Debug.LogWarning("Multiplying clips by 0! This is not allowed");
                 return selectedClips;
             }
 
+            selectedClips = SortClips(selectedClips);
+
             double previousDifference = 0;
 
-            List<TimelineClip> selectedClipsList = new List<TimelineClip>();
-            selectedClipsList.AddRange(selectedClips);
-            selectedClipsList.Sort(comparer);
+            for (int i = 0; i < selectedClips.Length; i++) {
 
-            for (int i = 0; i < selectedClipsList.Count; i++) {
-
-                TimelineClip selectedClip = selectedClipsList[i];
+                TimelineClip selectedClip = selectedClips[i];
                 double originalDuration = selectedClip.duration;
 
                 Undo.RecordObject(selectedClip.parentTrack, "multiply clip(s)");
@@ -595,19 +546,17 @@ namespace AltSalt
             return selectedClips;
         }
 
-        static TimelineClip[] MultiplyAndTranspose(TimelineClip[] selectedClips, float multiplier, Comparer<TimelineClip> comparer, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
+        public static TimelineClip[] MultiplyDurationAndTranspose(TimelineClip[] selectedClips, float multiplier, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
         {
             if (multiplier.Equals(0)) {
                 Debug.LogWarning("Multiplying clips by 0! This is not allowed");
                 return selectedClips;
             }
 
-            List<TimelineClip> selectedClipsList = new List<TimelineClip>();
-            selectedClipsList.AddRange(selectedClips);
-            selectedClipsList.Sort(comparer);
+            selectedClips = SortClips(selectedClips);
 
-            for(int i=0; i<selectedClipsList.Count; i++) {
-                TimelineClip selectedClip = selectedClipsList[i];
+            for (int i=0; i<selectedClips.Length; i++) {
+                TimelineClip selectedClip = selectedClips[i];
 
                 double originalDuration = selectedClip.duration;
 
@@ -618,9 +567,9 @@ namespace AltSalt
 
                 if(executeTranposeCallback == false) {
 
-                    for (int q = 0; q < selectedClipsList.Count; q++) {
+                    for (int q = 0; q < selectedClips.Length; q++) {
 
-                        TimelineClip clip = selectedClipsList[q];
+                        TimelineClip clip = selectedClips[q];
 
                         if (clip == selectedClip) {
                             continue;
@@ -641,22 +590,20 @@ namespace AltSalt
             return selectedClips;
         }
 
-        static TimelineClip[] SetDuration(TimelineClip[] selectedClips, float duration, Comparer<TimelineClip> comparer, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
+        public static TimelineClip[] SetDuration(TimelineClip[] selectedClips, float duration, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
         {
             if (duration.Equals(0)) {
                 Debug.LogWarning("Setting duration to 0! This is not allowed");
                 return selectedClips;
             }
 
+            selectedClips = SortClips(selectedClips);
+
             double previousDifference = 0;
 
-            List<TimelineClip> selectedClipsList = new List<TimelineClip>();
-            selectedClipsList.AddRange(selectedClips);
-            selectedClipsList.Sort(comparer);
+            for (int i = 0; i < selectedClips.Length; i++) {
 
-            for (int i = 0; i < selectedClipsList.Count; i++) {
-
-                TimelineClip selectedClip = selectedClipsList[i];
+                TimelineClip selectedClip = selectedClips[i];
                 double originalDuration = selectedClip.duration;
 
                 Undo.RecordObject(selectedClip.parentTrack, "set clip(s) duration");
@@ -679,20 +626,18 @@ namespace AltSalt
             return selectedClips;
         }
 
-        static TimelineClip[] SetDurationAndTranspose(TimelineClip[] selectedClips, float duration, Comparer<TimelineClip> comparer, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
+        public static TimelineClip[] SetDurationAndTranspose(TimelineClip[] selectedClips, float duration, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
         {
             if (duration.Equals(0)) {
                 Debug.LogWarning("Setting duration to 0! This is not allowed");
                 return selectedClips;
             }
 
-            List<TimelineClip> selectedClipsList = new List<TimelineClip>();
-            selectedClipsList.AddRange(selectedClips);
-            selectedClipsList.Sort(comparer);
+            selectedClips = SortClips(selectedClips);
 
-            for (int i = 0; i < selectedClipsList.Count; i++) {
+            for (int i = 0; i < selectedClips.Length; i++) {
 
-                TimelineClip selectedClip = selectedClipsList[i];
+                TimelineClip selectedClip = selectedClips[i];
 
                 double originalDuration = selectedClip.duration;
 
@@ -703,9 +648,9 @@ namespace AltSalt
 
                 if (executeTranposeCallback == false) {
 
-                    for (int q = 0; q < selectedClipsList.Count; q++) {
+                    for (int q = 0; q < selectedClips.Length; q++) {
 
-                        TimelineClip clip = selectedClipsList[q];
+                        TimelineClip clip = selectedClips[q];
 
                         if (clip == selectedClip) {
                             continue;
@@ -726,127 +671,17 @@ namespace AltSalt
             return selectedClips;
         }
 
-        static TimelineClip[] SetSequentialOrder(TimelineClip[] selectedClips, TimelineClip[] sourceClips, Comparer<TimelineClip> comparer, bool executeTranposeCallback = false, TransposeClipsCallback transposeClipsCallback = null)
+        public static TimelineClip[] SetSpacing(TimelineClip[] selectedClips, float spacing, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
         {
-            List<TimelineClip> selectedClipsList = new List<TimelineClip>();
-            selectedClipsList.AddRange(selectedClips);
-            selectedClipsList.Sort(comparer);
+            for (int i = 0; i < selectedClips.Length; i++) {
 
-            List<TimelineClip> sourceClipsList = new List<TimelineClip>();
-            sourceClipsList.AddRange(sourceClips);
-            sourceClipsList.Sort(comparer);
-
-            double difference = 0;
-
-            for (int i=0; i<selectedClipsList.Count; i++) {
-
-                TimelineClip selectedClip = selectedClipsList[i];
-
-                double newStartTime = selectedClip.end;
-
-                for(int q=0; q<selectedClipsList.Count; q++) {
-
-                    TimelineClip clip = selectedClipsList[q];
-
-                    if (clip == selectedClip) {
-                        continue;
-                    }
-
-                    if(i == 0 || clip.start > selectedClip.start || Equals(clip.start, selectedClip.start)) {
-                        Undo.RecordObject(clip.parentTrack, "set clips sequentially");
-                        difference += newStartTime - clip.start;
-                        clip.start = newStartTime;                    
-                    }
-                }
-            }
-
-            if(executeTranposeCallback == true) {
-                transposeClipsCallback(selectedClipsList.ToArray(), sourceClipsList.ToArray(), difference, selectedClipsList[0].end);
-            }
-
-            return selectedClips;
-        }
-
-        static TimelineClip[] SetSequentialOrderReverse(TimelineClip[] selectedClips, TimelineClip[] sourceClips, Comparer<TimelineClip> comparer, bool executeTranposeCallback = false, TransposeClipsCallback transposeClipsCallback = null)
-        {
-            List<TimelineClip> selectedClipsList = new List<TimelineClip>();
-            selectedClipsList.AddRange(selectedClips);
-            selectedClipsList.Sort(comparer);
-
-            List<TimelineClip> sourceClipsList = new List<TimelineClip>();
-            sourceClipsList.AddRange(sourceClips);
-            sourceClipsList.Sort(comparer);
-
-            double difference = 0;
-
-            for (int i = selectedClipsList.Count - 1; i >= 0; i--) {
-
-                TimelineClip selectedClip = selectedClipsList[i];
-
-                double newStartTime = selectedClip.end;
-
-                for (int q = 0; q < selectedClipsList.Count; q++) {
-
-                    TimelineClip clip = selectedClipsList[q];
-
-                    if (clip == selectedClip) {
-                        continue;
-                    }
-
-                    if (i == selectedClipsList.Count - 1 || clip.start > selectedClip.start || Equals(clip.start, selectedClip.start)) {
-                        Undo.RecordObject(clip.parentTrack, "set clips sequentially (reverse)");
-                        difference += newStartTime - clip.start;
-                        clip.start = newStartTime;
-                    }
-                }
-            }
-
-            if (executeTranposeCallback == true) {
-                transposeClipsCallback(selectedClipsList.ToArray(), sourceClipsList.ToArray(), difference, selectedClipsList[selectedClipsList.Count - 1].end);
-            }
-
-            return selectedClips;
-        }
-
-
-        static List<TrackAsset> GetAllTracks()
-        {
-            List<TrackAsset> trackAssets = new List<TrackAsset>();
-            foreach (TrackAsset rootTrack in TimelineEditor.inspectedAsset.GetRootTracks()) {
-                trackAssets.AddRange(GetChildTracks(rootTrack));
-            }
-            return trackAssets;
-        }
-
-        static List<TrackAsset> GetChildTracks(TrackAsset trackAsset)
-        {
-            List<TrackAsset> trackAssets = new List<TrackAsset>();
-            trackAssets.Add(trackAsset);
-            foreach(TrackAsset childTrack in trackAsset.GetChildTracks()) {
-                trackAssets.AddRange(GetChildTracks(childTrack));
-            }
-            return trackAssets;
-        }
-
-        static TimelineClip[] SetSpacing(TimelineClip[] selectedClips, float spacing, Comparer<TimelineClip> comparer, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
-        {
-            List<TimelineClip> selectedClipsList = new List<TimelineClip>();
-            selectedClipsList.AddRange(selectedClips);
-            selectedClipsList.Sort(comparer);
-
-            List<TimelineClip> sourceClipsList = new List<TimelineClip>();
-            sourceClipsList.AddRange(sourceClips);
-            sourceClipsList.Sort(comparer);
-
-            for (int i = 0; i < selectedClipsList.Count; i++) {
-
-                TimelineClip selectedClip = selectedClipsList[i];
+                TimelineClip selectedClip = selectedClips[i];
 
                 double endTimePlusSpacing = selectedClip.end + spacing;
 
-                for (int q = 0; q < selectedClipsList.Count; q++) {
+                for (int q = 0; q < selectedClips.Length; q++) {
 
-                    TimelineClip clip = selectedClipsList[q];
+                    TimelineClip clip = selectedClips[q];
 
                     if (clip == selectedClip) {
                         continue;
@@ -860,7 +695,7 @@ namespace AltSalt
 
                         if (executeTranposeCallback == true) {
                             double difference = clip.start - initialStartTime;
-                            transposeClipsCallback(selectedClipsList.ToArray(), sourceClipsList.ToArray(), difference, initialStartTime);
+                            transposeClipsCallback(selectedClips, sourceClips, difference, initialStartTime);
                         }
                     }
                 }
@@ -869,23 +704,16 @@ namespace AltSalt
             return selectedClips;
         }
 
-        static TimelineClip[] AddSubtractSpacing(TimelineClip[] selectedClips, TimelineClip[] sourceClips, float spacing, Comparer<TimelineClip> comparer)
+        public static TimelineClip[] AddSubtractSpacing(TimelineClip[] selectedClips, TimelineClip[] sourceClips, float spacing)
         {
-            List<TimelineClip> selectedClipsList = new List<TimelineClip>();
-            selectedClipsList.AddRange(selectedClips);
-            selectedClipsList.Sort(comparer);
 
-            List<TimelineClip> sourceClipsList = new List<TimelineClip>();
-            sourceClipsList.AddRange(sourceClips);
-            sourceClipsList.Sort(comparer);
+            for (int i = 0; i < selectedClips.Length; i++) {
 
-            for (int i = 0; i < selectedClipsList.Count; i++) {
+                TimelineClip selectedClip = selectedClips[i];
 
-                TimelineClip selectedClip = selectedClipsList[i];
+                for (int q = 0; q < sourceClips.Length; q++) {
 
-                for (int q = 0; q < sourceClipsList.Count; q++) {
-
-                    TimelineClip clip = sourceClipsList[q];
+                    TimelineClip clip = sourceClips[q];
 
                     if (clip == selectedClip) {
                         continue;
@@ -901,7 +729,77 @@ namespace AltSalt
             return selectedClips;
         }
 
-        static TimelineClip[] TransposeTargetClips(TimelineClip[] omittedClips, TimelineClip[] targetClips, double offset, double timeReference)
+        public static TimelineClip[] SetSequentialOrder(TimelineClip[] selectedClips, TimelineClip[] sourceClips, bool executeTranposeCallback = false, TransposeClipsCallback transposeClipsCallback = null)
+        {
+            selectedClips = SortClips(selectedClips, new ClipTimeSequentialSort(GetAllTracks()));
+
+            double difference = 0;
+
+            for (int i=0; i<selectedClips.Length; i++) {
+
+                TimelineClip selectedClip = selectedClips[i];
+
+                double newStartTime = selectedClip.end;
+
+                for(int q=0; q<selectedClips.Length; q++) {
+
+                    TimelineClip clip = selectedClips[q];
+
+                    if (clip == selectedClip) {
+                        continue;
+                    }
+
+                    if(i == 0 || clip.start > selectedClip.start || Equals(clip.start, selectedClip.start)) {
+                        Undo.RecordObject(clip.parentTrack, "set clips sequentially");
+                        difference += newStartTime - clip.start;
+                        clip.start = newStartTime;                    
+                    }
+                }
+            }
+
+            if(executeTranposeCallback == true) {
+                transposeClipsCallback(selectedClips, sourceClips, difference, selectedClips[0].end);
+            }
+
+            return selectedClips;
+        }
+
+        public static TimelineClip[] SetSequentialOrderReverse(TimelineClip[] selectedClips, TimelineClip[] sourceClips, bool executeTranposeCallback = false, TransposeClipsCallback transposeClipsCallback = null)
+        {
+            selectedClips = SortClips(selectedClips, new ClipTimeSequentialSort(GetAllTracks()));
+
+            double difference = 0;
+
+            for (int i = selectedClips.Length - 1; i >= 0; i--) {
+
+                TimelineClip selectedClip = selectedClips[i];
+
+                double newStartTime = selectedClip.end;
+
+                for (int q = 0; q < selectedClips.Length; q++) {
+
+                    TimelineClip clip = selectedClips[q];
+
+                    if (clip == selectedClip) {
+                        continue;
+                    }
+
+                    if (i == selectedClips.Length - 1 || clip.start > selectedClip.start || Equals(clip.start, selectedClip.start)) {
+                        Undo.RecordObject(clip.parentTrack, "set clips sequentially (reverse)");
+                        difference += newStartTime - clip.start;
+                        clip.start = newStartTime;
+                    }
+                }
+            }
+
+            if (executeTranposeCallback == true) {
+                transposeClipsCallback(selectedClips, sourceClips, difference, selectedClips[selectedClips.Length - 1].end);
+            }
+
+            return selectedClips;
+        }
+
+        public static TimelineClip[] TransposeTargetClips(TimelineClip[] omittedClips, TimelineClip[] targetClips, double offset, double timeReference)
         {
             List<TimelineClip> selectedClipsList = new List<TimelineClip>();
             selectedClipsList.AddRange(omittedClips);
@@ -924,6 +822,103 @@ namespace AltSalt
             }
 
             return sourceClipsList.ToArray();
+        }
+
+        static List<TrackAsset> GetAllTracks()
+        {
+            List<TrackAsset> trackAssets = new List<TrackAsset>();
+            foreach (TrackAsset rootTrack in TimelineEditor.inspectedAsset.GetRootTracks()) {
+                trackAssets.AddRange(GetChildTracks(rootTrack));
+            }
+            return trackAssets;
+        }
+
+        static List<TrackAsset> GetChildTracks(TrackAsset trackAsset)
+        {
+            List<TrackAsset> trackAssets = new List<TrackAsset>();
+            trackAssets.Add(trackAsset);
+            foreach(TrackAsset childTrack in trackAsset.GetChildTracks()) {
+                trackAssets.AddRange(GetChildTracks(childTrack));
+            }
+            return trackAssets;
+        }
+
+        public static TimelineClip[] GetAllTimelineClips()
+        {
+            return GetAllTimelineClips(new ClipTimeSort());
+        }
+
+        public static TimelineClip[] GetAllTimelineClips(Comparer<TimelineClip> comparer)
+        {
+            IEnumerable<PlayableBinding> playableBindings = TimelineEditor.inspectedAsset.outputs;
+
+            List<TimelineClip> allClips = new List<TimelineClip>();
+
+            foreach (PlayableBinding playableBinding in playableBindings) {
+                TrackAsset trackAsset = playableBinding.sourceObject as TrackAsset;
+
+                // Skip playable bindings that don't contain track assets (e.g. markers)
+                if (trackAsset == null || trackAsset.hasClips == false) {
+                    continue;
+                }
+
+                allClips.AddRange(trackAsset.GetClips());
+            }
+
+            if (comparer != null) {
+                allClips.Sort(comparer);
+            }
+
+            return allClips.ToArray();
+        }
+
+
+        static TimelineClip[] GetTimelineClipsFromSelection(UnityEngine.Object[] selection)
+        {
+            List<TimelineClip> selectedTrackClips = new List<TimelineClip>();
+            bool trackAssetSelected = false;
+
+            if (selection != null && selection.Length > 0) {
+                for (int i = 0; i < selection.Length; i++) {
+                    if (selection[i] is TrackAsset) {
+                        trackAssetSelected = true;
+                        TrackAsset trackAsset = selection[i] as TrackAsset;
+                        if (trackAsset.GetChildTracks() != null) {
+                            selectedTrackClips.AddRange(trackAsset.GetClips());
+                        }
+                    }
+                }
+            }
+
+            if (trackAssetSelected == true) {
+                return selectedTrackClips.ToArray();
+            } else {
+                return GetAllTimelineClips();
+            }
+        }
+
+        public static TimelineClip[] GetCurrentClipSelection()
+        {
+            return GetCurrentClipSelection(new ClipTimeSort());
+        }
+
+        public static TimelineClip[] GetCurrentClipSelection(Comparer<TimelineClip> comparer)
+        {
+            TimelineClip[] currentSelection = TimelineEditor.selectedClips;
+            System.Array.Sort(currentSelection, comparer);
+            return currentSelection;
+        }
+
+        public static TimelineClip[] SortClips(TimelineClip[] clips)
+        {
+            System.Array.Sort(clips, new ClipTimeSort());
+            return clips;
+        }
+
+        public static TimelineClip[] SortClips(TimelineClip[] clips, Comparer<TimelineClip> comparer)
+        {
+            System.Array.Sort(clips, comparer);
+            return clips;
         }
 
         public class ClipTimeSort : Comparer<TimelineClip>

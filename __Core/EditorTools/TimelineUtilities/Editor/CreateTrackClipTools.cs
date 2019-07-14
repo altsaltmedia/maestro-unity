@@ -192,6 +192,7 @@ namespace AltSalt
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
 
             if (targetGameObjects.Length > 0) {
+                Array.Sort(targetGameObjects, new Utils.GameObjectSort());
                 for (int i = 0; i < targetGameObjects.Length; i++) {
                     TrackAsset newTrack = CreateNewTrack(parentTrack, trackType);
                     trackAssets[i] = newTrack;

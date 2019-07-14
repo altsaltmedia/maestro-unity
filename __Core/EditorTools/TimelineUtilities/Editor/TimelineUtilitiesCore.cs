@@ -34,6 +34,13 @@ namespace AltSalt
             return currentTime;
         }
 
+        public static void RefreshTimelineWindow()
+        {
+            RefreshTimelineContentsAddedOrRemoved();
+            RefreshTimelineContentsModified();
+            RefreshTimelineRedrawWindow();
+        }
+
         public static void RefreshTimelineContentsAddedOrRemoved()
         {
             TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
