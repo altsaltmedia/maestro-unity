@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using TMPro;
 
 namespace AltSalt
 {
@@ -23,6 +24,12 @@ namespace AltSalt
         string[] toolbarStrings = { "Clip Tools", "Create Tools" };
 
         FloatField playheadTime;
+        VisualElement timelineUtilitiesStructure;
+        VisualElement clipSelectionManipulation;
+        VisualElement trackClipCreation;
+        bool debugTrackCreated = false;
+
+        Dictionary<DisplayCondition, List<Button>> buttonData = new Dictionary<DisplayCondition, List<Button>>();
 
         public float currentTime;
         public int selectionCount = 1;
@@ -31,14 +38,27 @@ namespace AltSalt
         public float targetDuration = 1;
         public float targetSpacing = 0;
 
-        bool showTimelineClipTools = false;
-        bool showTrackClipTools = false;
+        public bool allowBlankTracks = false;
+        public float newClipDuration = .5f;
+        public FloatVariable targetFloat;
 
         Undo.UndoRedoCallback undoCallback = new Undo.UndoRedoCallback(TimelineUtilitiesCore.RefreshTimelineWindow);
 
-        SerializedObject serializedObject;
+        SerializedObject editorWindowSerialized;
+        SerializedObject floatVarSerialized;
 
-        public enum ButtonNames {
+        enum DisplayCondition
+        {
+            TextSelected,
+            RectTransformSelected,
+            SpriteSelected,
+            TrackSelected,
+            FloatVarPopulated,
+            ColorVarPopulated
+        }
+
+        enum ButtonNames
+        {
             SelectEndingBefore,
             SelectStartingBefore,
             SelectEndingAfter,
@@ -50,7 +70,7 @@ namespace AltSalt
             SetToPlayhead,
             TransposeToPlayhead,
             ExpandToPlayhead,
-            ExpandAndTranposeToPlayhead,
+            ExpandAndTransposeToPlayhead,
             MultiplyDuration,
             MultiplyDurationAndTranspose,
             SetDuration,
@@ -61,8 +81,14 @@ namespace AltSalt
             SetSequentialOrderReverse,
             DeselectAll,
             RefreshTimelineWindow,
-            RefreshLayout
-        }; 
+            RefreshLayout,
+            TMProColorTrack,
+            RectTransformPosTrack,
+            SpriteColorTrack,
+            FloatVarTrack,
+            GroupTrack,
+            NewClips
+        };
 
         [MenuItem("Tools/AltSalt/Timeline Utilities")]
         public static void ShowWindow()
@@ -79,23 +105,123 @@ namespace AltSalt
         {
             RenderLayout();
             Undo.undoRedoPerformed += undoCallback;
+            Selection.selectionChanged += UpdateElementStructure;
+        }
+
+        void OnDestroy()
+        {
+            Selection.selectionChanged -= UpdateElementStructure;
+        }
+
+        void UpdateElementStructure()
+        {
+            if(allowBlankTracks == true) {
+
+                ToggleButtons(buttonData, DisplayCondition.TextSelected, true);
+                ToggleButtons(buttonData, DisplayCondition.RectTransformSelected, true);
+                ToggleButtons(buttonData, DisplayCondition.SpriteSelected, true);
+                ToggleButtons(buttonData, DisplayCondition.FloatVarPopulated, true);
+                ToggleButtons(buttonData, DisplayCondition.TrackSelected, true);
+
+            } else {
+
+                if(TargetComponentSelected(Selection.gameObjects, typeof(TMP_Text))) {
+                    ToggleButtons(buttonData, DisplayCondition.TextSelected, true);
+                } else {
+                    ToggleButtons(buttonData, DisplayCondition.TextSelected, false);
+                }
+
+                if (TargetComponentSelected(Selection.gameObjects, typeof(RectTransform))) {
+                    ToggleButtons(buttonData, DisplayCondition.RectTransformSelected, true);
+                } else {
+                    ToggleButtons(buttonData, DisplayCondition.RectTransformSelected, false);
+                }
+
+                if (TargetComponentSelected(Selection.gameObjects, typeof(SpriteRenderer))) {
+                    ToggleButtons(buttonData, DisplayCondition.SpriteSelected, true);
+                } else {
+                    ToggleButtons(buttonData, DisplayCondition.SpriteSelected, false);
+                }
+
+                if(targetFloat != null) {
+                    ToggleButtons(buttonData, DisplayCondition.FloatVarPopulated, true);
+                } else {
+                    ToggleButtons(buttonData, DisplayCondition.FloatVarPopulated, false);
+                }
+
+                if (TargetTypeSelected(Selection.objects, typeof(TrackAsset))) {
+                    ToggleButtons(buttonData, DisplayCondition.TrackSelected, true);
+                } else {
+                    ToggleButtons(buttonData, DisplayCondition.TrackSelected, false);
+                }
+
+            }
+        }
+
+        Dictionary<DisplayCondition, List<Button>> AddToButtonData(Dictionary<DisplayCondition, List<Button>> targetCollection, DisplayCondition targetCondition, Button buttonToAdd)
+        {
+            if(targetCollection.ContainsKey(targetCondition)) {
+                targetCollection[targetCondition].Add(buttonToAdd);
+            } else {
+                List<Button> buttonList = new List<Button>();
+                buttonList.Add(buttonToAdd);
+                targetCollection.Add(targetCondition, buttonList);
+            }
+
+            return targetCollection;
+        }
+
+        Dictionary<DisplayCondition, List<Button>> ToggleButtons(Dictionary<DisplayCondition, List<Button>> targetCollection, DisplayCondition targetCondition, bool targetStatus = false)
+        {
+            if(targetCollection.ContainsKey(targetCondition)) {
+                List<Button> buttonList = targetCollection[targetCondition];
+                for (int i=0; i<buttonList.Count; i++) {
+                    buttonList[i].SetEnabled(targetStatus);        
+                }
+            }
+            return targetCollection;
+        }
+
+        bool TargetComponentSelected(GameObject[] currentSelection, Type targetType)
+        {
+            for (int i = 0; i < currentSelection.Length; i++) {
+                if (currentSelection[i].GetComponent(targetType) != null) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool TargetTypeSelected(UnityEngine.Object[] currentSelection, Type targetType)
+        {
+            for (int i = 0; i < currentSelection.Length; i++) {
+                Type currentType = currentSelection[i].GetType();
+                if (currentType.IsSubclassOf(targetType) || currentType == targetType) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         void RenderLayout()
         {
             rootVisualElement.Clear();
+            buttonData.Clear();
             AssetDatabase.Refresh();
 
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_AltSalt/__Core/EditorTools/TimelineUtilities/Editor/TimelineUtilities_Style.uss");
             rootVisualElement.styleSheets.Add(styleSheet);
 
             // Loads and clones our VisualTree (eg. our UXML structure) inside the root.
-            var clipToolsTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_AltSalt/__Core/EditorTools/TimelineUtilities/Editor/TimelineUtilities_ClipTools.uxml");
-            VisualElement clipToolsFromXML = clipToolsTree.CloneTree();
-            rootVisualElement.Add(clipToolsFromXML);
+            var timelineUtilitiesTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_AltSalt/__Core/EditorTools/TimelineUtilities/Editor/TimelineUtilitiesWindow.uxml");
+            timelineUtilitiesStructure = timelineUtilitiesTree.CloneTree();
+            rootVisualElement.Add(timelineUtilitiesStructure);
 
-            serializedObject = new SerializedObject(this);
-            rootVisualElement.Bind(serializedObject);
+            clipSelectionManipulation = rootVisualElement.Query("clip-selection-manipulation");
+            trackClipCreation = rootVisualElement.Query("track-clip-creation");
+
+            editorWindowSerialized = new SerializedObject(this);
+            rootVisualElement.Bind(editorWindowSerialized);
 
             var buttons = rootVisualElement.Query<Button>();
             buttons.ForEach(SetupButton);
@@ -103,39 +229,39 @@ namespace AltSalt
 
         Button SetupButton(Button button)
         {
-            switch(button.name) {
+            switch (button.name) {
 
-                case nameof(ButtonNames.SelectEndingBefore) :
+                case nameof(ButtonNames.SelectEndingBefore):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.SelectEndingBefore(Selection.objects);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.SelectEndingBefore(Selection.objects);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SelectStartingBefore):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.SelectStartingBefore(Selection.objects);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.SelectStartingBefore(Selection.objects);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SelectEndingAfter):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.SelectEndingAfter(Selection.objects);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.SelectEndingAfter(Selection.objects);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SelectStartingAfter):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.SelectStartingAfter(Selection.objects);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.SelectStartingAfter(Selection.objects);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.AddPrevClipToSelection):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.AddPrevClipToSelection(TimelineEditor.selectedClips, currentTime, selectionCount);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.AddPrevClipToSelection(TimelineEditor.selectedClips, currentTime, selectionCount);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
@@ -157,77 +283,91 @@ namespace AltSalt
 
                 case nameof(ButtonNames.AddNextClipToSelection):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.AddNextClipToSelection(TimelineEditor.selectedClips, currentTime, selectionCount);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.AddNextClipToSelection(TimelineEditor.selectedClips, currentTime, selectionCount);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SetToPlayhead):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.SetToPlayhead(ClipTools.GetCurrentClipSelection(), currentTime, callTransposeUnselectedClips, ClipTools.GetAllTimelineClips(), ClipTools.TransposeTargetClips);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.SetToPlayhead(ClipSelectionManipulation.GetCurrentClipSelection(), currentTime, callTransposeUnselectedClips, ClipSelectionManipulation.GetAllTimelineClips(), ClipSelectionManipulation.TransposeTargetClips);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.TransposeToPlayhead):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.TransposeToPlayhead(ClipTools.GetCurrentClipSelection(), currentTime, callTransposeUnselectedClips, ClipTools.GetAllTimelineClips(), ClipTools.TransposeTargetClips);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.TransposeToPlayhead(ClipSelectionManipulation.GetCurrentClipSelection(), currentTime, callTransposeUnselectedClips, ClipSelectionManipulation.GetAllTimelineClips(), ClipSelectionManipulation.TransposeTargetClips);
+                        TimelineUtilitiesCore.RefreshTimelineContentsModified();
+                    };
+                    break;
+
+                case nameof(ButtonNames.ExpandToPlayhead):
+                    button.clickable.clicked += () => {
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.ExpandToPlayhead(ClipSelectionManipulation.GetCurrentClipSelection(), currentTime, callTransposeUnselectedClips, ClipSelectionManipulation.GetAllTimelineClips(), ClipSelectionManipulation.TransposeTargetClips);
+                        TimelineUtilitiesCore.RefreshTimelineContentsModified();
+                    };
+                    break;
+
+                case nameof(ButtonNames.ExpandAndTransposeToPlayhead):
+                    button.clickable.clicked += () => {
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.ExpandAndTransposeToPlayhead(ClipSelectionManipulation.GetCurrentClipSelection(), currentTime, callTransposeUnselectedClips, ClipSelectionManipulation.GetAllTimelineClips());
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.MultiplyDuration):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.MultiplyDuration(ClipTools.GetCurrentClipSelection(), durationMultiplier, callTransposeUnselectedClips, ClipTools.GetAllTimelineClips(), ClipTools.TransposeTargetClips);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.MultiplyDuration(ClipSelectionManipulation.GetCurrentClipSelection(), durationMultiplier, callTransposeUnselectedClips, ClipSelectionManipulation.GetAllTimelineClips(), ClipSelectionManipulation.TransposeTargetClips);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.MultiplyDurationAndTranspose):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.MultiplyDurationAndTranspose(ClipTools.GetCurrentClipSelection(), durationMultiplier, callTransposeUnselectedClips, ClipTools.GetAllTimelineClips(), ClipTools.TransposeTargetClips);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.MultiplyDurationAndTranspose(ClipSelectionManipulation.GetCurrentClipSelection(), durationMultiplier, callTransposeUnselectedClips, ClipSelectionManipulation.GetAllTimelineClips());
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SetDuration):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.SetDuration(ClipTools.GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, ClipTools.GetAllTimelineClips(), ClipTools.TransposeTargetClips);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.SetDuration(ClipSelectionManipulation.GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, ClipSelectionManipulation.GetAllTimelineClips(), ClipSelectionManipulation.TransposeTargetClips);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SetDurationAndTranspose):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.SetDurationAndTranspose(ClipTools.GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, ClipTools.GetAllTimelineClips(), ClipTools.TransposeTargetClips);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.SetDurationAndTranspose(ClipSelectionManipulation.GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, ClipSelectionManipulation.GetAllTimelineClips(), ClipSelectionManipulation.TransposeTargetClips);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SetSpacing):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.SetSpacing(ClipTools.GetCurrentClipSelection(), targetSpacing, callTransposeUnselectedClips, ClipTools.GetAllTimelineClips(), ClipTools.TransposeTargetClips);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.SetSpacing(ClipSelectionManipulation.GetCurrentClipSelection(), targetSpacing, callTransposeUnselectedClips, ClipSelectionManipulation.GetAllTimelineClips(), ClipSelectionManipulation.TransposeTargetClips);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.AddSubtractSpacing):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.AddSubtractSpacing(ClipTools.GetCurrentClipSelection(), ClipTools.GetAllTimelineClips(), targetSpacing);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.AddSubtractSpacing(ClipSelectionManipulation.GetCurrentClipSelection(), ClipSelectionManipulation.GetAllTimelineClips(), targetSpacing);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SetSequentialOrder):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.SetSequentialOrder(ClipTools.GetCurrentClipSelection(), ClipTools.GetAllTimelineClips(), callTransposeUnselectedClips, ClipTools.TransposeTargetClips);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.SetSequentialOrder(ClipSelectionManipulation.GetCurrentClipSelection(), ClipSelectionManipulation.GetAllTimelineClips(), callTransposeUnselectedClips, ClipSelectionManipulation.TransposeTargetClips);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SetSequentialOrderReverse):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ClipTools.SetSequentialOrderReverse(ClipTools.GetCurrentClipSelection(), ClipTools.GetAllTimelineClips(), callTransposeUnselectedClips, ClipTools.TransposeTargetClips);
+                        TimelineEditor.selectedClips = ClipSelectionManipulation.SetSequentialOrderReverse(ClipSelectionManipulation.GetCurrentClipSelection(), ClipSelectionManipulation.GetAllTimelineClips(), callTransposeUnselectedClips, ClipSelectionManipulation.TransposeTargetClips);
                         TimelineUtilitiesCore.RefreshTimelineContentsModified();
                     };
                     break;
@@ -240,7 +380,7 @@ namespace AltSalt
 
                 case nameof(ButtonNames.DeselectAll):
                     button.clickable.clicked += () => {
-                        ClipTools.DeselectAll();
+                        ClipSelectionManipulation.DeselectAll();
                     };
                     break;
 
@@ -249,6 +389,54 @@ namespace AltSalt
                         RenderLayout();
                     };
                     break;
+
+                case nameof(ButtonNames.TMProColorTrack):
+                    button.clickable.clicked += () => {
+                        Selection.objects = TrackClipCreation.TriggerCreateTrack(Selection.gameObjects, typeof(TMProColorTrack), Selection.objects);
+                        TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToButtonData(buttonData, DisplayCondition.TextSelected, button);
+                    break;
+
+                case nameof(ButtonNames.RectTransformPosTrack):
+                    button.clickable.clicked += () => {
+                        Selection.objects = TrackClipCreation.TriggerCreateTrack(Selection.gameObjects, typeof(RectTransformPosTrack), Selection.objects);
+                        TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToButtonData(buttonData, DisplayCondition.RectTransformSelected, button);
+                    break;
+
+                case nameof(ButtonNames.SpriteColorTrack):
+                    button.clickable.clicked += () => {
+                        Selection.objects = TrackClipCreation.TriggerCreateTrack(Selection.gameObjects, typeof(SpriteColorTrack), Selection.objects);
+                        TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToButtonData(buttonData, DisplayCondition.SpriteSelected, button);
+                    break;
+
+                case nameof(ButtonNames.FloatVarTrack):
+                    button.clickable.clicked += () => {
+                        Selection.objects = TrackClipCreation.TriggerCreateTrack(new UnityEngine.Object[] { targetFloat }, typeof(LerpFloatVarTrack), Selection.objects);
+                        TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToButtonData(buttonData, DisplayCondition.FloatVarPopulated, button);
+                    break;
+
+                case nameof(ButtonNames.GroupTrack):
+                    button.clickable.clicked += () => {
+                        Selection.activeObject = TrackClipCreation.TriggerCreateGroupTrack(Selection.objects);
+                        TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToButtonData(buttonData, DisplayCondition.TrackSelected, button);
+                    break;
+
+                case nameof(ButtonNames.NewClips):
+                    button.clickable.clicked += () => {
+                        TimelineEditor.selectedClips = TrackClipCreation.CreateClips(Selection.objects, newClipDuration).ToArray();
+                        TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToButtonData(buttonData, DisplayCondition.TrackSelected, button);
+                    break;
             }
 
             return button;
@@ -256,10 +444,12 @@ namespace AltSalt
 
         void OnInspectorUpdate()
         {
-            currentTime = TimelineUtilitiesCore.CurrentTime;
-            if (TimelineEditor.inspectedDirector != null) {
-                TimelineEditor.inspectedDirector.time = currentTime;
-                TimelineEditor.inspectedDirector.DeferredEvaluate();
+            if (debugTrackCreated == true) {
+                currentTime = TimelineUtilitiesCore.CurrentTime;
+                if (TimelineEditor.inspectedDirector != null) {
+                    TimelineEditor.inspectedDirector.time = currentTime;
+                    TimelineEditor.inspectedDirector.DeferredEvaluate();
+                }
             }
         }
 
@@ -272,49 +462,33 @@ namespace AltSalt
 
             GUILayout.Space(10);
 
-            //toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarStrings);
-            //GUILayout.Space(10);
-
-
             if (TimelineEditor.inspectedAsset == null) {
                 GUILayout.Label("Please select a timeline asset in order to use clip tools.", guiStyle);
-                return;
-            }
+            } else {
+                debugTrackCreated = FindDebugTrack();
 
-            if (FindDebugTrack() == false) {
+                if (debugTrackCreated == false) {
+                    timelineUtilitiesStructure.visible = false;
 
-                GUILayout.Label("You must create a debug track in order to use timeline utilities.", guiStyle);
-                GUILayout.Space(10);
+                    GUILayout.Label("You must create a debug track in order to use timeline utilities.", guiStyle);
+                    GUILayout.Space(10);
 
-                if (GUILayout.Button("Create Debug Track")) {
-                    CreateDebugTrack();
+                    if (GUILayout.Button("Create Debug Track")) {
+                        CreateDebugTrack();
+                    }
+
+                } else {
+                    timelineUtilitiesStructure.visible = true;
                 }
-
-                return;
             }
-            
-            //scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
-            //showTimelineClipTools = EditorGUILayout.Foldout(showTimelineClipTools, "Clip Tools");
-            //if (showTimelineClipTools == true) {
-                //ClipTools.ShowClipTools(position, rootVisualElement, this);
-            //}
-
-            GUILayout.Space(10);
-
-            //showTrackClipTools = EditorGUILayout.Foldout(showTrackClipTools, "Tracks and Clips");
-            //if (showTrackClipTools == true) {
-            //    CreateTrackClipTools.ShowTrackClipTools();
-            //}
-
-            //EditorGUILayout.EndScrollView();
         }
 
         static bool FindDebugTrack()
         {
             TimelineAsset currentAsset = TimelineEditor.inspectedAsset;
             IEnumerable<PlayableBinding> playableBindings = currentAsset.outputs;
-            bool debugTrackCreated = false;
+            bool debugTrackFound = false;
 
             foreach (PlayableBinding playableBinding in playableBindings) {
                 TrackAsset trackAsset = playableBinding.sourceObject as TrackAsset;
@@ -322,12 +496,12 @@ namespace AltSalt
                 // Skip playable bindings that don't contain track assets (e.g. markers)
                 if (trackAsset is DebugTimelineTrack) {
                     foreach (TimelineClip debugClip in trackAsset.GetClips()) {
-                        debugTrackCreated = true;
+                        debugTrackFound = true;
                         break;
                     }
                 }
             }
-            return debugTrackCreated;
+            return debugTrackFound;
         }
 
         static void CreateDebugTrack()
@@ -354,5 +528,6 @@ namespace AltSalt
                 }
             }
         }
+
     }
 }

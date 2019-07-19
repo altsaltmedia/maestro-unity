@@ -11,5 +11,12 @@ xsi:schemaLocation="
                         UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
 "
 >
-    <engine:Label text="Hello World! From UXML" />
+	<engine:Template path="Assets/_AltSalt/__Core/EditorTools/TimelineUtilities/Editor/ClipSelectionManipulation.uxml" name="ClipSelectionManipulation" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/TimelineUtilities/Editor/TrackClipCreation.uxml" name="TrackClipCreation" />
+
+	<engine:ScrollView class="altsalt timeline-utilities-window">
+		<engine:Instance template="ClipSelectionManipulation" />
+		<engine:Instance template="TrackClipCreation" />
+	</engine:ScrollView>
+
 </engine:UXML>

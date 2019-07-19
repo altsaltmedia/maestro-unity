@@ -3,11 +3,11 @@
 	font-size: 10px;
 }
 
-.clipTools Button {
+.timeline-utilities-window Button {
 	height: 20px;
 }
 
-.clipTools IntegerField .unity-integer-field__input {
+.timeline-utilities-window IntegerField .unity-integer-field__input {
 	-unity-text-align: middle-center;
 }
 
@@ -26,6 +26,7 @@
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
+	padding-top: 10px;
 }
 
 
@@ -106,6 +107,7 @@
 .manipulate .manipulate-col-full {
 	flex-grow: 1;
 	flex-basis: 275px;	
+	margin-bottom: 5px;
 }
 
 .manipulate .manipulate-col-1.placeholder {

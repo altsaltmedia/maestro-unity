@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+<engine:VisualElement class="clip-selection-manipulation" name="clip-selection-manipulation">
+	
+	<engine:VisualElement class="foldout___title___container">
+
+		<engine:Label text="Clip Selection / Manipulation" class="foldout___title" />
+
+	</engine:VisualElement>
+
+	<engine:Foldout class="foldout">
+
+		<engine:VisualElement class="section selection">
+
+		  	<engine:VisualElement class="section___title">
+				<engine:Label text="selection" />
+		  	</engine:VisualElement>
+		    <!-- Instantiates the template multiple times. Each time, we give it a name and a class for future reference. -->
+
+			<engine:VisualElement class="section___content">
+			    <engine:Button text="&lt;" class="select-btn" name="SelectEndingBefore"/>
+			    <engine:Button text="&lt;|" class="select-btn" name="SelectStartingBefore"/>
+			    <engine:Label text="~" class="tilde" />
+			    <engine:Button text="|>" class="select-btn" name="SelectEndingAfter"/>
+			    <engine:Button text=">" class="select-btn" name="SelectStartingAfter"/>
+		    </engine:VisualElement>
+
+		    <engine:VisualElement class="section___content">
+		  		<engine:Button text="&lt;" class="select-btn" name="AddPrevClipToSelection"/>
+		  		<engine:Button text="-" class="select-btn" name="DecrementSelectionCount"/>
+			    <editor:IntegerField value="1" class="integerField select-count" binding-path="selectionCount" name="SelectionCountField"/>
+			    <engine:Button text="+" class="select-btn" name="IncrementSelectionCount"/>
+			    <engine:Button text=">" class="select-btn" name="AddNextClipToSelection"/>
+	    	</engine:VisualElement>
+
+	    </engine:VisualElement>
+
+
+	<!--     <engine:VisualElement class="section">
+		    <Instance template="button-template" text="&lt;" name="Cube"/>
+		    <Instance template="button-template" text="&lt;|" name="Sphere"/>
+		    <engine:Label text="~" class="tilde" />
+		    <Instance template="button-template" text="|>" name="Cylinder"/>
+		    <Instance template="button-template" text=">" name="Plane"/>
+	    </engine:VisualElement> -->
+
+
+	    <engine:VisualElement class="section manipulate">
+
+			<engine:VisualElement class="section___title">
+				<engine:Label text="manipulation" />
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+				<engine:Toggle text="transpose unselected clips" class="manipulate-toggle-transpose" binding-path="callTransposeUnselectedClips"/>
+				<engine:Label text="" class="manipulate-col-1 placeholder" />
+		  		<engine:Label text="" class="manipulate-col-2 placeholder"/>
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+		  		<engine:Label text="Time : " class="manipulate-col-1" />
+		  		<editor:FloatField text="0.00" class="manipulate-col-2 persistent-float-field" binding-path="currentTime"/>
+				<engine:Button text="Set" class="manipulate-col-3" name="SetToPlayhead"/>
+			    <engine:Button text="Set (&lt;>)" class="manipulate-col-3" name="TransposeToPlayhead" />
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+		  		<engine:Label text="" class="manipulate-col-1 placeholder" />
+		  		<engine:Label text="" class="manipulate-col-2 placeholder"/>
+				<engine:Button text="Expand" class="manipulate-col-3" name="ExpandToPlayhead"/>
+			    <engine:Button text="Expand (&lt;>)" class="manipulate-col-3" name="ExpandAndTranposeToPlayhead"/>
+		  	</engine:VisualElement>
+
+			<engine:VisualElement class="section___content">
+		  		<engine:Label text="Multiply : " class="manipulate-col-1"/>
+		  		<editor:FloatField value="1" class="manipulate-col-2" binding-path="durationMultiplier"/>
+				<engine:Button text="X" class="manipulate-col-3" name="MultiplyDuration"/>
+			    <engine:Button text="X (&lt;>)" class="manipulate-col-3" name="MultiplyDurationAndTranspose"/>
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+		  		<engine:Label text="Duration : " class="manipulate-col-1"/>
+		  		<editor:FloatField value="1" class="manipulate-col-2" binding-path="targetDuration"/>
+				<engine:Button text="Set" class="manipulate-col-3" name="SetDuration" />
+			    <engine:Button text="Set (&lt;>)" class="manipulate-col-3" name="SetDurationAndTranspose"/>
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+		  		<engine:Label text="Spacing : " class="manipulate-col-1"/>
+		  		<editor:FloatField value="0" class="manipulate-col-2" binding-path="targetSpacing"/>
+				<engine:Button text="Set" class="manipulate-col-3" name="SetSpacing"/>
+			    <engine:Button text="+ / -" class="manipulate-col-3" name="AddSubtractSpacing"/>
+		  	</engine:VisualElement>
+
+			<engine:VisualElement class="section___content">
+		  		<engine:Button text="Set Sequential Order" class="manipulate-col-full" name="SetSequentialOrder" />
+		  		<engine:Button text="Set Sequential Order (Reverse)" class="manipulate-col-full" name="SetSequentialOrderReverse" />
+		  		<engine:Button text="Refresh Timeline Window" class="manipulate-col-full" name="RefreshTimelineWindow" />
+		  		<engine:Button text="Deselect All" class="manipulate-col-full" name="DeselectAll" />
+		  		<engine:Button text="Refresh Layout" class="manipulate-col-full" name="RefreshLayout" />
+		  	</engine:VisualElement>
+
+	  	</engine:VisualElement>
+
+
+	</engine:Foldout>
+
+</engine:VisualElement>
+
+</engine:UXML>

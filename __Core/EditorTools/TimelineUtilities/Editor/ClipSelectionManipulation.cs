@@ -9,315 +9,9 @@ using UnityEngine.UIElements;
 
 namespace AltSalt
 {
-    public static class ClipTools
+    public static class ClipSelectionManipulation
     {
-        public static int selectionCount = 1;
-
-        static SerializedObject serializedObject;
-
-        static IntegerField newSelectionCount;
-
-        static bool callTransposeUnselectedClips = false;
-        static float durationMultiplier = 1;
-        static float targetDuration = 1;
-        static float targetSpacing = 0;
-        static bool initialized = false;
-
-        static Rect windowPosition;
-        static VisualElement windowRoot;
-        static TimelineUtilitiesWindow parentWindow;
-
         public delegate TimelineClip[] TransposeClipsCallback(TimelineClip[] selectedClips, TimelineClip[] sourceClips, double offset, double timeReference);
-
-        static void RenderClipTools(Rect position, VisualElement rootVisualElement)
-        {
-            windowPosition = position;
-            windowRoot = rootVisualElement;
-            serializedObject = new SerializedObject(parentWindow);
-
-            
-            AssetDatabase.Refresh();
-
-            // Reference to the root of the window.
-            var root = rootVisualElement;
-
-            
-
-            root.Clear();
-
-            // Associates a stylesheet to our root. Thanks to inheritance, all root’s
-            // children will have access to it.
-
-            root.styleSheets.Add(Resources.Load<StyleSheet>("TimelineUtilities_Style"));
-
-            // Loads and clones our VisualTree (eg. our UXML structure) inside the root.
-            var clipToolsTree = Resources.Load<VisualTreeAsset>("TimelineUtilities_ClipTools");
-            VisualElement clipToolsFromXML = clipToolsTree.CloneTree();
-
-            root.Add(clipToolsFromXML);
-            root.Bind(serializedObject);
-            
-            Button refreshButton = root.Query<Button>("RefreshWindow");
-            refreshButton.clickable.clicked += () => RenderClipTools(windowPosition, windowRoot);
-
-            IntegerField selectionCountField = root.Query<IntegerField>("SelectionCountField");
-            newSelectionCount = selectionCountField;
-
-            Button incrementButton = root.Query<Button>("IncrementSelectionCount");
-            incrementButton.clickable.clicked += () => {
-                IncrementSelectionCount();
-            };
-
-            Button decrementButton = root.Query<Button>("DecrementSelectionCount");
-            decrementButton.clickable.clicked += () => DecrementSelectionCount();
-        }
-
-        static void IncrementSelectionCount()
-        {
-            //newSelectionCount.value += 1;
-        }
-
-        static void DecrementSelectionCount()
-        {
-            //newSelectionCount.value -= 1;
-        }
-
-        public static void ShowClipTools(Rect position, VisualElement rootVisualElement, TimelineUtilitiesWindow parent)
-        {
-            if (initialized == false) {
-                parentWindow = parent;
-                RenderClipTools(position, rootVisualElement);
-                initialized = true;
-            }
-
-            return;
-
-            GUIStyle labelOffsetCenterStyle = new GUIStyle("Label");
-            labelOffsetCenterStyle.contentOffset = new Vector2(0, 0);
-            labelOffsetCenterStyle.alignment = TextAnchor.MiddleCenter;
-
-            GUIStyle miniLabel = new GUIStyle("miniLabel");
-
-            GUIStyle miniToggle = new GUIStyle("toggle");
-            miniToggle.fontSize = miniLabel.fontSize;
-
-            GUIStyle labelCenterStyle = new GUIStyle("Label");
-            labelCenterStyle.alignment = TextAnchor.MiddleCenter;
-
-            GUIStyle textFieldCenterStyle = new GUIStyle("textField");
-            textFieldCenterStyle.alignment = TextAnchor.MiddleCenter;
-
-            GUIStyle miniButton = new GUIStyle("miniButtonRight");
-            miniButton.alignment = TextAnchor.MiddleCenter;
-
-            GUIStyle centeredTitleStyle = Utils.AltSaltSkin.GetStyle("centeredTitle");
-            GUIStyle infinityStyle = Utils.AltSaltSkin.GetStyle("infinitySymbol");
-
-            GUILayout.Space(10);
-
-            GUILayout.Label("selection", centeredTitleStyle);
-
-            EditorGUILayout.BeginHorizontal();
-                
-                if (GUILayout.Button("<", miniButton)) {
-                    TimelineEditor.selectedClips = SelectEndingBefore(Selection.objects);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-                if (GUILayout.Button("<|", miniButton)) {
-                    TimelineEditor.selectedClips = SelectStartingBefore(Selection.objects);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-                GUILayout.Label("~", infinityStyle);
-                if (GUILayout.Button("|>", miniButton)) {
-                    TimelineEditor.selectedClips = SelectEndingAfter(Selection.objects);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-                if (GUILayout.Button(">", miniButton)) {
-                    TimelineEditor.selectedClips = SelectStartingAfter(Selection.objects);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-                
-            EditorGUILayout.EndHorizontal();
-
-            GUILayout.Space(10);
-
-            EditorGUILayout.BeginHorizontal();
-                
-                if (GUILayout.Button("<", miniButton)) {
-                    TimelineEditor.selectedClips = AddPrevClipToSelection(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, selectionCount);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-                if (GUILayout.Button("-", labelOffsetCenterStyle, GUILayout.Width(25))) {
-                    selectionCount -= 1;
-                    if(selectionCount < 1) {
-                        selectionCount = 1;
-                    }
-                }
-                EditorGUI.BeginChangeCheck();
-                    selectionCount = EditorGUILayout.IntField(selectionCount, textFieldCenterStyle, GUILayout.Width(25));
-                if(EditorGUI.EndChangeCheck() == true && selectionCount < 1) {
-                    selectionCount = 1;
-                }
-                if (GUILayout.Button("+", labelOffsetCenterStyle, GUILayout.Width(25))) {
-                    selectionCount += 1;
-                }
-                if (GUILayout.Button(">", miniButton)) {
-                    TimelineEditor.selectedClips = AddNextClipToSelection(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, selectionCount);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-                
-            EditorGUILayout.EndHorizontal();
-
-            GUILayout.Space(15);
-
-            GUILayout.Label("manipulation", centeredTitleStyle);
-
-            GUILayout.Space(5);
-
-            callTransposeUnselectedClips = EditorGUILayout.Toggle("transpose unselected clips :", callTransposeUnselectedClips, miniToggle);
-
-            GUILayout.Space(10);
-
-            EditorGUILayout.BeginHorizontal();
-
-                GUILayout.Label("Time :", miniLabel, GUILayout.Width(position.width * .25f));
-
-                GUILayout.Label(TimelineUtilitiesCore.CurrentTime.ToString("N"), labelCenterStyle, GUILayout.Width(position.width * .2f));
-
-                if (GUILayout.Button("Set", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = SetToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-
-                if (GUILayout.Button("Set (<>)", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = TransposeToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-
-            EditorGUILayout.EndHorizontal();
-
-            GUILayout.Space(10);
-
-            EditorGUILayout.BeginHorizontal();
-
-                GUILayout.Label("", GUILayout.Width(position.width * .25f));
-
-                GUILayout.Label("", GUILayout.Width(position.width * .2f));
-
-                if (GUILayout.Button("Expand", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = TransposeToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-
-
-                if (GUILayout.Button("Expand (<>)", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = TransposeToPlayhead(TimelineEditor.selectedClips, TimelineUtilitiesCore.CurrentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-
-            EditorGUILayout.EndHorizontal();
-
-            GUILayout.Space(10);
-
-            EditorGUILayout.BeginHorizontal();
-
-                GUILayout.Label("Multiply :", miniLabel, GUILayout.Width(position.width * .25f));
-
-                EditorGUI.BeginChangeCheck();
-                durationMultiplier = EditorGUILayout.FloatField(durationMultiplier, textFieldCenterStyle, GUILayout.Width(position.width * .2f));
-                if (EditorGUI.EndChangeCheck() == true && durationMultiplier <= 0) {
-                    durationMultiplier = 0.1f;
-                }
-
-                if (GUILayout.Button("X", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = MultiplyDuration(TimelineEditor.selectedClips, durationMultiplier, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-                if (GUILayout.Button("X (<>)", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = MultiplyDurationAndTranspose(TimelineEditor.selectedClips, durationMultiplier, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-
-            EditorGUILayout.EndHorizontal();
-
-            GUILayout.Space(10);
-
-            EditorGUILayout.BeginHorizontal();
-
-                GUILayout.Label("Duration :", miniLabel, GUILayout.Width(position.width * .25f));
-
-                EditorGUI.BeginChangeCheck();
-                targetDuration = EditorGUILayout.FloatField(targetDuration, textFieldCenterStyle, GUILayout.Width(position.width * .2f));
-                if (EditorGUI.EndChangeCheck() == true && targetDuration <= 0) {
-                    targetDuration = 0.1f;
-                }
-
-                if (GUILayout.Button("Set", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = SetDuration(TimelineEditor.selectedClips, targetDuration, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-                if (GUILayout.Button("Set (<>)", miniButton, GUILayout.Width(position.width * .225f))) {
-                    TimelineEditor.selectedClips = SetDurationAndTranspose(TimelineEditor.selectedClips, targetDuration, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-
-            EditorGUILayout.EndHorizontal();
-
-            GUILayout.Space(10);
-
-            EditorGUILayout.BeginHorizontal();
-
-                GUILayout.Label("Spacing :", miniLabel, GUILayout.Width(position.width * .25f));
-
-                targetSpacing = EditorGUILayout.FloatField(targetSpacing, textFieldCenterStyle, GUILayout.Width(position.width * .2f));
-
-                if (GUILayout.Button("Set", miniButton, GUILayout.Width(position.width * .225f))) {
-                    SetSpacing(TimelineEditor.selectedClips, targetSpacing, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-                if (GUILayout.Button("+ / -", miniButton, GUILayout.Width(position.width * .225f))) {
-                    AddSubtractSpacing(TimelineEditor.selectedClips, GetAllTimelineClips(), targetSpacing);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-
-            EditorGUILayout.EndHorizontal();
-
-            GUILayout.Space(10);
-
-            EditorGUILayout.BeginHorizontal();
-
-                if (GUILayout.Button("Sequence", miniButton)) {
-                    SetSequentialOrder(TimelineEditor.selectedClips, GetAllTimelineClips(), callTransposeUnselectedClips, TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-
-                if (GUILayout.Button("Reverse", miniButton)) {
-                    SetSequentialOrderReverse(TimelineEditor.selectedClips, GetAllTimelineClips(), callTransposeUnselectedClips, TransposeTargetClips);
-                    TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                }
-
-            EditorGUILayout.EndHorizontal();
-
-            GUILayout.Space(5);
-
-            if (GUILayout.Button("Deselect All", miniButton)) {
-                DeselectAll();
-            }
-
-            GUILayout.Space(5);
-
-            if (GUILayout.Button("Refresh Timeline Window", miniButton)) {
-                TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
-                TimelineUtilitiesCore.RefreshTimelineContentsModified();
-                TimelineUtilitiesCore.RefreshTimelineRedrawWindow();
-            }
-
-            GUILayout.Space(5);
-
-            if (GUILayout.Button("Refresh Layout", miniButton)) {
-                RenderClipTools(position, rootVisualElement);
-            }
-        }
 
         public static void DeselectAll()
         {
@@ -470,12 +164,12 @@ namespace AltSalt
                 difference = timeReference - selectedClips[0].start;
             }
 
-            for (int i=0; i<selectedClips.Length; i++) {
+            for (int i = 0; i < selectedClips.Length; i++) {
                 Undo.RecordObject(selectedClips[i].parentTrack, "set clip(s) start time");
                 selectedClips[i].start = timeReference;
             }
 
-            if(executeTranposeCallback == true) {
+            if (executeTranposeCallback == true) {
                 transposeClipsCallback(selectedClips, sourceClips, difference, startTime);
             }
 
@@ -498,7 +192,7 @@ namespace AltSalt
                 Undo.RecordObject(selectedClips[i].parentTrack, "transpose clip(s) to start time");
                 selectedClips[i].start += difference;
 
-                if(i == selectedClips.Length - 1) {
+                if (i == selectedClips.Length - 1) {
                     selectedClips[0].start = timeReference;
                 }
             }
@@ -509,6 +203,81 @@ namespace AltSalt
 
             return selectedClips;
         }
+
+        public static TimelineClip[] ExpandToPlayhead(TimelineClip[] selectedClips, float timeReference, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
+        {
+            double smallestDifference = 0;
+            double originalEnd = 0;
+
+            if(selectedClips.Length > 0) {
+                originalEnd = selectedClips[0].end;
+            }
+
+            for (int i = 0; i < selectedClips.Length; i++) {
+                Undo.RecordObject(selectedClips[i].parentTrack, "expand clip(s) to playhead");
+                if(timeReference > selectedClips[i].start) {
+                    double difference = timeReference - selectedClips[i].end;
+                    selectedClips[i].duration += difference;
+
+                    if(smallestDifference.Equals(0) || Mathf.Abs((float)difference) < Mathf.Abs((float)smallestDifference)) {
+                        smallestDifference = difference;
+                    }
+                }
+            }
+
+            if (executeTranposeCallback == true) {
+                transposeClipsCallback(selectedClips, sourceClips, smallestDifference, originalEnd);
+            }
+
+            return selectedClips;
+        }
+
+        public static TimelineClip[] ExpandAndTransposeToPlayhead(TimelineClip[] selectedClips, float timeReference, bool executeTransposeUnselectedClips = false, TimelineClip[] sourceClips = null)
+        {
+            selectedClips = SortClips(selectedClips);
+            double previousDifference = 0;
+
+            for (int i = 0; i < selectedClips.Length; i++) {
+
+                TimelineClip selectedClip = selectedClips[i];
+                double originalDuration = selectedClip.duration;
+                double difference = timeReference - selectedClip.end;
+
+                Undo.RecordObject(selectedClip.parentTrack, "expand and transpose clip(s) to playhead");
+                if (timeReference > selectedClip.start) {
+                    selectedClips[i].duration += difference;
+                }
+
+                if (executeTransposeUnselectedClips == true) {
+
+                    double adjustedDifference = difference;
+
+                    // Subtract any overlap in multiplied clips so we only add newly created length to the offset
+                    if (i != 0 && Equals(selectedClip.start, selectedClips[i - 1].start)) {
+                        adjustedDifference -= previousDifference;
+                    }
+
+                    for (int q = 0; q < sourceClips.Length; q++) {
+
+                        TimelineClip clip = sourceClips[q];
+
+                        if (clip == selectedClip) {
+                            continue;
+                        }
+
+                        if (clip.start > selectedClip.start) {
+                            Undo.RecordObject(clip.parentTrack, "expand and transpose clip(s) to playhead");
+                            clip.start += adjustedDifference;
+                        }
+                    }
+                    previousDifference = selectedClip.duration - originalDuration;
+                }
+            }
+
+            return selectedClips;
+        }
+
+
 
         public static TimelineClip[] MultiplyDuration(TimelineClip[] selectedClips, float multiplier, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
         {
@@ -535,7 +304,7 @@ namespace AltSalt
 
                     // Subtract any overlap in multiplied clips so we only add newly created length to the offset
                     if (i != 0 && selectedClip.start < selectedClips[i - 1].end) {
-                        adjustedDifference -= previousDifference;
+                        adjustedDifference -= previousDifference;       
                     }
 
                     transposeClipsCallback(selectedClips, sourceClips, adjustedDifference, selectedClip.start);
@@ -546,7 +315,7 @@ namespace AltSalt
             return selectedClips;
         }
 
-        public static TimelineClip[] MultiplyDurationAndTranspose(TimelineClip[] selectedClips, float multiplier, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
+        public static TimelineClip[] MultiplyDurationAndTranspose(TimelineClip[] selectedClips, float multiplier, bool executeTranposeUnselectedClips = false, TimelineClip[] sourceClips = null)
         {
             if (multiplier.Equals(0)) {
                 Debug.LogWarning("Multiplying clips by 0! This is not allowed");
@@ -555,6 +324,8 @@ namespace AltSalt
 
             selectedClips = SortClips(selectedClips);
 
+            double previousDifference = 0;
+
             for (int i=0; i<selectedClips.Length; i++) {
                 TimelineClip selectedClip = selectedClips[i];
 
@@ -562,11 +333,10 @@ namespace AltSalt
 
                 Undo.RecordObject(selectedClip.parentTrack, "multiply and transpose clip(s)");
                 selectedClip.duration *= multiplier;
-
                 double difference = selectedClip.duration - originalDuration;
 
-                if(executeTranposeCallback == false) {
-
+                if (executeTranposeUnselectedClips == false) {
+                    
                     for (int q = 0; q < selectedClips.Length; q++) {
 
                         TimelineClip clip = selectedClips[q];
@@ -580,10 +350,29 @@ namespace AltSalt
                             clip.start += difference;
                         }
                     }
-
                 } else {
-                    TimelineClip[] selectedClipArray = { selectedClip };
-                    transposeClipsCallback(selectedClipArray, sourceClips, difference, selectedClip.start);
+
+                    double adjustedDifference = difference;
+
+                    // Subtract any overlap in multiplied clips so we only add newly created length to the offset
+                    if (i != 0 && Equals(selectedClip.start, selectedClips[i - 1].start) ) {
+                        adjustedDifference -= previousDifference;
+                    }
+
+                    for (int q = 0; q < sourceClips.Length; q++) {
+
+                        TimelineClip clip = sourceClips[q];
+
+                        if (clip == selectedClip) {
+                            continue;
+                        }
+
+                        if (clip.start > selectedClip.start) {
+                            Undo.RecordObject(clip.parentTrack, "multiply and transpose clip(s)");
+                            clip.start += adjustedDifference;
+                        }
+                    }
+                    previousDifference = selectedClip.duration - originalDuration;
                 }
             }
 
@@ -814,7 +603,7 @@ namespace AltSalt
                     continue;
                 }
 
-                if (sourceClip.start > timeReference) {
+                if (sourceClip.start > timeReference || sourceClip.start.Equals(timeReference)) {
                     Undo.RecordObject(sourceClip.parentTrack, "transpose target clip(s)");
                     sourceClip.start += offset;
                     sourceClipsList.Add(sourceClip);
@@ -858,7 +647,7 @@ namespace AltSalt
                 TrackAsset trackAsset = playableBinding.sourceObject as TrackAsset;
 
                 // Skip playable bindings that don't contain track assets (e.g. markers)
-                if (trackAsset == null || trackAsset.hasClips == false) {
+                if (trackAsset == null || trackAsset.hasClips == false || trackAsset is DebugTimelineTrack) {
                     continue;
                 }
 

@@ -10,7 +10,7 @@ using TMPro;
 
 namespace AltSalt
 {
-    public static class CreateTrackClipTools
+    public static class TrackClipCreation
     {
         public static PageBuilderReferences pageBuilderReferences;
         static List<TrackData> copiedTracks = new List<TrackData>();
@@ -55,19 +55,19 @@ namespace AltSalt
 
                 EditorGUI.BeginDisabledGroup(DisableComponentTrackButton(Selection.gameObjects, typeof(TMP_Text), allowBlankTracks));
                     if (GUILayout.Button("New TextMeshPro Color Track(s)")) {
-                        Selection.objects = TriggerCreateTrack(Selection.objects, typeof(TMProColorTrack), Selection.gameObjects);
+                        Selection.objects = TriggerCreateTrack(Selection.gameObjects, typeof(TMProColorTrack), Selection.objects);
                     }
                 EditorGUI.EndDisabledGroup();
 
                 EditorGUI.BeginDisabledGroup(DisableComponentTrackButton(Selection.gameObjects, typeof(SpriteRenderer), allowBlankTracks));
                     if (GUILayout.Button("New Sprite Color Track(s)")) {
-                        Selection.objects = TriggerCreateTrack(Selection.objects, typeof(SpriteColorTrack), Selection.gameObjects);
+                        Selection.objects = TriggerCreateTrack(Selection.gameObjects, typeof(SpriteColorTrack), Selection.objects);
                     }
                 EditorGUI.EndDisabledGroup();
 
                 EditorGUI.BeginDisabledGroup(DisableComponentTrackButton(Selection.gameObjects, typeof(RectTransform), allowBlankTracks));
                     if (GUILayout.Button("New RectTransform Position Track(s)")) {
-                        Selection.objects = TriggerCreateTrack(Selection.objects, typeof(RectTransformPosTrack), Selection.gameObjects);
+                        Selection.objects = TriggerCreateTrack(Selection.gameObjects, typeof(RectTransformPosTrack), Selection.objects);
                     }
                 EditorGUI.EndDisabledGroup();
 
@@ -97,7 +97,7 @@ namespace AltSalt
             }
         }
 
-        static List<TrackData> CopyTracks(UnityEngine.Object[] sourceObjects)
+        public static List<TrackData> CopyTracks(UnityEngine.Object[] sourceObjects)
         {
             List<TrackData> tracksToCopy = new List<TrackData>();
             for (int i = 0; i < sourceObjects.Length; i++) {
@@ -123,7 +123,7 @@ namespace AltSalt
             return trackData;
         }
 
-        static TrackAsset[] PasteTracks(UnityEngine.Object[] destinationSelection, List<TrackData> sourceTrackData)
+        public static TrackAsset[] PasteTracks(UnityEngine.Object[] destinationSelection, List<TrackData> sourceTrackData)
         {
             TrackAsset[] pastedTracks = new TrackAsset[sourceTrackData.Count];
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
@@ -186,17 +186,35 @@ namespace AltSalt
             return false;
         }
 
-        static TrackAsset[] TriggerCreateTrack(UnityEngine.Object[] destinationSelection, Type trackType, GameObject[] targetGameObjects)
+        public static TrackAsset[] TriggerCreateTrack(UnityEngine.Object[] sourceObjects, Type trackType, UnityEngine.Object[] destinationSelection)
         {
-            TrackAsset[] trackAssets = new TrackAsset[targetGameObjects.Length];
+            TrackAsset[] trackAssets = new TrackAsset[sourceObjects.Length];
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
 
-            if (targetGameObjects.Length > 0) {
-                Array.Sort(targetGameObjects, new Utils.GameObjectSort());
-                for (int i = 0; i < targetGameObjects.Length; i++) {
+            if (sourceObjects.Length > 0) {
+                for (int i = 0; i < sourceObjects.Length; i++) {
                     TrackAsset newTrack = CreateNewTrack(parentTrack, trackType);
                     trackAssets[i] = newTrack;
-                    PopulateTrackAsset(newTrack, targetGameObjects[i]);
+                    PopulateTrackAsset(newTrack, sourceObjects[i]);
+                }
+            } else {
+                CreateNewTrack(parentTrack, trackType);
+            }
+            TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
+            return trackAssets;
+        }
+
+        public static TrackAsset[] TriggerCreateTrack(GameObject[] sourceGameObjects, Type trackType, UnityEngine.Object[] destinationSelection)
+        {
+            TrackAsset[] trackAssets = new TrackAsset[sourceGameObjects.Length];
+            TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
+
+            if (sourceGameObjects.Length > 0) {
+                Array.Sort(sourceGameObjects, new Utils.GameObjectSort());
+                for (int i = 0; i < sourceGameObjects.Length; i++) {
+                    TrackAsset newTrack = CreateNewTrack(parentTrack, trackType);
+                    trackAssets[i] = newTrack;
+                    PopulateTrackAsset(newTrack, sourceGameObjects[i]);
                 }
             } else {
                 CreateNewTrack(parentTrack, trackType);
@@ -212,22 +230,26 @@ namespace AltSalt
             return trackAsset;
         }
 
-        static TrackAsset PopulateTrackAsset(TrackAsset targetTrack, GameObject targetGameObject)
+        static TrackAsset PopulateTrackAsset(TrackAsset targetTrack, UnityEngine.Object targetObject)
         {
             foreach (PlayableBinding playableBinding in targetTrack.outputs) {
 
                 switch(targetTrack.GetType().Name) {
 
                     case nameof(TMProColorTrack):
-                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, targetGameObject.GetComponent<TMP_Text>());
+                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<TMP_Text>());
                         break;
 
                     case nameof(RectTransformPosTrack):
-                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, targetGameObject.GetComponent<RectTransform>());
+                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<RectTransform>());
                         break;
 
                     case nameof(SpriteColorTrack):
-                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, targetGameObject.GetComponent<SpriteRenderer>());
+                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<SpriteRenderer>());
+                        break;
+
+                    case nameof(LerpFloatVarTrack):
+                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, targetObject);
                         break;
 
                     default:
@@ -239,7 +261,7 @@ namespace AltSalt
             return targetTrack;
         }
 
-        static List<TimelineClip> CreateClips(UnityEngine.Object[] selection, float duration)
+        public static List<TimelineClip> CreateClips(UnityEngine.Object[] selection, float duration)
         {
             List<TimelineClip> timelineClips = new List<TimelineClip>();
             for (int i = 0; i < selection.Length; i++) {
@@ -287,6 +309,13 @@ namespace AltSalt
                     spriteAsset.template.initialColor = spriteObject.color;
                     spriteAsset.template.targetColor = spriteObject.color;
                     return spriteAsset;
+
+                case nameof(LerpFloatVarClip):
+                    LerpFloatVarClip lerpFloatVarClip = timelineClip.asset as LerpFloatVarClip;
+                    FloatVariable floatVariable = sourceObject as FloatVariable;
+                    lerpFloatVarClip.template.initialValue = floatVariable.Value;
+                    lerpFloatVarClip.template.targetValue = floatVariable.Value;
+                    return lerpFloatVarClip;
             }
 
             return null;
@@ -311,7 +340,7 @@ namespace AltSalt
             return destinationTrack;
         }
 
-        static GroupTrack TriggerCreateGroupTrack(UnityEngine.Object[] childSelection)
+        public static GroupTrack TriggerCreateGroupTrack(UnityEngine.Object[] childSelection)
         {
             GroupTrack groupTrack = TimelineEditor.inspectedAsset.CreateTrack(typeof(GroupTrack), null, typeof(GroupTrack).Name) as GroupTrack;
             GroupTrack childGroup = null;
@@ -373,7 +402,7 @@ namespace AltSalt
             return false;
         }
 
-        class TrackData
+        public class TrackData
         {
             public TrackAsset trackAsset;
             public GroupTrack groupTrack;

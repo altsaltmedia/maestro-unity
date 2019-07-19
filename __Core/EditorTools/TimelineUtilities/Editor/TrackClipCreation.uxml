@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:altsalt="AltSalt"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xmlns:experimental="UnityEditor.Experimental.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+<engine:VisualElement class="track-clip-creation" name="track-clip-creation">
+
+	<engine:VisualElement class="foldout___title___container">
+
+		<engine:Label text="Track / Clip Creation" class="foldout___title" />
+
+	</engine:VisualElement>
+
+	<engine:Foldout class="foldout">
+
+	    <engine:VisualElement class="section manipulate">
+
+			<engine:VisualElement class="section___title">
+				<engine:Label text="track and clip creation" />
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+				<engine:Toggle text="allow blank tracks" class="manipulate-toggle-transpose" binding-path="allowBlankTracks"/>
+				<engine:Label text="" class="manipulate-col-1 placeholder" />
+		  		<engine:Label text="" class="manipulate-col-2 placeholder"/>
+		  	</engine:VisualElement>
+
+			<engine:VisualElement class="section___content">
+		  		<engine:Button text="New TextMeshPro Color Track(s)" class="manipulate-col-full" name="TMProColorTrack" />
+		  		<engine:Button text="New RectTransform Track" class="manipulate-col-full" name="RectTransformPosTrack" />
+		  		<engine:Button text="New SpriteColor Track" class="manipulate-col-full" name="SpriteColorTrack" />
+		  		<engine:PopupWindow class="manipulate-col-full" name="FloatSelectionWindow">
+  			  		<altsalt:FloatVariableField label="Target float variable" allow-scene-objects="false" class="manipulate-col-full" binding-path="targetFloat" object-type="AltSalt.FloatVariable"/>
+				</engine:PopupWindow>
+		  		<engine:Button text="New FloatVar Track" class="manipulate-col-full" name="FloatVarTrack" />
+		  		<engine:Button text="New Group Track" class="manipulate-col-full" name="GroupTrack" />
+		  	</engine:VisualElement>
+			
+			
+
+			<engine:VisualElement class="section___content">
+				<editor:PropertyField label="new clip duration :" value="0.5" binding-path="newClipDuration"/>
+			</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+		  		<engine:Button text="New Clip(s)" class="manipulate-col-full" name="NewClips" />
+	  		</engine:VisualElement>
+
+	  	</engine:VisualElement>
+
+
+	</engine:Foldout>
+
+</engine:VisualElement>
+
+</engine:UXML>
