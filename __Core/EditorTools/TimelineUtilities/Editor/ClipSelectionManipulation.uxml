@@ -13,13 +13,7 @@ xsi:schemaLocation="
 >
 <engine:VisualElement class="clip-selection-manipulation" name="clip-selection-manipulation">
 	
-	<engine:VisualElement class="foldout___title___container">
-
-		<engine:Label text="Clip Selection / Manipulation" class="foldout___title" />
-
-	</engine:VisualElement>
-
-	<engine:Foldout class="foldout">
+	<engine:Foldout class="foldout" text="Clip Selection / Manipulation" value="true">
 
 		<engine:VisualElement class="section selection">
 
@@ -64,55 +58,54 @@ xsi:schemaLocation="
 
 		  	<engine:VisualElement class="section___content">
 				<engine:Toggle text="transpose unselected clips" class="manipulate-toggle-transpose" binding-path="callTransposeUnselectedClips"/>
-				<engine:Label text="" class="manipulate-col-1 placeholder" />
-		  		<engine:Label text="" class="manipulate-col-2 placeholder"/>
+				<engine:Label text="" class="col-1 placeholder" />
+		  		<engine:Label text="" class="col-2 placeholder"/>
 		  	</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">
-		  		<engine:Label text="Time : " class="manipulate-col-1" />
-		  		<editor:FloatField text="0.00" class="manipulate-col-2 persistent-float-field" binding-path="currentTime"/>
-				<engine:Button text="Set" class="manipulate-col-3" name="SetToPlayhead"/>
-			    <engine:Button text="Set (&lt;>)" class="manipulate-col-3" name="TransposeToPlayhead" />
+		  		<engine:Label text="Time : " class="col-1" />
+		  		<editor:FloatField text="0.00" class="col-2 persistent-float-field" binding-path="currentTime"/>
+				<engine:Button text="Set" class="col-3" name="SetToPlayhead"/>
+			    <engine:Button text="Set (&lt;>)" class="col-3" name="TransposeToPlayhead" />
 		  	</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">
-		  		<engine:Label text="" class="manipulate-col-1 placeholder" />
-		  		<engine:Label text="" class="manipulate-col-2 placeholder"/>
-				<engine:Button text="Expand" class="manipulate-col-3" name="ExpandToPlayhead"/>
-			    <engine:Button text="Expand (&lt;>)" class="manipulate-col-3" name="ExpandAndTranposeToPlayhead"/>
+		  		<engine:Label text="" class="col-1 placeholder" />
+		  		<engine:Label text="" class="col-2 placeholder"/>
+				<engine:Button text="Expand" class="col-3" name="ExpandToPlayhead"/>
+			    <engine:Button text="Expand (&lt;>)" class="col-3" name="ExpandAndTranposeToPlayhead"/>
 		  	</engine:VisualElement>
 
 			<engine:VisualElement class="section___content">
-		  		<engine:Label text="Multiply : " class="manipulate-col-1"/>
-		  		<editor:FloatField value="1" class="manipulate-col-2" binding-path="durationMultiplier"/>
-				<engine:Button text="X" class="manipulate-col-3" name="MultiplyDuration"/>
-			    <engine:Button text="X (&lt;>)" class="manipulate-col-3" name="MultiplyDurationAndTranspose"/>
+		  		<engine:Label text="Multiply : " class="col-1"/>
+		  		<editor:FloatField value="1" class="col-2" binding-path="durationMultiplier"/>
+				<engine:Button text="X" class="col-3" name="MultiplyDuration"/>
+			    <engine:Button text="X (&lt;>)" class="col-3" name="MultiplyDurationAndTranspose"/>
 		  	</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">
-		  		<engine:Label text="Duration : " class="manipulate-col-1"/>
-		  		<editor:FloatField value="1" class="manipulate-col-2" binding-path="targetDuration"/>
-				<engine:Button text="Set" class="manipulate-col-3" name="SetDuration" />
-			    <engine:Button text="Set (&lt;>)" class="manipulate-col-3" name="SetDurationAndTranspose"/>
+		  		<engine:Label text="Duration : " class="col-1"/>
+		  		<editor:FloatField value="1" class="col-2" binding-path="targetDuration"/>
+				<engine:Button text="Set" class="col-3" name="SetDuration" />
+			    <engine:Button text="Set (&lt;>)" class="col-3" name="SetDurationAndTranspose"/>
 		  	</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">
-		  		<engine:Label text="Spacing : " class="manipulate-col-1"/>
-		  		<editor:FloatField value="0" class="manipulate-col-2" binding-path="targetSpacing"/>
-				<engine:Button text="Set" class="manipulate-col-3" name="SetSpacing"/>
-			    <engine:Button text="+ / -" class="manipulate-col-3" name="AddSubtractSpacing"/>
+		  		<engine:Label text="Spacing : " class="col-1"/>
+		  		<editor:FloatField value="0" class="col-2" binding-path="targetSpacing"/>
+				<engine:Button text="Set" class="col-3" name="SetSpacing"/>
+			    <engine:Button text="+ / -" class="col-3" name="AddSubtractSpacing"/>
 		  	</engine:VisualElement>
 
 			<engine:VisualElement class="section___content">
-		  		<engine:Button text="Set Sequential Order" class="manipulate-col-full" name="SetSequentialOrder" />
-		  		<engine:Button text="Set Sequential Order (Reverse)" class="manipulate-col-full" name="SetSequentialOrderReverse" />
-		  		<engine:Button text="Refresh Timeline Window" class="manipulate-col-full" name="RefreshTimelineWindow" />
-		  		<engine:Button text="Deselect All" class="manipulate-col-full" name="DeselectAll" />
-		  		<engine:Button text="Refresh Layout" class="manipulate-col-full" name="RefreshLayout" />
+		  		<engine:Button text="Set Sequential Order" class="col-full" name="SetSequentialOrder" />
+		  		<engine:Button text="Set Sequential Order (Reverse)" class="col-full" name="SetSequentialOrderReverse" />
+		  		<engine:Button text="Refresh Timeline Window" class="col-full" name="RefreshTimelineWindow" />
+		  		<engine:Button text="Deselect All" class="col-full" name="DeselectAll" />
+		  		<engine:Button text="Refresh Layout" class="col-full" name="RefreshLayout" />
 		  	</engine:VisualElement>
 
 	  	</engine:VisualElement>
-
 
 	</engine:Foldout>
 

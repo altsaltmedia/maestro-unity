@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace AltSalt
 {
-    public static class SelectionTools
+    public static class HierarchySelection
     {
         public static void ShowSelectionTools()
         {

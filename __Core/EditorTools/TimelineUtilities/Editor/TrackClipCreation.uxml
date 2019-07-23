@@ -15,13 +15,7 @@ xsi:schemaLocation="
 >
 <engine:VisualElement class="track-clip-creation" name="track-clip-creation">
 
-	<engine:VisualElement class="foldout___title___container">
-
-		<engine:Label text="Track / Clip Creation" class="foldout___title" />
-
-	</engine:VisualElement>
-
-	<engine:Foldout class="foldout">
+	<engine:Foldout class="foldout" text="Track / Clip Creation" value="true">
 
 	    <engine:VisualElement class="section manipulate">
 
@@ -30,34 +24,36 @@ xsi:schemaLocation="
 		  	</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">
-				<engine:Toggle text="allow blank tracks" class="manipulate-toggle-transpose" binding-path="allowBlankTracks"/>
-				<engine:Label text="" class="manipulate-col-1 placeholder" />
-		  		<engine:Label text="" class="manipulate-col-2 placeholder"/>
+		  		<engine:Button text="Copy Track(s)" class="col-full" name="CopyTracks" />
+		  		<engine:Button text="Paste Track(s)" class="col-full" name="PasteTracks" />
+	  		</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+				<engine:Toggle text="allow blank tracks" class="manipulate-toggle-transpose update-window-trigger" binding-path="allowBlankTracks" name="AllowBlankTracks"/>
+				<engine:Label text="" class="col-1 placeholder" />
+		  		<engine:Label text="" class="col-2 placeholder"/>
 		  	</engine:VisualElement>
 
 			<engine:VisualElement class="section___content">
-		  		<engine:Button text="New TextMeshPro Color Track(s)" class="manipulate-col-full" name="TMProColorTrack" />
-		  		<engine:Button text="New RectTransform Track" class="manipulate-col-full" name="RectTransformPosTrack" />
-		  		<engine:Button text="New SpriteColor Track" class="manipulate-col-full" name="SpriteColorTrack" />
-		  		<engine:PopupWindow class="manipulate-col-full" name="FloatSelectionWindow">
-  			  		<altsalt:FloatVariableField label="Target float variable" allow-scene-objects="false" class="manipulate-col-full" binding-path="targetFloat" object-type="AltSalt.FloatVariable"/>
+		  		<engine:Button text="New TextMeshPro Color Track(s)" class="col-full" name="TMProColorTrack" />
+		  		<engine:Button text="New RectTransform Track(s)" class="col-full" name="RectTransformPosTrack" />
+		  		<engine:Button text="New SpriteColor Track(s)" class="col-full" name="SpriteColorTrack" />
+		  		<engine:PopupWindow class="col-full" name="FloatSelectionWindow">
+  			  		<editor:PropertyField label="Target float variable" allow-scene-objects="false" class="col-full update-window-trigger" binding-path="targetFloat" name="TargetFloatVariable"/>
 				</engine:PopupWindow>
-		  		<engine:Button text="New FloatVar Track" class="manipulate-col-full" name="FloatVarTrack" />
-		  		<engine:Button text="New Group Track" class="manipulate-col-full" name="GroupTrack" />
+		  		<engine:Button text="New FloatVar Track" class="col-full" name="FloatVarTrack" />
+		  		<engine:Button text="New Group Track" class="col-full" name="GroupTrack" />
 		  	</engine:VisualElement>
-			
-			
 
 			<engine:VisualElement class="section___content">
 				<editor:PropertyField label="new clip duration :" value="0.5" binding-path="newClipDuration"/>
 			</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">
-		  		<engine:Button text="New Clip(s)" class="manipulate-col-full" name="NewClips" />
+		  		<engine:Button text="New Clip(s)" class="col-full" name="NewClips" />
 	  		</engine:VisualElement>
 
 	  	</engine:VisualElement>
-
 
 	</engine:Foldout>
 

@@ -29,7 +29,7 @@ namespace AltSalt
         VisualElement trackClipCreation;
         bool debugTrackCreated = false;
 
-        Dictionary<DisplayCondition, List<Button>> buttonData = new Dictionary<DisplayCondition, List<Button>>();
+        Dictionary<EnableCondition, List<VisualElement>> toggleData = new Dictionary<EnableCondition, List<VisualElement>>();
 
         public float currentTime;
         public int selectionCount = 1;
@@ -37,6 +37,8 @@ namespace AltSalt
         public float durationMultiplier = 1;
         public float targetDuration = 1;
         public float targetSpacing = 0;
+
+        public List<TrackClipCreation.TrackData> copiedTracks = new List<TrackClipCreation.TrackData>();
 
         public bool allowBlankTracks = false;
         public float newClipDuration = .5f;
@@ -47,15 +49,16 @@ namespace AltSalt
         SerializedObject editorWindowSerialized;
         SerializedObject floatVarSerialized;
 
-        enum DisplayCondition
+        enum EnableCondition
         {
             TextSelected,
             RectTransformSelected,
             SpriteSelected,
             TrackSelected,
+            CopiedTracksPopulated,
             FloatVarPopulated,
             ColorVarPopulated
-        }
+        };
 
         enum ButtonNames
         {
@@ -82,12 +85,21 @@ namespace AltSalt
             DeselectAll,
             RefreshTimelineWindow,
             RefreshLayout,
+            CopyTracks,
+            PasteTracks,
             TMProColorTrack,
             RectTransformPosTrack,
             SpriteColorTrack,
             FloatVarTrack,
             GroupTrack,
             NewClips
+        };
+
+        enum UpdateWindowTriggers
+        {
+            RootWindow,
+            AllowBlankTracks,
+            TargetFloatVariable
         };
 
         [MenuItem("Tools/AltSalt/Timeline Utilities")]
@@ -104,6 +116,7 @@ namespace AltSalt
         void OnEnable()
         {
             RenderLayout();
+            UpdateElementStructure();
             Undo.undoRedoPerformed += undoCallback;
             Selection.selectionChanged += UpdateElementStructure;
         }
@@ -117,64 +130,69 @@ namespace AltSalt
         {
             if(allowBlankTracks == true) {
 
-                ToggleButtons(buttonData, DisplayCondition.TextSelected, true);
-                ToggleButtons(buttonData, DisplayCondition.RectTransformSelected, true);
-                ToggleButtons(buttonData, DisplayCondition.SpriteSelected, true);
-                ToggleButtons(buttonData, DisplayCondition.FloatVarPopulated, true);
-                ToggleButtons(buttonData, DisplayCondition.TrackSelected, true);
+                ToggleVisualElements(toggleData, EnableCondition.TextSelected, true);
+                ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, true);
+                ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, true);
+                ToggleVisualElements(toggleData, EnableCondition.FloatVarPopulated, true);
+                ToggleVisualElements(toggleData, EnableCondition.TrackSelected, true);
 
             } else {
 
-                if(TargetComponentSelected(Selection.gameObjects, typeof(TMP_Text))) {
-                    ToggleButtons(buttonData, DisplayCondition.TextSelected, true);
+                if (TargetComponentSelected(Selection.gameObjects, typeof(TMP_Text))) {
+                    ToggleVisualElements(toggleData, EnableCondition.TextSelected, true);
                 } else {
-                    ToggleButtons(buttonData, DisplayCondition.TextSelected, false);
+                    ToggleVisualElements(toggleData, EnableCondition.TextSelected, false);
                 }
 
                 if (TargetComponentSelected(Selection.gameObjects, typeof(RectTransform))) {
-                    ToggleButtons(buttonData, DisplayCondition.RectTransformSelected, true);
+                    ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, true);
                 } else {
-                    ToggleButtons(buttonData, DisplayCondition.RectTransformSelected, false);
+                    ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, false);
                 }
 
                 if (TargetComponentSelected(Selection.gameObjects, typeof(SpriteRenderer))) {
-                    ToggleButtons(buttonData, DisplayCondition.SpriteSelected, true);
+                    ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, true);
                 } else {
-                    ToggleButtons(buttonData, DisplayCondition.SpriteSelected, false);
+                    ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, false);
                 }
 
                 if(targetFloat != null) {
-                    ToggleButtons(buttonData, DisplayCondition.FloatVarPopulated, true);
+                    ToggleVisualElements(toggleData, EnableCondition.FloatVarPopulated, true);
                 } else {
-                    ToggleButtons(buttonData, DisplayCondition.FloatVarPopulated, false);
+                    ToggleVisualElements(toggleData, EnableCondition.FloatVarPopulated, false);
                 }
 
                 if (TargetTypeSelected(Selection.objects, typeof(TrackAsset))) {
-                    ToggleButtons(buttonData, DisplayCondition.TrackSelected, true);
+                    ToggleVisualElements(toggleData, EnableCondition.TrackSelected, true);
                 } else {
-                    ToggleButtons(buttonData, DisplayCondition.TrackSelected, false);
+                    ToggleVisualElements(toggleData, EnableCondition.TrackSelected, false);
                 }
 
+                if(copiedTracks.Count > 0) {
+                    ToggleVisualElements(toggleData, EnableCondition.CopiedTracksPopulated, true);
+                } else {
+                    ToggleVisualElements(toggleData, EnableCondition.CopiedTracksPopulated, false);
+                }
             }
         }
 
-        Dictionary<DisplayCondition, List<Button>> AddToButtonData(Dictionary<DisplayCondition, List<Button>> targetCollection, DisplayCondition targetCondition, Button buttonToAdd)
+        Dictionary<EnableCondition, List<VisualElement>> AddToToggleData(Dictionary<EnableCondition, List<VisualElement>> targetCollection, EnableCondition targetCondition, VisualElement elementToAdd)
         {
             if(targetCollection.ContainsKey(targetCondition)) {
-                targetCollection[targetCondition].Add(buttonToAdd);
+                targetCollection[targetCondition].Add(elementToAdd);
             } else {
-                List<Button> buttonList = new List<Button>();
-                buttonList.Add(buttonToAdd);
+                List<VisualElement> buttonList = new List<VisualElement>();
+                buttonList.Add(elementToAdd);
                 targetCollection.Add(targetCondition, buttonList);
             }
 
             return targetCollection;
         }
 
-        Dictionary<DisplayCondition, List<Button>> ToggleButtons(Dictionary<DisplayCondition, List<Button>> targetCollection, DisplayCondition targetCondition, bool targetStatus = false)
+        Dictionary<EnableCondition, List<VisualElement>> ToggleVisualElements(Dictionary<EnableCondition, List<VisualElement>> targetCollection, EnableCondition targetCondition, bool targetStatus = false)
         {
             if(targetCollection.ContainsKey(targetCondition)) {
-                List<Button> buttonList = targetCollection[targetCondition];
+                List<VisualElement> buttonList = targetCollection[targetCondition];
                 for (int i=0; i<buttonList.Count; i++) {
                     buttonList[i].SetEnabled(targetStatus);        
                 }
@@ -206,7 +224,7 @@ namespace AltSalt
         void RenderLayout()
         {
             rootVisualElement.Clear();
-            buttonData.Clear();
+            toggleData.Clear();
             AssetDatabase.Refresh();
 
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_AltSalt/__Core/EditorTools/TimelineUtilities/Editor/TimelineUtilities_Style.uss");
@@ -225,6 +243,16 @@ namespace AltSalt
 
             var buttons = rootVisualElement.Query<Button>();
             buttons.ForEach(SetupButton);
+
+            var updateWindowTriggers = rootVisualElement.Query<VisualElement>(null, "update-window-trigger");
+            updateWindowTriggers.ForEach(SetupUpdateWindowTriggers);
+        }
+
+        void RefreshStyles()
+        {
+            rootVisualElement.styleSheets.Clear();
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_AltSalt/__Core/EditorTools/TimelineUtilities/Editor/TimelineUtilities_Style.uss");
+            rootVisualElement.styleSheets.Add(styleSheet);
         }
 
         Button SetupButton(Button button)
@@ -390,59 +418,102 @@ namespace AltSalt
                     };
                     break;
 
-                case nameof(ButtonNames.TMProColorTrack):
+                case nameof(ButtonNames.CopyTracks):
                     button.clickable.clicked += () => {
-                        Selection.objects = TrackClipCreation.TriggerCreateTrack(Selection.gameObjects, typeof(TMProColorTrack), Selection.objects);
+                        copiedTracks = TrackClipCreation.CopyTracks(TimelineEditor.inspectedDirector, Selection.objects);
+                        TimelineUtilitiesCore.RefreshTimelineContentsModified();
+                    };
+                    AddToToggleData(toggleData, EnableCondition.TrackSelected, button);
+                    break;
+
+                case nameof(ButtonNames.PasteTracks):
+                    button.clickable.clicked += () => {
+                        TrackClipCreation.PasteTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects, copiedTracks);
                         TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    AddToButtonData(buttonData, DisplayCondition.TextSelected, button);
+                    AddToToggleData(toggleData, EnableCondition.CopiedTracksPopulated, button);
+                    break;
+
+                case nameof(ButtonNames.TMProColorTrack):
+                    button.clickable.clicked += () => {
+                        Selection.objects = TrackClipCreation.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProColorTrack), Selection.objects);
+                        TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToToggleData(toggleData, EnableCondition.TextSelected, button);
                     break;
 
                 case nameof(ButtonNames.RectTransformPosTrack):
                     button.clickable.clicked += () => {
-                        Selection.objects = TrackClipCreation.TriggerCreateTrack(Selection.gameObjects, typeof(RectTransformPosTrack), Selection.objects);
+                        Selection.objects = TrackClipCreation.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformPosTrack), Selection.objects);
                         TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    AddToButtonData(buttonData, DisplayCondition.RectTransformSelected, button);
+                    AddToToggleData(toggleData, EnableCondition.RectTransformSelected, button);
                     break;
 
                 case nameof(ButtonNames.SpriteColorTrack):
                     button.clickable.clicked += () => {
-                        Selection.objects = TrackClipCreation.TriggerCreateTrack(Selection.gameObjects, typeof(SpriteColorTrack), Selection.objects);
+                        Selection.objects = TrackClipCreation.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(SpriteColorTrack), Selection.objects);
                         TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    AddToButtonData(buttonData, DisplayCondition.SpriteSelected, button);
+                    AddToToggleData(toggleData, EnableCondition.SpriteSelected, button);
                     break;
 
                 case nameof(ButtonNames.FloatVarTrack):
                     button.clickable.clicked += () => {
-                        Selection.objects = TrackClipCreation.TriggerCreateTrack(new UnityEngine.Object[] { targetFloat }, typeof(LerpFloatVarTrack), Selection.objects);
+                        Selection.objects = TrackClipCreation.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new UnityEngine.Object[] { targetFloat }, typeof(LerpFloatVarTrack), Selection.objects);
                         TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    AddToButtonData(buttonData, DisplayCondition.FloatVarPopulated, button);
+                    AddToToggleData(toggleData, EnableCondition.FloatVarPopulated, button);
                     break;
 
                 case nameof(ButtonNames.GroupTrack):
                     button.clickable.clicked += () => {
-                        Selection.activeObject = TrackClipCreation.TriggerCreateGroupTrack(Selection.objects);
+                        Selection.activeObject = TrackClipCreation.TriggerCreateGroupTrack(TimelineEditor.inspectedAsset, Selection.objects);
                         TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    AddToButtonData(buttonData, DisplayCondition.TrackSelected, button);
+                    AddToToggleData(toggleData, EnableCondition.TrackSelected, button);
                     break;
 
                 case nameof(ButtonNames.NewClips):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = TrackClipCreation.CreateClips(Selection.objects, newClipDuration).ToArray();
+                        TimelineEditor.selectedClips = TrackClipCreation.CreateClips(TimelineEditor.inspectedDirector, Selection.objects, newClipDuration).ToArray();
                         TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    AddToButtonData(buttonData, DisplayCondition.TrackSelected, button);
+                    AddToToggleData(toggleData, EnableCondition.TrackSelected, button);
                     break;
             }
 
             return button;
         }
 
-        void OnInspectorUpdate()
+        IEnumerator CallRenderLayout(float waitTime)
+        {
+            yield return new WaitForSeconds(waitTime);
+            RenderLayout();
+        }
+
+        VisualElement SetupUpdateWindowTriggers(VisualElement visualElement)
+        {
+            switch (visualElement.name) {
+
+                case nameof(UpdateWindowTriggers.AllowBlankTracks):
+                    visualElement.RegisterCallback<ChangeEvent<bool>>((ChangeEvent<bool> evt) => {
+                        UpdateElementStructure();
+                    });
+                    break;
+
+                case nameof(UpdateWindowTriggers.TargetFloatVariable):
+                    visualElement.RegisterCallback<ChangeEvent<UnityEngine.Object>>((ChangeEvent<UnityEngine.Object> evt) => {
+                        UpdateElementStructure();
+                    });
+                    break;
+
+            }
+            
+            return visualElement;
+        }
+
+            void OnInspectorUpdate()
         {
             if (debugTrackCreated == true) {
                 currentTime = TimelineUtilitiesCore.CurrentTime;
@@ -464,6 +535,7 @@ namespace AltSalt
 
             if (TimelineEditor.inspectedAsset == null) {
                 GUILayout.Label("Please select a timeline asset in order to use clip tools.", guiStyle);
+                timelineUtilitiesStructure.visible = false;
             } else {
                 debugTrackCreated = FindDebugTrack();
 

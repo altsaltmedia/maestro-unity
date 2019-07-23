@@ -10,109 +10,22 @@ namespace AltSalt
 {
     public static class CreateSequenceTools
     {
-        public static PageBuilderReferences pageBuilderReferences;
+        public static PageBuilderReferences pageBuilderRefs;
 
-        static GameObject sequenceControllerObject;
-        static SequenceList sequenceList;
-        static string sequenceName = "";
+        public static PageBuilderReferences PageBuilderRefs {
 
-        public static void ShowSequenceTools()
-        {
-            pageBuilderReferences = Utils.GetScriptableObject("PageBuilderReferences") as PageBuilderReferences;
-
-            GUILayout.Space(10);
-
-            //if (GUILayout.Button("Create standard director")) {
-            //    CreateStandardDirector();
-            //}
-
-            EditorGUILayout.LabelField("Create a sequence controller:");
-
-            if (GUILayout.Button("Create sequence touch applier")) {
-                CreateSequenceTouchApplier(Selection.activeTransform);
+            get {
+                if(pageBuilderRefs == null) {
+                    pageBuilderRefs = Utils.GetScriptableObject("PageBuilderReferences") as PageBuilderReferences;
+                }
+                return pageBuilderRefs;
             }
 
-            if (GUILayout.Button("Create sequence autoplayer")) {
-                CreateSequenceAutoplayer(Selection.activeTransform);
-            }
-
-            GUILayout.Space(10);
-
-
-            EditorGUILayout.BeginHorizontal();
-
-                if (Event.current.commandName == "ObjectSelectorUpdated") {
-                    sequenceControllerObject = EditorGUIUtility.GetObjectPickerObject() as GameObject;
-                }
-
-                if (sequenceControllerObject == null) {
-                    EditorGUILayout.LabelField("No sequence controller selected");
-                } else {
-                    EditorGUILayout.LabelField(sequenceControllerObject.name + " is selected");
-                }
-
-                if (GUILayout.Button("Select sequence controller")) {
-                    SelectSequenceController();
-                }
-
-            EditorGUILayout.EndHorizontal();
-
-            
-            EditorGUI.BeginDisabledGroup(CheckListDependencies());
-                if (GUILayout.Button("Create sequence list")) {
-                    CreateSequenceList();
-                }
-            EditorGUI.EndDisabledGroup();
-
-            GUILayout.Space(10);
-
-            sequenceList = EditorGUILayout.ObjectField("Target sequence list", sequenceList, typeof(SequenceList), false) as SequenceList;
-            sequenceName = EditorGUILayout.TextField("New sequence name", sequenceName);
-
-            EditorGUI.BeginDisabledGroup(CheckSwipeDependencies());
-                if (GUILayout.Button("Create swipe director")) {
-                    CreateSwipeDirector(Selection.activeTransform, sequenceList, sequenceName);
-                }
-            EditorGUI.EndDisabledGroup();
-
-            GUILayout.Space(10);
-
-            
         }
 
-        //void CreateStandardDirector()
-        //{
-
-        //}
-
-        static bool CheckListDependencies()
+        public static GameObject CreateSequenceTouchApplier(Transform parentTransform)
         {
-            if (sequenceControllerObject == null) {
-                return true;
-            }
-
-            return false;
-        }
-
-        static bool CheckSwipeDependencies()
-        {
-            if(sequenceList == null || sequenceName == string.Empty) {
-                return true;
-            }
-
-            return false;
-        }
-
-        static void SelectSequenceController()
-        {
-            EditorGUIUtility.ShowObjectPicker<SequenceController>(sequenceControllerObject, true, "t:" + typeof(SequenceController).Name, 1);
-        }
-
-        /* DIRECTOR TOOLS */
-
-        static GameObject CreateSequenceTouchApplier(Transform parentTransform)
-        {
-            GameObject sequenceTouchApplier = PrefabUtility.InstantiatePrefab(pageBuilderReferences.sequenceTouchApplier) as GameObject;
+            GameObject sequenceTouchApplier = PrefabUtility.InstantiatePrefab(PageBuilderRefs.sequenceTouchApplier) as GameObject;
             Undo.RegisterCreatedObjectUndo(sequenceTouchApplier, "Create sequence touch applier");
 
             if (parentTransform != null) {
@@ -121,9 +34,9 @@ namespace AltSalt
             return sequenceTouchApplier;
         }
 
-        static GameObject CreateSequenceAutoplayer(Transform parentTransform)
+        public static GameObject CreateSequenceAutoplayer(Transform parentTransform)
         {
-            GameObject sequenceAutoplayer = PrefabUtility.InstantiatePrefab(pageBuilderReferences.sequenceAutoplayer) as GameObject;
+            GameObject sequenceAutoplayer = PrefabUtility.InstantiatePrefab(PageBuilderRefs.sequenceAutoplayer) as GameObject;
             Undo.RegisterCreatedObjectUndo(sequenceAutoplayer, "Create sequence autoplayer");
 
             if (parentTransform != null) {
@@ -133,9 +46,9 @@ namespace AltSalt
         }
 
 
-        static GameObject CreateSwipeDirector(Transform parentTransform, SequenceList parentSequenceList, string elementName)
+        public static GameObject CreateSwipeDirector(Transform parentTransform, SequenceList parentSequenceList, string elementName)
         {
-            GameObject swipeDirector = PrefabUtility.InstantiatePrefab(pageBuilderReferences.swipeDirector) as GameObject;
+            GameObject swipeDirector = PrefabUtility.InstantiatePrefab(PageBuilderRefs.swipeDirector) as GameObject;
             Undo.RegisterCreatedObjectUndo(swipeDirector, "Create swipe director");
 
             if (parentTransform != null) {
@@ -221,20 +134,16 @@ namespace AltSalt
             return newTimelineAsset;
         }
 
-        static SequenceList CreateSequenceList()
+        public static SequenceList CreateSequenceList(SequenceController sequenceController)
         {
             string filePath = EditorUtility.SaveFilePanelInProject("Create new sequence list", "", "asset", "Please enter a file name for the new sequence list");
             SequenceList newSequenceList = ScriptableObject.CreateInstance(typeof(SequenceList)) as SequenceList;
             AssetDatabase.CreateAsset(newSequenceList, filePath);
 
-            sequenceControllerObject.GetComponent<SequenceController>().sequenceLists.Add(newSequenceList);
+            sequenceController.sequenceLists.Add(newSequenceList);
 
             return newSequenceList;
         }
-
-
-        /* TRACK TOOLS */
-
 
     }
 }

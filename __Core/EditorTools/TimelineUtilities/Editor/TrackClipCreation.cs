@@ -15,126 +15,44 @@ namespace AltSalt
         public static PageBuilderReferences pageBuilderReferences;
         static List<TrackData> copiedTracks = new List<TrackData>();
 
-        static float newClipDuration = .5f;
-        static bool allowBlankTracks = false;
-
-        public static void ShowTrackClipTools()
-        {
-            var guiStyle = new GUIStyle("Label");
-            guiStyle.fontStyle = FontStyle.Italic;
-            guiStyle.alignment = TextAnchor.UpperCenter;
-
-            if (TimelineEditor.inspectedAsset == null) {
-
-                GUILayout.Label("Please select a timeline asset in order to use clip tools.", guiStyle);
-
-            } else {
-
-                EditorGUI.BeginDisabledGroup(!ObjectsSelected());
-                if (GUILayout.Button("Copy Track(s)")) {
-                    copiedTracks = CopyTracks(Selection.objects);
-                }
-                EditorGUI.EndDisabledGroup();
-
-                EditorGUI.BeginDisabledGroup(!ObjectsSelected());
-                if (GUILayout.Button("Paste Track(s)")) {
-                    PasteTracks(Selection.objects, copiedTracks);
-                }
-                EditorGUI.EndDisabledGroup();
-
-                GUILayout.Space(10);
-
-                EditorGUILayout.BeginHorizontal();
-                    allowBlankTracks = EditorGUILayout.Toggle("Allow blank tracks", allowBlankTracks);
-                    if (GUILayout.Button("Refresh")) {
-                        // This button just here as a visual cue - any click inside window will refresh buttons
-                    }
-                EditorGUILayout.EndHorizontal();
-
-                GUILayout.Space(5);
-
-                EditorGUI.BeginDisabledGroup(DisableComponentTrackButton(Selection.gameObjects, typeof(TMP_Text), allowBlankTracks));
-                    if (GUILayout.Button("New TextMeshPro Color Track(s)")) {
-                        Selection.objects = TriggerCreateTrack(Selection.gameObjects, typeof(TMProColorTrack), Selection.objects);
-                    }
-                EditorGUI.EndDisabledGroup();
-
-                EditorGUI.BeginDisabledGroup(DisableComponentTrackButton(Selection.gameObjects, typeof(SpriteRenderer), allowBlankTracks));
-                    if (GUILayout.Button("New Sprite Color Track(s)")) {
-                        Selection.objects = TriggerCreateTrack(Selection.gameObjects, typeof(SpriteColorTrack), Selection.objects);
-                    }
-                EditorGUI.EndDisabledGroup();
-
-                EditorGUI.BeginDisabledGroup(DisableComponentTrackButton(Selection.gameObjects, typeof(RectTransform), allowBlankTracks));
-                    if (GUILayout.Button("New RectTransform Position Track(s)")) {
-                        Selection.objects = TriggerCreateTrack(Selection.gameObjects, typeof(RectTransformPosTrack), Selection.objects);
-                    }
-                EditorGUI.EndDisabledGroup();
-
-                GUILayout.Space(10);
-
-                EditorGUI.BeginDisabledGroup(DisableGroupTrackButton(Selection.gameObjects, allowBlankTracks));
-                    if (GUILayout.Button("New Group Track(s)")) {
-                        Selection.activeObject = TriggerCreateGroupTrack(Selection.objects);
-                    }
-                EditorGUI.EndDisabledGroup();
-
-                GUILayout.Space(10);
-
-                EditorGUI.BeginDisabledGroup(!TracksSelected());
-                    EditorGUI.BeginChangeCheck();
-                        newClipDuration = EditorGUILayout.FloatField("New clip duration :", newClipDuration);
-                    if(EditorGUI.EndChangeCheck() == true && newClipDuration < 0) {
-                        newClipDuration = 0;
-                    }
-
-                    if (GUILayout.Button("Create Clip(s)")) {
-                        TimelineUtilitiesCore.timelineClips = CreateClips(Selection.objects, newClipDuration);
-                        TimelineEditor.selectedClips = TimelineUtilitiesCore.timelineClips.ToArray();
-                        TimelineEditor.Refresh(RefreshReason.ContentsModified);
-                    }
-                EditorGUI.EndDisabledGroup();
-            }
-        }
-
-        public static List<TrackData> CopyTracks(UnityEngine.Object[] sourceObjects)
+        public static List<TrackData> CopyTracks(PlayableDirector sourceDirector, UnityEngine.Object[] sourceObjects)
         {
             List<TrackData> tracksToCopy = new List<TrackData>();
             for (int i = 0; i < sourceObjects.Length; i++) {
                 if (sourceObjects[i] is TrackAsset) {
-                    List<TrackData> trackData = GetTrackData(sourceObjects[i] as TrackAsset);
+                    List<TrackData> trackData = GetTrackData(sourceDirector, sourceObjects[i] as TrackAsset);
                     tracksToCopy.AddRange(trackData);
                 }
             }
             return tracksToCopy;
         }
 
-        static List<TrackData> GetTrackData(TrackAsset sourceTrack)
+        static List<TrackData> GetTrackData(PlayableDirector sourceDirector, TrackAsset sourceTrack)
         {
             List<TrackData> trackData = new List<TrackData>();
             UnityEngine.Object sourceObject = new UnityEngine.Object();
             foreach (PlayableBinding playableBinding in sourceTrack.outputs) {
-                sourceObject = TimelineEditor.inspectedDirector.GetGenericBinding(playableBinding.sourceObject);
+                sourceObject = sourceDirector.GetGenericBinding(playableBinding.sourceObject);
             }
             trackData.Add(new TrackData(sourceTrack, sourceObject, sourceTrack.GetClips()));
             foreach(TrackAsset childTrack in sourceTrack.GetChildTracks()) {
-                trackData.AddRange(GetTrackData(childTrack));
+                trackData.AddRange(GetTrackData(sourceDirector, childTrack));
             }
             return trackData;
         }
 
-        public static TrackAsset[] PasteTracks(UnityEngine.Object[] destinationSelection, List<TrackData> sourceTrackData)
+        public static TrackAsset[] PasteTracks(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, UnityEngine.Object[] destinationSelection, List<TrackData> sourceTrackData)
         {
             TrackAsset[] pastedTracks = new TrackAsset[sourceTrackData.Count];
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
 
             // Paste tracks
             for (int i = 0; i < sourceTrackData.Count; i++) {
-                TrackAsset trackAsset = TimelineEditor.inspectedAsset.CreateTrack(sourceTrackData[i].trackType, parentTrack, sourceTrackData[i].trackName);
+                TrackAsset trackAsset = targetTimelineAsset.CreateTrack(sourceTrackData[i].trackType, parentTrack, sourceTrackData[i].trackName);
                 pastedTracks[i] = trackAsset;
 
                 foreach (PlayableBinding playableBinding in trackAsset.outputs) {
-                    TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, sourceTrackData[i].trackBinding);
+                    targetDirector.SetGenericBinding(playableBinding.sourceObject, sourceTrackData[i].trackBinding);
                 }
                 foreach (TimelineClip trackClip in sourceTrackData[i].trackClips) {
                     TimelineClip pastedClip = trackAsset.CreateDefaultClip();
@@ -162,7 +80,7 @@ namespace AltSalt
                 }
             }
 
-            TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
+            TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
 
             return pastedTracks;
         }
@@ -186,25 +104,25 @@ namespace AltSalt
             return false;
         }
 
-        public static TrackAsset[] TriggerCreateTrack(UnityEngine.Object[] sourceObjects, Type trackType, UnityEngine.Object[] destinationSelection)
+        public static TrackAsset[] TriggerCreateTrack(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, UnityEngine.Object[] sourceObjects, Type trackType, UnityEngine.Object[] destinationSelection)
         {
             TrackAsset[] trackAssets = new TrackAsset[sourceObjects.Length];
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
 
             if (sourceObjects.Length > 0) {
                 for (int i = 0; i < sourceObjects.Length; i++) {
-                    TrackAsset newTrack = CreateNewTrack(parentTrack, trackType);
+                    TrackAsset newTrack = CreateNewTrack(targetTimelineAsset, parentTrack, trackType);
                     trackAssets[i] = newTrack;
-                    PopulateTrackAsset(newTrack, sourceObjects[i]);
+                    PopulateTrackAsset(targetDirector, newTrack, sourceObjects[i]);
                 }
             } else {
-                CreateNewTrack(parentTrack, trackType);
+                CreateNewTrack(targetTimelineAsset, parentTrack, trackType);
             }
-            TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
+            TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
             return trackAssets;
         }
 
-        public static TrackAsset[] TriggerCreateTrack(GameObject[] sourceGameObjects, Type trackType, UnityEngine.Object[] destinationSelection)
+        public static TrackAsset[] TriggerCreateTrack(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, GameObject[] sourceGameObjects, Type trackType, UnityEngine.Object[] destinationSelection)
         {
             TrackAsset[] trackAssets = new TrackAsset[sourceGameObjects.Length];
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
@@ -212,44 +130,44 @@ namespace AltSalt
             if (sourceGameObjects.Length > 0) {
                 Array.Sort(sourceGameObjects, new Utils.GameObjectSort());
                 for (int i = 0; i < sourceGameObjects.Length; i++) {
-                    TrackAsset newTrack = CreateNewTrack(parentTrack, trackType);
+                    TrackAsset newTrack = CreateNewTrack(targetTimelineAsset, parentTrack, trackType);
                     trackAssets[i] = newTrack;
-                    PopulateTrackAsset(newTrack, sourceGameObjects[i]);
+                    PopulateTrackAsset(targetDirector, newTrack, sourceGameObjects[i]);
                 }
             } else {
-                CreateNewTrack(parentTrack, trackType);
+                CreateNewTrack(targetTimelineAsset, parentTrack, trackType);
             }
-            TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
+            TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
             return trackAssets;
         }
 
-        static TrackAsset CreateNewTrack(TrackAsset parentTrack, Type trackType)
+        static TrackAsset CreateNewTrack(TimelineAsset targetTimelineAsset, TrackAsset parentTrack, Type trackType)
         {
             TrackAsset trackAsset;    
-            trackAsset = TimelineEditor.inspectedAsset.CreateTrack(trackType, parentTrack, trackType.Name);
+            trackAsset = targetTimelineAsset.CreateTrack(trackType, parentTrack, trackType.Name);
             return trackAsset;
         }
 
-        static TrackAsset PopulateTrackAsset(TrackAsset targetTrack, UnityEngine.Object targetObject)
+        static TrackAsset PopulateTrackAsset(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject)
         {
             foreach (PlayableBinding playableBinding in targetTrack.outputs) {
 
                 switch(targetTrack.GetType().Name) {
 
                     case nameof(TMProColorTrack):
-                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<TMP_Text>());
+                        targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<TMP_Text>());
                         break;
 
                     case nameof(RectTransformPosTrack):
-                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<RectTransform>());
+                        targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<RectTransform>());
                         break;
 
                     case nameof(SpriteColorTrack):
-                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<SpriteRenderer>());
+                        targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<SpriteRenderer>());
                         break;
 
                     case nameof(LerpFloatVarTrack):
-                        TimelineEditor.inspectedDirector.SetGenericBinding(playableBinding.sourceObject, targetObject);
+                        targetDirector.SetGenericBinding(playableBinding.sourceObject, targetObject);
                         break;
 
                     default:
@@ -261,7 +179,7 @@ namespace AltSalt
             return targetTrack;
         }
 
-        public static List<TimelineClip> CreateClips(UnityEngine.Object[] selection, float duration)
+        public static List<TimelineClip> CreateClips(PlayableDirector targetDirector, UnityEngine.Object[] selection, float duration)
         {
             List<TimelineClip> timelineClips = new List<TimelineClip>();
             for (int i = 0; i < selection.Length; i++) {
@@ -270,21 +188,21 @@ namespace AltSalt
                     TimelineClip newClip = trackAsset.CreateDefaultClip();
                     newClip.start = TimelineUtilitiesCore.CurrentTime;
                     newClip.duration = duration;
-                    PopulateClip(trackAsset, newClip);
+                    PopulateClip(targetDirector, trackAsset, newClip);
                     timelineClips.Add(newClip);
                 }
             }
 
-            TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
+            TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
 
             return timelineClips;
         }
 
-        static PlayableAsset PopulateClip(TrackAsset parentTrack, TimelineClip timelineClip)
+        static PlayableAsset PopulateClip(PlayableDirector targetDirector, TrackAsset parentTrack, TimelineClip timelineClip)
 		{
             UnityEngine.Object sourceObject = null;
             foreach (PlayableBinding playableBinding in parentTrack.outputs) {
-                sourceObject = TimelineEditor.inspectedDirector.GetGenericBinding(playableBinding.sourceObject);
+                sourceObject = targetDirector.GetGenericBinding(playableBinding.sourceObject);
             }
 
             switch (timelineClip.asset.GetType().Name) {
@@ -340,9 +258,9 @@ namespace AltSalt
             return destinationTrack;
         }
 
-        public static GroupTrack TriggerCreateGroupTrack(UnityEngine.Object[] childSelection)
+        public static GroupTrack TriggerCreateGroupTrack(TimelineAsset targetTimelineAsset, UnityEngine.Object[] childSelection)
         {
-            GroupTrack groupTrack = TimelineEditor.inspectedAsset.CreateTrack(typeof(GroupTrack), null, typeof(GroupTrack).Name) as GroupTrack;
+            GroupTrack groupTrack = targetTimelineAsset.CreateTrack(typeof(GroupTrack), null, typeof(GroupTrack).Name) as GroupTrack;
             GroupTrack childGroup = null;
 
             for(int i=0; i<childSelection.Length; i++) {
@@ -359,47 +277,9 @@ namespace AltSalt
                 groupTrack.SetGroup(childGroup);
             }
 
-            TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
+            TimelineUtilitiesCore.RefreshTimelineContentsAddedOrRemoved();
 
             return groupTrack;
-        }
-
-        static bool DisableComponentTrackButton(GameObject[] currentSelection, Type targetType, bool overrideValue)
-        {
-            if(overrideValue == true) {
-                return false;
-            }
-
-            return !TargetComponentSelected(currentSelection, targetType);
-        }
-
-        static bool DisableGroupTrackButton(GameObject[] currentSelection, bool overrideValue)
-        {
-            if (overrideValue == true) {
-                return false;
-            }
-
-            return TargetTypeSelected(currentSelection, typeof(TrackAsset));
-        }
-
-        static bool TargetComponentSelected(GameObject[] currentSelection, Type targetType)
-        {
-            for(int i=0; i<currentSelection.Length; i++) {
-                if(currentSelection[i].GetComponent(targetType) != null) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        static bool TargetTypeSelected(GameObject[] currentSelection, Type targetType)
-        {
-            for (int i = 0; i < currentSelection.Length; i++) {
-                if (currentSelection[i].GetType().Name == targetType.Name) {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public class TrackData

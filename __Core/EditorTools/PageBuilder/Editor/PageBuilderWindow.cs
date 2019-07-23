@@ -1,32 +1,85 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using TMPro;
 using System.Text.RegularExpressions;
+using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 
 namespace AltSalt
 {
     public class PageBuilderWindow : EditorWindow
     {
-        Vector2 scrollPos;
         public PageBuilderReferences pageBuilderReferences;
-        string objectName = "[INSERT NAME HERE]";
-        
-        bool showSelectionTools = false;
-        bool showSequencingTools = false;
-        bool showCreateTools = false;
+        public string objectName = "[INSERT NAME HERE]";
 
-        bool showTextTools = false;
-        string textContent;
-        float fontSize;
-        Color fontColor;
+        Dictionary<EnableCondition, List<VisualElement>> toggleData = new Dictionary<EnableCondition, List<VisualElement>>();
 
-        bool showRectTransformTools = false;
-        Vector3 rectTransPosition;
-        Vector3 rectTransTransposePosition;
+        // Sequences
+        public SequenceController sequenceControllerObject;
+        public SequenceList targetSequenceList;
+        public string newSequenceName = "";
 
-        bool selectCreatedObject;
+        // Text
+        public string textContent;
+        public float fontSize;
+        public Color fontColor;
+
+        // Rect Transform
+        public Vector3 rectPosition;
+        public Vector3 rectTransposePosition;
+
+        VisualElement pageBuilderStructure;
+
+        SerializedObject editorWindowSerialized;
+
+        public bool selectCreatedObject;
         GameObject createdGameObject;
+
+        enum ButtonNames
+        {
+            NewText,
+            NewSprite,
+            NewContainer,
+            NewResponsiveContainer,
+            NewSequenceTouchApplier,
+            NewSequenceAutoplayer,
+            NewSequenceList,
+            NewSwipeDirector,
+            RenameElements,
+            RefreshLayout,
+        }
+
+        enum PropertyFieldNames
+        {
+            RectPosition,
+            RectTransposePosition,
+            TextContent,
+            FontSize,
+            FontColor
+        }
+
+        enum EnableCondition
+        {
+            SequenceControllerObjectPopulated,
+            SequenceListNamePopulated,
+            TextSelected,
+            RectTransformSelected,
+        }
+
+        enum ToggleGroups
+        {
+            RectTransformComponent,
+            TextMeshProComponent
+        }
+
+        enum UpdateWindowTriggers
+        {
+            SequenceControllerObject,
+            TargetSequenceList,
+            NewSequenceName
+        }
 
         [MenuItem("Tools/AltSalt/Page Builder")]
         public static void ShowWindow()
@@ -39,116 +92,306 @@ namespace AltSalt
             EditorWindow.GetWindow(typeof(PageBuilderWindow)).Show();
         }
 
-        //void OnEnable()
-        //{
-        //    Selection.selectionChanged += SetObjectNameDefault;
-        //}
-
-        //void OnDestroy()
-        //{
-        //    Selection.selectionChanged -= SetObjectNameDefault;
-        //}
-
-        //void SetObjectNameDefault()
-        //{
-        //    if(Selection.activeGameObject == null) {
-        //        return;
-        //    }
-
-        //    string originalName = Selection.activeGameObject.name;
-            
-        //    Match match = Regex.Match(originalName, @"[0-9]+", RegexOptions.RightToLeft);
-
-        //    string newName = "";
-
-        //    if(match.Value != string.Empty) {
-        //        int numValue = Int32.Parse(match.Value);
-        //        numValue++;
-        //        newName = originalName.Replace(match.Value, numValue.ToString());
-        //    } else {
-        //        newName = originalName + " (1)";
-        //    }
-
-        //    objectName = newName;
-        //}
-
-        public void OnGUI()
+        void RenderLayout()
         {
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+            rootVisualElement.Clear();
+            AssetDatabase.Refresh();
 
-            pageBuilderReferences = Utils.GetScriptableObject("PageBuilderReferences") as PageBuilderReferences;
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_AltSalt/__Core/EditorTools/TimelineUtilities/Editor/TimelineUtilities_Style.uss");
+            rootVisualElement.styleSheets.Add(styleSheet);
 
-            GUILayout.Space(10);
+            // Loads and clones our VisualTree (eg. our UXML structure) inside the root.
+            var pageBuilderTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_AltSalt/__Core/EditorTools/PageBuilder/Editor/PageBuilderWindow.uxml");
+            pageBuilderStructure = pageBuilderTree.CloneTree();
+            rootVisualElement.Add(pageBuilderStructure);
 
-            showSelectionTools = EditorGUILayout.Foldout(showSelectionTools, "Selection Tools");
-            if(showSelectionTools == true) {
-                SelectionTools.ShowSelectionTools();
-            }
+            editorWindowSerialized = new SerializedObject(this);
+            rootVisualElement.Bind(editorWindowSerialized);
 
-            GUILayout.Space(10);
+            var buttons = rootVisualElement.Query<Button>();
+            buttons.ForEach(SetupButton);
 
-            showSequencingTools = EditorGUILayout.Foldout(showSequencingTools, "Create Sequences");
-            if (showSequencingTools == true) {
-                CreateSequenceTools.ShowSequenceTools();
-            }
+            var propertyFields = rootVisualElement.Query<PropertyField>();
+            propertyFields.ForEach(SetupPropertyField);
 
-            GUILayout.Space(10);
+            var toggleGroups = rootVisualElement.Query<VisualElement>(null, "toggleable-group");
+            toggleGroups.ForEach(SetupToggleGroups);
 
-            showCreateTools = EditorGUILayout.Foldout(showCreateTools, "Create Sequences");
-            if(showCreateTools == true) {
-                ShowCreationTools();
-            }
-
-            GUILayout.Space(10);
-
-            ShowEditingTools(Selection.gameObjects);
-
-            EditorGUILayout.EndScrollView();
+            var updateWindowTriggers = rootVisualElement.Query<VisualElement>(null, "update-window-trigger");
+            updateWindowTriggers.ForEach(SetupUpdateWindowTriggers);
         }
 
-        void ShowCreationTools()
+        void OnEnable()
         {
-            objectName = EditorGUILayout.TextField("Object name", objectName);
+            pageBuilderReferences = Utils.GetScriptableObject("PageBuilderReferences") as PageBuilderReferences;
+            RenderLayout();
+            Selection.selectionChanged += UpdateElementStructure;
+        }
 
-            GUILayout.Space(5);
+        void OnDestroy()
+        {
+            Selection.selectionChanged -= UpdateElementStructure;
+        }
 
-            selectCreatedObject = EditorGUILayout.Toggle("Select object after creation", selectCreatedObject);
-
-            GUILayout.Space(5);
-
-            EditorGUI.BeginChangeCheck();
-            if (GUILayout.Button("New Text")) {
-                createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.textPrefab, objectName);
-            }
-                
-            if (GUILayout.Button("New Sprite")) {
-                createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.spritePrefab, objectName);
-            }
-
-            if (GUILayout.Button("New Container")) {
-                createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.containerPrefab, objectName);
+        void UpdateElementStructure()
+        {
+            if (sequenceControllerObject != null) {
+                ToggleVisualElements(toggleData, EnableCondition.SequenceControllerObjectPopulated, true);
+            } else {
+                ToggleVisualElements(toggleData, EnableCondition.SequenceControllerObjectPopulated, false);
             }
 
-            if (GUILayout.Button("New Responsive Container")) {
-                createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.responsiveContainerPrefab, objectName);
+            if (targetSequenceList != null && newSequenceName.Length > 0) {
+                ToggleVisualElements(toggleData, EnableCondition.SequenceListNamePopulated, true);
+            } else {
+                ToggleVisualElements(toggleData, EnableCondition.SequenceListNamePopulated, false);
             }
 
-            if (EditorGUI.EndChangeCheck() == true) {
-                if (selectCreatedObject == true) {
-                    Selection.activeGameObject = createdGameObject;
+            bool textSelected = false;
+            bool rectTransformSelected = false;
+
+            for (int i = 0; i < Selection.objects.Length; i++) {
+                if (Selection.objects[i] is GameObject && ((GameObject)Selection.objects[i]).GetComponent<TMP_Text>() != null) {
+                    textSelected = true;
+                }
+
+                if (Selection.objects[i] is GameObject && ((GameObject)Selection.objects[i]).GetComponent<RectTransform>() != null) {
+                    rectTransformSelected = true;
                 }
             }
 
-            GUILayout.Space(10);
-
-            if (GUILayout.Button("Rename Element(s)")) {
-                RenameElement(Selection.gameObjects);
+            if (textSelected == true) {
+                ToggleVisualElements(toggleData, EnableCondition.TextSelected, true);
+            } else {
+                ToggleVisualElements(toggleData, EnableCondition.TextSelected, false);
             }
 
-            
+            if (rectTransformSelected == true) {
+                ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, true);
+            } else {
+                ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, false);
+            }
         }
 
-        GameObject[] RenameElement(GameObject[] targetObjects)
+        Button SetupButton(Button button)
+        {
+            switch(button.name) {
+
+                case nameof(ButtonNames.NewText):
+                    button.clickable.clicked += () => {
+                        createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.textPrefab, objectName);
+                        if (selectCreatedObject == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+
+                case nameof(ButtonNames.NewSprite):
+                    button.clickable.clicked += () => {
+                        createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.spritePrefab, objectName);
+                        if (selectCreatedObject == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+
+                case nameof(ButtonNames.NewContainer):
+                    button.clickable.clicked += () => {
+                        createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.containerPrefab, objectName, true);
+                        if (selectCreatedObject == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+
+                case nameof(ButtonNames.NewResponsiveContainer):
+                    button.clickable.clicked += () => {
+                        createdGameObject = CreateNewElement(Selection.transforms, pageBuilderReferences.responsiveContainerPrefab, objectName, true);
+                        if (selectCreatedObject == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+
+                case nameof(ButtonNames.NewSequenceTouchApplier):
+                    button.clickable.clicked += () => {
+                        CreateSequenceTools.CreateSequenceTouchApplier(Selection.activeTransform);
+                    };
+                    break;
+
+                case nameof(ButtonNames.NewSequenceAutoplayer):
+                    button.clickable.clicked += () => {
+                        CreateSequenceTools.CreateSequenceAutoplayer(Selection.activeTransform);
+                    };
+                    break;
+
+                case nameof(ButtonNames.NewSequenceList):
+                    button.clickable.clicked += () => {
+                        CreateSequenceTools.CreateSequenceList(sequenceControllerObject);
+                    };
+                    AddToToggleData(toggleData, EnableCondition.SequenceControllerObjectPopulated, button);
+                    break;
+
+                case nameof(ButtonNames.NewSwipeDirector):
+                    button.clickable.clicked += () => {
+                        CreateSequenceTools.CreateSwipeDirector(Selection.activeTransform, targetSequenceList, newSequenceName);
+                    };
+                    AddToToggleData(toggleData, EnableCondition.SequenceListNamePopulated, button);
+                    break;
+
+                case nameof(ButtonNames.RenameElements):
+                    button.clickable.clicked += () => {
+                        RenameElements(Selection.gameObjects);
+                    };
+                    break;
+
+                case nameof(ButtonNames.RefreshLayout):
+                    button.clickable.clicked += () => {
+                        RenderLayout();
+                    };
+                    break;
+            }
+
+            return button;
+        }
+
+        PropertyField SetupPropertyField(PropertyField propertyField)
+        {
+            switch (propertyField.name) {
+
+                case nameof(PropertyFieldNames.RectPosition):
+                    propertyField.RegisterCallback<ChangeEvent<Vector3>>((ChangeEvent<Vector3> evt) => {
+                        for (int i = 0; i < Selection.gameObjects.Length; i++) {
+                            RectTransform rectTransform = Selection.gameObjects[i].GetComponent<RectTransform>();
+                            if (rectTransform != null) {
+                                Undo.RecordObject(rectTransform, "set rect position");
+                                rectTransform.anchoredPosition3D = rectPosition;
+                            }
+                        }
+                    });
+                    break;
+
+                case nameof(PropertyFieldNames.RectTransposePosition):
+                    propertyField.RegisterCallback<ChangeEvent<Vector3>>((ChangeEvent<Vector3> evt) => {
+                        for (int i = 0; i < Selection.gameObjects.Length; i++) {
+                            RectTransform rectTransform = Selection.gameObjects[i].GetComponent<RectTransform>();
+                            if (rectTransform != null) {
+                                Undo.RecordObject(rectTransform, "tranpose rect position");
+                                rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x + rectTransposePosition.x, rectTransform.anchoredPosition3D.y + rectTransposePosition.y, rectTransform.anchoredPosition3D.z + rectTransposePosition.z);
+                            }
+                        }
+                        rectTransposePosition = new Vector3(0, 0, 0);
+                    });
+                    break;
+
+                case nameof(PropertyFieldNames.TextContent):
+                    propertyField.RegisterCallback<ChangeEvent<string>>((ChangeEvent<string> evt) => {
+                        for (int i = 0; i < Selection.gameObjects.Length; i++) {
+                            TMP_Text textMeshPro = Selection.gameObjects[i].GetComponent<TMP_Text>();
+                            Undo.RecordObject(textMeshPro, "set text content");
+                            if (textMeshPro != null) {
+                                textMeshPro.text = textContent;
+                            }
+                        }
+                    });
+                    break;
+
+                case nameof(PropertyFieldNames.FontSize):
+                    propertyField.RegisterCallback<ChangeEvent<float>>((ChangeEvent<float> evt) => {
+                        for (int i = 0; i < Selection.gameObjects.Length; i++) {
+                            TMP_Text textMeshPro = Selection.gameObjects[i].GetComponent<TMP_Text>();
+                            Undo.RecordObject(textMeshPro, "set font size");
+                            if (textMeshPro != null) {
+                                textMeshPro.fontSize = fontSize;
+                            }
+                        }
+                    });
+                    break;
+
+                case nameof(PropertyFieldNames.FontColor):
+                    propertyField.RegisterCallback<ChangeEvent<Color>>((ChangeEvent<Color> evt) => {
+                        for (int i = 0; i < Selection.gameObjects.Length; i++) {
+                            TMP_Text textMeshPro = Selection.gameObjects[i].GetComponent<TMP_Text>();
+                            Undo.RecordObject(textMeshPro, "set font color");
+                            if (textMeshPro != null) {
+                                textMeshPro.color = fontColor;
+                            }
+                        }
+                    });
+                    break;
+
+            }
+
+            return propertyField;
+        }
+
+        VisualElement SetupToggleGroups(VisualElement visualElement)
+        {
+            switch (visualElement.name) {
+
+                case nameof(ToggleGroups.RectTransformComponent):
+                    AddToToggleData(toggleData, EnableCondition.RectTransformSelected, visualElement);
+                    break;
+
+                case nameof(ToggleGroups.TextMeshProComponent):
+                    AddToToggleData(toggleData, EnableCondition.TextSelected, visualElement);
+                    break;
+            }
+
+            return visualElement;
+        }
+
+
+        VisualElement SetupUpdateWindowTriggers(VisualElement visualElement)
+        {
+            switch (visualElement.name) {
+
+                case nameof(UpdateWindowTriggers.SequenceControllerObject):
+                case nameof(UpdateWindowTriggers.TargetSequenceList):
+                    visualElement.RegisterCallback<ChangeEvent<UnityEngine.Object>>((ChangeEvent<UnityEngine.Object> evt) => {
+                        UpdateElementStructure();
+                    });
+                    break;
+
+                case nameof(UpdateWindowTriggers.NewSequenceName):
+                    visualElement.RegisterCallback<ChangeEvent<string>>((ChangeEvent<string> evt) => {
+                        UpdateElementStructure();
+                    });
+                    break;
+            }
+
+            return visualElement;
+        }
+
+
+        Dictionary<EnableCondition, List<VisualElement>> AddToToggleData(Dictionary<EnableCondition, List<VisualElement>> targetCollection, EnableCondition targetCondition, VisualElement elementToAdd)
+        {
+            if (targetCollection.ContainsKey(targetCondition)) {
+                targetCollection[targetCondition].Add(elementToAdd);
+            } else {
+                List<VisualElement> visualElementList = new List<VisualElement>();
+                visualElementList.Add(elementToAdd);
+                targetCollection.Add(targetCondition, visualElementList);
+            }
+
+            return targetCollection;
+        }
+
+        Dictionary<EnableCondition, List<VisualElement>> ToggleVisualElements(Dictionary<EnableCondition, List<VisualElement>> targetCollection, EnableCondition targetCondition, bool targetStatus = false)
+        {
+            if (targetCollection.ContainsKey(targetCondition)) {
+                List<VisualElement> visualElementList = targetCollection[targetCondition];
+                for (int i = 0; i < visualElementList.Count; i++) {
+                    if(visualElementList[i] is Foldout) {
+                        (visualElementList[i] as Foldout).value = targetStatus;
+                    }
+                    visualElementList[i].SetEnabled(targetStatus);
+                }
+            }
+            return targetCollection;
+        }
+
+        GameObject[] RenameElements(GameObject[] targetObjects)
         {
             Array.Sort(targetObjects, new Utils.GameObjectSort());
 
@@ -168,119 +411,7 @@ namespace AltSalt
             return targetObjects;
         }
 
-        void ShowEditingTools(GameObject[] objectsToEdit)
-        {
-            bool textSelected = false;
-            bool rectTransformSelected = false;
-
-            for(int i=0; i<objectsToEdit.Length; i++) {
-
-                if(objectsToEdit[i].GetComponent<TMP_Text>() != null) {
-                    textSelected = true;
-                }
-
-                if (objectsToEdit[i].GetComponent<RectTransform>() != null) {
-                    rectTransformSelected = true;
-                }
-            }
-
-            if(textSelected == true) {
-                showTextTools = EditorGUILayout.Foldout(showTextTools, "Text Tools");
-                if(showTextTools == true) {
-                    ShowTextTools();
-                }
-            }
-
-            if(rectTransformSelected == true) {
-                showRectTransformTools = EditorGUILayout.Foldout(showRectTransformTools, "Rect Transform Tools");
-                if(showRectTransformTools == true) {
-                    ShowRectTransformTools();
-                }
-            }
-        }
-
-        void ShowTextTools()
-        {
-            GUILayout.Space(10);
-
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.LabelField("Text Content");
-            textContent = EditorGUILayout.TextArea(textContent, GUILayout.Height(50));
-
-            if (EditorGUI.EndChangeCheck() == true) {
-                for (int i = 0; i < Selection.gameObjects.Length; i++) {
-                    TMP_Text textMeshPro = Selection.gameObjects[i].GetComponent<TMP_Text>();
-                    Undo.RecordObject(textMeshPro, "set text content");
-                    if (textMeshPro != null) {
-                        textMeshPro.text = textContent;
-                    }
-                }
-            }
-
-            EditorGUI.BeginChangeCheck();
-            fontSize = EditorGUILayout.FloatField("Font Size", fontSize);
-
-            if(EditorGUI.EndChangeCheck() == true) {
-                for(int i=0; i<Selection.gameObjects.Length; i++) {
-                    TMP_Text textMeshPro = Selection.gameObjects[i].GetComponent<TMP_Text>();
-                    Undo.RecordObject(textMeshPro, "set font size");
-                    if (textMeshPro != null) {
-                        textMeshPro.fontSize = fontSize;
-                    }
-                }
-            }
-
-            EditorGUI.BeginChangeCheck();
-            fontColor = EditorGUILayout.ColorField("Font Color", fontColor);
-
-            if (EditorGUI.EndChangeCheck() == true) {
-                for (int i = 0; i < Selection.gameObjects.Length; i++) {
-                    TMP_Text textMeshPro = Selection.gameObjects[i].GetComponent<TMP_Text>();
-                    Undo.RecordObject(textMeshPro, "set font color");
-                    if (textMeshPro != null) {
-                        textMeshPro.color = fontColor;
-                    }
-                }
-            }
-
-            GUILayout.Space(10);
-        }
-
-        void ShowRectTransformTools()
-        {
-            GUILayout.Space(10);
-
-            EditorGUI.BeginChangeCheck();
-            rectTransPosition = EditorGUILayout.Vector3Field("Rect Position", rectTransPosition);
-
-            if (EditorGUI.EndChangeCheck() == true) {
-                for (int i = 0; i < Selection.gameObjects.Length; i++) {
-                    RectTransform rectTransform = Selection.gameObjects[i].GetComponent<RectTransform>();
-                    if (rectTransform != null) {
-                        Undo.RecordObject(rectTransform, "set rect position");
-                        rectTransform.anchoredPosition3D = rectTransPosition;
-                    }
-                }
-            }
-
-            EditorGUI.BeginChangeCheck();
-            rectTransTransposePosition = EditorGUILayout.Vector3Field("Transpose Rect Position", rectTransTransposePosition);
-
-            if (EditorGUI.EndChangeCheck() == true) {
-                for (int i = 0; i < Selection.gameObjects.Length; i++) {
-                    RectTransform rectTransform = Selection.gameObjects[i].GetComponent<RectTransform>();
-                    if (rectTransform != null) {
-                        Undo.RecordObject(rectTransform, "tranpose rect position");
-                        rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x + rectTransTransposePosition.x, rectTransform.anchoredPosition3D.y + rectTransTransposePosition.y, rectTransform.anchoredPosition3D.z + rectTransTransposePosition.z);
-                    }
-                }
-                rectTransTransposePosition = new Vector3(0, 0, 0);
-            }
-
-            GUILayout.Space(10);
-        }
-
-        GameObject CreateNewElement(Transform[] selectedTransforms, GameObject sourceObject, string elementName = "")
+        GameObject CreateNewElement(Transform[] selectedTransforms, GameObject sourceObject, string elementName = "", bool isParent = false)
         {
             GameObject newElement = PrefabUtility.InstantiatePrefab(sourceObject) as GameObject;
             string undoMessage = "create " + sourceObject.name;
@@ -290,7 +421,7 @@ namespace AltSalt
                 newElement.name = elementName;
             }
 
-            if (selectedTransforms.Length > 1) {
+            if (selectedTransforms.Length > 1 || (selectedTransforms.Length > 0 && isParent == true)) {
 
                 Array.Sort(selectedTransforms, new Utils.TransformSort());
                 Transform parentTransform = selectedTransforms[0].parent;
@@ -309,47 +440,6 @@ namespace AltSalt
 
             return newElement;
         }
-
-        //public class TextPopup : EditorWindow
-        //{
-        //    public PageBuilderReferences pageBuilderReferences;
-        //    public GameObject parentObject;
-
-        //    string textContent;
-        //    GameObject textObject;
-
-        //    public static void ShowWindow()
-        //    {
-        //        var window = GetWindow<TextPopup>();
-        //    }
-
-        //    static void Init()
-        //    {
-        //        EditorWindow.GetWindow(typeof(TextPopup)).Close();
-        //    }
-
-        //    void OnGUI()
-        //    {
-        //        pageBuilderReferences = Utils.GetScriptableObject("PageBuilderReferences") as PageBuilderReferences;
-
-        //        textContent = EditorGUILayout.TextField("Text object content: ", textContent);
-
-        //        if (GUILayout.Button("Place Text")) {
-        //            PlaceText();
-        //        }
-        //    }
-
-        //    void PlaceText()
-        //    {
-        //        textObject = PrefabUtility.InstantiatePrefab(pageBuilderReferences.textPrefab) as GameObject;
-
-        //        textObject.GetComponent<TMP_Text>().text = textContent;
-
-        //        if (parentObject != null) {
-        //            textObject.transform.SetParent(parentObject.transform);
-        //        }
-        //    }
-        //}
 
     }
 }
