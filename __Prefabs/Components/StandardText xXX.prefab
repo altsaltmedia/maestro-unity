@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 114831698138452250}
   - component: {fileID: 114860081495304408}
   - component: {fileID: 6162087246834992834}
+  - component: {fileID: -2335259992271015214}
   m_Layer: 0
   m_Name: StandardText xXX
   m_TagString: textObject
@@ -255,3 +256,17 @@ MonoBehaviour:
     m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   doNotRecord: 1
+--- !u!114 &-2335259992271015214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144127328821010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4395b367f14c646888d5e8b873142270, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxColor: {r: 0.98039216, g: 0.6439562, b: 0, a: 1}
+  drawBoxWhenNotSelected: 0

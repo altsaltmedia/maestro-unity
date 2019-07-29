@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Create/CreateCoreElements_UXML.uxml" name="CreateCoreElements" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Create/CreateOtherElements_UXML.uxml" name="CreateOtherElements" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditRectTransformComponent_UXML.uxml" name="EditRectTransformComponent" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditTMProComponent_UXML.uxml" name="EditTMProComponent" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditRectTransformPosClip_UXML.uxml" name="EditRectTransformPosClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditTMProColorClip_UXML.uxml" name="EditTMProColorClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditRectTransformScaleClip_UXML.uxml" name="EditRectTransformScaleClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditRectTransformRotationClip_UXML.uxml" name="EditRectTransformRotationClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditSpriteColorClip_UXML.uxml" name="EditSpriteColorClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditFloatVarClip_UXML.uxml" name="EditFloatVarClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditColorVarClip_UXML.uxml" name="EditColorVarClip" />
+
+	<engine:ScrollView class="altsalt page-builder-window">
+
+        <engine:Instance template="CreateCoreElements" />
+
+        <engine:Instance template="CreateOtherElements" />
+
+        <engine:Instance template="EditRectTransformComponent" />
+
+        <engine:Instance template="EditTMProComponent" />
+
+        <engine:Instance template="EditRectTransformPosClip" />
+
+        <engine:Instance template="EditTMProColorClip" />
+
+        <engine:Instance template="EditRectTransformScaleClip" />
+
+        <engine:Instance template="EditRectTransformRotationClip" />
+
+        <engine:Instance template="EditSpriteColorClip" />
+
+        <engine:Instance template="EditFloatVarClip" />
+
+        <engine:Instance template="EditColorVarClip" />
+
+        <engine:VisualElement class="section-container">
+            <engine:VisualElement class="section">
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Refresh Layout" class="col-full" name="RefreshLayout" />
+                </engine:VisualElement>
+            </engine:VisualElement>
+        </engine:VisualElement>
+
+	</engine:ScrollView>
+
+</engine:UXML>

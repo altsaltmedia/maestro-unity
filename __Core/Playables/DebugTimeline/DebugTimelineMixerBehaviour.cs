@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Playables;
+using UnityEditor.Timeline;
 
 namespace AltSalt
 {    
@@ -9,23 +10,17 @@ namespace AltSalt
         ScriptPlayable<DebugTimelineBehaviour> inputPlayable;
         DebugTimelineBehaviour input;
 
+        public override void OnGraphStart(Playable playable)
+        {
+            base.OnGraphStart(playable);
+            trackBinding = Utils.GetFloatVariable("TimelineCurrentTime");
+            TimelineEditor.inspectedDirector.time = trackBinding.Value;
+        }
+
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            trackBinding = playerData as FloatVariable;
             trackBinding.SetValue((float)currentTime);
         }
         
-//        public override void OnGraphStop(Playable playable)
-//        {
-//            base.OnGraphStop(playable);
-
-//            // Reset color if we're working in edit mode
-//#if UNITY_EDITOR
-//            if(trackBinding != null) {
-//                trackBinding.SetDefaultValue();
-//            }
-//#endif
-            
-        //}
     }   
 }

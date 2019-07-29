@@ -18,6 +18,7 @@ using SimpleJSON;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine.Timeline;
 #endif
 
 namespace AltSalt
@@ -60,6 +61,104 @@ namespace AltSalt
             }
         }
 
+        public static string GetStylesheetPath()
+        {
+            return "Assets/_AltSalt/__Core/EditorTools/Editor/_Base/EditorStyles.uss";
+        }
+
+        public static bool TargetComponentSelected(GameObject currentSelection, Type targetType)
+        {
+            if (currentSelection.GetComponent(targetType) != null) {
+                return true;
+            }
+            
+            return false;
+        }
+
+        public static bool TargetTypeSelected(UnityEngine.Object currentSelection, Type targetType)
+        {
+            Type currentType = currentSelection.GetType();
+            if (currentType.IsSubclassOf(targetType) || currentType == targetType) {
+                return true;
+            }
+            
+            return false;
+        }
+
+        public static bool TargetComponentSelected(GameObject[] currentSelection, Type targetType)
+        {
+            for (int i = 0; i < currentSelection.Length; i++) {
+                if (currentSelection[i].GetComponent(targetType) != null) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool TargetTypeSelected(UnityEngine.Object[] currentSelection, Type targetType)
+        {
+            for (int i = 0; i < currentSelection.Length; i++) {
+                Type currentType = currentSelection[i].GetType();
+                if (currentType.IsSubclassOf(targetType) || currentType == targetType) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static GameObject[] RenameElements(string newName, GameObject[] targetObjects)
+        {
+            Array.Sort(targetObjects, new Utils.GameObjectSort());
+
+            for (int i = 0; i < targetObjects.Length; i++) {
+                if (newName.Contains("{x}")) {
+                    targetObjects[i].name = newName.Replace("{x}", (i + 1).ToString());
+                } else {
+                    if (i == 0) {
+                        targetObjects[i].name = newName;
+                    } else {
+                        targetObjects[i].name = string.Format("{0} ({1})", newName, i);
+                    }
+                }
+
+            }
+
+            return targetObjects;
+        }
+
+        public static UnityEngine.Object[] FilterObjectSelection(UnityEngine.Object[] currentSelection, Type typeToOmit)
+        {
+            List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
+
+            for (int i = 0; i < currentSelection.Length; i++) {
+                Type objectType = currentSelection[i].GetType();
+                if (objectType.IsSubclassOf(typeToOmit) || objectType == typeToOmit) {
+                    continue;
+                }
+                newSelection.Add(currentSelection[i]);
+                
+            }
+
+            return newSelection.ToArray();
+        }
+
+        public static UnityEngine.Object[] FilterObjectSelection(UnityEngine.Object[] currentSelection, Type[] typeToOmit)
+        {
+            List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
+
+            for(int i=0; i<currentSelection.Length; i++) {
+                for(int q=0; q<typeToOmit.Length; q++) {
+                    Type objectType = currentSelection[i].GetType();
+                    if (objectType.IsSubclassOf(typeToOmit[q]) || objectType == typeToOmit[q]) {
+                        continue;
+                    }
+                    newSelection.Add(currentSelection[i]);
+                }
+            }
+
+            return newSelection.ToArray();
+        }
+
         public class GameObjectSort : Comparer<GameObject>
         {
             public override int Compare(GameObject x, GameObject y)
@@ -73,6 +172,14 @@ namespace AltSalt
             public override int Compare(Transform x, Transform y)
             {
                 return x.GetSiblingIndex().CompareTo(y.GetSiblingIndex());
+            }
+        }
+
+        public class ClipTimeSort : Comparer<TimelineClip>
+        {
+            public override int Compare(TimelineClip x, TimelineClip y)
+            {
+                return x.start.CompareTo(y.start);
             }
         }
 

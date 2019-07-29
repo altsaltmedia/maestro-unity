@@ -6,7 +6,6 @@ namespace AltSalt
 {
     [TrackColor(0.245149f, 0.895372f, 0.5679245f)]
     [TrackClipType(typeof(DebugTimelineClip))]
-    [TrackBindingType(typeof(FloatVariable))]
     public class DebugTimelineTrack : LerpToTargetTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)

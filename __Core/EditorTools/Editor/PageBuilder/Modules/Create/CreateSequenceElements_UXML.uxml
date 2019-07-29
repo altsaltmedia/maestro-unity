@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+	<engine:VisualElement class="section" name="create-sequence-elements">
+        <engine:VisualElement class="section___content">
+
+            <engine:Foldout class="foldout col-full" text="Sequences" value="false">
+                <engine:VisualElement class="section">
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="New sequence touch applier" class="col-full" name="NewSequenceTouchApplier" />
+                        <engine:Button text="New sequence autoplayer" class="col-full" name="NewSequenceAutoplayer" />
+                        <editor:PropertyField label="Sequence controller object :" class="col-full update-window-trigger" value="" binding-path="sequenceControllerObject" name="SequenceControllerObject"/>
+                        <engine:Button text="New sequence list" class="col-full" name="NewSequenceList" />
+                        <editor:PropertyField label="Target sequence list :" class="col-full update-window-trigger" value="" binding-path="targetSequenceList" name="TargetSequenceList"/>
+                        <editor:PropertyField label="New sequence name :" class="col-full update-window-trigger" value="" binding-path="newSequenceName" name="NewSequenceName"/>
+                        <engine:Button text="New swipe director" class="col-full" name="NewSwipeDirector" />
+                    </engine:VisualElement>
+                </engine:VisualElement>
+            </engine:Foldout>
+
+        </engine:VisualElement>
+    </engine:VisualElement>
+
+</engine:UXML>

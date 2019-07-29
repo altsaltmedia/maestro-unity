@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+<engine:VisualElement class="clip-selection-manipulation" name="clip-selection-manipulation">
+	
+	<engine:Foldout class="foldout" text="Clip Selection / Manipulation" value="true">
+
+		<engine:VisualElement class="section selection">
+
+		  	<engine:VisualElement class="section___title">
+				<engine:Label text="selection" />
+		  	</engine:VisualElement>
+		    <!-- Instantiates the template multiple times. Each time, we give it a name and a class for future reference. -->
+
+			<engine:VisualElement class="section___content">
+			    <engine:Button text="&lt;" class="select-btn" name="SelectEndingBefore"/>
+			    <engine:Button text="&lt;|" class="select-btn" name="SelectStartingBefore"/>
+			    <engine:Label text="~" class="tilde" />
+			    <engine:Button text="|>" class="select-btn" name="SelectEndingAfter"/>
+			    <engine:Button text=">" class="select-btn" name="SelectStartingAfter"/>
+		    </engine:VisualElement>
+
+		    <engine:VisualElement class="section___content">
+		  		<engine:Button text="&lt;" class="select-btn" name="AddPrevClipToSelection"/>
+		  		<engine:Button text="-" class="select-btn" name="DecrementSelectionCount"/>
+			    <editor:IntegerField value="1" class="integerField select-count" binding-path="selectionCount" name="SelectionCountField"/>
+			    <engine:Button text="+" class="select-btn" name="IncrementSelectionCount"/>
+			    <engine:Button text=">" class="select-btn" name="AddNextClipToSelection"/>
+	    	</engine:VisualElement>
+
+	    </engine:VisualElement>
+
+
+	<!--     <engine:VisualElement class="section">
+		    <Instance template="button-template" text="&lt;" name="Cube"/>
+		    <Instance template="button-template" text="&lt;|" name="Sphere"/>
+		    <engine:Label text="~" class="tilde" />
+		    <Instance template="button-template" text="|>" name="Cylinder"/>
+		    <Instance template="button-template" text=">" name="Plane"/>
+	    </engine:VisualElement> -->
+
+
+	    <engine:VisualElement class="section manipulate">
+
+			<engine:VisualElement class="section___title">
+				<engine:Label text="manipulation" />
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+				<engine:Toggle text="transpose unselected clips" class="manipulate-toggle-transpose" binding-path="callTransposeUnselectedClips"/>
+				<engine:Label text="" class="col-1 placeholder" />
+		  		<engine:Label text="" class="col-15-percent placeholder"/>
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+		  		<editor:FloatField label="Time :" text="0.00" class="col-40-percent persistent-float-field" name="CurrentTime"/>
+				<engine:Button text="Set" class="col-30-percent" name="SetToPlayhead"/>
+			    <engine:Button text="Set (&lt;>)" class="col-30-percent last-child" name="TransposeToPlayhead" />
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+		  		<engine:Label text="" class="col-40-percent placeholder" />
+				<engine:Button text="Resize" class="col-30-percent" name="ResizeToPlayhead"/>
+			    <engine:Button text="Resize (&lt;>)" class="col-30-percent last-child" name="ResizeAndTransposeToPlayhead"/>
+		  	</engine:VisualElement>
+
+			<engine:VisualElement class="section___content">
+		  		<editor:PropertyField label="Multiply :" value="1" class="col-40-percent" binding-path="durationMultiplier" name="DurationMultiplier"/>
+				<engine:Button text="X" class="col-30-percent" name="MultiplyDuration"/>
+			    <engine:Button text="X (&lt;>)" class="col-30-percent last-child" name="MultiplyDurationAndTranspose"/>
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+		  		<editor:PropertyField label="Duration :" value="1" class="col-40-percent" binding-path="targetDuration" name="TargetDuration"/>
+				<engine:Button text="Set" class="col-30-percent" name="SetDuration" />
+			    <engine:Button text="Set (&lt;>)" class="col-30-percent last-child" name="SetDurationAndTranspose"/>
+		  	</engine:VisualElement>
+
+		  	<engine:VisualElement class="section___content">
+		  		<editor:PropertyField label="Spacing : " value="0" class="col-40-percent" binding-path="targetSpacing" name="TargetSpacing"/>
+				<engine:Button text="Set" class="col-30-percent" name="SetSpacing"/>
+			    <engine:Button text="+ / -" class="col-30-percent last-child" name="AddSubtractSpacing"/>
+		  	</engine:VisualElement>
+
+			<engine:VisualElement class="section___content">
+		  		<engine:Button text="Set Sequential Order" class="col-full" name="SetSequentialOrder" />
+		  		<engine:Button text="Set Sequential Order (Reverse)" class="col-full" name="SetSequentialOrderReverse" />
+		  		<engine:Button text="Select Source Object(s)" class="col-full" name="SelectSourceObjects" />
+		  		<engine:Button text="Select Target Track(s)" class="col-full" name="SelectTargetTracks" />
+		  		<engine:Button text="Deselect All" class="col-full" name="DeselectAll" />
+				<engine:Button text="Refresh Timeline Window" class="col-full" name="RefreshTimelineWindow" />
+		  		<engine:Button text="Refresh Layout" class="col-full" name="RefreshLayout" />
+		  	</engine:VisualElement>
+
+	  	</engine:VisualElement>
+
+	</engine:Foldout>
+
+</engine:VisualElement>
+
+</engine:UXML>
