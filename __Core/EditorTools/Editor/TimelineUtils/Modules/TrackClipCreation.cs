@@ -73,6 +73,7 @@ namespace AltSalt
             RefreshLayout,
             CopyTracks,
             PasteTracks,
+            GroupTrack,
             TMProColorTrack,
             RectTransformPosTrack,
             SpriteColorTrack,
@@ -80,7 +81,7 @@ namespace AltSalt
             RectTransformRotationTrack,
             FloatVarTrack,
             ColorVarTrack,
-            GroupTrack,
+            TMProCharSpacingTrack,
             NewClips,
             RenameClips
         };
@@ -198,6 +199,18 @@ namespace AltSalt
                     AddToToggleData(toggleData, EnableCondition.CopiedTracksPopulated, button);
                     break;
 
+                case nameof(ButtonNames.GroupTrack):
+                    button.clickable.clicked += () => {
+                        if (selectCreatedTracks == true) {
+                            Selection.activeObject = TriggerCreateGroupTrack(TimelineEditor.inspectedAsset, Selection.objects);
+                        } else {
+                            TriggerCreateGroupTrack(TimelineEditor.inspectedAsset, Selection.objects);
+                        }
+                        TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToToggleData(toggleData, EnableCondition.TrackSelected, button);
+                    break;
+
                 case nameof(ButtonNames.TMProColorTrack):
                     button.clickable.clicked += () => {
                         if(selectCreatedTracks == true) {
@@ -282,16 +295,16 @@ namespace AltSalt
                     AddToToggleData(toggleData, EnableCondition.ColorVarPopulated, button);
                     break;
 
-                case nameof(ButtonNames.GroupTrack):
+                case nameof(ButtonNames.TMProCharSpacingTrack):
                     button.clickable.clicked += () => {
                         if (selectCreatedTracks == true) {
-                            Selection.activeObject = TriggerCreateGroupTrack(TimelineEditor.inspectedAsset, Selection.objects);
+                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProCharSpacingTrack), typeof(TMP_Text), Selection.objects);
                         } else {
-                            TriggerCreateGroupTrack(TimelineEditor.inspectedAsset, Selection.objects);
+                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProCharSpacingTrack), typeof(TMP_Text), Selection.objects);
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    AddToToggleData(toggleData, EnableCondition.TrackSelected, button);
+                    AddToToggleData(toggleData, EnableCondition.TextSelected, button);
                     break;
 
                 case nameof(ButtonNames.NewClips):
@@ -535,6 +548,7 @@ namespace AltSalt
                 switch (targetTrack.GetType().Name) {
 
                     case nameof(TMProColorTrack):
+                    case nameof(TMProCharSpacingTrack):
                         targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<TMP_Text>());
                         break;
 
@@ -613,68 +627,85 @@ namespace AltSalt
 
             switch (timelineClip.asset.GetType().Name) {
 
-                case nameof(TMProColorClip):
-                    TMProColorClip tmProAsset = timelineClip.asset as TMProColorClip;
-                    TMP_Text tmProObject = sourceObject as TMP_Text;
-                    if(tmProObject != null) {
-                        tmProAsset.template.initialColor = tmProObject.color;
-                        tmProAsset.template.targetColor = tmProObject.color;
+                case nameof(TMProColorClip): {
+                        TMProColorClip asset = timelineClip.asset as TMProColorClip;
+                        TMP_Text component = sourceObject as TMP_Text;
+                        if(component != null) {
+                            asset.template.initialColor = component.color;
+                            asset.template.targetColor = component.color;
+                        }
+                        return asset;
                     }
-                    return tmProAsset;
 
-                case nameof(RectTransformPosClip):
-                    RectTransformPosClip rectTransPosAsset = timelineClip.asset as RectTransformPosClip;
-                    RectTransform rectTransPosObject = sourceObject as RectTransform;
-                    if(rectTransPosObject != null) {
-                        rectTransPosAsset.template.initialPosition = rectTransPosObject.anchoredPosition3D;
-                        rectTransPosAsset.template.targetPosition = rectTransPosObject.anchoredPosition3D;
+                case nameof(RectTransformPosClip): {
+                        RectTransformPosClip asset = timelineClip.asset as RectTransformPosClip;
+                        RectTransform component = sourceObject as RectTransform;
+                        if(component != null) {
+                            asset.template.initialPosition = component.anchoredPosition3D;
+                            asset.template.targetPosition = component.anchoredPosition3D;
+                        }
+                        return asset;
                     }
-                    return rectTransPosAsset;
 
-                case nameof(SpriteColorClip):
-                    SpriteColorClip spriteAsset = timelineClip.asset as SpriteColorClip;
-                    SpriteRenderer spriteObject = sourceObject as SpriteRenderer;
-                    if(spriteObject != null) {
-                        spriteAsset.template.initialColor = spriteObject.color;
-                        spriteAsset.template.targetColor = spriteObject.color;
+                case nameof(SpriteColorClip): {
+                        SpriteColorClip asset = timelineClip.asset as SpriteColorClip;
+                        SpriteRenderer component = sourceObject as SpriteRenderer;
+                        if(component != null) {
+                            asset.template.initialColor = component.color;
+                            asset.template.targetColor = component.color;
+                        }
+                        return asset;
                     }
-                    return spriteAsset;
 
-                case nameof(RectTransformScaleClip):
-                    RectTransformScaleClip rectTransScaleAsset = timelineClip.asset as RectTransformScaleClip;
-                    RectTransform rectTransScaleObject = sourceObject as RectTransform;
-                    if (rectTransScaleObject != null) {
-                        rectTransScaleAsset.template.initialScale = rectTransScaleObject.localScale;
-                        rectTransScaleAsset.template.targetScale = rectTransScaleObject.localScale;
+                case nameof(RectTransformScaleClip): {
+                        RectTransformScaleClip asset = timelineClip.asset as RectTransformScaleClip;
+                        RectTransform component = sourceObject as RectTransform;
+                        if (component != null) {
+                            asset.template.initialScale = component.localScale;
+                            asset.template.targetScale = component.localScale;
+                        }
+                        return asset;
                     }
-                    return rectTransScaleAsset;
 
-                case nameof(RectTransformRotationClip):
-                    RectTransformRotationClip rectTransRotAsset = timelineClip.asset as RectTransformRotationClip;
-                    RectTransform rectTransRotObject = sourceObject as RectTransform;
-                    if (rectTransRotObject != null) {
-                        rectTransRotAsset.template.initialRotation = rectTransRotObject.localEulerAngles;
-                        rectTransRotAsset.template.targetRotation = rectTransRotObject.localEulerAngles;
+                case nameof(RectTransformRotationClip): {
+                        RectTransformRotationClip asset = timelineClip.asset as RectTransformRotationClip;
+                        RectTransform component = sourceObject as RectTransform;
+                        if (component != null) {
+                            asset.template.initialRotation = component.localEulerAngles;
+                            asset.template.targetRotation = component.localEulerAngles;
+                        }
+                        return asset;
                     }
-                    return rectTransRotAsset;
 
-                case nameof(LerpFloatVarClip):
-                    LerpFloatVarClip lerpFloatVarClip = timelineClip.asset as LerpFloatVarClip;
-                    FloatVariable floatVariable = sourceObject as FloatVariable;
-                    if(floatVariable != null) {
-                        lerpFloatVarClip.template.initialValue = floatVariable.Value;
-                        lerpFloatVarClip.template.targetValue = floatVariable.Value;
+                case nameof(LerpFloatVarClip): {
+                        LerpFloatVarClip asset = timelineClip.asset as LerpFloatVarClip;
+                        FloatVariable component = sourceObject as FloatVariable;
+                        if(component != null) {
+                            asset.template.initialValue = component.Value;
+                            asset.template.targetValue = component.Value;
+                        }
+                        return asset;
                     }
-                    return lerpFloatVarClip;
 
-                case nameof(LerpColorVarClip):
-                    LerpColorVarClip lerpColorVarClip = timelineClip.asset as LerpColorVarClip;
-                    ColorVariable colorVariable = sourceObject as ColorVariable;
-                    if (colorVariable != null) {
-                        lerpColorVarClip.template.initialColor = colorVariable.Value;
-                        lerpColorVarClip.template.targetColor = colorVariable.Value;
+                case nameof(LerpColorVarClip): {
+                        LerpColorVarClip asset = timelineClip.asset as LerpColorVarClip;
+                        ColorVariable component = sourceObject as ColorVariable;
+                        if (component != null) {
+                            asset.template.initialColor = component.Value;
+                            asset.template.targetColor = component.Value;
+                        }
+                        return asset;
                     }
-                    return lerpColorVarClip;
+
+                case nameof(TMProCharSpacingClip): {
+                        TMProCharSpacingClip asset = timelineClip.asset as TMProCharSpacingClip;
+                        TMP_Text component = sourceObject as TMP_Text;
+                        if (component != null) {
+                            asset.template.initialValue = component.characterSpacing;
+                            asset.template.targetValue = component.characterSpacing;
+                        }
+                        return asset;
+                    }
             }
 
             return null;

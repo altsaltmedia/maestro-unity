@@ -15,6 +15,7 @@ xsi:schemaLocation="
 >
 
 <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/Modules/TrackClipCreationGroups/SimpleTracks_UXML.uxml" name="SimpleTracks" />
+<engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/Modules/TrackClipCreationGroups/DecoratorTracks_UXML.uxml" name="DecoratorTracks" />
 <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/Modules/TrackClipCreationGroups/ComplexTracks_UXML.uxml" name="ComplexTracks" />
 
 <engine:VisualElement class="track-clip-creation" name="track-clip-creation">
@@ -34,14 +35,15 @@ xsi:schemaLocation="
 
 		  	<engine:VisualElement class="section___content">
 		  		<engine:Toggle text="select created tracks" class="col-half update-window-trigger" binding-path="selectCreatedTracks" name="SelectCreatedTracks"/>
-				<engine:Toggle text="allow blank tracks" class="col-half last-child update-window-trigger" binding-path="allowBlankTracks" name="AllowBlankTracks"/>
+				<engine:Toggle text="allow blank tracks" class="col-half margin-right-0 update-window-trigger" binding-path="allowBlankTracks" name="AllowBlankTracks"/>
+				<engine:Button text="New Group Track" class="col-full" name="GroupTrack" />
 		  	</engine:VisualElement>
 
 			<engine:VisualElement class="section___content">
-
-				<engine:Button text="New Group Track" class="col-full" name="GroupTrack" />
 		  		
 				<engine:Instance template="SimpleTracks" />
+
+				<engine:Instance template="DecoratorTracks" />
 
 				<engine:Instance template="ComplexTracks" />
 
@@ -54,7 +56,7 @@ xsi:schemaLocation="
 		  	<engine:VisualElement class="section___content">
 		  		<editor:PropertyField label="clip name :" class="col-full" value="" binding-path="clipName"/>
 				<engine:Toggle text="select created clip(s)" class="col-half update-window-trigger" binding-path="selectCreatedClip"/>
-				<engine:Toggle text="advance playhead" class="col-half last-child update-window-trigger" binding-path="advancePlayhead"/>
+				<engine:Toggle text="advance playhead" class="col-half margin-right-0 update-window-trigger" binding-path="advancePlayhead"/>
 		  	</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">

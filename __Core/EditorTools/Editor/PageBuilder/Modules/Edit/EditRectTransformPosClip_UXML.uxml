@@ -27,7 +27,7 @@ xsi:schemaLocation="
                     <editor:PropertyField label="Initial Position :" class="col-full" value="(0,0,0)" binding-path="initialPos" name="InitialPos"/>
                     <engine:Label text="Populate from : " class="col-1" />
                     <engine:Button text="Selection" class="col-quarter" name="PopulateInitialPosFromSelection" />
-                    <engine:Button text="Target" class="col-quarter last-child" name="PopulateInitialPosFromTarget" />
+                    <engine:Button text="Target" class="col-quarter margin-right-0" name="PopulateInitialPosFromTarget" />
                     <engine:Button text="Set" class="col-full" name="SetInitialPos" />
 
                     <!-- Transpose initial position -->
@@ -36,7 +36,7 @@ xsi:schemaLocation="
                     <!-- Init interval Positioning -->
                     <editor:PropertyField label="Initial interval :" class="col-full" value="(0,0,0)" binding-path="initialPosInterval" name="InitialPosInterval"/>
                     <editor:PropertyField label="set on value change :" class="col-three-quarters" value="false" binding-path="setInitIntervalOnValueChange" name="SetInitIntervalOnValueChange"/>
-                    <engine:Button text="Set" class="col-quarter last-child" name="SetInitPosUsingInterval" />
+                    <engine:Button text="Set" class="col-quarter margin-right-0" name="SetInitPosUsingInterval" />
 
                 </engine:VisualElement>
 
@@ -51,7 +51,7 @@ xsi:schemaLocation="
                     <editor:PropertyField label="Target Position :" class="col-full" value="(0,0,0)" binding-path="targetPos" name="TargetPos"/>
                     <engine:Label text="Populate from : " class="col-1" />
                     <engine:Button text="Selection" class="col-quarter" name="PopulateTargetPosFromSelection" />
-                    <engine:Button text="Init" class="col-quarter last-child" name="PopulateTargetPosFromInit" />
+                    <engine:Button text="Init" class="col-quarter margin-right-0" name="PopulateTargetPosFromInit" />
                     <engine:Button text="Set" class="col-full" name="SetTargetPosition" />
 
                     <!-- Transpose target position -->
@@ -60,7 +60,7 @@ xsi:schemaLocation="
                     <!-- Target interval Positioning -->
                     <editor:PropertyField label="Target interval :" class="col-full" value="(0,0,0)" binding-path="targetPosInterval" name="TargetPosInterval"/>
                     <editor:PropertyField label="set on value change :" class="col-three-quarters" value="false" binding-path="setTargetIntervalOnValueChange" name="SetTargetIntervalOnValueChange"/>
-                    <engine:Button text="Set" class="col-quarter last-child" name="SetTargetPosUsingInterval" />
+                    <engine:Button text="Set" class="col-quarter margin-right-0" name="SetTargetPosUsingInterval" />
 
                 </engine:VisualElement>
             </engine:VisualElement>

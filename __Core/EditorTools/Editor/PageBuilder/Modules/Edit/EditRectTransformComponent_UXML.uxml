@@ -22,33 +22,33 @@ xsi:schemaLocation="
                         <!-- Position -->
                         <editor:PropertyField label="Position :" class="col-full" value="(0,0,0)" binding-path="position" name="Position"/>
                         <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulatePosition" />
-                        <engine:Button text="Set" class="col-quarter last-child" name="SetPosition" />
+                        <engine:Button text="Set" class="col-quarter margin-right-0" name="SetPosition" />
                         <editor:PropertyField label="Transpose :" class="col-full" value="(0,0,0)" binding-path="transposePosition" name="TransposePosition"/>
 
                         <!-- Interval Positioning -->
                         <editor:PropertyField label="Position interval :" class="col-full" value="(0,0,0)" binding-path="positionInterval" name="PositionInterval"/>
                         <editor:PropertyField label="set on value change :" class="col-three-quarters" value="false" binding-path="setIntervalOnValueChange" name="SetIntervalOnValueChange"/>
-                        <engine:Button text="Set" class="col-quarter last-child" name="SetPositionUsingInterval" />
+                        <engine:Button text="Set" class="col-quarter margin-right-0" name="SetPositionUsingInterval" />
 
                         <!-- Pivot -->
                         <editor:PropertyField label="Pivot :" class="col-full" value="(0,0,0)" binding-path="pivot" name="Pivot"/>
                         <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulatePivot" />
-                        <engine:Button text="Set" class="col-quarter last-child" name="SetPivot" />
+                        <engine:Button text="Set" class="col-quarter margin-right-0" name="SetPivot" />
 
                         <!-- Rotation -->
                         <editor:PropertyField label="Rotation :" class="col-full" value="(0,0,0)" binding-path="rotation" name="Rotation"/>
                         <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulateRotation" />
-                        <engine:Button text="Set" class="col-quarter last-child" name="SetRotation" />
+                        <engine:Button text="Set" class="col-quarter margin-right-0" name="SetRotation" />
 
                         <!-- Width -->
                         <editor:PropertyField label="Width :" class="col-full" binding-path="width" name="Width"/>
                         <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulateWidth" />
-                        <engine:Button text="Set" class="col-quarter last-child" name="SetWidth" />
+                        <engine:Button text="Set" class="col-quarter margin-right-0" name="SetWidth" />
                         
                         <!-- Height -->
                         <editor:PropertyField label="Height :" class="col-full" binding-path="height" name="Height"/>
                         <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulateHeight" />
-                        <engine:Button text="Set" class="col-quarter last-child" name="SetHeight" />
+                        <engine:Button text="Set" class="col-quarter margin-right-0" name="SetHeight" />
                     </engine:VisualElement>
                 </engine:VisualElement>
 

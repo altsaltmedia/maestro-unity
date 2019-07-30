@@ -50,5 +50,37 @@ namespace AltSalt
 
             return newElement;
         }
+
+        public static ResponsiveElement[] AddBreakpointToSelection(GameObject[] gameObjects, float targetBreakpoint)
+        {
+            List<ResponsiveElement> componentList = new List<ResponsiveElement>();
+
+            for (int i = 0; i < gameObjects.Length; i++) {
+
+                ResponsiveElement[] objectComponents = gameObjects[i].GetComponents<ResponsiveElement>();
+                for (int q = 0; q < objectComponents.Length; q++) {
+                    objectComponents[i].AddBreakpoint(targetBreakpoint);
+                }
+
+                componentList.AddRange(objectComponents);
+            }
+            return componentList.ToArray();
+        }
+
+        public static IResponsiveSaveable[] SaveResponsiveValues(GameObject[] gameObjects)
+        {
+            List<IResponsiveSaveable> componentList = new List<IResponsiveSaveable>();
+
+            for(int i=0; i<gameObjects.Length; i++) {
+
+                IResponsiveSaveable[] objectComponents = gameObjects[i].GetComponents<IResponsiveSaveable>();
+                for(int q=0; q<objectComponents.Length; q++) {
+                    objectComponents[i].SaveValue();
+                }
+
+                componentList.AddRange(objectComponents);
+            }
+            return componentList.ToArray();
+        }
     }
 }

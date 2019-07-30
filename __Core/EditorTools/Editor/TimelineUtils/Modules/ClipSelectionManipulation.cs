@@ -104,19 +104,19 @@ namespace AltSalt
 
         void UpdateDisplay()
         {
-            if(TimelineEditor.selectedClips.Length > 0) {
+            if (TimelineEditor.selectedClips.Length > 0) {
                 EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ClipsSelected, true);
             } else {
                 EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ClipsSelected, false);
             }
 
-            if(Utils.TargetTypeSelected(Selection.objects, typeof(TrackAsset)) == true || TimelineEditor.selectedClips.Length > 0) {
+            if (Utils.TargetTypeSelected(Selection.objects, typeof(TrackAsset)) == true || TimelineEditor.selectedClips.Length > 0) {
                 EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TracksOrClipsSelected, true);
             } else {
                 EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TracksOrClipsSelected, false);
             }
 
-            if(Utils.FilterObjectSelection(Selection.objects, typeof(TrackAsset)).Length > 0 || TimelineEditor.selectedClips.Length > 0) {
+            if (Utils.FilterSelection(Selection.objects, typeof(TrackAsset)).Length > 0 || TimelineEditor.selectedClips.Length > 0) {
                 EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ObjectsSelected, true);
             } else {
                 EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ObjectsSelected, false);
@@ -948,7 +948,7 @@ namespace AltSalt
         static List<TrackAsset> GetParentTracks(TrackAsset trackAsset)
         {
             List<TrackAsset> parentTracks = new List<TrackAsset>();
-            if(trackAsset.parent != null && trackAsset.parent is GroupTrack) {
+            if (trackAsset.parent != null && trackAsset.parent is GroupTrack) {
                 TrackAsset parentTrack = trackAsset.parent as TrackAsset;
                 parentTracks.Add(parentTrack);
                 parentTracks.AddRange(GetParentTracks(parentTrack));
@@ -1040,8 +1040,8 @@ namespace AltSalt
 
             List<TrackAsset> trackAssets = new List<TrackAsset>();
 
-            for(int i=0; i<objectSelection.Length; i++) {
-                if(objectSelection[i] is TrackAsset) {
+            for (int i = 0; i < objectSelection.Length; i++) {
+                if (objectSelection[i] is TrackAsset) {
                     trackAssets.Add(objectSelection[i] as TrackAsset);
                 }
             }
@@ -1053,11 +1053,11 @@ namespace AltSalt
                 }
             }
 
-            for(int i=0; i<trackAssets.Count; i++) {
+            for (int i = 0; i < trackAssets.Count; i++) {
 
                 foreach (PlayableBinding playableBinding in trackAssets[i].outputs) {
                     UnityEngine.Object objectBinding = sourceDirector.GetGenericBinding(playableBinding.sourceObject);
-                    if(objectBinding is Component) {
+                    if (objectBinding is Component) {
                         newObjectSelection.Add((objectBinding as Component).gameObject);
                     } else {
                         newObjectSelection.Add(objectBinding);
@@ -1093,7 +1093,7 @@ namespace AltSalt
 
                     if (objectSelection[i] is GameObject && objectBinding is Component) {
 
-                        if(objectSelection[i] == (objectBinding as Component).gameObject) {
+                        if (objectSelection[i] == (objectBinding as Component).gameObject) {
                             trackAssets.Add(playableBinding.sourceObject as TrackAsset);
                         }
 
@@ -1101,7 +1101,7 @@ namespace AltSalt
                         trackAssets.Add(playableBinding.sourceObject as TrackAsset);
                     }
                 }
-                
+
             }
 
             for (int i = 0; i < clipSelection.Length; i++) {

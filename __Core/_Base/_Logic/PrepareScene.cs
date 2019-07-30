@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
@@ -141,6 +142,21 @@ namespace AltSalt {
             for (int i = 0; i < sequenceList.sequences.Count; i++) {
                 sequenceList.sequences[i].currentTime = 0;
             }
+        }
+
+        public ResponsiveElement[] CallExecuteResponsiveAction()
+        {
+            List<ResponsiveElement> responsiveElementList = new List<ResponsiveElement>();
+            ResponsiveElement[] responsiveElements = Resources.FindObjectsOfTypeAll<ResponsiveElement>();
+            Array.Sort(responsiveElements, new Utils.ResponsiveElementSort());
+
+            for(int i=0; i<responsiveElements.Length; i++) {
+                if(responsiveElements[i].gameObject.scene == this.gameObject.scene) {
+                    responsiveElementList.Add(responsiveElements[i]);
+                    responsiveElements[i].ExecuteResponsiveAction();
+                }
+            }
+            return responsiveElementList.ToArray();
         }
 
         private static bool IsPopulated(BoolReference attribute)

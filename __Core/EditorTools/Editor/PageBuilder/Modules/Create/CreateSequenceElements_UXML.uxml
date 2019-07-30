@@ -19,8 +19,14 @@ xsi:schemaLocation="
                     <engine:VisualElement class="section___content">
                         <engine:Button text="New sequence touch applier" class="col-full" name="NewSequenceTouchApplier" />
                         <engine:Button text="New sequence autoplayer" class="col-full" name="NewSequenceAutoplayer" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
                         <editor:PropertyField label="Sequence controller object :" class="col-full update-window-trigger" value="" binding-path="sequenceControllerObject" name="SequenceControllerObject"/>
                         <engine:Button text="New sequence list" class="col-full" name="NewSequenceList" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
                         <editor:PropertyField label="Target sequence list :" class="col-full update-window-trigger" value="" binding-path="targetSequenceList" name="TargetSequenceList"/>
                         <editor:PropertyField label="New sequence name :" class="col-full update-window-trigger" value="" binding-path="newSequenceName" name="NewSequenceName"/>
                         <engine:Button text="New swipe director" class="col-full" name="NewSwipeDirector" />

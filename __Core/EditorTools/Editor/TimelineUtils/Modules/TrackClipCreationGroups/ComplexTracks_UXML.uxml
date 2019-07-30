@@ -16,10 +16,13 @@ xsi:schemaLocation="
 
             <engine:Foldout class="foldout col-full" text="Complex Tracks" value="false">
                 <engine:VisualElement class="section">
+
                     <engine:VisualElement class="section___content">
                         <editor:PropertyField label="Target float variable" allow-scene-objects="false" class="col-full update-window-trigger" binding-path="targetFloat" name="TargetFloatVariable"/>
                         <engine:Button text="New FloatVar Track" class="col-full" name="FloatVarTrack" />
+                    </engine:VisualElement>
                     
+                    <engine:VisualElement class="section___content">
                         <editor:PropertyField label="Target color variable" allow-scene-objects="false" class="col-full update-window-trigger" binding-path="targetColor" name="TargetColorVariable"/>
                         
                         <engine:Button text="New ColorVar Track" class="col-full" name="ColorVarTrack" />

@@ -11,17 +11,13 @@ xsi:schemaLocation="
                         UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
 "
 >
-	<engine:VisualElement class="section" name="simple-tracks">
+	<engine:VisualElement class="section" name="decorator-tracks">
         <engine:VisualElement class="section___content">
 
-            <engine:Foldout class="foldout col-full" text="Simple Tracks" value="true">
+            <engine:Foldout class="foldout col-full" text="Decorator Tracks" value="false">
                 <engine:VisualElement class="section">
                     <engine:VisualElement class="section___content margin-bottom-0">
-                        <engine:Button text="New TextMeshPro Color Track(s)" class="col-full" name="TMProColorTrack" />
-                        <engine:Button text="New RectTransform Pos Track(s)" class="col-full" name="RectTransformPosTrack" />
-                        <engine:Button text="New SpriteColor Track(s)" class="col-full" name="SpriteColorTrack" />
-                        <engine:Button text="New RectTransform Scale Track(s)" class="col-full" name="RectTransformScaleTrack" />
-                        <engine:Button text="New RectTransform Rotation Track(s)" class="col-full margin-bottom-0" name="RectTransformRotationTrack" />
+                        <engine:Button text="New TextMeshPro Character Spacing Track(s)" class="col-full" name="TMProCharSpacingTrack" />
                     </engine:VisualElement>
                 </engine:VisualElement>
             </engine:Foldout>

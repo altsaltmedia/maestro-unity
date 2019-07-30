@@ -16,23 +16,24 @@ xsi:schemaLocation="
         
         <engine:Foldout class="foldout toggleable-group" text="Text Mesh Pro Component" value="true" name="EditTMProComponent">
             <engine:VisualElement class="section">
+
                 <engine:VisualElement class="section___content">
 
                     <!-- Text Content -->
                     <editor:PropertyField label="Text content :" class="col-full" value="" binding-path="textContent" multiline="true" name="TextContent"/>
                     <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulateTextContent" />
-                    <engine:Button text="Set" class="col-quarter last-child" name="SetTextContent" />
+                    <engine:Button text="Set" class="col-quarter margin-right-0" name="SetTextContent" />
                     <engine:Button text="Rename using Content" class="col-full" name="RenameUsingContent" />
 
                     <!-- Font size -->
                     <editor:PropertyField label="Font size :" class="col-full" value="1.35" binding-path="fontSize" name="FontSize"/>
                     <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulateFontSize" />
-                    <engine:Button text="Set" class="col-quarter last-child" name="SetFontSize" />
+                    <engine:Button text="Set" class="col-quarter margin-right-0" name="SetFontSize" />
 
                     <!-- Font color -->
                     <editor:PropertyField label="Font color :" class="col-full" value="(0,0,0,1)" binding-path="fontColor" name="FontColor"/>
                     <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulateFontColor" />
-                    <engine:Button text="Set" class="col-quarter last-child" name="SetFontColor" />
+                    <engine:Button text="Set" class="col-quarter margin-right-0" name="SetFontColor" />
 
                     <engine:Label text="Alignment : " class="col-1" />
                     <engine:Button text="L" class="col-15-percent" name="AlignLeft"/>
@@ -41,6 +42,14 @@ xsi:schemaLocation="
                     <engine:Button text="J" class="col-15-percent" name="Justify"/>
                     <engine:Button text="F" class="col-15-percent" name="Flush"/>
                     <engine:Button text="Trim Text Box " class="col-full" name="TrimTextBox" />
+
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+
+                    <editor:PropertyField label="New Breakpoint :" class="col-three-quarters" value="" binding-path="breakpoint" name="Breakpoint"/>
+                    <engine:Button text="Add" class="col-quarter margin-right-0" name="AddBreakpoint" />
+                    <engine:Button text="Save Responsive Values" class="col-full" name="SaveResponsiveValues" />
 
                 </engine:VisualElement>
                 

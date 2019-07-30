@@ -62,37 +62,36 @@ xsi:schemaLocation="
 		  		<engine:Label text="" class="col-15-percent placeholder"/>
 		  	</engine:VisualElement>
 
-		  	<engine:VisualElement class="section___content">
+		  	<engine:VisualElement class="section___content margin-bottom-5">
+
+		  		<!-- Set -->
 		  		<editor:FloatField label="Time :" text="0.00" class="col-40-percent persistent-float-field" name="CurrentTime"/>
 				<engine:Button text="Set" class="col-30-percent" name="SetToPlayhead"/>
-			    <engine:Button text="Set (&lt;>)" class="col-30-percent last-child" name="TransposeToPlayhead" />
-		  	</engine:VisualElement>
-
-		  	<engine:VisualElement class="section___content">
+			    <engine:Button text="Set (&lt;>)" class="col-30-percent margin-right-0" name="TransposeToPlayhead" />
+		  	
+		  		<!-- Resize -->
 		  		<engine:Label text="" class="col-40-percent placeholder" />
 				<engine:Button text="Resize" class="col-30-percent" name="ResizeToPlayhead"/>
-			    <engine:Button text="Resize (&lt;>)" class="col-30-percent last-child" name="ResizeAndTransposeToPlayhead"/>
-		  	</engine:VisualElement>
-
-			<engine:VisualElement class="section___content">
+			    <engine:Button text="Resize (&lt;>)" class="col-30-percent margin-right-0" name="ResizeAndTransposeToPlayhead"/>
+		  	
+		  		<!-- Multiply -->
 		  		<editor:PropertyField label="Multiply :" value="1" class="col-40-percent" binding-path="durationMultiplier" name="DurationMultiplier"/>
 				<engine:Button text="X" class="col-30-percent" name="MultiplyDuration"/>
-			    <engine:Button text="X (&lt;>)" class="col-30-percent last-child" name="MultiplyDurationAndTranspose"/>
-		  	</engine:VisualElement>
-
-		  	<engine:VisualElement class="section___content">
+			    <engine:Button text="X (&lt;>)" class="col-30-percent margin-right-0" name="MultiplyDurationAndTranspose"/>
+		  	
+		  		<!-- Duration -->
 		  		<editor:PropertyField label="Duration :" value="1" class="col-40-percent" binding-path="targetDuration" name="TargetDuration"/>
 				<engine:Button text="Set" class="col-30-percent" name="SetDuration" />
-			    <engine:Button text="Set (&lt;>)" class="col-30-percent last-child" name="SetDurationAndTranspose"/>
-		  	</engine:VisualElement>
-
-		  	<engine:VisualElement class="section___content">
+			    <engine:Button text="Set (&lt;>)" class="col-30-percent margin-right-0" name="SetDurationAndTranspose"/>
+		  	
+		  		<!-- Spacing -->
 		  		<editor:PropertyField label="Spacing : " value="0" class="col-40-percent" binding-path="targetSpacing" name="TargetSpacing"/>
 				<engine:Button text="Set" class="col-30-percent" name="SetSpacing"/>
-			    <engine:Button text="+ / -" class="col-30-percent last-child" name="AddSubtractSpacing"/>
-		  	</engine:VisualElement>
+			    <engine:Button text="+ / -" class="col-30-percent margin-right-0" name="AddSubtractSpacing"/>
+			</engine:VisualElement>
 
-			<engine:VisualElement class="section___content">
+		  	<engine:VisualElement class="section___content">
+		  		<!-- Other -->
 		  		<engine:Button text="Set Sequential Order" class="col-full" name="SetSequentialOrder" />
 		  		<engine:Button text="Set Sequential Order (Reverse)" class="col-full" name="SetSequentialOrderReverse" />
 		  		<engine:Button text="Select Source Object(s)" class="col-full" name="SelectSourceObjects" />

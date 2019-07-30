@@ -126,7 +126,70 @@ namespace AltSalt
             return targetObjects;
         }
 
-        public static UnityEngine.Object[] FilterObjectSelection(UnityEngine.Object[] currentSelection, Type typeToOmit)
+        public static UnityEngine.Object[] CullSelection(GameObject[] currentSelection, Type typeToSelect)
+        {
+            List<GameObject> newSelection = new List<GameObject>();
+
+            for (int i = 0; i < currentSelection.Length; i++) {
+                Component component = currentSelection[i].GetComponent(typeToSelect);
+                if (component != null && (component.GetType().IsSubclassOf(typeToSelect) || component.GetType() == typeToSelect)) {
+                    newSelection.Add(currentSelection[i]);
+                }
+            }
+
+            return newSelection.ToArray();
+        }
+
+        public static UnityEngine.Object[] CullSelection(GameObject[] currentSelection, Type[] typeToSelect)
+        {
+            List<GameObject> newSelection = new List<GameObject>();
+
+            for (int i = 0; i < currentSelection.Length; i++) {
+                for (int q = 0; q < typeToSelect.Length; q++) {
+                    Component component = currentSelection[i].GetComponent(typeToSelect[q]);
+                    if (component != null && (component.GetType().IsSubclassOf(typeToSelect[q]) || component.GetType() == typeToSelect[q])) {
+                        newSelection.Add(currentSelection[i]);
+                    }
+                }
+            }
+
+            return newSelection.ToArray();
+        }
+
+        public static UnityEngine.Object[] CullSelection(UnityEngine.Object[] currentSelection, Type typeToSelect)
+        {
+            List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
+
+            for (int i = 0; i < currentSelection.Length; i++) {
+                Type objectType = currentSelection[i].GetType();
+                if (objectType.IsSubclassOf(typeToSelect) || objectType == typeToSelect) {
+                    newSelection.Add(currentSelection[i]);
+                }
+            }
+
+            return newSelection.ToArray();
+        }
+
+
+        public static UnityEngine.Object[] CullSelection(UnityEngine.Object[] currentSelection, Type[] typeToSelect)
+        {
+            List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
+
+            for (int i = 0; i < currentSelection.Length; i++) {
+                for (int q = 0; q < typeToSelect.Length; q++) {
+                    Type objectType = currentSelection[i].GetType();
+                    if (objectType.IsSubclassOf(typeToSelect[q]) || objectType == typeToSelect[q]) {
+                        
+                        newSelection.Add(currentSelection[i]);
+                    }
+                }
+            }
+
+            return newSelection.ToArray();
+        }
+
+
+        public static UnityEngine.Object[] FilterSelection(UnityEngine.Object[] currentSelection, Type typeToOmit)
         {
             List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
 
@@ -142,7 +205,7 @@ namespace AltSalt
             return newSelection.ToArray();
         }
 
-        public static UnityEngine.Object[] FilterObjectSelection(UnityEngine.Object[] currentSelection, Type[] typeToOmit)
+        public static UnityEngine.Object[] FilterSelection(UnityEngine.Object[] currentSelection, Type[] typeToOmit)
         {
             List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
 
@@ -157,6 +220,14 @@ namespace AltSalt
             }
 
             return newSelection.ToArray();
+        }
+
+        public class ResponsiveElementSort : Comparer<ResponsiveElement>
+        {
+            public override int Compare(ResponsiveElement x, ResponsiveElement y)
+            {
+                return x.Priority.CompareTo(y.Priority);
+            }
         }
 
         public class GameObjectSort : Comparer<GameObject>

@@ -41,6 +41,7 @@ namespace AltSalt
         static string renamePrefix = "tx - ";
         public float fontSize = 1.55f;
         public Color fontColor;
+        public float breakpoint = 1.78f;
 
         static bool populateButtonPressed = false;
 
@@ -58,7 +59,9 @@ namespace AltSalt
             AlignCenter,
             AlignRight,
             Justify,
-            Flush
+            Flush,
+            AddBreakpoint,
+            SaveResponsiveValues
         }
 
         enum PropertyFieldNames
@@ -200,6 +203,19 @@ namespace AltSalt
                 case nameof(ButtonNames.TrimTextBox):
                     button.clickable.clicked += () => {
                         TrimTextBox(Selection.gameObjects);
+                    };
+                    break;
+
+                case nameof(ButtonNames.AddBreakpoint):
+                    button.clickable.clicked += () => {
+                        PageBuilderCore.AddBreakpointToSelection(Selection.gameObjects, breakpoint);
+                    };
+                    break;
+
+                case nameof(ButtonNames.SaveResponsiveValues):
+                    button.clickable.clicked += () => {
+                        UnityEngine.Object[] tmProObjects = Utils.CullSelection(Selection.gameObjects, typeof(TMP_Text));
+                        PageBuilderCore.SaveResponsiveValues(Array.ConvertAll(tmProObjects, item => (GameObject)item));
                     };
                     break;
             }

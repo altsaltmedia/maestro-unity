@@ -3,6 +3,14 @@
 	font-size: 10px;
 }
 
+.unity-foldout__content {
+	padding-top: 10px;
+}
+
+.altsalt .unity-foldout--depth-1 {
+	margin-bottom: 0;
+}
+
 .timeline-utilities-window Button {
 	height: 20px;
 }
@@ -20,7 +28,6 @@
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
-	padding-top: 10px;
 }
 
 .section > * {
@@ -157,8 +164,16 @@
 	font-style: bold;
 }
 
-.altsalt .last-child {
+.altsalt .margin-right-0 {
 	margin-right: 0;
+}
+
+.altsalt .margin-bottom-0 {
+	margin-bottom: 0;
+}
+
+.altsalt .margin-bottom-5 {
+	margin-bottom: 5;
 }
 
 .manipulate .manipulate-toggle {

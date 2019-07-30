@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -41,6 +40,19 @@ namespace AltSalt
         [SerializeField]
         [OnValueChanged("PopulateDefaultBreakpointValues")]
         protected bool hasBreakpoints;
+        public bool HasBreakpoints {
+            get {
+                return hasBreakpoints;
+            }
+        }
+
+        [SerializeField]
+        protected int priority;
+        public int Priority {
+            get {
+                return priority;
+            }
+        }
 
         protected int breakpointIndex;
 
@@ -137,6 +149,35 @@ namespace AltSalt
 
         protected SimpleEventListener screenResizedListener;
         protected bool resizedListenerCreated = false;
+
+        public List<float> AddBreakpoint(float targetBreakpoint)
+        {
+            Undo.RecordObject(this, "add breakpoint");
+            hasBreakpoints = true;
+
+            if (aspectRatioBreakpoints.Contains(targetBreakpoint)) {
+                EditorUtility.DisplayDialog("Breakpoint already exists", "The breakpoint " + targetBreakpoint.ToString("F2") + " already exists on " + this.name, "Okay");
+                return aspectRatioBreakpoints;
+            }
+
+            if (aspectRatioBreakpoints.Count == 0) {
+                aspectRatioBreakpoints.Add(targetBreakpoint);
+                return aspectRatioBreakpoints;
+            }
+
+            for (int i=0; i<aspectRatioBreakpoints.Count; i++) {
+
+                if(targetBreakpoint < aspectRatioBreakpoints[i]) {
+                    aspectRatioBreakpoints.Insert(i, targetBreakpoint);
+                    break;
+                } else if(targetBreakpoint > aspectRatioBreakpoints[i] && aspectRatioBreakpoints.Count == i + 1) {
+                    aspectRatioBreakpoints.Insert(i + 1, targetBreakpoint);
+                    break;
+                }
+            }
+
+            return aspectRatioBreakpoints;
+        }
 
         protected void PopulateDefaultBreakpointValues()
         {
