@@ -38,7 +38,7 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if(aspectRatio.Variable == null) {
-                aspectRatio.Variable = Utils.GetFloatVariable("AspectRatio");
+                aspectRatio.Variable = Utils.GetFloatVariable(VarDependencies.SceneAspectRatio.ToString());
             }
 #endif
             base.OnGraphStart(playable);

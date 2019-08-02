@@ -44,6 +44,16 @@ namespace AltSalt
             return id;
         }
 
+        protected virtual void OnEnable()
+        {
+#if UNITY_EDITOR
+            if (modifySettings == null) {
+                modifySettings = Utils.GetModifySettings();
+            }
+            Initialize();
+#endif
+        }
+
 #if UNITY_EDITOR
         protected void Initialize()
         {
@@ -91,21 +101,6 @@ namespace AltSalt
         void GetActiveLayoutName()
         {
             activeLayoutName = "Current active layout: " + modifySettings.activeLayout.name;
-        }
-
-        protected virtual void OnRenderObject()
-        {
-            if (modifySettings == null) {
-                modifySettings = Utils.GetModifySettings();
-            }
-            Initialize();
-        }
-
-        public virtual void Reset()
-        {
-            if (modifySettings == null) {
-                modifySettings = Utils.GetModifySettings();
-            }
         }
 
         [InfoBox("Force reset of the element's scene name and serializable ID.")]

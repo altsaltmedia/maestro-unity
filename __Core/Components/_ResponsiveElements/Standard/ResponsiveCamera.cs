@@ -8,19 +8,16 @@ namespace AltSalt
     {
         protected Camera thisCamera;
 
-        bool cameraStored = false;
-
-        protected override void Start()
+        protected override void OnEnable()
         {
-            base.Start();
+            base.OnEnable();
             thisCamera = GetComponent<Camera>();
         }
 
         void StoreCamera()
         {
-            if (cameraStored == false) {
+            if (thisCamera == null) {
                 thisCamera = GetComponent<Camera>();
-                cameraStored = true;
             }
         }
 

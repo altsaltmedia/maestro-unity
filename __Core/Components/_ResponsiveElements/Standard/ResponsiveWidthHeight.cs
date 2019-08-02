@@ -19,7 +19,7 @@ namespace AltSalt
                 return;
             }
 
-            int targetBreakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
 
             Utils.ExpandList(breakpointSizeDelta, targetBreakpointIndex);
             breakpointSizeDelta[targetBreakpointIndex] = rectTransform.sizeDelta;
@@ -36,7 +36,7 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if (activeIndex >= breakpointSizeDelta.Count) {
-                LogBreakpointError();
+                LogBreakpointWarning();
                 return;
             }
 #endif

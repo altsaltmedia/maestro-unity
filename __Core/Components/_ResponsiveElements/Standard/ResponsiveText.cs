@@ -5,14 +5,18 @@ namespace AltSalt
 {
     public class ResponsiveText : ResponsiveElement
     {
-        bool textStored = false;
         protected TextMeshPro textMeshPro;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            StoreText();
+        }
 
         void StoreText()
         {
-            if (textStored == false) {
+            if (textMeshPro == null) {
                 textMeshPro = GetComponent<TextMeshPro>();
-                textStored = true;
             }
         }
 

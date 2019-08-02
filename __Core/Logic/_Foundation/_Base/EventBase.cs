@@ -1,13 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Sirenix.OdinInspector;
-using UnityEngine.SceneManagement;
-using UnityEditor;
-using SimpleJSON;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace AltSalt
 {
@@ -19,7 +11,7 @@ namespace AltSalt
         [Required]
         protected AppSettings appSettings;
 
-        protected GameObject callerObject;
+        protected UnityEngine.Object callerObject;
         protected string callerScene = "";
         protected string callerName = "";
 
@@ -49,6 +41,13 @@ namespace AltSalt
         }
 
         public void StoreCaller(GameObject caller, string sourceScene, string sourceName)
+        {
+            callerObject = caller;
+            callerScene = sourceScene;
+            callerName = sourceName;
+        }
+
+        public void StoreCaller(UnityEngine.Object caller, string sourceScene, string sourceName)
         {
             callerObject = caller;
             callerScene = sourceScene;

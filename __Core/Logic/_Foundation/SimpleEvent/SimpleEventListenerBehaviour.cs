@@ -10,6 +10,7 @@ namespace AltSalt
     public class SimpleEventListenerBehaviour : MonoBehaviour, ISimpleEventListener, ISkipRegistration
     {
         [Required]
+        [OnValueChanged("OnEnable")]
         public SimpleEvent Event;
 
         [ValidateInput("IsPopulated")]
@@ -27,12 +28,18 @@ namespace AltSalt
 
         private void OnEnable()
         {
-            Event.RegisterListener(this);
+            if(Event != null) {
+                Event.RegisterListener(this);
+            } else {
+                Debug.LogWarning("Please set an event for SimpleEventListenerBehaviour on " + this.name, this.gameObject);
+            }
         }
 
 		private void OnDisable()
 		{
-            Event.UnregisterListener(this);
+            if (Event != null) {
+                Event.UnregisterListener(this);
+            }
 		}
 
         public void OnEventRaised()

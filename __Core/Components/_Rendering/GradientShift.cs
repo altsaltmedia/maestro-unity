@@ -20,6 +20,9 @@ namespace AltSalt {
         [ValidateInput("IsPopulated")]
         public FloatReference _Subtract;
 
+        [SerializeField]
+        string sortingLayer = "Default";
+
         [InfoBox("The sorting order for meshes, unlike sprites, must be set via script")]
         public int sortingOrder;
 
@@ -38,8 +41,10 @@ namespace AltSalt {
 
         void OnGUI()
         {
-            SetSortingOrder();
-            RefreshRenderer();
+            if(Application.isPlaying == false) {
+                SetSortingOrder();
+                RefreshRenderer();
+            }
         }
 
         void Update ()
@@ -60,6 +65,7 @@ namespace AltSalt {
 
         void SetSortingOrder()
         {
+            meshRenderer.sortingLayerName = sortingLayer;
             meshRenderer.sortingOrder = sortingOrder;
         }
 

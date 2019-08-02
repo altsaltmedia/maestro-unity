@@ -10,6 +10,7 @@ namespace AltSalt
         ScriptPlayable<SpriteColorBehaviour> inputPlayable;
         SpriteColorBehaviour input;
         SpriteRenderer trackBindingComponent;
+        Color originalColor;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
@@ -18,6 +19,11 @@ namespace AltSalt
             if (!trackBinding)
                 return;
 
+            if(trackBindingComponent == null) {
+                trackBindingComponent = trackBinding.GetComponent<SpriteRenderer>();
+                originalColor = trackBindingComponent.color;
+            }
+
             inputCount = playable.GetInputCount ();
             
             for (int i = 0; i < inputCount; i++)
@@ -25,8 +31,6 @@ namespace AltSalt
                 inputWeight = playable.GetInputWeight(i);
                 inputPlayable = (ScriptPlayable<SpriteColorBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
-                
-                trackBindingComponent = trackBinding.GetComponent<SpriteRenderer>();
                 
                 if(inputWeight >= 1f) {
                     modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
@@ -40,5 +44,13 @@ namespace AltSalt
                 }
             }
         }
+
+        //public override void OnGraphStart(Playable playable)
+        //{
+        //    base.OnGraphStart(playable);
+        //    if(trackBindingComponent != null) {
+        //        trackBindingComponent.color = originalColor;
+        //    }
+        //}
     }   
 }

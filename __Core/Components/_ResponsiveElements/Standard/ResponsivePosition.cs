@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor;
 
 namespace AltSalt
 {
@@ -49,17 +50,18 @@ namespace AltSalt
                 if (activeIndex >= breakpointAnchorMax.Count ||
                     activeIndex >= breakpointAnchorMin.Count ||
                     activeIndex >= breakpointAnchoredPosition.Count) {
-                    LogBreakpointError();
+                    LogBreakpointWarning();
                     return;
                 }
             } else {
                 if (breakpointAnchorMax.Count < 1 ||
                     breakpointAnchorMin.Count < 1 ||
                     breakpointAnchoredPosition.Count < 1) {
-                    LogBreakpointError();
+                    LogBreakpointWarning();
                     return;
                 }
             }
+            Undo.RegisterCompleteObjectUndo(rectTransform, "set responsive position");
 #endif
             rectTransform.anchorMax = breakpointAnchorMax[activeIndex];
             rectTransform.anchorMin = breakpointAnchorMin[activeIndex];

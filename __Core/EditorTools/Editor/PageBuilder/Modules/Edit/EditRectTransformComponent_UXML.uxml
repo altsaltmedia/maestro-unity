@@ -50,6 +50,21 @@ xsi:schemaLocation="
                         <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulateHeight" />
                         <engine:Button text="Set" class="col-quarter margin-right-0" name="SetHeight" />
                     </engine:VisualElement>
+
+                    <engine:VisualElement class="section">
+                        <engine:VisualElement class="section___content">
+
+                            <engine:Foldout class="foldout col-full" text="Add Responsive RectTransform Components" value="false">
+                                <engine:VisualElement class="section">
+                                    <engine:VisualElement class="section___content margin-bottom-0">
+                                        <engine:Button text="Responsive Position" class="col-full" name="AddResponsivePosition" />
+                                    </engine:VisualElement>
+                                </engine:VisualElement>
+                            </engine:Foldout>
+
+                        </engine:VisualElement>
+                    </engine:VisualElement>
+
                 </engine:VisualElement>
 
             </engine:Foldout>

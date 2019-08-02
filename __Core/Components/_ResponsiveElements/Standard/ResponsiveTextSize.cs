@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor;
 
 namespace AltSalt
 {
@@ -19,7 +20,7 @@ namespace AltSalt
                 return;
             }
 
-            int targetBreakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
 
             Utils.ExpandList(breakpointTextSize, targetBreakpointIndex);
             breakpointTextSize[targetBreakpointIndex] = textMeshPro.fontSize;
@@ -36,9 +37,10 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if (activeIndex >= breakpointTextSize.Count) {
-                LogBreakpointError();
+                LogBreakpointWarning();
                 return;
             }
+            Undo.RegisterCompleteObjectUndo(textMeshPro, "set responsive text size");
 #endif
             textMeshPro.fontSize = breakpointTextSize[activeIndex];
         }

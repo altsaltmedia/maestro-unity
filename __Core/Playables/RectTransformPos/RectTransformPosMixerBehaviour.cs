@@ -13,12 +13,11 @@ namespace AltSalt
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            if(trackBinding == null) {
-                trackBinding = playerData as RectTransform;
-            }
+            trackBinding = playerData as RectTransform;
 
-            if (!trackBinding)
+            if (!trackBinding) {
                 return;
+            }
 
             if(trackBindingComponent == null) {
                 trackBindingComponent = trackBinding.GetComponent<RectTransform>();
@@ -45,10 +44,12 @@ namespace AltSalt
             }
         }
 
-        public override void OnGraphStop(Playable playable)
-        {
-            base.OnGraphStop(playable);
-
-        }
+        //public override void OnGraphStop(Playable playable)
+        //{
+        //    base.OnGraphStop(playable);
+        //    if (trackBindingComponent != null) {
+        //        trackBindingComponent.anchoredPosition3D = originalPosition;
+        //    }
+        //}
     }   
 }

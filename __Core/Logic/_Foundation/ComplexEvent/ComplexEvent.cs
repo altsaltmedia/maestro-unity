@@ -1,8 +1,7 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using UnityEngine.SceneManagement;
 
 namespace AltSalt
 {
@@ -15,7 +14,13 @@ namespace AltSalt
         [Header("Complex Event")]
         public string DeveloperDescription = "";
 #endif
-		private List<ComplexEventListenerBehaviour> listeners = new List<ComplexEventListenerBehaviour>();
+        [SerializeField]
+        List<ComplexEventParameters> requiredParameters = new List<ComplexEventParameters>();
+
+        [SerializeField]
+        List<ComplexEventParameters> optionalParameters = new List<ComplexEventParameters>();
+
+        private List<ComplexEventListenerBehaviour> listeners = new List<ComplexEventListenerBehaviour>();
 
         public void Raise()
         {
@@ -127,6 +132,29 @@ namespace AltSalt
             }
         }
 
+
+        public void Raise(UnityEngine.Object value)
+        {
+            if (CallerRegistered() == true) {
+                if (logCallersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                    LogCaller();
+                }
+                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                    LogListenersHeading(listeners.Count);
+                }
+                for (int i = listeners.Count - 1; i >= 0; i--) {
+                    if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                        LogListenerOnRaise(listeners[i]);
+                    }
+                    listeners[i].OnEventRaised(EventPayload.CreateInstance(value));
+                }
+                if (logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                    LogClosingLine();
+                }
+                ClearCaller();
+            }
+        }
+
         public void Raise(EventPayload eventPayload)
 		{
             if (CallerRegistered() == true) {
@@ -182,6 +210,13 @@ namespace AltSalt
 		{
 			listeners.Remove(listener);
 		}
+
+        [Serializable]
+        class ComplexEventParameters
+        {
+            public string description;
+            public DataType dataType;
+        }
 
 	}
 }

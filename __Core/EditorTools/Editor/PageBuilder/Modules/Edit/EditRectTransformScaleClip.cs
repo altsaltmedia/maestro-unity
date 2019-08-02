@@ -28,14 +28,14 @@ namespace AltSalt
             elementUXML = parentVisualElement.Query<Foldout>("EditRectTransformScaleClip", EditorToolsCore.ToggleableGroup);
 
             UpdateDisplay();
-            pageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
 
             return this;
         }
 
         void OnDestroy()
         {
-            pageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
         }
 
         public Vector3 initialValue = new Vector3(1, 1, 1);

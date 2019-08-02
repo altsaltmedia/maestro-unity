@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+    <engine:VisualElement class="altsalt responsive-utils-window">
+
+    	<engine:ScrollView>
+
+            <engine:VisualElement class="section-container">
+                <engine:VisualElement class="section">
+                    <engine:VisualElement class="section___content margin-bottom-0">
+
+                        <editor:PropertyField label="New Breakpoint :" class="col-three-quarters" binding-path="breakpoint" name="Breakpoint"/>
+                        <engine:Button text="Add" class="col-quarter margin-right-0" name="AddBreakpoint" />
+                        <engine:Button text="Save Responsive Values" class="col-full" name="SaveResponsiveValues" />
+                        <engine:Button text="Trigger Screen Resized Event" class="col-full" name="TriggerScreenResized" />
+
+                   </engine:VisualElement>
+
+                   <engine:VisualElement class="section___content border-top-1 justify-content-flex-start responsive-element-list-container" name="ResponsiveElementListContainer">
+
+                    <!-- Populated with objects via script -->
+
+                   </engine:VisualElement>
+
+                   <engine:VisualElement class="section___content">
+                        <engine:Button text="Toggle List View" class="col-full" name="ToggleListView" />
+                        <engine:Button text="Refresh Layout" class="col-full" name="RefreshLayout" />
+                    </engine:VisualElement>
+
+                </engine:VisualElement>
+            </engine:VisualElement>
+
+    	</engine:ScrollView>
+
+    </engine:VisualElement>
+
+</engine:UXML>

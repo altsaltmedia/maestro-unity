@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace AltSalt
@@ -8,7 +9,7 @@ namespace AltSalt
     public class PageBuilderWindow : EditorWindow
     {
         public delegate void SelectionChangedDelegate();
-        public SelectionChangedDelegate selectionChangedDelegate;
+        public static SelectionChangedDelegate selectionChangedDelegate;
 
         Dictionary<Type, string> childWindowData = new Dictionary<Type, string> {
             { typeof(CreateCoreElements), "create-core-elements" },
@@ -44,17 +45,21 @@ namespace AltSalt
 
         void OnEnable()
         {
+            titleContent = new GUIContent("Page Builder");
             RenderLayout();
             Selection.selectionChanged += SelectionChangedCallback;
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
             Selection.selectionChanged -= SelectionChangedCallback;
         }
 
         void SelectionChangedCallback()
         {
+            if (selectionChangedDelegate == null) {
+                RenderLayout();
+            }
             selectionChangedDelegate.Invoke();
         }
 
@@ -82,7 +87,22 @@ namespace AltSalt
 
             var buttons = rootVisualElement.Query<Button>();
             buttons.ForEach(SetupButton);
+
+            //var labels = rootVisualElement.Query<Label>();
+            //labels.ForEach(ChangeLabel);
         }
+
+        // ** Will eventually be used for Horizontal Mode **
+        // 
+        //Label ChangeLabel(Label label)
+        //{
+        //    if(label.text == "X") {
+        //        label.text = "Y";
+        //    } else if(label.text == "Y") {
+        //        label.text = "X";
+        //    }
+        //    return label;
+        //}
 
         Button SetupButton(Button button)
         {

@@ -27,14 +27,14 @@ namespace AltSalt
             editTMProUXML = parentVisualElement.Query<Foldout>("EditTMProComponent", EditorToolsCore.ToggleableGroup);
 
             UpdateDisplay();
-            pageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
 
             return this;
         }
 
         void OnDestroy()
         {
-            pageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
         }
 
         public string textContent;
@@ -60,8 +60,7 @@ namespace AltSalt
             AlignRight,
             Justify,
             Flush,
-            AddBreakpoint,
-            SaveResponsiveValues
+            AddResponsiveTextSize
         }
 
         enum PropertyFieldNames
@@ -206,16 +205,9 @@ namespace AltSalt
                     };
                     break;
 
-                case nameof(ButtonNames.AddBreakpoint):
+                case nameof(ButtonNames.AddResponsiveTextSize):
                     button.clickable.clicked += () => {
-                        PageBuilderCore.AddBreakpointToSelection(Selection.gameObjects, breakpoint);
-                    };
-                    break;
-
-                case nameof(ButtonNames.SaveResponsiveValues):
-                    button.clickable.clicked += () => {
-                        UnityEngine.Object[] tmProObjects = Utils.CullSelection(Selection.gameObjects, typeof(TMP_Text));
-                        PageBuilderCore.SaveResponsiveValues(Array.ConvertAll(tmProObjects, item => (GameObject)item));
+                        PageBuilderCore.AddComponentToSelection(Selection.gameObjects, typeof(ResponsiveTextSize));
                     };
                     break;
             }

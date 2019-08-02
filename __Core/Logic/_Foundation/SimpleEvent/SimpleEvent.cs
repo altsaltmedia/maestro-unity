@@ -14,6 +14,8 @@ namespace AltSalt
         [Header("Simple Event")]
         public string DeveloperDescription = "";
 #endif
+        [SerializeField]
+        List<ScriptableObject> associatedVariables = new List<ScriptableObject>();
 
         readonly List<ISimpleEventListener> listeners = new List<ISimpleEventListener>();
 

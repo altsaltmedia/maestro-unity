@@ -15,8 +15,8 @@ xsi:schemaLocation="
     <engine:VisualElement class="section-container" name="edit-tm-pro-component">
         
         <engine:Foldout class="foldout toggleable-group" text="Text Mesh Pro Component" value="true" name="EditTMProComponent">
-            <engine:VisualElement class="section">
 
+            <engine:VisualElement class="section">
                 <engine:VisualElement class="section___content">
 
                     <!-- Text Content -->
@@ -45,12 +45,18 @@ xsi:schemaLocation="
 
                 </engine:VisualElement>
 
-                <engine:VisualElement class="section___content">
+                <engine:VisualElement class="section">
+                    <engine:VisualElement class="section___content">
 
-                    <editor:PropertyField label="New Breakpoint :" class="col-three-quarters" value="" binding-path="breakpoint" name="Breakpoint"/>
-                    <engine:Button text="Add" class="col-quarter margin-right-0" name="AddBreakpoint" />
-                    <engine:Button text="Save Responsive Values" class="col-full" name="SaveResponsiveValues" />
+                        <engine:Foldout class="foldout col-full" text="Add Responsive Text Components" value="false">
+                            <engine:VisualElement class="section">
+                                <engine:VisualElement class="section___content margin-bottom-0">
+                                    <engine:Button text="Responsive Text Size" class="col-full" name="AddResponsiveTextSize" />
+                                </engine:VisualElement>
+                            </engine:VisualElement>
+                        </engine:Foldout>
 
+                    </engine:VisualElement>
                 </engine:VisualElement>
                 
             </engine:VisualElement>

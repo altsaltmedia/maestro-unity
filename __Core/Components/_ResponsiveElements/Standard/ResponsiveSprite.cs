@@ -4,15 +4,18 @@ namespace AltSalt
 {
     public class ResponsiveSprite : ResponsiveElement
     {
-
-        bool spriteStored = false;
         protected SpriteRenderer spriteRenderer;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            StoreSprite();
+        }
 
         void StoreSprite()
         {
-            if (spriteStored == false) {
+            if (spriteRenderer == null) {
                 spriteRenderer = GetComponent<SpriteRenderer>();
-                spriteStored = true;
             }
         }
 

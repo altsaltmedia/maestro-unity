@@ -24,7 +24,7 @@ namespace AltSalt
         public void ActivateTrigger(SimpleEvent targetEvent)
         {
             for (int i = 0; i < simpleEventTriggers.Count; i++) {
-                if(simpleEventTriggers[i].GetSimpleEvent() == targetEvent) {
+                if(simpleEventTriggers[i].SimpleEventTarget == targetEvent) {
                     simpleEventTriggers[i].RaiseEvent(this.gameObject);
                     break;
                 }

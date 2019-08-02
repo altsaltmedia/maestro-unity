@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -12,6 +10,14 @@ namespace AltSalt
         [Required]
         [SerializeField]
         SimpleEvent simpleEvent;
+        public SimpleEvent SimpleEventTarget {
+            get {
+                return simpleEvent;
+            }
+            set {
+                simpleEvent = value;
+            }
+        }
 
         public void RaiseEvent(GameObject caller)
         {
@@ -25,9 +31,10 @@ namespace AltSalt
             simpleEvent.Raise();
         }
 
-        public SimpleEvent GetSimpleEvent()
+        public void RaiseEvent(UnityEngine.Object caller, string sourceScene, string sourceName)
         {
-            return simpleEvent;
+            simpleEvent.StoreCaller(caller, sourceScene, sourceName);
+            simpleEvent.Raise();
         }
     }
 

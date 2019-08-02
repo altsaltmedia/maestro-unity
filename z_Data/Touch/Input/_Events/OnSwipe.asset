@@ -12,6 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6cfefc9189b422d8e558b5019449b3, type: 3}
   m_Name: OnSwipe
   m_EditorClassIdentifier: 
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
+  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  logCallersOnRaise: 0
+  logListenersOnRegister: 0
+  logListenersOnRaise: 0
   DeveloperDescription: Called from SwipeMonitor as a user swipes.
-  LogListenersOnRegister: 0
-  LogListenersOnRaise: 0
+  associatedVariables:
+  - {fileID: 11400000, guid: 8e6d661900bf54fe7895de6c6dfdb2d6, type: 2}
+  - {fileID: 11400000, guid: 70b26216ecfb74cba8dd466f31c042dc, type: 2}
+  - {fileID: 11400000, guid: 53fdf26dbeb8e41b9ad89e195014e0fb, type: 2}

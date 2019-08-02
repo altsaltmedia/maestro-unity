@@ -11,7 +11,7 @@ namespace AltSalt
 #endif
     public class ResponsiveAutoScale : ResponsiveRectTransform
     {
-        [ValueDropdown("dimensionValues")]
+        [ValueDropdown(nameof(dimensionValues))]
         [SerializeField]
         List<DimensionType> baseDimensionTypes = new List<DimensionType>();
 
@@ -20,7 +20,7 @@ namespace AltSalt
             {"Horizontal", DimensionType.Horizontal }
         };
 
-        [ValueDropdown("aspectRatioValues")]
+        [ValueDropdown(nameof(aspectRatioValues))]
         [SerializeField]
         List<AspectRatioType> objectAspectRatios = new List <AspectRatioType>();
 
@@ -38,8 +38,9 @@ namespace AltSalt
         List<float> maxDimensionValues = new List<float>();
 
 #if UNITY_EDITOR
-        void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             UpdateBreakpointDependencies();
         }
 
@@ -88,10 +89,8 @@ namespace AltSalt
 
         void SetValue(int activeIndex)
         {
-            // Custom equation of an exponential function - equation is in the form y = a^x * b
-            // It is derived by taking two (X,Y) coordinates along the line, creating two equations
-            // in the form above, then dividing one equation by the other to solve for a and b.
-            double baseDimension = (Math.Pow(0.561993755433366d, ((double)screenHeight.Value / (double)screenWidth.Value))) * 10.03014554127636d;
+            double baseDimension = Utils.GetResponsiveWidth(sceneHeight.Value, sceneWidth.Value);
+
             baseDimension *= dimensionPercentages[activeIndex];
             if (maxDimensionValues[activeIndex] > 0 && baseDimension > maxDimensionValues[activeIndex]) {
                 baseDimension = maxDimensionValues[activeIndex];

@@ -14,9 +14,11 @@ xsi:schemaLocation="
 	<engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/Modules/ClipSelectionManipulation_UXML.uxml" name="ClipSelectionManipulation" />
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/Modules/TrackClipCreation_UXML.uxml" name="TrackClipCreation" />
 
-	<engine:ScrollView class="altsalt timeline-utilities-window">
-		<engine:Instance template="ClipSelectionManipulation" />
-		<engine:Instance template="TrackClipCreation" />
-	</engine:ScrollView>
+    <engine:VisualElement class="altsalt page-builder-window">
+    	<engine:ScrollView>
+    		<engine:Instance template="ClipSelectionManipulation" />
+    		<engine:Instance template="TrackClipCreation" />
+    	</engine:ScrollView>
+    </engine:VisualElement>
 
 </engine:UXML>

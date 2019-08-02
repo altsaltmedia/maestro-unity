@@ -5,7 +5,8 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 namespace AltSalt {
-    
+
+    [ExecuteInEditMode]
 	public class PrepareScene : MonoBehaviour {
 
         [SerializeField]
@@ -35,25 +36,25 @@ namespace AltSalt {
         Axis zMomentumAxis;
 
         [SerializeField]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         BoolReference _invertYAxis;
 
         [SerializeField]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         BoolReference _invertXAxis;
 
         [SerializeField]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         BoolReference isReversing;
 
-        [ValueDropdown("orientationValues")]
+        [ValueDropdown(nameof(orientationValues))]
         [SerializeField]
         DimensionType orientation;
 
         [SerializeField]
         bool resetSequences;
 
-        [ShowIf("resetSequences")]
+        [ShowIf(nameof(resetSequences))]
         [SerializeField]
         SequenceList sequenceList;
 
@@ -61,7 +62,7 @@ namespace AltSalt {
         bool delayStart;
 
         [SerializeField]
-        [ShowIf("delayStart")]
+        [ShowIf(nameof(delayStart))]
         float delayAmount;
 
         [SerializeField]
@@ -69,21 +70,69 @@ namespace AltSalt {
         SimpleEventTrigger prepareSceneCompleted;
 
         [SerializeField]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         BoolReference removeOverlayImmediately;
 
         [SerializeField]
         [Required]
         SimpleEventTrigger fadeInTriggered;
 
+        [ValidateInput(nameof(IsPopulated))]
+        [SerializeField]
+        FloatReference deviceAspectRatio;
+
+        [ValidateInput(nameof(IsPopulated))]
+        [SerializeField]
+        FloatReference deviceWidth;
+
+        [ValidateInput(nameof(IsPopulated))]
+        [SerializeField]
+        FloatReference deviceHeight;
+
+        [ValidateInput(nameof(IsPopulated))]
+        [SerializeField]
+        FloatReference sceneWidth = new FloatReference();
+
+        [ValidateInput(nameof(IsPopulated))]
+        [SerializeField]
+        FloatReference sceneHeight = new FloatReference();
+
+        [ValidateInput(nameof(IsPopulated))]
+        [SerializeField]
+        FloatReference sceneAspectRatio = new FloatReference();
+
+        [SerializeField]
+        List<float> deviceBreakpoints = new List<float>();
+
+        [SerializeField]
+        List<SceneDimension> sceneDimensions = new List<SceneDimension>();
+
+        List<ResponsiveElement> priorityResponsiveElements = new List<ResponsiveElement>();
+        List<ResponsiveElement> responsiveElements = new List<ResponsiveElement>();
+
         private ValueDropdownList<DimensionType> orientationValues = new ValueDropdownList<DimensionType>(){
             {"Vertical", DimensionType.Vertical },
             {"Horizontal", DimensionType.Horizontal }
         };
 
-        void Start () {
+        void Start() {
             ResetScene();
 		}
+
+        void OnEnable()
+        {
+#if UNITY_EDITOR
+            if (Application.isPlaying == false) {
+                CallExecuteLayoutUpdate();
+            }
+#endif
+        }
+
+        void OnDisable()
+        {
+            priorityResponsiveElements.Clear();
+            responsiveElements.Clear();
+        }
 
         [HorizontalGroup("Split", 1f)]
         [InfoBox("Reset scene variables")]
@@ -119,6 +168,8 @@ namespace AltSalt {
                 fadeInTriggered.RaiseEvent(this.gameObject);
             }
 
+            CallExecuteLayoutUpdate();
+
             if(delayStart == false) {
                 prepareSceneCompleted.RaiseEvent(this.gameObject);
             } else {
@@ -144,19 +195,141 @@ namespace AltSalt {
             }
         }
 
-        public ResponsiveElement[] CallExecuteResponsiveAction()
+        public void AddResponsiveElement(EventPayload eventPayload)
         {
-            List<ResponsiveElement> responsiveElementList = new List<ResponsiveElement>();
-            ResponsiveElement[] responsiveElements = Resources.FindObjectsOfTypeAll<ResponsiveElement>();
-            Array.Sort(responsiveElements, new Utils.ResponsiveElementSort());
+            ResponsiveElement element = eventPayload.objectDictionary[DataType.unityObjectType] as ResponsiveElement;
+            
+            if(element.gameObject.scene == this.gameObject.scene &&
+                priorityResponsiveElements.Contains(element) == false && responsiveElements.Contains(element) == false) {
 
-            for(int i=0; i<responsiveElements.Length; i++) {
-                if(responsiveElements[i].gameObject.scene == this.gameObject.scene) {
-                    responsiveElementList.Add(responsiveElements[i]);
-                    responsiveElements[i].ExecuteResponsiveAction();
+                if(element.Priority > 0) {
+                    priorityResponsiveElements.Add(element);
+                } else {
+                    responsiveElements.Add(element);
                 }
             }
-            return responsiveElementList.ToArray();
+        }
+
+        public void RemoveResponsiveElement(EventPayload eventPayload)
+        {
+            ResponsiveElement element = eventPayload.objectDictionary[DataType.unityObjectType] as ResponsiveElement;
+            if(priorityResponsiveElements.Contains(element) == true) {
+                priorityResponsiveElements.Remove(element);
+            }
+            if (responsiveElements.Contains(element) == true) {
+                responsiveElements.Remove(element);
+            }
+        }
+
+        public void CallExecuteLayoutUpdate()
+        {
+            PopulateSceneDimensions();
+
+            // We track all priority responsive elements separately
+            // because sorting is an expensive operation
+            priorityResponsiveElements.Sort(new Utils.ResponsiveElementSort());
+
+            // Start with lowest priority and end with highest priority
+            for(int i= priorityResponsiveElements.Count - 1; i >= 0; i--) {
+                priorityResponsiveElements[i].ExecuteLayoutUpdate();
+            }
+
+            // All other elements can be executed in any order
+            for (int i=0; i<responsiveElements.Count; i++) {
+                responsiveElements[i].ExecuteLayoutUpdate();
+            }
+        }
+
+        void PopulateSceneDimensions()
+        {
+            if(deviceBreakpoints.Count > 0) {
+                int breakpointIndex = Utils.GetValueIndexInList(deviceAspectRatio.Value, deviceBreakpoints);
+                SceneDimension sceneDimension = sceneDimensions[breakpointIndex];
+
+                switch (sceneDimension.targetAspectRatio) {
+
+                    case AspectRatioType.x9x16:
+                        if(sceneDimension.resizeType == ResizeType.VerticalPillarBox || sceneDimension.resizeType == ResizeType.HorizontalLetterBox) {
+                            sceneWidth.Variable.SetValue(deviceWidth.Value);
+                            sceneHeight.Variable.SetValue((16f * sceneWidth.Value) / 9f);
+                        } else {
+                            sceneHeight.Variable.SetValue(deviceHeight.Value);
+                            sceneWidth.Variable.SetValue((9f * sceneHeight.Value) / 16f);
+                        }
+                        break;
+
+                    case AspectRatioType.x3x4:
+                        if (sceneDimension.resizeType == ResizeType.VerticalPillarBox || sceneDimension.resizeType == ResizeType.HorizontalLetterBox) {
+                            sceneWidth.Variable.SetValue(deviceWidth.Value);
+                            sceneHeight.Variable.SetValue((4f * sceneWidth.Value) / 3f);
+                        } else {
+                            sceneHeight.Variable.SetValue(deviceHeight.Value);
+                            sceneWidth.Variable.SetValue((3f * sceneHeight.Value) / 4f);
+                        }
+                        break;
+
+                    case AspectRatioType.Dynamic:
+                        sceneWidth.Variable.SetValue(deviceWidth.Value);
+                        sceneHeight.Variable.SetValue(deviceHeight.Value);
+                        break;
+
+                    default:
+                        Debug.Log("Specified aspect ratio " + nameof(sceneDimension.targetAspectRatio) + " is not supported.");
+                        break;
+                }
+
+                sceneAspectRatio.Variable.SetValue(sceneHeight.Value / sceneWidth.Value);
+
+            } else {
+
+                sceneWidth.Variable.SetValue(deviceWidth.Value);
+                sceneHeight.Variable.SetValue(deviceHeight.Value);
+                sceneAspectRatio.Variable.SetValue(deviceHeight.Value / deviceWidth.Value);
+
+            }
+            
+        }
+
+        [Serializable]
+        class SceneDimension
+        {
+            [ValueDropdown(nameof(aspectRatioValues))]
+            [SerializeField]
+            public AspectRatioType targetAspectRatio;
+
+            private ValueDropdownList<AspectRatioType> aspectRatioValues = new ValueDropdownList<AspectRatioType>(){
+                {"9 x 16 | 16 x 9", AspectRatioType.x9x16  },
+                {"3 x 4 | 4 x 3", AspectRatioType.x3x4 },
+                {"None | Resize", AspectRatioType.Dynamic }
+            };
+
+            [ValueDropdown(nameof(resizeTypeValues))]
+            [SerializeField]
+            [HideIf(nameof(TargetAspectRatioIsDynamic))]
+            public ResizeType resizeType;
+
+            private ValueDropdownList<ResizeType> resizeTypeValues = new ValueDropdownList<ResizeType>(){
+                {"Vertical : Crop or box top and bottom", ResizeType.VerticalPillarBox  },
+                {"Vertical : Crop or box sides", ResizeType.VerticalLetterBox },
+                {"Horizontal: Crop or box top and bottom", ResizeType.HorizontalPillarBox},
+                {"Horizontal : Crop or box sides", ResizeType.HorizontalLetterBox  }
+            };
+
+            bool TargetAspectRatioIsDynamic()
+            {
+                if(targetAspectRatio == AspectRatioType.Dynamic) {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public enum ResizeType { VerticalPillarBox, HorizontalLetterBox, VerticalLetterBox, HorizontalPillarBox }
+
+
+        private static bool IsPopulated(FloatReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
         }
 
         private static bool IsPopulated(BoolReference attribute)

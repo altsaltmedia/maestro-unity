@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Playables;
 using DG.Tweening;
+using UnityEngine.Timeline;
 
 namespace AltSalt
 {
@@ -21,6 +22,13 @@ namespace AltSalt
         public void SetTime(Sequence sequence)
         {
             playableDirector.time = sequence.currentTime;
+        }
+
+        public void SetSpeed(float targetSpeed)
+        {
+            if(playableDirector.playableGraph.IsValid() == true) {
+                playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(targetSpeed);
+            }
         }
 
         public void ChangeExrapolationMode (DirectorWrapMode wrapMode)

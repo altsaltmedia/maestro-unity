@@ -30,6 +30,9 @@ namespace AltSalt
         [SerializeField]
         public ScriptableObjectDictionary scriptableObjectDictionary = new ScriptableObjectDictionary();
 
+        [SerializeField]
+        public ObjectDictionary objectDictionary = new ObjectDictionary();
+
         static readonly string arrayExceptionMessage = "Discrepancy between number of keys and values";
 
         public static EventPayload Init()
@@ -72,6 +75,13 @@ namespace AltSalt
             return payloadInstance;
         }
 
+        public static EventPayload CreateInstance(UnityEngine.Object value)
+        {
+            EventPayload payloadInstance = Init();
+            payloadInstance.objectDictionary[DataType.unityObjectType] = value;
+            return payloadInstance;
+        }
+
         public static EventPayload CreateInstance(object key, string value)
         {
             EventPayload payloadInstance = Init();
@@ -97,6 +107,13 @@ namespace AltSalt
         {
             EventPayload payloadInstance = Init();
             payloadInstance.scriptableObjectDictionary[key] = value;
+            return payloadInstance;
+        }
+
+        public static EventPayload CreateInstance(object key, UnityEngine.Object value)
+        {
+            EventPayload payloadInstance = Init();
+            payloadInstance.objectDictionary[key] = value;
             return payloadInstance;
         }
 
@@ -148,6 +165,18 @@ namespace AltSalt
             return payloadInstance;
         }
 
+        public static EventPayload CreateInstance(object[] keys, UnityEngine.Object[] values)
+        {
+            EventPayload payloadInstance = Init();
+            if (keys.Length != values.Length) {
+                throw new Exception(arrayExceptionMessage);
+            }
+            for (int i = 0; i < keys.Length; i++) {
+                payloadInstance.objectDictionary[keys[i]] = values[i];
+            }
+            return payloadInstance;
+        }
+
         public void Set(string value)
         {
             stringDictionary[DataType.stringType] = value;
@@ -168,6 +197,11 @@ namespace AltSalt
             scriptableObjectDictionary[DataType.scriptableObjectType] = value;
         }
 
+        public void Set(UnityEngine.Object value)
+        {
+            objectDictionary[DataType.unityObjectType] = value;
+        }
+
         public void Set (object key, string value)
         {
             stringDictionary[key] = value;
@@ -186,6 +220,11 @@ namespace AltSalt
         public void Set(object key, ScriptableObject value)
         {
             scriptableObjectDictionary[key] = value;
+        }
+
+        public void Set(object key, UnityEngine.Object value)
+        {
+            objectDictionary[key] = value;
         }
 
         public string GetStringValue(object key)
@@ -227,6 +266,16 @@ namespace AltSalt
             }
         }
 
+        public UnityEngine.Object GetObjectValue(object key)
+        {
+            if (objectDictionary.ContainsKey(key)) {
+                return objectDictionary[key];
+            } else {
+                //                Debug.Log("Key for scriptable object value not found in EventPayload");
+                return null;
+            }
+        }
+
         [Serializable]
         public class StringDictionary : SerializableDictionaryBase<object, string> { }
 
@@ -238,6 +287,9 @@ namespace AltSalt
 
         [Serializable]
         public class ScriptableObjectDictionary : SerializableDictionaryBase<object, ScriptableObject> { }
+
+        [Serializable]
+        public class ObjectDictionary : SerializableDictionaryBase<object, UnityEngine.Object> { }
     }
 
 }

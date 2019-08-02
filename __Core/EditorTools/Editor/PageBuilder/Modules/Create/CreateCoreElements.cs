@@ -22,14 +22,14 @@ namespace AltSalt
             buttons.ForEach(SetupButton);
 
             UpdateDisplay();
-            pageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
 
             return this;
         }
 
         void OnDestroy()
         {
-            pageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
         }
 
         static VisualElementToggleData toggleData = new VisualElementToggleData();

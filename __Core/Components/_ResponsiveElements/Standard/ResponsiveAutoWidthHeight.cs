@@ -27,14 +27,10 @@ namespace AltSalt
 #if UNITY_EDITOR
         float internalMultiplierValue = 0f;
 
-        protected override void Start()
+        protected override void OnEnable()
         {
-            base.Start();
+            base.OnEnable();
             StoreInternalMarginVal();
-        }
-
-        void OnEnable()
-        {
             UpdateBreakpointDependencies();
         }
 
@@ -90,15 +86,11 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if (activeIndex >= multiplier.Count || activeIndex >= orientations.Count) {
-                LogBreakpointError();
+                LogBreakpointWarning();
                 return;
             }
 #endif
-
-            // Custom equation of an exponential function - equation is in the form y = a^x * b
-            // It is derived by taking two (X,Y) coordinates along the line, creating two equations
-            // in the form above, then dividing one equation by the other to solve for a and b.
-            double newDimension = (Math.Pow(0.561993755433366d, ((double)screenHeight.Value / (double)screenWidth.Value))) * 10.03014554127636d;
+            double newDimension = Utils.GetResponsiveWidth(sceneHeight.Value, sceneWidth.Value);
 
             if (orientations[activeIndex] == DimensionType.Vertical) {
                 rectTransform.sizeDelta = new Vector2((float)newDimension * multiplier[activeIndex], rectTransform.sizeDelta.y);

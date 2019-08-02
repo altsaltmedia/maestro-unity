@@ -61,17 +61,5 @@ namespace AltSalt
                 }
             }
         }
-
-        public override void OnGraphStop(Playable playable)
-        {
-            base.OnGraphStop(playable);
-            // Reset text values if we're working in edit mode
-#if UNITY_EDITOR
-            if(trackBindingComponent != null) {
-                trackBindingComponent.maxVisibleCharacters = 99999;
-                trackBindingComponent.maxVisibleWords = 99999;
-            }
-#endif
-        }
     }   
 }

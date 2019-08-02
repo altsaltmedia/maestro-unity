@@ -26,14 +26,14 @@ namespace AltSalt
             elementUXML = parentVisualElement.Query<Foldout>("EditRectTransformComponent", EditorToolsCore.ToggleableGroup);
 
             UpdateDisplay();
-            pageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
 
             return this;
         }
 
         void OnDestroy()
         {
-            pageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
         }
 
         static VisualElementToggleData toggleData = new VisualElementToggleData();
@@ -73,7 +73,8 @@ namespace AltSalt
             PopulateWidth,
             SetWidth,
             PopulateHeight,
-            SetHeight
+            SetHeight,
+            AddResponsivePosition
         }
 
         enum EnableCondition
@@ -253,6 +254,12 @@ namespace AltSalt
                 case nameof(ButtonNames.SetHeight):
                     button.clickable.clicked += () => {
                         SetHeight(Selection.gameObjects, height);
+                    };
+                    break;
+
+                case nameof(ButtonNames.AddResponsivePosition):
+                    button.clickable.clicked += () => {
+                        PageBuilderCore.AddComponentToSelection(Selection.gameObjects, typeof(ResponsivePosition));
                     };
                     break;
             }

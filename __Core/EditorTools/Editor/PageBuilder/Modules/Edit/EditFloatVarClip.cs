@@ -28,15 +28,15 @@ namespace AltSalt
             elementUXML = parentVisualElement.Query<Foldout>("EditFloatVarClip", EditorToolsCore.ToggleableGroup);
 
             UpdateDisplay();
-            
-            pageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
+
+            PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
 
             return this;
         }
 
         void OnDestroy()
         {
-            pageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
         }
 
         public float initialValue;

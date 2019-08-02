@@ -16,7 +16,11 @@ namespace AltSalt
             
             if (!trackBinding)
                 return;
-            
+
+            if (trackBindingComponent == null) {
+                trackBindingComponent = trackBinding.GetComponent<RectTransform>();
+            }
+
             inputCount = playable.GetInputCount ();
             
             for (int i = 0; i < inputCount; i++)
@@ -25,8 +29,6 @@ namespace AltSalt
                 inputWeight = playable.GetInputWeight(i);
                 inputPlayable = (ScriptPlayable<ResponsiveRectTransformPosBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
-                
-                trackBindingComponent = trackBinding.GetComponent<RectTransform>();
                 
                 if(inputWeight >= 1f) {
                     modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
@@ -39,11 +41,6 @@ namespace AltSalt
                     }
                 }
             }
-        }
-
-        public override void OnGraphStop(Playable playable)
-        {
-            base.OnGraphStop(playable);
         }
     }   
 }

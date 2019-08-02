@@ -8,6 +8,8 @@ namespace AltSalt
         ColorVariable trackBinding;
         ScriptPlayable<LerpColorVarBehaviour> inputPlayable;
         LerpColorVarBehaviour input;
+        bool originalValueSet;
+        Color originalValue;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
@@ -15,6 +17,11 @@ namespace AltSalt
             
             if (!trackBinding)
                 return;
+
+            if(originalValueSet == false) {
+                originalValue = trackBinding.Value;
+                originalValueSet = true;
+            }
             
             inputCount = playable.GetInputCount ();
             
@@ -38,14 +45,14 @@ namespace AltSalt
             }
         }
         
-        public override void OnGraphStop(Playable playable)
+        public override void OnPlayableDestroy(Playable playable)
         {
             base.OnGraphStop(playable);
 
             // Reset color if we're working in edit mode
 #if UNITY_EDITOR
             if(trackBinding != null) {
-                trackBinding.SetDefaultValue();
+                trackBinding.SetValue(originalValue);
             }
 #endif
             

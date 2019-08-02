@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48e52ce51209d4a699338a25976e8e00, type: 3}
-  m_Name: ScreenWidth
+  m_Name: SceneAspectRatio
   m_EditorClassIdentifier: 
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
   DeveloperDescription: 
-  Value: 400
+  Value: 1.3333334
   hasDefault: 0
   DefaultValue: 0

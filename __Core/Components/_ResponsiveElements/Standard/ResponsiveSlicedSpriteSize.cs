@@ -26,9 +26,9 @@ namespace AltSalt
 
         float internalWidthMarginValue = 0f;
 
-        protected override void Start()
+        protected override void OnEnable()
         {
-            base.Start();
+            base.OnEnable();
             StoreInternalMarginVal();
         }
 
@@ -61,12 +61,9 @@ namespace AltSalt
         public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
-            // Custom equation of an exponential function - equation is in the form y = a^x * b
-            // It is derived by taking two (X,Y) coordinates along the line, creating two equations
-            // in the form above, then dividing one equation by the other to solve for a and b.
-            double newDimension = 0d;
+            
+            double newDimension = Utils.GetResponsiveWidth(sceneHeight.Value, sceneWidth.Value);
 
-            newDimension = (Math.Pow(0.561993755433366d, ((double)screenHeight.Value / (double)screenWidth.Value))) * 10.03014554127636d;
             float dimensionModifier = Utils.GetValueFromDesiredPercent((float)newDimension, margin);
 
             if (orientation == DimensionType.Vertical) {

@@ -51,36 +51,22 @@ namespace AltSalt
             return newElement;
         }
 
-        public static ResponsiveElement[] AddBreakpointToSelection(GameObject[] gameObjects, float targetBreakpoint)
+        public static GameObject[] AddComponentToSelection(GameObject[] gameObjects, Type componentToAdd)
         {
-            List<ResponsiveElement> componentList = new List<ResponsiveElement>();
-
-            for (int i = 0; i < gameObjects.Length; i++) {
-
-                ResponsiveElement[] objectComponents = gameObjects[i].GetComponents<ResponsiveElement>();
-                for (int q = 0; q < objectComponents.Length; q++) {
-                    objectComponents[i].AddBreakpoint(targetBreakpoint);
-                }
-
-                componentList.AddRange(objectComponents);
-            }
-            return componentList.ToArray();
-        }
-
-        public static IResponsiveSaveable[] SaveResponsiveValues(GameObject[] gameObjects)
-        {
-            List<IResponsiveSaveable> componentList = new List<IResponsiveSaveable>();
+            List<GameObject> gameObjectList = new List<GameObject>();
 
             for(int i=0; i<gameObjects.Length; i++) {
 
-                IResponsiveSaveable[] objectComponents = gameObjects[i].GetComponents<IResponsiveSaveable>();
-                for(int q=0; q<objectComponents.Length; q++) {
-                    objectComponents[i].SaveValue();
+                if(gameObjects[i].GetComponent(componentToAdd) == null) {
+                    gameObjectList.Add(gameObjects[i]);
+                    Undo.AddComponent(gameObjects[i], componentToAdd);
+                    Debug.Log("Added " + componentToAdd.Name + " to " + gameObjects[i].name);
+                } else {
+                    EditorUtility.DisplayDialog("Component already exists", "The component " + componentToAdd + " already exists on " + gameObjects[i].name, "Okay");
                 }
-
-                componentList.AddRange(objectComponents);
             }
-            return componentList.ToArray();
+
+            return gameObjectList.ToArray();
         }
     }
 }

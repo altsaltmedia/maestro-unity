@@ -17,31 +17,31 @@ namespace AltSalt
         
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)
         {
-            
-            //#if UNITY_EDITOR
+
+#if UNITY_EDITOR
+
             
             //        // SYNTAX FOR MARKING PROPERTIES TO NOT BE SAVED IN EDIT MODE, CAN ITERATE
             //        // THROUGH ALL PROPERTIES DYNAMICALLY OR USE DEBUG.LOG STATEMENT BELOW TO FIND
             //        // NAMES OF SERIALIZED PROPERTIES AND MARK THEM EXPLICITY
-            
-            //        ColorVariable trackBinding = director.GetGenericBinding(this) as ColorVariable;
-            //         if (trackBinding == null)
-            //            return;
-            
-            //        var serializedObject = new UnityEditor.SerializedObject(trackBinding);
-            //        var iterator = serializedObject.GetIterator();
-            
-            //        while (iterator.NextVisible(true)) {
-            //            if (iterator.hasVisibleChildren)
-            //                continue;
-            
-            //            Debug.Log(iterator.propertyPath);
-            //            AnimationClip animationClip = new AnimationClip();
-            //            driver.AddObjectProperties(trackBinding, animationClip);
-            //        }
-            
-            //#endif
-            
+
+            //ColorVariable trackBinding = director.GetGenericBinding(this) as ColorVariable;
+            //if (trackBinding == null)
+            //    return;
+
+            //var serializedObject = new UnityEditor.SerializedObject(trackBinding);
+            //var iterator = serializedObject.GetIterator();
+
+            //while (iterator.NextVisible(true)) {
+            //    if (iterator.hasVisibleChildren)
+            //        continue;
+
+            //    Debug.Log(iterator.propertyPath);
+            //    driver.AddFromName(iterator.propertyPath);
+            //}
+
+#endif
+
             base.GatherProperties(director, driver);
         }
     }

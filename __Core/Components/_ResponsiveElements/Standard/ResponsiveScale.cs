@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using Sirenix.OdinInspector;
 
 namespace AltSalt
@@ -20,7 +21,7 @@ namespace AltSalt
                 return;
             }
 
-            int targetBreakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
 
             Utils.ExpandList(breakpointLocalScale, targetBreakpointIndex);
             breakpointLocalScale[targetBreakpointIndex] = rectTransform.localScale;
@@ -35,6 +36,13 @@ namespace AltSalt
 
         public void SetValue(int activeIndex)
         {
+#if UNITY_EDITOR
+            if (activeIndex >= breakpointLocalScale.Count) {
+                LogBreakpointWarning();
+                return;
+            }
+            Undo.RegisterCompleteObjectUndo(rectTransform, "set responsive scale");
+#endif
             rectTransform.localScale = breakpointLocalScale[activeIndex];
         }
 

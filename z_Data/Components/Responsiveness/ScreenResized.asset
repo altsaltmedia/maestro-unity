@@ -12,7 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6cfefc9189b422d8e558b5019449b3, type: 3}
   m_Name: ScreenResized
   m_EditorClassIdentifier: 
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
+  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  logCallersOnRaise: 0
+  logListenersOnRegister: 0
+  logListenersOnRaise: 0
   DeveloperDescription: Debug event used to resize elements in the editor and perform
     related responsive tasks when screen resolution changes.
-  LogListenersOnRegister: 0
-  LogListenersOnRaise: 0
+  associatedVariables:
+  - {fileID: 11400000, guid: 485c485f334ad43f2b87301367c6b4af, type: 2}
+  - {fileID: 11400000, guid: f30a66a737e6648e8b1a96d7d6bb77af, type: 2}
+  - {fileID: 11400000, guid: b3d3a094f9cae403cb93cba61a05913b, type: 2}

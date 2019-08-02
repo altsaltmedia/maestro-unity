@@ -31,14 +31,14 @@ namespace AltSalt
             updateWindowTriggers.ForEach(SetupUpdateWindowTriggers);
 
             UpdateDisplay();
-            timelineUtilsWindow.selectionChangedDelegate += UpdateDisplay;
+            TimelineUtilsWindow.selectionChangedDelegate += UpdateDisplay;
 
             return this;
         }
 
         void OnDestroy()
         {
-            timelineUtilsWindow.selectionChangedDelegate -= UpdateDisplay;
+            TimelineUtilsWindow.selectionChangedDelegate -= UpdateDisplay;
         }
 
         public static List<TrackData> copiedTracks = new List<TrackData>();

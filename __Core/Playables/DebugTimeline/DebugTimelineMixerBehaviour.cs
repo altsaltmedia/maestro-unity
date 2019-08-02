@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Playables;
+
+#if UNITY_EDITOR
 using UnityEditor.Timeline;
+#endif
 
 namespace AltSalt
 {    
@@ -13,14 +16,19 @@ namespace AltSalt
         public override void OnGraphStart(Playable playable)
         {
             base.OnGraphStart(playable);
+#if UNITY_EDITOR
             trackBinding = Utils.GetFloatVariable("TimelineCurrentTime");
-            TimelineEditor.inspectedDirector.time = trackBinding.Value;
+            if(Application.isPlaying == false ) {
+                TimelineEditor.inspectedDirector.time = trackBinding.Value;
+            }
+#endif
         }
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
+#if UNITY_EDITOR
             trackBinding.SetValue((float)currentTime);
+#endif
         }
-        
     }   
 }

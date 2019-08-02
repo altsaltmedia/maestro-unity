@@ -13,6 +13,15 @@ namespace AltSalt
         [SerializeField]
         ComplexEvent complexEvent;
 
+        public ComplexEvent ComplexEventTarget {
+            get {
+                return complexEvent;
+            }
+            set {
+                complexEvent = value;
+            }
+        }
+
         public void RaiseEvent(GameObject caller)
         {
             complexEvent.StoreCaller(caller);
@@ -38,6 +47,12 @@ namespace AltSalt
         }
 
         public void RaiseEvent(GameObject caller, ScriptableObject value)
+        {
+            complexEvent.StoreCaller(caller);
+            complexEvent.Raise(value);
+        }
+
+        public void RaiseEvent(GameObject caller, UnityEngine.Object value)
         {
             complexEvent.StoreCaller(caller);
             complexEvent.Raise(value);

@@ -30,16 +30,16 @@ namespace AltSalt
 
             UpdateDisplay();
 
-            timelineUtilsWindow.selectionChangedDelegate += UpdateDisplay;
-            timelineUtilsWindow.inspectorUpdateDelegate += UpdateTime;
+            TimelineUtilsWindow.selectionChangedDelegate += UpdateDisplay;
+            TimelineUtilsWindow.inspectorUpdateDelegate += UpdateTime;
 
             return this;
         }
 
         void OnDestroy()
         {
-            timelineUtilsWindow.selectionChangedDelegate -= UpdateDisplay;
-            timelineUtilsWindow.inspectorUpdateDelegate -= UpdateTime;
+            TimelineUtilsWindow.selectionChangedDelegate -= UpdateDisplay;
+            TimelineUtilsWindow.inspectorUpdateDelegate -= UpdateTime;
         }
 
         static VisualElementToggleData toggleData = new VisualElementToggleData();

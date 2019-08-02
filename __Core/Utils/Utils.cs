@@ -25,7 +25,7 @@ namespace AltSalt
 {
     public enum DimensionType { Vertical, Horizontal }
 
-    public enum AspectRatioType { x16x9, x9x16, x4x3 }
+    public enum AspectRatioType { x16x9, x9x16, x4x3, x3x4, Dynamic }
 
     public enum RatioType { Numerator, Denominator }
 
@@ -35,9 +35,23 @@ namespace AltSalt
 
     public enum AxisDestination { fromAxis, toAxis }
 
-    public enum DataType { stringType, floatType, boolType, intType, scriptableObjectType }
+    public enum DataType { stringType, floatType, boolType, intType, scriptableObjectType, unityObjectType }
 
     public enum ComparisonValues { GreaterThan, LessThan, EqualTo }
+
+    public enum VarDependencies {
+        AppSettings,
+        ModifySettings,
+        DeviceAspectRatio,
+        DeviceWidth,
+        DeviceHeight,
+        SceneAspectRatio,
+        SceneWidth,
+        SceneHeight,
+        TimelineCurrentTime,
+        ResponsiveElementEnable,
+        ResponsiveElementDisable
+    }
 
 
     public static class Utils
@@ -49,6 +63,16 @@ namespace AltSalt
         public static string ComplexEventString = typeof(ComplexEvent).Name;
         public static string SimpleEventString = typeof(SimpleEvent).Name;
         static GUISkin altSaltSkin;
+
+        // Custom equation of an exponential function - equation is in the form y = a^x * b
+        // It is derived by taking two (X,Y) coordinates along the line, creating two equations
+        // in the form above, then dividing one equation by the other to solve for a and b.
+        // Values are converted to a double here to preserve precision.
+        public static double GetResponsiveWidth(float height, float width)
+        {
+            double aspectRatio = height / width;
+            return Math.Pow(0.561993755433366d, aspectRatio) * 10.03014554127636d;
+        }
 
 #if UNITY_EDITOR
         public static GUISkin AltSaltSkin {
@@ -179,7 +203,6 @@ namespace AltSalt
                 for (int q = 0; q < typeToSelect.Length; q++) {
                     Type objectType = currentSelection[i].GetType();
                     if (objectType.IsSubclassOf(typeToSelect[q]) || objectType == typeToSelect[q]) {
-                        
                         newSelection.Add(currentSelection[i]);
                     }
                 }
@@ -220,14 +243,6 @@ namespace AltSalt
             }
 
             return newSelection.ToArray();
-        }
-
-        public class ResponsiveElementSort : Comparer<ResponsiveElement>
-        {
-            public override int Compare(ResponsiveElement x, ResponsiveElement y)
-            {
-                return x.Priority.CompareTo(y.Priority);
-            }
         }
 
         public class GameObjectSort : Comparer<GameObject>
@@ -297,6 +312,15 @@ namespace AltSalt
             return guid;
         }
 #endif
+
+        public class ResponsiveElementSort : Comparer<ResponsiveElement>
+        {
+            public override int Compare(ResponsiveElement x, ResponsiveElement y)
+            {
+                return x.Priority.CompareTo(y.Priority);
+            }
+        }
+
         public static JSONNode AddToJSONArray(JSONNode node, string key, string value)
         {
             if (key.Length < 1) {
@@ -397,7 +421,7 @@ namespace AltSalt
             string[] guids;
             string path;
 
-            guids = AssetDatabase.FindAssets("t:AppSettings");
+            guids = AssetDatabase.FindAssets("t:" + nameof(VarDependencies.AppSettings));
 
             if(guids.Length > 1) {
                 Debug.LogWarning("More than one matching App Settings asset found. Please check to see if this is intentional.");
@@ -413,7 +437,7 @@ namespace AltSalt
             string[] guids;
             string path;
 
-            guids = AssetDatabase.FindAssets("t:ModifySettings");
+            guids = AssetDatabase.FindAssets("t:" + nameof(VarDependencies.ModifySettings));
 
             if(guids.Length == 0) {
                 throw new Exception("Modify Settings not found! You must create an instance of Modify Settings.");

@@ -6,7 +6,6 @@ namespace AltSalt
 {
     [TrackColor(0.245149f, 0.895372f, 0.5679245f)]
     [TrackClipType(typeof(SimpleEventTimelineTriggerClip))]
-    [TrackBindingType(typeof(SimpleEvent))]
     public class SimpleEventTimelineTriggerTrack : TrackAsset
     {
         public void StoreClipStartEndTime()

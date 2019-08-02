@@ -59,8 +59,8 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0
-    height: 0.825
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 63.7
@@ -108,8 +108,6 @@ MonoBehaviour:
   - screenHeight
   - aspectRatio
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  screenResized: {fileID: 11400000, guid: 6958e603947ff451aac4f96c5c846b5f, type: 2}
-  layoutUpdate: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
   screenWidth:
     UseConstant: 0
     ConstantValue: 0
@@ -122,7 +120,12 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 485c485f334ad43f2b87301367c6b4af, type: 2}
+  responsiveElementEnable:
+    complexEvent: {fileID: 0}
+  responsiveElementDisable:
+    complexEvent: {fileID: 0}
   hasBreakpoints: 1
+  priority: 0
   aspectRatioBreakpoints:
   - 1.78
   viewportValues:

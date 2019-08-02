@@ -7,6 +7,8 @@ namespace AltSalt
 {
     [Serializable]
     [ExecuteInEditMode]
+    // Meant to be used within ComplexEventTriggerPackagerBehaviour or ComplexEventTimelineTrigger.
+    // If implementing a custom trigger from within a script, use the basic ComplexEventTrigger instead.
     public class ComplexEventTriggerPackager : EventTriggerBase
     {
         [Required]

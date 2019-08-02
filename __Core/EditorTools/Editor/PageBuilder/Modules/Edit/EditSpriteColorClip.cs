@@ -28,14 +28,14 @@ namespace AltSalt
             elementUXML = parentVisualElement.Query<Foldout>("EditSpriteColorClip", EditorToolsCore.ToggleableGroup);
 
             UpdateDisplay();
-            pageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
 
             return this;
         }
 
         void OnDestroy()
         {
-            pageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
+            PageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
         }
 
         public Color initialValue = new Color(1, 1, 1, 1);

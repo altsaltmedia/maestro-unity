@@ -24,38 +24,42 @@ xsi:schemaLocation="
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditFloatVarClip_UXML.uxml" name="EditFloatVarClip" />
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditColorVarClip_UXML.uxml" name="EditColorVarClip" />
 
-	<engine:ScrollView class="altsalt page-builder-window">
+    <engine:VisualElement class="altsalt page-builder-window">
 
-        <engine:Instance template="CreateCoreElements" />
+    	<engine:ScrollView class="create-edit-tools border-bottom-1">
 
-        <engine:Instance template="CreateOtherElements" />
+            <engine:Instance template="CreateCoreElements" />
 
-        <engine:Instance template="EditRectTransformComponent" />
+            <engine:Instance template="CreateOtherElements" />
 
-        <engine:Instance template="EditTMProComponent" />
+            <engine:Instance template="EditRectTransformComponent" />
 
-        <engine:Instance template="EditRectTransformPosClip" />
+            <engine:Instance template="EditTMProComponent" />
 
-        <engine:Instance template="EditTMProColorClip" />
+            <engine:Instance template="EditRectTransformPosClip" />
 
-        <engine:Instance template="EditRectTransformScaleClip" />
+            <engine:Instance template="EditTMProColorClip" />
 
-        <engine:Instance template="EditRectTransformRotationClip" />
+            <engine:Instance template="EditRectTransformScaleClip" />
 
-        <engine:Instance template="EditSpriteColorClip" />
+            <engine:Instance template="EditRectTransformRotationClip" />
 
-        <engine:Instance template="EditFloatVarClip" />
+            <engine:Instance template="EditSpriteColorClip" />
 
-        <engine:Instance template="EditColorVarClip" />
+            <engine:Instance template="EditFloatVarClip" />
 
-        <engine:VisualElement class="section-container">
-            <engine:VisualElement class="section">
-                <engine:VisualElement class="section___content">
-                    <engine:Button text="Refresh Layout" class="col-full" name="RefreshLayout" />
+            <engine:Instance template="EditColorVarClip" />
+
+            <engine:VisualElement class="section-container">
+                <engine:VisualElement class="section">
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="Refresh Layout" class="col-full" name="RefreshLayout" />
+                    </engine:VisualElement>
                 </engine:VisualElement>
             </engine:VisualElement>
-        </engine:VisualElement>
 
-	</engine:ScrollView>
+    	</engine:ScrollView>
+
+    </engine:VisualElement>
 
 </engine:UXML>

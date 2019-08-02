@@ -4,14 +4,18 @@ namespace AltSalt
 {
     public class ResponsiveRectTransform : ResponsiveElement
     {
-        bool transformStored = false;
         protected RectTransform rectTransform;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            StoreTransform();
+        }
 
         void StoreTransform()
         {
-            if (transformStored == false) {
+            if (rectTransform == null) {
                 rectTransform = GetComponent<RectTransform>();
-                transformStored = true;
             }
         }
 

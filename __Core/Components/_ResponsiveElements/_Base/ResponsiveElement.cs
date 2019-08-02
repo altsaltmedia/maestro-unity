@@ -9,7 +9,6 @@ using SimpleJSON;
 
 namespace AltSalt
 {
-    
     [ExecuteInEditMode]
     public abstract class ResponsiveElement : SerializableElement
     {
@@ -17,28 +16,26 @@ namespace AltSalt
         [SerializeField]
         protected AppSettings appSettings;
 
-        [Required]
+        [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
-        protected SimpleEvent screenResized;
+        protected FloatReference sceneWidth = new FloatReference();
 
-        [Required]
+        [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
-        protected SimpleEvent layoutUpdate;
+        protected FloatReference sceneHeight = new FloatReference();
 
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
-        protected FloatReference screenWidth = new FloatReference();
-
-        [ValidateInput("IsPopulated")]
-        [SerializeField]
-        protected FloatReference screenHeight = new FloatReference();
-
-        [ValidateInput("IsPopulated")]
-        [SerializeField]
-        protected FloatReference aspectRatio = new FloatReference();
+        protected FloatReference sceneAspectRatio = new FloatReference();
 
         [SerializeField]
-        [OnValueChanged("PopulateDefaultBreakpointValues")]
+        ComplexEventTrigger responsiveElementEnable = new ComplexEventTrigger();
+
+        [SerializeField]
+        ComplexEventTrigger responsiveElementDisable = new ComplexEventTrigger();
+
+        [SerializeField]
+        [OnValueChanged(nameof(PopulateDefaultBreakpointValues))]
         protected bool hasBreakpoints;
         public bool HasBreakpoints {
             get {
@@ -47,6 +44,7 @@ namespace AltSalt
         }
 
         [SerializeField]
+        [OnValueChanged(nameof(ResetResponsiveElementData))]
         protected int priority;
         public int Priority {
             get {
@@ -56,64 +54,37 @@ namespace AltSalt
 
         protected int breakpointIndex;
 
-        [ShowIf("hasBreakpoints")]
+        [ShowIf(nameof(hasBreakpoints))]
         [PropertySpace]
         [InfoBox("You should always have x+1 breakpoint values; e.g., for 1 breakpoint at 1.34, you must specify 2 breakpoint values - one for aspect ratios wider than 1.34, and another for aspect ratios narrower than or equal to 1.34.")]
         [InfoBox("Breakpoint examples: To target devices narrow than iPad (aspect ratio 1.33), specify a breakpoint of 1.4; to target narrower than iPhone (1.77), specify a breakpoint of 1.78.")]
-        [ValidateInput("IsPopulated")]
-        [OnValueChanged("UpdateBreakpointDependencies")]
+        [ValidateInput(nameof(IsPopulated))]
+        [OnValueChanged(nameof(UpdateBreakpointDependencies))]
         public List<float> aspectRatioBreakpoints = new List<float>();
-
-        protected SimpleEventListener layoutUpdateListener;
-        protected bool layoutListenerCreated = false;
-
-        protected virtual void Start()
-        {
-            ExecuteLayoutUpdate();
+        public List<float> AspectRatioBreakpoints {
+            get {
+                return aspectRatioBreakpoints;
+            }
         }
 
-        void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
 #if UNITY_EDITOR
             PopulateDependencies();
             PopulateNonSerializedProperties();
-            resizedListenerCreated = false;
-            ExecuteLayoutUpdate();
 #endif
-            CreateLayoutListener();
+            responsiveElementEnable.RaiseEvent(this.gameObject, this);
         }
 
-        void OnDisable()
+        void ResetResponsiveElementData()
         {
-            if (layoutListenerCreated == true) {
-                DisableLayoutListener();
-            }
-#if UNITY_EDITOR
-            if (resizedListenerCreated == true) {
-                DisableResizedListener();
-            }
-#endif
+            responsiveElementDisable.RaiseEvent(this.gameObject, this);
+            responsiveElementEnable.RaiseEvent(this.gameObject, this);
         }
 
-        void CreateLayoutListener()
-        {
-            if (layoutListenerCreated == false) {
-                layoutUpdateListener = new SimpleEventListener(layoutUpdate, gameObject);
-                layoutUpdateListener.OnTargetEventExecuted += ExecuteLayoutUpdate;
-                layoutListenerCreated = true;
-            }
-        }
 
-        void DisableLayoutListener()
-        {
-            if (layoutUpdateListener != null) {
-                layoutUpdateListener.DestroyListener();
-                layoutUpdateListener = null;
-                layoutListenerCreated = false;
-            }
-        }
-
-        void ExecuteLayoutUpdate()
+        public void ExecuteLayoutUpdate()
         {
             if(appSettings.modifyLayoutActive.Value == true) {
                 LoadData();
@@ -126,11 +97,11 @@ namespace AltSalt
             if (hasBreakpoints == true) {
                 if (aspectRatioBreakpoints.Count < 1) {
                     #if UNITY_EDITOR
-                    LogBreakpointError();
+                    LogBreakpointWarning();
                     #endif
                     return;
                 } else {
-                    breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+                    breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
                 }
             } else {
                 breakpointIndex = 0;
@@ -147,9 +118,6 @@ namespace AltSalt
 
 #if UNITY_EDITOR
 
-        protected SimpleEventListener screenResizedListener;
-        protected bool resizedListenerCreated = false;
-
         public List<float> AddBreakpoint(float targetBreakpoint)
         {
             Undo.RecordObject(this, "add breakpoint");
@@ -161,6 +129,7 @@ namespace AltSalt
             }
 
             if (aspectRatioBreakpoints.Count == 0) {
+                LogAddBreakpointMessage(targetBreakpoint, this);
                 aspectRatioBreakpoints.Add(targetBreakpoint);
                 return aspectRatioBreakpoints;
             }
@@ -176,6 +145,7 @@ namespace AltSalt
                 }
             }
 
+            LogAddBreakpointMessage(targetBreakpoint, this);
             return aspectRatioBreakpoints;
         }
 
@@ -188,7 +158,7 @@ namespace AltSalt
         void PopulateDefaultBreakpoint()
         {
             if(hasBreakpoints == true && aspectRatioBreakpoints.Count == 0) {
-                decimal tempVal = Convert.ToDecimal(aspectRatio.Value);
+                decimal tempVal = Convert.ToDecimal(sceneAspectRatio.Value);
                 tempVal = Math.Round(tempVal, 2);
                 aspectRatioBreakpoints.Add((float)tempVal + .01f);
             }
@@ -200,85 +170,59 @@ namespace AltSalt
             }
         }
 
-        public override void Reset()
+        public virtual void Reset()
         {
-            base.Reset();
             PopulateDependencies();
             PopulateNonSerializedProperties();
         }
 
-        void PopulateDependencies()
+        protected virtual void PopulateDependencies()
         {
             if (appSettings == null) {
                 appSettings = Utils.GetAppSettings();
             }
 
-            if (screenResized == null) {
-                screenResized = Utils.GetSimpleEvent("ScreenResized");
+            if (sceneWidth.Variable == null) {
+                sceneWidth.Variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneWidth));
             }
 
-            if (layoutUpdate == null) {
-                layoutUpdate = Utils.GetSimpleEvent("LayoutUpdate");
+            if (sceneHeight.Variable == null) {
+                sceneHeight.Variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneHeight));
             }
 
-            if (screenWidth.Variable == null) {
-                screenWidth.Variable = Utils.GetFloatVariable("ScreenWidth");
+            if (sceneAspectRatio.Variable == null) {
+                sceneAspectRatio.Variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneAspectRatio));
             }
 
-            if (screenHeight.Variable == null) {
-                screenHeight.Variable = Utils.GetFloatVariable("ScreenHeight");
+            if(responsiveElementEnable.ComplexEventTarget == null) {
+                responsiveElementEnable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementEnable));
             }
 
-            if (aspectRatio.Variable == null) {
-                aspectRatio.Variable = Utils.GetFloatVariable("AspectRatio");
+            if (responsiveElementDisable.ComplexEventTarget == null) {
+                responsiveElementDisable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementDisable));
             }
         }
 
         void PopulateNonSerializedProperties()
         {
             nonserializedProperties.Clear();
-            nonserializedProperties.Add("id");
-            nonserializedProperties.Add("nonserializedProperties");
-            nonserializedProperties.Add("modifySettings");
-            nonserializedProperties.Add("appSettings");
-            nonserializedProperties.Add("screenResized");
-            nonserializedProperties.Add("layoutUpdate");
-            nonserializedProperties.Add("screenWidth");
-            nonserializedProperties.Add("screenHeight");
-            nonserializedProperties.Add("aspectRatio");
+            nonserializedProperties.Add(nameof(id));
+            nonserializedProperties.Add(nameof(nonserializedProperties));
+            nonserializedProperties.Add(nameof(modifySettings));
+            nonserializedProperties.Add(nameof(appSettings));
+            nonserializedProperties.Add(nameof(sceneWidth));
+            nonserializedProperties.Add(nameof(sceneHeight));
+            nonserializedProperties.Add(nameof(sceneAspectRatio));
+            nonserializedProperties.Add(nameof(responsiveElementEnable));
+            nonserializedProperties.Add(nameof(responsiveElementDisable));
         }
 
-        protected override void OnRenderObject()
+        protected virtual void OnRenderObject()
         {
-            base.OnRenderObject();
-
-             //Uncomment this if it's ever necessary to repopulate missing dependencies
-             PopulateDependencies();
-             PopulateNonSerializedProperties();
-
-            CreateResizedListener();
-            if (resizedListenerCreated == true && appSettings.debugEventsActive.Value == false) {
-                DisableResizedListener();
-            }
-
-        }
-
-        void CreateResizedListener()
-        {
-            if (resizedListenerCreated == false && appSettings.debugEventsActive.Value == true) {
-                screenResizedListener = new SimpleEventListener(screenResized, this.gameObject);
-                screenResizedListener.OnTargetEventExecuted += ExecuteResponsiveAction;
-                resizedListenerCreated = true;
-            }
-        }
-
-        void DisableResizedListener()
-        {
-            if (screenResizedListener != null) {
-                screenResizedListener.DestroyListener();
-                screenResizedListener = null;
-                resizedListenerCreated = false;
-            }
+            //Uncomment this if it's ever necessary to repopulate missing dependencies
+            //PopulateDependencies();
+            //PopulateNonSerializedProperties();
+            
         }
 
         [HorizontalGroup("Data Handler", 0.5f)]
@@ -310,9 +254,16 @@ namespace AltSalt
             }
         }
 
-        protected virtual void LogBreakpointError()
+        protected virtual void LogBreakpointWarning()
         {
-            Debug.LogError("Please specify either 1.) target values for saving OR 2.) breakpoints and corresponding values on " + this.name, this);
+            Debug.LogWarning("Please specify either 1.) target values for saving OR 2.) breakpoints and corresponding values on " + this.name, this);
+        }
+
+        string LogAddBreakpointMessage(float targetBreakpoint, Component component)
+        {
+            string message = "Added breakpoint of " + targetBreakpoint.ToString("F2") + " to " + component.name + " " + component.GetType().Name;
+            Debug.Log(message, this);
+            return message;
         }
 #endif
 
@@ -329,7 +280,7 @@ namespace AltSalt
             }
         }
 
-        private static bool IsPopulated(FloatReference attribute)
+        protected static bool IsPopulated(FloatReference attribute)
         {
             return Utils.IsPopulated(attribute);
         }

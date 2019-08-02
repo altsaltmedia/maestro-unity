@@ -26,7 +26,7 @@ namespace AltSalt
                 return;
             }
 
-            int targetBreakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
 
             Utils.ExpandList(breakpointAnchorMax, targetBreakpointIndex);
             breakpointAnchorMax[targetBreakpointIndex] = rectTransform.anchorMax;

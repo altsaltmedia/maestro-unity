@@ -6,6 +6,7 @@ using UnityEditor.Timeline;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
+using UnityEngine.Playables;
 
 namespace AltSalt
 {
@@ -13,14 +14,15 @@ namespace AltSalt
     public class TimelineUtilsWindow : EditorWindow
     {
         VisualElement timelineUtilsStructure;
+        PlayableDirector currentDirector;
 
         Undo.UndoRedoCallback undoCallback = new Undo.UndoRedoCallback(TimelineUtilsCore.RefreshTimelineWindow);
 
         public delegate void InspectorUpdateDelegate();
-        public InspectorUpdateDelegate inspectorUpdateDelegate;
+        public static InspectorUpdateDelegate inspectorUpdateDelegate = () => {};
 
         public delegate void SelectionChangedDelegate();
-        public SelectionChangedDelegate selectionChangedDelegate;
+        public static SelectionChangedDelegate selectionChangedDelegate = () => {};
 
         Dictionary<Type, string> childWindowData = new Dictionary<Type, string> {
             { typeof(ClipSelectionManipulation), "clip-selection-manipulation" },
@@ -47,25 +49,50 @@ namespace AltSalt
 
         void OnEnable()
         {
-            RenderLayout();
+            titleContent = new GUIContent("Timeline Utils");
             Undo.undoRedoPerformed += undoCallback;
             Selection.selectionChanged += SelectionChangedCallback;
+            EditorSceneManager.activeSceneChangedInEditMode += SceneChangedCallback;
+            
+            currentDirector = TimelineEditor.inspectedDirector;
+            //currentDirector.paused += OnPlayableDirectorPaused;
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
             Undo.undoRedoPerformed -= undoCallback;
             Selection.selectionChanged -= SelectionChangedCallback;
+            EditorSceneManager.activeSceneChangedInEditMode -= SceneChangedCallback;
+
+            //currentDirector.paused -= OnPlayableDirectorPaused;
         }
 
         void OnInspectorUpdate()
-        {
+        {    
             inspectorUpdateDelegate.Invoke();
         }
 
         void SelectionChangedCallback()
         {
+            //if(currentDirector != TimelineEditor.inspectedDirector) {
+            //    currentDirector.paused -= OnPlayableDirectorPaused;
+            //    currentDirector = TimelineEditor.inspectedDirector;
+            //    currentDirector.paused += OnPlayableDirectorPaused;
+            //}
             selectionChangedDelegate.Invoke();
+        }
+
+        void SceneChangedCallback(Scene scene, Scene newScene)
+        {
+            rootVisualElement.Clear();
+            timelineUtilsStructure = null;
+        }
+
+        void OnPlayableDirectorPaused(PlayableDirector playableDirector)
+        {
+            playableDirector.time = TimelineUtilsCore.CurrentTime;
+            playableDirector.Evaluate();
+            TimelineUtilsCore.RefreshTimelineWindow();
         }
 
         void RenderLayout()
@@ -118,11 +145,15 @@ namespace AltSalt
 
             if (TimelineEditor.inspectedAsset == null) {
                 GUILayout.Label("Please select a timeline asset in order to use clip tools.", guiStyle);
-                timelineUtilsStructure.visible = false;
+                if(timelineUtilsStructure != null) {
+                    timelineUtilsStructure.visible = false;
+                }
             } else {
 
                 if (TimelineUtilsCore.DebugTrackCreated == false) {
-                    timelineUtilsStructure.visible = false;
+                    if (timelineUtilsStructure != null) {
+                        timelineUtilsStructure.visible = false;
+                    }
 
                     GUILayout.Label("You must create a debug track in order to use timeline utilities.", guiStyle);
                     GUILayout.Space(10);
@@ -133,7 +164,11 @@ namespace AltSalt
                     }
 
                 } else {
-                    timelineUtilsStructure.visible = true;
+                    if(timelineUtilsStructure != null) {
+                        timelineUtilsStructure.visible = true;
+                    } else {
+                        RenderLayout();
+                    }
                 }
             }
 
