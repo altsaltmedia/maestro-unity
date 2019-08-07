@@ -15,13 +15,14 @@ namespace AltSalt
     [HideInMenu]
     public class ResponsiveLerpToTargetTrack : TrackAsset {
 
-        public void StoreClipStartEndTime()
+        public void StoreClipProperties()
         {
             foreach (var clip in GetClips()) {
                 var myAsset = clip.asset as ResponsiveLerpToTargetClip;
                 if (myAsset) {
                     myAsset.startTime = clip.start;
                     myAsset.endTime = clip.end;
+                    myAsset.parentTrack = this;
                 }
             }
         }
@@ -29,7 +30,7 @@ namespace AltSalt
         // This method should be overridden in child classes
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipStartEndTime();
+            StoreClipProperties();
             return ScriptPlayable<ResponsiveLerpToTargetMixerBehaviour>.Create(graph, inputCount);
         }
 

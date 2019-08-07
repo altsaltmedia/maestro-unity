@@ -59,6 +59,9 @@ xsi:schemaLocation="
                                     <engine:VisualElement class="section___content margin-bottom-0">
                                         <engine:Button text="Responsive Position" class="col-full" name="AddResponsivePosition" />
                                     </engine:VisualElement>
+                                    <engine:VisualElement class="section___content margin-bottom-0">
+                                        <engine:Button text="Responsive Auto Width Height" class="col-full" name="AddResponsiveAutoWidthHeight" />
+                                    </engine:VisualElement>
                                 </engine:VisualElement>
                             </engine:Foldout>
 

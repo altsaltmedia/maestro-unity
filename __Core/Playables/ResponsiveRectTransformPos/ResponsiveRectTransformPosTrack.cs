@@ -11,7 +11,7 @@ namespace AltSalt
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipStartEndTime();
+            StoreClipProperties();
             return ScriptPlayable<ResponsiveRectTransformPosMixerBehaviour>.Create (graph, inputCount);
         }
 

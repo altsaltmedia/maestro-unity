@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
+using UnityEngine.Timeline;
+using UnityEditor.Timeline;
+using UnityEngine.Playables;
 
 namespace AltSalt
 {
@@ -13,7 +16,7 @@ namespace AltSalt
 
         static VisualElement responsiveElementListContainer;
         ListView responsiveElementListView;
-        List<ResponsiveElement> selectedElements;
+        List<IResponsive> selectedElements = new List<IResponsive>();
         SimpleEventTrigger screenResized = new SimpleEventTrigger();
 
         bool listViewExpanded;
@@ -84,10 +87,11 @@ namespace AltSalt
 
                 case nameof(ButtonNames.AddBreakpoint):
                     button.clickable.clicked += () => {
-                        if(selectedElements.Count > 0) {
+                        if (selectedElements.Count > 0) {
                             AddBreakpointToSelectedElements(selectedElements.ToArray(), breakpoint);
                         } else {
                             AddBreakpointToSelectedElements(Selection.gameObjects, breakpoint);
+                            AddBreakpointToSelectedElements(TimelineEditor.selectedClips, breakpoint);
                         }
                         UpdateResponsiveElementList();
                     };
@@ -96,6 +100,7 @@ namespace AltSalt
                 case nameof(ButtonNames.SaveResponsiveValues):
                     button.clickable.clicked += () => {
                         SaveResponsiveValues(Selection.gameObjects);
+                        SaveResponsiveValues(TimelineEditor.selectedClips);
                     };
                     break;
 
@@ -126,10 +131,17 @@ namespace AltSalt
         {
             responsiveElementListContainer.Clear();
 
-            List<ResponsiveElement> responsiveElements = new List<ResponsiveElement>();
+            List<IResponsive> responsiveElements = new List<IResponsive>();
 
             for(int i=0; i<Selection.gameObjects.Length; i++) {
-                responsiveElements.AddRange(Selection.gameObjects[i].GetComponents<ResponsiveElement>());
+                responsiveElements.AddRange(Selection.gameObjects[i].GetComponents<IResponsive>());
+            }
+
+            for(int i=0; i<TimelineEditor.selectedClips.Length; i++) {
+                var clipAsset = TimelineEditor.selectedClips[i].asset;
+                if (clipAsset is ResponsiveLerpToTargetClip) {
+                    responsiveElements.Add(GetResponsiveElementFromClipAsset(clipAsset as ResponsiveLerpToTargetClip));
+                }
             }
 
             if(responsiveElements.Count > 0) {
@@ -146,7 +158,7 @@ namespace AltSalt
             }
         }
 
-        static Label CreateBreakpointLabel(List<ResponsiveElement> list)
+        static Label CreateBreakpointLabel(List<IResponsive> list)
         {
             List<float> breakpointValues = new List<float>();
             for (int q = 0; q < list.Count; q++) {
@@ -171,16 +183,16 @@ namespace AltSalt
             return label;
         }
 
-        ListView CreateResponsiveElementListView(List<ResponsiveElement> list, bool expandListView)
+        ListView CreateResponsiveElementListView(List<IResponsive> list, bool expandListView)
         {
             Func<VisualElement> makeItem = () => new Label();
 
             Action<VisualElement, int> bindItem = (e, i) => {
                 string objectString;
-                if (list[i].name.Length > 10) {
-                    objectString = list[i].name.Substring(0, 10);
+                if (list[i].Name.Length > 10) {
+                    objectString = list[i].Name.Substring(0, 10);
                 } else {
-                    objectString = list[i].name;
+                    objectString = list[i].Name;
                 }
                 string aspectRatioNames = string.Format("({0})", string.Join(", ", list[i].AspectRatioBreakpoints.ToArray()));
 
@@ -190,12 +202,19 @@ namespace AltSalt
             const int itemHeight = 16;
 
             var listView = new ListView(list, itemHeight, makeItem, bindItem);
-
             listView.selectionType = SelectionType.Multiple;
 
-            listView.onItemChosen += obj => Selection.activeObject = obj as UnityEngine.Object;
+            listView.onItemChosen += obj => {
+                if (obj is ResponsiveLerpToTargetBehaviour) {
+                    var clipAsset = GetClipAssetFromResponsiveBehaviour(obj as ResponsiveLerpToTargetBehaviour);
+                    var parentTrack = GetParentTrackFromResponsiveBehaviour(obj as ResponsiveLerpToTargetBehaviour);
+                    TimelineEditor.selectedClip = TimelineUtilsCore.GetTimelineClipFromTrackAsset(clipAsset, parentTrack);
+                } else if(obj is UnityEngine.Object) {
+                    Selection.activeObject = obj as UnityEngine.Object;
+                } 
+            };
             listView.onSelectionChanged += objects => {
-                selectedElements = objects.ConvertAll(item => (ResponsiveElement)item);
+                selectedElements = objects.ConvertAll(item => (IResponsive)item);
             };
             listView.RegisterCallback<MouseCaptureOutEvent>((MouseCaptureOutEvent evt) => {
                 if (evt.target != responsiveElementListView) {
@@ -206,34 +225,35 @@ namespace AltSalt
             return ToggleListView(listView, expandListView);
         }
 
-        public static IResponsiveSaveable[] SaveResponsiveValues(GameObject[] gameObjects)
+        public static IResponsiveSaveable[] SaveResponsiveValues(GameObject[] selectedObjects)
         {
-            List<IResponsiveSaveable> componentList = new List<IResponsiveSaveable>();
+            List<IResponsiveSaveable> saveableList = new List<IResponsiveSaveable>();
 
-            for (int i = 0; i < gameObjects.Length; i++) {
+            for (int i = 0; i < selectedObjects.Length; i++) {
 
-                IResponsiveSaveable[] objectComponents = gameObjects[i].GetComponents<IResponsiveSaveable>();
+                IResponsiveSaveable[] objectComponents = selectedObjects[i].GetComponents<IResponsiveSaveable>();
                 for (int q = 0; q < objectComponents.Length; q++) {
                     objectComponents[q].SaveValue();
                 }
-
-                componentList.AddRange(objectComponents);
+                saveableList.AddRange(objectComponents);
+                
             }
-            return componentList.ToArray();
+            return saveableList.ToArray();
         }
 
-        public static ResponsiveElement[] ExecuteResponsiveAction(GameObject[] gameObjects)
+        public static IResponsiveSaveable[] SaveResponsiveValues(TimelineClip[] selectedClips)
         {
-            List<ResponsiveElement> componentList = new List<ResponsiveElement>();
+            List<IResponsiveSaveable> saveableList = new List<IResponsiveSaveable>();
 
-            for (int i = 0; i < gameObjects.Length; i++) {
-                ResponsiveElement[] objectComponents = gameObjects[i].GetComponents<ResponsiveElement>();
-                for (int q = 0; q < objectComponents.Length; q++) {
-                    objectComponents[q].ExecuteResponsiveAction();
+            for (int i = 0; i < selectedClips.Length; i++) {
+
+                if (selectedClips[i].asset is IResponsiveSaveable) {
+                    IResponsiveSaveable saveableElement = selectedClips[i] as IResponsiveSaveable;
+                    saveableElement.SaveValue();
+                    saveableList.Add(saveableElement);
                 }
-                componentList.AddRange(objectComponents);
             }
-            return componentList.ToArray();
+            return saveableList.ToArray();
         }
 
         static ListView ToggleListView(ListView targetListView, bool expandListView)
@@ -248,28 +268,108 @@ namespace AltSalt
             return targetListView;
         }
 
-        public static ResponsiveElement[] AddBreakpointToSelectedElements(GameObject[] gameObjects, float targetBreakpoint)
+        public static IResponsive[] AddBreakpointToSelectedElements(GameObject[] selectedObjects, float targetBreakpoint)
         {
-            List<ResponsiveElement> componentList = new List<ResponsiveElement>();
+            List<IResponsive> responsiveComponentList = new List<IResponsive>();
 
-            for (int i = 0; i < gameObjects.Length; i++) {
-
-                ResponsiveElement[] objectComponents = gameObjects[i].GetComponents<ResponsiveElement>();
-                for (int q = 0; q < objectComponents.Length; q++) {
-                    objectComponents[q].AddBreakpoint(targetBreakpoint);
+            for (int i = 0; i < selectedObjects.Length; i++) {
+                IResponsive[] responsiveComponents = selectedObjects[i].GetComponents<IResponsive>();
+                for (int q = 0; q < responsiveComponents.Length; q++) {
+                    responsiveComponents[q].AddBreakpoint(targetBreakpoint);
                 }
-
-                componentList.AddRange(objectComponents);
+                responsiveComponentList.AddRange(responsiveComponents);                
             }
-            return componentList.ToArray();
+            return responsiveComponentList.ToArray();
         }
 
-        public static ResponsiveElement[] AddBreakpointToSelectedElements(ResponsiveElement[] responsiveElements, float targetBreakpoint)
+        public static IResponsive[] AddBreakpointToSelectedElements(TimelineClip[] selectedClips, float targetBreakpoint)
+        {
+            List<IResponsive> responsiveClipAssetList = new List<IResponsive>();
+
+            for (int i = 0; i < selectedClips.Length; i++) {
+                if (selectedClips[i].asset is ResponsiveLerpToTargetClip) {
+                    IResponsive responsiveElement = GetResponsiveElementFromClipAsset(selectedClips[i].asset as ResponsiveLerpToTargetClip);
+                    responsiveElement.AddBreakpoint(targetBreakpoint);
+                    responsiveClipAssetList.Add(responsiveElement);
+                }
+            }
+            TimelineUtilsCore.RefreshTimelineContentsModified();
+            return responsiveClipAssetList.ToArray();
+        }
+
+        public static IResponsive[] AddBreakpointToSelectedElements(IResponsive[] responsiveElements, float targetBreakpoint)
         {            
             for (int q = 0; q < responsiveElements.Length; q++) {
-                responsiveElements[q].AddBreakpoint(targetBreakpoint);
+                if(responsiveElements[q] is ResponsiveElement) {
+                    responsiveElements[q].AddBreakpoint(targetBreakpoint);
+                } else if(responsiveElements[q] is ResponsiveLerpToTargetBehaviour) {
+                    responsiveElements[q].AddBreakpoint(targetBreakpoint);
+                }
             }
             return responsiveElements;
+        }
+
+        // =================================== //
+        //     Utils for Responsive Clips      //
+        // =================================== //
+
+        // Due to the way Unity instantiates ScriptPlayables, there's no way that I've found to get around strong casts
+        // to the behaviours in question to get the properties we need. The following functions are an admittedly bloated
+        // way to get those values. Time wasted trying to improve this: 5 hours.
+
+        public static IResponsive GetResponsiveElementFromClipAsset(ResponsiveLerpToTargetClip responsiveLerpToTargetClip)
+        {
+            switch(responsiveLerpToTargetClip.GetType().Name) {
+
+                case nameof(ResponsiveRectTransformPosClip): {
+                        ResponsiveRectTransformPosClip clipAsset = responsiveLerpToTargetClip as ResponsiveRectTransformPosClip;
+                        return clipAsset.template;
+                    }
+
+                case nameof(ResponsiveRectTransformScaleClip): {
+                        ResponsiveRectTransformScaleClip clipAsset = responsiveLerpToTargetClip as ResponsiveRectTransformScaleClip;
+                        return clipAsset.template;
+                    }
+            }
+
+            return null;
+        }
+
+        public static PlayableAsset GetClipAssetFromResponsiveBehaviour(ResponsiveLerpToTargetBehaviour responsiveBehaviour)
+        {
+            switch (responsiveBehaviour.GetType().Name) {
+
+                case nameof(ResponsiveRectTransformPosBehaviour): {
+                        ResponsiveRectTransformPosBehaviour behaviourInstance = responsiveBehaviour as ResponsiveRectTransformPosBehaviour;
+                        return behaviourInstance.clipAsset;
+                    }
+
+                case nameof(ResponsiveRectTransformScaleClip): {
+                        ResponsiveRectTransformScaleBehaviour behaviourInstance = responsiveBehaviour as ResponsiveRectTransformScaleBehaviour;
+                        return behaviourInstance.clipAsset;
+                    }
+            }
+
+            return null;
+        }
+
+        public static TrackAsset GetParentTrackFromResponsiveBehaviour(ResponsiveLerpToTargetBehaviour responsiveBehaviour)
+        {
+
+            switch (responsiveBehaviour.GetType().Name) {
+
+                case nameof(ResponsiveRectTransformPosBehaviour): {
+                        ResponsiveRectTransformPosBehaviour behaviourInstance = responsiveBehaviour as ResponsiveRectTransformPosBehaviour;
+                        return behaviourInstance.parentTrack;
+                    }
+
+                case nameof(ResponsiveRectTransformScaleClip): {
+                        ResponsiveRectTransformScaleBehaviour behaviourInstance = responsiveBehaviour as ResponsiveRectTransformScaleBehaviour;
+                        return behaviourInstance.parentTrack;
+                    }
+            }
+
+            return null;
         }
     }
 }

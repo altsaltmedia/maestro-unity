@@ -21,7 +21,9 @@ namespace AltSalt
         protected override void OnEnable()
         {
             base.OnEnable();
+#if UNITY_EDITOR
             UpdateBreakpointDependencies();
+#endif
         }
 
         public override void ExecuteResponsiveAction()

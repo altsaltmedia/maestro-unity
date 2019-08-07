@@ -119,7 +119,7 @@ namespace AltSalt
 
         private void LoadFile()
         {
-            filePath = EditorUtility.OpenFilePanel("Select text file", filePath, "xml");
+            filePath = Path.GetFullPath(EditorUtility.OpenFilePanel("Select text file", filePath, "xml"));
             if (File.Exists(filePath)) {
                 fileName = GetFilename(filePath);
             }
@@ -138,11 +138,13 @@ namespace AltSalt
             int count = 0;
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(File.ReadAllText(filePath));
-            foreach (XmlNode slide in xmlDocument["container"]) {
-                XmlAttribute attr = xmlDocument.CreateAttribute("key");
-                attr.Value = keyList[count];
-                slide.Attributes.Append(attr);
-                count++;
+            foreach (XmlNode node in xmlDocument[nameof(XMLValues.container)]) {
+                if(node.LocalName == nameof(XMLValues.textObject)) {
+                    XmlAttribute attr = xmlDocument.CreateAttribute("key");
+                    attr.Value = keyList[count];
+                    node.Attributes.Append(attr);
+                    count++;
+                }
             }
 
             var path = EditorUtility.SaveFilePanel("Save XML file", filePath, fileName, "xml");
@@ -200,18 +202,21 @@ namespace AltSalt
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.LoadXml(File.ReadAllText(filePath));
 
-                    foreach (XmlNode textObject in xmlDocument["container"].ChildNodes) {
-                        StringReader strReader = new StringReader(textObject.InnerText);
-                        string currentLine = null;
-                        string parsedText = null;
-                        while ((currentLine = strReader.ReadLine()) != null) {
-                            parsedText += currentLine.TrimStart(' ', '\t');
-                        }
+                    foreach (XmlNode textObject in xmlDocument[nameof(XMLValues.container)].ChildNodes) {
+                        if(textObject.LocalName == nameof(XMLValues.textObject)) {
+                            StringReader strReader = new StringReader(textObject.InnerText);
+                            string currentLine = null;
+                            string parsedText = null;
+                            while ((currentLine = strReader.ReadLine()) != null) {
+                                parsedText += currentLine.TrimStart(' ', '\t');
+                            }
 
-                        if (textCollectionBank.textCollection.ContainsKey(targetTextFamily) == false) {
-                            textCollectionBank.textCollection.Add(targetTextFamily, new TextNodes());
+                            if (textCollectionBank.textCollection.ContainsKey(targetTextFamily) == false) {
+                                textCollectionBank.textCollection.Add(targetTextFamily, new TextNodes());
+                            }
+                            textCollectionBank.textCollection[targetTextFamily][textObject.Attributes["key"].Value] = parsedText;
+                            Debug.Log(parsedText);
                         }
-                        textCollectionBank.textCollection[targetTextFamily][textObject.Attributes["key"].Value] = parsedText;
                     }
                     EditorUtility.SetDirty(textCollectionBank);
                 }
@@ -281,10 +286,10 @@ namespace AltSalt
             if (EditorUtility.DisplayDialog("Set active language and update texts?", "This will set the active language to " + targetTextFamily.name +
                 " in ModifySettings and update texts that use the " + textCollectionBank.name + " text bank, and (if needed) trigger a layout change to " + loadedLayoutName + ".", "Proceed", "Cancel")) {
                 modifySettings.activeTextFamily = targetTextFamily;
-                textUpdate.Raise(textCollectionBank);
+                textUpdate.RaiseEvent(this, "text tools", "editor window", textCollectionBank);
                 if (targetTextFamily.supportedLayouts.Count == 0) {
                     modifySettings.activeLayout = modifySettings.defaultLayout;
-                    layoutUpdate.Raise();
+                    layoutUpdate.RaiseEvent(this, "text tools", "editor window");
                 } else {
                     bool triggerLayoutChange = true;
                     for (int i = 0; i < targetTextFamily.supportedLayouts.Count; i++) {
@@ -294,7 +299,7 @@ namespace AltSalt
                     }
                     if (triggerLayoutChange == true) {
                         modifySettings.activeLayout = targetTextFamily.supportedLayouts[0];
-                        layoutUpdate.Raise();
+                        layoutUpdate.RaiseEvent(this, "text tools", "editor window");
                     }
                 }
             }
@@ -305,10 +310,10 @@ namespace AltSalt
             if (EditorUtility.DisplayDialog("Set active language and update texts?", "This will set the active language to " + targetTextFamily.name +
                 " in ModifySettings and update ALL texts, and (if needed) trigger a layout change to " + loadedLayoutName + ".", "Proceed", "Cancel")) {
                 modifySettings.activeTextFamily = targetTextFamily;
-                textUpdate.Raise();
+                textUpdate.RaiseEvent(this, "text tools", "editor window", textCollectionBank);
                 if (targetTextFamily.supportedLayouts.Count == 0) {
                     modifySettings.activeLayout = modifySettings.defaultLayout;
-                    layoutUpdate.Raise();
+                    layoutUpdate.RaiseEvent(this, "text tools", "editor window");
                 } else {
                     bool triggerLayoutChange = true;
                     for (int i = 0; i < modifySettings.activeTextFamily.supportedLayouts.Count; i++) {
@@ -318,7 +323,7 @@ namespace AltSalt
                     }
                     if (triggerLayoutChange == true) {
                         modifySettings.activeLayout = targetTextFamily.supportedLayouts[0];
-                        layoutUpdate.Raise();
+                        layoutUpdate.RaiseEvent(this, "text tools", "editor window");
                     }
                 }
             }

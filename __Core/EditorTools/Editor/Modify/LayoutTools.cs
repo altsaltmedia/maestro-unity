@@ -75,10 +75,10 @@ namespace AltSalt
             if (EditorUtility.DisplayDialog("Set new layout?", "This will set the active layout to " + targetLayout.name +
                 " in ModifySettings and update all responsive elements with corresponding data, and (if needed) trigger text family change to " + loadedTextFamilyName + ".", "Proceed", "Cancel")) {
                 modifySettings.activeLayout = targetLayout;
-                layoutUpdate.Raise();
+                layoutUpdate.RaiseEvent(this, "layout tools", "editor window");
                 if (targetLayout.supportedTextFamilies.Count == 0) {
                     modifySettings.activeTextFamily = modifySettings.defaultTextFamily;
-                    textUpdate.Raise();
+                    textUpdate.RaiseEvent(this, "layout tools", "editor window");
                 } else {
                     bool triggerTextChange = true;
                     for (int i = 0; i < targetLayout.supportedTextFamilies.Count; i++) {
@@ -88,7 +88,7 @@ namespace AltSalt
                     }
                     if (triggerTextChange == true) {
                         modifySettings.activeTextFamily = targetLayout.supportedTextFamilies[0];
-                        textUpdate.Raise();
+                        textUpdate.RaiseEvent(this, "layout tools", "editor window");
                     }
                 }
             }

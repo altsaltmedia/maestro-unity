@@ -8,8 +8,11 @@ namespace AltSalt
 {
     public class PageBuilderWindow : EditorWindow
     {
+        public delegate void InspectorUpdateDelegate();
+        public static InspectorUpdateDelegate inspectorUpdateDelegate = () => { };
+
         public delegate void SelectionChangedDelegate();
-        public static SelectionChangedDelegate selectionChangedDelegate;
+        public static SelectionChangedDelegate selectionChangedDelegate = () => { };
 
         Dictionary<Type, string> childWindowData = new Dictionary<Type, string> {
             { typeof(CreateCoreElements), "create-core-elements" },
@@ -23,6 +26,7 @@ namespace AltSalt
             { typeof(EditRectTransformRotationClip), "edit-rect-transform-rotation-clip" },
             { typeof(EditFloatVarClip), "edit-float-var-clip" },
             { typeof(EditColorVarClip), "edit-color-var-clip" },
+            { typeof(EditRectTransformResponsivePosClip), "edit-rect-transform-responsive-pos-clip" }
         };
 
         static List<ChildUIElementsWindow> childWindows = new List<ChildUIElementsWindow>();
@@ -61,6 +65,11 @@ namespace AltSalt
                 RenderLayout();
             }
             selectionChangedDelegate.Invoke();
+        }
+
+        void OnInspectorUpdate()
+        {
+            inspectorUpdateDelegate.Invoke();
         }
 
         void RenderLayout()

@@ -18,8 +18,20 @@ namespace AltSalt
                 }
                 return prefabReferences;
             }
-            
         }
+
+        static FloatReference sceneAspectRatio = new FloatReference();
+
+        public static float SceneAspectRatio {
+
+            get {
+                if(sceneAspectRatio.Variable == null) {
+                    sceneAspectRatio.Variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneAspectRatio));
+                }
+                return sceneAspectRatio.Value;
+            }
+        }
+
 
         public static GameObject CreateNewElement(Transform[] selectedTransforms, GameObject sourceObject, string elementName = "", bool isParent = false)
         {

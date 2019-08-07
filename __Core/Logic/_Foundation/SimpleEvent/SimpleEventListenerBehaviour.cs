@@ -26,6 +26,18 @@ namespace AltSalt
             }
         }
 
+        public UnityEngine.Object ParentObject {
+            get {
+                return gameObject;
+            }
+        }
+
+        public string SceneName {
+            get {
+                return gameObject.scene.name;
+            }
+        }
+
         private void OnEnable()
         {
             if(Event != null) {
@@ -45,11 +57,6 @@ namespace AltSalt
         public void OnEventRaised()
         {
             Response.Invoke();
-        }
-
-        public GameObject GetGameObject()
-        {
-            return gameObject;
         }
 
         public void LogName(string callingInfo)

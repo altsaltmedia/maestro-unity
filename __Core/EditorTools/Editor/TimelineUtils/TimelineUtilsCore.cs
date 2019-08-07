@@ -84,6 +84,16 @@ namespace AltSalt
             return trackAssets;
         }
 
+        public static TimelineClip GetTimelineClipFromTrackAsset(PlayableAsset clipAsset, TrackAsset trackAsset)
+        {
+            foreach(TimelineClip timelineClip in trackAsset.GetClips()) {
+                if(timelineClip.asset == clipAsset) {
+                    return timelineClip;
+                }
+            }
+            return null;
+        }
+
         public static TimelineClip[] RenameClips(string newName, TimelineClip[] targetClips)
         {
             Array.Sort(targetClips, new ClipTimeSequentialSort(GetAllTracks()));

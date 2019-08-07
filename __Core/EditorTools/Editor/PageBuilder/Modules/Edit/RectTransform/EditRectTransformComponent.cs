@@ -17,13 +17,13 @@ namespace AltSalt
             pageBuilderWindow = parentWindow as PageBuilderWindow;
             VisualElement parentVisualElement = parentWindow.rootVisualElement;
 
-            var propertyFields = parentVisualElement.Query<PropertyField>();
+            elementUXML = parentVisualElement.Query<Foldout>("EditRectTransformComponent", EditorToolsCore.ToggleableGroup);
+
+            var propertyFields = elementUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
 
-            var buttons = parentVisualElement.Query<Button>();
+            var buttons = elementUXML.Query<Button>();
             buttons.ForEach(SetupButton);
-
-            elementUXML = parentVisualElement.Query<Foldout>("EditRectTransformComponent", EditorToolsCore.ToggleableGroup);
 
             UpdateDisplay();
             PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
@@ -74,7 +74,8 @@ namespace AltSalt
             SetWidth,
             PopulateHeight,
             SetHeight,
-            AddResponsivePosition
+            AddResponsivePosition,
+            AddResponsiveAutoWidthHeight
         }
 
         enum EnableCondition
@@ -260,6 +261,12 @@ namespace AltSalt
                 case nameof(ButtonNames.AddResponsivePosition):
                     button.clickable.clicked += () => {
                         PageBuilderCore.AddComponentToSelection(Selection.gameObjects, typeof(ResponsivePosition));
+                    };
+                    break;
+
+                case nameof(ButtonNames.AddResponsiveAutoWidthHeight):
+                    button.clickable.clicked += () => {
+                        PageBuilderCore.AddComponentToSelection(Selection.gameObjects, typeof(ResponsiveAutoWidthHeight));
                     };
                     break;
             }

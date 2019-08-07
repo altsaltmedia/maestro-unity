@@ -18,13 +18,13 @@ namespace AltSalt
             pageBuilderWindow = parentWindow as PageBuilderWindow;
             VisualElement parentVisualElement = parentWindow.rootVisualElement;
 
-            var propertyFields = parentVisualElement.Query<PropertyField>();
+            editTMProUXML = parentVisualElement.Query<Foldout>("EditTMProComponent", EditorToolsCore.ToggleableGroup);
+
+            var propertyFields = editTMProUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
 
-            var buttons = parentVisualElement.Query<Button>();
+            var buttons = editTMProUXML.Query<Button>();
             buttons.ForEach(SetupButton);
-
-            editTMProUXML = parentVisualElement.Query<Foldout>("EditTMProComponent", EditorToolsCore.ToggleableGroup);
 
             UpdateDisplay();
             PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;

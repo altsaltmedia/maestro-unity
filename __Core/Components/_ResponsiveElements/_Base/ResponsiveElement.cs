@@ -10,7 +10,7 @@ using SimpleJSON;
 namespace AltSalt
 {
     [ExecuteInEditMode]
-    public abstract class ResponsiveElement : SerializableElement
+    public abstract class ResponsiveElement : SerializableElement, IResponsive
     {
         [Required]
         [SerializeField]
@@ -34,12 +34,23 @@ namespace AltSalt
         [SerializeField]
         ComplexEventTrigger responsiveElementDisable = new ComplexEventTrigger();
 
+        public string Name {
+            get {
+                return this.name;
+            }
+        }
+
         [SerializeField]
+#if UNITY_EDITOR
         [OnValueChanged(nameof(PopulateDefaultBreakpointValues))]
+#endif
         protected bool hasBreakpoints;
         public bool HasBreakpoints {
             get {
                 return hasBreakpoints;
+            }
+            set {
+                hasBreakpoints = value;
             }
         }
 
@@ -59,7 +70,9 @@ namespace AltSalt
         [InfoBox("You should always have x+1 breakpoint values; e.g., for 1 breakpoint at 1.34, you must specify 2 breakpoint values - one for aspect ratios wider than 1.34, and another for aspect ratios narrower than or equal to 1.34.")]
         [InfoBox("Breakpoint examples: To target devices narrow than iPad (aspect ratio 1.33), specify a breakpoint of 1.4; to target narrower than iPhone (1.77), specify a breakpoint of 1.78.")]
         [ValidateInput(nameof(IsPopulated))]
+#if UNITY_EDITOR
         [OnValueChanged(nameof(UpdateBreakpointDependencies))]
+#endif
         public List<float> aspectRatioBreakpoints = new List<float>();
         public List<float> AspectRatioBreakpoints {
             get {
@@ -121,32 +134,7 @@ namespace AltSalt
         public List<float> AddBreakpoint(float targetBreakpoint)
         {
             Undo.RecordObject(this, "add breakpoint");
-            hasBreakpoints = true;
-
-            if (aspectRatioBreakpoints.Contains(targetBreakpoint)) {
-                EditorUtility.DisplayDialog("Breakpoint already exists", "The breakpoint " + targetBreakpoint.ToString("F2") + " already exists on " + this.name, "Okay");
-                return aspectRatioBreakpoints;
-            }
-
-            if (aspectRatioBreakpoints.Count == 0) {
-                LogAddBreakpointMessage(targetBreakpoint, this);
-                aspectRatioBreakpoints.Add(targetBreakpoint);
-                return aspectRatioBreakpoints;
-            }
-
-            for (int i=0; i<aspectRatioBreakpoints.Count; i++) {
-
-                if(targetBreakpoint < aspectRatioBreakpoints[i]) {
-                    aspectRatioBreakpoints.Insert(i, targetBreakpoint);
-                    break;
-                } else if(targetBreakpoint > aspectRatioBreakpoints[i] && aspectRatioBreakpoints.Count == i + 1) {
-                    aspectRatioBreakpoints.Insert(i + 1, targetBreakpoint);
-                    break;
-                }
-            }
-
-            LogAddBreakpointMessage(targetBreakpoint, this);
-            return aspectRatioBreakpoints;
+            return Utils.AddBreakpointToResponsiveElement(this, targetBreakpoint);
         }
 
         protected void PopulateDefaultBreakpointValues()
@@ -259,9 +247,9 @@ namespace AltSalt
             Debug.LogWarning("Please specify either 1.) target values for saving OR 2.) breakpoints and corresponding values on " + this.name, this);
         }
 
-        string LogAddBreakpointMessage(float targetBreakpoint, Component component)
+        public string LogAddBreakpointMessage(float targetBreakpoint)
         {
-            string message = "Added breakpoint of " + targetBreakpoint.ToString("F2") + " to " + component.name + " " + component.GetType().Name;
+            string message = "Added breakpoint of " + targetBreakpoint.ToString("F2") + " to " + this.name + " " + this.GetType().Name;
             Debug.Log(message, this);
             return message;
         }

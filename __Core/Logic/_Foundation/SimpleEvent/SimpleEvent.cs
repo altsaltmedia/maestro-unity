@@ -51,7 +51,7 @@ namespace AltSalt
 
         void LogListenerOnRaise(ISimpleEventListener simpleEventListener)
         {
-            Debug.Log(string.Format("[event] [{0}] [{1}] {2}", simpleEventListener.GetGameObject().scene.name, this.name, simpleEventListener.GetGameObject().name), simpleEventListener.GetGameObject());
+            Debug.Log(string.Format("[event] [{0}] [{1}] {2}", simpleEventListener.SceneName, this.name, simpleEventListener.ParentObject.name), simpleEventListener.ParentObject);
         }
 
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
@@ -59,7 +59,7 @@ namespace AltSalt
         public void LogListeners()
         {
             for (int i = listeners.Count - 1; i >= 0; i--) {
-                Debug.Log(this.name + " event is registered on " + listeners[i].GetGameObject().name, listeners[i].GetGameObject());   
+                Debug.Log(this.name + " event is registered on " + listeners[i].ParentObject.name, listeners[i].ParentObject);   
             }
         }
 
@@ -67,7 +67,7 @@ namespace AltSalt
         {
             if (logListenersOnRegister == true) {
                 Debug.Log("The following listener subscribed to simple event " + this.name, this);
-                Debug.Log(listener.GetGameObject().name, listener.GetGameObject());
+                Debug.Log(listener.ParentObject.name, listener.ParentObject);
             }
             listeners.Add(listener);
         }

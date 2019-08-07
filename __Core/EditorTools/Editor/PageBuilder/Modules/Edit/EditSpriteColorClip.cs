@@ -19,13 +19,13 @@ namespace AltSalt
             pageBuilderWindow = parentWindow as PageBuilderWindow;
             VisualElement parentVisualElement = parentWindow.rootVisualElement;
 
-            var propertyFields = parentVisualElement.Query<PropertyField>();
+            elementUXML = parentVisualElement.Query<Foldout>("EditSpriteColorClip", EditorToolsCore.ToggleableGroup);
+
+            var propertyFields = elementUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
 
-            var buttons = parentVisualElement.Query<Button>();
+            var buttons = elementUXML.Query<Button>();
             buttons.ForEach(SetupButton);
-
-            elementUXML = parentVisualElement.Query<Foldout>("EditSpriteColorClip", EditorToolsCore.ToggleableGroup);
 
             UpdateDisplay();
             PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
@@ -79,7 +79,7 @@ namespace AltSalt
 
                 case nameof(PropertyFieldNames.InitialValue):
                     propertyField.RegisterCallback<ChangeEvent<Color>>((ChangeEvent<Color> evt) => {
-                        if(populateButtonPressed == false) {
+                        if (populateButtonPressed == false) {
                             SetInitialValue(TimelineEditor.selectedClips, initialValue);
                             TimelineUtilsCore.RefreshTimelineContentsModified();
                         }
@@ -89,7 +89,7 @@ namespace AltSalt
 
                 case nameof(PropertyFieldNames.TargetValue):
                     propertyField.RegisterCallback<ChangeEvent<Color>>((ChangeEvent<Color> evt) => {
-                        if(populateButtonPressed == false) {
+                        if (populateButtonPressed == false) {
                             SetTargetValue(TimelineEditor.selectedClips, targetValue);
                             TimelineUtilsCore.RefreshTimelineContentsModified();
                         }

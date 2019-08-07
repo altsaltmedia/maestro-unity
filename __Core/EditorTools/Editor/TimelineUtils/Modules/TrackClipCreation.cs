@@ -82,6 +82,7 @@ namespace AltSalt
             FloatVarTrack,
             ColorVarTrack,
             TMProCharSpacingTrack,
+            ResponsiveRectTransformPosTrack,
             NewClips,
             RenameClips
         };
@@ -307,6 +308,18 @@ namespace AltSalt
                     AddToToggleData(toggleData, EnableCondition.TextSelected, button);
                     break;
 
+                case nameof(ButtonNames.ResponsiveRectTransformPosTrack):
+                    button.clickable.clicked += () => {
+                        if (selectCreatedTracks == true) {
+                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformPosTrack), typeof(RectTransform), Selection.objects);
+                        } else {
+                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformPosTrack), typeof(RectTransform), Selection.objects);
+                        }
+                        TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToToggleData(toggleData, EnableCondition.RectTransformSelected, button);
+                    break;
+
                 case nameof(ButtonNames.NewClips):
                     button.clickable.clicked += () => {
                         if(selectCreatedClip == true) {
@@ -326,8 +339,10 @@ namespace AltSalt
 
                 case nameof(ButtonNames.RenameClips):
                     button.clickable.clicked += () => {
-                        TimelineUtilsCore.RenameClips(clipName, TimelineEditor.selectedClips);
-                        TimelineUtilsCore.RefreshTimelineContentsModified();
+                        if(clipName.Length > 0) {
+                            TimelineUtilsCore.RenameClips(clipName, TimelineEditor.selectedClips);
+                            TimelineUtilsCore.RefreshTimelineContentsModified();
+                        }
                     };
                     AddToToggleData(toggleData, EnableCondition.ClipSelected, button);
                     break;
@@ -555,6 +570,7 @@ namespace AltSalt
                     case nameof(RectTransformPosTrack):
                     case nameof(RectTransformScaleTrack):
                     case nameof(RectTransformRotationTrack):
+                    case nameof(ResponsiveRectTransformPosTrack):
                         targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<RectTransform>());
                         break;
 
@@ -703,6 +719,16 @@ namespace AltSalt
                         if (component != null) {
                             asset.template.initialValue = component.characterSpacing;
                             asset.template.targetValue = component.characterSpacing;
+                        }
+                        return asset;
+                    }
+
+                case nameof(ResponsiveRectTransformPosClip): {
+                        ResponsiveRectTransformPosClip asset = timelineClip.asset as ResponsiveRectTransformPosClip;
+                        RectTransform component = sourceObject as RectTransform;
+                        if (component != null) {
+                            asset.template.breakpointInitialPosition.Add(component.anchoredPosition3D);
+                            asset.template.breakpointTargetPosition.Add(component.anchoredPosition3D);
                         }
                         return asset;
                     }

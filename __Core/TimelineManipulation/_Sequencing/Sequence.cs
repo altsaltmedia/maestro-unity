@@ -16,7 +16,14 @@ namespace AltSalt
     public class Sequence : ScriptableObject
     {
         public bool Active = true;
+
+        [SerializeField]
+        protected bool defaultStatus;
+
         public double currentTime = 0f;
+
+        protected double defaultTime;
+
         public bool Invert = false;
         [ReadOnly]
         public bool ForceForward = false;
@@ -47,6 +54,18 @@ namespace AltSalt
         void Start()
         {
             currentTime = 0f;
+        }
+
+        public void SetStatus(bool targetStatus)
+        {
+            Active = targetStatus;
+        }
+
+        public void SetDefaults()
+        {
+
+            Active = defaultStatus;
+            currentTime = defaultTime;
         }
 
         public void ModifySequenceTime(float timeModifier)

@@ -191,7 +191,7 @@ namespace AltSalt {
             }
 
             for (int i = 0; i < sequenceList.sequences.Count; i++) {
-                sequenceList.sequences[i].currentTime = 0;
+                sequenceList.sequences[i].SetDefaults();
             }
         }
 
@@ -231,12 +231,20 @@ namespace AltSalt {
 
             // Start with lowest priority and end with highest priority
             for(int i= priorityResponsiveElements.Count - 1; i >= 0; i--) {
-                priorityResponsiveElements[i].ExecuteLayoutUpdate();
+                if(priorityResponsiveElements[i] != null) {
+                    priorityResponsiveElements[i].ExecuteLayoutUpdate();
+                } else {
+                    priorityResponsiveElements.Remove(priorityResponsiveElements[i]);
+                }
             }
 
             // All other elements can be executed in any order
             for (int i=0; i<responsiveElements.Count; i++) {
-                responsiveElements[i].ExecuteLayoutUpdate();
+                if (responsiveElements[i] != null) {
+                    responsiveElements[i].ExecuteLayoutUpdate();
+                } else {
+                    responsiveElements.Remove(responsiveElements[i]);
+                }
             }
         }
 

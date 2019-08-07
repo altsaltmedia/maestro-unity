@@ -63,5 +63,17 @@ namespace AltSalt
             complexEvent.StoreCaller(caller);
             complexEvent.Raise(eventPayload);
         }
+
+        public void RaiseEvent(UnityEngine.Object caller, string sourceScene, string sourceName)
+        {
+            complexEvent.StoreCaller(caller, sourceScene, sourceName);
+            complexEvent.Raise();
+        }
+
+        public void RaiseEvent(UnityEngine.Object caller, string sourceScene, string sourceName, ScriptableObject value)
+        {
+            complexEvent.StoreCaller(caller, sourceScene, sourceName);
+            complexEvent.Raise(value);
+        }
     }
 }

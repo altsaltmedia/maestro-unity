@@ -5,7 +5,12 @@ namespace AltSalt
     public interface ISimpleEventListener
     {
         void OnEventRaised();
-        GameObject GetGameObject();
+        UnityEngine.Object ParentObject {
+            get;
+        }
+        string SceneName {
+            get;
+        }
         void LogName(string callingInfo);
     }
 }

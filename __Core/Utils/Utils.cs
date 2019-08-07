@@ -50,9 +50,17 @@ namespace AltSalt
         SceneHeight,
         TimelineCurrentTime,
         ResponsiveElementEnable,
-        ResponsiveElementDisable
+        ResponsiveElementDisable,
+        TextUpdate,
+        LayoutUpdate,
+        ScreenResized
     }
 
+    public enum XMLValues
+    {
+        container,
+        textObject
+    }
 
     public static class Utils
     {
@@ -267,6 +275,37 @@ namespace AltSalt
             {
                 return x.start.CompareTo(y.start);
             }
+        }
+
+        public static List<float> AddBreakpointToResponsiveElement(IResponsive targetElement, float targetBreakpoint)
+        {
+            List<float> aspectRatioBreakpoints = targetElement.AspectRatioBreakpoints;
+            targetElement.HasBreakpoints = true;
+
+            if (aspectRatioBreakpoints.Contains(targetBreakpoint)) {
+                EditorUtility.DisplayDialog("Breakpoint already exists", "The breakpoint " + targetBreakpoint.ToString("F2") + " already exists on " + targetElement.Name, "Okay");
+                return aspectRatioBreakpoints;
+            }
+
+            if (aspectRatioBreakpoints.Count == 0) {
+                targetElement.LogAddBreakpointMessage(targetBreakpoint);
+                aspectRatioBreakpoints.Add(targetBreakpoint);
+                return aspectRatioBreakpoints;
+            }
+
+            for (int i = 0; i < aspectRatioBreakpoints.Count; i++) {
+
+                if (targetBreakpoint < aspectRatioBreakpoints[i]) {
+                    aspectRatioBreakpoints.Insert(i, targetBreakpoint);
+                    break;
+                } else if (targetBreakpoint > aspectRatioBreakpoints[i] && aspectRatioBreakpoints.Count == i + 1) {
+                    aspectRatioBreakpoints.Insert(i + 1, targetBreakpoint);
+                    break;
+                }
+            }
+
+            targetElement.LogAddBreakpointMessage(targetBreakpoint);
+            return aspectRatioBreakpoints;
         }
 
         public static string GetProjectPath()

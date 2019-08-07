@@ -9,16 +9,16 @@ https://www.altsalt.com / ricky@altsalt.com
 **********************************************/
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
 using TMPro;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace AltSalt
 {
 
-#if UNITY_EDITOR
     [ExecuteInEditMode]
-#endif
     public class TextLoader : MonoBehaviour
     {
         [Required]
@@ -43,6 +43,15 @@ namespace AltSalt
             }
         }
 
+#if UNITY_EDITOR
+        void OnEnable()
+        {
+            if(Application.isPlaying == false && modifySettings == null) {
+                modifySettings = Utils.GetModifySettings();
+            }
+        }
+#endif
+
         void GetTextComponent()
         {
             if (textComponent == null) {
@@ -56,6 +65,9 @@ namespace AltSalt
         {
             GetTextComponent();
             if(textCollectionBank != null) {
+#if UNITY_EDITOR
+                Undo.RecordObject(textComponent, "populate text");
+#endif
                 textComponent.SetText(textCollectionBank.GetText(modifySettings.activeTextFamily, key), true);
             }
         }

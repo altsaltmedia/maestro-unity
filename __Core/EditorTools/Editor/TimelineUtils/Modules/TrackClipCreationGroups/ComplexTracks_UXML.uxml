@@ -27,6 +27,10 @@ xsi:schemaLocation="
                         
                         <engine:Button text="New ColorVar Track" class="col-full" name="ColorVarTrack" />
                     </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">                      
+                        <engine:Button text="New Responsive RectTransform Pos Track" class="col-full" name="ResponsiveRectTransformPosTrack" />
+                    </engine:VisualElement>
                 </engine:VisualElement>
             </engine:Foldout>
 

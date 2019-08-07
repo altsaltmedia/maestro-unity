@@ -14,15 +14,16 @@ xsi:schemaLocation="
 
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Create/CreateCoreElements_UXML.uxml" name="CreateCoreElements" />
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Create/CreateOtherElements_UXML.uxml" name="CreateOtherElements" />
-    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditRectTransformComponent_UXML.uxml" name="EditRectTransformComponent" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/RectTransform/EditRectTransformComponent_UXML.uxml" name="EditRectTransformComponent" />
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditTMProComponent_UXML.uxml" name="EditTMProComponent" />
-    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditRectTransformPosClip_UXML.uxml" name="EditRectTransformPosClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/RectTransform/EditRectTransformPosClip_UXML.uxml" name="EditRectTransformPosClip" />
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditTMProColorClip_UXML.uxml" name="EditTMProColorClip" />
-    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditRectTransformScaleClip_UXML.uxml" name="EditRectTransformScaleClip" />
-    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditRectTransformRotationClip_UXML.uxml" name="EditRectTransformRotationClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/RectTransform/EditRectTransformScaleClip_UXML.uxml" name="EditRectTransformScaleClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/RectTransform/EditRectTransformRotationClip_UXML.uxml" name="EditRectTransformRotationClip" />
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditSpriteColorClip_UXML.uxml" name="EditSpriteColorClip" />
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditFloatVarClip_UXML.uxml" name="EditFloatVarClip" />
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditColorVarClip_UXML.uxml" name="EditColorVarClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/RectTransform/EditRectTransformResponsivePosClip_UXML.uxml" name="EditRectTransformResponsivePosClip" />
 
     <engine:VisualElement class="altsalt page-builder-window">
 
@@ -49,6 +50,8 @@ xsi:schemaLocation="
             <engine:Instance template="EditFloatVarClip" />
 
             <engine:Instance template="EditColorVarClip" />
+
+            <engine:Instance template="EditRectTransformResponsivePosClip" />
 
             <engine:VisualElement class="section-container">
                 <engine:VisualElement class="section">

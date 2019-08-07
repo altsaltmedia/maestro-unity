@@ -25,7 +25,6 @@ namespace AltSalt
             
             for (int i = 0; i < inputCount; i++)
             {
-
                 inputWeight = playable.GetInputWeight(i);
                 inputPlayable = (ScriptPlayable<ResponsiveRectTransformPosBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();

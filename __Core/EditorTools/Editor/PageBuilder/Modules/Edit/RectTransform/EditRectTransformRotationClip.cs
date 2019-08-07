@@ -9,7 +9,7 @@ using UnityEditor.Timeline;
 
 namespace AltSalt
 {
-    public class EditRectTransformScaleClip : ChildUIElementsWindow
+    public class EditRectTransformRotationClip : ChildUIElementsWindow
     {
         static PageBuilderWindow pageBuilderWindow;
         static Foldout elementUXML;
@@ -19,13 +19,13 @@ namespace AltSalt
             pageBuilderWindow = parentWindow as PageBuilderWindow;
             VisualElement parentVisualElement = parentWindow.rootVisualElement;
 
-            var propertyFields = parentVisualElement.Query<PropertyField>();
+            elementUXML = parentVisualElement.Query<Foldout>("EditRectTransformRotationClip", EditorToolsCore.ToggleableGroup);
+
+            var propertyFields = elementUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
 
-            var buttons = parentVisualElement.Query<Button>();
+            var buttons = elementUXML.Query<Button>();
             buttons.ForEach(SetupButton);
-
-            elementUXML = parentVisualElement.Query<Foldout>("EditRectTransformScaleClip", EditorToolsCore.ToggleableGroup);
 
             UpdateDisplay();
             PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;
@@ -38,8 +38,8 @@ namespace AltSalt
             PageBuilderWindow.selectionChangedDelegate -= UpdateDisplay;
         }
 
-        public Vector3 initialValue = new Vector3(1, 1, 1);
-        public Vector3 targetValue = new Vector3(1, 1, 1);
+        public Vector3 initialValue = new Vector3(0, 0, 0);
+        public Vector3 targetValue = new Vector3(0, 0, 0);
 
         static bool populateButtonPressed = false;
 
@@ -48,6 +48,7 @@ namespace AltSalt
             InitialValue,
             TargetValue,
         }
+
 
         enum ButtonNames
         {
@@ -64,7 +65,7 @@ namespace AltSalt
             bool dependencySelected = false;
 
             for (int i = 0; i < TimelineEditor.selectedClips.Length; i++) {
-                if (TimelineEditor.selectedClips[i].asset is RectTransformScaleClip) {
+                if (TimelineEditor.selectedClips[i].asset is RectTransformRotationClip) {
                     dependencySelected = true;
                     break;
                 }
@@ -80,7 +81,7 @@ namespace AltSalt
 
                 case nameof(PropertyFieldNames.InitialValue):
                     propertyField.RegisterCallback<ChangeEvent<Vector3>>((ChangeEvent<Vector3> evt) => {
-                        if(populateButtonPressed == false) {
+                        if (populateButtonPressed == false) {
                             SetInitialValue(TimelineEditor.selectedClips, initialValue);
                             TimelineUtilsCore.RefreshTimelineContentsModified();
                         }
@@ -159,8 +160,8 @@ namespace AltSalt
             Array.Sort(clipSelection, new Utils.ClipTimeSort());
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is RectTransformScaleClip) {
-                    value = (clipSelection[i].asset as RectTransformScaleClip).template.initialScale;
+                if (clipSelection[i].asset is RectTransformRotationClip) {
+                    value = (clipSelection[i].asset as RectTransformRotationClip).template.initialRotation;
                     break;
                 }
             }
@@ -173,12 +174,12 @@ namespace AltSalt
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is RectTransformScaleClip) {
+                if (clipSelection[i].asset is RectTransformRotationClip) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    RectTransformScaleClip clipAsset = clipSelection[i].asset as RectTransformScaleClip;
-                    Undo.RecordObject(clipAsset, "set clip(s) initial scale");
-                    clipAsset.template.initialScale = targetValue;
+                    RectTransformRotationClip clipAsset = clipSelection[i].asset as RectTransformRotationClip;
+                    Undo.RecordObject(clipAsset, "set clip(s) initial rotation");
+                    clipAsset.template.initialRotation = targetValue;
                 }
             }
 
@@ -191,8 +192,8 @@ namespace AltSalt
             Array.Sort(clipSelection, new Utils.ClipTimeSort());
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is RectTransformScaleClip) {
-                    value = (clipSelection[i].asset as RectTransformScaleClip).template.targetScale;
+                if (clipSelection[i].asset is RectTransformRotationClip) {
+                    value = (clipSelection[i].asset as RectTransformRotationClip).template.targetRotation;
                     break;
                 }
             }
@@ -205,18 +206,16 @@ namespace AltSalt
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is RectTransformScaleClip) {
+                if (clipSelection[i].asset is RectTransformRotationClip) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    RectTransformScaleClip clipAsset = clipSelection[i].asset as RectTransformScaleClip;
-                    Undo.RecordObject(clipAsset, "set clip(s) target scale");
-                    clipAsset.template.targetScale = targetValue;
+                    RectTransformRotationClip clipAsset = clipSelection[i].asset as RectTransformRotationClip;
+                    Undo.RecordObject(clipAsset, "set clip(s) target rotation");
+                    clipAsset.template.targetRotation = targetValue;
                 }
             }
 
             return changedClips.ToArray();
         }
-
-
     }
 }

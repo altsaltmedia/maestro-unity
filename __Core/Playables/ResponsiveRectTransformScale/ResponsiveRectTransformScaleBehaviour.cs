@@ -26,7 +26,7 @@ namespace AltSalt
                 return;
             }
 #endif
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
             SetValue(breakpointIndex);
         }
 
@@ -41,7 +41,7 @@ namespace AltSalt
                 return;
             }
 
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
 
             Utils.ExpandList(breakpointinitialScale, breakpointIndex);
             breakpointinitialScale[breakpointIndex] = new Vector3(0,0,0);

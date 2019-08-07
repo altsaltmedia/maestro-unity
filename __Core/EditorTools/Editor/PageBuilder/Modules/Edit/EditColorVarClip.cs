@@ -20,13 +20,13 @@ namespace AltSalt
             pageBuilderWindow = parentWindow as PageBuilderWindow;
             VisualElement parentVisualElement = parentWindow.rootVisualElement;
 
-            var propertyFields = parentVisualElement.Query<PropertyField>();
+            elementUXML = parentVisualElement.Query<Foldout>("EditColorVarClip", EditorToolsCore.ToggleableGroup);
+
+            var propertyFields = elementUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
 
-            var buttons = parentVisualElement.Query<Button>();
+            var buttons = elementUXML.Query<Button>();
             buttons.ForEach(SetupButton);
-
-            elementUXML = parentVisualElement.Query<Foldout>("EditColorVarClip", EditorToolsCore.ToggleableGroup);
 
             UpdateDisplay();
             PageBuilderWindow.selectionChangedDelegate += UpdateDisplay;

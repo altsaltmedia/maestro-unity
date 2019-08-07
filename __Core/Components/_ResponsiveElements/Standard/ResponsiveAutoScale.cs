@@ -27,7 +27,8 @@ namespace AltSalt
         private ValueDropdownList<AspectRatioType> aspectRatioValues = new ValueDropdownList<AspectRatioType>(){
             {"16 x 9", AspectRatioType.x16x9 },
             {"9 x 16", AspectRatioType.x9x16 },
-            {"4 x 3", AspectRatioType.x4x3 }
+            {"4 x 3", AspectRatioType.x4x3 },
+            {"3 x 4", AspectRatioType.x3x4 }
         };
 
         [SerializeField]
@@ -124,13 +125,22 @@ namespace AltSalt
                     return (referenceVal * 9.0d / 16.0d);
                 }
 
-            } else {
+            } else if (referenceAspectRatio == AspectRatioType.x4x3) {
 
                 if (ratioType == RatioType.Numerator) {
                     return (referenceVal * 3.0d / 4.0d);
                 } else {
                     return (referenceVal * 4.0d / 3.0d);
                 }
+
+            } else {
+
+                if (ratioType == RatioType.Numerator) {
+                    return (referenceVal* 4.0d / 3.0d);
+                } else {
+                    return (referenceVal* 3.0d / 4.0d);
+                }
+
             }
         }
 

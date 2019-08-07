@@ -8,8 +8,8 @@ namespace AltSalt
     public class ModifyTools : EditorWindow
     {
         protected ModifySettings modifySettings;
-        protected ComplexEvent textUpdate;
-        protected SimpleEvent layoutUpdate;
+        protected ComplexEventTrigger textUpdate = new ComplexEventTrigger();
+        protected SimpleEventTrigger layoutUpdate = new SimpleEventTrigger();
         protected string loadedLayoutName;
 
         protected void CreateHeader()
@@ -31,10 +31,10 @@ namespace AltSalt
             GUILayout.Label("These values are automatically populated via script.");
             EditorGUI.BeginDisabledGroup(true);
             modifySettings = EditorGUILayout.ObjectField("Modify Settings", modifySettings, typeof(ModifySettings), false) as ModifySettings;
-            layoutUpdate = EditorGUILayout.ObjectField("Layout Update", layoutUpdate, typeof(SimpleEvent), false) as SimpleEvent;
-            layoutUpdate = Utils.GetSimpleEvent("LayoutUpdate");
-            textUpdate = EditorGUILayout.ObjectField("Text Update", textUpdate, typeof(ComplexEvent), false) as ComplexEvent;
-            textUpdate = Utils.GetComplexEvent("TextUpdate");
+            layoutUpdate.SimpleEventTarget = Utils.GetSimpleEvent(nameof(VarDependencies.LayoutUpdate));
+            layoutUpdate.SimpleEventTarget = EditorGUILayout.ObjectField("Layout Update", layoutUpdate.SimpleEventTarget, typeof(SimpleEvent), false) as SimpleEvent;
+            textUpdate.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.TextUpdate));
+            textUpdate.ComplexEventTarget = EditorGUILayout.ObjectField("Text Update", textUpdate.ComplexEventTarget, typeof(ComplexEvent), false) as ComplexEvent;
             EditorGUI.EndDisabledGroup();
 
             if (modifySettings == null) {

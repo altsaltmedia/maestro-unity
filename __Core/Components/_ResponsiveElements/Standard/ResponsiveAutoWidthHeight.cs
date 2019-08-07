@@ -30,8 +30,8 @@ namespace AltSalt
         protected override void OnEnable()
         {
             base.OnEnable();
-            StoreInternalMarginVal();
             UpdateBreakpointDependencies();
+            StoreInternalMarginVal();
         }
 
         protected override void UpdateBreakpointDependencies()

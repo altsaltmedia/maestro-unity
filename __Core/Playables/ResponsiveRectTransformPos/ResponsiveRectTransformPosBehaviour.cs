@@ -22,16 +22,30 @@ namespace AltSalt
         {
             base.ExecuteResponsiveAction();
 #if UNITY_EDITOR
-            if (aspectRatioBreakpoints.Count < 1) {
-                return;
+            if (aspectRatioBreakpoints.Count == 0) {
+                SetValue(0);
+            } else {
+                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
+                SetValue(breakpointIndex);
             }
 #endif
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
-            SetValue(breakpointIndex);
         }
 
 #if UNITY_EDITOR
-        
+
+        protected override void PopulateBreakpointDependencies()
+        {
+            base.PopulateBreakpointDependencies();
+
+            if(breakpointInitialPosition.Count < 1) {
+                breakpointInitialPosition.Add(new Vector3(0, 0, 0));
+            }
+
+            if (breakpointTargetPosition.Count < 1) {
+                breakpointTargetPosition.Add(new Vector3(0, 0, 0));
+            }
+        }
+
         [InfoBox("Creates placeholder values based on number of breakpoints.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SaveValue()
@@ -41,7 +55,7 @@ namespace AltSalt
                 return;
             }
 
-            int breakpointIndex = Utils.GetValueIndexInList(aspectRatio.Value, aspectRatioBreakpoints);
+            int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
 
             Utils.ExpandList(breakpointInitialPosition, breakpointIndex);
             breakpointInitialPosition[breakpointIndex] = new Vector3(0,0,0);
@@ -50,12 +64,13 @@ namespace AltSalt
             breakpointTargetPosition[breakpointIndex] = new Vector3(0,0,0);
         }
 #endif
-
         public void SetValue(int activeIndex)
         {
 #if UNITY_EDITOR
-            if(activeIndex >= breakpointInitialPosition.Count ||
-               activeIndex >= breakpointTargetPosition.Count) {
+            if(activeIndex != 0 &&
+               (activeIndex >= breakpointInitialPosition.Count ||
+               activeIndex >= breakpointTargetPosition.Count)) {
+                LogBreakpointWarning();
                 return;
             }
 #endif

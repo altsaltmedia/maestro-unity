@@ -15,8 +15,10 @@ namespace AltSalt
 {
     [Serializable]
     public class LerpToTargetClip : PlayableAsset, ITimelineClipAsset {
-        
-        public LerpToTargetBehaviour template = new LerpToTargetBehaviour();
+
+        // This is here for implementation reference only. DO NOT attempt to use or access this when
+        // creating subclasses; it won't work. Instead, create a new instance of your behaviour in question.
+        private LerpToTargetBehaviour template = new LerpToTargetBehaviour();
         public double startTime;
         public double endTime;
 
@@ -32,8 +34,11 @@ namespace AltSalt
 
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
+            // These are here for reference and don't do anything. These should also be implemented
+            // in your child class so that the instance of your behaviour has all the necessary variables.
             template.startTime = startTime;
             template.endTime = endTime;
+
             var playable = ScriptPlayable<LerpToTargetBehaviour>.Create(graph, template);
             return playable;
         }
