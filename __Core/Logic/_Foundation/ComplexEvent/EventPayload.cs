@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using RotaryHeart.Lib.SerializableDictionary;
 
@@ -47,184 +45,134 @@ namespace AltSalt
             return payloadInstance;
         }
 
-        public static new EventPayload CreateInstance(string value)
+        public static EventPayload CreateInstance(object value)
         {
             EventPayload payloadInstance = Init();
-            payloadInstance.stringDictionary[DataType.stringType] = value;
-            return payloadInstance;
-        }
 
-        public static EventPayload CreateInstance(float value)
-        {
-            EventPayload payloadInstance = Init();
-            payloadInstance.floatDictionary[DataType.floatType] = value;
-            return payloadInstance;
-        }
+            if(value is string) {
+                payloadInstance.objectDictionary[DataType.systemObjectType] = (string)value;
 
-        public static EventPayload CreateInstance(bool value)
-        {
-            EventPayload payloadInstance = Init();
-            payloadInstance.boolDictionary[DataType.boolType] = value;
-            return payloadInstance;
-        }
+            } else if (value is float) {
+                payloadInstance.floatDictionary[DataType.floatType] = (float)value;
+                
+            } else if (value is bool) {
+                payloadInstance.boolDictionary[DataType.boolType] = (bool)value;
 
-        public static EventPayload CreateInstance(ScriptableObject value)
-        {
-            EventPayload payloadInstance = Init();
-            payloadInstance.scriptableObjectDictionary[DataType.scriptableObjectType] = value;
-            return payloadInstance;
-        }
+            } else if (value is ScriptableObject) {
+                payloadInstance.scriptableObjectDictionary[DataType.scriptableObjectType] = (ScriptableObject)value;
 
-        public static EventPayload CreateInstance(UnityEngine.Object value)
-        {
-            EventPayload payloadInstance = Init();
-            payloadInstance.objectDictionary[DataType.unityObjectType] = value;
-            return payloadInstance;
-        }
-
-        public static EventPayload CreateInstance(object key, string value)
-        {
-            EventPayload payloadInstance = Init();
-            payloadInstance.stringDictionary[key] = value;
-            return payloadInstance;
-        }
-
-        public static EventPayload CreateInstance(object key, float value)
-        {
-            EventPayload payloadInstance = Init();
-            payloadInstance.floatDictionary[key] = value;
-            return payloadInstance;
-        }
-
-        public static EventPayload CreateInstance(object key, bool value)
-        {
-            EventPayload payloadInstance = Init();
-            payloadInstance.boolDictionary[key] = value;
-            return payloadInstance;
-        }
-
-        public static EventPayload CreateInstance(object key, ScriptableObject value)
-        {
-            EventPayload payloadInstance = Init();
-            payloadInstance.scriptableObjectDictionary[key] = value;
-            return payloadInstance;
-        }
-
-        public static EventPayload CreateInstance(object key, UnityEngine.Object value)
-        {
-            EventPayload payloadInstance = Init();
-            payloadInstance.objectDictionary[key] = value;
-            return payloadInstance;
-        }
-
-        public static EventPayload CreateInstance(object[] keys, string[] values)
-        {
-            EventPayload payloadInstance = Init();
-            if(keys.Length != values.Length) {
-                throw new Exception(arrayExceptionMessage);
+            } else {
+                payloadInstance.objectDictionary[DataType.systemObjectType] = value;
             }
-            for (int i = 0; i < keys.Length; i++) {
-                payloadInstance.stringDictionary[keys[i]] = values[i];
-            }
+                
             return payloadInstance;
         }
 
-        public static EventPayload CreateInstance(object[] keys, float[] values)
+        public static EventPayload CreateInstance(object key, object value)
+        {
+            EventPayload payloadInstance = Init();
+
+            if (value is string) {
+                payloadInstance.objectDictionary[key] = (string)value;
+
+            } else if (value is float) {
+                payloadInstance.floatDictionary[key] = (float)value;
+
+            } else if (value is bool) {
+                payloadInstance.boolDictionary[key] = (bool)value;
+
+            } else if (value is ScriptableObject) {
+                payloadInstance.scriptableObjectDictionary[key] = (ScriptableObject)value;
+
+            } else {
+                payloadInstance.objectDictionary[key] = value;
+            }
+
+            return payloadInstance;
+        }
+
+        public static EventPayload CreateInstance(object[] keys, object[] values)
         {
             EventPayload payloadInstance = Init();
             if (keys.Length != values.Length) {
                 throw new Exception(arrayExceptionMessage);
             }
-            for (int i = 0; i < keys.Length; i++) {
-                payloadInstance.floatDictionary[keys[i]] = values[i];
+
+            if (values.GetType() == typeof(string[])) {
+                for (int i = 0; i < keys.Length; i++) {
+                    payloadInstance.stringDictionary[keys[i]] = (string)values[i];
+                }
+
+            } else if (values.GetType() == typeof(float[])) {
+                for (int i = 0; i < keys.Length; i++) {
+                    payloadInstance.floatDictionary[keys[i]] = (float)values[i];
+                }
+
+            } else if (values.GetType() == typeof(bool[])) {
+                for (int i = 0; i < keys.Length; i++) {
+                    payloadInstance.boolDictionary[keys[i]] = (bool)values[i];
+                }
+
+            } else if (values.GetType() == typeof(ScriptableObject[])) {
+                for (int i = 0; i < keys.Length; i++) {
+                    payloadInstance.boolDictionary[keys[i]] = (ScriptableObject)values[i];
+                }
+
+            } else {
+                for (int i = 0; i < keys.Length; i++) {
+                    payloadInstance.objectDictionary[keys[i]] = values[i];
+                }
             }
+
             return payloadInstance;
         }
 
-        public static EventPayload CreateInstance(object[] keys, bool[] values)
+        public void Set(object value)
         {
-            EventPayload payloadInstance = Init();
-            if (keys.Length != values.Length) {
-                throw new Exception(arrayExceptionMessage);
+            if (value is string) {
+
+                objectDictionary[DataType.systemObjectType] = (string)value;
+
+            } else if (value is float) {
+
+                floatDictionary[DataType.floatType] = (float)value;
+
+            } else if (value is bool) {
+
+                boolDictionary[DataType.boolType] = (bool)value;
+
+            } else if (value is ScriptableObject) {
+
+                scriptableObjectDictionary[DataType.scriptableObjectType] = (ScriptableObject)value;
+
+            } else {
+
+                objectDictionary[DataType.systemObjectType] = value;
             }
-            for (int i = 0; i < keys.Length; i++) {
-                payloadInstance.boolDictionary[keys[i]] = values[i];
+        }
+
+        public void Set(object key, object value)
+        {
+            if (value is string) {
+
+                objectDictionary[key] = (string)value;
+
+            } else if (value is float) {
+
+                floatDictionary[key] = (float)value;
+
+            } else if (value is bool) {
+
+                boolDictionary[key] = (bool)value;
+
+            } else if (value is ScriptableObject) {
+
+                scriptableObjectDictionary[key] = (ScriptableObject)value;
+
+            } else {
+
+                objectDictionary[key] = value;
             }
-            return payloadInstance;
-        }
-
-        public static EventPayload CreateInstance(object[] keys, ScriptableObject[] values)
-        {
-            EventPayload payloadInstance = Init();
-            if (keys.Length != values.Length) {
-                throw new Exception(arrayExceptionMessage);
-            }
-            for (int i = 0; i < keys.Length; i++) {
-                payloadInstance.scriptableObjectDictionary[keys[i]] = values[i];
-            }
-            return payloadInstance;
-        }
-
-        public static EventPayload CreateInstance(object[] keys, UnityEngine.Object[] values)
-        {
-            EventPayload payloadInstance = Init();
-            if (keys.Length != values.Length) {
-                throw new Exception(arrayExceptionMessage);
-            }
-            for (int i = 0; i < keys.Length; i++) {
-                payloadInstance.objectDictionary[keys[i]] = values[i];
-            }
-            return payloadInstance;
-        }
-
-        public void Set(string value)
-        {
-            stringDictionary[DataType.stringType] = value;
-        }
-
-        public void Set(float value)
-        {
-            floatDictionary[DataType.floatType] = value;
-        }
-
-        public void Set(bool value)
-        {
-            boolDictionary[DataType.boolType] = value;
-        }
-
-        public void Set(ScriptableObject value)
-        {
-            scriptableObjectDictionary[DataType.scriptableObjectType] = value;
-        }
-
-        public void Set(UnityEngine.Object value)
-        {
-            objectDictionary[DataType.unityObjectType] = value;
-        }
-
-        public void Set (object key, string value)
-        {
-            stringDictionary[key] = value;
-		}
-
-        public void Set(object key, float value)
-        {
-            floatDictionary[key] = value;
-        }
-
-        public void Set(object key, bool value)
-        {
-            boolDictionary[key] = value;
-        }
-
-        public void Set(object key, ScriptableObject value)
-        {
-            scriptableObjectDictionary[key] = value;
-        }
-
-        public void Set(object key, UnityEngine.Object value)
-        {
-            objectDictionary[key] = value;
         }
 
         public string GetStringValue(object key)
@@ -266,7 +214,7 @@ namespace AltSalt
             }
         }
 
-        public UnityEngine.Object GetObjectValue(object key)
+        public object GetObjectValue(object key)
         {
             if (objectDictionary.ContainsKey(key)) {
                 return objectDictionary[key];
@@ -289,7 +237,7 @@ namespace AltSalt
         public class ScriptableObjectDictionary : SerializableDictionaryBase<object, ScriptableObject> { }
 
         [Serializable]
-        public class ObjectDictionary : SerializableDictionaryBase<object, UnityEngine.Object> { }
+        public class ObjectDictionary : SerializableDictionaryBase<object, object> { }
     }
 
 }

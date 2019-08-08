@@ -140,7 +140,7 @@ namespace AltSalt
             for(int i=0; i<TimelineEditor.selectedClips.Length; i++) {
                 var clipAsset = TimelineEditor.selectedClips[i].asset;
                 if (clipAsset is ResponsiveLerpToTargetClip) {
-                    responsiveElements.Add(GetResponsiveElementFromClipAsset(clipAsset as ResponsiveLerpToTargetClip));
+                    responsiveElements.Add(ResponsiveUtilsCore.GetResponsiveElementFromClipAsset(clipAsset as ResponsiveLerpToTargetClip));
                 }
             }
 
@@ -151,6 +151,12 @@ namespace AltSalt
 
                 responsiveElementListView = CreateResponsiveElementListView(responsiveElements, listViewExpanded);
                 responsiveElementListContainer.Add(responsiveElementListView);
+
+                rootVisualElement.RegisterCallback<MouseCaptureOutEvent>((MouseCaptureOutEvent evt) => {
+                    if (evt.target != responsiveElementListView) {
+                        selectedElements.Clear();
+                    }
+                });
 
             } else {
                 Label label = new Label("No responsive elements selected");
@@ -206,8 +212,8 @@ namespace AltSalt
 
             listView.onItemChosen += obj => {
                 if (obj is ResponsiveLerpToTargetBehaviour) {
-                    var clipAsset = GetClipAssetFromResponsiveBehaviour(obj as ResponsiveLerpToTargetBehaviour);
-                    var parentTrack = GetParentTrackFromResponsiveBehaviour(obj as ResponsiveLerpToTargetBehaviour);
+                    var clipAsset = ResponsiveUtilsCore.GetClipAssetFromResponsiveBehaviour(obj as ResponsiveLerpToTargetBehaviour);
+                    var parentTrack = ResponsiveUtilsCore.GetParentTrackFromResponsiveBehaviour(obj as ResponsiveLerpToTargetBehaviour);
                     TimelineEditor.selectedClip = TimelineUtilsCore.GetTimelineClipFromTrackAsset(clipAsset, parentTrack);
                 } else if(obj is UnityEngine.Object) {
                     Selection.activeObject = obj as UnityEngine.Object;
@@ -216,11 +222,6 @@ namespace AltSalt
             listView.onSelectionChanged += objects => {
                 selectedElements = objects.ConvertAll(item => (IResponsive)item);
             };
-            listView.RegisterCallback<MouseCaptureOutEvent>((MouseCaptureOutEvent evt) => {
-                if (evt.target != responsiveElementListView) {
-                    selectedElements.Clear();
-                }
-            });
 
             return ToggleListView(listView, expandListView);
         }
@@ -288,7 +289,7 @@ namespace AltSalt
 
             for (int i = 0; i < selectedClips.Length; i++) {
                 if (selectedClips[i].asset is ResponsiveLerpToTargetClip) {
-                    IResponsive responsiveElement = GetResponsiveElementFromClipAsset(selectedClips[i].asset as ResponsiveLerpToTargetClip);
+                    IResponsive responsiveElement = ResponsiveUtilsCore.GetResponsiveElementFromClipAsset(selectedClips[i].asset as ResponsiveLerpToTargetClip);
                     responsiveElement.AddBreakpoint(targetBreakpoint);
                     responsiveClipAssetList.Add(responsiveElement);
                 }
@@ -307,69 +308,6 @@ namespace AltSalt
                 }
             }
             return responsiveElements;
-        }
-
-        // =================================== //
-        //     Utils for Responsive Clips      //
-        // =================================== //
-
-        // Due to the way Unity instantiates ScriptPlayables, there's no way that I've found to get around strong casts
-        // to the behaviours in question to get the properties we need. The following functions are an admittedly bloated
-        // way to get those values. Time wasted trying to improve this: 5 hours.
-
-        public static IResponsive GetResponsiveElementFromClipAsset(ResponsiveLerpToTargetClip responsiveLerpToTargetClip)
-        {
-            switch(responsiveLerpToTargetClip.GetType().Name) {
-
-                case nameof(ResponsiveRectTransformPosClip): {
-                        ResponsiveRectTransformPosClip clipAsset = responsiveLerpToTargetClip as ResponsiveRectTransformPosClip;
-                        return clipAsset.template;
-                    }
-
-                case nameof(ResponsiveRectTransformScaleClip): {
-                        ResponsiveRectTransformScaleClip clipAsset = responsiveLerpToTargetClip as ResponsiveRectTransformScaleClip;
-                        return clipAsset.template;
-                    }
-            }
-
-            return null;
-        }
-
-        public static PlayableAsset GetClipAssetFromResponsiveBehaviour(ResponsiveLerpToTargetBehaviour responsiveBehaviour)
-        {
-            switch (responsiveBehaviour.GetType().Name) {
-
-                case nameof(ResponsiveRectTransformPosBehaviour): {
-                        ResponsiveRectTransformPosBehaviour behaviourInstance = responsiveBehaviour as ResponsiveRectTransformPosBehaviour;
-                        return behaviourInstance.clipAsset;
-                    }
-
-                case nameof(ResponsiveRectTransformScaleClip): {
-                        ResponsiveRectTransformScaleBehaviour behaviourInstance = responsiveBehaviour as ResponsiveRectTransformScaleBehaviour;
-                        return behaviourInstance.clipAsset;
-                    }
-            }
-
-            return null;
-        }
-
-        public static TrackAsset GetParentTrackFromResponsiveBehaviour(ResponsiveLerpToTargetBehaviour responsiveBehaviour)
-        {
-
-            switch (responsiveBehaviour.GetType().Name) {
-
-                case nameof(ResponsiveRectTransformPosBehaviour): {
-                        ResponsiveRectTransformPosBehaviour behaviourInstance = responsiveBehaviour as ResponsiveRectTransformPosBehaviour;
-                        return behaviourInstance.parentTrack;
-                    }
-
-                case nameof(ResponsiveRectTransformScaleClip): {
-                        ResponsiveRectTransformScaleBehaviour behaviourInstance = responsiveBehaviour as ResponsiveRectTransformScaleBehaviour;
-                        return behaviourInstance.parentTrack;
-                    }
-            }
-
-            return null;
         }
     }
 }

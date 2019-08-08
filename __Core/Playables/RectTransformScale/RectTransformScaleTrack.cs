@@ -21,13 +21,18 @@ namespace AltSalt
             var comp = director.GetGenericBinding(this) as RectTransform;
             if (comp == null)
                 return;
-            var so = new UnityEditor.SerializedObject(comp);
-            var iter = so.GetIterator();
-            while (iter.NextVisible(true)) {
-                if (iter.hasVisibleChildren)
-                    continue;
-                driver.AddFromName<RectTransform>(comp.gameObject, iter.propertyPath);
-            }
+
+            driver.AddFromName<RectTransform>(comp.gameObject, "m_LocalScale.x");
+            driver.AddFromName<RectTransform>(comp.gameObject, "m_LocalScale.y");
+            driver.AddFromName<RectTransform>(comp.gameObject, "m_LocalScale.z");
+
+            //var so = new UnityEditor.SerializedObject(comp);
+            //var iter = so.GetIterator();
+            //while (iter.NextVisible(true)) {
+            //    if (iter.hasVisibleChildren)
+            //        continue;
+            //    driver.AddFromName<RectTransform>(comp.gameObject, iter.propertyPath);
+            //}
 #endif
             base.GatherProperties(director, driver);
         }

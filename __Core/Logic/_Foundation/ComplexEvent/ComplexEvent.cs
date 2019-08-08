@@ -133,7 +133,7 @@ namespace AltSalt
         }
 
 
-        public void Raise(UnityEngine.Object value)
+        public void Raise(object value)
         {
             if (CallerRegistered() == true) {
                 if (logCallersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {

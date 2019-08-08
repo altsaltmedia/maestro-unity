@@ -22,7 +22,15 @@ namespace AltSalt
 
         public double startTime;
         public double endTime;
+
+        [HideInInspector]
+        public AppSettings appSettings;
+
+        [HideInInspector]
         public TrackAsset parentTrack;
+
+        [HideInInspector]
+        public GameObject directorObject;
 
         public override double duration {
             get {
@@ -40,8 +48,10 @@ namespace AltSalt
             // in your child class so that the instance of your behaviour has all the necessary variables.
             template.startTime = startTime;
             template.endTime = endTime;
+            template.appSettings = appSettings;
             template.parentTrack = parentTrack;
             template.clipAsset = this;
+            template.directorObject = directorObject;
 
             var playable = ScriptPlayable<ResponsiveLerpToTargetBehaviour>.Create(graph);
             return playable;

@@ -24,6 +24,7 @@ xsi:schemaLocation="
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditFloatVarClip_UXML.uxml" name="EditFloatVarClip" />
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/EditColorVarClip_UXML.uxml" name="EditColorVarClip" />
     <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/RectTransform/EditRectTransformResponsivePosClip_UXML.uxml" name="EditRectTransformResponsivePosClip" />
+    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/Modules/Edit/RectTransform/EditRectTransformResponsiveScaleClip_UXML.uxml" name="EditRectTransformResponsiveScaleClip" />
 
     <engine:VisualElement class="altsalt page-builder-window">
 
@@ -52,6 +53,8 @@ xsi:schemaLocation="
             <engine:Instance template="EditColorVarClip" />
 
             <engine:Instance template="EditRectTransformResponsivePosClip" />
+
+            <engine:Instance template="EditRectTransformResponsiveScaleClip" />
 
             <engine:VisualElement class="section-container">
                 <engine:VisualElement class="section">

@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
+#if UNITY_EDITOR
+using UnityEditor.Timeline;
+#endif
+
 namespace AltSalt {
 
     [ExecuteInEditMode]
@@ -107,8 +111,8 @@ namespace AltSalt {
         [SerializeField]
         List<SceneDimension> sceneDimensions = new List<SceneDimension>();
 
-        List<ResponsiveElement> priorityResponsiveElements = new List<ResponsiveElement>();
-        List<ResponsiveElement> responsiveElements = new List<ResponsiveElement>();
+        List<IResponsive> priorityResponsiveElements = new List<IResponsive>();
+        List<IResponsive> responsiveElements = new List<IResponsive>();
 
         private ValueDropdownList<DimensionType> orientationValues = new ValueDropdownList<DimensionType>(){
             {"Vertical", DimensionType.Vertical },
@@ -197,9 +201,9 @@ namespace AltSalt {
 
         public void AddResponsiveElement(EventPayload eventPayload)
         {
-            ResponsiveElement element = eventPayload.objectDictionary[DataType.unityObjectType] as ResponsiveElement;
+            IResponsive element = eventPayload.objectDictionary[DataType.systemObjectType] as IResponsive;
             
-            if(element.gameObject.scene == this.gameObject.scene &&
+            if(element.ParentScene == this.gameObject.scene &&
                 priorityResponsiveElements.Contains(element) == false && responsiveElements.Contains(element) == false) {
 
                 if(element.Priority > 0) {
@@ -212,7 +216,7 @@ namespace AltSalt {
 
         public void RemoveResponsiveElement(EventPayload eventPayload)
         {
-            ResponsiveElement element = eventPayload.objectDictionary[DataType.unityObjectType] as ResponsiveElement;
+            IResponsive element = eventPayload.objectDictionary[DataType.systemObjectType] as IResponsive;
             if(priorityResponsiveElements.Contains(element) == true) {
                 priorityResponsiveElements.Remove(element);
             }
@@ -227,12 +231,12 @@ namespace AltSalt {
 
             // We track all priority responsive elements separately
             // because sorting is an expensive operation
-            priorityResponsiveElements.Sort(new Utils.ResponsiveElementSort());
+            priorityResponsiveElements.Sort(new ResponsiveUtilsCore.ResponsiveElementSort());
 
             // Start with lowest priority and end with highest priority
             for(int i= priorityResponsiveElements.Count - 1; i >= 0; i--) {
-                if(priorityResponsiveElements[i] != null) {
-                    priorityResponsiveElements[i].ExecuteLayoutUpdate();
+                if(priorityResponsiveElements[i] != null && priorityResponsiveElements[i].Name.Length > 0) {
+                    priorityResponsiveElements[i].CallExecuteLayoutUpdate(this.gameObject);
                 } else {
                     priorityResponsiveElements.Remove(priorityResponsiveElements[i]);
                 }
@@ -240,12 +244,17 @@ namespace AltSalt {
 
             // All other elements can be executed in any order
             for (int i=0; i<responsiveElements.Count; i++) {
-                if (responsiveElements[i] != null) {
-                    responsiveElements[i].ExecuteLayoutUpdate();
+                if (responsiveElements[i] != null && responsiveElements[i].Name.Length > 0) {
+                    responsiveElements[i].CallExecuteLayoutUpdate(this.gameObject);
                 } else {
                     responsiveElements.Remove(responsiveElements[i]);
                 }
             }
+#if UNITY_EDITOR
+            if(TimelineEditor.inspectedDirector != null) {
+                TimelineEditor.Refresh(RefreshReason.ContentsModified);
+            }
+#endif
         }
 
         void PopulateSceneDimensions()

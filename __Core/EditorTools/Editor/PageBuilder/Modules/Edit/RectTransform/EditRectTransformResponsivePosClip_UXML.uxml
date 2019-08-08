@@ -56,7 +56,7 @@ xsi:schemaLocation="
                     <engine:Label text="Populate from : " class="col-1" />
                     <engine:Button text="Selection" class="col-quarter" name="PopulateTargetPosFromSelection" />
                     <engine:Button text="Init" class="col-quarter margin-right-0" name="PopulateTargetPosFromInit" />
-                    <engine:Button text="Set" class="col-full" name="SetTargetPosition" />
+                    <engine:Button text="Set" class="col-full" name="SetTargetPos" />
 
                     <!-- Transpose target position -->
                     <editor:PropertyField label="Transpose target :" class="col-full" value="(0,0,0)" binding-path="transposeTargetPos" name="TransposeTargetPos"/>

@@ -16,6 +16,9 @@ namespace AltSalt
     {
         float rawMaxCharactersVal;
         float rawMaxWordVal;
+
+        int originalCharactersVal = -1;
+        int originalWordsVal = -1;
         
         TextMeshPro trackBinding;
         TextMeshPro trackBindingComponent;
@@ -30,6 +33,14 @@ namespace AltSalt
                 return;
 
             inputCount = playable.GetInputCount();
+
+            if(originalCharactersVal == -1) {
+                originalCharactersVal = trackBinding.maxVisibleCharacters;
+            }
+
+            if (originalWordsVal == -1) {
+                originalWordsVal = trackBinding.maxVisibleWords;
+            }
 
             for (int i = 0; i < inputCount; i++) {
                 inputWeight = playable.GetInputWeight(i);
@@ -54,12 +65,23 @@ namespace AltSalt
                 else {
                     if (currentTime >= input.endTime) {
                         trackBindingComponent.maxVisibleCharacters = input.targetMaxVisibleCharacters;
+                        trackBindingComponent.maxVisibleWords = input.targetMaxVisibleWords;
                     }
                     else if (i == 0 && currentTime <= input.startTime) {
                         trackBindingComponent.maxVisibleCharacters = input.initialMaxVisibleCharacters;
+                        trackBindingComponent.maxVisibleWords = input.initialMaxVisibleWords;
                     }
                 }
             }
+        }
+
+        public override void OnGraphStop(Playable playable)
+        {
+            base.OnPlayableDestroy(playable);
+#if UNITY_EDITOR
+            trackBinding.maxVisibleCharacters = originalCharactersVal;
+            trackBinding.maxVisibleWords = originalWordsVal;
+#endif
         }
     }   
 }

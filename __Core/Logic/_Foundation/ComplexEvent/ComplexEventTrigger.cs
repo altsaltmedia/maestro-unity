@@ -28,34 +28,30 @@ namespace AltSalt
             complexEvent.Raise();
         }
 
-        public void RaiseEvent(GameObject caller, string value)
+        public void RaiseEvent(GameObject caller, object value)
         {
             complexEvent.StoreCaller(caller);
-            complexEvent.Raise(value);
-        }
 
-        public void RaiseEvent(GameObject caller, int value)
-        {
-            complexEvent.StoreCaller(caller);
-            complexEvent.Raise(value);
-        }
+            if (value is string) {
 
-        public void RaiseEvent(GameObject caller, bool value)
-        {
-            complexEvent.StoreCaller(caller);
-            complexEvent.Raise(value);
-        }
+                complexEvent.Raise((string)value);
 
-        public void RaiseEvent(GameObject caller, ScriptableObject value)
-        {
-            complexEvent.StoreCaller(caller);
-            complexEvent.Raise(value);
-        }
+            } else if (value is float) {
 
-        public void RaiseEvent(GameObject caller, UnityEngine.Object value)
-        {
-            complexEvent.StoreCaller(caller);
-            complexEvent.Raise(value);
+                complexEvent.Raise((float)value);
+
+            } else if (value is bool) {
+
+                complexEvent.Raise((bool)value);
+
+            } else if (value is ScriptableObject) {
+
+                complexEvent.Raise((ScriptableObject)value);
+
+            } else {
+
+                complexEvent.Raise(value);
+            }
         }
 
         public void RaiseEvent(GameObject caller, EventPayload eventPayload)
@@ -71,6 +67,12 @@ namespace AltSalt
         }
 
         public void RaiseEvent(UnityEngine.Object caller, string sourceScene, string sourceName, ScriptableObject value)
+        {
+            complexEvent.StoreCaller(caller, sourceScene, sourceName);
+            complexEvent.Raise(value);
+        }
+
+        public void RaiseEvent(UnityEngine.Object caller, string sourceScene, string sourceName, object value)
         {
             complexEvent.StoreCaller(caller, sourceScene, sourceName);
             complexEvent.Raise(value);

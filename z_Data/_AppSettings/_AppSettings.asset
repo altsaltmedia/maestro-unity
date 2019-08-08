@@ -68,6 +68,10 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 1d7c66be13b99408ba2664f43bf16133, type: 2}
+  logResponsiveElementActions:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: e4a2d9336687d4897868885bad46b411, type: 2}
   hasBeenOpened:
     UseConstant: 0
     ConstantValue: 0

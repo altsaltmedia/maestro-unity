@@ -32,7 +32,6 @@ namespace AltSalt
             }
         }
 
-
         public static GameObject CreateNewElement(Transform[] selectedTransforms, GameObject sourceObject, string elementName = "", bool isParent = false)
         {
             GameObject newElement = PrefabUtility.InstantiatePrefab(sourceObject) as GameObject;

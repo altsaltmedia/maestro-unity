@@ -16,22 +16,24 @@ namespace AltSalt
         [SerializeField]
         protected AppSettings appSettings;
 
-        [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
         protected FloatReference sceneWidth = new FloatReference();
 
-        [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
         protected FloatReference sceneHeight = new FloatReference();
 
-        [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
         protected FloatReference sceneAspectRatio = new FloatReference();
 
         [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
         ComplexEventTrigger responsiveElementEnable = new ComplexEventTrigger();
 
         [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
         ComplexEventTrigger responsiveElementDisable = new ComplexEventTrigger();
 
         public string Name {
@@ -55,11 +57,31 @@ namespace AltSalt
         }
 
         [SerializeField]
+#if UNITY_EDITOR
         [OnValueChanged(nameof(ResetResponsiveElementData))]
+#endif
         protected int priority;
         public int Priority {
             get {
                 return priority;
+            }
+        }
+
+        [SerializeField]
+        protected bool logElementOnLayoutUpdate;
+        public bool LogElementOnLayoutUpdate {
+            get {
+                if (appSettings.logResponsiveElementActions.Value == true) {
+                    return true;
+                } else {
+                    return logElementOnLayoutUpdate;
+                }
+            }
+        }
+
+        public Scene ParentScene {
+            get {
+                return gameObject.scene;
             }
         }
 
@@ -90,16 +112,17 @@ namespace AltSalt
             responsiveElementEnable.RaiseEvent(this.gameObject, this);
         }
 
-        void ResetResponsiveElementData()
+        public void CallExecuteLayoutUpdate(UnityEngine.Object callingObject)
         {
-            responsiveElementDisable.RaiseEvent(this.gameObject, this);
-            responsiveElementEnable.RaiseEvent(this.gameObject, this);
-        }
+            if (LogElementOnLayoutUpdate == true) {
+                Debug.Log("CallExecuteLayoutUpdate triggered!");
+                Debug.Log("Calling object : " + callingObject.name, callingObject);
+                Debug.Log("Triggered object : " + Name, gameObject);
+                Debug.Log("Component : " + this.GetType().Name, gameObject);
+                Debug.Log("--------------------------");
+            }
 
-
-        public void ExecuteLayoutUpdate()
-        {
-            if(appSettings.modifyLayoutActive.Value == true) {
+            if (appSettings.modifyLayoutActive.Value == true) {
                 LoadData();
             }
             ExecuteResponsiveAction();
@@ -109,9 +132,9 @@ namespace AltSalt
         {
             if (hasBreakpoints == true) {
                 if (aspectRatioBreakpoints.Count < 1) {
-                    #if UNITY_EDITOR
+#if UNITY_EDITOR
                     LogBreakpointWarning();
-                    #endif
+#endif
                     return;
                 } else {
                     breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
@@ -134,7 +157,13 @@ namespace AltSalt
         public List<float> AddBreakpoint(float targetBreakpoint)
         {
             Undo.RecordObject(this, "add breakpoint");
-            return Utils.AddBreakpointToResponsiveElement(this, targetBreakpoint);
+            return ResponsiveUtilsCore.AddBreakpointToResponsiveElement(this, targetBreakpoint);
+        }
+
+        void ResetResponsiveElementData()
+        {
+            responsiveElementDisable.RaiseEvent(this.gameObject, this);
+            responsiveElementEnable.RaiseEvent(this.gameObject, this);
         }
 
         protected void PopulateDefaultBreakpointValues()
@@ -268,6 +297,11 @@ namespace AltSalt
             }
         }
 
+        protected static bool IsPopulated(ComplexEventTrigger attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+
         protected static bool IsPopulated(FloatReference attribute)
         {
             return Utils.IsPopulated(attribute);
@@ -278,5 +312,5 @@ namespace AltSalt
             return Utils.IsPopulated(attribute);
         }
     }
-	
+
 }

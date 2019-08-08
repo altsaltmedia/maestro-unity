@@ -35,7 +35,7 @@ namespace AltSalt
 
     public enum AxisDestination { fromAxis, toAxis }
 
-    public enum DataType { stringType, floatType, boolType, intType, scriptableObjectType, unityObjectType }
+    public enum DataType { stringType, floatType, boolType, intType, scriptableObjectType, systemObjectType }
 
     public enum ComparisonValues { GreaterThan, LessThan, EqualTo }
 
@@ -277,37 +277,6 @@ namespace AltSalt
             }
         }
 
-        public static List<float> AddBreakpointToResponsiveElement(IResponsive targetElement, float targetBreakpoint)
-        {
-            List<float> aspectRatioBreakpoints = targetElement.AspectRatioBreakpoints;
-            targetElement.HasBreakpoints = true;
-
-            if (aspectRatioBreakpoints.Contains(targetBreakpoint)) {
-                EditorUtility.DisplayDialog("Breakpoint already exists", "The breakpoint " + targetBreakpoint.ToString("F2") + " already exists on " + targetElement.Name, "Okay");
-                return aspectRatioBreakpoints;
-            }
-
-            if (aspectRatioBreakpoints.Count == 0) {
-                targetElement.LogAddBreakpointMessage(targetBreakpoint);
-                aspectRatioBreakpoints.Add(targetBreakpoint);
-                return aspectRatioBreakpoints;
-            }
-
-            for (int i = 0; i < aspectRatioBreakpoints.Count; i++) {
-
-                if (targetBreakpoint < aspectRatioBreakpoints[i]) {
-                    aspectRatioBreakpoints.Insert(i, targetBreakpoint);
-                    break;
-                } else if (targetBreakpoint > aspectRatioBreakpoints[i] && aspectRatioBreakpoints.Count == i + 1) {
-                    aspectRatioBreakpoints.Insert(i + 1, targetBreakpoint);
-                    break;
-                }
-            }
-
-            targetElement.LogAddBreakpointMessage(targetBreakpoint);
-            return aspectRatioBreakpoints;
-        }
-
         public static string GetProjectPath()
         {
             return Application.dataPath + "/__Project";
@@ -351,15 +320,6 @@ namespace AltSalt
             return guid;
         }
 #endif
-
-        public class ResponsiveElementSort : Comparer<ResponsiveElement>
-        {
-            public override int Compare(ResponsiveElement x, ResponsiveElement y)
-            {
-                return x.Priority.CompareTo(y.Priority);
-            }
-        }
-
         public static JSONNode AddToJSONArray(JSONNode node, string key, string value)
         {
             if (key.Length < 1) {
@@ -639,56 +599,51 @@ namespace AltSalt
             return valueIndex;
         }
 
+        // =========== //
+        // Expand List //
+        // =========== //
+
+        // Used for responsive elements to ensure the list in question is always
+        // one greater than the index, that way we can create responsiveness between breakpoints
+
         public static void ExpandList(List<Rect> list, int index)
-        {
-            // Must add 1 to zero-based index in order to compare correctly
-            // with the length of the list
-            while (list.Count < index + 1) {
+        { 
+            while (list.Count <= index) {
                 list.Add(new Rect());
             }
         }
 
         public static void ExpandList(List<Vector2> list, int index)
         {
-            // Must add 1 to zero-based index in order to compare correctly
-            // with the length of the list
-            while(list.Count < index + 1) {
+            while(list.Count <= index) {
                 list.Add(new Vector2());
             }
         }
 
         public static void ExpandList(List<Vector3> list, int index)
         {
-            // Must add 1 to zero-based index in order to compare correctly
-            // with the length of the list
-            while (list.Count < index + 1) {
+            while (list.Count <= index) {
                 list.Add(new Vector3());
             }
         }
 
         public static void ExpandList(List<float> list, int index)
         {
-            // Must add 1 to zero-based index in order to compare correctly
-            // with the length of the list
-            while (list.Count < index + 1) {
+            while (list.Count <= index) {
                 list.Add(new float());
             }
         }
 
         public static void ExpandList(List<DimensionType> list, int index)
         {
-            // Must add 1 to zero-based index in order to compare correctly
-            // with the length of the list
-            while (list.Count < index + 1) {
+            while (list.Count <= index) {
                 list.Add(new DimensionType());
             }
         }
 
         public static void ExpandList(List<AspectRatioType> list, int index)
         {
-            // Must add 1 to zero-based index in order to compare correctly
-            // with the length of the list
-            while (list.Count < index + 1) {
+            while (list.Count <= index) {
                 list.Add(new AspectRatioType());
             }
         }
@@ -785,6 +740,24 @@ namespace AltSalt
                 if (index == -1)
                     return indexes;
                 indexes.Add(index);
+            }
+        }
+
+        public static bool IsPopulated(SimpleEventTrigger attribute)
+        {
+            if (attribute.SimpleEventTarget != null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public static bool IsPopulated(ComplexEventTrigger attribute)
+        {
+            if (attribute.ComplexEventTarget != null) {
+                return true;
+            } else {
+                return false;
             }
         }
 

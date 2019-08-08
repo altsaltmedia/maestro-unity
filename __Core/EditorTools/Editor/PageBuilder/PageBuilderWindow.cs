@@ -26,7 +26,8 @@ namespace AltSalt
             { typeof(EditRectTransformRotationClip), "edit-rect-transform-rotation-clip" },
             { typeof(EditFloatVarClip), "edit-float-var-clip" },
             { typeof(EditColorVarClip), "edit-color-var-clip" },
-            { typeof(EditRectTransformResponsivePosClip), "edit-rect-transform-responsive-pos-clip" }
+            { typeof(EditRectTransformResponsivePosClip), "edit-rect-transform-responsive-pos-clip" },
+            { typeof(EditRectTransformResponsiveScaleClip), "edit-rect-transform-responsive-scale-clip" }
         };
 
         static List<ChildUIElementsWindow> childWindows = new List<ChildUIElementsWindow>();

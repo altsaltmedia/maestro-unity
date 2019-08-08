@@ -83,6 +83,7 @@ namespace AltSalt
             ColorVarTrack,
             TMProCharSpacingTrack,
             ResponsiveRectTransformPosTrack,
+            ResponsiveRectTransformScaleTrack,
             NewClips,
             RenameClips
         };
@@ -172,7 +173,7 @@ namespace AltSalt
                 ToggleVisualElements(toggleData, EnableCondition.TrackOrClipSelected, false);
             }
 
-            if(TimelineEditor.selectedClips.Length > 0) {
+            if (TimelineEditor.selectedClips.Length > 0) {
                 ToggleVisualElements(toggleData, EnableCondition.ClipSelected, true);
             } else {
                 ToggleVisualElements(toggleData, EnableCondition.ClipSelected, false);
@@ -214,7 +215,7 @@ namespace AltSalt
 
                 case nameof(ButtonNames.TMProColorTrack):
                     button.clickable.clicked += () => {
-                        if(selectCreatedTracks == true) {
+                        if (selectCreatedTracks == true) {
                             Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProColorTrack), typeof(TMP_Text), Selection.objects);
                         } else {
                             TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProColorTrack), typeof(TMP_Text), Selection.objects);
@@ -320,16 +321,28 @@ namespace AltSalt
                     AddToToggleData(toggleData, EnableCondition.RectTransformSelected, button);
                     break;
 
+                case nameof(ButtonNames.ResponsiveRectTransformScaleTrack):
+                    button.clickable.clicked += () => {
+                        if (selectCreatedTracks == true) {
+                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformScaleTrack), typeof(RectTransform), Selection.objects);
+                        } else {
+                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformScaleTrack), typeof(RectTransform), Selection.objects);
+                        }
+                        TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToToggleData(toggleData, EnableCondition.RectTransformSelected, button);
+                    break;
+
                 case nameof(ButtonNames.NewClips):
                     button.clickable.clicked += () => {
-                        if(selectCreatedClip == true) {
+                        if (selectCreatedClip == true) {
                             TimelineEditor.selectedClips = CreateClips(TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, newClipDuration, clipName);
                         } else {
                             CreateClips(TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, newClipDuration, clipName);
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
 
-                        if(advancePlayhead == true) {
+                        if (advancePlayhead == true) {
                             TimelineUtilsCore.CurrentTime += newClipDuration;
                             TimelineUtilsCore.RefreshTimelineRedrawWindow();
                         }
@@ -339,7 +352,7 @@ namespace AltSalt
 
                 case nameof(ButtonNames.RenameClips):
                     button.clickable.clicked += () => {
-                        if(clipName.Length > 0) {
+                        if (clipName.Length > 0) {
                             TimelineUtilsCore.RenameClips(clipName, TimelineEditor.selectedClips);
                             TimelineUtilsCore.RefreshTimelineContentsModified();
                         }
@@ -357,7 +370,7 @@ namespace AltSalt
 
                 case nameof(PropertyFieldNames.NewClipDuration):
                     propertyField.RegisterCallback<ChangeEvent<float>>((ChangeEvent<float> evt) => {
-                        if(evt.newValue < .1f) {
+                        if (evt.newValue < .1f) {
                             newClipDuration = .1f;
                         }
                     });
@@ -536,13 +549,13 @@ namespace AltSalt
             if (sourceGameObjects.Length > 0) {
                 Array.Sort(sourceGameObjects, new Utils.GameObjectSort());
                 for (int i = 0; i < sourceGameObjects.Length; i++) {
-                    if(requiredComponentType != null && Utils.TargetComponentSelected(sourceGameObjects[i], requiredComponentType) == true) {
+                    if (requiredComponentType != null && Utils.TargetComponentSelected(sourceGameObjects[i], requiredComponentType) == true) {
                         TrackAsset newTrack = CreateNewTrack(targetTimelineAsset, parentTrack, trackType);
                         trackAssets.Add(newTrack);
                         PopulateTrackAsset(targetDirector, newTrack, sourceGameObjects[i]);
                     }
                 }
-            } else {    
+            } else {
                 trackAssets.Add(CreateNewTrack(targetTimelineAsset, parentTrack, trackType));
             }
             TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
@@ -571,6 +584,7 @@ namespace AltSalt
                     case nameof(RectTransformScaleTrack):
                     case nameof(RectTransformRotationTrack):
                     case nameof(ResponsiveRectTransformPosTrack):
+                    case nameof(ResponsiveRectTransformScaleTrack):
                         targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<RectTransform>());
                         break;
 
@@ -601,7 +615,7 @@ namespace AltSalt
             List<TrackAsset> targetTracks = new List<TrackAsset>();
 
             for (int i = 0; i < objectSelection.Length; i++) {
-                if (objectSelection[i] is TrackAsset) {
+                if (objectSelection[i] is TrackAsset && objectSelection[i] is GroupTrack == false) {
                     targetTracks.Add(objectSelection[i] as TrackAsset);
                 }
             }
@@ -611,7 +625,7 @@ namespace AltSalt
 
                 // It is possible to have multiple clips selected on the same track,
                 // so this conditional prevents us from adding duplicates
-                if(targetTracks.Contains(trackAsset) == false) {
+                if (targetTracks.Contains(trackAsset) == false) {
                     targetTracks.Add(trackAsset);
                 }
             }
@@ -626,7 +640,7 @@ namespace AltSalt
 
             TimelineClip[] timelineClipsArray = timelineClips.ToArray();
 
-            if(clipName.Length > 0) {
+            if (clipName.Length > 0) {
                 TimelineUtilsCore.RenameClips(clipName, timelineClipsArray);
             }
 
@@ -646,7 +660,7 @@ namespace AltSalt
                 case nameof(TMProColorClip): {
                         TMProColorClip asset = timelineClip.asset as TMProColorClip;
                         TMP_Text component = sourceObject as TMP_Text;
-                        if(component != null) {
+                        if (component != null) {
                             asset.template.initialColor = component.color;
                             asset.template.targetColor = component.color;
                         }
@@ -656,7 +670,7 @@ namespace AltSalt
                 case nameof(RectTransformPosClip): {
                         RectTransformPosClip asset = timelineClip.asset as RectTransformPosClip;
                         RectTransform component = sourceObject as RectTransform;
-                        if(component != null) {
+                        if (component != null) {
                             asset.template.initialPosition = component.anchoredPosition3D;
                             asset.template.targetPosition = component.anchoredPosition3D;
                         }
@@ -666,7 +680,7 @@ namespace AltSalt
                 case nameof(SpriteColorClip): {
                         SpriteColorClip asset = timelineClip.asset as SpriteColorClip;
                         SpriteRenderer component = sourceObject as SpriteRenderer;
-                        if(component != null) {
+                        if (component != null) {
                             asset.template.initialColor = component.color;
                             asset.template.targetColor = component.color;
                         }
@@ -696,7 +710,7 @@ namespace AltSalt
                 case nameof(LerpFloatVarClip): {
                         LerpFloatVarClip asset = timelineClip.asset as LerpFloatVarClip;
                         FloatVariable component = sourceObject as FloatVariable;
-                        if(component != null) {
+                        if (component != null) {
                             asset.template.initialValue = component.Value;
                             asset.template.targetValue = component.Value;
                         }
@@ -723,12 +737,18 @@ namespace AltSalt
                         return asset;
                     }
 
-                case nameof(ResponsiveRectTransformPosClip): {
-                        ResponsiveRectTransformPosClip asset = timelineClip.asset as ResponsiveRectTransformPosClip;
+                case nameof(ResponsiveVector3Clip): {
+                        ResponsiveVector3Clip asset = timelineClip.asset as ResponsiveVector3Clip;
                         RectTransform component = sourceObject as RectTransform;
                         if (component != null) {
-                            asset.template.breakpointInitialPosition.Add(component.anchoredPosition3D);
-                            asset.template.breakpointTargetPosition.Add(component.anchoredPosition3D);
+
+                            if(parentTrack is ResponsiveRectTransformPosTrack) {
+                                asset.template.breakpointInitialValue.Add(component.anchoredPosition3D);
+                                asset.template.breakpointTargetValue.Add(component.anchoredPosition3D);
+                            } else if (parentTrack is ResponsiveRectTransformScaleTrack) {
+                                asset.template.breakpointInitialValue.Add(component.localScale);
+                                asset.template.breakpointTargetValue.Add(component.localScale);
+                            }
                         }
                         return asset;
                     }

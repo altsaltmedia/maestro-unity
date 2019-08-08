@@ -28,19 +28,20 @@ namespace AltSalt
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)
         {
 #if UNITY_EDITOR
-            TextMeshPro trackBinding = director.GetGenericBinding(this) as TextMeshPro;
-             if (trackBinding == null)
-                return;
-            
-            var serializedObject = new UnityEditor.SerializedObject(trackBinding);
-            var iterator = serializedObject.GetIterator();
+            //TextMeshPro trackBinding = director.GetGenericBinding(this) as TextMeshPro;
+            // if (trackBinding == null)
+            //    return;
 
-            while (iterator.NextVisible(true)) {
-                if (iterator.hasVisibleChildren)
-                    continue;
+            //var serializedObject = new UnityEditor.SerializedObject(trackBinding);
+            //var iterator = serializedObject.GetIterator();
 
-                driver.AddFromName<TextMeshPro>(trackBinding.gameObject, iterator.propertyPath);
-            }
+            //while (iterator.NextVisible(true)) {
+            //    if (iterator.hasVisibleChildren)
+            //        continue;
+
+            //    driver.AddFromName<TextMeshPro>(trackBinding.gameObject, iterator.propertyPath);
+            //    Debug.Log(iterator.propertyPath);
+            //}
 #endif
             base.GatherProperties(director, driver);
         }

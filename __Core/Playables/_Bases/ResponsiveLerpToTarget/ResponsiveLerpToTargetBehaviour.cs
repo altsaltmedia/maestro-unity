@@ -12,35 +12,31 @@ using UnityEngine;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
 using UnityEngine.Timeline;
+using UnityEngine.SceneManagement;
+
 #if UNITY_EDITOR
 using UnityEditor;
-using UnityEditor.Timeline;
 #endif
 
 namespace AltSalt
 {
-    public class ResponsiveLerpToTargetBehaviour : PlayableBehaviour, IResponsive {
+    public class ResponsiveLerpToTargetBehaviour : PlayableBehaviour, IResponsive
+    {
+        [Required]
+        [SerializeField]
+        public AppSettings appSettings;
 
+        [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         public FloatReference sceneAspectRatio = new FloatReference();
 
-        public SimpleEventListener resizedListener;
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        ComplexEventTrigger responsiveElementEnable = new ComplexEventTrigger();
 
-        [PropertySpace]
-        [InfoBox("You should always have x+1 breakpoint values; e.g., for 1 breakpoint at 1.34, you must specify 2 breakpoint values - one for aspect ratios wider than 1.34, and another for aspect ratios narrower than or equal to 1.34.")]
-        [InfoBox("Breakpoint examples: To target devices narrow than iPad (aspect ratio 1.33), specify a breakpoint of 1.4; to target narrower than iPhone (1.77), specify a breakpoint of 1.78.")]
-        public List<float> aspectRatioBreakpoints = new List<float>();
-        public List<float> AspectRatioBreakpoints {
-            get {
-                return aspectRatioBreakpoints;
-            }
-        }
-
-        public string Name {
-            get {
-                return this.ToString();
-            }
-        }
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        ComplexEventTrigger responsiveElementDisable = new ComplexEventTrigger();
 
         [SerializeField]
 #if UNITY_EDITOR
@@ -57,6 +53,7 @@ namespace AltSalt
         }
 
         [SerializeField]
+        [OnValueChanged(nameof(ResetResponsiveElementData))]
         int priority;
         public int Priority {
             get {
@@ -64,7 +61,42 @@ namespace AltSalt
             }
         }
 
+        [SerializeField]
+        protected bool logElementOnLayoutUpdate;
+        public bool LogElementOnLayoutUpdate {
+            get {
+                if (appSettings.logResponsiveElementActions.Value == true) {
+                    return true;
+                } else {
+                    return logElementOnLayoutUpdate;
+                }
+            }
+        }
+
         public EasingFunction.Ease ease = EasingFunction.Ease.EaseInOutQuad;
+
+        [PropertySpace]
+        [InfoBox("You should always have x+1 breakpoint values; e.g., for 1 breakpoint at 1.34, you must specify 2 breakpoint values - one for aspect ratios wider than 1.34, and another for aspect ratios narrower than or equal to 1.34.")]
+        [InfoBox("Breakpoint examples: To target devices narrow than iPad (aspect ratio 1.33), specify a breakpoint of 1.4; to target narrower than iPhone (1.77), specify a breakpoint of 1.78.")]
+        [OnValueChanged(nameof(UpdateBreakpointDependencies))]
+        public List<float> aspectRatioBreakpoints = new List<float>();
+        public List<float> AspectRatioBreakpoints {
+            get {
+                return aspectRatioBreakpoints;
+            }
+        }
+
+        public string Name {
+            get {
+                return this.ToString();
+            }
+        }
+
+        public Scene ParentScene {
+            get {
+                return directorObject.scene;
+            }
+        }
 
         [HideInInspector]
         public double startTime;
@@ -79,37 +111,65 @@ namespace AltSalt
         public PlayableAsset clipAsset;
 
         [HideInInspector]
+        public GameObject directorObject;
+
+        [HideInInspector]
         public EasingFunction.Function easingFunction;
 
-        public override void OnGraphStart(Playable playable)
+        public override void OnPlayableCreate(Playable playable)
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR    
             if (sceneAspectRatio.Variable == null) {
                 sceneAspectRatio.Variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneAspectRatio));
             }
-            resizedListener = new SimpleEventListener(Utils.GetSimpleEvent(nameof(VarDependencies.ScreenResized)), clipAsset, TimelineEditor.inspectedDirector.gameObject.scene.name);
-            resizedListener.OnTargetEventExecuted += ExecuteResponsiveAction;
-            PopulateBreakpointDependencies();
+            
+            UpdateBreakpointDependencies();
+            responsiveElementEnable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementEnable));
+            responsiveElementDisable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementDisable));
 #endif
             base.OnGraphStart(playable);
+            responsiveElementEnable.RaiseEvent(clipAsset, ParentScene.name, clipAsset.name, this);
+
             easingFunction = EasingFunction.GetEasingFunction(ease);
+            CallExecuteLayoutUpdate(directorObject);
+        }
+
+        public void CallExecuteLayoutUpdate(UnityEngine.Object callingObject)
+        {
+            if (LogElementOnLayoutUpdate == true) {
+                Debug.Log("CallExecuteLayoutUpdate triggered!");
+                Debug.Log("Calling object : " + callingObject.name, callingObject);
+                Debug.Log("Triggered timeline clip : " + Name, clipAsset);
+                Debug.Log("Track : " + parentTrack.name, parentTrack);
+                Debug.Log("--------------------------");
+            }
+
+            // TO DO - write functionality to hook into modify
             ExecuteResponsiveAction();
         }
 
-        public override void OnGraphStop(Playable playable)
+        protected virtual void ExecuteResponsiveAction()
         {
-            base.OnGraphStop(playable);
-            resizedListener.OnTargetEventExecuted -= ExecuteResponsiveAction;
+#if UNITY_EDITOR
+            if (aspectRatioBreakpoints.Count == 0) {
+                SetValue(0);
+            } else {
+                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
+                SetValue(breakpointIndex);
+            }
+#endif
         }
 
-        public virtual void ExecuteResponsiveAction() {
-            // Override this in child classes to define custom responsive actions
+        protected virtual void SetValue(int activeIndex)
+        {
+            // Override this in child classes
         }
 
 #if UNITY_EDITOR
-        protected virtual void PopulateBreakpointDependencies()
+        void ResetResponsiveElementData()
         {
-            // Override this in child classes to define custom responsive actions
+            responsiveElementDisable.RaiseEvent(clipAsset, ParentScene.name, clipAsset.name, this);
+            responsiveElementEnable.RaiseEvent(clipAsset, ParentScene.name, clipAsset.name, this);
         }
 
         protected void PopulateDefaultBreakpointValues()
@@ -120,7 +180,7 @@ namespace AltSalt
 
         void PopulateDefaultBreakpoint()
         {
-            if (hasBreakpoints == true && aspectRatioBreakpoints.Count == 0) {
+            if (HasBreakpoints == true && aspectRatioBreakpoints.Count == 0) {
                 decimal tempVal = Convert.ToDecimal(sceneAspectRatio.Value);
                 tempVal = Math.Round(tempVal, 2);
                 aspectRatioBreakpoints.Add((float)tempVal + .01f);
@@ -136,8 +196,9 @@ namespace AltSalt
 
         public List<float> AddBreakpoint(float targetBreakpoint)
         {
-            Undo.RecordObject(clipAsset, "Add breakpoint to clip(s)");
-            return Utils.AddBreakpointToResponsiveElement(this, targetBreakpoint);
+            List<float> breakpointList = ResponsiveUtilsCore.AddBreakpointToResponsiveElement(this, targetBreakpoint);
+            UpdateBreakpointDependencies();
+            return breakpointList;
         }
 
         public string LogAddBreakpointMessage(float targetBreakpoint)
@@ -153,9 +214,15 @@ namespace AltSalt
         }
 #endif
 
+        private static bool IsPopulated(ComplexEventTrigger attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+
         private static bool IsPopulated(FloatReference attribute)
         {
             return Utils.IsPopulated(attribute);
         }
+
     }
 }

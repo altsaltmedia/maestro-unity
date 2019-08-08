@@ -30,6 +30,9 @@ xsi:schemaLocation="
 
                     <engine:VisualElement class="section___content">                      
                         <engine:Button text="New Responsive RectTransform Pos Track" class="col-full" name="ResponsiveRectTransformPosTrack" />
+
+                        <engine:Button text="New Responsive RectTransform Scale Track" class="col-full" name="ResponsiveRectTransformScaleTrack" />
+
                     </engine:VisualElement>
                 </engine:VisualElement>
             </engine:Foldout>

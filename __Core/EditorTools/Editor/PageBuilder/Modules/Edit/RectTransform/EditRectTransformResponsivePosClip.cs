@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEngine.Timeline;
 using UnityEditor.Timeline;
+using UnityEngine.Playables;
 
 namespace AltSalt
 {
@@ -98,7 +99,7 @@ namespace AltSalt
             bool dependencySelected = false;
 
             for (int i = 0; i < TimelineEditor.selectedClips.Length; i++) {
-                if (TimelineEditor.selectedClips[i].asset is ResponsiveRectTransformPosClip) {
+                if (TimelineEditor.selectedClips[i].parentTrack is ResponsiveRectTransformPosTrack) {
                     dependencySelected = true;
                     break;
                 }
@@ -257,8 +258,8 @@ namespace AltSalt
             Array.Sort(clipSelection, new Utils.ClipTimeSort());
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ResponsiveRectTransformPosClip) {
-                    value = (clipSelection[i].asset as ResponsiveRectTransformPosClip).template.initialPosition;
+                if (clipSelection[i].parentTrack is ResponsiveRectTransformPosTrack) {
+                    value = (clipSelection[i].asset as ResponsiveVector3Clip).template.GetInitialValueAtBreakpoint(currentAspectRatio.value);
                     break;
                 }
             }
@@ -271,21 +272,12 @@ namespace AltSalt
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ResponsiveRectTransformPosClip) {
+                if (clipSelection[i].parentTrack is ResponsiveRectTransformPosTrack) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    ResponsiveRectTransformPosClip clipAsset = clipSelection[i].asset as ResponsiveRectTransformPosClip;
+                    ResponsiveVector3Clip clipAsset = clipSelection[i].asset as ResponsiveVector3Clip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial position");
-
-                    if(clipAsset.template.aspectRatioBreakpoints.Count > 0) {
-                        int breakpointIndex = Utils.GetValueIndexInList(currentAspectRatio.value, clipAsset.template.aspectRatioBreakpoints);
-                        Utils.ExpandList(clipAsset.template.breakpointInitialPosition, breakpointIndex);
-                        clipAsset.template.breakpointInitialPosition[breakpointIndex] = targetValue;
-                    } else {
-                        clipAsset.template.breakpointInitialPosition[0] = targetValue;
-                    }
-
-                    clipAsset.template.ExecuteResponsiveAction();
+                    clipAsset.template.SaveNewInitialValue(targetValue);
                 }
             }
 
@@ -299,12 +291,12 @@ namespace AltSalt
             Vector3 newValue = sourceValue;
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ResponsiveRectTransformPosClip) {
+                if (clipSelection[i].parentTrack is ResponsiveRectTransformPosTrack) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    ResponsiveRectTransformPosClip clipAsset = clipSelection[i].asset as ResponsiveRectTransformPosClip;
+                    ResponsiveVector3Clip clipAsset = clipSelection[i].asset as ResponsiveVector3Clip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial interval position");
-                    clipAsset.template.initialPosition = sourceValue;
+                    clipAsset.template.SaveNewInitialValue(sourceValue);
                     sourceValue += interval;
                 }
             }
@@ -317,12 +309,12 @@ namespace AltSalt
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ResponsiveRectTransformPosClip) {
+                if (clipSelection[i].parentTrack is ResponsiveRectTransformPosTrack) {
                     changedClips.Add(clipSelection[i]);
-                    ResponsiveRectTransformPosClip clipAsset = clipSelection[i].asset as ResponsiveRectTransformPosClip;
+                    ResponsiveVector3Clip clipAsset = clipSelection[i].asset as ResponsiveVector3Clip;
                     Undo.RecordObject(clipAsset, "transpose clip(s) initial position");
-                    Vector3 originalPosition = clipAsset.template.initialPosition;
-                    clipAsset.template.initialPosition = new Vector3(originalPosition.x + transposeValue.x, originalPosition.y + transposeValue.y, originalPosition.z + transposeValue.z);
+                    Vector3 originalPosition = clipAsset.template.GetInitialValueAtBreakpoint(currentAspectRatio.value);
+                    clipAsset.template.SaveNewInitialValue(new Vector3(originalPosition.x + transposeValue.x, originalPosition.y + transposeValue.y, originalPosition.z + transposeValue.z));
                 }
             }
 
@@ -335,8 +327,8 @@ namespace AltSalt
             Array.Sort(clipSelection, new Utils.ClipTimeSort());
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ResponsiveRectTransformPosClip) {
-                    value = (clipSelection[i].asset as ResponsiveRectTransformPosClip).template.targetPosition;
+                if (clipSelection[i].parentTrack is ResponsiveRectTransformPosTrack) {
+                    value = (clipSelection[i].asset as ResponsiveVector3Clip).template.GetTargetValueAtBreakpoint(currentAspectRatio.value);
                     break;
                 }
             }
@@ -349,21 +341,12 @@ namespace AltSalt
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ResponsiveRectTransformPosClip) {
+                if (clipSelection[i].parentTrack is ResponsiveRectTransformPosTrack) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    ResponsiveRectTransformPosClip clipAsset = clipSelection[i].asset as ResponsiveRectTransformPosClip;
+                    ResponsiveVector3Clip clipAsset = clipSelection[i].asset as ResponsiveVector3Clip;
                     Undo.RecordObject(clipAsset, "set clip(s) target position");
-
-                    if(clipAsset.template.aspectRatioBreakpoints.Count > 0) {
-                        int breakpointIndex = Utils.GetValueIndexInList(currentAspectRatio.value, clipAsset.template.aspectRatioBreakpoints);
-                        Utils.ExpandList(clipAsset.template.breakpointTargetPosition, breakpointIndex);
-                        clipAsset.template.breakpointTargetPosition[breakpointIndex] = targetValue;
-                    } else {
-                        clipAsset.template.breakpointTargetPosition[0] = targetValue;
-                    }
-
-                    clipAsset.template.ExecuteResponsiveAction();
+                    clipAsset.template.SaveNewTargetValue(targetValue);
                 }
             }
 
@@ -375,12 +358,12 @@ namespace AltSalt
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ResponsiveRectTransformPosClip) {
+                if (clipSelection[i].parentTrack is ResponsiveRectTransformPosTrack) {
                     changedClips.Add(clipSelection[i]);
-                    ResponsiveRectTransformPosClip clipAsset = clipSelection[i].asset as ResponsiveRectTransformPosClip;
+                    ResponsiveVector3Clip clipAsset = clipSelection[i].asset as ResponsiveVector3Clip;
                     Undo.RecordObject(clipAsset, "transpose clip(s) target position");
-                    Vector3 originalPosition = clipAsset.template.targetPosition;
-                    clipAsset.template.targetPosition = new Vector3(originalPosition.x + transposeValue.x, originalPosition.y + transposeValue.y, originalPosition.z + transposeValue.z);
+                    Vector3 originalPosition = clipAsset.template.GetTargetValueAtBreakpoint(currentAspectRatio.value);
+                    clipAsset.template.SaveNewTargetValue(new Vector3(originalPosition.x + transposeValue.x, originalPosition.y + transposeValue.y, originalPosition.z + transposeValue.z));
                 }
             }
 
@@ -394,12 +377,12 @@ namespace AltSalt
             Vector3 newValue = sourceValue;
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ResponsiveRectTransformPosClip) {
+                if (clipSelection[i].parentTrack is ResponsiveRectTransformPosTrack) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    ResponsiveRectTransformPosClip clipAsset = clipSelection[i].asset as ResponsiveRectTransformPosClip;
+                    ResponsiveVector3Clip clipAsset = clipSelection[i].asset as ResponsiveVector3Clip;
                     Undo.RecordObject(clipAsset, "set clip(s) target interval position");
-                    clipAsset.template.targetPosition = sourceValue;
+                    clipAsset.template.SaveNewTargetValue(sourceValue);
                     sourceValue += interval;
                 }
             }

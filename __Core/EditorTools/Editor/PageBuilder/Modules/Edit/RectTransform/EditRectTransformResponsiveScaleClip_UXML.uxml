@@ -12,12 +12,16 @@ xsi:schemaLocation="
 "
 >
 
-    <engine:VisualElement class="section-container" name="edit-rect-transform-scale-clip">
+    <engine:VisualElement class="section-container" name="edit-rect-transform-responsive-scale-clip">
         
-        <engine:Foldout class="foldout toggleable-group" text="Rect Transform Scale Clip" value="true" name="EditRectTransformScaleClip">
+        <engine:Foldout class="foldout toggleable-group" text="Rect Transform Responsive Scale Clip" value="true" name="EditRectTransformResponsiveScaleClip">
             <engine:VisualElement class="section">
 
-                 <!-- Initial Scale -->
+               <engine:VisualElement class="section___content">
+                    <editor:FloatField label="Aspect Ratio : " class="col-full" name="CurrentAspectRatio"/>
+                </engine:VisualElement>
+
+                <!-- Responsive Init Scale -->
 
                 <engine:VisualElement class="section___content">
                     <engine:Label class="bold" text="initial scale" />
@@ -31,7 +35,7 @@ xsi:schemaLocation="
                     <engine:Button text="Set" class="col-full" name="SetInitialValue" />
                 </engine:VisualElement>
 
-                <!-- Target Scale -->
+                <!-- Responsive Target Scale -->
 
                 <engine:VisualElement class="section___content">
                     <engine:Label class="bold" text="target scale" />

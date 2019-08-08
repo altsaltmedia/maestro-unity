@@ -9,20 +9,25 @@ https://www.altsalt.com / ricky@altsalt.com
 using UnityEngine;
 using UnityEngine.Timeline;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 namespace AltSalt
 {    
     [HideInMenu]
     public class ResponsiveLerpToTargetTrack : TrackAsset {
 
-        public void StoreClipProperties()
+        public void StoreClipProperties(GameObject directorObject)
         {
             foreach (var clip in GetClips()) {
                 var myAsset = clip.asset as ResponsiveLerpToTargetClip;
                 if (myAsset) {
                     myAsset.startTime = clip.start;
                     myAsset.endTime = clip.end;
+#if UNITY_EDITOR
+                    myAsset.appSettings = Utils.GetAppSettings();
+#endif
                     myAsset.parentTrack = this;
+                    myAsset.directorObject = directorObject;
                 }
             }
         }
@@ -30,7 +35,7 @@ namespace AltSalt
         // This method should be overridden in child classes
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipProperties();
+            StoreClipProperties(go);
             return ScriptPlayable<ResponsiveLerpToTargetMixerBehaviour>.Create(graph, inputCount);
         }
 
