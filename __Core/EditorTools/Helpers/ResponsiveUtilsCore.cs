@@ -65,6 +65,11 @@ namespace AltSalt
                         ResponsiveVector3Clip clipAsset = responsiveLerpToTargetClip as ResponsiveVector3Clip;
                         return clipAsset.template;
                     }
+
+                case nameof(ResponsiveFloatClip): {
+                        ResponsiveFloatClip clipAsset = responsiveLerpToTargetClip as ResponsiveFloatClip;
+                        return clipAsset.template;
+                    }
             }
 
             return null;
@@ -78,6 +83,11 @@ namespace AltSalt
                         ResponsiveVector3Behaviour behaviourInstance = responsiveBehaviour as ResponsiveVector3Behaviour;
                         return behaviourInstance.clipAsset;
                     }
+
+                case nameof(ResponsiveFloatBehaviour): {
+                        ResponsiveFloatBehaviour behaviourInstance = responsiveBehaviour as ResponsiveFloatBehaviour;
+                        return behaviourInstance.clipAsset;
+                    }
             }
 
             return null;
@@ -85,11 +95,15 @@ namespace AltSalt
 
         public static TrackAsset GetParentTrackFromResponsiveBehaviour(ResponsiveLerpToTargetBehaviour responsiveBehaviour)
         {
-
             switch (responsiveBehaviour.GetType().Name) {
 
                 case nameof(ResponsiveVector3Behaviour): {
                         ResponsiveVector3Behaviour behaviourInstance = responsiveBehaviour as ResponsiveVector3Behaviour;
+                        return behaviourInstance.parentTrack;
+                    }
+
+                case nameof(ResponsiveFloatBehaviour): {
+                        ResponsiveFloatBehaviour behaviourInstance = responsiveBehaviour as ResponsiveFloatBehaviour;
                         return behaviourInstance.parentTrack;
                     }
             }

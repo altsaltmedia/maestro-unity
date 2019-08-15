@@ -5,14 +5,14 @@ using TMPro;
 
 namespace AltSalt
 {
-    [TrackColor(0.6981132f, 0f, 0.1065063f)]
-    [TrackClipType(typeof(TMProCharSpacingClip))]
+    [TrackColor(0.2981132f, 0.5f, 0.1065063f)]
+    [TrackClipType(typeof(ResponsiveFloatClip))]
     [TrackBindingType(typeof(TMP_Text))]
-    public class TMProCharSpacingTrack : LerpToTargetTrack
+    public class TMProCharSpacingTrack : ResponsiveLerpToTargetTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipStartEndTime();
+            StoreClipProperties(go);
             return ScriptPlayable<TMProCharSpacingMixerBehaviour>.Create (graph, inputCount);
         }
 

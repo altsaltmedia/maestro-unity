@@ -476,12 +476,17 @@ namespace AltSalt
 
                     pastedClip.duration = trackClip.duration;
                     pastedClip.start = trackClip.start;
-
+                    
                     Type assetType = pastedClip.asset.GetType();
                     FieldInfo[] assetFields = assetType.GetFields();
 
+                    // Need to create a copy of the asset, otherwise the new clip
+                    // will use references to the old clip's asset values
+                    var trackClipAssetCopy = Instantiate(trackClip.asset);
+
                     foreach (FieldInfo assetField in assetFields) {
-                        assetField.SetValue(pastedClip.asset, assetField.GetValue(trackClip.asset));
+
+                        assetField.SetValue(pastedClip.asset, assetField.GetValue(trackClipAssetCopy));                        
                     }
                 }
             }

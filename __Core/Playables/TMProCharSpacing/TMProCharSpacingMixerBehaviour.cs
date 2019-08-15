@@ -4,11 +4,11 @@ using TMPro;
 
 namespace AltSalt
 {
-    public class TMProCharSpacingMixerBehaviour : LerpToTargetMixerBehaviour
+    public class TMProCharSpacingMixerBehaviour : ResponsiveLerpToTargetMixerBehaviour
     {
         TMP_Text trackBinding;
-        ScriptPlayable<TMProCharSpacingBehaviour> inputPlayable;
-        TMProCharSpacingBehaviour input;
+        ScriptPlayable<ResponsiveFloatBehaviour> inputPlayable;
+        ResponsiveFloatBehaviour input;
         TMP_Text trackBindingComponent;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
@@ -23,7 +23,7 @@ namespace AltSalt
             for (int i = 0; i < inputCount; i++)
             {
                 inputWeight = playable.GetInputWeight(i);
-                inputPlayable = (ScriptPlayable<TMProCharSpacingBehaviour>)playable.GetInput(i);
+                inputPlayable = (ScriptPlayable<ResponsiveFloatBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
                 
                 trackBindingComponent = trackBinding.GetComponent<TMP_Text>();
