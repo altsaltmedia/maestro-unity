@@ -20,6 +20,8 @@ MonoBehaviour:
   logListenersOnRaise: 0
   DeveloperDescription: 
   requiredParameters:
-  - description: AudioClipBundle containing audio clip
+  - description: AudioClipBundle containing audio clip to fade out
     dataType: 4
+    customKey: 0
+    eventPayloadKey: {fileID: 0}
   optionalParameters: []

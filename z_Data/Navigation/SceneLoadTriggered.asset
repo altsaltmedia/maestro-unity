@@ -24,6 +24,10 @@ MonoBehaviour:
   requiredParameters:
   - description: Scene name to load
     dataType: 0
+    customKey: 0
+    eventPayloadKey: {fileID: 0}
   optionalParameters:
   - description: Should the scene load additively?
     dataType: 2
+    customKey: 0
+    eventPayloadKey: {fileID: 0}

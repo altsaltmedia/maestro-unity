@@ -23,7 +23,9 @@ using UnityEngine.Timeline;
 
 namespace AltSalt
 {
-    public enum DimensionType { Vertical, Horizontal }
+	public enum FadeType { FadeIn, FadeOut }
+
+	public enum DimensionType { Vertical, Horizontal }
 
     public enum AspectRatioType { x16x9, x9x16, x4x3, x3x4, Dynamic }
 

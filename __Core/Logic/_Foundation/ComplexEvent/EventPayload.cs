@@ -50,7 +50,7 @@ namespace AltSalt
             EventPayload payloadInstance = Init();
 
             if(value is string) {
-                payloadInstance.objectDictionary[DataType.systemObjectType] = (string)value;
+                payloadInstance.stringDictionary[DataType.stringType] = (string)value;
 
             } else if (value is float) {
                 payloadInstance.floatDictionary[DataType.floatType] = (float)value;
@@ -131,7 +131,7 @@ namespace AltSalt
         {
             if (value is string) {
 
-                objectDictionary[DataType.systemObjectType] = (string)value;
+                stringDictionary[DataType.stringType] = (string)value;
 
             } else if (value is float) {
 
@@ -155,7 +155,7 @@ namespace AltSalt
         {
             if (value is string) {
 
-                objectDictionary[key] = (string)value;
+                stringDictionary[key] = (string)value;
 
             } else if (value is float) {
 

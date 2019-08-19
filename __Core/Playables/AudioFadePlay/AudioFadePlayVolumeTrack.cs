@@ -7,7 +7,6 @@ namespace AltSalt
 {
     [TrackColor(0.245149f, 0.595372f, 0.1679245f)]
     [TrackClipType(typeof(AudioFadePlayVolumeClip))]
-    [TrackBindingType(typeof(AudioSource))]
     public class AudioFadePlayVolumeTrack : LerpToTargetTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)

@@ -17,10 +17,13 @@ namespace AltSalt
         [SerializeField]
         EventPayloadKey loopAudioKey;
 
+        [SerializeField]
+        EventPayloadKey volumeKey;
+
         public void PlayAudioClip(EventPayload eventPayload)
         {
             AudioClipBundle audioClipBundle = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
-            for (int i = 0; i < audioClipBundle.audioClips.Count; i++) {
+            for (int i = 0; i < audioClipBundle.audioClipData.Count; i++) {
 
                 bool loopClip = false;
 
@@ -28,7 +31,13 @@ namespace AltSalt
                     loopClip = true;
                 }
 
-                AudioElement audioElement = new AudioElement(audioPrefab, transform, audioClipBundle.audioClips[i], loopClip, audioClipBundle);
+                float volume = 1f;
+
+                if (Equals(eventPayload.GetFloatValue(volumeKey), -1f) == false) {
+                    volume = eventPayload.GetFloatValue(volumeKey);
+                }
+
+                AudioElement audioElement = new AudioElement(audioPrefab, transform, audioClipBundle.audioClipData[i], loopClip, volume, audioClipBundle);
                 audioElements.Add(audioElement);
             }
         }
@@ -51,14 +60,16 @@ namespace AltSalt
             public AudioSource audioSource;
             public AudioClipBundle audioClipBundle;
 
-            public AudioElement(GameObject audioPrefab, Transform parent, AudioClip audioClip, bool loop, AudioClipBundle referenceBundle)
+            public AudioElement(GameObject audioPrefab, Transform parent, AudioClipData audioClipData, bool loop, float volume, AudioClipBundle referenceBundle)
             {
                 audioSourceObject = Instantiate(audioPrefab);
                 audioSourceObject.transform.SetParent(parent.transform);
 
                 audioSource = audioSourceObject.GetComponent<AudioSource>();
-                audioSource.clip = audioClip;
+                audioSource.clip = audioClipData.audioClip;
+                audioSource.outputAudioMixerGroup = audioClipData.targetMixerGroup;
                 audioSource.loop = loop;
+                audioSource.volume = volume;
                 audioSource.Play();
                 audioClipBundle = referenceBundle;
             }

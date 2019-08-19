@@ -49,6 +49,7 @@ MonoBehaviour:
     type: 3}
   audioElements: []
   loopAudioKey: {fileID: 11400000, guid: 1ebc7f3fa274d463a8256066c48e2089, type: 2}
+  volumeKey: {fileID: 11400000, guid: 8b9af6247445a4d8d89fb45f6fa8e470, type: 2}
 --- !u!114 &1665444724315265665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,6 +80,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &1665444724871226524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,3 +111,4 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0

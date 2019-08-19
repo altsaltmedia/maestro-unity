@@ -6,7 +6,6 @@ namespace AltSalt
 {    
     public class AudioFadePlayVolumeMixerBehaviour : LerpToTargetMixerBehaviour
     {
-        AudioSource trackBinding;
         ScriptPlayable<AudioFadePlayVolumeBehaviour> inputPlayable;
         AudioFadePlayVolumeBehaviour input;
 
@@ -19,11 +18,6 @@ namespace AltSalt
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            trackBinding = playerData as AudioSource;
-            
-            if (!trackBinding)
-                return;
-            
             inputCount = playable.GetInputCount ();
             
             for (int i = 0; i < inputCount; i++)
@@ -31,27 +25,32 @@ namespace AltSalt
                 inputWeight = playable.GetInputWeight(i);
                 inputPlayable = (ScriptPlayable<AudioFadePlayVolumeBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
-                
-                if (inputWeight >= 1f) {
-                    doubleModifier = inputPlayable.GetTime() / inputPlayable.GetDuration();
-                    trackBinding.volume = Mathf.Lerp(0, 1, (float)DoubleEasingFunction(0f, 1f, doubleModifier));
-                } else {
-                    if (currentTime >= input.endTime) {
-                        if(trackBinding.isPlaying == false) {
-                            trackBinding.Play();
+
+                for(int q=0; q < input.targetAudioSources.Count; q++) {
+
+                    AudioSource audioSource = input.targetAudioSources[q];
+
+                    if (inputWeight >= 1f) {
+                        doubleModifier = inputPlayable.GetTime() / inputPlayable.GetDuration();
+                        audioSource.volume = Mathf.Lerp(0, 1, (float)DoubleEasingFunction(0f, 1f, doubleModifier));
+                    } else {
+                        if (currentTime >= input.endTime) {
+                            if(audioSource.isPlaying == false) {
+                                audioSource.volume = 1;
+                                audioSource.Play();
+                            }
+                        } else if (i == 0 && currentTime <= input.startTime) {
+                            audioSource.volume = 0;
+                            audioSource.Stop();
                         }
                     }
-                    else if (i == 0 && currentTime <= input.startTime) {
-                        trackBinding.volume = 0;
-                        trackBinding.Stop();
+
+    #if UNITY_EDITOR
+                    if (input.debugCurrentVolume == true) {
+                        Debug.Log("Current volume: " + audioSource.volume.ToString("F4"));
                     }
                 }
-
-#if UNITY_EDITOR
-                if (input.debugCurrentVolume == true) {
-                    Debug.Log("Current volume: " + trackBinding.volume.ToString("F4"));
-                }
-#endif
+    #endif
             }
         }
         
@@ -61,9 +60,15 @@ namespace AltSalt
 
             // Reset color if we're working in edit mode
 #if UNITY_EDITOR
-            if (trackBinding != null) {
-                trackBinding.time = 0;
-                trackBinding.volume = 0;
+            if (input != null) {
+                for (int q = 0; q < input.targetAudioSources.Count; q++) {
+                    AudioSource audioSource = input.targetAudioSources[q];
+                    if(audioSource != null) {
+                        audioSource.Stop();
+                        audioSource.time = 0;
+                        audioSource.volume = 0;
+                    }
+                }
             }
 #endif
 

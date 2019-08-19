@@ -22,12 +22,15 @@ namespace AltSalt
     public class TextLoader : MonoBehaviour
     {
         [Required]
-        public AppSettings appSettings;
+        [SerializeField]
+        AppSettings appSettings;
 
         [Required]
-        public ModifySettings modifySettings;
+        [SerializeField]
+        ModifySettings modifySettings;
 
         [Required]
+        [SerializeField]
         public string key;
 
         [Required]

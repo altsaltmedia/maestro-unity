@@ -19,6 +19,7 @@ namespace AltSalt
         // This is here for implementation reference only. DO NOT attempt to use or access this when
         // creating subclasses; it won't work. Instead, create a new instance of your behaviour in question.
         private LerpToTargetBehaviour template = new LerpToTargetBehaviour();
+
         public double startTime;
         public double endTime;
 

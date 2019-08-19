@@ -15,9 +15,9 @@ MonoBehaviour:
   registrationNotice: This object and its dependents will be registered whenever the
     RegisterDependencies tool is used.
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  logCallersOnRaise: 0
+  logCallersOnRaise: 1
   logListenersOnRegister: 0
-  logListenersOnRaise: 0
+  logListenersOnRaise: 1
   DeveloperDescription: Event used by the bootstrapper to trigger the initial scene
     load
   requiredParameters:

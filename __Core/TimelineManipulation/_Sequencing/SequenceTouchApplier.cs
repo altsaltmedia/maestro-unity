@@ -103,16 +103,16 @@ namespace AltSalt
                         }
 
 #if UNITY_ANDROID
-                        if (sequenceList.sequences[i].VideoSequenceActive == true) {
+                        if (sequenceLists[q].sequences[i].VideoSequenceActive == true) {
                             if (internalIsReversingVal != isReversing.Value) {
                                 internalIsReversingVal = isReversing.Value;
-                                StartCoroutine(PauseSequence(sequenceList.sequences[i], swipeModifier));
+                                StartCoroutine(PauseSequence(sequenceLists[q].sequences[i], swipeModifier));
                             } else {
-                                sequenceList.sequences[i].ModifySequenceTime(swipeModifier);
+                                sequenceLists[q].sequences[i].ModifySequenceTime(swipeModifier);
                                 sequenceModified.RaiseEvent(this.gameObject);
                             }
                         } else {
-                            sequenceList.sequences[i].ModifySequenceTime(swipeModifier);
+                            sequenceLists[q].sequences[i].ModifySequenceTime(swipeModifier);
                             sequenceModified.RaiseEvent(this.gameObject);
                         }
 #else
@@ -133,7 +133,7 @@ namespace AltSalt
 
                     if (sequenceLists[q].sequences[i].Active == true && sequenceLists[q].sequences[i].pauseMomentumActive == false || appSettings.pauseMomentum.Value == false) {
 #if UNITY_ANDROID
-                        if(sequenceList.sequences[i].MomentumDisabled == true) {
+                        if(sequenceLists[q].sequences[i].MomentumDisabled == true) {
                             return;
                         }
 #endif

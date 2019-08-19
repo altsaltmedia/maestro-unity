@@ -22,4 +22,10 @@ MonoBehaviour:
   requiredParameters:
   - description: AudioClipBundle containing audio clip
     dataType: 4
-  optionalParameters: []
+    customKey: 0
+    eventPayloadKey: {fileID: 0}
+  optionalParameters:
+  - description: Whether to loop the audio
+    dataType: 2
+    customKey: 1
+    eventPayloadKey: {fileID: 11400000, guid: 1ebc7f3fa274d463a8256066c48e2089, type: 2}

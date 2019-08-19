@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace AltSalt
 {
@@ -13,9 +15,19 @@ namespace AltSalt
         [Header("Audio Clip Bundle")]
         string description = "";
 #endif
+        [SerializeField]
+        public List<AudioClipData> audioClipData = new List<AudioClipData>();
+    }
+
+    [Serializable]
+    public class AudioClipData
+    {
+        [SerializeField]
+        public AudioClip audioClip;
 
         [SerializeField]
-        public List<AudioClip> audioClips = new List<AudioClip>();
+        public AudioMixerGroup targetMixerGroup;
 
     }
+
 }

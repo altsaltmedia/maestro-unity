@@ -24,6 +24,10 @@ MonoBehaviour:
   requiredParameters:
   - description: Language or Layout
     dataType: 4
+    customKey: 0
+    eventPayloadKey: {fileID: 0}
   optionalParameters:
   - description: Language or Layout
     dataType: 4
+    customKey: 0
+    eventPayloadKey: {fileID: 0}
