@@ -268,5 +268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4395b367f14c646888d5e8b873142270, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxColor: {r: 0.98039216, g: 0.6439562, b: 0, a: 1}
-  drawBoxWhenNotSelected: 0
+  drawWhenNotSelected: 0
+  transformBoxColor: {r: 0.13216448, g: 0.8490566, b: 0.79440635, a: 1}
+  textBoxColor: {r: 1, g: 0.67534244, b: 0, a: 1}

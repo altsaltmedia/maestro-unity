@@ -191,7 +191,7 @@ namespace AltSalt
                 return floatDictionary[key];
             } else {
                 Debug.Log("Key for float value not found in EventPayload");
-                return -1f;
+                return float.NaN;
             }
         }
 

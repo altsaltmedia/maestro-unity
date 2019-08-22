@@ -17,6 +17,11 @@ namespace AltSalt
         };
 
         public bool Active = false;
+
+        public void SetStatus(bool targetStatus)
+        {
+            Active = targetStatus;
+        }
 	}
 
 }

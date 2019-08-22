@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.Video;
 
@@ -8,10 +7,14 @@ namespace AltSalt
 #if UNITY_EDITOR
     [ExecuteInEditMode]
 #endif
+    [RequireComponent(typeof(VideoPlayer))]
     public class PlayableVideoPlayer : MonoBehaviour
     {
         VideoPlayer videoPlayer;
         public float initialTime;
+
+        [SerializeField]
+        SimpleEventTrigger videoCompleteCallback;
 
         MeshRenderer meshRenderer;
 
@@ -21,15 +24,21 @@ namespace AltSalt
             GetMeshRenderer();
             videoPlayer.prepareCompleted += SetInitialTime;
             videoPlayer.sendFrameReadyEvents = true;
-            videoPlayer.frameReady += TriggerUpdateMaterial;
+            videoPlayer.frameReady += TriggerUpdateMaterial;    
+            videoPlayer.loopPointReached += VideoComplete;
             videoPlayer.Prepare();
         }
-
 
         void SetInitialTime(VideoPlayer param)
         {
             videoPlayer.StepForward();
             videoPlayer.time = initialTime;
+        }
+
+        public void SetCurrentTime(float targetTime)
+        {
+            videoPlayer.StepForward();
+            videoPlayer.time = targetTime;
         }
 
         void GetVideoPlayer()
@@ -49,6 +58,13 @@ namespace AltSalt
         void TriggerUpdateMaterial(VideoPlayer param, long frameId)
         {
             meshRenderer.sharedMaterial.mainTexture = videoPlayer.texture;
+        }
+
+        void VideoComplete(VideoPlayer src)
+        {
+            if(videoCompleteCallback.SimpleEventTarget != null) {
+                videoCompleteCallback.RaiseEvent(this.gameObject);
+            }
         }
 
 #if UNITY_EDITOR
@@ -75,6 +91,7 @@ namespace AltSalt
         public void PlayVideo()
         {
             GetVideoPlayer();
+            videoPlayer.StepForward();
             videoPlayer.Play();
         }
 
@@ -95,12 +112,7 @@ namespace AltSalt
         }
 
 #endif
-        private static bool IsPopulated(IntReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-
-        private static bool IsPopulated(BoolReference attribute)
+        private static bool IsPopulated(SimpleEventTrigger attribute)
         {
             return Utils.IsPopulated(attribute);
         }

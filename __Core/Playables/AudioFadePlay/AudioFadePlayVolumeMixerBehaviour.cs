@@ -49,8 +49,8 @@ namespace AltSalt
                     if (input.debugCurrentVolume == true) {
                         Debug.Log("Current volume: " + audioSource.volume.ToString("F4"));
                     }
-                }
     #endif
+                }
             }
         }
         

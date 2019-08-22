@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6cfefc9189b422d8e558b5019449b3, type: 3}
-  m_Name: OnTouchStart
+  m_Script: {fileID: 11500000, guid: df7551c54cc6d4969a45a8d769935a8e, type: 3}
+  m_Name: PlayOneShot
   m_EditorClassIdentifier: 
   registrationNotice: This object and its dependents will be registered whenever the
     RegisterDependencies tool is used.
@@ -18,6 +18,14 @@ MonoBehaviour:
   logCallersOnRaise: 0
   logListenersOnRegister: 0
   logListenersOnRaise: 0
-  DeveloperDescription: SwipeMonitor registers this event as soon as a user touches
-    the screen.
-  associatedVariables: []
+  DeveloperDescription: 
+  requiredParameters:
+  - description: AudioClipBundle containing audio clip
+    dataType: 4
+    customKey: 0
+    eventPayloadKey: {fileID: 0}
+  optionalParameters:
+  - description: Whether to randomize volume
+    dataType: 2
+    customKey: 0
+    eventPayloadKey: {fileID: 0}

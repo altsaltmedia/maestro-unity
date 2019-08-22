@@ -85,7 +85,12 @@ namespace AltSalt
         public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
-            SetValue(breakpointIndex);
+
+            if(HasBreakpoints == true) {
+                SetValue(breakpointIndex);
+            } else {
+                SetValue(0);
+            }
         }
 
         void SetValue(int activeIndex)

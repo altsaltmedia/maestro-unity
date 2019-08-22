@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
 namespace AltSalt
 {
+    [RequireComponent(typeof(AudioSource))]
     public class AudioSourceController : MonoBehaviour
     {
         [SerializeField]
@@ -20,6 +20,13 @@ namespace AltSalt
         [SerializeField]
         EventPayloadKey volumeKey;
 
+        AudioSource oneShotHandler;
+
+        void Start()
+        {
+            oneShotHandler = GetComponent<AudioSource>();
+        }
+
         public void PlayAudioClip(EventPayload eventPayload)
         {
             AudioClipBundle audioClipBundle = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
@@ -33,12 +40,27 @@ namespace AltSalt
 
                 float volume = 1f;
 
-                if (Equals(eventPayload.GetFloatValue(volumeKey), -1f) == false) {
+                if (float.IsNaN(eventPayload.GetFloatValue(volumeKey)) == false) {
                     volume = eventPayload.GetFloatValue(volumeKey);
                 }
 
                 AudioElement audioElement = new AudioElement(audioPrefab, transform, audioClipBundle.audioClipData[i], loopClip, volume, audioClipBundle);
                 audioElements.Add(audioElement);
+            }
+        }
+
+        public void PlayOneShot(EventPayload eventPayload)
+        {
+            AudioClipBundle audioClipBundle = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
+            for (int i = 0; i < audioClipBundle.audioClipData.Count; i++) {
+
+                float volume = 1f;
+
+                if (eventPayload.GetBoolValue(DataType.boolType) == true) {
+                    volume = UnityEngine.Random.Range(.25f, 1f);
+                }
+
+                oneShotHandler.PlayOneShot(audioClipBundle.audioClipData[i].audioClip, volume);
             }
         }
 

@@ -15,9 +15,8 @@ GameObject:
   - component: {fileID: 114137983989975432}
   - component: {fileID: 114156328160024268}
   - component: {fileID: 114632566213413860}
-  - component: {fileID: 114172397158448126}
   m_Layer: 0
-  m_Name: Timeline Transparent Video
+  m_Name: TimelineTransparentVideo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,6 +74,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -146,16 +146,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialTime: 0
-  bufferSequenceCompleted: {fileID: 11400000, guid: e272e4de87f5f4c4eb6f590f9c104553,
-    type: 2}
-  bufferStepInterval:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 3fdb95174e2274ecfb2f49c2761d52d5, type: 2}
-  bufferPlayback:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: a98dc1467157e403f969efbf1783622e, type: 2}
+  playOnPrepareComplete: 1
+  videoCompleteCallback:
+    simpleEvent: {fileID: 0}
 --- !u!114 &114632566213413860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,8 +161,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49cb2841b4d754f0fb172debd39466ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshRenderers:
+  - {fileID: 23555264733359084}
+  materialInstances: []
   targetMaterialAttributes:
-  - targetAttributeName: _Opacity
+  - targetAttributeName: _Color
     materialType: 0
     _Color:
       UseConstant: 0
@@ -179,32 +175,3 @@ MonoBehaviour:
       UseConstant: 0
       ConstantValue: 0
       Variable: {fileID: 0}
---- !u!114 &114172397158448126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1105680655065532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: cf30205a07feb468ebdeddcc0e466607, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114156328160024268}
-        m_MethodName: BufferVideo
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null

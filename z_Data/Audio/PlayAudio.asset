@@ -29,3 +29,7 @@ MonoBehaviour:
     dataType: 2
     customKey: 1
     eventPayloadKey: {fileID: 11400000, guid: 1ebc7f3fa274d463a8256066c48e2089, type: 2}
+  - description: The volume of the clip
+    dataType: 1
+    customKey: 1
+    eventPayloadKey: {fileID: 11400000, guid: 8b9af6247445a4d8d89fb45f6fa8e470, type: 2}

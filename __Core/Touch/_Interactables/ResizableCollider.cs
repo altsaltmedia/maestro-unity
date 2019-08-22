@@ -7,6 +7,9 @@ namespace AltSalt
     [ExecuteInEditMode]
     public abstract class ResizableCollider : InteractableRectTransform
     {
+        [SerializeField]
+        protected Color boxColor = new Color(1, 1, 1, 1);
+
         protected override void Start()
         {
             base.Start();

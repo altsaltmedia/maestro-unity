@@ -36,15 +36,17 @@ namespace AltSalt {
             get;
         }
 
-        List<float> AddBreakpoint(float targetBreakpoint);
-
         bool LogElementOnLayoutUpdate {
             get;
         }
 
         void CallExecuteLayoutUpdate(UnityEngine.Object callerObject);
 
+#if UNITY_EDITOR
+        List<float> AddBreakpoint(float targetBreakpoint);
         string LogAddBreakpointMessage(float targetBreakpoint);
+#endif
+
     }
 
 }

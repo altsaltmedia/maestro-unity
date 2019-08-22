@@ -5,6 +5,7 @@ using UnityEngine;
 namespace AltSalt
 {
     [ExecuteInEditMode]
+    [RequireComponent(typeof(BoxCollider2D))]
     public class ResizableBoxCollider2D : ResizableCollider
     {
         protected BoxCollider2D boxCollider;
@@ -21,5 +22,12 @@ namespace AltSalt
             Vector2 newSize = new Vector2(rectTransform.sizeDelta.x, rectTransform.sizeDelta.y);
             boxCollider.size = newSize;
         }
+
+        void Reset()
+        {
+            GetCollider();
+            boxCollider.offset = new Vector2(0, 0);
+        }
+
     }
 }

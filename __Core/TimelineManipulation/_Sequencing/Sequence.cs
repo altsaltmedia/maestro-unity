@@ -22,6 +22,7 @@ namespace AltSalt
 
         public double currentTime = 0f;
 
+        [SerializeField]
         protected double defaultTime;
 
         public bool Invert = false;

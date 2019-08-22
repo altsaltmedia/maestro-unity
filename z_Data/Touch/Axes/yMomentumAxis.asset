@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: yMomentumAxis
   m_EditorClassIdentifier: 
   Name: y
-  Active: 1
+  Active: 0

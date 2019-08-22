@@ -14,6 +14,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt
 {
     [CreateAssetMenu(menuName = "AltSalt/Color Variable")]
+    [ExecuteInEditMode]
     public class ColorVariable : VariableBase
     {
 #if UNITY_EDITOR
@@ -36,6 +37,16 @@ namespace AltSalt
         public void SetValue(ColorVariable value)
         {
             Value = value.Value;
+        }
+
+        public void SetTransparent()
+        {
+            Value = new Color(0, 0, 0, 0);
+        }
+
+        public void SetOpaque()
+        {
+            Value = new Color(1, 1, 1, 1);
         }
 
         public void SetDefaultValue()
