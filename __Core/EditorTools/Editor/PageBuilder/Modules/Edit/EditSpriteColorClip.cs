@@ -53,9 +53,13 @@ namespace AltSalt
             PopulateInitialValueFromSelection,
             PopulateInitialValueFromTarget,
             SetInitialValue,
+            SetInitialTransparent,
+            SetInitialOpaque,
             PopulateTargetValueFromSelection,
             PopulateTargetValueFromInit,
-            SetTargetValue
+            SetTargetValue,
+            SetTargetTransparent,
+            SetTargetOpaque
         }
 
         void UpdateDisplay()
@@ -126,6 +130,21 @@ namespace AltSalt
                     };
                     break;
 
+
+                case nameof(ButtonNames.SetInitialTransparent):
+                    button.clickable.clicked += () => {
+                        SetInitialAlpha(TimelineEditor.selectedClips, 0);
+                        TimelineUtilsCore.RefreshTimelineContentsModified();
+                    };
+                    break;
+
+                case nameof(ButtonNames.SetInitialOpaque):
+                    button.clickable.clicked += () => {
+                        SetInitialAlpha(TimelineEditor.selectedClips, 1);
+                        TimelineUtilsCore.RefreshTimelineContentsModified();
+                    };
+                    break;
+
                 case nameof(ButtonNames.PopulateTargetValueFromSelection):
                     button.clickable.clicked += () => {
                         populateButtonPressed = true;
@@ -143,6 +162,20 @@ namespace AltSalt
                 case nameof(ButtonNames.SetTargetValue):
                     button.clickable.clicked += () => {
                         SetTargetValue(TimelineEditor.selectedClips, targetValue);
+                        TimelineUtilsCore.RefreshTimelineContentsModified();
+                    };
+                    break;
+
+                case nameof(ButtonNames.SetTargetTransparent):
+                    button.clickable.clicked += () => {
+                        SetTargetAlpha(TimelineEditor.selectedClips, 0);
+                        TimelineUtilsCore.RefreshTimelineContentsModified();
+                    };
+                    break;
+
+                case nameof(ButtonNames.SetTargetOpaque):
+                    button.clickable.clicked += () => {
+                        SetTargetAlpha(TimelineEditor.selectedClips, 1);
                         TimelineUtilsCore.RefreshTimelineContentsModified();
                     };
                     break;
@@ -183,6 +216,24 @@ namespace AltSalt
             return changedClips.ToArray();
         }
 
+        public static TimelineClip[] SetInitialAlpha(TimelineClip[] clipSelection, float targetValue)
+        {
+            List<TimelineClip> changedClips = new List<TimelineClip>();
+
+            for (int i = 0; i < clipSelection.Length; i++) {
+                if (clipSelection[i].asset is SpriteColorClip) {
+                    TimelineClip clip = clipSelection[i];
+                    changedClips.Add(clip);
+                    SpriteColorClip clipAsset = clipSelection[i].asset as SpriteColorClip;
+                    Undo.RecordObject(clipAsset, "set clip(s) initial color");
+                    Color originalColor = clipAsset.template.initialColor;
+                    clipAsset.template.initialColor = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
+                }
+            }
+
+            return changedClips.ToArray();
+        }
+
         public static Color GetTargetValueFromSelection(TimelineClip[] clipSelection)
         {
             Color value = new Color(0, 0, 0, 0);
@@ -209,6 +260,24 @@ namespace AltSalt
                     SpriteColorClip clipAsset = clipSelection[i].asset as SpriteColorClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target color");
                     clipAsset.template.targetColor = targetValue;
+                }
+            }
+
+            return changedClips.ToArray();
+        }
+
+        public static TimelineClip[] SetTargetAlpha(TimelineClip[] clipSelection, float targetValue)
+        {
+            List<TimelineClip> changedClips = new List<TimelineClip>();
+
+            for (int i = 0; i < clipSelection.Length; i++) {
+                if (clipSelection[i].asset is SpriteColorClip) {
+                    TimelineClip clip = clipSelection[i];
+                    changedClips.Add(clip);
+                    SpriteColorClip clipAsset = clipSelection[i].asset as SpriteColorClip;
+                    Undo.RecordObject(clipAsset, "set clip(s) target color");
+                    Color originalColor = clipAsset.template.targetColor;
+                    clipAsset.template.targetColor = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
                 }
             }
 

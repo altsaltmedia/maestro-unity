@@ -7,6 +7,8 @@ namespace AltSalt
     [System.Serializable]
     public class StartEndThreshold
     {
+        [SerializeField]
+        string description;
         public double startTime;
         public double endTime;
         public bool isVideoSequence = false;
@@ -26,31 +28,60 @@ namespace AltSalt
         protected double defaultTime;
 
         public bool Invert = false;
-        [ReadOnly]
+
+        [TitleGroup("Autopopulated Fields")]
         public bool ForceForward = false;
-        [ReadOnly]
+
+        [TitleGroup("Autopopulated Fields")]
         public bool ForceBackward = false;
-        [ReadOnly]
+
+        [TitleGroup("Autopopulated Fields")]
         public bool VideoSequenceActive = false;
 
 #if UNITY_ANDROID
         [ReadOnly]
+        [TitleGroup("Android Dependencies")]
         public bool MomentumDisabled = false;
 #endif
+        // Autoplay
 
+        [TitleGroup("Autoplay")]
         public bool hasAutoplay = false;
-        [ShowIf("hasAutoplay")]
+        
+        [ShowIf(nameof(hasAutoplay))]
         [ReadOnly]
+        [TitleGroup("Autoplay")]
+        public bool isLerping = false;
+
+        [ShowIf(nameof(hasAutoplay))]
+        [TitleGroup("Autoplay")]
+        public float lerpInterval = .02f;
+
+        [ShowIf(nameof(hasAutoplay))]
+        [ReadOnly]
+        [TitleGroup("Autoplay")]
         public bool autoplayActive = false;
-        [ShowIf("hasAutoplay")]
+
+        [ShowIf(nameof(hasAutoplay))]
+        [TitleGroup("Autoplay")]
         public List<StartEndThreshold> autoplayThresholds = new List<StartEndThreshold>();
 
+
+        // Pause Momentum
+
+        [TitleGroup("Pause Momentum")]
         public bool hasPauseMomentum = false;
-        [ShowIf("hasPauseMomentum")]
+
+        [ShowIf(nameof(hasPauseMomentum))]
         [ReadOnly]
+        [TitleGroup("Pause Momentum")]
         public bool pauseMomentumActive = false;
-        [ShowIf("hasPauseMomentum")]
+
+        [ShowIf(nameof(hasPauseMomentum))]
+        [TitleGroup("Pause Momentum")]
         public List<StartEndThreshold> pauseMomentumThresholds = new List<StartEndThreshold>();
+
+        [PropertySpace(10)]
 
         void Start()
         {
@@ -73,6 +104,49 @@ namespace AltSalt
         {
             currentTime += timeModifier;
         }
+
+#if UNITY_EDITOR
+        [TitleGroup("Modify Time Thresholds Utils")]
+        [SerializeField]
+        public float modifyTargetStart;
+
+        [TitleGroup("Modify Time Thresholds Utils")]
+        [SerializeField]
+        public float modifyTargetEnd;
+
+        [TitleGroup("Modify Time Thresholds Utils")]
+        [ShowIf(nameof(hasAutoplay))]
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void ModifyAutoplayThresholds(float modifier)
+        {
+            for(int i=0; i<autoplayThresholds.Count; i++)
+            {
+                if(autoplayThresholds[i].startTime > modifyTargetStart && autoplayThresholds[i].startTime < modifyTargetEnd) {
+                    autoplayThresholds[i].startTime += modifier;
+                }
+
+                if (autoplayThresholds[i].endTime > modifyTargetStart && autoplayThresholds[i].endTime < modifyTargetEnd) {
+                    autoplayThresholds[i].endTime += modifier;
+                }
+            }
+        }
+
+        [TitleGroup("Modify Time Thresholds Utils")]
+        [ShowIf(nameof(hasPauseMomentum))]
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void ModifyPauseMomentumThresholds(float modifier)
+        {
+            for (int i = 0; i < pauseMomentumThresholds.Count; i++) {
+                if (pauseMomentumThresholds[i].startTime > modifyTargetStart && pauseMomentumThresholds[i].startTime < modifyTargetEnd) {
+                    pauseMomentumThresholds[i].startTime += modifier;
+                }
+
+                if (pauseMomentumThresholds[i].endTime > modifyTargetStart && pauseMomentumThresholds[i].endTime < modifyTargetEnd) {
+                    pauseMomentumThresholds[i].endTime += modifier;
+                }
+            }
+        }
+#endif
 
     }
 }

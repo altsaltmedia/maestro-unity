@@ -18,6 +18,11 @@ namespace AltSalt
         [HideInInspector]
         public bool triggered = false;
 
+        [HideInInspector]
+        public BoolReference isReversing;
+
+        public bool disableOnReverse;
+
         public List<ComplexEventTriggerPackager> complexEventTriggerPackagers;
     }
 }

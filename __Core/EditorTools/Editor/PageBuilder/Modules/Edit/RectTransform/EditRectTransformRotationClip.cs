@@ -39,7 +39,10 @@ namespace AltSalt
         }
 
         public Vector3 initialValue = new Vector3(0, 0, 0);
+        public Vector3 transposeInitialValue = new Vector3(0, 0, 0);
+
         public Vector3 targetValue = new Vector3(0, 0, 0);
+        public Vector3 transposeTargetValue = new Vector3(0, 0, 0);
 
         static bool populateButtonPressed = false;
 
@@ -47,6 +50,8 @@ namespace AltSalt
         {
             InitialValue,
             TargetValue,
+            TransposeInitialValue,
+            TransposeTargetValue
         }
 
 
@@ -89,6 +94,14 @@ namespace AltSalt
                     });
                     break;
 
+                case nameof(PropertyFieldNames.TransposeInitialValue):
+                    propertyField.RegisterCallback<ChangeEvent<Vector3>>((ChangeEvent<Vector3> evt) => {
+                        TransposeInitialValue(TimelineEditor.selectedClips, transposeInitialValue);
+                        transposeInitialValue = new Vector3(0, 0, 0);
+                        TimelineUtilsCore.RefreshTimelineContentsModified();
+                    });
+                    break;
+
                 case nameof(PropertyFieldNames.TargetValue):
                     propertyField.RegisterCallback<ChangeEvent<Vector3>>((ChangeEvent<Vector3> evt) => {
                         if (populateButtonPressed == false) {
@@ -96,6 +109,14 @@ namespace AltSalt
                             TimelineUtilsCore.RefreshTimelineContentsModified();
                         }
                         populateButtonPressed = false;
+                    });
+                    break;
+
+                case nameof(PropertyFieldNames.TransposeTargetValue):
+                    propertyField.RegisterCallback<ChangeEvent<Vector3>>((ChangeEvent<Vector3> evt) => {
+                        TransposeTargetValue(TimelineEditor.selectedClips, transposeTargetValue);
+                        transposeTargetValue = new Vector3(0, 0, 0);
+                        TimelineUtilsCore.RefreshTimelineContentsModified();
                     });
                     break;
 
@@ -212,6 +233,41 @@ namespace AltSalt
                     RectTransformRotationClip clipAsset = clipSelection[i].asset as RectTransformRotationClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target rotation");
                     clipAsset.template.targetRotation = targetValue;
+                }
+            }
+
+            return changedClips.ToArray();
+        }
+
+
+        public static TimelineClip[] TransposeInitialValue(TimelineClip[] clipSelection, Vector3 transposeValue)
+        {
+            List<TimelineClip> changedClips = new List<TimelineClip>();
+
+            for (int i = 0; i < clipSelection.Length; i++) {
+                if (clipSelection[i].asset is RectTransformRotationClip) {
+                    changedClips.Add(clipSelection[i]);
+                    RectTransformRotationClip clipAsset = clipSelection[i].asset as RectTransformRotationClip;
+                    Undo.RecordObject(clipAsset, "transpose clip(s) initial rotation");
+                    Vector3 originalValue = clipAsset.template.initialRotation;
+                    clipAsset.template.initialRotation = new Vector3(originalValue.x + transposeValue.x, originalValue.y + transposeValue.y, originalValue.z + transposeValue.z);
+                }
+            }
+
+            return changedClips.ToArray();
+        }
+
+        public static TimelineClip[] TransposeTargetValue(TimelineClip[] clipSelection, Vector3 transposeValue)
+        {
+            List<TimelineClip> changedClips = new List<TimelineClip>();
+
+            for (int i = 0; i < clipSelection.Length; i++) {
+                if (clipSelection[i].asset is RectTransformRotationClip) {
+                    changedClips.Add(clipSelection[i]);
+                    RectTransformRotationClip clipAsset = clipSelection[i].asset as RectTransformRotationClip;
+                    Undo.RecordObject(clipAsset, "transpose clip(s) target rotation");
+                    Vector3 originalValue = clipAsset.template.targetRotation;
+                    clipAsset.template.targetRotation = new Vector3(originalValue.x + transposeValue.x, originalValue.y + transposeValue.y, originalValue.z + transposeValue.z);
                 }
             }
 

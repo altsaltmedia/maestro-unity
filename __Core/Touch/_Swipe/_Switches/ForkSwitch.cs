@@ -11,6 +11,11 @@ namespace AltSalt {
         [FoldoutGroup("Fork Variables", 1)]
         public FloatReference forkInflectionPoint = new FloatReference();
 
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        [FoldoutGroup("Fork Variables", 1)]
+        BoolReference forkActive;
+
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Fork Variables", 1)]
         public FloatReference forkTransitionSpread = new FloatReference();
@@ -77,6 +82,15 @@ namespace AltSalt {
 
         enum SequenceUpdateType { Next, Previous }
 
+        [ShowInInspector]
+        float[] swipeYHistory = new float[10];
+
+        [ShowInInspector]
+        float[] swipeXHistory = new float[10];
+
+        [ShowInInspector]
+        int swipeHistoryIndex;
+
         void Start()
         {
             for (int i = 0; i < branchingPaths.Count; i++) {
@@ -90,9 +104,26 @@ namespace AltSalt {
             }
         }
 
+        public void ResetSwipeHistory()
+        {
+            swipeYHistory = new float[10];
+            swipeXHistory = new float[10];
+            swipeHistoryIndex = 0;
+        }
+
         public void UpdateDestinationSequence()
         {
             activeBranch = GetActiveSequence();
+
+            if(activeBranch == null) {
+                return;
+            }
+
+            if (swipeHistoryIndex < swipeYHistory.Length) {
+                swipeYHistory[swipeHistoryIndex] = Mathf.Abs(swipeForce.Value.y);
+                swipeXHistory[swipeHistoryIndex] = Mathf.Abs(swipeForce.Value.x);
+                swipeHistoryIndex++;
+            }
 
             // Activate the fork if we're within the correct thresholds of the inflection point. If active branch is the origin,
             // then this happens at the specified forkInflectionPoint, modified by the spread. However, if active branch is one of the destinations,
@@ -100,14 +131,21 @@ namespace AltSalt {
             if ((activeBranch.sequence.currentTime >= forkInflectionPoint.Value - forkTransitionSpread.Value && activeBranch.isOrigin == true) ||
                 (activeBranch.sequence.currentTime <= forkTransitionSpread.Value && activeBranch.isOrigin == false)) {
 
+                forkActive.Variable.SetValue(true);
+
                 xSwipeAxis.Active = true;
                 ySwipeAxis.Active = true;
 
+                Vector3 swipeForceToApply = swipeForce.Value;
+
+                // If we're in a fork, only apply force from the axis currently receiving greatest input    
+                swipeForceToApply = SequenceTouchApplier.GetForkSwipeForce(swipeForceToApply, swipeYHistory, swipeXHistory);
+
                 // Determine which direction we're swiping, then activate the new path accordingly
-                if (Mathf.Abs(swipeForce.Value.y) > Mathf.Abs(swipeForce.Value.x)) {
-                    ActivateYBranch();
-                } else if(Mathf.Abs(swipeForce.Value.x) > Mathf.Abs(swipeForce.Value.y)) {
+                if (Mathf.Abs(swipeForceToApply.y) > Mathf.Abs(swipeForceToApply.x)) {
                     ActivateXBranch();
+                } else if(Mathf.Abs(swipeForceToApply.x) > Mathf.Abs(swipeForceToApply.y)) {
+                    ActivateYBranch();
                 }
 
             // Once we pass through the fork, we need this handling to reset our variables
@@ -117,6 +155,8 @@ namespace AltSalt {
                       (activeBranch.sequence.currentTime > forkTransitionSpread.Value && 
                        activeBranch.sequence.currentTime <= (forkTransitionSpread.Value + swipeOriginDestSpread.Value) && activeBranch.isOrigin == false)) {
                 ResetBranchStates(new[] { BranchName.yPos, BranchName.yNeg, BranchName.xPos, BranchName.xNeg });
+
+                forkActive.Variable.SetValue(false);
 
                 // Flip axes accordingly
                 if (activeBranch.branchType == BranchName.yPos ||
@@ -156,6 +196,7 @@ namespace AltSalt {
             }
 
             yMomentumAxis.Active = true;
+            xMomentumAxis.Active = false;
 
             // Subtract the value of the x axis, otherwise our swipe is not smooth
             float sign = swipeModifier.Value >= 0 ? 1 : -1;
@@ -169,19 +210,19 @@ namespace AltSalt {
             // and director so that we can rewind correctly
             if (activeBranch.isOrigin == true) {
 
-                if (isReversing.Value == false) {
-                    if(branchDictionary.ContainsKey(BranchName.yPos)) {
+                if(swipeForce.Value.y < 0) {
+                    if (branchDictionary.ContainsKey(BranchName.yPos)) {
                         UpdateBranchSibling(activeBranch, BranchName.yPos, SequenceUpdateType.Next);
                     }
                 } else {
-                    if(branchDictionary.ContainsKey(BranchName.yNeg)) {
+                    if (branchDictionary.ContainsKey(BranchName.yNeg)) {
                         UpdateBranchSibling(activeBranch, BranchName.yNeg, SequenceUpdateType.Next);
                     }
                 }
 
             } else {
 
-                if (isReversing.Value == false) {
+                if (swipeForce.Value.y < 0) {
                     if (branchDictionary.ContainsKey(BranchName.yPos)) {
                         UpdateBranchSibling(activeBranch, BranchName.yPos, SequenceUpdateType.Previous);
                     }
@@ -211,6 +252,7 @@ namespace AltSalt {
             }
 
             xMomentumAxis.Active = true;
+            yMomentumAxis.Active = false;
 
             // Subtract the value of the y axis, otherwise our swipe is not smooth
             float sign = swipeModifier.Value >= 0 ? 1 : -1;
@@ -224,7 +266,7 @@ namespace AltSalt {
             // and director so that we can rewind correctly
             if (activeBranch.isOrigin == true) {
 
-                if (isReversing.Value == false) {
+                if (swipeForce.Value.x > 0) {
                     if (branchDictionary.ContainsKey(BranchName.xPos)) {
                         UpdateBranchSibling(activeBranch, BranchName.xPos, SequenceUpdateType.Next);
                     }
@@ -237,7 +279,7 @@ namespace AltSalt {
             }
             else {
 
-                if (isReversing.Value == false) {
+                if (swipeForce.Value.x > 0) {
                     if (branchDictionary.ContainsKey(BranchName.xPos)) {
                         UpdateBranchSibling(activeBranch, BranchName.xPos, SequenceUpdateType.Previous);
                     }

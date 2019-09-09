@@ -27,6 +27,8 @@ xsi:schemaLocation="
                     <engine:Button text="Selection" class="col-quarter" name="PopulateInitialValueFromSelection" />
                     <engine:Button text="Target" class="col-quarter margin-right-0" name="PopulateInitialValueFromTarget" />
                     <engine:Button text="Set" class="col-full" name="SetInitialValue" />
+                    <engine:Button text="Set Transparent" class="col-full" name="SetInitialTransparent" />
+                    <engine:Button text="Set Opaque" class="col-full" name="SetInitialOpaque" />
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
@@ -39,6 +41,8 @@ xsi:schemaLocation="
                     <engine:Button text="Selection" class="col-quarter" name="PopulateTargetValueFromSelection" />
                     <engine:Button text="Init" class="col-quarter margin-right-0" name="PopulateTargetValueFromInit" />>
                     <engine:Button text="Set" class="col-full" name="SetTargetValue" />
+                    <engine:Button text="Set Transparent" class="col-full" name="SetTargetTransparent" />
+                    <engine:Button text="Set Opaque" class="col-full" name="SetTargetOpaque" />
                 </engine:VisualElement>
             </engine:VisualElement>
         </engine:Foldout>

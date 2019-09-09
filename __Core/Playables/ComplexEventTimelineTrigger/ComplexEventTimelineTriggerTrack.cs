@@ -8,20 +8,23 @@ namespace AltSalt
     [TrackClipType(typeof(ComplexEventTimelineTriggerClip))]
     public class ComplexEventTimelineTriggerTrack : TrackAsset
     {
-        public void StoreClipStartEndTime()
+        public void StoreUtilVars()
         {
             foreach (var clip in GetClips()) {
                 var myAsset = clip.asset as ComplexEventTimelineTriggerClip;
                 if (myAsset) {
                     myAsset.startTime = clip.start;
                     myAsset.endTime = clip.end;
+#if UNITY_EDITOR
+                    myAsset.isReversing.Variable = Utils.GetBoolVariable(nameof(VarDependencies.IsReversing));
+#endif
                 }
             }
         }
 
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipStartEndTime();
+            StoreUtilVars();
             return ScriptPlayable<ComplexEventTimelineTriggerMixerBehaviour>.Create (graph, inputCount);
         }
         

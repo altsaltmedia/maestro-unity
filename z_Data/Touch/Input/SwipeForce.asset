@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a002c9dd0021641518211c23c9313b74, type: 3}
   m_Name: SwipeForce
   m_EditorClassIdentifier: 
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
   DeveloperDescription: 
-  Value: {x: -0, y: -0.0077203126, z: -0.0021445313}
+  Value: {x: -0.015989063, y: 0.058577344, z: 0.016271485}

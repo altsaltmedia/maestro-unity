@@ -30,7 +30,7 @@ namespace AltSalt
                 inputPlayable = (ScriptPlayable<SimpleEventTimelineTriggerBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
 
-                if (inputWeight > 0 && input.triggered == false) {
+                if (currentTime >= input.startTime && currentTime <= input.endTime && input.triggered == false) {
                     input.triggered = true;
                     for(int q=0; q<input.simpleEventTriggers.Count; q++) {
                         PlayableDirector playableDirector = playable.GetGraph().GetResolver() as PlayableDirector;
@@ -38,7 +38,7 @@ namespace AltSalt
                         //input.simpleEventTriggers[q].RaiseEvent(playable.GetGraph().GetEditorName() + " director at " + currentTime.ToString("F6"));
                     }
                 } else {
-                    if (currentTime >= input.endTime || currentTime < input.startTime) {
+                    if (currentTime > input.endTime || currentTime < input.startTime) {
                         input.triggered = false;
                     }
                 }

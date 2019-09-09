@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4702525276798940}
   - component: {fileID: 114975682343234766}
+  - component: {fileID: -6050846550928524056}
   - component: {fileID: 114834371844494940}
   - component: {fileID: 114104263229337992}
   - component: {fileID: 114736413140752494}
@@ -49,7 +50,7 @@ MonoBehaviour:
   sequenceModified:
     simpleEvent: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  sequenceList: {fileID: 0}
+  sequenceLists: []
   isReversing:
     UseConstant: 0
     ConstantValue: 0
@@ -68,6 +69,10 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 85f0b43954f014116ac2bc831ac930a4, type: 2}
+  forkActive:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 2aff08255bfe44376b24d0ea43897ac1, type: 2}
   xSwipeAxis: {fileID: 11400000, guid: 78821859800bc4f338b0683018b859c0, type: 2}
   ySwipeAxis: {fileID: 11400000, guid: 04fddbb3e8a0245bbaf7eb7ac8c54c1a, type: 2}
   zSwipeAxis: {fileID: 11400000, guid: f545d3f97388040cebfc721fb6b4ff3a, type: 2}
@@ -85,6 +90,36 @@ MonoBehaviour:
     Variable: {fileID: 11400000, guid: f622ace9e18b44dddaacabde456d3ef4, type: 2}
   pauseSequenceComplete:
     simpleEvent: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
+--- !u!114 &-6050846550928524056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187882997373286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114975682343234766}
+        m_MethodName: ResetSwipeHistory
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &114834371844494940
 MonoBehaviour:
   m_ObjectHideFlags: 0

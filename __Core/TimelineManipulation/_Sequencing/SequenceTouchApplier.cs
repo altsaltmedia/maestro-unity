@@ -17,8 +17,21 @@ namespace AltSalt
         [ValidateInput("IsPopulated")]
         public FloatReference momentumModifier;
 
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        BoolReference forkActive;
+
+        [ShowInInspector]
+        float[] swipeYHistory = new float[10];
+
+        [ShowInInspector]
+        float[] swipeXHistory = new float[10];
+
+        [ShowInInspector]
+        int swipeHistoryIndex;
+
         // Swipe variables
-		[Required]
+        [Required]
         [FoldoutGroup("Swipe Variables")]
         public Axis xSwipeAxis;
 
@@ -60,9 +73,55 @@ namespace AltSalt
         [BoxGroup("Android dependencies")]
         SimpleEventTrigger pauseSequenceComplete;
 
+        public void ResetSwipeHistory()
+        {
+            swipeYHistory = new float[10];
+            swipeXHistory = new float[10];
+            swipeHistoryIndex = 0;
+        }
+
+        public static Vector3 GetForkSwipeForce(Vector3 sourceSwipeForce, float[] yHistory, float[] xHistory)
+        {
+            if(yHistory.Length != xHistory.Length) {
+                Debug.LogError("History counts must of equal length");
+                return Vector3.zero;
+            }
+
+            Vector3 modifiedSwipeForce;
+
+            float totalYForce = 0;
+            float totalXForce = 0;
+
+            for (int z = 0; z < yHistory.Length; z++) {
+                totalYForce += yHistory[z];
+                totalXForce += xHistory[z];
+            }
+
+            if (totalYForce > totalXForce) {
+                modifiedSwipeForce = new Vector3(sourceSwipeForce.y, 0, 0);
+            } else {
+                modifiedSwipeForce = new Vector3(0, sourceSwipeForce.x, 0);
+            }
+
+            return modifiedSwipeForce;
+        }
+
         public void UpdateSequenceWithSwipe()
         {
-            for(int q=0; q < sequenceLists.Count; q++) {
+            if (swipeHistoryIndex < swipeYHistory.Length) {
+                swipeYHistory[swipeHistoryIndex] = Mathf.Abs(swipeForce.Value.y);
+                swipeXHistory[swipeHistoryIndex] = Mathf.Abs(swipeForce.Value.x);
+                swipeHistoryIndex++;
+            }
+
+            Vector3 swipeForceToApply = swipeForce.Value;
+
+            // If we're in a fork, only apply force from the axis currently receiving greatest input
+            if (forkActive.Value == true) {
+                swipeForceToApply = GetForkSwipeForce(swipeForceToApply, swipeYHistory, swipeXHistory);
+            }
+
+            for (int q=0; q < sequenceLists.Count; q++) {
 
                 for (int i = 0; i < sequenceLists[q].sequences.Count; i++) {
 
@@ -73,17 +132,17 @@ namespace AltSalt
 					    if (ySwipeAxis.Active) {
 						    //Debug.Log("y axis");
 						    //Debug.Log(swipeForce.y);
-                            swipeModifier.Variable.SetValue(swipeModifier.Value + swipeForce.Variable.Value.y);
+                            swipeModifier.Variable.SetValue(swipeModifier.Value + swipeForceToApply.y);
 					    }
 					    if (xSwipeAxis.Active) {
                             //Debug.Log("x axis");
                             //Debug.Log(swipeForce.x);
-                            swipeModifier.Variable.SetValue(swipeModifier.Value + swipeForce.Variable.Value.x);
+                            swipeModifier.Variable.SetValue(swipeModifier.Value + swipeForceToApply.x);
                         }
 					    if (zSwipeAxis.Active) {
                             //Debug.Log("z axis");
                             //Debug.Log(swipeForce.z);
-                            swipeModifier.Variable.SetValue(swipeModifier.Value + swipeForce.Variable.Value.z);
+                            swipeModifier.Variable.SetValue(swipeModifier.Value + swipeForceToApply.z);
                         }
 
                         if (swipeModifier > 0) {
@@ -127,6 +186,7 @@ namespace AltSalt
 
         public void UpdateSequenceWithMomentum()
         {
+
             for (int q = 0; q < sequenceLists.Count; q++) {
 
                 for (int i = 0; i < sequenceLists[q].sequences.Count; i++) {
@@ -142,17 +202,17 @@ namespace AltSalt
                         if (yMomentumAxis.Active) {
                             //Debug.Log("y axis");
                             //Debug.Log(swipeForce.y);
-                            momentumModifier.Variable.SetValue(momentumModifier.Value + momentumForce.Variable.Value.y);
+                            momentumModifier.Variable.SetValue(momentumModifier.Value + momentumForce.Value.y);
                         }
                         if (xMomentumAxis.Active) {
                             //Debug.Log("x axis");
                             //Debug.Log(swipeForce.x);
-                            momentumModifier.Variable.SetValue(momentumModifier.Value + momentumForce.Variable.Value.x);
+                            momentumModifier.Variable.SetValue(momentumModifier.Value + momentumForce.Value.x);
                         }
                         if (zMomentumAxis.Active) {
                             //Debug.Log("z axis");
                             //Debug.Log(swipeForce.z);
-                            momentumModifier.Variable.SetValue(momentumModifier.Value + momentumForce.Variable.Value.z);
+                            momentumModifier.Variable.SetValue(momentumModifier.Value + momentumForce.Value.z);
                         }
 
                         if (sequenceLists[q].sequences[i].Invert == true) {

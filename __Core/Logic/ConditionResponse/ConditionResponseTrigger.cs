@@ -42,6 +42,12 @@ namespace AltSalt
         List<FloatConditionResponse> floatEvents = new List<FloatConditionResponse>();
 
         [SerializeField]
+        [ShowIf("triggerType", ConditionResponseTypes.Int)]
+        [Title("Int Event List")]
+        [ValidateInput("IsPopulated")]
+        List<IntConditionResponse> intEvents = new List<IntConditionResponse>();
+
+        [SerializeField]
         [ShowIf("triggerType", ConditionResponseTypes.TextFamily)]
         [Title("Text Family Event List")]
         [ValidateInput("IsPopulated")]
@@ -74,6 +80,12 @@ namespace AltSalt
                 case ConditionResponseTypes.Float:
                     for (int i = 0; i < floatEvents.Count; i++) {
                         floatEvents[i].TriggerResponse(caller, triggerOnStart);
+                    }
+                    break;
+
+                case ConditionResponseTypes.Int:
+                    for (int i = 0; i < intEvents.Count; i++) {
+                        intEvents[i].TriggerResponse(caller, triggerOnStart);
                     }
                     break;
 
@@ -122,6 +134,15 @@ namespace AltSalt
                     }
                     break;
 
+                case ConditionResponseTypes.Int:
+                    for (int i = 0; i < intEvents.Count; i++) {
+                        if (intEvents[i].CheckCondition() == true) {
+                            intEvents[i].TriggerResponse(caller, triggerOnStart);
+                            return;
+                        }
+                    }
+                    break;
+
                 case ConditionResponseTypes.TextFamily:
                     for (int i = 0; i < textFamilyEvents.Count; i++) {
                         if (textFamilyEvents[i].CheckCondition() == true) {
@@ -161,6 +182,12 @@ namespace AltSalt
                 case ConditionResponseTypes.Float:
                     for (int i = 0; i < floatEvents.Count; i++) {
                         floatEvents[i].SyncValues();
+                    }
+                    break;
+
+                case ConditionResponseTypes.Int:
+                    for (int i = 0; i < intEvents.Count; i++) {
+                        intEvents[i].SyncValues();
                     }
                     break;
 
@@ -204,7 +231,7 @@ namespace AltSalt
             }
 
             if (triggerType != ConditionResponseTypes.Int) {
-                // Int condition response not yet implemented
+                intEvents.Clear();
             }
 
             if (triggerType != ConditionResponseTypes.Layout) {
@@ -265,6 +292,35 @@ namespace AltSalt
         }
 
         private bool IsPopulated(List<FloatConditionResponse> attribute)
+        {
+            if (triggerType == ConditionResponseTypes.Float) {
+                if (attribute.Count > 0) {
+                    bool isValid = true;
+                    for (int i = 0; i < attribute.Count; i++) {
+                        if (attribute[i].GetReference() == null || Utils.IsPopulated(attribute[i].GetReference()) == false) {
+                            isValid = false;
+                            break;
+                        }
+
+                        if (attribute[i].GetCondition() == null || Utils.IsPopulated(attribute[i].GetCondition()) == false) {
+                            isValid = false;
+                            break;
+                        }
+
+                        if (Utils.IsPopulated(attribute[i].GetResponse()) == false) {
+                            isValid = false;
+                            break;
+                        }
+                    }
+                    return isValid;
+                }
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsPopulated(List<IntConditionResponse> attribute)
         {
             if (triggerType == ConditionResponseTypes.Float) {
                 if (attribute.Count > 0) {

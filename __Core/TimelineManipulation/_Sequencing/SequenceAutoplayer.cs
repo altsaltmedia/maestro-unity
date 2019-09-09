@@ -46,7 +46,7 @@ namespace AltSalt
 
                 for (int i = 0; i < sequenceLists[q].sequences.Count; i++) {
 
-                    if (sequenceLists[q].sequences[i].Active == true && sequenceLists[q].sequences[i].hasAutoplay == true && sequenceLists[q].sequences[i].autoplayActive == true) {
+                    if (sequenceLists[q].sequences[i].Active == true && sequenceLists[q].sequences[i].hasAutoplay == true && sequenceLists[q].sequences[i].autoplayActive == true && sequenceLists[q].sequences[i].isLerping == false) {
 
                         for (int z = 0; z < sequenceLists[q].sequences[i].autoplayThresholds.Count; z++) {
 
@@ -72,6 +72,51 @@ namespace AltSalt
                 }
             }
         }
+
+        public void TriggerLerpSequence(Sequence targetSequence)
+        {
+            if (targetSequence.Active == true && targetSequence.hasAutoplay == true && targetSequence.isLerping == false) {
+
+                for (int z = 0; z < targetSequence.autoplayThresholds.Count; z++) {
+                    if (targetSequence.currentTime >= targetSequence.autoplayThresholds[z].startTime &&
+                        targetSequence.currentTime <= targetSequence.autoplayThresholds[z].endTime) {
+                        targetSequence.isLerping = true;
+                        StartCoroutine(LerpSequence(targetSequence, targetSequence.autoplayThresholds[z]));
+                    }
+                }
+            }
+        }
+
+        protected IEnumerator LerpSequence(Sequence targetSequence, StartEndThreshold targetAutoplayThreshold)
+        {
+            while(true) {
+                if (isReversing.Value == false) {
+#if UNITY_ANDROID
+                    targetSequence.ModifySequenceTime(targetSequence.lerpInterval * 3f);
+#else
+                    targetSequence.ModifySequenceTime(targetSequence.lerpInterval);
+#endif
+                    if (targetSequence.currentTime > targetAutoplayThreshold.endTime) {
+                        targetSequence.isLerping = false;
+                        yield break;
+                    }
+
+                } else {
+#if UNITY_ANDROID
+                    targetSequence.ModifySequenceTime(targetSequence.lerpInterval * 3f * -1f);
+#else
+                    targetSequence.ModifySequenceTime(targetSequence.lerpInterval * -1f);
+#endif
+                    if (targetSequence.currentTime < targetAutoplayThreshold.startTime) {
+                        targetSequence.isLerping = false;
+                        yield break;
+                    }
+                }
+                sequenceModified.RaiseEvent(this.gameObject);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        
 
         protected void AutoplaySequence(Sequence targetSequence, StartEndThreshold targetAutoplayThreshold)
         {

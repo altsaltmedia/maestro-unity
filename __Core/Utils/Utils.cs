@@ -55,7 +55,8 @@ namespace AltSalt
         ResponsiveElementDisable,
         TextUpdate,
         LayoutUpdate,
-        ScreenResized
+        ScreenResized,
+        IsReversing
     }
 
     public enum XMLValues

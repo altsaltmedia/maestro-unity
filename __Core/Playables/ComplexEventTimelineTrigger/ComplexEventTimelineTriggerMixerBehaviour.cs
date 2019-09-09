@@ -32,6 +32,9 @@ namespace AltSalt
                 input = inputPlayable.GetBehaviour ();
                 
                 if (inputWeight > 0 && input.triggered == false) {
+                    if (input.isReversing.Value == true && input.disableOnReverse == true) {
+                        continue;
+                    }
                     input.triggered = true;
                     for(int q=0; q<input.complexEventTriggerPackagers.Count; q++) {
                         PlayableDirector playableDirector = playable.GetGraph().GetResolver() as PlayableDirector;

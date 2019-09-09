@@ -29,8 +29,8 @@ MonoBehaviour:
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: a3f4ec9668d034f12bdf87f121b39274, type: 2}
   saveDataActive:
-    UseConstant: 0
-    ConstantValue: 1
+    UseConstant: 1
+    ConstantValue: 0
     Variable: {fileID: 11400000, guid: a84e6b85ea0a5400583dae82803d3a19, type: 2}
   autoplayActive:
     UseConstant: 0

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Video;
@@ -8,6 +9,7 @@ namespace AltSalt
     {
         ScriptPlayable<AudioFadePlayVolumeBehaviour> inputPlayable;
         AudioFadePlayVolumeBehaviour input;
+        List<float> originalVolumes = new List<float>();
 
         double doubleModifier;
 
@@ -19,14 +21,20 @@ namespace AltSalt
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
             inputCount = playable.GetInputCount ();
-            
-            for (int i = 0; i < inputCount; i++)
-            {
+
+            for (int i = 0; i < inputCount; i++) {
                 inputWeight = playable.GetInputWeight(i);
                 inputPlayable = (ScriptPlayable<AudioFadePlayVolumeBehaviour>)playable.GetInput(i);
-                input = inputPlayable.GetBehaviour ();
+                input = inputPlayable.GetBehaviour();
 
-                for(int q=0; q < input.targetAudioSources.Count; q++) {
+
+                if (originalVolumes.Count < 1) {
+                    for (int z = 0; z < input.targetAudioSources.Count; z++){
+                        originalVolumes.Add(input.targetAudioSources[z].volume);
+                    }
+                }
+
+                for (int q=0; q < input.targetAudioSources.Count; q++) {
 
                     AudioSource audioSource = input.targetAudioSources[q];
 
@@ -63,7 +71,7 @@ namespace AltSalt
             if (input != null) {
                 for (int q = 0; q < input.targetAudioSources.Count; q++) {
                     AudioSource audioSource = input.targetAudioSources[q];
-                    if(audioSource != null) {
+                    if(Application.isPlaying == false && audioSource != null) {
                         audioSource.Stop();
                         audioSource.time = 0;
                         audioSource.volume = 0;
