@@ -10,11 +10,13 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.Events;
 using System.IO;
 using System.Text;
 using SimpleJSON;
+using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -254,6 +256,64 @@ namespace AltSalt
             }
 
             return newSelection.ToArray();
+        }
+
+        public static GameObject[] SortGameObjectSelection(GameObject[] gameObjects)
+        {
+            // Collect all selected game objects into a dictionary based on parent
+            Dictionary<Transform, List<GameObject>> collection = new Dictionary<Transform, List<GameObject>>();
+            for(int i=0; i<gameObjects.Length; i++) {
+                Transform parent = gameObjects[i].transform.parent;
+                if(collection.ContainsKey(parent)) {
+                    collection[parent].Add(gameObjects[i]);
+                } else {
+                    collection.Add(parent, new List<GameObject>());
+                    collection[parent].Add(gameObjects[i]);
+                }
+            }
+
+            // Sort the game object lists underneath each node based on sibling index
+            foreach (KeyValuePair<Transform, List<GameObject>> node in collection) {
+                node.Value.Sort(new GameObjectSort());
+            }
+
+            List<GameObject> masterGameObjectList = new List<GameObject>();
+            GameObject[] rootGameObjects = GetRootGameObjects();
+            for(int q=0; q<rootGameObjects.Length; q++) {
+                List<GameObject> nodeGameObjectList = new List<GameObject>();
+                masterGameObjectList.AddRange(TraverseTransform(nodeGameObjectList, collection, rootGameObjects[q].transform));
+            }
+
+            return masterGameObjectList.ToArray();
+        }
+
+        // Given an empty list of game objects, a collection of game objects sorted by parent transform, and a root transform,
+        // will traverse the root transform and return a list of game objects in the order they appear in the hierarchy
+        public static List<GameObject> TraverseTransform(List<GameObject> targetList, Dictionary<Transform, List<GameObject>> collection, Transform rootTransform)
+        {
+            if (rootTransform.childCount == 0) {
+                return targetList;
+            } else {
+                for (int i = 0; i < rootTransform.childCount; i++) {
+                    Transform childTransform = rootTransform.GetChild(i);
+
+                    TraverseTransform(targetList, collection, childTransform);
+
+                    foreach(KeyValuePair<Transform, List<GameObject>> node in collection) {
+                        if(node.Key == childTransform) {
+                            targetList.AddRange(node.Value);
+                        }
+                    }
+                }
+                return targetList;
+            }
+        }
+
+        public static GameObject[] GetRootGameObjects()
+        {
+            GameObject[] rootGameObjects =  SceneManager.GetActiveScene().GetRootGameObjects();
+            Array.Sort(rootGameObjects, new GameObjectSort());
+            return rootGameObjects;
         }
 
         public class GameObjectSort : Comparer<GameObject>

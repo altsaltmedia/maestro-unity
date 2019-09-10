@@ -552,12 +552,12 @@ namespace AltSalt
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
 
             if (sourceGameObjects.Length > 0) {
-                Array.Sort(sourceGameObjects, new Utils.GameObjectSort());
-                for (int i = 0; i < sourceGameObjects.Length; i++) {
-                    if (requiredComponentType != null && Utils.TargetComponentSelected(sourceGameObjects[i], requiredComponentType) == true) {
+                GameObject[] sortedGameObjects = Utils.SortGameObjectSelection(sourceGameObjects);
+                for (int i = 0; i < sortedGameObjects.Length; i++) {
+                    if (requiredComponentType != null && Utils.TargetComponentSelected(sortedGameObjects[i], requiredComponentType) == true) {
                         TrackAsset newTrack = CreateNewTrack(targetTimelineAsset, parentTrack, trackType);
                         trackAssets.Add(newTrack);
-                        PopulateTrackAsset(targetDirector, newTrack, sourceGameObjects[i]);
+                        PopulateTrackAsset(targetDirector, newTrack, sortedGameObjects[i]);
                     }
                 }
             } else {
