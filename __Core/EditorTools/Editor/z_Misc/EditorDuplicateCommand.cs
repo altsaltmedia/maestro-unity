@@ -3,35 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public static class EditorDuplicateCommand
+namespace AltSalt
 {
-    [MenuItem("Edit/AltSaltDuplicate #d", false, 0)]
-    static void DuplicateSelection()
+    public static class EditorDuplicateCommand
     {
-        List<GameObject> newSelection = new List<GameObject>();
-        for (int ui = 0; ui < Selection.gameObjects.Length; ui++) {
+        [MenuItem("Edit/AltSaltDuplicate #d", false, 0)]
+        static void DuplicateSelection()
+        {
+            List<GameObject> newSelection = new List<GameObject>();
+            for (int i = 0; i < Selection.gameObjects.Length; i++) {
         
-            GameObject go = Selection.gameObjects[ui];
-            int siblingIndex = go.transform.GetSiblingIndex();
+                GameObject sourceObject = Selection.gameObjects[i];
+                GameObject newGo = Utils.DuplicateObject(sourceObject);
 
-            GameObject newGo;
+                newGo.transform.parent = sourceObject.transform.parent;
+                newGo.transform.SetSiblingIndex(sourceObject.transform.GetSiblingIndex() + 1);
+                Undo.RegisterCreatedObjectUndo(newGo, "Duplicate");
 
-            GameObject prefabRoot = PrefabUtility.GetCorrespondingObjectFromSource(go) as GameObject;
-            if (prefabRoot != null) {
-                newGo = (GameObject)PrefabUtility.InstantiatePrefab(prefabRoot);
-                PrefabUtility.SetPropertyModifications(newGo, PrefabUtility.GetPropertyModifications(go));
-            } else {
-                newGo = GameObject.Instantiate(go);
+                newGo.hideFlags = HideFlags.DontUnloadUnusedAsset;
+                newSelection.Add(newGo);
             }
-            newGo.transform.parent = go.transform.parent;
-            newGo.transform.position = go.transform.position;
-            newGo.transform.localScale = go.transform.localScale;
-            newGo.transform.SetSiblingIndex(siblingIndex + 1);
-            Undo.RegisterCreatedObjectUndo(newGo, "Duplicate");
-            newGo.name = go.name;
-            newSelection.Add(newGo);
+            Selection.objects = newSelection.ToArray();
         }
-        Selection.objects = newSelection.ToArray();
     }
 }
-

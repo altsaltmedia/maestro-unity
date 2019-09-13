@@ -271,11 +271,6 @@ namespace AltSalt
             }
         }
 
-        protected virtual void LogBreakpointWarning()
-        {
-            Debug.LogWarning("Please specify either 1.) target values for saving OR 2.) breakpoints and corresponding values on " + this.name, this);
-        }
-
         public string LogAddBreakpointMessage(float targetBreakpoint)
         {
             string message = "Added breakpoint of " + targetBreakpoint.ToString("F2") + " to " + this.name + " " + this.GetType().Name;
@@ -283,6 +278,10 @@ namespace AltSalt
             return message;
         }
 #endif
+        protected virtual void LogBreakpointWarning()
+        {
+            Debug.LogWarning("Please specify either 1.) target values for saving OR 2.) breakpoints and corresponding values on " + this.name, this);
+        }
 
         [HorizontalGroup("Data Handler", 0.5f)]
         [InfoBox("Load and populate data based on current scene and active layout.")]

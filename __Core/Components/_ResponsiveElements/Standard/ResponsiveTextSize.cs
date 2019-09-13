@@ -35,11 +35,11 @@ namespace AltSalt
 
         public void SetValue(int activeIndex)
         {
-#if UNITY_EDITOR
             if (activeIndex >= breakpointTextSize.Count) {
                 LogBreakpointWarning();
-                return;
+				return;
             }
+#if UNITY_EDITOR
             Undo.RegisterCompleteObjectUndo(textMeshPro, "set responsive text size");
 #endif
             textMeshPro.fontSize = breakpointTextSize[activeIndex];

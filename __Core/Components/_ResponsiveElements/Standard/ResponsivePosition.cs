@@ -63,6 +63,7 @@ namespace AltSalt
             }
             Undo.RegisterCompleteObjectUndo(rectTransform, "set responsive position");
 #endif
+
             rectTransform.anchorMax = breakpointAnchorMax[activeIndex];
             rectTransform.anchorMin = breakpointAnchorMin[activeIndex];
             rectTransform.anchoredPosition3D = breakpointAnchoredPosition[activeIndex];

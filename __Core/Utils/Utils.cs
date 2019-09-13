@@ -281,15 +281,58 @@ namespace AltSalt
             GameObject[] rootGameObjects = GetRootGameObjects();
             for(int q=0; q<rootGameObjects.Length; q++) {
                 List<GameObject> nodeGameObjectList = new List<GameObject>();
-                masterGameObjectList.AddRange(TraverseTransform(nodeGameObjectList, collection, rootGameObjects[q].transform));
+                masterGameObjectList.AddRange(TraverseTransformChildren(nodeGameObjectList, rootGameObjects[q].transform, (List<GameObject> nodeList, Transform currentTransform) => {
+                    foreach (KeyValuePair<Transform, List<GameObject>> node in collection) {
+                        if (node.Key == currentTransform) {
+                            nodeList.AddRange(node.Value);
+                        }
+                    }
+                }));
             }
 
             return masterGameObjectList.ToArray();
         }
 
-        // Given an empty list of game objects, a collection of game objects sorted by parent transform, and a root transform,
-        // will traverse the root transform and return a list of game objects in the order they appear in the hierarchy
-        public static List<GameObject> TraverseTransform(List<GameObject> targetList, Dictionary<Transform, List<GameObject>> collection, Transform rootTransform)
+        public static GameObject[] GetChildGameObjects(GameObject selection)
+        {
+            GameObject[] gameObjectArray = { selection };
+            return GetChildGameObjects(gameObjectArray);
+        }
+
+        public static GameObject[] GetChildGameObjects(GameObject[] selection)
+        {
+            List<GameObject> gameObjectList = new List<GameObject>();
+            for (int i = 0; i < selection.Length; i++) {
+                gameObjectList.AddRange(TraverseTransformChildren(gameObjectList, selection[i].transform));
+            }
+            return gameObjectList.ToArray();
+        }
+
+        public static GameObject DuplicateObject(GameObject sourceObject)
+        {
+            GameObject duplicate;
+
+            GameObject prefabRoot = PrefabUtility.GetCorrespondingObjectFromSource(sourceObject) as GameObject;
+            if (prefabRoot != null) {
+                duplicate = (GameObject)PrefabUtility.InstantiatePrefab(prefabRoot);
+                PrefabUtility.SetPropertyModifications(duplicate, PrefabUtility.GetPropertyModifications(sourceObject));
+            } else {
+                duplicate = GameObject.Instantiate(sourceObject);
+            }
+
+            duplicate.transform.position = sourceObject.transform.position;
+            duplicate.transform.localScale = sourceObject.transform.localScale;
+            duplicate.name = sourceObject.name;
+
+            return duplicate;
+        }
+
+        public delegate void TraverseTransformDelegate(List<GameObject> gameObjectList, Transform transform);
+
+        // Given an empty list of game objects and a root transform, will recursively go through the root transform's children
+        // and populate the list with the children in the order they appear in the hierarchy.
+        // Optionally, can take a delegate to perform custom handling on each child transform.
+        public static List<GameObject> TraverseTransformChildren(List<GameObject> targetList, Transform rootTransform, TraverseTransformDelegate traverseTransformDelegate = null)
         {
             if (rootTransform.childCount == 0) {
                 return targetList;
@@ -297,13 +340,13 @@ namespace AltSalt
                 for (int i = 0; i < rootTransform.childCount; i++) {
                     Transform childTransform = rootTransform.GetChild(i);
 
-                    TraverseTransform(targetList, collection, childTransform);
-
-                    foreach(KeyValuePair<Transform, List<GameObject>> node in collection) {
-                        if(node.Key == childTransform) {
-                            targetList.AddRange(node.Value);
-                        }
+                    if(traverseTransformDelegate != null) {
+                        traverseTransformDelegate.Invoke(targetList, childTransform);
+                    } else {
+                        targetList.Add(childTransform.gameObject);
                     }
+
+                    TraverseTransformChildren(targetList, childTransform, traverseTransformDelegate);
                 }
                 return targetList;
             }

@@ -42,6 +42,8 @@ namespace AltSalt
         public float fontSize = 1.55f;
         public Color fontColor;
         public float breakpoint = 1.78f;
+        public string targetLayer = "";
+        public int targetOrder;
 
         static bool populateButtonPressed = false;
 
@@ -60,7 +62,9 @@ namespace AltSalt
             AlignRight,
             Justify,
             Flush,
-            AddResponsiveTextSize
+            AddResponsiveTextSize,
+            SetSortingLayer,
+            SetSortingOrder
         }
 
         enum PropertyFieldNames
@@ -202,6 +206,18 @@ namespace AltSalt
                 case nameof(ButtonNames.TrimTextBox):
                     button.clickable.clicked += () => {
                         TrimTextBox(Selection.gameObjects);
+                    };
+                    break;
+
+                case nameof(ButtonNames.SetSortingLayer):
+                    button.clickable.clicked += () => {
+                        SetSortingLayer(Selection.gameObjects, targetLayer);
+                    };
+                    break;
+
+                case nameof(ButtonNames.SetSortingOrder):
+                    button.clickable.clicked += () => {
+                        SetSortingOrder(Selection.gameObjects, targetOrder);
                     };
                     break;
 
@@ -375,6 +391,42 @@ namespace AltSalt
                     textMeshPro.ForceMeshUpdate();
                 }
             }
+            return textList.ToArray();
+        }
+
+        public static TMP_Text[] SetSortingLayer(GameObject[] objectSelection, string targetSortingLayer)
+        {
+            List<TMP_Text> textList = new List<TMP_Text>();
+
+            for (int i = 0; i < objectSelection.Length; i++) {
+                if(objectSelection[i].TryGetComponent(typeof(TMP_Text), out Component textMeshPro) && objectSelection[i].TryGetComponent(typeof(MeshRenderer), out Component meshRendererComponent))  {
+                    textList.Add(textMeshPro as TMP_Text);
+
+                    MeshRenderer meshRenderer = meshRendererComponent as MeshRenderer;
+
+                    Undo.RecordObject(meshRenderer, "set sorting layer(s)");
+                    meshRenderer.sortingLayerName = targetSortingLayer;
+                }
+            }
+
+            return textList.ToArray();
+        }
+
+        public static TMP_Text[] SetSortingOrder(GameObject[] objectSelection, int targetSortingOrder)
+        {
+            List<TMP_Text> textList = new List<TMP_Text>();
+
+            for (int i = 0; i < objectSelection.Length; i++) {
+                if (objectSelection[i].TryGetComponent(typeof(TMP_Text), out Component textMeshPro) && objectSelection[i].TryGetComponent(typeof(MeshRenderer), out Component meshRendererComponent)) {
+                    textList.Add(textMeshPro as TMP_Text);
+
+                    MeshRenderer meshRenderer = meshRendererComponent as MeshRenderer;
+                    Undo.RecordObject(meshRenderer, "set sorting order(s)");
+
+                    meshRenderer.sortingOrder = targetSortingOrder;
+                }
+            }
+
             return textList.ToArray();
         }
     }

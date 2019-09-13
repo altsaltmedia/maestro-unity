@@ -991,20 +991,26 @@ namespace AltSalt
             List<TimelineClip> selectedTrackClips = new List<TimelineClip>();
             bool trackAssetSelected = false;
 
+            List<TrackAsset> selectedTrackAssets = new List<TrackAsset>();
+
             if (selection != null && selection.Length > 0) {
                 for (int i = 0; i < selection.Length; i++) {
                     if (selection[i] is TrackAsset) {
                         trackAssetSelected = true;
                         TrackAsset trackAsset = selection[i] as TrackAsset;
-                        if (trackAsset.GetChildTracks() != null) {
-                            selectedTrackClips.AddRange(trackAsset.GetClips());
-                        }
+
+                        selectedTrackAssets.Add(trackAsset);
+                        selectedTrackAssets.AddRange(TimelineUtilsCore.GetChildTracks(trackAsset));
                     }
                 }
             }
 
             if (trackAssetSelected == true) {
+                for(int z=0; z<selectedTrackAssets.Count; z++) {
+                    selectedTrackClips.AddRange(selectedTrackAssets[z].GetClips());
+                }
                 return selectedTrackClips.ToArray();
+
             } else {
                 return GetAllTimelineClips();
             }

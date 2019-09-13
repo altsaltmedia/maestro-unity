@@ -123,15 +123,6 @@ namespace AltSalt {
             ResetScene();
 		}
 
-        void OnEnable()
-        {
-#if UNITY_EDITOR
-            if (Application.isPlaying == false) {
-                CallExecuteLayoutUpdate();
-            }
-#endif
-        }
-
         void OnDisable()
         {
             priorityResponsiveElements.Clear();

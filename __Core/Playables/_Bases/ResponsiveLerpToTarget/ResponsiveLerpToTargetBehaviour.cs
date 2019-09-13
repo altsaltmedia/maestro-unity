@@ -154,14 +154,12 @@ namespace AltSalt
 
         protected virtual void ExecuteResponsiveAction()
         {
-#if UNITY_EDITOR
-            if (aspectRatioBreakpoints.Count == 0) {
+            if (aspectRatioBreakpoints.Count == 0 || HasBreakpoints == false) {
                 SetValue(0);
             } else {
                 int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
                 SetValue(breakpointIndex);
             }
-#endif
         }
 
         protected virtual void SetValue(int activeIndex)

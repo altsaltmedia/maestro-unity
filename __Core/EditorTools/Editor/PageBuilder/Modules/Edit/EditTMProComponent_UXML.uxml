@@ -43,6 +43,13 @@ xsi:schemaLocation="
                     <engine:Button text="F" class="col-15-percent" name="Flush"/>
                     <engine:Button text="Trim Text Box " class="col-full" name="TrimTextBox" />
 
+                    <!-- Layer -->
+                    <editor:PropertyField label="Target Sorting Layer :" class="col-full" value="" binding-path="targetLayer"/>
+                    <engine:Button text="Set Sorting Layer" class="col-full" name="SetSortingLayer"/>
+
+                    <editor:PropertyField label="Target Sorting Order :" class="col-full" value="0" binding-path="targetOrder"/>
+                    <engine:Button text="Set Sorting Order" class="col-full" name="SetSortingOrder"/>
+
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section">

@@ -61,7 +61,9 @@ namespace AltSalt
 
         void GetPlayableDirector()
         {
-            playableDirector = gameObject.GetComponent<PlayableDirector>();
+            if(playableDirector == null) {
+                playableDirector = gameObject.GetComponent<PlayableDirector>();
+            }
         }
 
         // Update is called once per frame
