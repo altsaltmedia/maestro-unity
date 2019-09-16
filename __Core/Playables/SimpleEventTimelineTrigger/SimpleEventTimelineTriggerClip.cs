@@ -12,6 +12,8 @@ namespace AltSalt
         public double startTime;
         public double endTime;
 
+        public BoolReference isReversing;
+
         public override double duration {
             get {
                 return 1d;
@@ -26,6 +28,8 @@ namespace AltSalt
         {
             template.startTime = startTime;
             template.endTime = endTime;
+            template.isReversing.Variable = isReversing.Variable;
+
             var playable = ScriptPlayable<SimpleEventTimelineTriggerBehaviour>.Create(graph, template);
             return playable;
         }

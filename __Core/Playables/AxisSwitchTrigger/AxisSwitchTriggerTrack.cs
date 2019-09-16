@@ -5,19 +5,16 @@ using UnityEngine.Timeline;
 namespace AltSalt
 {
     [TrackColor(0.245149f, 0.895372f, 0.5679245f)]
-    [TrackClipType(typeof(SimpleEventTimelineTriggerClip))]
-    public class SimpleEventTimelineTriggerTrack : TrackAsset
+    [TrackClipType(typeof(AxisSwitchTriggerClip))]
+    public class AxisSwitchTriggerTrack : TrackAsset
     {
         public void StoreClipStartEndTime()
         {
             foreach (var clip in GetClips()) {
-                var myAsset = clip.asset as SimpleEventTimelineTriggerClip;
+                var myAsset = clip.asset as AxisSwitchTriggerClip;
                 if (myAsset) {
                     myAsset.startTime = clip.start;
                     myAsset.endTime = clip.end;
-#if UNITY_EDITOR
-                    myAsset.isReversing.Variable = Utils.GetBoolVariable(nameof(VarDependencies.IsReversing));
-#endif
                 }
             }
         }
@@ -25,7 +22,7 @@ namespace AltSalt
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipStartEndTime();
-            return ScriptPlayable<SimpleEventTimelineTriggerMixerBehaviour>.Create (graph, inputCount);
+            return ScriptPlayable<AxisSwitchTriggerMixerBehaviour>.Create (graph, inputCount);
         }
         
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)

@@ -9,7 +9,39 @@ namespace AltSalt {
     
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Fork Variables", 1)]
+        [ShowInInspector]
+        [ReadOnly]
+        [SerializeField]
+        [InfoBox("This value must be set using an AxisSwitchTrigger using Timeline")]
         public FloatReference forkInflectionPoint = new FloatReference();
+
+        public float ForkInflectionPoint {
+
+            get {
+                return forkInflectionPoint.Value;
+            }
+
+            set {
+                forkInflectionPoint.UseConstant = true;
+                forkInflectionPoint.ConstantValue = value;
+            }
+
+        }
+
+        [PropertyOrder(1)]
+        [ShowInInspector]
+        [ReadOnly]
+        [InfoBox("The switch is enabled at runtime when connected to an AxisSwitchTrigger playable")]
+        bool switchEnabled;
+        public bool SwitchEnabled {
+            get {
+                return switchEnabled;
+            }
+
+            set {
+                switchEnabled = value;
+            }
+        }
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
@@ -82,13 +114,10 @@ namespace AltSalt {
 
         enum SequenceUpdateType { Next, Previous }
 
-        [ShowInInspector]
         float[] swipeYHistory = new float[10];
 
-        [ShowInInspector]
         float[] swipeXHistory = new float[10];
 
-        [ShowInInspector]
         int swipeHistoryIndex;
 
         void Start()
@@ -96,8 +125,6 @@ namespace AltSalt {
             for (int i = 0; i < branchingPaths.Count; i++) {
                 branchDictionary.Add(branchingPaths[i].branchType, branchingPaths[i]);
             }
-
-            Debug.Log(branchDictionary);
 
             foreach(KeyValuePair<BranchName, BranchingPath> entry in branchDictionary) {
                 entry.Value.director = entry.Value.directorObject.GetComponent<DirectorUpdater>();
@@ -115,7 +142,7 @@ namespace AltSalt {
         {
             activeBranch = GetActiveSequence();
 
-            if(activeBranch == null) {
+            if(activeBranch == null || SwitchEnabled == false) {
                 return;
             }
 

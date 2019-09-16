@@ -10,15 +10,6 @@ namespace AltSalt
     public class ComplexEventTimelineTriggerBehaviour : PlayableBehaviourTriggerBase
     {
         [HideInInspector]
-        public double startTime;
-
-        [HideInInspector]
-        public double endTime;
-
-        [HideInInspector]
-        public bool triggered = false;
-
-        [HideInInspector]
         public BoolReference isReversing;
 
         public bool disableOnReverse;

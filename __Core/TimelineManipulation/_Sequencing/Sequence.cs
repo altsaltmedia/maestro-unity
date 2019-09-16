@@ -9,6 +9,14 @@ namespace AltSalt
     {
         [SerializeField]
         string description;
+        public string Description {
+            get {
+                return description;
+            }
+            set {
+                description = value;
+            }
+        }
         public double startTime;
         public double endTime;
         public bool isVideoSequence = false;

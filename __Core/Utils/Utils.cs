@@ -43,6 +43,8 @@ namespace AltSalt
 
     public enum ComparisonValues { GreaterThan, LessThan, EqualTo }
 
+    public enum SwitchType { AxisSwitch, ForkSwitch, InvertSwitch }
+
     public enum VarDependencies {
         AppSettings,
         ModifySettings,

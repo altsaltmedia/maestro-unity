@@ -9,13 +9,9 @@ namespace AltSalt
     public class SimpleEventTimelineTriggerBehaviour : PlayableBehaviourTriggerBase
     {
         [HideInInspector]
-        public double startTime;
+        public BoolReference isReversing;
 
-        [HideInInspector]
-        public double endTime;
-
-        [HideInInspector]
-        public bool triggered = false;
+        public bool disableOnReverse;
 
         public List<SimpleEventTrigger> simpleEventTriggers;
     }

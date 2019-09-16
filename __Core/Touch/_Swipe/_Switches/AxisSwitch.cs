@@ -21,11 +21,42 @@ namespace AltSalt
         public Sequence parentClip;
 
         [ValidateInput("IsPopulated")]
-        public BoolReference lockAxis;
-
-        [ValidateInput("IsPopulated")]
         [PropertyOrder(1)]
-        public FloatReference axisInflectionPoint = new FloatReference();
+        [SerializeField]
+        [InfoBox("This value should be set using an AxisSwitchTrigger using Timeline")]
+        protected FloatReference axisInflectionPoint = new FloatReference();
+
+        public float AxisInflectionPoint {
+
+            get {
+                return axisInflectionPoint.Value;
+            }
+
+            set {
+                axisInflectionPoint.UseConstant = true;
+                axisInflectionPoint.ConstantValue = value;
+            }
+
+        }
+
+        [PropertyOrder(1)]
+        [ShowInInspector]
+        [ReadOnly]
+        [InfoBox("The switch is enabled at runtime when connected to an AxisSwitchTrigger playable")]
+        bool switchEnabled;
+        public bool SwitchEnabled {
+            get {
+                return switchEnabled;
+            }
+
+            set {
+                switchEnabled = value;
+            }
+        }
+
+        [PropertyOrder(1)]
+        [ValidateInput("IsPopulated")]
+        public BoolReference lockAxis;
 
         [Required]
         [PropertyOrder(1)]
@@ -80,7 +111,7 @@ namespace AltSalt
 
 
 		public virtual void UpdateActiveAxes () {
-            if(lockAxis.Value == true) {
+            if (lockAxis.Value == true || SwitchEnabled == false || parentClip.Active == false) {
                 return;
             }
             

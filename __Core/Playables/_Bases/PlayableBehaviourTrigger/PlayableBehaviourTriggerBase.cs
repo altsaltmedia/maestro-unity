@@ -5,5 +5,16 @@ using UnityEngine.Playables;
 
 namespace AltSalt
 {
-    public abstract class PlayableBehaviourTriggerBase : PlayableBehaviour { }
+    public abstract class PlayableBehaviourTriggerBase : PlayableBehaviour {
+
+        [HideInInspector]
+        public double startTime;
+
+        [HideInInspector]
+        public double endTime;
+
+        [HideInInspector]
+        public bool triggered = false;
+
+    }
 }

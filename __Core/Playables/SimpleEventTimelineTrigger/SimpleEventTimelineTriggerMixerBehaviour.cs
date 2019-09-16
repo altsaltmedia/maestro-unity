@@ -31,6 +31,9 @@ namespace AltSalt
                 input = inputPlayable.GetBehaviour ();
 
                 if (currentTime >= input.startTime && currentTime <= input.endTime && input.triggered == false) {
+                    if (input.isReversing.Value == true && input.disableOnReverse == true) {
+                        continue;
+                    }
                     input.triggered = true;
                     for(int q=0; q<input.simpleEventTriggers.Count; q++) {
                         PlayableDirector playableDirector = playable.GetGraph().GetResolver() as PlayableDirector;
