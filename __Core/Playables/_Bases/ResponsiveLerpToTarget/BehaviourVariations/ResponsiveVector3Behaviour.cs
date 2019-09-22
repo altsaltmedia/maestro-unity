@@ -9,9 +9,7 @@ namespace AltSalt
     {
         // initialPosition and targetPosition don't refresh in inspector for
         // some reason, but they work as intended
-        [HideInInspector]
         public Vector3 initialValue = new Vector3(0, 0, 0);
-        [HideInInspector]
         public Vector3 targetValue = new Vector3(0, 0, 0);
 
         public List<Vector3> breakpointInitialValue = new List<Vector3>();

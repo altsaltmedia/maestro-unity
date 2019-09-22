@@ -131,7 +131,7 @@ namespace AltSalt
             responsiveElementEnable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementEnable));
             responsiveElementDisable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementDisable));
 #endif
-            base.OnGraphStart(playable);
+            base.OnPlayableCreate(playable);
             responsiveElementEnable.RaiseEvent(clipAsset, ParentScene.name, clipAsset.name, this);
 
             easingFunction = EasingFunction.GetEasingFunction(ease);

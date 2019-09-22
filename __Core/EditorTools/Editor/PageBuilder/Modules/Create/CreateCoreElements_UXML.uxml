@@ -31,12 +31,14 @@ xsi:schemaLocation="
                 <engine:VisualElement class="section___content margin-bottom-0">
                     <engine:Button text="New Text" class="col-full" name="NewText" />
                     <engine:Button text="New Sprite" class="col-full" name="NewSprite" />
+                    <engine:Button text="New Empty Container" class="col-full" name="NewEmptyContainer" />
+                    <engine:Button text="New Empty Responsive Container" class="col-full" name="NewEmptyResponsiveContainer" />
                     <engine:Button text="New Container" class="col-full" name="NewContainer" />
                     <engine:Button text="New Responsive Container" class="col-full" name="NewResponsiveContainer" />
                     <engine:Button text="Rename Element(s)" class="col-full" name="RenameElements" />
                 </engine:VisualElement>
 
-                <engine:VisualElement class="section" name="create-sequence-elements">
+                <engine:VisualElement class="section" name="hierarchy-selection">
                     <engine:VisualElement class="section___content">
 
                         <engine:Foldout class="foldout col-full" text="Hierarchy Selection" value="false">

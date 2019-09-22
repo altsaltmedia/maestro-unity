@@ -46,6 +46,8 @@ namespace AltSalt
             NewText,
             NewSprite,
             NewContainer,
+            NewEmptyContainer,
+            NewEmptyResponsiveContainer,
             NewResponsiveContainer,
             RenameElements,
             SaveSelection,
@@ -95,6 +97,24 @@ namespace AltSalt
                 case nameof(ButtonNames.NewContainer):
                     button.clickable.clicked += () => {
                         createdGameObject = PageBuilderCore.CreateNewElement(Selection.transforms, PageBuilderCore.PrefabReferences.containerPrefab, objectName, true);
+                        if (selectCreatedObject == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+
+                case nameof(ButtonNames.NewEmptyContainer):
+                    button.clickable.clicked += () => {
+                        createdGameObject = PageBuilderCore.CreateNewElement(Selection.transforms, PageBuilderCore.PrefabReferences.containerPrefab, objectName);
+                        if (selectCreatedObject == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+
+                case nameof(ButtonNames.NewEmptyResponsiveContainer):
+                    button.clickable.clicked += () => {
+                        createdGameObject = PageBuilderCore.CreateNewElement(Selection.transforms, PageBuilderCore.PrefabReferences.responsiveContainerPrefab, objectName);
                         if (selectCreatedObject == true) {
                             Selection.activeGameObject = createdGameObject;
                         }

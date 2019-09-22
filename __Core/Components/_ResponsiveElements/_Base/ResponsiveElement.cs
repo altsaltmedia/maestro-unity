@@ -112,6 +112,13 @@ namespace AltSalt
             responsiveElementEnable.RaiseEvent(this.gameObject, this);
         }
 
+#if UNITY_EDITOR
+        void OnDisable()
+        {
+            responsiveElementDisable.RaiseEvent(this.gameObject, this);
+        }
+#endif
+
         public void CallExecuteLayoutUpdate(UnityEngine.Object callingObject)
         {
             if (LogElementOnLayoutUpdate == true) {

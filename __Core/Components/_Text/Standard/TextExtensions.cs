@@ -1,11 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
-    public class TextUtils : MonoBehaviour
+    public class TextExtensions : MonoBehaviour
     {
         TMP_Text textRenderer;
 
@@ -46,7 +49,7 @@ namespace AltSalt
         void StoreTextRenderer()
         {
             if(textRenderer == null) {
-                textRenderer = gameObject.GetComponent<TextMeshPro>();
+                textRenderer = gameObject.GetComponent<TMP_Text>();
             }
         }
     }

@@ -164,7 +164,6 @@ namespace AltSalt
 
             return targetObjects;
         }
-
         public static UnityEngine.Object[] CullSelection(GameObject[] currentSelection, Type typeToSelect)
         {
             List<GameObject> newSelection = new List<GameObject>();

@@ -56,6 +56,8 @@ namespace AltSalt
             SetFontSize,
             PopulateFontColor,
             SetFontColor,
+            SetOpaque,
+            SetTransparent,
             TrimTextBox,
             AlignLeft,
             AlignCenter,
@@ -170,6 +172,18 @@ namespace AltSalt
                 case nameof(ButtonNames.SetFontColor):
                     button.clickable.clicked += () => {
                         SetFontColor(Selection.gameObjects, fontColor);
+                    };
+                    break;
+
+                case nameof(ButtonNames.SetOpaque):
+                    button.clickable.clicked += () => {
+                        SetFontAlpha(Selection.gameObjects, 1);
+                    };
+                    break;
+
+                case nameof(ButtonNames.SetTransparent):
+                    button.clickable.clicked += () => {
+                        SetFontAlpha(Selection.gameObjects, 0);
                     };
                     break;
 
@@ -340,6 +354,22 @@ namespace AltSalt
                     Undo.RecordObject(textMeshPro, "set font color");
                     componentList.Add(textMeshPro);
                     textMeshPro.color = targetColor;
+                }
+            }
+
+            return componentList.ToArray();
+        }
+
+        public static TMP_Text[] SetFontAlpha(GameObject[] objectSelection, float targetAlpha)
+        {
+            List<TMP_Text> componentList = new List<TMP_Text>();
+
+            for (int i = 0; i < objectSelection.Length; i++) {
+                TMP_Text textMeshPro = objectSelection[i].GetComponent<TMP_Text>();
+                if (textMeshPro != null) {
+                    Undo.RecordObject(textMeshPro, "set font alpha");
+                    componentList.Add(textMeshPro);
+                    textMeshPro.color = new Color(textMeshPro.color.r, textMeshPro.color.g, textMeshPro.color.b, targetAlpha);
                 }
             }
 

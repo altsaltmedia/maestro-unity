@@ -327,16 +327,14 @@ namespace AltSalt
 
                 case nameof(ButtonNames.SelectSourceObjects):
                     button.clickable.clicked += () => {
-                        Selection.objects = GetObjectsFromTimelineSelection(Selection.objects, TimelineEditor.selectedClips, TimelineEditor.inspectedDirector);
-                        TimelineUtilsCore.RefreshTimelineContentsModified();
+                        SelectSourceObjects();
                     };
                     EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.TracksOrClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.SelectTargetTracks):
                     button.clickable.clicked += () => {
-                        Selection.objects = SelectTargetTracks(Selection.objects, TimelineEditor.selectedClips, TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector);
-                        TimelineUtilsCore.RefreshTimelineContentsModified();
+                        SelectTargetTracks();
                     };
                     EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ObjectsSelected, button);
                     break;
@@ -345,6 +343,21 @@ namespace AltSalt
             return button;
         }
 
+        [MenuItem("Edit/AltSalt/Select Source Objects", false, 0)]
+        public static void SelectSourceObjects()
+        {
+            Selection.objects = GetObjectsFromTimelineSelection(Selection.objects, TimelineEditor.selectedClips, TimelineEditor.inspectedDirector);
+            TimelineUtilsCore.RefreshTimelineContentsModified();
+        }
+
+        [MenuItem("Edit/AltSalt/Select Target Tracks", false, 0)]
+        public static void SelectTargetTracks()
+        {
+            Selection.objects = SelectTargetTracks(Selection.objects, TimelineEditor.selectedClips, TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector);
+            TimelineUtilsCore.RefreshTimelineContentsModified();
+        }
+
+        [MenuItem("Edit/AltSalt/Deselect All", false, 0)]
         public static void DeselectAll()
         {
             TimelineEditor.selectedClips = new TimelineClip[0];
@@ -608,8 +621,6 @@ namespace AltSalt
 
             return selectedClips;
         }
-
-
 
         public static TimelineClip[] MultiplyDuration(TimelineClip[] selectedClips, float multiplier, bool executeTranposeCallback = false, TimelineClip[] sourceClips = null, TransposeClipsCallback transposeClipsCallback = null)
         {

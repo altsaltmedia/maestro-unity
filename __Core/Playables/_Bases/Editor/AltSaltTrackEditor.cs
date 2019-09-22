@@ -7,13 +7,13 @@ using UnityEngine.Timeline;
 
 namespace AltSalt
 {
-    [CustomTimelineEditor(typeof(LerpToTargetTrack))]
-    public class DebugTimelineTrackEditor : TrackEditor
+    [CustomTimelineEditor(typeof(TrackAsset))]
+	public class AltSaltTrackEditor : TrackEditor
     {
         public override TrackDrawOptions GetTrackOptions(TrackAsset track, Object binding)
         {
             TrackDrawOptions drawOptions = base.GetTrackOptions(track, binding);
-            drawOptions.minimumHeight = 25f;
+            drawOptions.minimumHeight = 15f;
             return drawOptions;
         }
     }

@@ -55,6 +55,7 @@ xsi:schemaLocation="
 
 		  	<engine:VisualElement class="section___content">
 		  		<editor:PropertyField label="clip name :" class="col-full" value="" binding-path="clipName"/>
+		  		<editor:PropertyField label="easing type :" class="col-full" binding-path="clipEaseType" name="ClipEaseType"/>
 				<engine:Toggle text="select created clip(s)" class="col-half update-window-trigger" binding-path="selectCreatedClip"/>
 				<engine:Toggle text="advance playhead" class="col-half margin-right-0 update-window-trigger" binding-path="advancePlayhead"/>
 		  	</engine:VisualElement>

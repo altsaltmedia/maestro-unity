@@ -46,6 +46,7 @@ namespace AltSalt
         public bool selectCreatedTracks = true;
         public bool allowBlankTracks = false;
         public float newClipDuration = .5f;
+        public EasingFunction.Ease clipEaseType = EasingFunction.Ease.EaseInOutQuad;
         public string clipName = "";
         public bool selectCreatedClip = true;
         public bool advancePlayhead = true;
@@ -195,7 +196,7 @@ namespace AltSalt
 
                 case nameof(ButtonNames.PasteTracks):
                     button.clickable.clicked += () => {
-                        Selection.objects = PasteTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects, copiedTracks);
+                        Selection.objects = PasteTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, copiedTracks);
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
                     AddToToggleData(toggleData, EnableCondition.CopiedTracksPopulated, button);
@@ -216,9 +217,9 @@ namespace AltSalt
                 case nameof(ButtonNames.TMProColorTrack):
                     button.clickable.clicked += () => {
                         if (selectCreatedTracks == true) {
-                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProColorTrack), typeof(TMP_Text), Selection.objects);
+                            Selection.objects = CreateTMProColorTrack();
                         } else {
-                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProColorTrack), typeof(TMP_Text), Selection.objects);
+                            CreateTMProColorTrack();
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
@@ -228,9 +229,9 @@ namespace AltSalt
                 case nameof(ButtonNames.RectTransformPosTrack):
                     button.clickable.clicked += () => {
                         if (selectCreatedTracks == true) {
-                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformPosTrack), typeof(RectTransform), Selection.objects);
+                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformPosTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
                         } else {
-                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformPosTrack), typeof(RectTransform), Selection.objects);
+                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformPosTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
@@ -239,10 +240,10 @@ namespace AltSalt
 
                 case nameof(ButtonNames.SpriteColorTrack):
                     button.clickable.clicked += () => {
-                        if (selectCreatedTracks == true) {
-                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(SpriteColorTrack), typeof(SpriteRenderer), Selection.objects);
+                        if(selectCreatedTracks == true) {
+                            Selection.objects = CreateSpriteColorTrack();
                         } else {
-                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(SpriteColorTrack), typeof(SpriteRenderer), Selection.objects);
+                            CreateSpriteColorTrack();
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
@@ -252,9 +253,9 @@ namespace AltSalt
                 case nameof(ButtonNames.RectTransformScaleTrack):
                     button.clickable.clicked += () => {
                         if (selectCreatedTracks == true) {
-                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformScaleTrack), typeof(RectTransform), Selection.objects);
+                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformScaleTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
                         } else {
-                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformScaleTrack), typeof(RectTransform), Selection.objects);
+                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformScaleTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
@@ -264,9 +265,9 @@ namespace AltSalt
                 case nameof(ButtonNames.RectTransformRotationTrack):
                     button.clickable.clicked += () => {
                         if (selectCreatedTracks == true) {
-                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformRotationTrack), typeof(RectTransform), Selection.objects);
+                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformRotationTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
                         } else {
-                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformRotationTrack), typeof(RectTransform), Selection.objects);
+                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformRotationTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
@@ -276,9 +277,9 @@ namespace AltSalt
                 case nameof(ButtonNames.FloatVarTrack):
                     button.clickable.clicked += () => {
                         if (selectCreatedTracks == true) {
-                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new UnityEngine.Object[] { targetFloat }, typeof(LerpFloatVarTrack), typeof(FloatVariable), Selection.objects);
+                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new UnityEngine.Object[] { targetFloat }, typeof(LerpFloatVarTrack), typeof(FloatVariable), Selection.objects, TimelineEditor.selectedClips);
                         } else {
-                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new UnityEngine.Object[] { targetFloat }, typeof(LerpFloatVarTrack), typeof(FloatVariable), Selection.objects);
+                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new UnityEngine.Object[] { targetFloat }, typeof(LerpFloatVarTrack), typeof(FloatVariable), Selection.objects, TimelineEditor.selectedClips);
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
@@ -288,9 +289,9 @@ namespace AltSalt
                 case nameof(ButtonNames.ColorVarTrack):
                     button.clickable.clicked += () => {
                         if (selectCreatedTracks == true) {
-                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new UnityEngine.Object[] { targetColor }, typeof(LerpColorVarTrack), typeof(ColorVariable), Selection.objects);
+                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new UnityEngine.Object[] { targetColor }, typeof(LerpColorVarTrack), typeof(ColorVariable), Selection.objects, TimelineEditor.selectedClips);
                         } else {
-                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new UnityEngine.Object[] { targetColor }, typeof(LerpColorVarTrack), typeof(ColorVariable), Selection.objects);
+                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new UnityEngine.Object[] { targetColor }, typeof(LerpColorVarTrack), typeof(ColorVariable), Selection.objects, TimelineEditor.selectedClips);
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
@@ -300,9 +301,9 @@ namespace AltSalt
                 case nameof(ButtonNames.TMProCharSpacingTrack):
                     button.clickable.clicked += () => {
                         if (selectCreatedTracks == true) {
-                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProCharSpacingTrack), typeof(TMP_Text), Selection.objects);
+                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProCharSpacingTrack), typeof(TMP_Text), Selection.objects, TimelineEditor.selectedClips);
                         } else {
-                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProCharSpacingTrack), typeof(TMP_Text), Selection.objects);
+                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProCharSpacingTrack), typeof(TMP_Text), Selection.objects, TimelineEditor.selectedClips);
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
@@ -311,10 +312,10 @@ namespace AltSalt
 
                 case nameof(ButtonNames.ResponsiveRectTransformPosTrack):
                     button.clickable.clicked += () => {
-                        if (selectCreatedTracks == true) {
-                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformPosTrack), typeof(RectTransform), Selection.objects);
+                        if(selectCreatedTracks == true) {
+                            Selection.objects = CreateResponsiveRectTransformPosTrack();
                         } else {
-                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformPosTrack), typeof(RectTransform), Selection.objects);
+                            CreateResponsiveRectTransformPosTrack();
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
@@ -324,9 +325,9 @@ namespace AltSalt
                 case nameof(ButtonNames.ResponsiveRectTransformScaleTrack):
                     button.clickable.clicked += () => {
                         if (selectCreatedTracks == true) {
-                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformScaleTrack), typeof(RectTransform), Selection.objects);
+                            Selection.objects = TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformScaleTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
                         } else {
-                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformScaleTrack), typeof(RectTransform), Selection.objects);
+                            TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformScaleTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
                         }
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
@@ -335,17 +336,7 @@ namespace AltSalt
 
                 case nameof(ButtonNames.NewClips):
                     button.clickable.clicked += () => {
-                        if (selectCreatedClip == true) {
-                            TimelineEditor.selectedClips = CreateClips(TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, newClipDuration, clipName);
-                        } else {
-                            CreateClips(TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, newClipDuration, clipName);
-                        }
-                        TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
-
-                        if (advancePlayhead == true) {
-                            TimelineUtilsCore.CurrentTime += newClipDuration;
-                            TimelineUtilsCore.RefreshTimelineRedrawWindow();
-                        }
+                        TriggerCreateClips(selectCreatedClip, advancePlayhead, newClipDuration, clipName, clipEaseType);
                     };
                     AddToToggleData(toggleData, EnableCondition.TrackOrClipSelected, button);
                     break;
@@ -458,10 +449,13 @@ namespace AltSalt
             return trackData;
         }
 
-        public static TrackAsset[] PasteTracks(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, UnityEngine.Object[] destinationSelection, List<TrackData> sourceTrackData)
+        public static TrackAsset[] PasteTracks(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, UnityEngine.Object[] destinationSelection, TimelineClip[] clipSelection, List<TrackData> sourceTrackData)
         {
             TrackAsset[] pastedTracks = new TrackAsset[sourceTrackData.Count];
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
+            if (parentTrack == null) {
+                parentTrack = GetDestinationTrackFromSelection(clipSelection);
+            }
 
             // Paste tracks
             for (int i = 0; i < sourceTrackData.Count; i++) {
@@ -526,10 +520,94 @@ namespace AltSalt
             return false;
         }
 
-        public static TrackAsset[] TriggerCreateTrack(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, UnityEngine.Object[] sourceObjects, Type trackType, Type requiredObjectType, UnityEngine.Object[] destinationSelection)
+        [MenuItem("Edit/AltSalt/Create Color Track", false, 0)]
+        public static void HotkeyCreateColorTrack()
+        {
+            TrackClipCreation trackClipWindow = TimelineUtilsWindow.childWindows[typeof(TrackClipCreation)] as TrackClipCreation;
+            bool selectCreatedTracks = trackClipWindow.selectCreatedTracks;
+
+            List<TrackAsset> newTracks = new List<TrackAsset>();
+
+            if(Utils.CullSelection(Selection.gameObjects, typeof(TMP_Text)).Length > 0) {
+                newTracks.AddRange(CreateTMProColorTrack());
+            }
+
+            if (Utils.CullSelection(Selection.gameObjects, typeof(SpriteRenderer)).Length > 0) {
+                newTracks.AddRange(CreateSpriteColorTrack());
+            }
+
+            if(selectCreatedTracks == true) {
+                Selection.objects = newTracks.ToArray();
+            }
+
+            TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+        }
+
+        [MenuItem("Edit/AltSalt/Create Position Track", false, 0)]
+        public static void HotkeyCreatePositionTrack()
+        {
+            TrackClipCreation trackClipWindow = TimelineUtilsWindow.childWindows[typeof(TrackClipCreation)] as TrackClipCreation;
+            bool selectCreatedTracks = trackClipWindow.selectCreatedTracks;
+
+            if(selectCreatedTracks == true) {
+                Selection.objects = CreateResponsiveRectTransformPosTrack();
+            } else {
+                CreateResponsiveRectTransformPosTrack();
+            }
+
+            TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+        }
+
+        [MenuItem("Edit/AltSalt/Create New Clip(s)", false, 0)]
+        public static void HotkeyTriggerCreateClips()
+        {
+            TrackClipCreation trackClipWindow = TimelineUtilsWindow.childWindows[typeof(TrackClipCreation)] as TrackClipCreation;
+            bool selectCreatedClip = trackClipWindow.selectCreatedClip;
+            bool advancePlayhead = trackClipWindow.advancePlayhead;
+            float newClipDuration = trackClipWindow.newClipDuration;
+            string clipName = trackClipWindow.clipName;
+            EasingFunction.Ease clipEaseType = trackClipWindow.clipEaseType;
+
+            TriggerCreateClips(selectCreatedClip, advancePlayhead, newClipDuration, clipName, clipEaseType);
+        }
+
+        public static TrackAsset[] CreateTMProColorTrack()
+        {
+            return TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProColorTrack), typeof(TMP_Text), Selection.objects, TimelineEditor.selectedClips); ;
+        }
+
+        public static TrackAsset[] CreateSpriteColorTrack()
+        {
+            return TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(SpriteColorTrack), typeof(SpriteRenderer), Selection.objects, TimelineEditor.selectedClips);
+        }
+
+        public static TrackAsset[] CreateResponsiveRectTransformPosTrack()
+        {
+            return TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformPosTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
+        }
+
+        public static void TriggerCreateClips(bool selectCreatedClip, bool advancePlayhead, float newClipDuration, string clipName, EasingFunction.Ease clipEaseType)
+        {
+            if (selectCreatedClip == true) {
+                TimelineEditor.selectedClips = CreateClips(TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, newClipDuration, clipName, clipEaseType);
+            } else {
+                CreateClips(TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, newClipDuration, clipName, clipEaseType);
+            }
+            TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+
+            if (advancePlayhead == true) {
+                TimelineUtilsCore.CurrentTime += newClipDuration;
+                TimelineUtilsCore.RefreshTimelineRedrawWindow();
+            }
+        }
+
+        public static TrackAsset[] TriggerCreateTrack(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, UnityEngine.Object[] sourceObjects, Type trackType, Type requiredObjectType, UnityEngine.Object[] destinationSelection, TimelineClip[] clipSelection)
         {
             List<TrackAsset> trackAssets = new List<TrackAsset>();
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
+            if (parentTrack == null) {
+                parentTrack = GetDestinationTrackFromSelection(clipSelection);
+            }
 
             if (sourceObjects.Length > 0) {
                 for (int i = 0; i < sourceObjects.Length; i++) {
@@ -546,10 +624,13 @@ namespace AltSalt
             return trackAssets.ToArray();
         }
 
-        public static TrackAsset[] TriggerCreateTrack(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, GameObject[] sourceGameObjects, Type trackType, Type requiredComponentType, UnityEngine.Object[] destinationSelection)
+        public static TrackAsset[] TriggerCreateTrack(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, GameObject[] sourceGameObjects, Type trackType, Type requiredComponentType, UnityEngine.Object[] destinationSelection, TimelineClip[] clipSelection)
         {
             List<TrackAsset> trackAssets = new List<TrackAsset>();
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
+            if(parentTrack == null) {
+                parentTrack = GetDestinationTrackFromSelection(clipSelection);
+            }
 
             if (sourceGameObjects.Length > 0) {
                 GameObject[] sortedGameObjects = Utils.SortGameObjectSelection(sourceGameObjects);
@@ -614,7 +695,7 @@ namespace AltSalt
             return targetTrack;
         }
 
-        public static TimelineClip[] CreateClips(PlayableDirector targetDirector, UnityEngine.Object[] objectSelection, TimelineClip[] clipSelection, float duration, string clipName)
+        public static TimelineClip[] CreateClips(PlayableDirector targetDirector, UnityEngine.Object[] objectSelection, TimelineClip[] clipSelection, float duration, string clipName, EasingFunction.Ease easeType)
         {
             List<TimelineClip> timelineClips = new List<TimelineClip>();
             List<TrackAsset> targetTracks = new List<TrackAsset>();
@@ -639,7 +720,7 @@ namespace AltSalt
                 TimelineClip newClip = targetTracks[i].CreateDefaultClip();
                 newClip.start = TimelineUtilsCore.CurrentTime;
                 newClip.duration = duration;
-                PopulateClip(targetDirector, targetTracks[i], newClip);
+                PopulateClip(targetDirector, targetTracks[i], easeType, newClip);
                 timelineClips.Add(newClip);
             }
 
@@ -653,7 +734,7 @@ namespace AltSalt
             return timelineClipsArray;
         }
 
-        static PlayableAsset PopulateClip(PlayableDirector targetDirector, TrackAsset parentTrack, TimelineClip timelineClip)
+        static PlayableAsset PopulateClip(PlayableDirector targetDirector, TrackAsset parentTrack, EasingFunction.Ease easeType, TimelineClip timelineClip)
         {
             UnityEngine.Object sourceObject = null;
             foreach (PlayableBinding playableBinding in parentTrack.outputs) {
@@ -669,6 +750,7 @@ namespace AltSalt
                             asset.template.initialColor = component.color;
                             asset.template.targetColor = component.color;
                         }
+                        asset.template.ease = easeType;
                         return asset;
                     }
 
@@ -679,6 +761,7 @@ namespace AltSalt
                             asset.template.initialPosition = component.anchoredPosition3D;
                             asset.template.targetPosition = component.anchoredPosition3D;
                         }
+                        asset.template.ease = easeType;
                         return asset;
                     }
 
@@ -689,6 +772,7 @@ namespace AltSalt
                             asset.template.initialColor = component.color;
                             asset.template.targetColor = component.color;
                         }
+                        asset.template.ease = easeType;
                         return asset;
                     }
 
@@ -699,6 +783,7 @@ namespace AltSalt
                             asset.template.initialScale = component.localScale;
                             asset.template.targetScale = component.localScale;
                         }
+                        asset.template.ease = easeType;
                         return asset;
                     }
 
@@ -709,6 +794,7 @@ namespace AltSalt
                             asset.template.initialRotation = component.localEulerAngles;
                             asset.template.targetRotation = component.localEulerAngles;
                         }
+                        asset.template.ease = easeType;
                         return asset;
                     }
 
@@ -719,6 +805,7 @@ namespace AltSalt
                             asset.template.initialValue = component.Value;
                             asset.template.targetValue = component.Value;
                         }
+                        asset.template.ease = easeType;
                         return asset;
                     }
 
@@ -729,6 +816,7 @@ namespace AltSalt
                             asset.template.initialColor = component.Value;
                             asset.template.targetColor = component.Value;
                         }
+                        asset.template.ease = easeType;
                         return asset;
                     }
 
@@ -739,6 +827,7 @@ namespace AltSalt
                             asset.template.initialValue = component.characterSpacing;
                             asset.template.targetValue = component.characterSpacing;
                         }
+                        asset.template.ease = easeType;
                         return asset;
                     }
 
@@ -755,6 +844,7 @@ namespace AltSalt
                                 asset.template.breakpointTargetValue.Add(component.localScale);
                             }
                         }
+                        asset.template.ease = easeType;
                         return asset;
                     }
             }
@@ -778,6 +868,20 @@ namespace AltSalt
                     return destinationTrack;
                 }
             }
+
+            return destinationTrack;
+        }
+
+        static TrackAsset GetDestinationTrackFromSelection(TimelineClip[] destinationSelection)
+        {
+            TrackAsset destinationTrack = null;
+            for (int q = 0; q < destinationSelection.Length; q++) {
+                TimelineClip clip = destinationSelection[q];
+                if (clip.parentTrack.parent is TrackAsset) {
+                    destinationTrack = clip.parentTrack.parent as TrackAsset;
+                }
+            }
+
             return destinationTrack;
         }
 

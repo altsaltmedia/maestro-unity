@@ -34,6 +34,8 @@ xsi:schemaLocation="
                     <editor:PropertyField label="Font color :" class="col-full" value="(0,0,0,1)" binding-path="fontColor" name="FontColor"/>
                     <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulateFontColor" />
                     <engine:Button text="Set" class="col-quarter margin-right-0" name="SetFontColor" />
+                    <engine:Button text="Set Opaque" class="col-half margin-right-0" name="SetOpaque" />
+                    <engine:Button text="Set Transparent" class="col-half margin-right-0" name="SetTransparent" />
 
                     <engine:Label text="Alignment : " class="col-1" />
                     <engine:Button text="L" class="col-15-percent" name="AlignLeft"/>
