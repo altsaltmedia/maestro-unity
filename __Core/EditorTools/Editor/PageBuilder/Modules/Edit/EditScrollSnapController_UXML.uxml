@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+    <engine:VisualElement class="section-container" name="edit-scroll-snap-controller">
+        
+        <engine:Foldout class="foldout toggleable-group" text="Scroll Snap Controller" value="true" name="EditScrollSnapController">
+
+            <engine:VisualElement class="section">
+                <engine:VisualElement class="section___content">
+
+                    <editor:PropertyField label="Add Icon :" class="col-full" value="" binding-path="addIcon" name="AddIcon"/>
+
+                    <engine:Button text="Add Panel" class="col-full" name="AddPanel" />
+
+                    <editor:PropertyField label="Icon interval :" class="col-full" value="" binding-path="iconInterval" name="IconInterval"/>
+
+                    <engine:Button text="Set Icon Interval" class="col-full" name="SetIconInterval" />
+
+                </engine:VisualElement>
+                
+            </engine:VisualElement>
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

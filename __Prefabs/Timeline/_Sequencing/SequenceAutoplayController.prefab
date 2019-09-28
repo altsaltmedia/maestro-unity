@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5961701273639827757}
   - component: {fileID: 114198889693866494}
   - component: {fileID: 114743968378624194}
+  - component: {fileID: 9140622990383936743}
   m_Layer: 0
   m_Name: SequenceAutoplayController
   m_TagString: Untagged
@@ -51,7 +52,7 @@ MonoBehaviour:
   sequenceModified:
     simpleEvent: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  sequenceList: {fileID: 0}
+  sequenceLists: []
   isReversing:
     UseConstant: 0
     ConstantValue: 0
@@ -64,6 +65,7 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 1e19d88d8db1b4a37b05030830ea63cf, type: 2}
+  enableEditorStepDebug: 0
   ease: 10
   easeThreshold: 0.25
   lerpModifier: 0.01
@@ -205,6 +207,36 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 114514924441005906}
         m_MethodName: DeactivateAutoplay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
+--- !u!114 &9140622990383936743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170332053769480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 432c2a70e79604fe4ae9e1a6f20ee25b, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114514924441005906}
+        m_MethodName: ActivateAutoplay
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -45,6 +45,7 @@ namespace AltSalt
 
         enum ButtonNames
         {
+            NewSimpleDirector,
             NewSequenceTouchApplier,
             NewSequenceAutoplayer,
             NewSequenceList,
@@ -83,6 +84,12 @@ namespace AltSalt
         Button SetupButton(Button button)
         {
             switch (button.name) {
+
+                case nameof(ButtonNames.NewSimpleDirector):
+                    button.clickable.clicked += () => {
+                        CreateStandardDirector();
+                    };
+                    break;
 
                 case nameof(ButtonNames.NewSequenceTouchApplier):
                     button.clickable.clicked += () => {
@@ -133,6 +140,36 @@ namespace AltSalt
             }
 
             return visualElement;
+        }
+
+        public static PlayableDirector CreateStandardDirector()
+        {
+            string filePath = EditorUtility.SaveFilePanelInProject("Create a new timeline asset", "", "", "Please enter a file name for the new timeline asset");
+
+            if(filePath.Length > 0) {
+                TimelineAsset timelineAsset = CreateTimelineAsset(filePath);
+                PlayableDirector playableDirector = CreateElement(PageBuilderCore.PrefabReferences.standardDirector, Selection.activeTransform, "Create standard director").GetComponent<PlayableDirector>();
+                playableDirector.playableAsset = timelineAsset;
+
+                Selection.activeGameObject = playableDirector.gameObject;
+
+                return playableDirector;
+            } else {
+                Debug.Log("Creation cancelled");
+            }
+
+            return null;
+        }
+
+        public static GameObject CreateElement(GameObject targetElement, Transform parentTransform, string createMessage = "Create new element")
+        {
+            GameObject newElement = PrefabUtility.InstantiatePrefab(targetElement) as GameObject;
+            Undo.RegisterCreatedObjectUndo(newElement, createMessage);
+            if (parentTransform != null) {
+                newElement.transform.SetParent(parentTransform);
+            }
+
+            return newElement;
         }
 
         public static GameObject CreateSequenceTouchApplier(Transform parentTransform)
@@ -236,7 +273,7 @@ namespace AltSalt
                 if (EditorUtility.DisplayDialog("Overwrite existing file?", "This will overwrite the existing file at " + finalPath, "Proceed", "Cancel")) {
                     AssetDatabase.CreateAsset(newTimelineAsset, finalPath);
                 } else {
-                    EditorUtility.DisplayDialog("No sequence populated", "Timeline asset creation cancelled.", "Ok");
+                    EditorUtility.DisplayDialog("No assets created", "Timeline asset creation cancelled.", "Ok");
                     return null;
                 }
             } else {

@@ -12,7 +12,7 @@ namespace AltSalt
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipStartEndTime();
+            StoreClipProperties(go);
             return ScriptPlayable<AudioLerpVolumeMixerBehaviour>.Create (graph, inputCount);
         }
         

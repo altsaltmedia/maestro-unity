@@ -39,7 +39,7 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if (activeIndex >= viewportValues.Count) {
-                LogBreakpointWarning();
+                LogBreakpointError();
                 return;
             }
 #endif

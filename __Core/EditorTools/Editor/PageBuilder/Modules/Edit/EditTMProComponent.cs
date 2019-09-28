@@ -145,7 +145,7 @@ namespace AltSalt
 
                 case nameof(ButtonNames.RenameUsingContent):
                     button.clickable.clicked += () => {
-                        RenameObjectsUsingContent(Selection.gameObjects, renamePrefix);
+                        CallRenameTextUsingContent();
                     };
                     break;
 
@@ -245,6 +245,12 @@ namespace AltSalt
             return button;
         }
 
+        [MenuItem("Edit/AltSalt/Rename Text Object", false, 0)]
+        public static void CallRenameTextUsingContent()
+        {
+            RenameTextUsingContent(Selection.gameObjects, renamePrefix);
+        }
+
         public static string GetTextContentFromSelection(GameObject[] objectSelection)
         {
             string value = null;
@@ -277,7 +283,7 @@ namespace AltSalt
             return componentList.ToArray();
         }
 
-        public static GameObject[] RenameObjectsUsingContent(GameObject[] objectSelection, string prefix)
+        public static GameObject[] RenameTextUsingContent(GameObject[] objectSelection, string prefix)
         {
             for (int i = 0; i < objectSelection.Length; i++) {
                 TMP_Text component = objectSelection[i].GetComponent<TMP_Text>();

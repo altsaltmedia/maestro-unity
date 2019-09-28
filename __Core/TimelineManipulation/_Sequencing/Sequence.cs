@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using Sirenix.OdinInspector;
 
 namespace AltSalt
@@ -26,6 +27,28 @@ namespace AltSalt
     public class Sequence : ScriptableObject
     {
         public bool Active = true;
+
+        [SerializeField]
+        PlayableAsset sourcePlayable;
+        public PlayableAsset SourcePlayable {
+            get {
+                return sourcePlayable;
+            }
+            set {
+                sourcePlayable = value;
+            }
+        }
+
+        [SerializeField]
+        DirectorUpdater director;
+        public DirectorUpdater Director {
+            get {
+                return director;
+            }
+            set {
+                director = value;
+            }
+        }
 
         [SerializeField]
         protected bool defaultStatus;

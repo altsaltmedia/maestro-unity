@@ -26,6 +26,10 @@ namespace AltSalt
 
         [Required]
         [SerializeField]
+        public GameObject responsiveContainerLeftAnchorPrefab;
+
+        [Required]
+        [SerializeField]
         public GameObject sequenceTouchApplier;
 
         [Required]
@@ -39,5 +43,13 @@ namespace AltSalt
         [Required]
         [SerializeField]
         public GameObject swipeDirector;
+
+        [Required]
+        [SerializeField]
+        public GameObject scrollSnapController;
+
+        [Required]
+        [SerializeField]
+        public GameObject scrollSnapIcon;
     }
 }

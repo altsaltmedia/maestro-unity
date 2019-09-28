@@ -21,7 +21,7 @@ namespace AltSalt
         // This method should be overridden in child classes
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipStartEndTime();
+            StoreClipProperties(go);
             return ScriptPlayable<TMProTypewriterMixerBehaviour>.Create(graph, inputCount);
         }
 

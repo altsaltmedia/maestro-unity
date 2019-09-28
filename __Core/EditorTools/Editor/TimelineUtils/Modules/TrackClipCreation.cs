@@ -15,11 +15,14 @@ namespace AltSalt
     public class TrackClipCreation : ChildUIElementsWindow
     {
         static TimelineUtilsWindow timelineUtilsWindow;
+        static TrackClipCreation trackClipWindow;
 
         public override ChildUIElementsWindow Init(EditorWindow parentWindow)
         {
             timelineUtilsWindow = parentWindow as TimelineUtilsWindow;
             VisualElement parentVisualElement = parentWindow.rootVisualElement;
+
+            trackClipWindow = this;
 
             var buttons = parentVisualElement.Query<Button>();
             buttons.ForEach(SetupButton);
@@ -74,6 +77,7 @@ namespace AltSalt
             RefreshLayout,
             CopyTracks,
             PasteTracks,
+            DuplicateTracks,
             GroupTrack,
             TMProColorTrack,
             RectTransformPosTrack,
@@ -200,6 +204,14 @@ namespace AltSalt
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
                     AddToToggleData(toggleData, EnableCondition.CopiedTracksPopulated, button);
+                    break;
+
+                case nameof(ButtonNames.DuplicateTracks):
+                    button.clickable.clicked += () => {
+                        Selection.objects = DuplicateTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects);
+                        TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    AddToToggleData(toggleData, EnableCondition.TrackSelectedForCopying, button);
                     break;
 
                 case nameof(ButtonNames.GroupTrack):
@@ -501,6 +513,70 @@ namespace AltSalt
             return pastedTracks;
         }
 
+        public static TrackAsset[] DuplicateTracks(TimelineAsset targetTimelineAsset, PlayableDirector sourceDirector, UnityEngine.Object[] sourceObjects)
+        {
+            List<TrackData> sourceTrackData = new List<TrackData>();
+            for (int i = 0; i < sourceObjects.Length; i++) {
+                if (sourceObjects[i] is TrackAsset) {
+                    List<TrackData> trackData = GetTrackData(sourceDirector, sourceObjects[i] as TrackAsset);
+                    sourceTrackData.AddRange(trackData);
+                }
+            }
+
+            TrackAsset[] pastedTracks = new TrackAsset[sourceTrackData.Count];
+
+            // Create tracks from selection
+            for (int i = 0; i < sourceTrackData.Count; i++) {
+
+                TrackAsset trackAsset = targetTimelineAsset.CreateTrack(sourceTrackData[i].trackType, null, sourceTrackData[i].trackName);
+                pastedTracks[i] = trackAsset;
+
+                foreach (PlayableBinding playableBinding in trackAsset.outputs) {
+                    sourceDirector.SetGenericBinding(playableBinding.sourceObject, sourceTrackData[i].trackBinding);
+                }
+                foreach (TimelineClip trackClip in sourceTrackData[i].trackClips) {
+                    TimelineClip pastedClip = trackAsset.CreateDefaultClip();
+
+                    pastedClip.duration = trackClip.duration;
+                    pastedClip.start = trackClip.start;
+
+                    Type assetType = pastedClip.asset.GetType();
+                    FieldInfo[] assetFields = assetType.GetFields();
+
+                    // Need to create a copy of the asset, otherwise the new clip
+                    // will use references to the old clip's asset values
+                    var trackClipAssetCopy = Instantiate(trackClip.asset);
+
+                    foreach (FieldInfo assetField in assetFields) {
+
+                        assetField.SetValue(pastedClip.asset, assetField.GetValue(trackClipAssetCopy));
+                    }
+                }
+            }
+
+            // Set groups if applicable, inserting the duplicated tracks into the group beside the source
+            for (int i = 0; i < sourceTrackData.Count; i++) {
+                if (sourceTrackData[i].groupTrack != null) {
+
+                    List<TrackAsset> revisedTrackList = new List<TrackAsset>();
+                    revisedTrackList.AddRange(sourceTrackData[i].groupTrack.GetChildTracks());
+
+                    for (int q = 0; q < revisedTrackList.Count; q++) {
+                        if (revisedTrackList[q] == sourceTrackData[i].trackAsset) {
+                            revisedTrackList.Insert(q + 1, pastedTracks[i]);
+                        }
+                    }
+
+                    for (int z = 0; z < revisedTrackList.Count; z++) {
+                        revisedTrackList[z].SetGroup(null);
+                        revisedTrackList[z].SetGroup(sourceTrackData[i].groupTrack);
+                    }
+                }
+            }
+
+            return pastedTracks;
+        }
+
         static bool ObjectsSelected()
         {
             if (Selection.objects.Length > 0) {
@@ -523,17 +599,23 @@ namespace AltSalt
         [MenuItem("Edit/AltSalt/Create Color Track", false, 0)]
         public static void HotkeyCreateColorTrack()
         {
-            TrackClipCreation trackClipWindow = TimelineUtilsWindow.childWindows[typeof(TrackClipCreation)] as TrackClipCreation;
             bool selectCreatedTracks = trackClipWindow.selectCreatedTracks;
 
             List<TrackAsset> newTracks = new List<TrackAsset>();
+            Type[] types = { typeof(TMP_Text), typeof(SpriteRenderer) };
 
-            if(Utils.CullSelection(Selection.gameObjects, typeof(TMP_Text)).Length > 0) {
-                newTracks.AddRange(CreateTMProColorTrack());
-            }
+            UnityEngine.Object[] culledSelection = Utils.CullSelection(Selection.gameObjects, types);
+            GameObject[] selectionAsGameObjects = Array.ConvertAll(culledSelection, item => (GameObject)item);
+            GameObject[] sortedSelection = Utils.SortGameObjectSelection(selectionAsGameObjects);
 
-            if (Utils.CullSelection(Selection.gameObjects, typeof(SpriteRenderer)).Length > 0) {
-                newTracks.AddRange(CreateSpriteColorTrack());
+            for (int i=0; i< sortedSelection.Length; i++) {
+                if(Utils.TargetComponentSelected(sortedSelection[i], typeof(TMP_Text))) {
+                    newTracks.AddRange(TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new GameObject[] { sortedSelection[i] }, typeof(TMProColorTrack), typeof(TMP_Text), Selection.objects, TimelineEditor.selectedClips));
+                }
+
+                if (Utils.TargetComponentSelected(sortedSelection[i], typeof(SpriteRenderer))) {
+                    newTracks.AddRange(TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new GameObject[] { sortedSelection[i] }, typeof(SpriteColorTrack), typeof(SpriteRenderer), Selection.objects, TimelineEditor.selectedClips));
+                }
             }
 
             if(selectCreatedTracks == true) {
@@ -546,7 +628,6 @@ namespace AltSalt
         [MenuItem("Edit/AltSalt/Create Position Track", false, 0)]
         public static void HotkeyCreatePositionTrack()
         {
-            TrackClipCreation trackClipWindow = TimelineUtilsWindow.childWindows[typeof(TrackClipCreation)] as TrackClipCreation;
             bool selectCreatedTracks = trackClipWindow.selectCreatedTracks;
 
             if(selectCreatedTracks == true) {
@@ -561,7 +642,6 @@ namespace AltSalt
         [MenuItem("Edit/AltSalt/Create New Clip(s)", false, 0)]
         public static void HotkeyTriggerCreateClips()
         {
-            TrackClipCreation trackClipWindow = TimelineUtilsWindow.childWindows[typeof(TrackClipCreation)] as TrackClipCreation;
             bool selectCreatedClip = trackClipWindow.selectCreatedClip;
             bool advancePlayhead = trackClipWindow.advancePlayhead;
             float newClipDuration = trackClipWindow.newClipDuration;
@@ -573,7 +653,7 @@ namespace AltSalt
 
         public static TrackAsset[] CreateTMProColorTrack()
         {
-            return TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProColorTrack), typeof(TMP_Text), Selection.objects, TimelineEditor.selectedClips); ;
+            return TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TMProColorTrack), typeof(TMP_Text), Selection.objects, TimelineEditor.selectedClips);
         }
 
         public static TrackAsset[] CreateSpriteColorTrack()

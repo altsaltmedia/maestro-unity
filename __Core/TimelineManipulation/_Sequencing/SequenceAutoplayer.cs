@@ -12,6 +12,9 @@ namespace AltSalt
         FloatReference frameStepValue;
 
         [SerializeField]
+        bool enableEditorStepDebug;
+
+        [SerializeField]
         EasingFunction.Ease ease = EasingFunction.Ease.EaseOutQuad;
 
         [HideInInspector]
@@ -123,7 +126,11 @@ namespace AltSalt
             if (isReversing.Value == false) {
                 // Update sequence moving forward
 #if UNITY_EDITOR
-                targetSequence.ModifySequenceTime(Time.smoothDeltaTime * easingModifier);
+                if (enableEditorStepDebug == true) {
+                    targetSequence.ModifySequenceTime(frameStepValue.Value * easingModifier);
+                } else {
+                    targetSequence.ModifySequenceTime(Time.smoothDeltaTime * easingModifier);
+                }
 #else
 
 #if UNITY_ANDROID
@@ -141,7 +148,11 @@ namespace AltSalt
             else {
                 // Update sequence moving backward
 #if UNITY_EDITOR
-                targetSequence.ModifySequenceTime(Time.smoothDeltaTime * easingModifier * -1f);
+                if(enableEditorStepDebug == true) {
+                    targetSequence.ModifySequenceTime(frameStepValue.Value * easingModifier * -1f);
+                } else {
+                    targetSequence.ModifySequenceTime(Time.smoothDeltaTime * easingModifier * -1f);
+                }
 #else
 
 #if UNITY_ANDROID

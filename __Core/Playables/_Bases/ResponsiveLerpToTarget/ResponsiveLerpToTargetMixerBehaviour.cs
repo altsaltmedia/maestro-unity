@@ -6,6 +6,7 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
+using UnityEngine;
 using UnityEngine.Playables;
 
 namespace AltSalt
@@ -18,6 +19,9 @@ namespace AltSalt
         protected int inputCount;
         protected float inputWeight;
         protected float modifier;
+
+        public GameObject directorObject;
+        public DirectorUpdater directorUpdater;
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {

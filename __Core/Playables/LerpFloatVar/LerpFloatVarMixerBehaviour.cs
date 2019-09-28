@@ -47,15 +47,18 @@ namespace AltSalt
         
         public override void OnPlayableDestroy(Playable playable)
         {
-            base.OnGraphStop(playable);
+            base.OnPlayableDestroy(playable);
 
             // Reset color if we're working in edit mode
+            if (trackBinding != null) {
+                if (Application.isPlaying == true && directorUpdater != null && directorUpdater.scrubberActive.Value == true) {
+                    trackBinding.SetValue(originalValue);
+                } else {
 #if UNITY_EDITOR
-            if(trackBinding != null) {
-                trackBinding.Value = originalValue;
-            }
+                    trackBinding.SetValue(originalValue);
 #endif
-            
+                }
+            }
         }
     }   
 }

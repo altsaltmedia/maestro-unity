@@ -91,7 +91,7 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if (activeIndex >= multiplier.Count || activeIndex >= orientations.Count) {
-                LogBreakpointWarning();
+                LogBreakpointError();
                 return;
             }
 #endif

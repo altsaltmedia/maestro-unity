@@ -12,7 +12,11 @@ namespace AltSalt
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipProperties(go);
-            return ScriptPlayable<ResponsiveRectTransformPosMixerBehaviour>.Create (graph, inputCount);
+            ScriptPlayable<ResponsiveRectTransformPosMixerBehaviour> trackPlayable = ScriptPlayable<ResponsiveRectTransformPosMixerBehaviour>.Create(graph, inputCount);
+            ResponsiveRectTransformPosMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            StoreMixerProperties(go, behaviour);
+
+            return trackPlayable;
         }
 
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)

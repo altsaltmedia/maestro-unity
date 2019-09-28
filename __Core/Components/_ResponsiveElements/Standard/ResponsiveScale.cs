@@ -38,7 +38,7 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if (activeIndex >= breakpointLocalScale.Count) {
-                LogBreakpointWarning();
+                LogBreakpointError();
                 return;
             }
             Undo.RegisterCompleteObjectUndo(rectTransform, "set responsive scale");

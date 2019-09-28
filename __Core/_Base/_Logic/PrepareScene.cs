@@ -295,7 +295,6 @@ namespace AltSalt {
                 sceneAspectRatio.Variable.SetValue(deviceHeight.Value / deviceWidth.Value);
 
             }
-            
         }
 
         [Serializable]

@@ -29,7 +29,7 @@ namespace AltSalt
 
         void GetUnsortedElements()
         {
-            relativeElements = FindObjectsOfType<RelativeElement>();
+            relativeElements = GetComponentsInChildren<RelativeElement>();
         }
 
         void StoreSortedElements()
@@ -49,7 +49,7 @@ namespace AltSalt
             }
         }
 
-        void ExecuteRelativity()
+        public void ExecuteRelativity()
         {
             for (int i = 0; i < sortedElements.Count; i++) {
                 sortedElements[i].ExecuteRelativeAction();

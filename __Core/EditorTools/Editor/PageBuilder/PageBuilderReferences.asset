@@ -19,6 +19,8 @@ MonoBehaviour:
     type: 3}
   responsiveContainerPrefab: {fileID: 1865775484262442, guid: a9aac29e430174582b3f0545758b45f2,
     type: 3}
+  responsiveContainerLeftAnchorPrefab: {fileID: 1820016223117700670, guid: 7f83d03ac65ea434e97192b7341aa13d,
+    type: 3}
   sequenceTouchApplier: {fileID: 1187882997373286, guid: a08611f7b640e4826b42e1a84b4a6221,
     type: 3}
   sequenceAutoplayer: {fileID: 1170332053769480, guid: be5fcc5036f2446f9a35aceadc3fd2cb,
@@ -26,4 +28,8 @@ MonoBehaviour:
   standardDirector: {fileID: 1176190904042262, guid: 45500f98c099c4c6ba46239041287a4f,
     type: 3}
   swipeDirector: {fileID: 1651845744537938, guid: 965a9055c56ab4990862478b56e0829d,
+    type: 3}
+  scrollSnapController: {fileID: 8985265788023737603, guid: c917a1d67419a49529112d5d955987b9,
+    type: 3}
+  scrollSnapIcon: {fileID: 5769402479335331085, guid: 20d233b6ec3c147a1b02241028dfaef8,
     type: 3}

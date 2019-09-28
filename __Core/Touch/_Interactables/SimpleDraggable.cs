@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using Sirenix.OdinInspector;
 
@@ -6,21 +7,15 @@ namespace AltSalt
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(ResizableBoxCollider2D))]
-    public class Draggable : InteractableRectTransform, IDragHandler
+    public class SimpleDraggable : DraggableBase
     {
-        BoxCollider2D boxCollider;
+        [SerializeField]
+        UnityEvent onDragEvent;
 
         [SerializeField]
-        [ValidateInput("IsPopulated")]
-        FloatReference dragSensitivity;
+        UnityEvent onEndDragEvent;
 
-        [SerializeField]
-        bool horizontalDrag;
-
-        [SerializeField]
-        bool verticalDrag;
-
-        public void OnDrag(PointerEventData data)
+        public override void OnDrag(PointerEventData data)
         {
             float newXPosition = 0f;
             float newYPosition = 0f;
@@ -39,6 +34,12 @@ namespace AltSalt
 
             Vector2 newPosition = new Vector2(newXPosition, newYPosition);
             rectTransform.anchoredPosition = newPosition;
+            onDragEvent.Invoke();
+        }
+
+        public override void OnEndDrag(PointerEventData data)
+        {
+            onEndDragEvent.Invoke();
         }
 
         private static bool IsPopulated(FloatReference attribute)

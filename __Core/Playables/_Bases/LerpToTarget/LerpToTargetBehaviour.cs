@@ -8,6 +8,7 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace AltSalt
 {
@@ -24,6 +25,18 @@ namespace AltSalt
 
         [HideInInspector]
         public EasingFunction.Function easingFunction;
+
+        [HideInInspector]
+        public TrackAsset parentTrack;
+
+        [HideInInspector]
+        public PlayableAsset clipAsset;
+
+        [HideInInspector]
+        public GameObject directorObject;
+
+        [HideInInspector]
+        public DirectorUpdater directorUpdater;
 
         public bool disableReset;
 

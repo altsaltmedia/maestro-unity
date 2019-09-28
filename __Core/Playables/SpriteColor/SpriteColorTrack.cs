@@ -12,23 +12,35 @@ namespace AltSalt
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipStartEndTime();
-            return ScriptPlayable<SpriteColorMixerBehaviour>.Create (graph, inputCount);
+            StoreClipProperties(go);
+
+            ScriptPlayable<SpriteColorMixerBehaviour> trackPlayable = ScriptPlayable<SpriteColorMixerBehaviour>.Create(graph, inputCount);
+            SpriteColorMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            StoreMixerProperties(go, behaviour);
+
+            return trackPlayable;
         }
 
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)
         {
 #if UNITY_EDITOR
-            var comp = director.GetGenericBinding(this) as SpriteRenderer;
-            if (comp == null)
+            //var comp = director.GetGenericBinding(this) as SpriteRenderer;
+            //if (comp == null)
+            //    return;
+            //var so = new UnityEditor.SerializedObject(comp);
+            //var iter = so.GetIterator();
+            //while (iter.NextVisible(true)) {
+            //    if (iter.hasVisibleChildren)
+            //        continue;
+            //    Debug.Log(iter.propertyPath);
+            //    driver.AddFromName<SpriteRenderer>(comp.gameObject, iter.propertyPath);
+            //}
+
+            SpriteRenderer trackBinding = director.GetGenericBinding(this) as SpriteRenderer;
+            if (trackBinding == null)
                 return;
-            var so = new UnityEditor.SerializedObject(comp);
-            var iter = so.GetIterator();
-            while (iter.NextVisible(true)) {
-                if (iter.hasVisibleChildren)
-                    continue;
-                driver.AddFromName<SpriteRenderer>(comp.gameObject, iter.propertyPath);
-            }
+
+            driver.AddFromName<SpriteRenderer>(trackBinding.gameObject, "m_Color");
 #endif
             base.GatherProperties(director, driver);
         }

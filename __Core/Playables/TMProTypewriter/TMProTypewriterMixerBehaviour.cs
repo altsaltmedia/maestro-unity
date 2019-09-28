@@ -77,11 +77,9 @@ namespace AltSalt
 
         public override void OnGraphStop(Playable playable)
         {
-            base.OnPlayableDestroy(playable);
-#if UNITY_EDITOR
+            base.OnGraphStop(playable);
             trackBinding.maxVisibleCharacters = originalCharactersVal;
             trackBinding.maxVisibleWords = originalWordsVal;
-#endif
         }
     }   
 }

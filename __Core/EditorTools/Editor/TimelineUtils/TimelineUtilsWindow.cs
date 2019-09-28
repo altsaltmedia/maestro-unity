@@ -29,7 +29,7 @@ namespace AltSalt
             { typeof(TrackClipCreation), "track-clip-creation" }
         };
 
-        public static Dictionary<Type, ChildUIElementsWindow> childWindows = new Dictionary<Type, ChildUIElementsWindow>();
+        static Dictionary<Type, ChildUIElementsWindow> childWindows = new Dictionary<Type, ChildUIElementsWindow>();
 
         enum ButtonNames
         {
@@ -97,9 +97,6 @@ namespace AltSalt
 
         void RenderLayout()
         {
-            foreach(KeyValuePair<Type, ChildUIElementsWindow> childWindow in childWindows) {
-                DestroyImmediate(childWindow.Value);
-            }
             rootVisualElement.Clear();
             AssetDatabase.Refresh();
 
@@ -111,8 +108,16 @@ namespace AltSalt
             timelineUtilsStructure = timelineUtilitiesTree.CloneTree();
             rootVisualElement.Add(timelineUtilsStructure);
 
+            foreach (KeyValuePair<Type, ChildUIElementsWindow> childWindow in childWindows) {
+                DestroyImmediate(childWindow.Value);
+            }
+            childWindows.Clear();
             foreach (KeyValuePair<Type, string> childWindow in childWindowData) {
-                childWindows.Add(childWindow.Key, EditorToolsCore.CreateAndBindChildWindow(childWindow.Key, this, childWindow.Value));
+                if(childWindows.ContainsKey(childWindow.Key)) {
+                    childWindows[childWindow.Key] = EditorToolsCore.CreateAndBindChildWindow(childWindow.Key, this, childWindow.Value);
+                } else {
+                    childWindows.Add(childWindow.Key, EditorToolsCore.CreateAndBindChildWindow(childWindow.Key, this, childWindow.Value));
+                }
             }
 
             var buttons = rootVisualElement.Query<Button>();

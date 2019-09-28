@@ -16,23 +16,37 @@ namespace AltSalt
     [HideInMenu]
     public class LerpToTargetTrack : TrackAsset {
     
-        public void StoreClipStartEndTime()
+        public void StoreClipProperties(GameObject directorObject)
         {
             foreach (var clip in GetClips()) {
                 var myAsset = clip.asset as LerpToTargetClip;
                 if (myAsset) {
                     myAsset.startTime = clip.start;
                     myAsset.endTime = clip.end;
+                    myAsset.parentTrack = this;
+                    myAsset.directorObject = directorObject;
+                    myAsset.directorUpdater = directorObject.GetComponent<DirectorUpdater>();
                 }
             }
+        }
+
+        public LerpToTargetMixerBehaviour StoreMixerProperties(GameObject go, LerpToTargetMixerBehaviour trackMixer)
+        {
+            trackMixer.directorObject = go;
+            trackMixer.directorUpdater = go.GetComponent<DirectorUpdater>();
+            
+            return trackMixer;
         }
 
         // This method should be overridden in child classes
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipStartEndTime();
+            StoreClipProperties(go);
             ScriptPlayable<LerpToTargetMixerBehaviour> trackPlayable = ScriptPlayable<LerpToTargetMixerBehaviour>.Create(graph, inputCount);
-            trackPlayable.GetBehaviour().markers = GetMarkers().ToList();
+            LerpToTargetMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            StoreMixerProperties(go, behaviour);
+
+            //trackPlayable.GetBehaviour().markers = GetMarkers().ToList();
             return trackPlayable;
         }
 

@@ -11,8 +11,12 @@ namespace AltSalt
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipStartEndTime();
-            return ScriptPlayable<LerpFloatVarMixerBehaviour>.Create (graph, inputCount);
+            StoreClipProperties(go);
+            ScriptPlayable<LerpFloatVarMixerBehaviour> trackPlayable = ScriptPlayable<LerpFloatVarMixerBehaviour>.Create(graph, inputCount);
+            LerpFloatVarMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            StoreMixerProperties(go, behaviour);
+
+            return trackPlayable;
         }
         
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)

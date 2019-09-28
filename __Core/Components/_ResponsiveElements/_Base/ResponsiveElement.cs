@@ -113,10 +113,10 @@ namespace AltSalt
         }
 
 #if UNITY_EDITOR
-        void OnDisable()
-        {
-            responsiveElementDisable.RaiseEvent(this.gameObject, this);
-        }
+        //void OnDisable()
+        //{
+        //    responsiveElementDisable.RaiseEvent(this.gameObject, this);
+        //}
 #endif
 
         public void CallExecuteLayoutUpdate(UnityEngine.Object callingObject)
@@ -140,7 +140,7 @@ namespace AltSalt
             if (hasBreakpoints == true) {
                 if (aspectRatioBreakpoints.Count < 1) {
 #if UNITY_EDITOR
-                    LogBreakpointWarning();
+                    LogBreakpointError();
 #endif
                     return;
                 } else {
@@ -285,9 +285,9 @@ namespace AltSalt
             return message;
         }
 #endif
-        protected virtual void LogBreakpointWarning()
+        protected virtual void LogBreakpointError()
         {
-            Debug.LogWarning("Please specify either 1.) target values for saving OR 2.) breakpoints and corresponding values on " + this.name, this);
+            Debug.LogError("Please specify either 1.) target values for saving OR 2.) breakpoints and corresponding values on " + this.name, this);
         }
 
         [HorizontalGroup("Data Handler", 0.5f)]

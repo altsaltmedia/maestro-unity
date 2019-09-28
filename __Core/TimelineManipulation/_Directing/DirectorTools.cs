@@ -31,6 +31,13 @@ namespace AltSalt
             }
         }
 
+        public void Reset()
+        {
+            playableDirector.Stop();
+            playableDirector.time = 0;
+            playableDirector.Evaluate();
+        }
+
         public void ChangeExrapolationMode (DirectorWrapMode wrapMode)
         {
             playableDirector.extrapolationMode = wrapMode;

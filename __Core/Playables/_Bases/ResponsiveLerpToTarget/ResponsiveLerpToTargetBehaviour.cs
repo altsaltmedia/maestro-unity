@@ -63,7 +63,6 @@ namespace AltSalt
             }
         }
 
-        [SerializeField]
         protected bool logElementOnLayoutUpdate;
         public bool LogElementOnLayoutUpdate {
             get {
@@ -116,6 +115,9 @@ namespace AltSalt
 
         [HideInInspector]
         public GameObject directorObject;
+
+        [HideInInspector]
+        public DirectorUpdater directorUpdater;
 
         [HideInInspector]
         public EasingFunction.Function easingFunction;

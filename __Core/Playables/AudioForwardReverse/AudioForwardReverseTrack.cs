@@ -30,7 +30,7 @@ namespace AltSalt
 #if UNITY_EDITOR
             StoreUtilVars();
 #endif
-            StoreClipStartEndTime();
+            StoreClipProperties(go);
             return ScriptPlayable<AudioForwardReverseMixerBehaviour>.Create(graph, inputCount);
         }
         

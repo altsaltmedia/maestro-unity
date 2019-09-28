@@ -8,12 +8,9 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
-using System;
 using UnityEngine;
 using System.Collections;
-using DoozyUI;
 using Sirenix.OdinInspector;
-using System.Reflection;
 
 namespace AltSalt
 {
@@ -50,7 +47,12 @@ namespace AltSalt
         [BoxGroup("Debug Scene")]
         string debugMenuName;
 
-        IEnumerator Start()
+        public void CallInitializeApp()
+        {
+            StartCoroutine(InitializeApp());
+        }
+
+        IEnumerator InitializeApp()
         {
             Physics.autoSimulation = false;
             Application.targetFrameRate = 60;

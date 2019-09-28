@@ -22,7 +22,7 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if (activeIndex >= targetLists.Count) {
-                LogBreakpointWarning();
+                LogBreakpointError();
                 return;
             }
 #endif

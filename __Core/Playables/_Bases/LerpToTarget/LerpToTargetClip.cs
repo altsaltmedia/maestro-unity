@@ -23,6 +23,15 @@ namespace AltSalt
         public double startTime;
         public double endTime;
 
+        [HideInInspector]
+        public TrackAsset parentTrack;
+
+        [HideInInspector]
+        public GameObject directorObject;
+
+        [HideInInspector]
+        public DirectorUpdater directorUpdater;
+
         public override double duration {
             get {
                 return 1d;
@@ -39,6 +48,10 @@ namespace AltSalt
             // in your child class so that the instance of your behaviour has all the necessary variables.
             template.startTime = startTime;
             template.endTime = endTime;
+            template.parentTrack = parentTrack;
+            template.clipAsset = this;
+            template.directorObject = directorObject;
+            template.directorUpdater = directorUpdater;
 
             var playable = ScriptPlayable<LerpToTargetBehaviour>.Create(graph, template);
             return playable;

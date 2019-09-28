@@ -10,18 +10,19 @@ namespace AltSalt
         ScriptPlayable<RectTransformRelativePosBehaviour> inputPlayable;
         RectTransformRelativePosBehaviour input;
         RectTransform trackBindingComponent;
+        Vector3 originalValue;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            if(trackBinding == null) {
-                trackBinding = playerData as RectTransform;
-            }
+            
+            trackBinding = playerData as RectTransform;
 
             if (!trackBinding)
                 return;
 
             if(trackBindingComponent == null) {
                 trackBindingComponent = trackBinding.GetComponent<RectTransform>();
+                originalValue = trackBindingComponent.anchoredPosition3D;
             }
 
             inputCount = playable.GetInputCount ();
@@ -48,7 +49,11 @@ namespace AltSalt
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-
+            if (Application.isPlaying == true) {
+                if (trackBindingComponent != null) {
+                    trackBindingComponent.anchoredPosition3D = originalValue;
+                }
+            }
         }
     }   
 }

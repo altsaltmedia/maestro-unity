@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace AltSalt
 {
     [Serializable]
     public class ResponsiveVector3Behaviour : ResponsiveLerpToTargetBehaviour
     {
+        public bool editMode;
+
         // initialPosition and targetPosition don't refresh in inspector for
         // some reason, but they work as intended
         public Vector3 initialValue = new Vector3(0, 0, 0);
@@ -16,6 +19,22 @@ namespace AltSalt
         public List<Vector3> breakpointTargetValue = new List<Vector3>();
 
 #if UNITY_EDITOR
+        [ShowIf(nameof(editMode))]
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void SaveInitial()
+        {
+            SaveNewInitialValue(initialValue);
+            editMode = false;
+        }
+
+        [ShowIf(nameof(editMode))]
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void SaveTarget()
+        {
+            SaveNewTargetValue(targetValue);
+            editMode = false;
+        }
+
         protected override void UpdateBreakpointDependencies()
         {
             base.UpdateBreakpointDependencies();
@@ -95,8 +114,10 @@ namespace AltSalt
                 return;
             }
 #endif
-            initialValue = breakpointInitialValue[activeIndex];
-            targetValue = breakpointTargetValue[activeIndex];
+            if(editMode == false) {
+                initialValue = breakpointInitialValue[activeIndex];
+                targetValue = breakpointTargetValue[activeIndex];
+            }
         }
     }
 }

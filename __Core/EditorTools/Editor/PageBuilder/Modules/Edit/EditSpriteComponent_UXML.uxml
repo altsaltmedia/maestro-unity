@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+    <engine:VisualElement class="section-container" name="edit-sprite-component">
+        
+        <engine:Foldout class="foldout toggleable-group" text="Sprite Component" value="true" name="EditSpriteComponent">
+
+            <engine:VisualElement class="section">
+                <engine:VisualElement class="section___content">
+                    
+                    <editor:PropertyField label="Sprite color :" class="col-full" value="(0,0,0,1)" binding-path="spriteColor" name="SpriteColor"/>
+                    <engine:Button text="Populate from Selection " class="col-three-quarters" name="PopulateSpriteColor" />
+                    <engine:Button text="Set" class="col-quarter margin-right-0" name="SetSpriteColor" />
+    
+                    <engine:Button text="Set Opaque" class="col-half margin-right-0" name="SetOpaque" />
+
+                    <engine:Button text="Set Transparent" class="col-half margin-right-0" name="SetTransparent" />
+
+                    <!-- Layer -->
+                    <editor:PropertyField label="Target Sorting Layer :" class="col-full" value="" binding-path="targetLayer"/>
+                    <engine:Button text="Set Sorting Layer" class="col-full" name="SetSortingLayer"/>
+
+                    <editor:PropertyField label="Target Sorting Order :" class="col-full" value="0" binding-path="targetOrder"/>
+                    <engine:Button text="Set Sorting Order" class="col-full" name="SetSortingOrder"/>
+
+                </engine:VisualElement>
+                
+            </engine:VisualElement>
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

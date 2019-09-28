@@ -13,7 +13,14 @@ namespace AltSalt {
 
         protected void Start()
         {
-            rectTransform = GetComponent<RectTransform>();
+            GetRectTransform();
+        }
+
+        void GetRectTransform()
+        {
+            if (rectTransform == null) {
+                rectTransform = GetComponent<RectTransform>();
+            }
         }
 
         void OnValidate()
@@ -23,7 +30,10 @@ namespace AltSalt {
             }
         }
 
-        public abstract void ExecuteRelativeAction();
+        public virtual void ExecuteRelativeAction()
+        {
+            GetRectTransform();
+        }
     }
     
 }

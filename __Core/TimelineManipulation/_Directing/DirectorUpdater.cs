@@ -41,18 +41,22 @@ namespace AltSalt
         [Required]
         public SimpleEventTrigger boundaryReached;
 
+        [ValidateInput(nameof(IsPopulated))]
+        public BoolReference scrubberActive;
+
         [ValidateInput("IsPopulated", "Note: Previous sequence group not populated. Is this intentional?", InfoMessageType.Warning)]
         public SequenceGroup previousSequenceGroup;
 
         [ValidateInput("IsPopulated", "Note: Next sequence group not populated. Is this intentional?", InfoMessageType.Warning)]
         public SequenceGroup nextSequenceGroup;
 
-        private PlayableDirector playableDirector;
+        public PlayableDirector playableDirector;
 
         // Use this for initialization
         void Start()
         {
             GetPlayableDirector();
+            sequence.Director = this;
             //playableDirector.RebuildGraph();
             //playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
             //playableDirector.Play();
@@ -77,16 +81,16 @@ namespace AltSalt
             // than the actual clip, we fix that nonsense
             if (sequence.currentTime < playableDirector.initialTime) {
                 if (previousSequenceGroup.sequence != null) {
-                    sequence.Active = false;
                     if(previousSequenceGroup.forkOriginActive == true) {
                         previousSequenceGroup.sequence.currentTime = previousSequenceGroup.directorObject.GetComponent<PlayableDirector>().playableAsset.duration;
                     } else {
                         previousSequenceGroup.sequence.currentTime = 0.0000f;
                     }
                     previousSequenceGroup.sequence.Active = true;
-                    previousSequenceGroup.directorObject.SetActive(true);
+                    previousSequenceGroup.directorObject.gameObject.SetActive(true);
                     previousSequenceGroup.directorObject.GetComponent<DirectorUpdater>().ForceEvaluate();
-                    gameObject.SetActive(false);
+                    this.gameObject.SetActive(false);
+                    sequence.Active = false;
                 } else {
                     boundaryReached.RaiseEvent(this.gameObject);
                 }
@@ -101,12 +105,12 @@ namespace AltSalt
                 //////
 
                 if (nextSequenceGroup.sequence != null) {
-                    sequence.Active = false;
                     nextSequenceGroup.sequence.currentTime = 0.0000f;
                     nextSequenceGroup.sequence.Active = true;
-                    nextSequenceGroup.directorObject.SetActive(true);
+                    nextSequenceGroup.directorObject.gameObject.SetActive(true);
                     nextSequenceGroup.directorObject.GetComponent<DirectorUpdater>().ForceEvaluate();
-                    gameObject.SetActive(false);
+                    this.gameObject.SetActive(false);
+                    sequence.Active = false;
                 } else {
                     boundaryReached.RaiseEvent(this.gameObject);
                 }
@@ -122,6 +126,20 @@ namespace AltSalt
 
         public void ForceEvaluate()
         {
+            playableDirector.time = sequence.currentTime;
+            playableDirector.Evaluate();
+        }
+
+        public void SetToBeginning()
+        {
+            sequence.currentTime = 0;
+            playableDirector.time = sequence.currentTime;
+            playableDirector.Evaluate();
+        }
+
+        public void SetToEnd()
+        {
+            sequence.currentTime = sequence.SourcePlayable.duration;
             playableDirector.time = sequence.currentTime;
             playableDirector.Evaluate();
         }
@@ -205,6 +223,11 @@ namespace AltSalt
             } else {
                 return true;
             }
+        }
+
+        public static bool IsPopulated(BoolReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
         }
 
     }

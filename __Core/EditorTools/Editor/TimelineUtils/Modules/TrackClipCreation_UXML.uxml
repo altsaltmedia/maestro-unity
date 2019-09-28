@@ -31,6 +31,7 @@ xsi:schemaLocation="
 		  	<engine:VisualElement class="section___content">
 		  		<engine:Button text="Copy Track(s)" class="col-full" name="CopyTracks" />
 		  		<engine:Button text="Paste Track(s)" class="col-full" name="PasteTracks" />
+		  		<engine:Button text="Duplicate Track(s)" class="col-full" name="DuplicateTracks" />
 	  		</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">

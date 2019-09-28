@@ -10,6 +10,7 @@ namespace AltSalt
         ScriptPlayable<TMProColorBehaviour> inputPlayable;
         TMProColorBehaviour input;
         TMP_Text trackBindingComponent;
+        Color originalValue;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
@@ -17,7 +18,12 @@ namespace AltSalt
 
             if (!trackBinding)
                 return;
-            
+
+            if (trackBindingComponent == null) {
+                trackBindingComponent = trackBinding.GetComponent<TMP_Text>();
+                originalValue = trackBindingComponent.color;
+            }
+
             inputCount = playable.GetInputCount ();
             
             for (int i = 0; i < inputCount; i++)
@@ -37,6 +43,16 @@ namespace AltSalt
                     } else if (i == 0 && currentTime <= input.startTime) {
                         trackBindingComponent.color = input.initialColor;
                     }
+                }
+            }
+        }
+
+        public override void OnGraphStop(Playable playable)
+        {
+            base.OnGraphStop(playable);
+            if (Application.isPlaying == true && directorUpdater != null && directorUpdater.scrubberActive.Value == true) {
+                if (trackBindingComponent != null) {    
+                    trackBindingComponent.color = Utils.transparent;
                 }
             }
         }

@@ -32,6 +32,9 @@ namespace AltSalt
         [HideInInspector]
         public GameObject directorObject;
 
+        [HideInInspector]
+        public DirectorUpdater directorUpdater;
+
         public override double duration {
             get {
                 return 1d;
@@ -52,6 +55,7 @@ namespace AltSalt
             template.parentTrack = parentTrack;
             template.clipAsset = this;
             template.directorObject = directorObject;
+            template.directorUpdater = directorUpdater;
 
             var playable = ScriptPlayable<ResponsiveLerpToTargetBehaviour>.Create(graph);
             return playable;

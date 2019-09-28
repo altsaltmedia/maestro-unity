@@ -61,11 +61,11 @@ namespace AltSalt
         {
 #if UNITY_EDITOR
             if (activeIndex >= viewportModifiers.Count) {
-                LogBreakpointWarning();
+                LogBreakpointError();
                 return;
             }
 #endif
-            Rect originalRect = new Rect((deviceWidth.Value - sceneWidth.Value) / 2f, (deviceHeight.Value - sceneHeight.Value) / 2f, sceneWidth.Value, sceneHeight.Value);    
+            Rect originalRect = new Rect((deviceWidth.Value - sceneWidth.Value) / 2f, (deviceHeight.Value - sceneHeight.Value) / 2f, sceneWidth.Value, sceneHeight.Value);
             thisCamera.pixelRect = new Rect(originalRect.x + viewportModifiers[activeIndex].x, originalRect.y + viewportModifiers[activeIndex].y, originalRect.width + viewportModifiers[activeIndex].width, originalRect.height + viewportModifiers[activeIndex].height);
         }
 

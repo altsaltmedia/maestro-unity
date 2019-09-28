@@ -44,23 +44,23 @@ namespace AltSalt
 
         public void SetValue(int activeIndex)
         {
-#if UNITY_EDITOR
             if(hasBreakpoints == true) {
 
                 if (activeIndex >= breakpointAnchorMax.Count ||
                     activeIndex >= breakpointAnchorMin.Count ||
                     activeIndex >= breakpointAnchoredPosition.Count) {
-                    LogBreakpointWarning();
+                    LogBreakpointError();
                     return;
                 }
             } else {
                 if (breakpointAnchorMax.Count < 1 ||
                     breakpointAnchorMin.Count < 1 ||
                     breakpointAnchoredPosition.Count < 1) {
-                    LogBreakpointWarning();
+                    LogBreakpointError();
                     return;
                 }
             }
+#if UNITY_EDITOR
             Undo.RegisterCompleteObjectUndo(rectTransform, "set responsive position");
 #endif
 

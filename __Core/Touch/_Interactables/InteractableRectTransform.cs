@@ -8,7 +8,7 @@ namespace AltSalt
     [RequireComponent(typeof(RectTransform))]
     public class InteractableRectTransform : MonoBehaviour
     {
-        protected RectTransform rectTransform;
+        public RectTransform rectTransform;
 
         protected virtual void Start()
         {

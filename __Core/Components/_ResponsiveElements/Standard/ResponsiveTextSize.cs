@@ -36,7 +36,7 @@ namespace AltSalt
         public void SetValue(int activeIndex)
         {
             if (activeIndex >= breakpointTextSize.Count) {
-                LogBreakpointWarning();
+                LogBreakpointError();
 				return;
             }
 #if UNITY_EDITOR

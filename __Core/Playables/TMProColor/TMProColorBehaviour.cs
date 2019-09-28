@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
-#if UNITY_EDITOR
 using Sirenix.OdinInspector;
-#endif
 
 namespace AltSalt
 {

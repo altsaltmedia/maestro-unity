@@ -9,6 +9,7 @@ namespace AltSalt
         ScriptPlayable<ResponsiveVector3Behaviour> inputPlayable;
         ResponsiveVector3Behaviour input;
         RectTransform trackBindingComponent;
+        Vector3 originalValue;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
@@ -19,6 +20,7 @@ namespace AltSalt
 
             if (trackBindingComponent == null) {
                 trackBindingComponent = trackBinding.GetComponent<RectTransform>();
+                originalValue = trackBindingComponent.anchoredPosition3D;
             }
 
             inputCount = playable.GetInputCount ();
@@ -38,6 +40,16 @@ namespace AltSalt
                     } else if (i == 0 && currentTime <= input.startTime) {
                         trackBindingComponent.anchoredPosition3D = input.initialValue;
                     }
+                }
+            }
+        }
+
+        public override void OnGraphStop(Playable playable)
+        {
+            base.OnGraphStop(playable);
+            if (Application.isPlaying == true && directorUpdater != null && directorUpdater.scrubberActive.Value == true) {
+                if (trackBindingComponent != null) {
+                    trackBindingComponent.anchoredPosition3D = originalValue;
                 }
             }
         }

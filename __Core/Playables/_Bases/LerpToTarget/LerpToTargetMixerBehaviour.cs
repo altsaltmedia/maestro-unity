@@ -22,9 +22,11 @@ namespace AltSalt
         protected float inputWeight;
         protected float modifier;
 
-        //public IEnumerable<IMarker> markers;
+        public GameObject directorObject;
+        public DirectorUpdater directorUpdater;
 
-        public List<IMarker> markers;
+        //public IEnumerable<IMarker> markers;
+        //public List<IMarker> markers;
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {

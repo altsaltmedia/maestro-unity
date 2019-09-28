@@ -320,8 +320,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4e3309bc5aa426f92e0b77ff29b38b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sequenceModified:
-    simpleEvent: {fileID: 0}
+  sequenceScrubbed:
+    simpleEvent: {fileID: 11400000, guid: 9ff5b71473dbd4bacac724317cf05171, type: 2}
   sequences:
   - {fileID: 0}
   - {fileID: 0}
@@ -521,7 +521,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 3895
+    m_Bits: 823
 --- !u!225 &3248041132954124202
 CanvasGroup:
   m_ObjectHideFlags: 0

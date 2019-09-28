@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 320944326161814764}
   - component: {fileID: 114615924759454770}
   - component: {fileID: 114995181156598806}
+  - component: {fileID: 9192232105761766021}
   - component: {fileID: 3825933744865969490}
   m_Layer: 0
   m_Name: SwipeDirectorTimeline
@@ -67,6 +68,10 @@ MonoBehaviour:
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
   boundaryReached:
     simpleEvent: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
+  scrubberActive:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 00a2b24214f8a443581542514270dc00, type: 2}
   previousSequenceGroup:
     sequence: {fileID: 0}
     directorObject: {fileID: 0}
@@ -75,6 +80,7 @@ MonoBehaviour:
     sequence: {fileID: 0}
     directorObject: {fileID: 0}
     forkOriginActive: 0
+  playableDirector: {fileID: 0}
   screenResized: {fileID: 11400000, guid: 6958e603947ff451aac4f96c5c846b5f, type: 2}
 --- !u!114 &114995181156598806
 MonoBehaviour:
@@ -89,6 +95,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114615924759454770}
+        m_MethodName: RefreshSequence
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
+--- !u!114 &9192232105761766021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1651845744537938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 9ff5b71473dbd4bacac724317cf05171, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:

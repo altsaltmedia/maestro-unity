@@ -19,6 +19,7 @@ namespace AltSalt
             { typeof(CreateSequenceElements), "create-sequence-elements" },
             { typeof(EditRectTransformComponent), "edit-rect-transform-component" },
             { typeof(EditTMProComponent), "edit-tm-pro-component" },
+            { typeof(EditSpriteComponent), "edit-sprite-component" },
             { typeof(EditTMProColorClip), "edit-tm-pro-color-clip" },
             { typeof(EditRectTransformPosClip), "edit-rect-transform-pos-clip" },
             { typeof(EditSpriteColorClip), "edit-sprite-color-clip" },
@@ -27,7 +28,8 @@ namespace AltSalt
             { typeof(EditFloatVarClip), "edit-float-var-clip" },
             { typeof(EditColorVarClip), "edit-color-var-clip" },
             { typeof(EditRectTransformResponsivePosClip), "edit-rect-transform-responsive-pos-clip" },
-            { typeof(EditRectTransformResponsiveScaleClip), "edit-rect-transform-responsive-scale-clip" }
+            { typeof(EditRectTransformResponsiveScaleClip), "edit-rect-transform-responsive-scale-clip" },
+            { typeof(EditScrollSnapController), "edit-scroll-snap-controller" }
         };
 
         static List<ChildUIElementsWindow> childWindows = new List<ChildUIElementsWindow>();
