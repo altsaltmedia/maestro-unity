@@ -49,7 +49,7 @@ namespace AltSalt
             base.OnGraphStop(playable);
             if (Application.isPlaying == true && directorUpdater != null && directorUpdater.scrubberActive.Value == true) {
                 if (trackBindingComponent != null) {
-                    trackBindingComponent.anchoredPosition3D = originalValue;
+                    trackBindingComponent.anchoredPosition3D = new Vector3(1000, 1000);
                 }
             }
         }
