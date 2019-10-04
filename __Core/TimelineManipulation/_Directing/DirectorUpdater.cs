@@ -190,17 +190,16 @@ namespace AltSalt
                 GetPlayableDirector();
             }
 
-            if(Application.isPlaying == false) {
-                if (editorListenerCreated == false && appSettings.debugEventsActive.Value == true) {
-                    simpleEventListener = new SimpleEventListener(screenResized, this.gameObject);
-                    simpleEventListener.OnTargetEventExecuted += playableDirector.RebuildGraph;
-                    editorListenerCreated = true;
-                }
-
-                if (editorListenerCreated == true && appSettings.debugEventsActive == false) {
-                    DisableListener();
-                }
+            if (editorListenerCreated == false && appSettings.debugEventsActive.Value == true) {
+                simpleEventListener = new SimpleEventListener(screenResized, this.gameObject);
+                simpleEventListener.OnTargetEventExecuted += playableDirector.RebuildGraph;
+                editorListenerCreated = true;
             }
+
+            if (editorListenerCreated == true && appSettings.debugEventsActive == false) {
+                DisableListener();
+            }
+            
         }
 
         void OnDisable()
