@@ -9,10 +9,14 @@ https://www.altsalt.com / ricky@altsalt.com
 **********************************************/
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using DoozyUI;
 using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 
 namespace AltSalt
 {
@@ -39,6 +43,8 @@ namespace AltSalt
 
         string sceneName;
         LoadSceneMode loadMode;
+
+        Dictionary<string, AsyncOperationHandle<SceneInstance>> sceneInstances = new Dictionary<string, AsyncOperationHandle<SceneInstance>>();
 
         // The first scene will always be a single load, done immediately w/o a call to
         // make a fade out first, so we have a special case for it here
@@ -70,15 +76,19 @@ namespace AltSalt
         
         IEnumerator AsyncLoad (string xSceneName, LoadSceneMode xLoadMode)
         {
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(xSceneName, xLoadMode);
-            asyncLoad.completed += SceneLoadCallback;
+            //AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(xSceneName, xLoadMode);
+
+            AsyncOperationHandle asyncLoad = Addressables.LoadSceneAsync(xSceneName, xLoadMode);
+
+            asyncLoad.Completed += SceneLoadCallback;
+            sceneInstances.Add(xSceneName, asyncLoad.Convert<SceneInstance>());
             
-            while (!asyncLoad.isDone) {
+            while (!asyncLoad.IsDone) {
                 yield return null;
             }
         }
         
-        void SceneLoadCallback(AsyncOperation asyncOperation)
+        void SceneLoadCallback(AsyncOperationHandle asyncOperation)
         {
             sceneLoadCompleted.RaiseEvent(this.gameObject);
         }
@@ -91,8 +101,13 @@ namespace AltSalt
 
         IEnumerator AsyncUnload(string xSceneName)
         {
-            AsyncOperation asyncLoad = SceneManager.UnloadSceneAsync(xSceneName);
-            while (!asyncLoad.isDone) {
+            //AsyncOperation asyncLoad = SceneManager.UnloadSceneAsync(xSceneName);
+
+            AsyncOperationHandle<SceneInstance> unloadInstance = sceneInstances[xSceneName];
+
+            AsyncOperationHandle asyncLoad = Addressables.UnloadSceneAsync(unloadInstance);
+
+            while (!asyncLoad.IsDone) {
                 yield return null;
             }
         }

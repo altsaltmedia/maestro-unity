@@ -6,7 +6,9 @@ namespace AltSalt
     {
         public void TriggerVibrate()
         {
+#if !UNITY_STANDALONE
             Handheld.Vibrate();
+#endif
         }
     }
 }
