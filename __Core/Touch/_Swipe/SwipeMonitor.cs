@@ -18,10 +18,23 @@ namespace AltSalt
     {
         // Invert Axis variable
         [Required]
-        public BoolReference invertYAxis;
+        [SerializeField]
+        private BoolReference _invertYInput;
+
+        public bool invertYInput
+        {
+            get => _invertYInput.Value;
+            set => _invertYInput.Variable.SetValue(value);
+        }
 
         [Required]
-        public BoolReference invertXAxis;
+        private BoolReference _invertXInput;
+
+        public bool invertXInput
+        {
+            get => _invertXInput.Value;
+            set => _invertXInput.Variable.SetValue(value);
+        }
 
         // Swipe variables
         [Required]
@@ -287,14 +300,15 @@ namespace AltSalt
             // the X value always comes in opposite of what we need. In some instances,
             // scrolling vertically for example, we also need to inver the Y.
             Vector3 correctedV3;
-            if(invertYAxis) {
-                if(invertXAxis) {
+            
+            if(invertYInput == true) {
+                if(invertXInput == true) {
                     correctedV3 = Utils.InvertV3Values(v3Vector, new string[]{"x", "y"});
                 } else {
                     correctedV3 = Utils.InvertV3Values(v3Vector, new string[]{"y"});
                 }
             } else {
-                if (invertXAxis) {
+                if (invertXInput == true) {
                     correctedV3 = Utils.InvertV3Values(v3Vector, new string[]{"x"});
                 } else {
                     correctedV3 = v3Vector;

@@ -36,7 +36,7 @@ namespace AltSalt
         public GameObject directorObject;
 
         [HideInInspector]
-        public DirectorUpdater directorUpdater;
+        public SyncTimelineToSequence directorUpdater;
 
         public bool disableReset;
 

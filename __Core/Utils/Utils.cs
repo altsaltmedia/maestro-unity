@@ -16,6 +16,7 @@ using UnityEngine.Events;
 using System.IO;
 using System.Text;
 using SimpleJSON;
+using UnityEngine.Experimental.XR;
 using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
@@ -36,15 +37,19 @@ namespace AltSalt
 
     public enum MaterialAttributeType { Color, Float }
 
-    public enum BranchName { yNeg, yPos, xNeg, xPos }
-
+    public enum BranchType { yNeg, yPos, xNeg, xPos }
+    
+    public enum AxisType { X, Y }
+    
     public enum AxisDestination { fromAxis, toAxis }
 
     public enum DataType { stringType, floatType, boolType, intType, scriptableObjectType, systemObjectType }
 
     public enum ComparisonValues { GreaterThan, LessThan, EqualTo }
 
-    public enum SwitchType { AxisSwitch, ForkSwitch, InvertSwitch }
+    public enum SimpleSwitchType { XtoY, YtoX }
+    
+    public enum InvertSwitchType { ActivateYNeg, DeactivateYNeg, ActivateXNeg, DeactivateXNeg }
 
     public enum VarDependencies {
         AppSettings,
@@ -56,12 +61,17 @@ namespace AltSalt
         SceneWidth,
         SceneHeight,
         TimelineCurrentTime,
+        OnGraphStart,
         ResponsiveElementEnable,
         ResponsiveElementDisable,
         TextUpdate,
         LayoutUpdate,
         ScreenResized,
-        IsReversing
+        IsReversing,
+        ySwipeAxis,
+        xSwipeAxis,
+        yMomentumAxis,
+        xMomentumAxis
     }
 
     public enum XMLValues
@@ -476,6 +486,21 @@ namespace AltSalt
             return guid;
         }
 #endif
+        public static TrackAsset GetTrackFromTimelineAsset(TimelineAsset timelineAsset, Type trackType)
+        {
+            IEnumerable<TrackAsset> trackAssets = timelineAsset.GetOutputTracks();
+                    
+            foreach (TrackAsset trackAsset in trackAssets)
+            {
+                if (trackAsset.GetType() == trackType)
+                {
+                    return trackAsset;
+                }
+            }
+
+            return null;
+        }
+        
         public static JSONNode AddToJSONArray(JSONNode node, string key, string value)
         {
             if (key.Length < 1) {
@@ -978,27 +1003,8 @@ namespace AltSalt
             }
         }
 
-        public static bool IsPopulated(List<float> attribute)
+        public static bool IsPopulated<t>(List<t> attribute)
         {
-            return attribute.Count < 1 ? false : true;
-        }
-
-        public static bool IsPopulated(List<SequenceList> attribute)
-        {
-            return attribute.Count < 1 ? false : true;
-        }
-
-        public static bool IsPopulated(List<Sequence> attribute)
-        {
-            return attribute.Count < 1 ? false : true;
-        }
-
-        public static bool IsPopulated(List<TargetMaterialAttribute> attribute)
-        {
-            return attribute.Count < 1 ? false : true;
-        }
-
-        public static bool IsPopulated(List<TextCollectionBank> attribute) {
             return attribute.Count < 1 ? false : true;
         }
 

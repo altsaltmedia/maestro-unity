@@ -1,0 +1,96 @@
+/* Collapsed Marker State -> Corresponds to GUIStyle.normal */
+AutoplayStart
+{
+    width: 18px;
+    height: 18px;
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/autoplay-start.png");
+}
+
+/* Active Marker State -> Corresponds to GUIStyle.onNormal */
+AutoplayStart:checked
+{
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/autoplay-start.png");
+}
+
+/* Selected Marker State -> Corresponds to GUIStyle.onFocused */
+AutoplayStart:hover:focus:checked
+{
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/autoplay-start-selected.png");
+}
+
+/* Collapsed Marker State -> Corresponds to GUIStyle.normal */
+AutoplayEnd
+{
+    width: 18px;
+    height: 18px;
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/autoplay-end.png");
+}
+
+/* Active Marker State -> Corresponds to GUIStyle.onNormal */
+AutoplayEnd:checked
+{
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/autoplay-end.png");
+}
+
+/* Selected Marker State -> Corresponds to GUIStyle.onFocused */
+AutoplayEnd:hover:focus:checked
+{
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/autoplay-end-selected.png");
+}
+
+AutoplayPause
+{
+    width: 18px;
+    height: 18px;
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/autoplay-pause.png");
+}
+
+/* Active Marker State -> Corresponds to GUIStyle.onNormal */
+AutoplayPause:checked
+{
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/autoplay-pause.png");
+}
+
+/* Selected Marker State -> Corresponds to GUIStyle.onFocused */
+AutoplayPause:hover:focus:checked
+{
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/autoplay-pause-selected.png");
+}
+
+PauseMomentumStart
+{
+    width: 18px;
+    height: 18px;
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/pause-momentum-start.png");
+}
+
+/* Active Marker State -> Corresponds to GUIStyle.onNormal */
+PauseMomentumStart:checked
+{
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/pause-momentum-start.png");
+}
+
+/* Selected Marker State -> Corresponds to GUIStyle.onFocused */
+PauseMomentumStart:hover:focus:checked
+{
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/pause-momentum-start-selected.png");
+}
+
+PauseMomentumEnd
+{
+    width: 18px;
+    height: 18px;
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/pause-momentum-end.png");
+}
+
+/* Active Marker State -> Corresponds to GUIStyle.onNormal */
+PauseMomentumEnd:checked
+{
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/pause-momentum-end.png");
+}
+
+/* Selected Marker State -> Corresponds to GUIStyle.onFocused */
+PauseMomentumEnd:hover:focus:checked
+{
+    background-image: resource("Assets/_AltSalt/__Core/Playables/_Bases/SequenceConfig/Editor/Stylesheets/imgs/pause-momentum-end-selected.png");
+}

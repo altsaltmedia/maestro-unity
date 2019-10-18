@@ -185,6 +185,16 @@ namespace AltSalt
             }
         }
 
+        public float GetFloatValue()
+        {
+            if (floatDictionary.ContainsKey(DataType.floatType)) {
+                return floatDictionary[DataType.floatType];
+            } else {
+                Debug.Log("Key for float value not found in EventPayload");
+                return float.NaN;
+            }
+        }
+        
         public float GetFloatValue(object key)
         {
             if (floatDictionary.ContainsKey(key)) {
@@ -204,6 +214,16 @@ namespace AltSalt
             }
         }
 
+        public ScriptableObject GetScriptableObjectValue()
+        {
+            if (scriptableObjectDictionary.ContainsKey(DataType.scriptableObjectType)) {
+                return scriptableObjectDictionary[DataType.scriptableObjectType];
+            } else {
+//                Debug.Log("Key for scriptable object value not found in EventPayload");
+                return null;
+            }
+        }
+        
         public ScriptableObject GetScriptableObjectValue(object key)
         {
             if (scriptableObjectDictionary.ContainsKey(key)) {

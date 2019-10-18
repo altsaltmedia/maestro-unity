@@ -2,6 +2,10 @@
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
+#if UNITY_EDITOR
+using UnityEditor.Timeline;
+#endif
+
 namespace AltSalt
 {
     [TrackColor(0.245149f, 0.895372f, 0.5679245f)]
@@ -11,7 +15,18 @@ namespace AltSalt
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipProperties(go);
-            return ScriptPlayable<DebugTimelineMixerBehaviour>.Create (graph, inputCount);
+
+            ScriptPlayable<DebugTimelineMixerBehaviour> trackPlayable = ScriptPlayable<DebugTimelineMixerBehaviour>.Create(graph, inputCount);
+            DebugTimelineMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            StoreMixerProperties(go, behaviour);
+#if UNITY_EDITOR
+            behaviour.timelineCurrentTime = Utils.GetFloatVariable(nameof(VarDependencies.TimelineCurrentTime));
+            if (Application.isPlaying == false) {
+                TimelineEditor.inspectedDirector.time = behaviour.timelineCurrentTime.Value;
+            }
+            behaviour.onGraphStart.SimpleEventTarget = Utils.GetSimpleEvent(nameof(VarDependencies.OnGraphStart));
+#endif
+            return trackPlayable;
         }
         
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)

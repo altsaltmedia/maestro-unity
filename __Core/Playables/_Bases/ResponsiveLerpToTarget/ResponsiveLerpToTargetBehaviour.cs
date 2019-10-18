@@ -117,7 +117,7 @@ namespace AltSalt
         public GameObject directorObject;
 
         [HideInInspector]
-        public DirectorUpdater directorUpdater;
+        public SyncTimelineToSequence directorUpdater;
 
         [HideInInspector]
         public EasingFunction.Function easingFunction;

@@ -1,33 +1,25 @@
 ﻿using UnityEngine;
 using UnityEngine.Playables;
 
-#if UNITY_EDITOR
-using UnityEditor.Timeline;
-#endif
-
 namespace AltSalt
 {    
     public class DebugTimelineMixerBehaviour : LerpToTargetMixerBehaviour
     {
-        FloatVariable trackBinding;
-        ScriptPlayable<DebugTimelineBehaviour> inputPlayable;
-        DebugTimelineBehaviour input;
+        public FloatVariable timelineCurrentTime = new FloatVariable();
+        public SimpleEventTrigger onGraphStart = new SimpleEventTrigger();
 
         public override void OnGraphStart(Playable playable)
         {
             base.OnGraphStart(playable);
 #if UNITY_EDITOR
-            trackBinding = Utils.GetFloatVariable("TimelineCurrentTime");
-            if(Application.isPlaying == false ) {
-                TimelineEditor.inspectedDirector.time = trackBinding.Value;
-            }
+            onGraphStart.RaiseEvent(directorObject, directorObject.scene.name, "debug timeline");
 #endif
         }
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
 #if UNITY_EDITOR
-            trackBinding.SetValue((float)currentTime);
+            timelineCurrentTime.SetValue((float)base.currentTime);
 #endif
         }
     }   

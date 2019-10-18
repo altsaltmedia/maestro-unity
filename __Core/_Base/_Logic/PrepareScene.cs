@@ -60,7 +60,7 @@ namespace AltSalt {
 
         [ShowIf(nameof(resetSequences))]
         [SerializeField]
-        SequenceList sequenceList;
+        SequenceCollection _sequenceCollection;
 
         [SerializeField]
         bool delayStart;
@@ -134,13 +134,13 @@ namespace AltSalt {
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void ResetScene()
         {
-            xSwipeAxis.Active = defaultX;
-            ySwipeAxis.Active = defaultY;
-            zSwipeAxis.Active = defaultZ;
+            xSwipeAxis.active = defaultX;
+            ySwipeAxis.active = defaultY;
+            zSwipeAxis.active = defaultZ;
 
-            xMomentumAxis.Active = defaultX;
-            yMomentumAxis.Active = defaultY;
-            zMomentumAxis.Active = defaultZ;
+            xMomentumAxis.active = defaultX;
+            yMomentumAxis.active = defaultY;
+            zMomentumAxis.active = defaultZ;
 
             _invertYAxis.Variable.Value = invertYAxis;
             _invertXAxis.Variable.Value = invertXAxis;
@@ -180,13 +180,13 @@ namespace AltSalt {
 
         void TriggerResetSequences()
         {
-            if (sequenceList == null) {
+            if (_sequenceCollection == null) {
                 Debug.LogWarning("No sequence list found on " + this.name + ", please check.", this);
                 return;
             }
 
-            for (int i = 0; i < sequenceList.sequences.Count; i++) {
-                sequenceList.sequences[i].SetDefaults();
+            for (int i = 0; i < _sequenceCollection.sequences.Count; i++) {
+                _sequenceCollection.sequences[i].SetDefaults();
             }
         }
 

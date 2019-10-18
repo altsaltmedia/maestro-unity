@@ -21,7 +21,7 @@ namespace AltSalt
         protected float modifier;
 
         public GameObject directorObject;
-        public DirectorUpdater directorUpdater;
+        public SyncTimelineToSequence directorUpdater;
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {

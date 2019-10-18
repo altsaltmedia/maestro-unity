@@ -6,21 +6,36 @@ namespace AltSalt
     [CreateAssetMenu(menuName = "AltSalt/Axis")]
 	public class Axis : ScriptableObject {
 
-        [ValueDropdown("dropdownValues")]
-        public string Name = "";
+        [SerializeField]
+        private AxisType _axisType;
 
-        private string[] dropdownValues = new string[]{
-            "x",
-            "y",
-            "z",
-            "transition"
-        };
+        public AxisType axisType
+        {
+            get => _axisType;
+            set => _axisType = value;
+        }
 
-        public bool Active = false;
+        [SerializeField]
+        private bool _active;
+
+        public bool active
+        {
+            get => _active;
+            set => _active = value;
+        }
+
+        [SerializeField]
+        private bool _inverted;
+
+        public bool inverted
+        {
+            get => _inverted;
+            set => _inverted = value;
+        }
 
         public void SetStatus(bool targetStatus)
         {
-            Active = targetStatus;
+            active = targetStatus;
         }
 	}
 

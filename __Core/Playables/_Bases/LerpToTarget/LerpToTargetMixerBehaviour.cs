@@ -23,7 +23,8 @@ namespace AltSalt
         protected float modifier;
 
         public GameObject directorObject;
-        public DirectorUpdater directorUpdater;
+        public SyncTimelineToSequence directorUpdater;
+        public TrackAsset parentTrack;
 
         //public IEnumerable<IMarker> markers;
         //public List<IMarker> markers;

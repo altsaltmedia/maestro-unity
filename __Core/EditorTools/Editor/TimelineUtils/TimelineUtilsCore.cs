@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Timeline;
 using UnityEditor.Timeline;
 using UnityEngine.Playables;
+using System.Linq;
 
 namespace AltSalt
 {
@@ -112,6 +113,12 @@ namespace AltSalt
             }
 
             return targetClips;
+        }
+
+        public static IEnumerable<IMarker> GetMarkers(TrackAsset sourceTrack)
+        {
+            IEnumerable<IMarker> markers = sourceTrack.GetMarkers();
+            return markers.OrderBy(s => s.time);
         }
 
         public class ClipTimeSequentialSort : Comparer<TimelineClip>

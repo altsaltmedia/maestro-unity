@@ -78,8 +78,10 @@ namespace AltSalt
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            trackBinding.maxVisibleCharacters = originalCharactersVal;
-            trackBinding.maxVisibleWords = originalWordsVal;
+            if(trackBinding != null) {
+                trackBinding.maxVisibleCharacters = originalCharactersVal;
+                trackBinding.maxVisibleWords = originalWordsVal;
+            }
         }
     }   
 }

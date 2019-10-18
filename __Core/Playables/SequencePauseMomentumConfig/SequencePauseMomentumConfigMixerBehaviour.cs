@@ -38,12 +38,9 @@ namespace AltSalt
                 inputPlayable = (ScriptPlayable<SequencePauseMomentumConfigBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
 
-                StartEndThreshold threshold = new StartEndThreshold();
-                threshold.Description = input.description;
-                threshold.startTime = input.startTime;
-                threshold.endTime = input.endTime;
+                StartEndThreshold threshold = new StartEndThreshold(input.startTime, input.endTime);
+                threshold.description = input.description;
                 threshold.isVideoSequence = input.isVideoSequence;
-
                 trackBinding.pauseMomentumThresholds.Add(threshold);
             }
 

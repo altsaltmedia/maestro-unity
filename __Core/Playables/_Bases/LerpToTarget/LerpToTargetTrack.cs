@@ -25,7 +25,7 @@ namespace AltSalt
                     myAsset.endTime = clip.end;
                     myAsset.parentTrack = this;
                     myAsset.directorObject = directorObject;
-                    myAsset.directorUpdater = directorObject.GetComponent<DirectorUpdater>();
+                    myAsset.directorUpdater = directorObject.GetComponent<SyncTimelineToSequence>();
                 }
             }
         }
@@ -33,7 +33,8 @@ namespace AltSalt
         public LerpToTargetMixerBehaviour StoreMixerProperties(GameObject go, LerpToTargetMixerBehaviour trackMixer)
         {
             trackMixer.directorObject = go;
-            trackMixer.directorUpdater = go.GetComponent<DirectorUpdater>();
+            trackMixer.directorUpdater = go.GetComponent<SyncTimelineToSequence>();
+            trackMixer.parentTrack = this;
             
             return trackMixer;
         }

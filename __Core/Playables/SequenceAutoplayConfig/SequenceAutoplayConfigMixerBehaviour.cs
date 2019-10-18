@@ -38,10 +38,8 @@ namespace AltSalt
                 inputPlayable = (ScriptPlayable<SequenceAutoplayConfigBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
 
-                StartEndThreshold threshold = new StartEndThreshold();
-                threshold.Description = input.description;
-                threshold.startTime = input.startTime;
-                threshold.endTime = input.endTime;
+                StartEndThreshold threshold = new StartEndThreshold(input.startTime, input.endTime);
+                threshold.description = input.description;
                 threshold.isVideoSequence = input.isVideoSequence;
 
                 trackBinding.autoplayThresholds.Add(threshold);
