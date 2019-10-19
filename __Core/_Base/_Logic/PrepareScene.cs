@@ -58,9 +58,9 @@ namespace AltSalt {
         [SerializeField]
         bool resetSequences;
 
-        [ShowIf(nameof(resetSequences))]
-        [SerializeField]
-        SequenceCollection _sequenceCollection;
+//        [ShowIf(nameof(resetSequences))]
+//        [SerializeField]
+//        SequenceCollection _sequenceCollection;
 
         [SerializeField]
         bool delayStart;
@@ -180,14 +180,14 @@ namespace AltSalt {
 
         void TriggerResetSequences()
         {
-            if (_sequenceCollection == null) {
-                Debug.LogWarning("No sequence list found on " + this.name + ", please check.", this);
-                return;
-            }
-
-            for (int i = 0; i < _sequenceCollection.sequences.Count; i++) {
-                _sequenceCollection.sequences[i].SetDefaults();
-            }
+//            if (_sequenceCollection == null) {
+//                Debug.LogWarning("No sequence list found on " + this.name + ", please check.", this);
+//                return;
+//            }
+//
+//            for (int i = 0; i < _sequenceCollection.sequences.Count; i++) {
+//                _sequenceCollection.sequences[i].SetDefaults();
+//            }
         }
 
         public void AddResponsiveElement(EventPayload eventPayload)

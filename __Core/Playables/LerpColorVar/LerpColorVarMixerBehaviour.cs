@@ -50,7 +50,7 @@ namespace AltSalt
             base.OnPlayableDestroy(playable);
 
             if (trackBinding != null) {
-                if (Application.isPlaying == true && directorUpdater != null && directorUpdater.scrubberActive.Value == true) {
+                if (Application.isPlaying == true && scrubberActive == true) {
                     trackBinding.SetValue(Utils.transparent);
                 } else {
 #if UNITY_EDITOR

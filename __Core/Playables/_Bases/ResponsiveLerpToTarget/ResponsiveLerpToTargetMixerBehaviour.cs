@@ -8,20 +8,51 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace AltSalt
 {
     public class ResponsiveLerpToTargetMixerBehaviour : PlayableBehaviour
     {
-        protected double currentTime;
+        private double _currentTime;
+
+        protected double currentTime
+        {
+            get => _currentTime;
+            set => _currentTime = value;
+        }
 
         // Utility vars - specified here to prevent garbage collection
         protected int inputCount;
         protected float inputWeight;
         protected float modifier;
 
-        public GameObject directorObject;
-        public SyncTimelineToSequence directorUpdater;
+        [SerializeField]
+        private GameObject _directorObject;
+
+        public GameObject directorObject
+        {
+            get => _directorObject;
+            set => _directorObject = value;
+        }
+
+        [SerializeField]
+        private BoolReference _scrubberActive;
+
+        public bool scrubberActive
+        {
+            get => _scrubberActive.Value;
+            set => _scrubberActive.Variable.SetValue(value);
+        }
+
+        [SerializeField]
+        private TrackAsset _parentTrack;
+
+        public TrackAsset parentTrack
+        {
+            get => _parentTrack;
+            set => _parentTrack = value;
+        }
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {

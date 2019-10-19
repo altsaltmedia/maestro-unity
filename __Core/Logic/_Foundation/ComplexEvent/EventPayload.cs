@@ -21,6 +21,15 @@ namespace AltSalt
 
         [SerializeField]
         public FloatDictionary floatDictionary = new FloatDictionary();
+        
+        [SerializeField]
+        private IntDictionary _intDictionary = new IntDictionary();
+
+        public IntDictionary intDictionary
+        {
+            get => _intDictionary;
+            private set => _intDictionary = value;
+        }
 
         [SerializeField]
         public BoolDictionary boolDictionary = new BoolDictionary();
@@ -33,7 +42,7 @@ namespace AltSalt
 
         static readonly string arrayExceptionMessage = "Discrepancy between number of keys and values";
 
-        public static EventPayload Init()
+        private static EventPayload Init()
         {
             EventPayload payloadInstance = ScriptableObject.CreateInstance(typeof(EventPayload)) as EventPayload;
             return payloadInstance;
@@ -54,6 +63,9 @@ namespace AltSalt
 
             } else if (value is float) {
                 payloadInstance.floatDictionary[DataType.floatType] = (float)value;
+            
+            } else if (value is int) {
+                payloadInstance.intDictionary[DataType.intType] = (int)value;
                 
             } else if (value is bool) {
                 payloadInstance.boolDictionary[DataType.boolType] = (bool)value;
@@ -77,6 +89,9 @@ namespace AltSalt
 
             } else if (value is float) {
                 payloadInstance.floatDictionary[key] = (float)value;
+                
+            } else if (value is int) {
+                payloadInstance.intDictionary[key] = (int)value;
 
             } else if (value is bool) {
                 payloadInstance.boolDictionary[key] = (bool)value;
@@ -107,6 +122,11 @@ namespace AltSalt
                 for (int i = 0; i < keys.Length; i++) {
                     payloadInstance.floatDictionary[keys[i]] = (float)values[i];
                 }
+                
+            } else if (values.GetType() == typeof(int[])) {
+                for (int i = 0; i < keys.Length; i++) {
+                    payloadInstance.intDictionary[keys[i]] = (int)values[i];
+                }
 
             } else if (values.GetType() == typeof(bool[])) {
                 for (int i = 0; i < keys.Length; i++) {
@@ -136,6 +156,10 @@ namespace AltSalt
             } else if (value is float) {
 
                 floatDictionary[DataType.floatType] = (float)value;
+                
+            } else if (value is int) {
+
+                intDictionary[DataType.intType] = (int)value;
 
             } else if (value is bool) {
 
@@ -160,6 +184,10 @@ namespace AltSalt
             } else if (value is float) {
 
                 floatDictionary[key] = (float)value;
+                
+            } else if (value is int) {
+
+                intDictionary[key] = (int)value;
 
             } else if (value is bool) {
 
@@ -175,6 +203,16 @@ namespace AltSalt
             }
         }
 
+        public string GetStringValue()
+        {
+            if (stringDictionary.ContainsKey(DataType.stringType)) {
+                return stringDictionary[DataType.stringType];
+            } else {
+                Debug.Log("Key for string value not found in EventPayload");
+                return null;
+            }
+        }
+        
         public string GetStringValue(object key)
         {
             if (stringDictionary.ContainsKey(key)) {
@@ -204,6 +242,28 @@ namespace AltSalt
                 return float.NaN;
             }
         }
+        
+        
+        public int GetIntValue()
+        {
+            if (intDictionary.ContainsKey(DataType.intType)) {
+                return intDictionary[DataType.intType];
+            } else {
+                Debug.Log("Key for int value not found in EventPayload");
+                return -1;
+            }
+        }
+        
+        public int GetIntValue(object key)
+        {
+            if (intDictionary.ContainsKey(key)) {
+                return intDictionary[key];
+            } else {
+                Debug.Log("Key for int value not found in EventPayload");
+                return -1;
+            }
+        }
+
 
         public bool GetBoolValue(object key)
         {
@@ -249,6 +309,9 @@ namespace AltSalt
 
         [Serializable]
         public class FloatDictionary : SerializableDictionaryBase<object, float> { }
+        
+        [Serializable]
+        public class IntDictionary : SerializableDictionaryBase<object, int> { }
 
         [Serializable]
         public class BoolDictionary : SerializableDictionaryBase<object, bool> { }

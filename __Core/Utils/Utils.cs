@@ -71,7 +71,8 @@ namespace AltSalt
         ySwipeAxis,
         xSwipeAxis,
         yMomentumAxis,
-        xMomentumAxis
+        xMomentumAxis,
+        ScrubberActive
     }
 
     public enum XMLValues

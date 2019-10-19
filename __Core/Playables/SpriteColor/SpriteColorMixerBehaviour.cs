@@ -48,7 +48,7 @@ namespace AltSalt
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            if (Application.isPlaying == true && directorUpdater != null && directorUpdater.scrubberActive.Value == true) {
+            if (Application.isPlaying == true && scrubberActive == true) {
                 trackBindingComponent.color = Utils.transparent;
             }
         }

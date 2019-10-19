@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 using DG.Tweening;
 using UnityEngine.Timeline;
 
-namespace AltSalt
+namespace AltSalt.Sequencing
 {
     public class DirectorTools : MonoBehaviour
     {

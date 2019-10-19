@@ -34,10 +34,7 @@ namespace AltSalt
 
         [HideInInspector]
         public GameObject directorObject;
-
-        [HideInInspector]
-        public SyncTimelineToSequence directorUpdater;
-
+        
         public bool disableReset;
 
         public override void OnGraphStart(Playable playable)

@@ -16,7 +16,7 @@ namespace AltSalt
 
         Dictionary<Type, string> childWindowData = new Dictionary<Type, string> {
             { typeof(CreateCoreElements), "create-core-elements" },
-            { typeof(CreateSequenceElements), "create-sequence-elements" },
+            //{ typeof(CreateSequenceElements), "create-sequence-elements" },
             { typeof(EditRectTransformComponent), "edit-rect-transform-component" },
             { typeof(EditTMProComponent), "edit-tm-pro-component" },
             { typeof(EditSpriteComponent), "edit-sprite-component" },

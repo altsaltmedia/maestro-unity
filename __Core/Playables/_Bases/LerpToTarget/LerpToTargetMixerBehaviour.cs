@@ -15,16 +15,45 @@ namespace AltSalt
 {
     public class LerpToTargetMixerBehaviour : PlayableBehaviour
     {
-        protected double currentTime;
+        private double _currentTime;
+
+        protected double currentTime
+        {
+            get => _currentTime;
+            set => _currentTime = value;
+        }
 
         // Utility vars - specified here to prevent garbage collection
         protected int inputCount;
         protected float inputWeight;
         protected float modifier;
+        
+        [SerializeField]
+        private GameObject _directorObject;
 
-        public GameObject directorObject;
-        public SyncTimelineToSequence directorUpdater;
-        public TrackAsset parentTrack;
+        public GameObject directorObject
+        {
+            get => _directorObject;
+            set => _directorObject = value;
+        }
+
+        [SerializeField]
+        private BoolReference _scrubberActive;
+
+        public bool scrubberActive
+        {
+            get => _scrubberActive.Value;
+            set => _scrubberActive.Variable.SetValue(value);
+        }
+
+        [SerializeField]
+        private TrackAsset _parentTrack;
+
+        public TrackAsset parentTrack
+        {
+            get => _parentTrack;
+            set => _parentTrack = value;
+        }
 
         //public IEnumerable<IMarker> markers;
         //public List<IMarker> markers;
