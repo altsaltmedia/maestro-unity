@@ -43,7 +43,7 @@ namespace AltSalt
 		}
 		
 		public bool Value {
-			get { return UseConstant ? ConstantValue : Variable.Value; }
+			get { return UseConstant ? ConstantValue : Variable.value; }
 		}
 		
 		public static implicit operator bool(BoolReference reference)

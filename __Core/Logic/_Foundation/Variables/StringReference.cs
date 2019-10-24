@@ -20,7 +20,7 @@ namespace AltSalt
         }
 
         public string Value {
-            get { return UseConstant ? ConstantValue : Variable.Value; }
+            get { return UseConstant ? ConstantValue : Variable.value; }
         }
 
         public static implicit operator string(StringReference reference)

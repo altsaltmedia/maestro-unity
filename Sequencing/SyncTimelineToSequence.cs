@@ -151,16 +151,16 @@ namespace AltSalt.Sequencing
 
         protected virtual void OnRenderObject()
         {
-            if (editorListenerCreated == false && appSettings.debugEventsActive.Value == true) {
-                simpleEventListener = new SimpleEventListener(screenResized, this.gameObject);
-                simpleEventListener.OnTargetEventExecuted += sequence.sequenceConfig.playableDirector.RebuildGraph;
-                editorListenerCreated = true;
-            }
-
-            if (editorListenerCreated == true && appSettings.debugEventsActive == false) {
-                DisableListener();
-            }
-            
+//            if (editorListenerCreated == false && appSettings.debugEventsActive.Value == true) {
+//                simpleEventListener = new SimpleEventListener(screenResized, this.gameObject);
+//                simpleEventListener.OnTargetEventExecuted += sequence.sequenceConfig.playableDirector.RebuildGraph;
+//                editorListenerCreated = true;
+//            }
+//
+//            if (editorListenerCreated == true && appSettings.debugEventsActive == false) {
+//                DisableListener();
+//            }
+//            
         }
 
         void OnDisable()

@@ -15,7 +15,7 @@ namespace AltSalt.Sequencing.Touch
             set => _template = value;
         }
         
-        [ReadOnly]
+        [SerializeField]
         private List<BranchingPath> _branchingPaths;
 
         public List<BranchingPath> branchingPaths

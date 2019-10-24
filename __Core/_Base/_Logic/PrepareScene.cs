@@ -19,12 +19,7 @@ namespace AltSalt {
         bool defaultY;
         [SerializeField]
         bool defaultZ;
-
-        [SerializeField]
-        bool invertYAxis;
-        [SerializeField]
-        bool invertXAxis;
-
+        
         [SerializeField]
         Axis xSwipeAxis;
         [SerializeField]
@@ -40,17 +35,13 @@ namespace AltSalt {
         Axis zMomentumAxis;
 
         [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        BoolReference _invertYAxis;
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        BoolReference _invertXAxis;
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        BoolReference isReversing;
-
+        private List<VariableBase> _variablesToReset;
+        
+        public List<VariableBase> variablesToReset
+        {
+            get => _variablesToReset;
+        }
+        
         [ValueDropdown(nameof(orientationValues))]
         [SerializeField]
         DimensionType orientation;
@@ -134,6 +125,8 @@ namespace AltSalt {
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void ResetScene()
         {
+            ResetVariables(variablesToReset);
+            
             xSwipeAxis.active = defaultX;
             ySwipeAxis.active = defaultY;
             zSwipeAxis.active = defaultZ;
@@ -141,11 +134,6 @@ namespace AltSalt {
             xMomentumAxis.active = defaultX;
             yMomentumAxis.active = defaultY;
             zMomentumAxis.active = defaultZ;
-
-            _invertYAxis.Variable.Value = invertYAxis;
-            _invertXAxis.Variable.Value = invertXAxis;
-
-            isReversing.Variable.Value = false;
 
             Time.timeScale = 1.0f;
 
@@ -170,6 +158,19 @@ namespace AltSalt {
             } else {
                 StartCoroutine(PrepareSceneCompleteTimedDelay());
             }
+        }
+
+        private static List<VariableBase> ResetVariables(List<VariableBase> variables)
+        {
+            for (int i = 0; i < variables.Count; i++)
+            {
+                if (variables[i].hasDefault == true)
+                {
+                    variables[i].SetDefaultValue();
+                }
+            }
+
+            return variables;
         }
 
         IEnumerator PrepareSceneCompleteTimedDelay()

@@ -17,7 +17,7 @@ namespace AltSalt.Sequencing.Autorun
         }
 
         [SerializeField]
-        [Range(0f, 5f)]
+        [Range(0f, 1f)]
         private float _autoplayEaseThreshold = 0.25f;
 
         private float autoplayEaseThreshold
@@ -51,8 +51,20 @@ namespace AltSalt.Sequencing.Autorun
                         autorunData.autorunIntervals, out var currentInterval) == false)
                     continue;
 
-                float autoplayModifer = frameStepValue;
-                autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, isReversing, autoplayEaseThreshold, easingUtility);
+                
+                float autoplayModifer = 0f; 
+#if UNITY_EDITOR
+                autoplayModifer = Time.smoothDeltaTime;
+#else
+                if (Application.platform == RuntimePlatform.Android)  {
+                    autoplayModifer = frameStepValue * 3f;
+                } else  {
+                    autoplayModifer = frameStepValue;
+                }
+#endif
+
+                
+                autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, autorunController.isReversing, autoplayEaseThreshold, easingUtility);
 
                 AutoplaySequence(autorunController.requestModifyToSequence, this, autorunData.sequence, autoplayModifer);
             
@@ -67,8 +79,8 @@ namespace AltSalt.Sequencing.Autorun
         private static float CalculateAutoplayModifier(Sequence targetSequence, StartEndThreshold currentInterval,
             bool isReversing, float easeThreshold, EasingUtility easingUtility)
         {
-            float timeModifier;
-            
+            float timeModifier = 0f;
+
             if (WithinEaseThreshold(targetSequence, currentInterval, isReversing, easeThreshold)) {
                 timeModifier = easingUtility.GetMultiplier();
             } else {
@@ -108,13 +120,9 @@ namespace AltSalt.Sequencing.Autorun
             EventPayload eventPayload = EventPayload.CreateInstance();
             eventPayload.Set(DataType.scriptableObjectType, targetSequence);
             eventPayload.Set(DataType.intType, source.priority);
+            eventPayload.Set(DataType.stringType, source.gameObject.name);
+            eventPayload.Set(DataType.floatType, timeModifier);
 
-            if (Application.platform == RuntimePlatform.Android)  {
-                eventPayload.Set(DataType.floatType, timeModifier * 3f);
-            } else {
-                eventPayload.Set(DataType.floatType, timeModifier);
-            }
-            
             applyEvent.RaiseEvent(source.gameObject, eventPayload);
             return targetSequence;
         }

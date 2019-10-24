@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace AltSalt.Sequencing.Autorun
@@ -7,15 +8,17 @@ namespace AltSalt.Sequencing.Autorun
     public class Lerper : AutorunModule
     {
         [SerializeField]
-        private float _lerpInterval;
+        [ValidateInput(nameof(IsPopulated))]
+        private FloatReference _frameStepValue;
+        
+        private IEnumerator coroutine;
 
-        private float lerpInterval
+        private float frameStepValue
         {
-            get => _lerpInterval;
-            set => _lerpInterval = value;
+            get => _frameStepValue.Value;
         }
-
-        private delegate AutorunController.AutorunData CoroutineCallback(AutorunController.AutorunData autorunData, Interval interval);
+        
+        private delegate AutorunController.AutorunData CoroutineCallback(AutorunController autorunController, AutorunController.AutorunData autorunData, Interval interval);
 
         public void TriggerLerpSequence(Sequence targetSequence)
         {
@@ -28,21 +31,22 @@ namespace AltSalt.Sequencing.Autorun
 
                 autorunData.isLerping = true;
 
-                float timeModifier = CalculateLerpModifier(lerpInterval, isReversing); 
-                
-                StartCoroutine(LerpSequence(autorunController.requestModifyToSequence, this, autorunData,
-                    timeModifier, currentInterval, CheckEndLerp));
+                float timeModifier = CalculateLerpModifier(frameStepValue, autorunController.isReversing);
+
+                coroutine = LerpSequence(autorunController, this, autorunData,
+                    timeModifier, currentInterval, CheckEndLerp);
+                StartCoroutine(coroutine);
             }
         }
 
-        private AutorunController.AutorunData CheckEndLerp(AutorunController.AutorunData autorunData, Interval interval)
+        private AutorunController.AutorunData CheckEndLerp(AutorunController autorunController, AutorunController.AutorunData autorunData, Interval interval)
         {
-            if (isReversing == false)
+            if (autorunController.isReversing == false)
             {
                 if (autorunData.sequence.currentTime > interval.endTime)
                 {
                     autorunData.isLerping = false;
-                    StopCoroutine(nameof(LerpSequence));
+                    StopCoroutine(coroutine);
                     TriggerInputActionComplete();
                 }
             }
@@ -50,7 +54,7 @@ namespace AltSalt.Sequencing.Autorun
             {
                 if (autorunData.sequence.currentTime < interval.startTime) {
                     autorunData.isLerping = false;
-                    StopCoroutine(nameof(LerpSequence));
+                    StopCoroutine(coroutine);
                     TriggerInputActionComplete();
                 }    
             }
@@ -83,7 +87,7 @@ namespace AltSalt.Sequencing.Autorun
             return lerpValue;
         }
 
-        private static IEnumerator LerpSequence(ComplexEventTrigger applyEvent, InputModule source,
+        private static IEnumerator LerpSequence(AutorunController autorunController, InputModule source,
             AutorunController.AutorunData autorunData, float timeModifier, Interval currentInterval, CoroutineCallback callback)
         {
             while(true) {
@@ -91,6 +95,7 @@ namespace AltSalt.Sequencing.Autorun
                 EventPayload eventPayload = EventPayload.CreateInstance();
                 eventPayload.Set(DataType.scriptableObjectType, autorunData.sequence);
                 eventPayload.Set(DataType.intType, source.priority);
+                eventPayload.Set(DataType.stringType, source.gameObject.name);
                 
                 if (Application.platform == RuntimePlatform.Android)
                 {
@@ -101,10 +106,15 @@ namespace AltSalt.Sequencing.Autorun
                     eventPayload.Set(DataType.floatType, timeModifier);
                 }
                 
-                applyEvent.RaiseEvent(source.gameObject, eventPayload);
-                callback(autorunData, currentInterval);
+                autorunController.requestModifyToSequence.RaiseEvent(source.gameObject, eventPayload);
+                callback(autorunController, autorunData, currentInterval);
                 yield return new WaitForEndOfFrame();
             }
+        }
+        
+        private static bool IsPopulated(FloatReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
         }
     }
 }

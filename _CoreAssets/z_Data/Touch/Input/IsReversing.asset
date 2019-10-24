@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   registrationNotice: This object and its dependents will be registered whenever the
     RegisterDependencies tool is used.
+  _hasDefault: 1
   DeveloperDescription: After evaluating swipe input, a variable to track whether
     we are moving forward in a timeline or backward.
-  Value: 0
+  _value: 0
+  _defaultValue: 0

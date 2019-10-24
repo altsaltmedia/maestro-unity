@@ -27,7 +27,8 @@ namespace AltSalt.Sequencing.Touch
 
             public static InvertSwitch CreateInstance(TouchController touchController, TouchController.TouchData touchData, InvertSwitchClip sourceClip)
             {
-                var inputData = ScriptableObject.CreateInstance(typeof(InvertSwitch)) as InvertSwitch;
+                //var inputData = ScriptableObject.CreateInstance(typeof(InvertSwitch)) as InvertSwitch;
+                var inputData = new InvertSwitch();
 
                 inputData.touchController = touchController;
                 inputData.touchData = touchData;
@@ -36,7 +37,7 @@ namespace AltSalt.Sequencing.Touch
 
                 double midpoint = (sourceClip.endTime - sourceClip.startTime) / 2d;
                 inputData.inflectionPoint =
-                    (float) MasterSequence.LocalToMasterTime(touchData.masterSequence.masterTimeData,
+                    (float) MasterSequence.LocalToMasterTime(touchData.masterSequence,
                         touchData.sequence, midpoint);
 
                 if (sourceClip.switchType == InvertSwitchType.ActivateXNeg ||

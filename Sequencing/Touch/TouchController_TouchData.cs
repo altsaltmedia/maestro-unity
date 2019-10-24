@@ -18,6 +18,7 @@ namespace AltSalt.Sequencing.Touch
             }
 
             [SerializeField]
+            [FoldoutGroup("Data")]
             private List<StartEndThreshold> _pauseMomentumIntervals;
 
             public List<StartEndThreshold> pauseMomentumIntervals
@@ -28,6 +29,7 @@ namespace AltSalt.Sequencing.Touch
 
             [ReadOnly]
             [ShowInInspector]
+            [FoldoutGroup("Data")]
             private bool _forceForward;
 
             public bool forceForward
@@ -38,6 +40,7 @@ namespace AltSalt.Sequencing.Touch
 
             [ReadOnly]
             [ShowInInspector]
+            [FoldoutGroup("Data")]
             private bool _forceBackward;
 
             public bool forceBackward
@@ -48,6 +51,7 @@ namespace AltSalt.Sequencing.Touch
 
             [ReadOnly]
             [ShowInInspector]
+            [FoldoutGroup("Data")]
             private bool _pauseMomentumActive;
 
             public bool pauseMomentumActive
@@ -58,6 +62,7 @@ namespace AltSalt.Sequencing.Touch
 
             [ReadOnly]
             [ShowInInspector]
+            [FoldoutGroup("Data")]
             private bool _momentumDisabled;
 
             public bool momentumDisabled
@@ -68,6 +73,7 @@ namespace AltSalt.Sequencing.Touch
 
             [ReadOnly]
             [ShowInInspector]
+            [FoldoutGroup("Data")]
             private AxisSwitchTrack _axisSwitchTrack;
 
             public AxisSwitchTrack axisSwitchTrack
@@ -79,7 +85,8 @@ namespace AltSalt.Sequencing.Touch
             public static TouchData CreateInstance(Sequence sequence, List<StartEndThreshold> pauseMomentumIntervals,
                 AxisSwitchTrack axisSwitchTrack, MasterSequence masterSequence)
             {
-                var inputData = ScriptableObject.CreateInstance(typeof(TouchData)) as TouchData;
+                //var inputData = ScriptableObject.CreateInstance(typeof(TouchData)) as TouchData;
+                var inputData = new TouchData();
 
                 inputData.sequence = sequence;
                 inputData.pauseMomentumIntervals = pauseMomentumIntervals;

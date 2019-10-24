@@ -5,6 +5,7 @@ namespace AltSalt.Sequencing.Touch
 {
     public class InvertSwitchClip : LerpToTargetClip
     {
+        [SerializeField]
         private InvertSwitchBehaviour _template = new InvertSwitchBehaviour();
 
         public InvertSwitchBehaviour template
@@ -13,6 +14,7 @@ namespace AltSalt.Sequencing.Touch
             set => _template = value;
         }
 
+        [SerializeField]
         private InvertSwitchType _switchType;
 
         public InvertSwitchType switchType

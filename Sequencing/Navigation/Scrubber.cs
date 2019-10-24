@@ -32,12 +32,12 @@ namespace AltSalt.Sequencing.Navigate
         void Start()
         {
             slider = GetComponent<Slider>();
-            slider.maxValue = (float)_masterSequence.MasterTotalTime;
+            slider.maxValue = (float)_masterSequence.masterTotalTime;
         }
 
         public void SetScrubberTime()
         {
-            slider.value = (float)_masterSequence.ElapsedTime;
+            slider.value = (float)_masterSequence.elapsedTime;
         }
 
         private void OnMouseUpAsButton()
@@ -48,7 +48,7 @@ namespace AltSalt.Sequencing.Navigate
         // TO DO - Clean this up.
         public void ScrubSequence(float newValue)
         {
-            _masterSequence.MasterTime = newValue;
+            _masterSequence.masterTime = newValue;
             sequenceScrubbed.RaiseEvent(this.gameObject);
             return;
 

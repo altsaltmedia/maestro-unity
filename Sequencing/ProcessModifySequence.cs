@@ -41,6 +41,7 @@ namespace AltSalt.Sequencing
         }
 
         [ValidateInput(nameof(IsPopulated))]
+        [SerializeField]
         private SimpleEventTrigger _boundaryReached;
 
         public SimpleEventTrigger boundaryReached

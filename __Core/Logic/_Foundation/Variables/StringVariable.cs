@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace AltSalt
 {
@@ -11,16 +12,42 @@ namespace AltSalt
         [Header("String Variable")]
         string DeveloperDescription = "";
 #endif
-        public string Value;
+        [SerializeField]
+        private string _value;
 
-		public void SetValue(string value)
+        public string value
         {
-            Value = value;
+            get => _value;
+            set => _value = value;
+        }
+        
+        [SerializeField]
+        [ShowIf(nameof(hasDefault))]
+        private string _defaultValue;
+
+        public string defaultValue
+        {
+            get => _defaultValue;
+            set => _defaultValue = value;
+        }
+        
+        public void SetValue(string value)
+        {
+            this.value = value;
         }
 
         public void SetValue(StringVariable value)
         {
-            Value = value.Value;
+            this.value = value.value;
+        }
+
+        public override void SetDefaultValue()
+        {
+            if (hasDefault)  {
+                value = defaultValue;
+            } else  {
+                Debug.LogWarning("Method SetDefaultValue() called on " + this.name + ", but var does not have a default value assigned.");
+            }
         }
     }
 }

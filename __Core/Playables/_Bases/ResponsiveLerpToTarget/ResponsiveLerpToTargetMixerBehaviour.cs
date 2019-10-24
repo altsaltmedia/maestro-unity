@@ -37,7 +37,7 @@ namespace AltSalt
         }
 
         [SerializeField]
-        private BoolReference _scrubberActive;
+        public BoolReference _scrubberActive = new BoolReference();
 
         public bool scrubberActive
         {

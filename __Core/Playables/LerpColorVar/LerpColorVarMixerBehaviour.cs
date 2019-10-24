@@ -19,7 +19,7 @@ namespace AltSalt
                 return;
 
             if(originalValueSet == false) {
-                originalValue = trackBinding.Value;
+                originalValue = trackBinding.value;
                 originalValueSet = true;
             }
             

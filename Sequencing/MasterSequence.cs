@@ -6,9 +6,10 @@ using UnityEngine;
 
 namespace AltSalt.Sequencing
 {
+    [ExecuteInEditMode]
     public class MasterSequence : MonoBehaviour
     {
-        [ShowInInspector]
+        [SerializeField]
         [ReadOnly]
         private ActiveInputModuleData _activeInputModule = new ActiveInputModuleData();
 
@@ -16,15 +17,6 @@ namespace AltSalt.Sequencing
         {
             get => _activeInputModule;
             set => _activeInputModule = value;
-        }
-
-
-        [SerializeField]
-        private List<InputController> _inputModules = new List<InputController>();
-
-        private List<InputController> inputModules
-        {
-            get => _inputModules;
         }
 
         [SerializeField]
@@ -35,17 +27,18 @@ namespace AltSalt.Sequencing
             get => _sequenceConfigs;
         }
         
-        List<MasterTimeData> _masterTimeData = new List<MasterTimeData>();
+        [SerializeField]
+        private List<MasterTimeData> _masterTimeData = new List<MasterTimeData>();
 
         public List<MasterTimeData> masterTimeData
         {
-            get => masterTimeData;
-            private set => masterTimeData = value;
+            get {
+                return _masterTimeData;
+            }
+            private set => _masterTimeData = value;
         }
 
-        double masterTotalTime;
-
-        public double ElapsedTime {
+        public double elapsedTime {
             get {
                 if (masterTimeData.Count < 1) {
                     Init();
@@ -54,9 +47,9 @@ namespace AltSalt.Sequencing
             }
         }
 
-        public double MasterTime {
+        public double masterTime {
             get {
-                return ElapsedTime;
+                return elapsedTime;
             }
             set {
                 if (masterTimeData.Count < 1) {
@@ -66,13 +59,20 @@ namespace AltSalt.Sequencing
             }
         }
 
-        public double MasterTotalTime {
+        double _masterTotalTime;
+        
+        public double masterTotalTime {
             get {
                 if (masterTimeData.Count < 1) {
                     Init();
                 }
-                return masterTotalTime;
+                return _masterTotalTime;
             }
+        }
+
+        private void Start()
+        {
+            Init();
         }
 
         void Init()
@@ -80,8 +80,13 @@ namespace AltSalt.Sequencing
             // Generate master times for sequences
             masterTimeData = GenerateSequenceData(sequenceConfigs);
 
+            for (int i = 0; i < sequenceConfigs.Count; i++)
+            {
+                sequenceConfigs[i].sequence.SetDefaults();
+            }
+
             // Get total time by adding last sequences master time end threshold with its duration
-            masterTotalTime = masterTimeData[masterTimeData.Count - 1].masterTimeEnd + masterTimeData[masterTimeData.Count - 1].sequence.sourcePlayable.duration;
+            _masterTotalTime = masterTimeData[masterTimeData.Count - 1].masterTimeEnd + masterTimeData[masterTimeData.Count - 1].sequence.sourcePlayable.duration;
         }
 
         public void ProcessModifyRequest(EventPayload eventPayload)
@@ -92,11 +97,13 @@ namespace AltSalt.Sequencing
             if (sequenceConfig == null) return;
 
             int requestPriority = eventPayload.GetIntValue();
-            if (string.IsNullOrEmpty(activeInputModule.name) || requestPriority > activeInputModule.priority)
-            {
-                LockInputModule(activeInputModule, eventPayload.GetStringValue(), requestPriority);
+            string moduleName = eventPayload.GetStringValue();
                 
-                Sequence.ModifySequence(sequenceConfig.sequence, eventPayload.GetFloatValue());
+            if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
+            {
+                activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
+                
+                sequenceConfig.processModifySequence.ModifySequence(eventPayload.GetFloatValue());
             }
         }
 
@@ -212,8 +219,9 @@ namespace AltSalt.Sequencing
 
                 if (i == 0)  {
                     masterTimeEnd = sourceSequenceConfigs[i].sequence.sourcePlayable.duration;
-                } else  {
-                    masterTimeStart = sequenceData[i - 1].sequence.sourcePlayable.duration;
+                } else
+                {
+                    masterTimeStart = sequenceData[i - 1].masterTimeEnd;
                     masterTimeEnd = sourceSequenceConfigs[i].sequence.sourcePlayable.duration + sequenceData[i - 1].masterTimeEnd;
                 }
 
@@ -224,8 +232,10 @@ namespace AltSalt.Sequencing
             return sequenceData;
         }
 
-        public static double LocalToMasterTime(List<MasterTimeData> masterTimeData, Sequence sourceSequence, double localTime)
+        public static double LocalToMasterTime(MasterSequence masterSequence, Sequence sourceSequence, double localTime)
         {
+            masterSequence.Init();
+            List<MasterTimeData> masterTimeData = masterSequence.masterTimeData;
             for (int i = 0; i < masterTimeData.Count; i++)
             {
                 if (masterTimeData[i].sequence == sourceSequence)
@@ -253,16 +263,16 @@ namespace AltSalt.Sequencing
         private double _masterTimeStart;
         
         public double masterTimeStart {
-            get => masterTimeStart;
-            set => masterTimeStart = value;
+            get => _masterTimeStart;
+            set => _masterTimeStart = value;
         }
 
         [SerializeField]
         private double _masterTimeEnd;
         
         public double masterTimeEnd {
-            get => masterTimeEnd;
-            set => masterTimeEnd = value;
+            get => _masterTimeEnd;
+            set => _masterTimeEnd = value;
         }
 
         public MasterTimeData(Sequence sourceSequence, double masterTimeStart, double masterTimeEnd)
@@ -276,6 +286,7 @@ namespace AltSalt.Sequencing
     [Serializable]
     public class ActiveInputModuleData
     {
+        [SerializeField]
         private string _name;
 
         public string name
@@ -284,6 +295,7 @@ namespace AltSalt.Sequencing
             set => _name = value;
         }
 
+        [SerializeField]
         private int _priority;
 
         public int priority

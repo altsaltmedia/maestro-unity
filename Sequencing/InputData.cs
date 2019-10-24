@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace AltSalt.Sequencing
 {
-    public abstract class InputData : ScriptableObject
+    public abstract class InputData
     {
         [SerializeField]
         private Sequence _sequence;

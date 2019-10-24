@@ -5,14 +5,20 @@ using Sirenix.OdinInspector;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Timeline;
+using UnityEngine.Serialization;
+
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
 namespace AltSalt.Sequencing.Touch
 {
 
+    [ExecuteInEditMode]
     public partial class AxisModifier : TouchModule
     {
         [SerializeField]
-        private List<BaseAxisSwitch> _switchData;
+        private List<BaseAxisSwitch> _switchData = new List<BaseAxisSwitch>();
 
         private List<BaseAxisSwitch> switchData
         {
@@ -75,14 +81,20 @@ namespace AltSalt.Sequencing.Touch
             get => _forkTransitionSpread.Value;
         }
 
-        private void ConfigureData()
+#if UNITY_EDITOR
+        
+        public void ConfigureData()
         {
             switchData.Clear();
 
             for (int i = 0; i < touchController.touchDataList.Count; i++)
             {
                 var touchData = touchController.touchDataList[i];
-                IEnumerable<TimelineClip> clips = touchData.axisSwitchTrack.GetClips();
+                
+                AxisSwitchTrack axisSwitchTrack = touchData.axisSwitchTrack;
+                if (axisSwitchTrack == null) continue;
+                
+                IEnumerable<TimelineClip> clips = axisSwitchTrack.GetClips();
                 
                 foreach (TimelineClip clip in clips)
                 {
@@ -110,13 +122,17 @@ namespace AltSalt.Sequencing.Touch
                     }
                 }
             }
+            
+            EditorUtility.SetDirty(this);
         }
+        
+#endif
         
         public virtual void UpdateAxes()
         {
             for (int i = 0; i < touchController.masterSequences.Count; i++)
             {
-                double masterTime = touchController.masterSequences[i].ElapsedTime;
+                double masterTime = touchController.masterSequences[i].elapsedTime;
                 
                 for (int j = 0; j < switchData.Count; j++)
                 {
@@ -154,26 +170,31 @@ namespace AltSalt.Sequencing.Touch
         }
         
         [Serializable]
-        public abstract partial class BaseAxisSwitch : ScriptableObject
+        [ExecuteInEditMode]
+        public partial class BaseAxisSwitch
         {
         }
 
         [Serializable]
+        [ExecuteInEditMode]
         public partial class BiAxisSwitch : BaseAxisSwitch
         {
         }
 
         [Serializable]
+        [ExecuteInEditMode]
         public partial class SimpleSwitch : BiAxisSwitch
         {
         }
 
         [Serializable]
+        [ExecuteInEditMode]
         public partial class InvertSwitch : BiAxisSwitch
         {
         }
 
         [Serializable]
+        [ExecuteInEditMode]
         public partial class ForkSwitch : BaseAxisSwitch
         {
         }

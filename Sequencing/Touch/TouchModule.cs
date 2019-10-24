@@ -6,6 +6,7 @@ namespace AltSalt.Sequencing.Touch
     public class TouchModule : InputModule
     {
         [SerializeField]
+        [Required]
         private TouchController _touchController;
 
         protected TouchController touchController
@@ -13,17 +14,7 @@ namespace AltSalt.Sequencing.Touch
             get => _touchController;
             set => _touchController = value;
         }
-        
-        [SerializeField]
-        [ValidateInput("IsPopulated")]
-        private BoolReference _isReversing;
 
-        protected bool isReversing
-        {
-            get => _isReversing.Value;
-            set => _isReversing.Variable.SetValue(value);
-        }
-     
         protected bool _isparentModuleNull;
         
         protected virtual void Start()

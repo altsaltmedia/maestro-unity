@@ -17,6 +17,7 @@ namespace AltSalt.Sequencing.Touch
             set => _template = value;
         }
 
+        [SerializeField]
         private SimpleSwitchType _switchType;
 
         public SimpleSwitchType switchType

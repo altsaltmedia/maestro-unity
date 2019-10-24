@@ -10,6 +10,7 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt
 {
@@ -23,36 +24,50 @@ namespace AltSalt
         [Header("Color Variable")]
         string DeveloperDescription = "";
 #endif
-        public Color Value = new Color(1,1,1,1);
-        public bool hasDefault;
+        [FormerlySerializedAs("Value")]
+        [SerializeField]
+        private Color _value = new Color(1,1,1,1);
 
-        [ShowIf("hasDefault")]
-        public Color DefaultValue;
+        public Color value
+        {
+            get => _value;
+            set => _value = value;
+        }
+
+        [SerializeField]
+        private Color _defaultValue;
+
+        [ShowIf(nameof(hasDefault))]
+        public Color defaultValue
+        {
+            get => _defaultValue;
+            set => _defaultValue = value;
+        }
 
         public void SetValue(Color value)
         {
-            Value = value;
+            this.value = value;
         }
 
         public void SetValue(ColorVariable value)
         {
-            Value = value.Value;
+            this.value = value.value;
         }
 
         public void SetTransparent()
         {
-            Value = new Color(0, 0, 0, 0);
+            value = new Color(0, 0, 0, 0);
         }
 
         public void SetOpaque()
         {
-            Value = new Color(1, 1, 1, 1);
+            value = new Color(1, 1, 1, 1);
         }
 
-        public void SetDefaultValue()
+        public override void SetDefaultValue()
         {
             if(hasDefault) {
-                Value = DefaultValue;   
+                value = defaultValue;   
             } else {
                 Debug.LogWarning("Method SetDefaultValue() called on " + this.name + ", but var does not have a default value assigned.");
             }

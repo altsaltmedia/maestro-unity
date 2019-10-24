@@ -5,7 +5,13 @@ namespace AltSalt
 {    
     public class DebugTimelineMixerBehaviour : LerpToTargetMixerBehaviour
     {
-        public FloatVariable timelineCurrentTime = new FloatVariable();
+        private FloatReference _timelineCurrentTime = new FloatReference();
+
+        public FloatReference timelineCurrentTime
+        {
+            get => _timelineCurrentTime;
+        }
+
         public SimpleEventTrigger onGraphStart = new SimpleEventTrigger();
 
         public override void OnGraphStart(Playable playable)
@@ -19,7 +25,7 @@ namespace AltSalt
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
 #if UNITY_EDITOR
-            timelineCurrentTime.SetValue((float)base.currentTime);
+            timelineCurrentTime.Variable.SetValue((float)base.currentTime);
 #endif
         }
     }   

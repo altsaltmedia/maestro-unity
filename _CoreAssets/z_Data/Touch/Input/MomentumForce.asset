@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a002c9dd0021641518211c23c9313b74, type: 3}
+  m_Script: {fileID: 11500000, guid: 3f813d867b1ed42fea4549ac0aa681c4, type: 3}
   m_Name: MomentumForce
   m_EditorClassIdentifier: 
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
   DeveloperDescription: 
-  Value: {x: 0, y: 0, z: 0}
+  Value: {x: 0, y: 0}

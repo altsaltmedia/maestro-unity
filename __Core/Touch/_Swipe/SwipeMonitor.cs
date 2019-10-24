@@ -28,6 +28,7 @@ namespace AltSalt
         }
 
         [Required]
+        [SerializeField]
         private BoolReference _invertXInput;
 
         public bool invertXInput
@@ -65,7 +66,14 @@ namespace AltSalt
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Swipe Variables")]
         [InfoBox("SwipeForce is generated and modified dynamically at run time", InfoMessageType.Info)]
-        public V3Reference swipeForce;
+        [SerializeField]
+        private V2Reference _swipeForce;
+
+        private Vector2 swipeForce
+        {
+            get => _swipeForce.Value;
+            set => _swipeForce.Variable.SetValue(value);
+        }
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Swipe Variables")]
@@ -113,7 +121,14 @@ namespace AltSalt
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
         [InfoBox("MomentumForce is generated and modified dynamically at run time", InfoMessageType.Info)]
-		public V3Reference momentumForce;
+        [SerializeField]
+		private V2Reference _momentumForce;
+
+        private Vector2 momentumForce
+        {
+            get => _momentumForce.Value;
+            set => _momentumForce.Variable.SetValue(value);
+        }
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
@@ -173,11 +188,11 @@ namespace AltSalt
             if(momentumActive == true) {
                 // All momentum is executed through momentumForce. However, we calculate the momentumForce
                 // via a momentumCache, which is modified dynamically based on swipe input, decay value, etc.
-                momentumForce.Variable.SetValue(new Vector3(momentumCache.Value.x, momentumCache.Value.y, momentumCache.Value.z));
+                momentumForce= new Vector2(momentumCache.Value.x, momentumCache.Value.y);
 				
 				MomentumUpdate.RaiseEvent(this.gameObject);
 				
-				if (momentumForce.Value.sqrMagnitude < .00001f) {
+				if (momentumForce.sqrMagnitude < .00001f) {
                     MomentumDepleted.RaiseEvent(this.gameObject);
                     momentumCache.Variable.SetValue(new Vector3(0, 0, 0));
                     momentumActive = false;
@@ -230,7 +245,7 @@ namespace AltSalt
 
             Vector3 newSwipeForce = NormalizeVectorInfo(swipeVector, swipeMinMax);
 
-            swipeForce.Variable.SetValue(newSwipeForce);
+            swipeForce = newSwipeForce;
             OnSwipeEvent.RaiseEvent(this.gameObject);
         }
 
@@ -325,7 +340,7 @@ namespace AltSalt
         {
             momentumActive = false;
             momentumCache.Variable.SetValue(new Vector3(0, 0, 0));
-            momentumForce.Variable.SetValue(new Vector3(0, 0, 0));
+            momentumForce = new Vector2(0, 0);
         }
 
         public void UpdateMomentum(EventPayload eventPayload)
@@ -340,7 +355,7 @@ namespace AltSalt
 			//Debug.Log(eventPayload.GetStringValue("toAxis"));
 
             // Replace the momentum cache's new active axis with the previous active axis's momentum
-            momentumCache.Variable.Value[Utils.GetAxisId(toAxis)] = momentumCache.Variable.Value[Utils.GetAxisId(fromAxis)];
+            momentumCache.Variable._value[Utils.GetAxisId(toAxis)] = momentumCache.Variable.value[Utils.GetAxisId(fromAxis)];
 
             //Debug.Log(momentumCache.Value.ToString("F8"));
         }

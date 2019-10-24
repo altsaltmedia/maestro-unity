@@ -1,8 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace AltSalt
 {
-    public abstract class VariableBase : RegisterableScriptableObject { }
+    public abstract class VariableBase : RegisterableScriptableObject
+    {
+        [SerializeField]
+        private bool _hasDefault;
+
+        public bool hasDefault
+        {
+            get => _hasDefault;
+            protected set => _hasDefault = value;
+        }
+        public abstract void SetDefaultValue();
+    }
 }

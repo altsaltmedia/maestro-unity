@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80207dbd0ac7646aba8defefa38de89b, type: 3}
   m_Name: EditorDebugEventsActive
   m_EditorClassIdentifier: 
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
+  _hasDefault: 1
   DeveloperDescription: Activate this to test responsiveness and other special events
     in the editor.
-  Value: 1
+  _value: 1
+  _defaultValue: 1

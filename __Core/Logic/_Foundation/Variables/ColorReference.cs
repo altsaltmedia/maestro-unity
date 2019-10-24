@@ -30,7 +30,7 @@ namespace AltSalt
         }
 
         public Color Value {
-            get { return UseConstant ? ConstantValue : Variable.Value; }
+            get { return UseConstant ? ConstantValue : Variable.value; }
         }
 
         public static implicit operator Color(ColorReference reference)

@@ -30,7 +30,7 @@ namespace AltSalt
 
         public int Value
         {
-            get { return UseConstant ? ConstantValue : Variable.Value; }
+            get { return UseConstant ? ConstantValue : Variable.value; }
         }
 
         public static implicit operator int(IntReference reference)

@@ -14,7 +14,6 @@ namespace AltSalt.Sequencing.Touch
 
         public void UpdateSequenceWithSwipe()
         {
-            touchController.AddToSwipeHistory(touchController.swipeForce);
             Vector2 swipeForceToApply = touchController.swipeForce;
 
             // If we're in a fork, only apply force from the axis currently receiving greatest input
@@ -43,9 +42,9 @@ namespace AltSalt.Sequencing.Touch
             }
 
             if (touchController.swipeModifierOutput > 0) {
-                isReversing = false;
+                touchController.isReversing = false;
             } else if (touchController.swipeModifierOutput < 0) {
-                isReversing = true;
+                touchController.isReversing = true;
             }
 
             for (int q=0; q < touchController.touchDataList.Count; q++)

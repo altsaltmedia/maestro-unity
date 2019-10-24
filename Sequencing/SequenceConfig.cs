@@ -30,10 +30,6 @@ namespace AltSalt.Sequencing
 
         [Required]
         [SerializeField]
-        SimpleEventTrigger boundaryReached;
-
-        [Required]
-        [SerializeField]
         private PlayableDirector _playableDirector;
 
         public PlayableDirector playableDirector

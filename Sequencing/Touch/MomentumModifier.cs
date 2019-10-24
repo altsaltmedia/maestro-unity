@@ -55,9 +55,9 @@ namespace AltSalt.Sequencing.Touch
             }
             
             if (touchController.momentumModifierOutput > 0) {
-                isReversing = false;
+                touchController.isReversing = false;
             } else if (touchController.momentumModifierOutput < 0) {
-                isReversing = true;
+                touchController.isReversing = true;
             }
 
             for (int q=0; q < touchController.touchDataList.Count; q++)
@@ -90,6 +90,7 @@ namespace AltSalt.Sequencing.Touch
             
             eventPayload.Set(DataType.scriptableObjectType, targetSequence);
             eventPayload.Set(DataType.intType, source.priority);
+            eventPayload.Set(DataType.stringType, source.gameObject.name);
             eventPayload.Set(DataType.floatType, timeModifier);
             
             applyEvent.RaiseEvent(source.gameObject, eventPayload);

@@ -46,11 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c988e76ee47474488013b330da6b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invertYAxis:
+  _invertYInput:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 307bf3fe2474043068fdd4e250f6a84a, type: 2}
-  invertXAxis:
+  _invertXInput:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 3e188ea664ddc4003896aefdb9d1fa5f, type: 2}
@@ -70,9 +70,9 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 02c56e2aa3ca74ea197b12137c1130e1, type: 2}
-  swipeForce:
+  _swipeForce:
     UseConstant: 0
-    ConstantValue: {x: 0, y: 0, z: 0}
+    ConstantValue: {x: 0, y: 0}
     Variable: {fileID: 11400000, guid: 83dca11092e3c42a3ac39cf5ea347c2f, type: 2}
   swipeMinMax:
     UseConstant: 0
@@ -101,9 +101,9 @@ MonoBehaviour:
   xMomentumAxis: {fileID: 11400000, guid: f88bf119e8f2c4cf3877691a94127d64, type: 2}
   yMomentumAxis: {fileID: 11400000, guid: f42a426f4dfb54a94938a16ec1f3c2e3, type: 2}
   zMomentumAxis: {fileID: 11400000, guid: 0ff6d39eb4be84e459d1db349ebb85bb, type: 2}
-  momentumForce:
+  _momentumForce:
     UseConstant: 0
-    ConstantValue: {x: 0, y: 0, z: 0}
+    ConstantValue: {x: 0, y: 0}
     Variable: {fileID: 11400000, guid: f622ace9e18b44dddaacabde456d3ef4, type: 2}
   momentumCache:
     UseConstant: 0
@@ -247,6 +247,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &114946770816194122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,3 +279,4 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0

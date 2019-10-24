@@ -22,36 +22,49 @@ namespace AltSalt
         [Header("Int Variable")]
         string DeveloperDescription = "";
 #endif
-        public int Value;
-        public bool hasDefault;
+        [SerializeField]
+        public int _value;
 
-        [ShowIf("hasDefault")]
-        public int DefaultValue;
+        public int value
+        {
+            get => _value;
+            set => _value = value;
+        }
+
+        [SerializeField]
+        [ShowIf(nameof(hasDefault))]
+        private int _defaultValue;
+
+        public int defaultValue
+        {
+            get => _defaultValue;
+            set => _defaultValue = value;
+        }
 
         public void SetValue(int value)
         {
-            Value = value;
+            this.value = value;
         }
 
         public void SetValue(IntVariable value)
         {
-            Value = value.Value;
+            this.value = value.value;
         }
 
         public void ApplyChange(int amount)
         {
-            Value += amount;
+            value += amount;
         }
 
         public void ApplyChange(IntVariable amount)
         {
-            Value += amount.Value;
+            value += amount.value;
         }
 
-        public void SetDefaultValue()
+        public override void SetDefaultValue()
         {
             if (hasDefault) {
-                Value = DefaultValue;
+                value = defaultValue;
             } else {
                 Debug.LogWarning("Method SetDefaultValue() called on " + this.name + ", but var does not have a default value assigned.");
             }

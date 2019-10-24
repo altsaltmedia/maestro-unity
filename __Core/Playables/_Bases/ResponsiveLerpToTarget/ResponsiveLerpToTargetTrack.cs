@@ -23,9 +23,7 @@ namespace AltSalt
                 if (myAsset) {
                     myAsset.startTime = clip.start;
                     myAsset.endTime = clip.end;
-#if UNITY_EDITOR
-                    myAsset.appSettings = Utils.GetAppSettings();
-#endif
+                    myAsset.appSettings = directorObject.GetComponent<TrackAssetConfig>().appSettings;
                     myAsset.parentTrack = this;
                     myAsset.directorObject = directorObject;
                 }
@@ -35,9 +33,7 @@ namespace AltSalt
         public ResponsiveLerpToTargetMixerBehaviour StoreMixerProperties(GameObject go, ResponsiveLerpToTargetMixerBehaviour trackMixer)
         {
             trackMixer.directorObject = go;
-#if UNITY_EDITOR
-            trackMixer.scrubberActive = Utils.GetBoolVariable(nameof(VarDependencies.ScrubberActive));
-#endif
+            trackMixer._scrubberActive.Variable = go.GetComponent<TrackAssetConfig>().scrubberActive;
             trackMixer.parentTrack = this;
             
             return trackMixer;

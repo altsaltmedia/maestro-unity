@@ -51,29 +51,18 @@ MonoBehaviour:
   defaultX: 0
   defaultY: 1
   defaultZ: 0
-  invertYAxis: 0
-  invertXAxis: 1
   xSwipeAxis: {fileID: 11400000, guid: 78821859800bc4f338b0683018b859c0, type: 2}
   ySwipeAxis: {fileID: 11400000, guid: 04fddbb3e8a0245bbaf7eb7ac8c54c1a, type: 2}
   zSwipeAxis: {fileID: 11400000, guid: f545d3f97388040cebfc721fb6b4ff3a, type: 2}
   xMomentumAxis: {fileID: 11400000, guid: f88bf119e8f2c4cf3877691a94127d64, type: 2}
   yMomentumAxis: {fileID: 11400000, guid: f42a426f4dfb54a94938a16ec1f3c2e3, type: 2}
   zMomentumAxis: {fileID: 11400000, guid: 0ff6d39eb4be84e459d1db349ebb85bb, type: 2}
-  _invertYAxis:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 307bf3fe2474043068fdd4e250f6a84a, type: 2}
-  _invertXAxis:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 3e188ea664ddc4003896aefdb9d1fa5f, type: 2}
-  isReversing:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
+  _variablesToReset:
+  - {fileID: 11400000, guid: 307bf3fe2474043068fdd4e250f6a84a, type: 2}
+  - {fileID: 11400000, guid: 3e188ea664ddc4003896aefdb9d1fa5f, type: 2}
+  - {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
   orientation: 0
   resetSequences: 0
-  sequenceList: {fileID: 0}
   delayStart: 0
   delayAmount: 0
   prepareSceneCompleted:

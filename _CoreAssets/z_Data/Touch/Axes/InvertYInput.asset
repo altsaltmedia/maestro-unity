@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80207dbd0ac7646aba8defefa38de89b, type: 3}
-  m_Name: _invertXAxis
+  m_Name: InvertYInput
   m_EditorClassIdentifier: 
   registrationNotice: This object and its dependents will be registered whenever the
     RegisterDependencies tool is used.
-  DeveloperDescription: By default, the X axis is usually inverted
-  Value: 0
+  _hasDefault: 1
+  DeveloperDescription: 
+  _value: 0
+  _defaultValue: 0

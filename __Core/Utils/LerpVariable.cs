@@ -58,7 +58,7 @@ namespace AltSalt
 
                 case nameof(FloatVariable): {
                         FloatVariable variable = variableTarget as FloatVariable;
-                        DOTween.To(() => variable.Value, x => variable.Value = x, targetFloat, duration).OnComplete(() => {
+                        DOTween.To(() => variable.value, x => variable.value = x, targetFloat, duration).OnComplete(() => {
                             variableCallbackDelegate.Invoke();
                         });
                         break;
@@ -66,7 +66,7 @@ namespace AltSalt
 
                 case nameof(ColorVariable): {
                         ColorVariable variable = variableTarget as ColorVariable;
-                        DOTween.To(() => variable.Value, x => variable.Value = x, targetColor, duration).OnComplete(() => {
+                        DOTween.To(() => variable.value, x => variable.value = x, targetColor, duration).OnComplete(() => {
                             variableCallbackDelegate.Invoke();
                         });
                         break;
@@ -74,7 +74,7 @@ namespace AltSalt
 
                 case nameof(V3Variable): {
                         V3Variable variable = variableTarget as V3Variable;
-                        DOTween.To(() => variable.Value, x => variable.Value = x, targetV3, duration).OnComplete(() => {
+                        DOTween.To(() => variable.value, x => variable.value = x, targetV3, duration).OnComplete(() => {
                             variableCallbackDelegate.Invoke();
                         });
                         break;
@@ -82,7 +82,7 @@ namespace AltSalt
 
                 case nameof(IntVariable): {
                         IntVariable variable = variableTarget as IntVariable;
-                        DOTween.To(() => variable.Value, x => variable.Value = x, targetInt, duration).OnComplete(() => {
+                        DOTween.To(() => variable.value, x => variable.value = x, targetInt, duration).OnComplete(() => {
                             variableCallbackDelegate.Invoke();
                         });
                         break;

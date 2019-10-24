@@ -20,7 +20,7 @@ namespace AltSalt
         }
 
         public Vector3 Value {
-            get { return UseConstant ? ConstantValue : Variable.Value; }
+            get { return UseConstant ? ConstantValue : Variable.value; }
         }
 
         public static implicit operator Vector3(V3Reference reference)

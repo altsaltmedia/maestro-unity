@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 
 namespace AltSalt.Sequencing.Autorun
 {
+    [Serializable]
     public class Interval : StartEndThreshold
     {
         [SerializeField]
@@ -46,19 +48,15 @@ namespace AltSalt.Sequencing.Autorun
         
         public static bool TimeWithinThreshold(double sourceTime, List<Interval> intervals, out Interval currentInterval)
         {
-            // Check if we're inside a pauseMomentumThreshold
-            bool withinThreshold = false;
-
             for (int q = 0; q < intervals.Count; q++) {
                 if(sourceTime >= intervals[q].startTime &&
                    sourceTime <= intervals[q].endTime) {
                     currentInterval = intervals[q];
-                    withinThreshold = true;
-                    break;
+                    return true;
                 }
             }
             currentInterval = null;
-            return withinThreshold;
+            return false;
         }
     }
 }

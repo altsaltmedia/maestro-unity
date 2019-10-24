@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 using System.Collections.Generic;
 
 namespace AltSalt
 {
-    [System.Serializable]
+    [Serializable]
     public class StartEndThreshold
     {
         [SerializeField]

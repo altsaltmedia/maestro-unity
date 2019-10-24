@@ -17,15 +17,16 @@ namespace AltSalt.Sequencing.Touch
 
             public static SimpleSwitch CreateInstance(TouchController touchController, TouchController.TouchData touchData,SimpleSwitchClip sourceClip)
             {
-                var inputData = ScriptableObject.CreateInstance(typeof(SimpleSwitch)) as SimpleSwitch;
+                //var inputData = ScriptableObject.CreateInstance(typeof(SimpleSwitch)) as SimpleSwitch;
+                var inputData = new SimpleSwitch();
 
                 inputData.touchController = touchController;
                 inputData.touchData = touchData;
                 inputData.sourceClip = sourceClip;
 
-                double midpoint = (sourceClip.endTime - sourceClip.startTime) / 2d;
+                double midpoint = sourceClip.startTime + (sourceClip.endTime - sourceClip.startTime) / 2d;
                 inputData.inflectionPoint =
-                    (float) MasterSequence.LocalToMasterTime(touchData.masterSequence.masterTimeData,
+                    (float) MasterSequence.LocalToMasterTime(touchData.masterSequence,
                         touchData.sequence, midpoint);
 
                 if (sourceClip.switchType == SimpleSwitchType.YtoX)

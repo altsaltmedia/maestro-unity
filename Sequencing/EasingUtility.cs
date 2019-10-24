@@ -51,8 +51,22 @@ namespace AltSalt.Sequencing
             set => _percentValue = value;
         }
         
+        private bool _initialized;
+
+        private bool initialized
+        {
+            get => _initialized;
+            set => _initialized = value;
+        }
+
         public float GetMultiplier()
         {
+            if (initialized == false)
+            {
+                easingFunction = EasingFunction.GetEasingFunction(ease);
+                initialized = true;
+            }
+            
             if (lerpType == LerpType.EaseOut)
             {
                 multiplier = easingFunction(1f, 0f, percentValue);

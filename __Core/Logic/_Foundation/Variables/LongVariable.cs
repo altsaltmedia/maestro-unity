@@ -22,36 +22,49 @@ namespace AltSalt
         [Header("Long Variable")]
         string DeveloperDescription = "";
 #endif
-        public long Value;
-        public bool hasDefault;
+        [SerializeField]
+        private long _value;
+
+        public long value
+        {
+            get => _value;
+            set => _value = value;
+        }
+
+        [SerializeField]
+        private long _defaultValue;
 
         [ShowIf("hasDefault")]
-        public long DefaultValue;
+        public long defaultValue
+        {
+            get => _defaultValue;
+            set => _defaultValue = value;
+        }
 
         public void SetValue(long value)
         {
-            Value = value;
+            this.value = value;
         }
 
         public void SetValue(LongVariable value)
         {
-            Value = value.Value;
+            this.value = value.value;
         }
 
         public void ApplyChange(long amount)
         {
-            Value += amount;
+            value += amount;
         }
 
         public void ApplyChange(LongVariable amount)
         {
-            Value += amount.Value;
+            value += amount.value;
         }
 
-        public void SetDefaultValue()
+        public override void SetDefaultValue()
         {
             if (hasDefault) {
-                Value = DefaultValue;
+                value = defaultValue;
             } else {
                 Debug.LogWarning("Method SetDefaultValue() called on " + this.name + ", but var does not have a default value assigned.");
             }

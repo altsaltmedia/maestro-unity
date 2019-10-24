@@ -10,6 +10,7 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt
 {
@@ -22,36 +23,52 @@ namespace AltSalt
         [Header("Float Variable")]
         string DeveloperDescription = "";
 #endif
-        public float Value;
+        [FormerlySerializedAs("Value")]
+        [SerializeField]
+        private float _value;
+
+        public float value
+        {
+            get => _value;
+            set => _value = value;
+        }
+        
         public bool hasDefault;
 
+        [SerializeField]
+        private float _defaultValue;
+
         [ShowIf("hasDefault")]
-        public float DefaultValue;
+        public float defaultValue
+        {
+            get => _defaultValue;
+            set => _defaultValue = value;
+        }
 
         public void SetValue(float value)
         {
-            Value = value;
+            _value = value;
         }
 
         public void SetValue(FloatVariable value)
         {
-            Value = value.Value;
+            _value = value._value;
         }
 
         public void ApplyChange(float amount)
         {
-            Value += amount;
+            _value += amount;
         }
 
         public void ApplyChange(FloatVariable amount)
         {
-            Value += amount.Value;
+            _value += amount._value;
         }
 
-        public void SetDefaultValue()
+        public override void SetDefaultValue()
         {
             if (hasDefault) {
-                Value = DefaultValue;
+                value = defaultValue;
             } else {
                 Debug.LogWarning("Method SetDefaultValue() called on " + this.name + ", but var does not have a default value assigned.");
             }

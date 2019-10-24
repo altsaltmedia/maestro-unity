@@ -33,17 +33,17 @@ namespace AltSalt
 
         public void SetText(StringVariable targetValue)
         {
-            textRenderer.SetText(targetValue.Value);
+            textRenderer.SetText(targetValue.value);
         }
 
         public void SetText(IntVariable targetValue)
         {
-            textRenderer.SetText(targetValue.Value.ToString());
+            textRenderer.SetText(targetValue.value.ToString());
         }
 
         public void SetText(FloatVariable targetValue)
         {
-            textRenderer.SetText(targetValue.Value.ToString());
+            textRenderer.SetText(targetValue.value.ToString());
         }
 
         void StoreTextRenderer()

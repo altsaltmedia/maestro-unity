@@ -1,11 +1,21 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace AltSalt.Sequencing.Touch
 {
     public partial class AxisModifier
     {
-        public abstract partial class BaseAxisSwitch
+        public partial class BaseAxisSwitch
         {
+            [SerializeField]
+            private float _inflectionPoint;
+
+            public float inflectionPoint
+            {
+                get => _inflectionPoint;
+                set => _inflectionPoint = value;
+            }
+            
             [SerializeField]
             private TouchController _touchController;
 
@@ -22,15 +32,6 @@ namespace AltSalt.Sequencing.Touch
             {
                 get => _touchData;
                 set => _touchData = value;
-            }
-
-            [SerializeField]
-            private float _inflectionPoint;
-
-            public float inflectionPoint
-            {
-                get => _inflectionPoint;
-                set => _inflectionPoint = value;
             }
         }
     }

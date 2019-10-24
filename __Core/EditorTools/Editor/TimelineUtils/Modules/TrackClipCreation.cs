@@ -882,8 +882,8 @@ namespace AltSalt
                         LerpFloatVarClip asset = timelineClip.asset as LerpFloatVarClip;
                         FloatVariable component = sourceObject as FloatVariable;
                         if (component != null) {
-                            asset.template.initialValue = component.Value;
-                            asset.template.targetValue = component.Value;
+                            asset.template.initialValue = component.value;
+                            asset.template.targetValue = component.value;
                         }
                         asset.template.ease = easeType;
                         return asset;
@@ -893,8 +893,8 @@ namespace AltSalt
                         LerpColorVarClip asset = timelineClip.asset as LerpColorVarClip;
                         ColorVariable component = sourceObject as ColorVariable;
                         if (component != null) {
-                            asset.template.initialColor = component.Value;
-                            asset.template.targetColor = component.Value;
+                            asset.template.initialColor = component.value;
+                            asset.template.targetColor = component.value;
                         }
                         asset.template.ease = easeType;
                         return asset;

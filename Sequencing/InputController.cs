@@ -35,16 +35,6 @@ namespace AltSalt.Sequencing
             get => _requestModifyToSequence;
         }
 
-        [ValidateInput(nameof(IsPopulated))]
-        [SerializeField]
-        private ComplexEventTrigger _inputActionComplete;
-
-        public ComplexEventTrigger inputActionComplete
-        {
-            get => _inputActionComplete;
-            set => _inputActionComplete = value;
-        }
-
         protected static bool IsPopulated(BoolReference attribute)
         {
             return Utils.IsPopulated(attribute);

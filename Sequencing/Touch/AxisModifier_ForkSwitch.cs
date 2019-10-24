@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,13 +32,15 @@ namespace AltSalt.Sequencing.Touch
             public static ForkSwitch CreateInstance(TouchController touchController,
                 TouchController.TouchData touchData, ForkSwitchClip sourceClip)
             {
-                var inputData = ScriptableObject.CreateInstance(typeof(ForkSwitch)) as ForkSwitch;
+                //var inputData = ScriptableObject.CreateInstance(typeof(ForkSwitch)) as ForkSwitch;
+                
+                var inputData = new ForkSwitch();
 
                 inputData.touchController = touchController;
                 inputData.touchData = touchData;
                 inputData.sourceClip = sourceClip;
                 inputData.inflectionPoint =
-                    (float) MasterSequence.LocalToMasterTime(touchData.masterSequence.masterTimeData,
+                    (float) MasterSequence.LocalToMasterTime(touchData.masterSequence,
                         touchData.sequence, sourceClip.endTime);
 
                 for (int i = 0; i < sourceClip.branchingPaths.Count; i++)

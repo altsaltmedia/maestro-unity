@@ -52,23 +52,18 @@ namespace AltSalt.Sequencing.Touch
                 {
                     biAxisSwitch.swipeOrigin.active = true;
                     biAxisSwitch.swipeDestination.active = false;
-                    
-
                 }
                 else if (masterTime >= biAxisSwitch.inflectionPoint -  axisModifier.swipeTransitionSpread
                          && masterTime < biAxisSwitch.inflectionPoint + axisModifier.swipeTransitionSpread)
                 {
                     biAxisSwitch.swipeOrigin.active = true;
                     biAxisSwitch.swipeDestination.active = true;
-                    
-                    
                 }
                 else if (masterTime >= biAxisSwitch.inflectionPoint + axisModifier.swipeTransitionSpread
                            && masterTime <= biAxisSwitch.inflectionPoint + axisModifier.swipeTransitionSpread + axisModifier.swipeResetSpread)
                 {
                     biAxisSwitch.swipeOrigin.active = false;
                     biAxisSwitch.swipeDestination.active = true;
-                    
                 }
                 
                 if (masterTime >= biAxisSwitch.inflectionPoint - axisModifier.momentumTransitionSpread - axisModifier.swipeResetSpread
@@ -76,14 +71,12 @@ namespace AltSalt.Sequencing.Touch
 
                     biAxisSwitch.momentumOrigin.active = true;
                     biAxisSwitch.momentumDestination.active = false;
-                    
-
                 } else if (masterTime >= biAxisSwitch.inflectionPoint - axisModifier.momentumTransitionSpread
                            && masterTime < biAxisSwitch.inflectionPoint + axisModifier.momentumTransitionSpread) {
-
+                    
                     EventPayload eventPayload = EventPayload.CreateInstance();
 
-                    if (axisModifier.isReversing == false) {
+                    if (biAxisSwitch.touchController.isReversing == false) {
                         eventPayload.Set(AxisDestination.fromAxis, nameof(biAxisSwitch.momentumOrigin.axisType));
                         eventPayload.Set(AxisDestination.toAxis, nameof(biAxisSwitch.momentumDestination.axisType));
                         biAxisSwitch.momentumOrigin.active = false;
@@ -96,14 +89,11 @@ namespace AltSalt.Sequencing.Touch
                     }
 
                     axisModifier.convertMomentum.RaiseEvent(axisModifier.gameObject, eventPayload);
-                    
 
                 } else if (masterTime >= biAxisSwitch.inflectionPoint + axisModifier.momentumTransitionSpread
                            && masterTime <= biAxisSwitch.inflectionPoint + axisModifier.momentumTransitionSpread + axisModifier.swipeResetSpread) {
-
                     biAxisSwitch.momentumOrigin.active = false;
                     biAxisSwitch.momentumDestination.active = true;
-                    
                 }
 
                 return biAxisSwitch;

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4942472062882772}
   - component: {fileID: 320612190713747116}
+  - component: {fileID: -2485728263257889689}
   m_Layer: 0
   m_Name: StandardTimeline
   m_TagString: Untagged
@@ -48,3 +49,24 @@ PlayableDirector:
   m_SceneBindings: []
   m_ExposedReferences:
     m_References: []
+--- !u!114 &-2485728263257889689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176190904042262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df6b19ab5020452e82eaad85aff31d92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  _isReversing:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
+  _scrubberActive:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 00a2b24214f8a443581542514270dc00, type: 2}

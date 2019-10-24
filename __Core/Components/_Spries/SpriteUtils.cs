@@ -24,7 +24,7 @@ namespace AltSalt
         public void SetColor(ColorVariable colorVariable)
         {
             GetSpriteComponent();
-            spriteRenderer.color = colorVariable.Value;
+            spriteRenderer.color = colorVariable.value;
         }
 
         public void SetColor(Color color)

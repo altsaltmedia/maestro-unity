@@ -20,7 +20,7 @@ namespace AltSalt
             DebugTimelineMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(go, behaviour);
 #if UNITY_EDITOR
-            behaviour.timelineCurrentTime = Utils.GetFloatVariable(nameof(VarDependencies.TimelineCurrentTime));
+            behaviour.timelineCurrentTime.Variable = Utils.GetFloatVariable(nameof(VarDependencies.TimelineCurrentTime));
             if (Application.isPlaying == false) {
                 TimelineEditor.inspectedDirector.time = behaviour.timelineCurrentTime.Value;
             }

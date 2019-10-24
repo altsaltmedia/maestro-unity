@@ -67,7 +67,7 @@ namespace AltSalt
 
                 case DataType.boolType:
                     BoolVariable boolVariable = userDatum.scriptableObject as BoolVariable;
-                    int boolIntValue = boolVariable.Value == true ? 1 : 0;
+                    int boolIntValue = boolVariable.value == true ? 1 : 0;
                     PlayerPrefs.SetInt(boolVariable.name, boolIntValue);
 #if UNITY_EDITOR
                     string boolString = boolIntValue == 1 ? "true" : "false";
@@ -77,26 +77,26 @@ namespace AltSalt
 
                 case DataType.floatType:
                     FloatVariable floatVariable = userDatum.scriptableObject as FloatVariable;
-                    PlayerPrefs.SetFloat(floatVariable.name, floatVariable.Value);
+                    PlayerPrefs.SetFloat(floatVariable.name, floatVariable.value);
 #if UNITY_EDITOR
-                    LogSavedMessage(floatVariable.name, floatVariable.Value.ToString("F6"));
+                    LogSavedMessage(floatVariable.name, floatVariable.value.ToString("F6"));
 #endif
                     break;
 
 
                 case DataType.stringType:
                     StringVariable stringVariable = userDatum.scriptableObject as StringVariable;
-                    PlayerPrefs.SetString(stringVariable.name, stringVariable.Value);
+                    PlayerPrefs.SetString(stringVariable.name, stringVariable.value);
 #if UNITY_EDITOR
-                    LogSavedMessage(stringVariable.name, stringVariable.Value);
+                    LogSavedMessage(stringVariable.name, stringVariable.value);
 #endif
                     break;
 
                 case DataType.intType:
                     IntVariable intVariable = userDatum.scriptableObject as IntVariable;
-                    PlayerPrefs.SetInt(intVariable.name, intVariable.Value);
+                    PlayerPrefs.SetInt(intVariable.name, intVariable.value);
 #if UNITY_EDITOR
-                    LogSavedMessage(intVariable.name, intVariable.Value.ToString("F6"));
+                    LogSavedMessage(intVariable.name, intVariable.value.ToString("F6"));
 #endif
                     break;
             }

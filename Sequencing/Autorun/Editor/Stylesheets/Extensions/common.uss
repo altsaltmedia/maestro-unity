@@ -61,36 +61,36 @@ PauseMomentumStart
 {
     width: 18px;
     height: 18px;
-    background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/pause-momentum-start.png");
+    background-image: resource("Assets/_AltSalt/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-start.png");
 }
 
 /* Active Marker State -> Corresponds to GUIStyle.onNormal */
 PauseMomentumStart:checked
 {
-    background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/pause-momentum-start.png");
+    background-image: resource("Assets/_AltSalt/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-start.png");
 }
 
 /* Selected Marker State -> Corresponds to GUIStyle.onFocused */
 PauseMomentumStart:hover:focus:checked
 {
-    background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/pause-momentum-start-selected.png");
+    background-image: resource("Assets/_AltSalt/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-start-selected.png");
 }
 
 PauseMomentumEnd
 {
     width: 18px;
     height: 18px;
-    background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/pause-momentum-end.png");
+    background-image: resource("Assets/_AltSalt/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-end.png");
 }
 
 /* Active Marker State -> Corresponds to GUIStyle.onNormal */
 PauseMomentumEnd:checked
 {
-    background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/pause-momentum-end.png");
+    background-image: resource("Assets/_AltSalt/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-end.png");
 }
 
 /* Selected Marker State -> Corresponds to GUIStyle.onFocused */
 PauseMomentumEnd:hover:focus:checked
 {
-    background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/pause-momentum-end-selected.png");
+    background-image: resource("Assets/_AltSalt/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-end-selected.png");
 }

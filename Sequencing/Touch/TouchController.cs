@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.Timeline;
 using Sirenix.OdinInspector;
 
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
+
 namespace AltSalt.Sequencing.Touch
 {
     [ExecuteInEditMode]
@@ -30,22 +34,7 @@ namespace AltSalt.Sequencing.Touch
             set => _timeModifier.Variable.SetValue(value);
         }
         
-        private SwipeModifier _swipeModifier;
-        
-        private SwipeModifier swipeModifier
-        {
-            get => _swipeModifier;
-            set => _swipeModifier = value;
-        }
-        
-        private MomentumModifier _momentumModifier;
-
-        private MomentumModifier momentumModifier
-        {
-            get => _momentumModifier;
-            set => _momentumModifier = value;
-        }
-
+        [SerializeField]
         private AxisModifier _axisModifier;
 
         public AxisModifier axisModifier
@@ -54,6 +43,24 @@ namespace AltSalt.Sequencing.Touch
             set => _axisModifier = value;
         }
         
+        [SerializeField]
+        private SwipeModifier _swipeModifier;
+        
+        private SwipeModifier swipeModifier
+        {
+            get => _swipeModifier;
+            set => _swipeModifier = value;
+        }
+        
+        [SerializeField]
+        private MomentumModifier _momentumModifier;
+
+        private MomentumModifier momentumModifier
+        {
+            get => _momentumModifier;
+            set => _momentumModifier = value;
+        }
+
         [ValidateInput("IsPopulated")]
         [SerializeField]
         [FoldoutGroup("Swipe Variables")]
@@ -87,6 +94,18 @@ namespace AltSalt.Sequencing.Touch
         
         [ShowInInspector]
         [FoldoutGroup("Swipe Variables")]
+        [ReadOnly]
+        private int _swipeHistoryIndex;
+        
+        public int swipeHistoryIndex
+        {
+            get => _swipeHistoryIndex;
+            set => _swipeHistoryIndex = value;
+        }
+        
+        [ShowInInspector]
+        [FoldoutGroup("Swipe Variables")]
+        [ReadOnly]
         private float[] _swipeYHistory = new float[10];
 
         public float[] swipeYHistory
@@ -97,6 +116,7 @@ namespace AltSalt.Sequencing.Touch
 
         [ShowInInspector]
         [FoldoutGroup("Swipe Variables")]
+        [ReadOnly]
         private float[] _swipeXHistory = new float[10];
         
         public float[] swipeXHistory
@@ -105,16 +125,6 @@ namespace AltSalt.Sequencing.Touch
             set => _swipeXHistory = value;
         }
 
-        [ShowInInspector]
-        [FoldoutGroup("Swipe Variables")]
-        private int _swipeHistoryIndex;
-        
-        public int swipeHistoryIndex
-        {
-            get => _swipeHistoryIndex;
-            set => _swipeHistoryIndex = value;
-        }
-        
         [SerializeField]
         [FoldoutGroup("Momentum Variables")]
         [ValidateInput("IsPopulated")]
@@ -168,6 +178,18 @@ namespace AltSalt.Sequencing.Touch
             set => _forkActive.Variable.SetValue(value);
         }
         
+        [SerializeField]
+        [ValidateInput("IsPopulated")]
+        private BoolReference _isReversing;
+
+        public bool isReversing
+        {
+            get => _isReversing.Value;
+            set => _isReversing.Variable.SetValue(value);
+        }
+        
+        [SerializeField]
+        [ReadOnly]
         private List<TouchData> _touchDataList = new List<TouchData>();
 
         public List<TouchData> touchDataList
@@ -175,30 +197,20 @@ namespace AltSalt.Sequencing.Touch
             get => _touchDataList;
         }
 
-
-        private void Start()
-        { 
-            
-        }
-
-        public TouchController AddToSwipeHistory(Vector2 swipeForce)
+        public void UpdateSwipeHistory()
         {
             if (swipeHistoryIndex < swipeYHistory.Length) {
                 swipeYHistory[swipeHistoryIndex] = Mathf.Abs(swipeForce.y);
                 swipeXHistory[swipeHistoryIndex] = Mathf.Abs(swipeForce.x);
                 swipeHistoryIndex++;
             }
-
-            return this;
         }
         
-        public TouchController ResetSwipeHistory()
+        public void ResetSwipeHistory()
         {
             swipeYHistory = new float[10];
             swipeXHistory = new float[10];
             swipeHistoryIndex = 0;
-
-            return this;
         }
 
         public Vector2 GetDominantSwipeForce(Vector2 sourceSwipeForce)
@@ -231,6 +243,8 @@ namespace AltSalt.Sequencing.Touch
 
         public void ConfigureData()
         {
+            if (Application.isPlaying == true) return;
+            
             touchDataList.Clear();
 
             for (int i = 0; i < masterSequences.Count; i++)
@@ -239,7 +253,7 @@ namespace AltSalt.Sequencing.Touch
                 {
                     var sequence = masterSequences[i].sequenceConfigs[q].sequence;
                     TimelineAsset rootTimelineAsset = sequence.sourcePlayable as TimelineAsset;
-                    
+
                     IEnumerable<IMarker> markers = rootTimelineAsset.markerTrack.GetMarkers().OrderBy(s => s.time);
                     var (item1, item2) = GetConfigTimes(markers);
                     
@@ -250,6 +264,10 @@ namespace AltSalt.Sequencing.Touch
                         CreateTouchData(sequence, item1, item2, axisSwitchTrack, masterSequences[i]));
                 }
             }
+            
+            EditorUtility.SetDirty(this);
+            
+            axisModifier.ConfigureData();
         }
 
         private static Tuple<List<double>, List<double>> GetConfigTimes(IEnumerable<IMarker> markers)
@@ -312,6 +330,16 @@ namespace AltSalt.Sequencing.Touch
         }
         
         private static bool IsPopulated(V2Reference attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+        
+        private static bool IsPopulated(FloatReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+
+        private static bool IsPopulated(BoolReference attribute)
         {
             return Utils.IsPopulated(attribute);
         }

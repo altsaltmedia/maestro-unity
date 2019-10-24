@@ -10,7 +10,8 @@ namespace AltSalt.Sequencing
     [CreateAssetMenu(menuName = "AltSalt/Sequence")]
     public class Sequence : ScriptableObject
     {
-        private bool _active = true;
+        [SerializeField]
+        private bool _active = false;
         
         public bool active {
             get => _active;
@@ -27,6 +28,7 @@ namespace AltSalt.Sequencing
         }
 
         [SerializeField]
+        [ReadOnly]
         private SequenceConfig _sequenceConfig;
         
         public SequenceConfig sequenceConfig {

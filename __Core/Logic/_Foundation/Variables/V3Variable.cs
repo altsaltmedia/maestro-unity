@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace AltSalt
 {
@@ -11,26 +12,52 @@ namespace AltSalt
         [Header("Vector3 Variable")]
         string DeveloperDescription = "";
 #endif
-        public Vector3 Value;
+        [SerializeField]
+        public Vector3 _value;
+
+        public Vector3 value
+        {
+            get => _value;
+            set => _value = value;
+        }
+        
+        [SerializeField]
+        [ShowIf(nameof(hasDefault))]
+        private Vector3 _defaultValue;
+
+        public Vector3 defaultValue
+        {
+            get => _defaultValue;
+            set => _defaultValue = value;
+        }
 
         public void SetValue(Vector3 value)
         {
-            Value = value;
+            this.value = value;
         }
 
         public void SetValue(V3Variable value)
         {
-            Value = value.Value;
+            this.value = value.value;
         }
 
         public void ApplyChange(Vector3 amount)
         {
-            Value += amount;
+            value += amount;
         }
 
         public void ApplyChange(V3Variable amount)
         {
-            Value += amount.Value;
+            value += amount.value;
+        }
+        
+        public override void SetDefaultValue()
+        {
+            if (hasDefault)  {
+                value = defaultValue;
+            } else  {
+                Debug.LogWarning("Method SetDefaultValue() called on " + this.name + ", but var does not have a default value assigned.");
+            }
         }
     }
 }

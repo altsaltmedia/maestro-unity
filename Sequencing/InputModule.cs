@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace AltSalt.Sequencing
@@ -13,19 +14,25 @@ namespace AltSalt.Sequencing
         }
 
         [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
         private ComplexEventTrigger _inputActionComplete;
 
-        public ComplexEventTrigger inputActionComplete
+        private ComplexEventTrigger inputActionComplete
         {
             get => _inputActionComplete;
             set => _inputActionComplete = value;
         }
 
-        protected void TriggerInputActionComplete()
+        public void TriggerInputActionComplete()
         {
             EventPayload eventPayload = EventPayload.CreateInstance();
             eventPayload.Set(DataType.stringType, this.gameObject.name);
             inputActionComplete.RaiseEvent(this.gameObject, eventPayload);
+        }
+
+        private static bool IsPopulated(ComplexEventTrigger attribute)
+        {
+            return Utils.IsPopulated(attribute);
         }
     }
 }

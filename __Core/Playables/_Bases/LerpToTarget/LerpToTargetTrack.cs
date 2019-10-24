@@ -32,11 +32,8 @@ namespace AltSalt
         public LerpToTargetMixerBehaviour StoreMixerProperties(GameObject go, LerpToTargetMixerBehaviour trackMixer)
         {
             trackMixer.directorObject = go;
-    #if UNITY_EDITOR
-            trackMixer.scrubberActive = Utils.GetBoolVariable(nameof(VarDependencies.ScrubberActive));
-    #endif
+            trackMixer._scrubberActive.Variable = go.GetComponent<TrackAssetConfig>().scrubberActive;
             trackMixer.parentTrack = this;
-            
             return trackMixer;
         }
 

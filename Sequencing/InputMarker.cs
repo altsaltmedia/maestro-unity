@@ -6,7 +6,6 @@ namespace AltSalt
     [HideInMenu]
     public class InputMarker : Marker
     {
-        [SerializeField]
-        public string description;
+        
     }
 }
