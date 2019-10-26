@@ -40,15 +40,20 @@ namespace AltSalt.Sequencing.Touch
                     (float) MasterSequence.LocalToMasterTime(touchData.masterSequence,
                         touchData.sequence, midpoint);
 
+                // If we are activating the x negative, that means we must be coming from the y axis.
+                // Or, if we are deactivating the y negative, that means we just completed an interval
+                // using the y negative axis and are resetting the values back to normal.
                 if (sourceClip.switchType == InvertSwitchType.ActivateXNeg ||
-                    sourceClip.switchType == InvertSwitchType.DeactivateXNeg)
+                    sourceClip.switchType == InvertSwitchType.DeactivateYNeg)
                 {
                     inputData.swipeOrigin = touchController.ySwipeAxis;
                     inputData.swipeDestination = touchController.xSwipeAxis;
                     inputData.momentumOrigin = touchController.yMomentumAxis;
                     inputData.momentumDestination = touchController.xMomentumAxis;
                 }
-                else
+                // This is simply the inverse of the above.
+                else if(sourceClip.switchType == InvertSwitchType.ActivateYNeg ||
+                        sourceClip.switchType == InvertSwitchType.DeactivateXNeg)
                 {
                     inputData.swipeOrigin = touchController.xSwipeAxis;
                     inputData.swipeDestination = touchController.ySwipeAxis;
@@ -67,98 +72,78 @@ namespace AltSalt.Sequencing.Touch
                 switch (invert.switchType)
                 {
                     case InvertSwitchType.ActivateYNeg:
-
-                        if (invert.touchController.ySwipeAxis.inverted == false)
+                        
+                        if (masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread
+                            && masterTime < invert.inflectionPoint)
                         {
-                            if (masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread
-                                && masterTime < invert.inflectionPoint)
-                            {
-                                invert.touchController.ySwipeAxis.inverted = true;
-                                invert.touchController.yMomentumAxis.inverted = true;
-                            }
+                            invert.touchController.ySwipeAxis.inverted = true;
+                            invert.touchController.yMomentumAxis.inverted = true;
                         }
-                        else
+
+                        // We double the invertTransitionSpread in the second condition so that we can keep the axis in question
+                        // inverted throughout the transition, then flip it after the threshold is passed
+                        else if (masterTime < invert.inflectionPoint - axisModifier.invertTransitionSpread
+                            && masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread * 2d)
                         {
-                            // We double the invertTransitionSpread in the second condition so that we can keep the axis in question
-                            // inverted throughout the transition, then flip it after the threshold is passed
-                            if (masterTime < invert.inflectionPoint - axisModifier.invertTransitionSpread
-                                && masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread * 2d)
-                            {
-                                invert.touchController.ySwipeAxis.inverted = false;
-                                invert.touchController.yMomentumAxis.inverted = false;
-                            }
+                            invert.touchController.ySwipeAxis.inverted = false;
+                            invert.touchController.yMomentumAxis.inverted = false;
                         }
 
                         break;
 
                     case InvertSwitchType.DeactivateYNeg:
-
-                        if (invert.touchController.ySwipeAxis.inverted == true)
+                        
+                        if (masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread
+                            && masterTime < invert.inflectionPoint)
                         {
-                            if (masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread
-                                && masterTime < invert.inflectionPoint)
-                            {
-                                invert.touchController.ySwipeAxis.inverted = false;
-                                invert.touchController.yMomentumAxis.inverted = false;
-                            }
+                            invert.touchController.ySwipeAxis.inverted = false;
+                            invert.touchController.yMomentumAxis.inverted = false;
                         }
-                        else
+                    
+                        // We double the invertTransitionSpread in the second condition so that we can keep the axis in question
+                        // inverted throughout the transition, then flip it after the threshold is passed
+                        else if (masterTime < invert.inflectionPoint - axisModifier.invertTransitionSpread
+                            && masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread * 2d)
                         {
-                            // We double the invertTransitionSpread in the second condition so that we can keep the axis in question
-                            // inverted throughout the transition, then flip it after the threshold is passed
-                            if (masterTime < invert.inflectionPoint - axisModifier.invertTransitionSpread
-                                && masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread * 2d)
-                            {
-                                invert.touchController.ySwipeAxis.inverted = true;
-                                invert.touchController.yMomentumAxis.inverted = true;
-                            }
+                            invert.touchController.ySwipeAxis.inverted = true;
+                            invert.touchController.yMomentumAxis.inverted = true;
                         }
 
                         break;
 
                     case InvertSwitchType.ActivateXNeg:
-
-                        if (invert.touchController.xSwipeAxis.inverted == false)
+                        
+                        // We double the invertTransitionSpread in the second condition so that we can keep the axis in question
+                        // inverted throughout the transition, then flip it after the threshold is passed
+                        if (masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread
+                            && masterTime < invert.inflectionPoint)
                         {
-                            // We double the invertTransitionSpread in the second condition so that we can keep the axis in question
-                            // inverted throughout the transition, then flip it after the threshold is passed
-                            if (masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread
-                                && masterTime < invert.inflectionPoint)
-                            {
-                                invert.touchController.xSwipeAxis.inverted = true;
-                            }
+                            invert.touchController.xSwipeAxis.inverted = true;
                         }
-                        else
+                    
+                        else if (masterTime < invert.inflectionPoint - axisModifier.invertTransitionSpread
+                            && masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread * 2d)
                         {
-                            if (masterTime < invert.inflectionPoint - axisModifier.invertTransitionSpread
-                                && masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread * 2d)
-                            {
-                                invert.touchController.xSwipeAxis.inverted = false;
-                            }
+                            invert.touchController.xSwipeAxis.inverted = false;
                         }
 
                         break;
 
                     case InvertSwitchType.DeactivateXNeg:
-
-                        if (invert.touchController.xSwipeAxis.inverted == true)
+                        
+                        // See note above
+                        if (masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread
+                            && masterTime < invert.inflectionPoint)
                         {
-                            // See note above
-                            if (masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread
-                                && masterTime < invert.inflectionPoint)
-                            {
-                                invert.touchController.xSwipeAxis.inverted = false;
-                            }
+                            invert.touchController.xSwipeAxis.inverted = false;
                         }
-                        else
+                    
+                        else if (masterTime < invert.inflectionPoint - axisModifier.invertTransitionSpread
+                            && masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread * 2)
                         {
-                            if (masterTime < invert.inflectionPoint - axisModifier.invertTransitionSpread
-                                && masterTime >= invert.inflectionPoint - axisModifier.invertTransitionSpread * 2)
-                            {
-                                invert.touchController.xSwipeAxis.inverted = true;
-                            }
+                            invert.touchController.xSwipeAxis.inverted = true;
                         }
-
+                    
                         break;
 
                     default:

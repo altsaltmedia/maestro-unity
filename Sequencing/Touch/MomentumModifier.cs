@@ -53,12 +53,6 @@ namespace AltSalt.Sequencing.Touch
                     touchController.momentumModifierOutput += touchController.momentumForce.x * -1f;
                 }
             }
-            
-            if (touchController.momentumModifierOutput > 0) {
-                touchController.isReversing = false;
-            } else if (touchController.momentumModifierOutput < 0) {
-                touchController.isReversing = true;
-            }
 
             for (int q=0; q < touchController.touchDataList.Count; q++)
             {

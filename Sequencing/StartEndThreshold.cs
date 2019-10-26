@@ -35,6 +35,11 @@ namespace AltSalt
             set => _endTime = value;
         }
 
+        public StartEndThreshold()
+        {
+            
+        }
+
         public StartEndThreshold(double startTime, double endTime)
         {
             this.startTime = startTime;

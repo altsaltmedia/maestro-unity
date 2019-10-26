@@ -65,23 +65,24 @@ namespace AltSalt.Sequencing.Autorun
                     TimelineAsset rootTimelineAsset = sequence.sourcePlayable as TimelineAsset;
 
                     IEnumerable<IMarker> markers = rootTimelineAsset.markerTrack.GetMarkers().OrderBy(s => s.time);
-                    var (item1, item2, item3, item4) = GetConfigTimes(markers);
+                    var (item1, item2, item3, item4, item5) = GetConfigTimes(markers);
 
                     autorunData.Add(
-                        CreateAutorunData(sequence, item1, item2, item3, item4));
+                        CreateAutorunData(sequence, item1, item2, item3, item4, item5));
                 }
             }
             EditorUtility.SetDirty(this);
         }
 
-        private static Tuple<List<double>, List<double>, List<int>, List<string>> GetConfigTimes(IEnumerable<IMarker> markers)
+        private static Tuple<List<double>, List<double>, List<int>, List<string>, List<int>> GetConfigTimes(IEnumerable<IMarker> markers)
         {
             List<double> autoplayStarts = new List<double>();
             List<double> autoplayEnds = new List<double>();
             List<int> videoIntervalIds = new List<int>();
             List<string> descriptions = new List<string>();
+            List<int> isEndIds = new List<int>();
 
-            int videoId = 0;
+            int markerId = 0;
 
             foreach (IMarker marker in markers) {
                 
@@ -91,6 +92,7 @@ namespace AltSalt.Sequencing.Autorun
 
                 else if (marker is AutoplayEnd) {
                     autoplayEnds.Add(marker.time);
+                    isEndIds.Add(markerId - 1);
                 }
 
                 else if(marker is AutoplayPause) {
@@ -99,29 +101,27 @@ namespace AltSalt.Sequencing.Autorun
                 }
 
                 if (marker is IVideoConfigurator videoConfigurator && videoConfigurator.isVideoSequence == true)  {
-                    videoIntervalIds.Add(videoId);
+                    videoIntervalIds.Add(markerId);
                 }
                 
                 if (marker is IMarkerDescription markerDescription)  {
                     descriptions.Add(markerDescription.description);
-                } else  {
-                    descriptions.Add("");
                 }
 
-                videoId++;
+                markerId++;
             }
 
-            return new Tuple<List<double>, List<double>, List<int>, List<string>>(autoplayStarts, autoplayEnds, videoIntervalIds, descriptions);
+            return new Tuple<List<double>, List<double>, List<int>, List<string>, List<int>>(autoplayStarts, autoplayEnds, videoIntervalIds, descriptions, isEndIds);
         }
         
-        private static AutorunData CreateAutorunData(Sequence targetSequence, List<double> autoplayStarts, List<double> autoplayEnds, List<int> videoIntervalIds, List<string> descriptions)
+        private static AutorunData CreateAutorunData(Sequence targetSequence, List<double> autoplayStarts, List<double> autoplayEnds, List<int> videoIntervalIds, List<string> descriptions, List<int> isEndIds)
         {
-            List<Interval> autorunIntervals = CreateAutorunIntervals(autoplayStarts, autoplayEnds, videoIntervalIds, descriptions);
+            List<Interval> autorunIntervals = CreateAutorunIntervals(autoplayStarts, autoplayEnds, videoIntervalIds, descriptions, isEndIds);
             
             return AutorunData.CreateInstance(targetSequence, autorunIntervals);
         }
         
-        private static List<Interval> CreateAutorunIntervals(List<double> startTimes, List<double> endTimes, List<int> videoIntervalIds, List<string> descriptions)
+        private static List<Interval> CreateAutorunIntervals(List<double> startTimes, List<double> endTimes, List<int> videoIntervalIds, List<string> descriptions, List<int> isEndIds)
         {
             List<Interval> autorunIntervals = new List<Interval>();
 
@@ -143,6 +143,11 @@ namespace AltSalt.Sequencing.Autorun
                 
                 if(videoIntervalIds.Contains(i) == true) {
                     interval.isVideoSequence = true;
+                }
+
+                if (isEndIds.Contains(i) == true)
+                {
+                    interval.isEnd = true;
                 }
                 
                 autorunIntervals.Add(interval);

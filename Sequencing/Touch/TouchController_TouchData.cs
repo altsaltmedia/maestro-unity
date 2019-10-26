@@ -72,7 +72,7 @@ namespace AltSalt.Sequencing.Touch
             }
 
             [ReadOnly]
-            [ShowInInspector]
+            [SerializeField]
             [FoldoutGroup("Data")]
             private AxisSwitchTrack _axisSwitchTrack;
 

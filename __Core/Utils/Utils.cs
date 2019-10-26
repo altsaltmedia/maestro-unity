@@ -40,7 +40,7 @@ namespace AltSalt
     public enum BranchType { yNeg, yPos, xNeg, xPos }
     
     public enum AxisType { X, Y }
-    
+
     public enum AxisDestination { fromAxis, toAxis }
 
     public enum DataType { stringType, floatType, boolType, intType, scriptableObjectType, systemObjectType }

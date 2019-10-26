@@ -8,7 +8,16 @@ namespace AltSalt.Sequencing.Autorun
     public class Interval : StartEndThreshold
     {
         [SerializeField]
-        bool _isVideoSequence = false;
+        private bool _isEnd = false;
+
+        public bool isEnd
+        {
+            get => _isEnd;
+            set => _isEnd = value;
+        }
+
+        [SerializeField]
+        private bool _isVideoSequence = false;
         
         public bool isVideoSequence {
             get => _isVideoSequence;

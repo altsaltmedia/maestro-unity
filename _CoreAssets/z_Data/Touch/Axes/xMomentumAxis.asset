@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec37372746a1487aab66cb0992ebcd3, type: 3}
   m_Name: xMomentumAxis
   m_EditorClassIdentifier: 
-  Name: x
-  Active: 0
+  _axisType: 0
+  _active: 0
+  _inverted: 0

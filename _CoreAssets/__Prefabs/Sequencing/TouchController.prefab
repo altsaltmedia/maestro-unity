@@ -47,7 +47,28 @@ MonoBehaviour:
   _inputActionComplete:
     complexEvent: {fileID: 11400000, guid: 5fc585840da1246b684b0ff3e7040b45, type: 2}
   _touchController: {fileID: 6351633449510160952}
-  _switchData: []
+  _convertMomentum:
+    complexEvent: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
+  _swipeResetSpread:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: bc2564f0a71134de7af265805f3cb21e, type: 2}
+  _swipeTransitionSpread:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 36d38cb5ece114eb0bfedc4e4952dabd, type: 2}
+  _momentumTransitionSpread:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: dc0713764ec1a4cdaa3f9affdfc2d6af, type: 2}
+  _invertTransitionSpread:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 6a43f748a303a4bcbb7990dd32c38b27, type: 2}
+  _forkTransitionSpread:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: b3e86449438674ff0ac944ba39781408, type: 2}
 --- !u!1 &2614246155531537207
 GameObject:
   m_ObjectHideFlags: 0

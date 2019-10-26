@@ -5,14 +5,13 @@ namespace AltSalt.Sequencing.Touch
 {
     public class TouchModule : InputModule
     {
-        [SerializeField]
         [Required]
+        [SerializeField]
         private TouchController _touchController;
 
-        protected TouchController touchController
+        public TouchController touchController
         {
             get => _touchController;
-            set => _touchController = value;
         }
 
         protected bool _isparentModuleNull;

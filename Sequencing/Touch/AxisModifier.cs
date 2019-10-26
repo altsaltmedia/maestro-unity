@@ -9,6 +9,8 @@ using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
     using UnityEditor;
+using UnityEditor.Timeline;
+
 #endif
 
 namespace AltSalt.Sequencing.Touch
@@ -17,7 +19,7 @@ namespace AltSalt.Sequencing.Touch
     [ExecuteInEditMode]
     public partial class AxisModifier : TouchModule
     {
-        [SerializeField]
+        [ShowInInspector]
         private List<BaseAxisSwitch> _switchData = new List<BaseAxisSwitch>();
 
         private List<BaseAxisSwitch> switchData
@@ -26,8 +28,18 @@ namespace AltSalt.Sequencing.Touch
             set => _switchData = value;
         }
         
+        [ShowInInspector]
+        private List<AxisExtents> _axisExtentsData = new List<AxisExtents>();
+
+        private List<AxisExtents> axisExtentsData
+        {
+            get => _axisExtentsData;
+            set => _axisExtentsData = value;
+        }
+        
         [ValidateInput(nameof(IsPopulated))]
         [FoldoutGroup("Switch Dependencies")]
+        [SerializeField]
         private ComplexEventTrigger _convertMomentum;
 
         public ComplexEventTrigger convertMomentum
@@ -38,6 +50,7 @@ namespace AltSalt.Sequencing.Touch
 
         [ValidateInput(nameof(IsPopulated))]
         [FoldoutGroup("Switch Dependencies")]
+        [SerializeField]
         private FloatReference _swipeResetSpread;
 
         public float swipeResetSpread
@@ -47,6 +60,7 @@ namespace AltSalt.Sequencing.Touch
         
         [ValidateInput(nameof(IsPopulated))]
         [FoldoutGroup("Switch Dependencies")]
+        [SerializeField]
         private FloatReference _swipeTransitionSpread;
 
         public float swipeTransitionSpread
@@ -56,6 +70,7 @@ namespace AltSalt.Sequencing.Touch
         
         [ValidateInput(nameof(IsPopulated))]
         [FoldoutGroup("Switch Dependencies")]
+        [SerializeField]
         private FloatReference _momentumTransitionSpread;
 
         public float momentumTransitionSpread
@@ -65,6 +80,7 @@ namespace AltSalt.Sequencing.Touch
         
         [ValidateInput(nameof(IsPopulated))]
         [FoldoutGroup("Switch Dependencies")]
+        [SerializeField]
         private FloatReference _invertTransitionSpread;
 
         public float invertTransitionSpread
@@ -74,11 +90,18 @@ namespace AltSalt.Sequencing.Touch
         
         [ValidateInput(nameof(IsPopulated))]
         [FoldoutGroup("Switch Dependencies")]
+        [SerializeField]
         private FloatReference _forkTransitionSpread;
 
         public float forkTransitionSpread
         {
             get => _forkTransitionSpread.Value;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            ConfigureData();
         }
 
 #if UNITY_EDITOR
@@ -94,42 +117,92 @@ namespace AltSalt.Sequencing.Touch
                 AxisSwitchTrack axisSwitchTrack = touchData.axisSwitchTrack;
                 if (axisSwitchTrack == null) continue;
                 
-                IEnumerable<TimelineClip> clips = axisSwitchTrack.GetClips();
-                
-                foreach (TimelineClip clip in clips)
-                {
-                    Type clipType = clip.asset.GetType();
+                IEnumerable<IMarker> markers = axisSwitchTrack.GetMarkers().OrderBy(s => s.time);
+                int count = 0;
 
-                    switch (clipType.Name)
-                    {
-                        case nameof(SimpleSwitchClip) :
-                        {
-                            switchData.Add(SimpleSwitch.CreateInstance(touchController, touchData, clip.asset as SimpleSwitchClip));
-                            break;
-                        }
-                    
-                        case nameof(InvertSwitchClip) :
-                        {
-                            switchData.Add(InvertSwitch.CreateInstance(touchController, touchData, clip.asset as InvertSwitchClip));
-                            break;
-                        }
-                    
-                        case nameof(ForkSwitchClip) :
-                        {
-                            switchData.Add(ForkSwitch.CreateInstance(touchController, touchData, clip.asset as ForkSwitchClip));
-                            break;
-                        }
-                    }
-                }
+                ConfigureAxisExtents(this, touchData, markers);
+
+//                IEnumerable<TimelineClip> clips = axisSwitchTrack.GetClips();
+//                
+//                foreach (TimelineClip clip in clips)
+//                {
+//                    Type clipType = clip.asset.GetType();
+//
+//                    switch (clipType.Name)
+//                    {
+//                        case nameof(SimpleSwitchClip) :
+//                        {
+//                            switchData.Add(SimpleSwitch.CreateInstance(touchController, touchData, clip.asset as SimpleSwitchClip));
+//                            break;
+//                        }
+//                    
+//                        case nameof(InvertSwitchClip) :
+//                        {
+//                            switchData.Add(InvertSwitch.CreateInstance(touchController, touchData, clip.asset as InvertSwitchClip));
+//                            break;
+//                        }
+//                    
+//                        case nameof(ForkSwitchClip) :
+//                        {
+//                            switchData.Add(ForkSwitch.CreateInstance(touchController, touchData, clip.asset as ForkSwitchClip));
+//                            break;
+//                        }
+//                    }
+//                }
             }
             
             EditorUtility.SetDirty(this);
         }
+
+        private static AxisModifier ConfigureAxisExtents(AxisModifier axisModifier, TouchController.TouchData touchData,
+            IEnumerable<IMarker> markers)
+        {
+            List<AxisExtents> axisExtentsData = axisModifier.axisExtentsData;
+            
+            foreach (IMarker marker in markers)
+            {
+                if (marker is AxisModifierMarker axisModifierMarker) {
+                        
+                    switch (axisModifierMarker) {
+                            
+                        case SingleAxis singleAxis:
+                            axisExtentsData.Add(new SingleAxisExtents(axisModifier, touchData, singleAxis));
+                            break;
+                            
+                        case ForkAxis forkAxis:
+                            axisExtentsData.Add(new ForkAxisExtents(axisModifier, touchData, forkAxis));
+                            break;
+                    }
+                }
+            }
+
+            for (int j = 0; j < axisExtentsData.Count; j++)
+            {
+                if (axisExtentsData.Count == 1) {
+                    AxisExtents.ConfigureAdjacentExtents(axisExtentsData[j], null, null);
+                    break;
+                }
+                    
+                if (j == 0) {
+                    AxisExtents.ConfigureAdjacentExtents(axisExtentsData[j], null, axisExtentsData[j + 1]);
+                }
+                else if (j == axisExtentsData.Count - 1)  {
+                    AxisExtents.ConfigureAdjacentExtents(axisExtentsData[j], axisExtentsData[j - 1], null);
+                }
+                else {
+                    AxisExtents.ConfigureAdjacentExtents(axisExtentsData[j], axisExtentsData[j - 1],  axisExtentsData[j + 1]);
+                }
+            }
+
+            return axisModifier;
+        }
         
 #endif
         
-        public virtual void UpdateAxes()
+        public virtual void Update()
         {
+            if (Application.isPlaying == false) return;
+            
             for (int i = 0; i < touchController.masterSequences.Count; i++)
             {
                 double masterTime = touchController.masterSequences[i].elapsedTime;
@@ -139,9 +212,9 @@ namespace AltSalt.Sequencing.Touch
                     if (touchController.masterSequences[i].sequenceConfigs
                         .Exists(x => x.sequence == switchData[j].touchData.sequence) == false) continue;
                     
-                    Type clipType = switchData[j].GetType();
+                    Type switchType = switchData[j].GetType();
                     
-                    switch (clipType.Name)
+                    switch (switchType.Name)
                     {
                         case nameof(SimpleSwitch) :
                         {
@@ -167,6 +240,11 @@ namespace AltSalt.Sequencing.Touch
 
                 }
             }
+        }
+
+        public class AxisExtentsData
+        {
+            
         }
         
         [Serializable]

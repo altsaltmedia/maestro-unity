@@ -10,9 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48e52ce51209d4a699338a25976e8e00, type: 3}
-  m_Name: swipeOriginDestSpread
+  m_Name: SwipeResetSpread
   m_EditorClassIdentifier: 
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
+  _hasDefault: 0
   DeveloperDescription: 
-  Value: 0.25
-  hasDefault: 0
-  DefaultValue: 0
+  _value: 0.25
+  hasDefault: 1
+  _defaultValue: 0.25

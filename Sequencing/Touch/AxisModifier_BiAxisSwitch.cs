@@ -47,8 +47,7 @@ namespace AltSalt.Sequencing.Touch
                 BiAxisSwitch biAxisSwitch = axisSwitch as BiAxisSwitch;
                 AxisModifier axisModifier = biAxisSwitch.touchController.axisModifier;
 
-                if (masterTime >= biAxisSwitch.inflectionPoint - axisModifier.swipeTransitionSpread -  axisModifier.swipeResetSpread
-                    && masterTime < biAxisSwitch.inflectionPoint - axisModifier.swipeTransitionSpread)
+                if (masterTime < biAxisSwitch.inflectionPoint - axisModifier.swipeTransitionSpread)
                 {
                     biAxisSwitch.swipeOrigin.active = true;
                     biAxisSwitch.swipeDestination.active = false;
@@ -59,18 +58,17 @@ namespace AltSalt.Sequencing.Touch
                     biAxisSwitch.swipeOrigin.active = true;
                     biAxisSwitch.swipeDestination.active = true;
                 }
-                else if (masterTime >= biAxisSwitch.inflectionPoint + axisModifier.swipeTransitionSpread
-                           && masterTime <= biAxisSwitch.inflectionPoint + axisModifier.swipeTransitionSpread + axisModifier.swipeResetSpread)
+                else if (masterTime >= biAxisSwitch.inflectionPoint + axisModifier.swipeTransitionSpread)
                 {
                     biAxisSwitch.swipeOrigin.active = false;
                     biAxisSwitch.swipeDestination.active = true;
                 }
                 
-                if (masterTime >= biAxisSwitch.inflectionPoint - axisModifier.momentumTransitionSpread - axisModifier.swipeResetSpread
-                    && masterTime < biAxisSwitch.inflectionPoint - axisModifier.swipeResetSpread) {
+                if (masterTime < biAxisSwitch.inflectionPoint - axisModifier.momentumTransitionSpread) {
 
                     biAxisSwitch.momentumOrigin.active = true;
                     biAxisSwitch.momentumDestination.active = false;
+                    
                 } else if (masterTime >= biAxisSwitch.inflectionPoint - axisModifier.momentumTransitionSpread
                            && masterTime < biAxisSwitch.inflectionPoint + axisModifier.momentumTransitionSpread) {
                     

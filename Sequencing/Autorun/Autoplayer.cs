@@ -62,8 +62,6 @@ namespace AltSalt.Sequencing.Autorun
                     autoplayModifer = frameStepValue;
                 }
 #endif
-
-                
                 autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, autorunController.isReversing, autoplayEaseThreshold, easingUtility);
 
                 AutoplaySequence(autorunController.requestModifyToSequence, this, autorunData.sequence, autoplayModifer);
@@ -71,7 +69,9 @@ namespace AltSalt.Sequencing.Autorun
                 if (autorunData.autoplayActive == true && (autorunData.sequence.currentTime > currentInterval.endTime || autorunData.sequence.currentTime < currentInterval.startTime))  {
                     autorunData.autoplayActive = false;
                     easingUtility.Reset();
-                    TriggerInputActionComplete();
+                    if (currentInterval.isEnd == true) {
+                        TriggerInputActionComplete();
+                    }
                 }
             }
         }

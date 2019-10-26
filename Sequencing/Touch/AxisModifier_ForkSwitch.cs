@@ -276,7 +276,7 @@ namespace AltSalt.Sequencing.Touch
                 return targetBranch;
             }
 
-            private static TouchController.TouchData GetTouchDataFromBranch(TouchController touchController, BranchingPath branchingPath)
+            public static TouchController.TouchData GetTouchDataFromBranch(TouchController touchController, BranchingPath branchingPath)
             {
                 for (int i = 0; i < touchController.touchDataList.Count; i++)
                 {

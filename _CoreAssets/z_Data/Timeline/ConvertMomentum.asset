@@ -23,6 +23,10 @@ MonoBehaviour:
   requiredParameters:
   - description: '"fromAxis"'
     dataType: 0
+    customKey: 0
+    eventPayloadKey: {fileID: 0}
   - description: '"toAxis"'
     dataType: 0
+    customKey: 0
+    eventPayloadKey: {fileID: 0}
   optionalParameters: []
