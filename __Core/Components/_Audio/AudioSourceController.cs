@@ -15,10 +15,10 @@ namespace AltSalt
         List<AudioElement> audioElements = new List<AudioElement>();
 
         [SerializeField]
-        EventPayloadKey loopAudioKey;
+        CustomKey loopAudioKey;
 
         [SerializeField]
-        EventPayloadKey volumeKey;
+        CustomKey volumeKey;
 
         AudioSource oneShotHandler;
 

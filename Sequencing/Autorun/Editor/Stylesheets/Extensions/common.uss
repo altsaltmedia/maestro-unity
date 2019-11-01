@@ -1,5 +1,5 @@
 /* Collapsed Marker State -> Corresponds to GUIStyle.normal */
-AutoplayStart
+Autorun_Start
 {
     width: 18px;
     height: 18px;
@@ -7,19 +7,19 @@ AutoplayStart
 }
 
 /* Active Marker State -> Corresponds to GUIStyle.onNormal */
-AutoplayStart:checked
+Autorun_Start:checked
 {
     background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-start.png");
 }
 
 /* Selected Marker State -> Corresponds to GUIStyle.onFocused */
-AutoplayStart:hover:focus:checked
+Autorun_Start:hover:focus:checked
 {
     background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-start-selected.png");
 }
 
 /* Collapsed Marker State -> Corresponds to GUIStyle.normal */
-AutoplayEnd
+Autorun_End
 {
     width: 18px;
     height: 18px;
@@ -27,18 +27,18 @@ AutoplayEnd
 }
 
 /* Active Marker State -> Corresponds to GUIStyle.onNormal */
-AutoplayEnd:checked
+Autorun_End:checked
 {
     background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-end.png");
 }
 
 /* Selected Marker State -> Corresponds to GUIStyle.onFocused */
-AutoplayEnd:hover:focus:checked
+Autorun_End:hover:focus:checked
 {
     background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-end-selected.png");
 }
 
-AutoplayPause
+Autorun_Pause
 {
     width: 18px;
     height: 18px;
@@ -46,13 +46,13 @@ AutoplayPause
 }
 
 /* Active Marker State -> Corresponds to GUIStyle.onNormal */
-AutoplayPause:checked
+Autorun_Pause:checked
 {
     background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-pause.png");
 }
 
 /* Selected Marker State -> Corresponds to GUIStyle.onFocused */
-AutoplayPause:hover:focus:checked
+Autorun_Pause:hover:focus:checked
 {
     background-image: resource("Assets/_AltSalt/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-pause-selected.png");
 }

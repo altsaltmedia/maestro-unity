@@ -52,9 +52,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sequence: {fileID: 0}
   appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  _masterSequence: {fileID: 0}
   _playableDirector: {fileID: 320944326161814764}
-  _processModifySequence: {fileID: 1384256474148654812}
-  _syncTimelineToSequence: {fileID: 114615924759454770}
+  _processModify: {fileID: 1384256474148654812}
+  _syncTimeline: {fileID: 114615924759454770}
 --- !u!114 &8562162275732644144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,6 +94,8 @@ MonoBehaviour:
   _nextSequence: {fileID: 0}
   _boundaryReached:
     simpleEvent: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
+  _sequenceModified:
+    complexEvent: {fileID: 11400000, guid: c1d1f8736e35847b594e918788a62e52, type: 2}
 --- !u!114 &114615924759454770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
+  Event: {fileID: 0}
   Response:
     m_PersistentCalls:
       m_Calls:

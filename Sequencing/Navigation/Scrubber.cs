@@ -9,7 +9,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Sequencing.Navigate
 {
 
-    public class Scrubber : InputModule
+    public class Scrubber : Input_Module
     {
 
         [SerializeField]
@@ -20,7 +20,7 @@ namespace AltSalt.Sequencing.Navigate
         [SerializeField]
         MasterSequence _masterSequence;
 
-        public List<SyncTimelineToSequence> sequenceDirectors = new List<SyncTimelineToSequence>();
+        public List<Sequence_SyncTimeline> sequenceDirectors = new List<Sequence_SyncTimeline>();
 
         [ReadOnly]
         public List<double> sequenceThresholds = new List<double>();

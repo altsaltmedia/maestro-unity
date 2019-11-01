@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace AltSalt.Sequencing.Touch
 {
-    public class MomentumModifier : TouchModule
+    public class MomentumModifier : Touch_Module
     {
         [Required]
         [SerializeField]
@@ -56,7 +56,7 @@ namespace AltSalt.Sequencing.Touch
 
             for (int q=0; q < touchController.touchDataList.Count; q++)
             {
-                TouchController.TouchData touchData = touchController.touchDataList[q];
+                Touch_Data touchData = touchController.touchDataList[q];
 
                 if (touchData.sequence.active == false || touchData.pauseMomentumActive == true)  {
                     continue;
@@ -78,7 +78,7 @@ namespace AltSalt.Sequencing.Touch
             momentumApplied.RaiseEvent(this.gameObject);
         }
         
-        private static Sequence ApplyMomentumModifier(ComplexEventTrigger applyEvent, InputModule source, Sequence targetSequence, float timeModifier)
+        private static Sequence ApplyMomentumModifier(ComplexEventTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
         {
             EventPayload eventPayload = EventPayload.CreateInstance();
             

@@ -26,11 +26,11 @@ namespace AltSalt
 
         [Required]
         [SerializeField]
-        EventPayloadKey textFamilyKey;
+        CustomKey textFamilyKey;
 
         [Required]
         [SerializeField]
-        EventPayloadKey layoutKey;
+        CustomKey layoutKey;
 
         [Required]
         public ComplexEventTrigger textUpdateTrigger;
@@ -52,11 +52,11 @@ namespace AltSalt
             }
 
             if(textFamilyKey == null) {
-                textFamilyKey = Utils.GetScriptableObject("TextFamilyKey") as EventPayloadKey;
+                textFamilyKey = Utils.GetScriptableObject("TextFamilyKey") as CustomKey;
             }
 
             if (layoutKey == null) {
-                textFamilyKey = Utils.GetScriptableObject("LayoutKey") as EventPayloadKey;
+                textFamilyKey = Utils.GetScriptableObject("LayoutKey") as CustomKey;
             }
         }
 #endif

@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt.Sequencing
 {
-    [CreateAssetMenu(menuName = "AltSalt/Sequence")]
+    [CreateAssetMenu(menuName = "AltSalt/Sequencing/Sequence")]
     public class Sequence : ScriptableObject
     {
         [SerializeField]
@@ -29,9 +29,9 @@ namespace AltSalt.Sequencing
 
         [SerializeField]
         [ReadOnly]
-        private SequenceConfig _sequenceConfig;
+        private Sequence_Config _sequenceConfig;
         
-        public SequenceConfig sequenceConfig {
+        public Sequence_Config sequenceConfig {
             get => _sequenceConfig;
             set => _sequenceConfig = value;
         }

@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt.Sequencing.Touch
 {
-    public class SwipeModifier : TouchModule
+    public class SwipeModifier : Touch_Module
     {
         [SerializeField]
         [Required]
@@ -17,7 +17,7 @@ namespace AltSalt.Sequencing.Touch
             Vector2 swipeForceToApply = touchController.swipeForce;
 
             // If we're in a fork, only apply force from the axis currently receiving greatest input
-            if (touchController.forkActive == true) {
+            if (touchController.joinTools.forkActive == true) {
                 swipeForceToApply = touchController.GetDominantSwipeForce(swipeForceToApply);
             }
 
@@ -49,7 +49,7 @@ namespace AltSalt.Sequencing.Touch
 
             for (int q=0; q < touchController.touchDataList.Count; q++)
             {
-                TouchController.TouchData touchData = touchController.touchDataList[q];
+                Touch_Data touchData = touchController.touchDataList[q];
 
                 if (touchData.sequence.active == false)  {
                     continue;
@@ -69,7 +69,7 @@ namespace AltSalt.Sequencing.Touch
             }
         }
 
-        private static EventPayload ApplySwipeModifier(ComplexEventTrigger applyEvent, InputModule source, Sequence targetSequence, float timeModifier)
+        private static EventPayload ApplySwipeModifier(ComplexEventTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
         {
             EventPayload eventPayload = EventPayload.CreateInstance();
             

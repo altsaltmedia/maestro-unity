@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt
 {
@@ -113,8 +114,8 @@ namespace AltSalt
 
             public bool customKey;
 
-            [ShowIf(nameof(customKey))]
-            public EventPayloadKey eventPayloadKey;
+            [FormerlySerializedAs("eventPayloadKey"),ShowIf(nameof(customKey))]
+            public CustomKey _customKey;
         }
 
 	}

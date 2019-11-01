@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt.Sequencing.Autorun
 {
-    public class Autoplayer : AutorunModule
+    public class Autoplayer : Autorun_Module
     {
         [SerializeField]
         [ValidateInput("IsPopulated")]
@@ -47,7 +47,7 @@ namespace AltSalt.Sequencing.Autorun
                     continue;
                 }
                 
-                if (Interval.TimeWithinThreshold(autorunData.sequence.currentTime,
+                if (Autorun_Interval.TimeWithinThreshold(autorunData.sequence.currentTime,
                         autorunData.autorunIntervals, out var currentInterval) == false)
                     continue;
 
@@ -76,7 +76,7 @@ namespace AltSalt.Sequencing.Autorun
             }
         }
         
-        private static float CalculateAutoplayModifier(Sequence targetSequence, StartEndThreshold currentInterval,
+        private static float CalculateAutoplayModifier(Sequence targetSequence, Input_Extents currentInterval,
             bool isReversing, float easeThreshold, EasingUtility easingUtility)
         {
             float timeModifier = 0f;
@@ -94,7 +94,7 @@ namespace AltSalt.Sequencing.Autorun
             return timeModifier;
         }
             
-        private static bool WithinEaseThreshold(Sequence targetSequence, StartEndThreshold currentInterval,
+        private static bool WithinEaseThreshold(Sequence targetSequence, Input_Extents currentInterval,
             bool isReversing, float easeThreshold)
         {
             if (isReversing == true)
@@ -115,7 +115,7 @@ namespace AltSalt.Sequencing.Autorun
             return false;
         }
 
-        private static Sequence AutoplaySequence(ComplexEventTrigger applyEvent, InputModule source, Sequence targetSequence, float timeModifier)
+        private static Sequence AutoplaySequence(ComplexEventTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
         {
             EventPayload eventPayload = EventPayload.CreateInstance();
             eventPayload.Set(DataType.scriptableObjectType, targetSequence);

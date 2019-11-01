@@ -8,6 +8,7 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
+using AltSalt.Sequencing;
 using UnityEngine;
 using HedgehogTeam.EasyTouch;
 using Sirenix.OdinInspector;
@@ -188,7 +189,7 @@ namespace AltSalt
             if(momentumActive == true) {
                 // All momentum is executed through momentumForce. However, we calculate the momentumForce
                 // via a momentumCache, which is modified dynamically based on swipe input, decay value, etc.
-                momentumForce= new Vector2(momentumCache.Value.x, momentumCache.Value.y);
+                momentumForce = new Vector2(momentumCache.Value.x, momentumCache.Value.y);
 				
 				MomentumUpdate.RaiseEvent(this.gameObject);
 				
@@ -345,18 +346,18 @@ namespace AltSalt
 
         public void UpdateMomentum(EventPayload eventPayload)
         {
-            string fromAxis = eventPayload.GetStringValue(AxisDestination.fromAxis);
-            string toAxis = eventPayload.GetStringValue(AxisDestination.toAxis);
-		
-   //         Debug.Log("cached momentum at update");
+            var fromAxis = eventPayload.GetScriptableObjectValue(AxisDestination.fromAxis) as Axis;
+            var toAxis = eventPayload.GetScriptableObjectValue(AxisDestination.fromAxis) as Axis;
+            //         Debug.Log("cached momentum at update");
 			//Debug.Log(momentumCache.Value.ToString("F8"));
 			//Debug.Log("update momentum");
 			//Debug.Log(eventPayload.GetStringValue("fromAxis"));
 			//Debug.Log(eventPayload.GetStringValue("toAxis"));
 
-            // Replace the momentum cache's new active axis with the previous active axis's momentum
-            momentumCache.Variable._value[Utils.GetAxisId(toAxis)] = momentumCache.Variable.value[Utils.GetAxisId(fromAxis)];
-
+            // Replace momentum on the new axis with momentum from the old axis.
+            // Also, convert the momentum to the opposite sign if need be.
+            momentumCache.Variable._value[Utils.GetAxisId(toAxis.ToString())] = momentumCache.Variable.value[Utils.GetAxisId(fromAxis.ToString())];
+            
             //Debug.Log(momentumCache.Value.ToString("F8"));
         }
 

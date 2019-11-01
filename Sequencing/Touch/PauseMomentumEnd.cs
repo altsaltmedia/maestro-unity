@@ -4,5 +4,5 @@ using UnityEngine.Timeline;
 namespace AltSalt.Sequencing.Touch
 {
     [CustomStyle(nameof(PauseMomentumEnd))]
-    public class PauseMomentumEnd : InputMarker { }
+    public class PauseMomentumEnd : Input_Marker { }
 }

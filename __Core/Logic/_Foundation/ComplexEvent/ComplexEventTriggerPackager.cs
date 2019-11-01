@@ -36,7 +36,7 @@ namespace AltSalt
         [ShowIf("ShowStringKeys")]
         [ValidateInput("CheckStringKeys", "Keys and Values must be of equal length")]
         [BoxGroup("String Packager")]
-        List<EventPayloadKey> stringKeys = new List<EventPayloadKey>();
+        List<CustomKey> stringKeys = new List<CustomKey>();
 
         [SerializeField]
         [ShowIf("hasString")]
@@ -67,7 +67,7 @@ namespace AltSalt
         [ShowIf("ShowFloatKeys")]
         [ValidateInput("CheckFloatKeys", "Keys and Values must be of equal length")]
         [BoxGroup("Float Packager")]
-        List<EventPayloadKey> floatKeys = new List<EventPayloadKey>();
+        List<CustomKey> floatKeys = new List<CustomKey>();
 
         [SerializeField]
         [ShowIf("hasFloat")]
@@ -98,7 +98,7 @@ namespace AltSalt
         [ShowIf("ShowBoolKeys")]
         [ValidateInput("CheckBoolKeys", "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
-        List<EventPayloadKey> boolKeys = new List<EventPayloadKey>();
+        List<CustomKey> boolKeys = new List<CustomKey>();
 
         [SerializeField]
         [ShowIf("hasBool")]
@@ -135,7 +135,7 @@ namespace AltSalt
         [ShowIf("ShowScriptableObjectKeys")]
         [ValidateInput("CheckScriptableObjectKeys", "Keys and Values must be of equal length")]
         [BoxGroup("Scriptable Object Packager")]
-        List<EventPayloadKey> scriptableObjectKeys = new List<EventPayloadKey>();
+        List<CustomKey> scriptableObjectKeys = new List<CustomKey>();
 
         [SerializeField]
         [ShowIf("hasScriptableObject")]
@@ -351,7 +351,7 @@ namespace AltSalt
             }
         }
 
-        bool CheckStringKeys(List<EventPayloadKey> attribute)
+        bool CheckStringKeys(List<CustomKey> attribute)
         {
             if(attribute.Count != stringValues.Count) {
                 return false;
@@ -360,7 +360,7 @@ namespace AltSalt
             }
         }
 
-        bool CheckFloatKeys(List<EventPayloadKey> attribute)
+        bool CheckFloatKeys(List<CustomKey> attribute)
         {
             if (attribute.Count != floatValues.Count) {
                 return false;
@@ -369,7 +369,7 @@ namespace AltSalt
             }
         }
 
-        bool CheckBoolKeys(List<EventPayloadKey> attribute)
+        bool CheckBoolKeys(List<CustomKey> attribute)
         {
             if (attribute.Count != boolValues.Count) {
                 return false;
@@ -378,7 +378,7 @@ namespace AltSalt
             }
         }
 
-        bool CheckScriptableObjectKeys(List<EventPayloadKey> attribute)
+        bool CheckScriptableObjectKeys(List<CustomKey> attribute)
         {
             if (attribute.Count != scriptableObjectValues.Count) {
                 return false;

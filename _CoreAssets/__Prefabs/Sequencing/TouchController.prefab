@@ -47,9 +47,34 @@ MonoBehaviour:
   _inputActionComplete:
     complexEvent: {fileID: 11400000, guid: 5fc585840da1246b684b0ff3e7040b45, type: 2}
   _touchController: {fileID: 6351633449510160952}
+  _touchExtentsCollection:
+    reorderableList:
+      canAdd: 0
+      canRemove: 0
+      draggable: 0
+      expandable: 0
+      multipleSelection: 0
+      isExpanded: 0
+      label:
+        m_Text: 
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 0
+      footerHeight: 0
+      slideEasing: 0
+      verticalSpacing: 0
+      showDefaultBackground: 0
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: []
+    _keys: []
   _convertMomentum:
     complexEvent: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
-  _swipeResetSpread:
+  _resetSpread:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: bc2564f0a71134de7af265805f3cb21e, type: 2}
@@ -65,10 +90,10 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 6a43f748a303a4bcbb7990dd32c38b27, type: 2}
-  _forkTransitionSpread:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: b3e86449438674ff0ac944ba39781408, type: 2}
+  _yPositiveKey: {fileID: 0}
+  _yNegativeKey: {fileID: 0}
+  _xPositiveKey: {fileID: 0}
+  _xNegativeKey: {fileID: 0}
 --- !u!1 &2614246155531537207
 GameObject:
   m_ObjectHideFlags: 0
@@ -81,7 +106,6 @@ GameObject:
   - component: {fileID: 6351633449510160952}
   - component: {fileID: 3768873193508529941}
   - component: {fileID: 2407152940222715019}
-  - component: {fileID: 3350714753589169664}
   m_Layer: 12
   m_Name: TouchController
   m_TagString: Untagged
@@ -118,8 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9b57c3050de4aebb4eba8b33e5d8b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  _masterSequences: []
+  _rootConfig: {fileID: 0}
   _requestModifyToSequence:
     complexEvent: {fileID: 11400000, guid: dc6452168b7334181bcaea1a33f8ebe1, type: 2}
   _swipeForce:
@@ -145,10 +168,6 @@ MonoBehaviour:
     Variable: {fileID: 11400000, guid: f622ace9e18b44dddaacabde456d3ef4, type: 2}
   _yMomentumAxis: {fileID: 11400000, guid: f42a426f4dfb54a94938a16ec1f3c2e3, type: 2}
   _xMomentumAxis: {fileID: 11400000, guid: f88bf119e8f2c4cf3877691a94127d64, type: 2}
-  _forkActive:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 2aff08255bfe44376b24d0ea43897ac1, type: 2}
   _isReversing:
     UseConstant: 0
     ConstantValue: 0
@@ -211,36 +230,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
---- !u!114 &3350714753589169664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2614246155531537207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 87530e998b45847529374d024ccfda83, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6351633449510160952}
-        m_MethodName: ConfigureData
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   doNotRecord: 0

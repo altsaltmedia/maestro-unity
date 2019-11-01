@@ -9,6 +9,18 @@ namespace AltSalt.Sequencing
     [ExecuteInEditMode]
     public class MasterSequence : MonoBehaviour
     {
+        [ReadOnly]
+        [SerializeField]
+        [Required]
+        [InfoBox("This must be populated via a root config component")]
+        private RootConfig _rootConfig;
+
+        public RootConfig rootConfig
+        {
+            get => _rootConfig;
+            set => _rootConfig = value;
+        }
+
         [SerializeField]
         [ReadOnly]
         private ActiveInputModuleData _activeInputModule = new ActiveInputModuleData();
@@ -20,31 +32,30 @@ namespace AltSalt.Sequencing
         }
 
         [SerializeField]
-        private List<SequenceConfig> _sequenceConfigs = new List<SequenceConfig>();
+        private List<Sequence_Config> _sequenceConfigs = new List<Sequence_Config>();
 
-        public List<SequenceConfig> sequenceConfigs
+        public List<Sequence_Config> sequenceConfigs
         {
             get => _sequenceConfigs;
         }
         
         [SerializeField]
-        private List<MasterTimeData> _masterTimeData = new List<MasterTimeData>();
+        private List<MasterTimeData> _masterTimeDataList = new List<MasterTimeData>();
 
-        public List<MasterTimeData> masterTimeData
+        public List<MasterTimeData> masterTimeDataList
         {
-            get {
-                return _masterTimeData;
-            }
-            private set => _masterTimeData = value;
+            get => _masterTimeDataList;
+            private set => _masterTimeDataList = value;
         }
 
-        public double elapsedTime {
-            get {
-                if (masterTimeData.Count < 1) {
-                    Init();
-                }
-                return GetElapsedTime(masterTimeData);
-            }
+        [ShowInInspector]
+        [ReadOnly]
+        private double _elapsedTime;
+
+        public double elapsedTime
+        {
+            get => _elapsedTime;
+            private set => _elapsedTime = value;
         }
 
         public double masterTime {
@@ -52,10 +63,10 @@ namespace AltSalt.Sequencing
                 return elapsedTime;
             }
             set {
-                if (masterTimeData.Count < 1) {
+                if (masterTimeDataList.Count < 1) {
                     Init();
                 }
-                SetMasterTime(value, masterTimeData);
+                SetMasterTime(value, masterTimeDataList);
             }
         }
 
@@ -63,7 +74,7 @@ namespace AltSalt.Sequencing
         
         public double masterTotalTime {
             get {
-                if (masterTimeData.Count < 1) {
+                if (masterTimeDataList.Count < 1) {
                     Init();
                 }
                 return _masterTotalTime;
@@ -72,27 +83,29 @@ namespace AltSalt.Sequencing
 
         private void Start()
         {
-            Init();
+            for (int i = 0; i < sequenceConfigs.Count; i++) {
+                sequenceConfigs[i].sequence.SetDefaults();
+            }
         }
 
-        void Init()
+        public void Init()
         {
             // Generate master times for sequences
-            masterTimeData = GenerateSequenceData(sequenceConfigs);
+            masterTimeDataList = GenerateSequenceData(sequenceConfigs);
 
-            for (int i = 0; i < sequenceConfigs.Count; i++)
-            {
-                sequenceConfigs[i].sequence.SetDefaults();
+            for (int i = 0; i < sequenceConfigs.Count; i++) {
+                sequenceConfigs[i].SetMasterSequence(this);
+                sequenceConfigs[i].Init();
             }
 
             // Get total time by adding last sequences master time end threshold with its duration
-            _masterTotalTime = masterTimeData[masterTimeData.Count - 1].masterTimeEnd + masterTimeData[masterTimeData.Count - 1].sequence.sourcePlayable.duration;
+            _masterTotalTime = masterTimeDataList[masterTimeDataList.Count - 1].masterTimeEnd + masterTimeDataList[masterTimeDataList.Count - 1].sequence.sourcePlayable.duration;
         }
 
         public void ProcessModifyRequest(EventPayload eventPayload)
         {
             Sequence targetSequence = eventPayload.GetScriptableObjectValue() as Sequence;
-            SequenceConfig sequenceConfig = sequenceConfigs.Find(x => x.sequence == targetSequence);
+            Sequence_Config sequenceConfig = sequenceConfigs.Find(x => x.sequence == targetSequence);
             
             if (sequenceConfig == null) return;
 
@@ -103,7 +116,7 @@ namespace AltSalt.Sequencing
             {
                 activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
                 
-                sequenceConfig.processModifySequence.ModifySequence(eventPayload.GetFloatValue());
+                sequenceConfig.processModify.ModifySequence(eventPayload.GetFloatValue());
             }
         }
 
@@ -123,7 +136,7 @@ namespace AltSalt.Sequencing
             activeInputModule.priority = 0;
         }
 
-        static List<Sequence> RefreshSequences(List<Sequence> sequences, List<SequenceConfig> sequenceConfigs)
+        static List<Sequence> RefreshSequences(List<Sequence> sequences, List<Sequence_Config> sequenceConfigs)
         {
             sequences.Clear();
 
@@ -137,10 +150,10 @@ namespace AltSalt.Sequencing
 
         public Sequence UpdateMasterTime(double targetTime)
         {
-            if (masterTimeData.Count < 1) {
+            if (masterTimeDataList.Count < 1) {
                 Init();
             }
-            return SetMasterTime(targetTime, masterTimeData);
+            return SetMasterTime(targetTime, masterTimeDataList);
         }
 
         public static Sequence SetMasterTime(double targetTime, List<MasterTimeData> sequenceData)
@@ -189,27 +202,17 @@ namespace AltSalt.Sequencing
             return activeSequence;
         }
 
-        static double GetElapsedTime(List<MasterTimeData> sequenceData)
+        public void RefreshElapsedTime(EventPayload eventPayload)
         {
-            double elapsedTime = 0d;
-
-            for (int i = 0; i < sequenceData.Count; i++) {
+            Sequence targetSequence = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as Sequence;
+            MasterTimeData masterTimeData = masterTimeDataList.Find(x => x.sequence == targetSequence);
                 
-                if (sequenceData[i].sequence.active == true) {
-
-                    if (i == 0) {
-                        elapsedTime = sequenceData[i].sequence.currentTime;
-                    } else {
-                        elapsedTime = sequenceData[i].masterTimeStart + sequenceData[i].sequence.currentTime;
-                    }
-
-                }
+            if(masterTimeData != null) {
+                elapsedTime = masterTimeData.masterTimeStart + targetSequence.currentTime;
             }
-
-            return elapsedTime;
         }
 
-        static List<MasterTimeData> GenerateSequenceData(List<SequenceConfig> sourceSequenceConfigs)
+        static List<MasterTimeData> GenerateSequenceData(List<Sequence_Config> sourceSequenceConfigs)
         {
             List<MasterTimeData> sequenceData = new List<MasterTimeData>();
             for (int i = 0; i < sourceSequenceConfigs.Count; i++)
@@ -235,7 +238,7 @@ namespace AltSalt.Sequencing
         public static double LocalToMasterTime(MasterSequence masterSequence, Sequence sourceSequence, double localTime)
         {
             masterSequence.Init();
-            List<MasterTimeData> masterTimeData = masterSequence.masterTimeData;
+            List<MasterTimeData> masterTimeData = masterSequence.masterTimeDataList;
             for (int i = 0; i < masterTimeData.Count; i++)
             {
                 if (masterTimeData[i].sequence == sourceSequence)

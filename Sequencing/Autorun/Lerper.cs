@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AltSalt.Sequencing.Autorun
 {
-    public class Lerper : AutorunModule
+    public class Lerper : Autorun_Module
     {
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
@@ -18,7 +18,7 @@ namespace AltSalt.Sequencing.Autorun
             get => _frameStepValue.Value;
         }
         
-        private delegate AutorunController.AutorunData CoroutineCallback(AutorunController autorunController, AutorunController.AutorunData autorunData, Interval interval);
+        private delegate Autorun_Data CoroutineCallback(Autorun_Controller autorunController, Autorun_Data autorunData, Autorun_Interval interval);
 
         public void TriggerLerpSequence(Sequence targetSequence)
         {
@@ -26,7 +26,7 @@ namespace AltSalt.Sequencing.Autorun
 
             if (autorunData.sequence.active == true && autorunData.isLerping == false)
             {
-                if (Interval.TimeWithinThreshold(autorunData.sequence.currentTime,
+                if (Autorun_Interval.TimeWithinThreshold(autorunData.sequence.currentTime,
                         autorunData.autorunIntervals, out var currentInterval) == false) return;
 
                 autorunData.isLerping = true;
@@ -39,7 +39,7 @@ namespace AltSalt.Sequencing.Autorun
             }
         }
 
-        private AutorunController.AutorunData CheckEndLerp(AutorunController autorunController, AutorunController.AutorunData autorunData, Interval interval)
+        private Autorun_Data CheckEndLerp(Autorun_Controller autorunController, Autorun_Data autorunData, Autorun_Interval interval)
         {
             if (autorunController.isReversing == false)
             {
@@ -62,7 +62,7 @@ namespace AltSalt.Sequencing.Autorun
             return autorunData;
         }
         
-        private static bool CanLerpSequence(Sequence targetSequence, AutorunController autorunController, out AutorunController.AutorunData autorunData)
+        private static bool CanLerpSequence(Sequence targetSequence, Autorun_Controller autorunController, out Autorun_Data autorunData)
         {
             for (int i = 0; i < autorunController.autorunData.Count; i++)
             {
@@ -87,8 +87,8 @@ namespace AltSalt.Sequencing.Autorun
             return lerpValue;
         }
 
-        private static IEnumerator LerpSequence(AutorunController autorunController, InputModule source,
-            AutorunController.AutorunData autorunData, float timeModifier, Interval currentInterval, CoroutineCallback callback)
+        private static IEnumerator LerpSequence(Autorun_Controller autorunController, Input_Module source,
+            Autorun_Data autorunData, float timeModifier, Autorun_Interval currentInterval, CoroutineCallback callback)
         {
             while(true) {
 

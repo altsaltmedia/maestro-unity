@@ -72,7 +72,17 @@ namespace AltSalt
         xSwipeAxis,
         yMomentumAxis,
         xMomentumAxis,
-        ScrubberActive
+        ScrubberActive,
+        yPositiveBranch,
+        yNegativeBranch,
+        xPositiveBranch,
+        xNegativeBranch
+    }
+
+    public enum ScriptNames
+    {
+        CustomKey,
+        BranchKey
     }
 
     public enum XMLValues
@@ -571,13 +581,13 @@ namespace AltSalt
         public static int GetAxisId(string axisName)
         {
             switch (axisName) {
-                case "x":
+                case "X":
                     return 0;
 
-                case "y":
+                case "Y":
                     return 1;
 
-                case "z":
+                case "Z":
                     return 2;
 
                 default:
