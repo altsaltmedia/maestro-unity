@@ -7,76 +7,76 @@ namespace AltSalt.Sequencing.Touch
     [CreateAssetMenu(menuName = "AltSalt/Sequencing/Touch Fork")]
     public class AxisModifier_TouchFork : JoinTools_Fork
     {
-        [TitleGroup("Y Positive")]
+        [TitleGroup("Y North")]
         [SerializeField]
         [OnValueChanged(nameof(RefreshForkData))]
-        private Sequence _yPositiveBranch;
+        private Sequence _yNorthBranch;
             
-        private Sequence yPositiveBranch => _yPositiveBranch;
+        private Sequence yNorthBranch => _yNorthBranch;
 
-        [TitleGroup("Y Positive")]
+        [TitleGroup("Y North")]
         [SerializeField]
         [ReadOnly]
-        private JoinTools_BranchKey _yPositiveKey;
+        private JoinTools_BranchKey _yNorthKey;
 
-        private JoinTools_BranchKey yPositiveKey
+        private JoinTools_BranchKey yNorthKey
         {
-            get => _yPositiveKey;
-            set => _yPositiveKey = value;
+            get => _yNorthKey;
+            set => _yNorthKey = value;
         }
 
-        [TitleGroup("Y Negative")]
+        [TitleGroup("Y South")]
         [SerializeField]
         [OnValueChanged(nameof(RefreshForkData))]
-        private Sequence _yNegativeBranch;
+        private Sequence _ySouthBranch;
             
-        private Sequence yNegativeBranch => _yNegativeBranch;
+        private Sequence ySouthBranch => _ySouthBranch;
             
-        [TitleGroup("Y Negative")]
+        [TitleGroup("Y South")]
         [SerializeField]
         [ReadOnly]
-        private JoinTools_BranchKey _yNegativeKey;
+        private JoinTools_BranchKey _ySouthKey;
 
-        private JoinTools_BranchKey yNegativeKey
+        private JoinTools_BranchKey ySouthKey
         {
-            get => _yNegativeKey;
-            set => _yNegativeKey = value;
+            get => _ySouthKey;
+            set => _ySouthKey = value;
         }
 
-        [TitleGroup("X Positive")]
+        [TitleGroup("X East")]
         [SerializeField]
         [OnValueChanged(nameof(RefreshForkData))]
-        private Sequence _xPositiveBranch;
+        private Sequence _xEastBranch;
 
-        private Sequence xPositiveBranch => _xPositiveBranch;
+        private Sequence xEastBranch => _xEastBranch;
             
-        [TitleGroup("X Positive")]
+        [TitleGroup("X East")]
         [SerializeField]
         [ReadOnly]
-        private JoinTools_BranchKey _xPositiveKey;
+        private JoinTools_BranchKey _xEastKey;
 
-        private JoinTools_BranchKey xPositiveKey
+        private JoinTools_BranchKey xEastKey
         {
-            get => _xPositiveKey;
-            set => _xPositiveKey = value;
+            get => _xEastKey;
+            set => _xEastKey = value;
         }
 
-        [TitleGroup("X Negative")]
+        [TitleGroup("X West")]
         [SerializeField]
         [OnValueChanged(nameof(RefreshForkData))]
-        private Sequence _xNegativeBranch;
+        private Sequence _xWestBranch;
             
-        private Sequence xNegativeBranch => _xNegativeBranch;
+        private Sequence xWestBranch => _xWestBranch;
             
-        [TitleGroup("X Negative")]
+        [TitleGroup("X West")]
         [SerializeField]
         [ReadOnly]
-        private JoinTools_BranchKey _xNegativeKey;
+        private JoinTools_BranchKey _xWestKey;
 
-        private JoinTools_BranchKey xNegativeKey
+        private JoinTools_BranchKey xWestKey
         {
-            get => _xNegativeKey;
-            set => _xNegativeKey = value;
+            get => _xWestKey;
+            set => _xWestKey = value;
         }
 
 //        [ReadOnly]
@@ -94,36 +94,36 @@ namespace AltSalt.Sequencing.Touch
         {
             branchingPaths.Clear();
 
-            if (yPositiveKey == null) {
-                yPositiveKey = Utils.GetScriptableObject(nameof(VarDependencies.yPositiveBranch)) as JoinTools_BranchKey;
+            if (yNorthKey == null) {
+                yNorthKey = Utils.GetScriptableObject(nameof(VarDependencies.yNorthBranch)) as JoinTools_BranchKey;
             }
                 
-            if (yPositiveBranch != null) {
-                branchingPaths.Add(new JoinTools_BranchingPath(yPositiveKey, yPositiveBranch));
+            if (yNorthBranch != null) {
+                branchingPaths.Add(new JoinTools_BranchingPath(yNorthKey, yNorthBranch, true));
             }
                 
-            if (yNegativeKey == null) {
-                yNegativeKey = Utils.GetScriptableObject(nameof(VarDependencies.yNegativeBranch)) as JoinTools_BranchKey;
+            if (ySouthKey == null) {
+                ySouthKey = Utils.GetScriptableObject(nameof(VarDependencies.ySouthBranch)) as JoinTools_BranchKey;
             }
                 
-            if (yNegativeBranch != null) {
-                branchingPaths.Add(new JoinTools_BranchingPath(yNegativeKey, yNegativeBranch));
+            if (ySouthBranch != null) {
+                branchingPaths.Add(new JoinTools_BranchingPath(ySouthKey, ySouthBranch));
             }
                 
-            if (xPositiveKey == null) {
-                xPositiveKey = Utils.GetScriptableObject(nameof(VarDependencies.xPositiveBranch)) as JoinTools_BranchKey;
+            if (xEastKey == null) {
+                xEastKey = Utils.GetScriptableObject(nameof(VarDependencies.xEastBranch)) as JoinTools_BranchKey;
             }
                 
-            if (xPositiveBranch != null) {
-                branchingPaths.Add(new JoinTools_BranchingPath(xPositiveKey, xPositiveBranch));
+            if (xEastBranch != null) {
+                branchingPaths.Add(new JoinTools_BranchingPath(xEastKey, xEastBranch));
             }
 
-            if (xNegativeKey == null) {
-                xNegativeKey = Utils.GetScriptableObject(nameof(VarDependencies.xNegativeBranch)) as JoinTools_BranchKey;
+            if (xWestKey == null) {
+                xWestKey = Utils.GetScriptableObject(nameof(VarDependencies.xWestBranch)) as JoinTools_BranchKey;
             }
                 
-            if (xNegativeBranch != null) {
-                branchingPaths.Add(new JoinTools_BranchingPath(xNegativeKey, xNegativeBranch));
+            if (xWestBranch != null) {
+                branchingPaths.Add(new JoinTools_BranchingPath(xWestKey, xWestBranch, true));
             }
 
             return branchingPaths;

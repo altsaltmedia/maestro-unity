@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a36c8365f9234ca78a5096d0cdc24eb2, type: 3}
-  m_Name: xNegativeBranch
+  m_Name: xEastBranch
   m_EditorClassIdentifier: 
   description: 

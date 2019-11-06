@@ -16,6 +16,6 @@ MonoBehaviour:
     RegisterDependencies tool is used.
   _hasDefault: 0
   DeveloperDescription: 
-  _value: 1.25
+  _value: 2
   hasDefault: 1
   _defaultValue: 1.25

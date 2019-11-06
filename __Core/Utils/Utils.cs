@@ -37,7 +37,7 @@ namespace AltSalt
 
     public enum MaterialAttributeType { Color, Float }
 
-    public enum BranchType { yNeg, yPos, xNeg, xPos }
+    public enum BranchType { ySouth, yNorth, xWest, xEast }
     
     public enum AxisType { X, Y }
 
@@ -73,10 +73,10 @@ namespace AltSalt
         yMomentumAxis,
         xMomentumAxis,
         ScrubberActive,
-        yPositiveBranch,
-        yNegativeBranch,
-        xPositiveBranch,
-        xNegativeBranch
+        yNorthBranch,
+        ySouthBranch,
+        xEastBranch,
+        xWestBranch
     }
 
     public enum ScriptNames

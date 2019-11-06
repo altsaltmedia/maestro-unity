@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 999520750079558234}
   - component: {fileID: 4581706541368278684}
+  - component: {fileID: 3318923730177639291}
+  - component: {fileID: 4592680014928591579}
   m_Layer: 12
   m_Name: AxisModifier
   m_TagString: Untagged
@@ -90,10 +92,71 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 6a43f748a303a4bcbb7990dd32c38b27, type: 2}
-  _yPositiveKey: {fileID: 0}
-  _yNegativeKey: {fileID: 0}
-  _xPositiveKey: {fileID: 0}
-  _xNegativeKey: {fileID: 0}
+  _yNorthKey: {fileID: 0}
+  _ySouthKey: {fileID: 0}
+  _xEastKey: {fileID: 0}
+  _xWestKey: {fileID: 0}
+--- !u!114 &3318923730177639291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2364722153129588570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: c1d1f8736e35847b594e918788a62e52, type: 2}
+  DeveloperDescription: 
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4581706541368278684}
+        m_MethodName: RefreshAxes
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
+--- !u!114 &4592680014928591579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2364722153129588570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4581706541368278684}
+        m_MethodName: CallRefreshBranchStates
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!1 &2614246155531537207
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,6 +212,14 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: {x: 0, y: 0}
     Variable: {fileID: 11400000, guid: 83dca11092e3c42a3ac39cf5ea347c2f, type: 2}
+  _ySensitivity:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 70b26216ecfb74cba8dd466f31c042dc, type: 2}
+  _xSensitivity:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 53fdf26dbeb8e41b9ad89e195014e0fb, type: 2}
   _axisModifier: {fileID: 4581706541368278684}
   _swipeModifier: {fileID: 1251530826959537226}
   _momentumModifier: {fileID: 2334433779831845473}

@@ -54,10 +54,18 @@ namespace AltSalt.Sequencing.Touch
                 if (touchData.sequence.active == false)  {
                     continue;
                 }
+
+//                AxisModifier_ForkExtents forkExtents = touchController.axisModifier
+//                    .touchExtentsCollection[touchData.masterSequence].Find(x => x.sequence == touchData.sequence) as AxisModifier_ForkExtents;
+//
+//                if (forkExtents != null &&
+//                    forkExtents.touchFork.branchingPaths.Find(x => x.sequence == touchData.sequence).invert == true) {
+//                    touchController.swipeModifierOutput *= -1f;
+//                }
                 
-                if(touchData.sequence.invert == true) {
-                    touchController.swipeModifierOutput *= -1f;
-                }
+//                if(touchData.sequence.invert == true) {
+//                    touchController.swipeModifierOutput *= -1f;
+//                }
                 
                 if (touchData.forceForward == true) {
                     touchController.swipeModifierOutput = Mathf.Abs(touchController.swipeModifierOutput);

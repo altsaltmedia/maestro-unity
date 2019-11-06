@@ -94,65 +94,170 @@ namespace AltSalt.Sequencing
             set => _boundaryReached = value;
         }
 
+        private void Start()
+        {
+            forkActive = false;
+        }
+
         public Sequence ActivatePreviousSequence(Sequence sourceSequence)
         {
             JoinTools_JoinSettings sequenceSettings = joinSettingsCollection[sourceSequence];
-            Sequence previousSequence = sequenceSettings.previousSequence;
-            
-            if (previousSequence != null)
+//            Sequence previousSequence = sequenceSettings.previousDestination as Sequence;
+//            
+            if (sequenceSettings.previousDestination != null)
             {
-                sourceSequence.active = false;
-
-                JoinTools_ForkJoinData currentForkData = forkDataList.Find(x => x.sequence == sourceSequence);
-                JoinTools_ForkJoinData previousForkData = forkDataList.Find(x => x.sequence == previousSequence);
-
-                if (currentForkData != null && previousForkData != null) {
-                    previousSequence.currentTime = previousForkData.markerPlacement == MarkerPlacement.StartOfSequence ? 0d : previousSequence.sourcePlayable.duration;
-                } else {
-                    previousSequence.currentTime = previousSequence.sourcePlayable.duration;
-                }
+                Sequence previousSequence;
                 
-                previousSequence.active = true;
-                previousSequence.sequenceConfig.gameObject.SetActive(true);
-                previousSequence.sequenceConfig.gameObject.SetActive(true);
-                previousSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                rootConfig.sequenceModified.RaiseEvent(this.gameObject, previousSequence);
-                    
-                sourceSequence.sequenceConfig.gameObject.SetActive(false);
+                if (sequenceSettings.previousDestination is Sequence sequence) {
+                    sourceSequence.active = false;
+                    previousSequence = sequence;
+                    previousSequence.currentTime = previousSequence.sourcePlayable.duration;
+                    previousSequence.active = true;
+                    previousSequence.sequenceConfig.gameObject.SetActive(true);
+                    previousSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                    rootConfig.sequenceModified.RaiseEvent(this.gameObject, previousSequence);
+                    sourceSequence.sequenceConfig.gameObject.SetActive(false);
+                }
+                else if (sequenceSettings.previousDestination is AxisModifier_TouchFork touchFork) {
+                    previousSequence = touchFork.GetDestinationBranch().sequence;
+                    if (previousSequence != sourceSequence) {
+                        for (int i = 0; i < touchFork.branchingPaths.Count; i++) {
+                            touchFork.branchingPaths[i].sequence.active = false;
+                        }
+                        JoinTools_ForkJoinData previousForkData = forkDataList.Find(x => x.sequence == previousSequence);
+                        previousSequence.currentTime = previousForkData.markerPlacement == MarkerPlacement.StartOfSequence ? 0d : previousSequence.sourcePlayable.duration;
+                        previousSequence.active = true;
+                        previousSequence.sequenceConfig.gameObject.SetActive(true);
+                        previousSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                        rootConfig.sequenceModified.RaiseEvent(this.gameObject, previousSequence);
+                        sourceSequence.sequenceConfig.gameObject.SetActive(false);
+                    }
+                }
+
+//                JoinTools_ForkJoinData currentForkData = forkDataList.Find(x => x.sequence == sourceSequence);
+//                JoinTools_ForkJoinData previousForkData = forkDataList.Find(x => x.sequence == previousSequence);
+//
+//                if (currentForkData != null && previousForkData != null) {
+//                    previousSequence.currentTime = previousForkData.markerPlacement == MarkerPlacement.StartOfSequence ? 0d : previousSequence.sourcePlayable.duration;
+//                } else {
+//                    previousSequence.currentTime = previousSequence.sourcePlayable.duration;
+//                }
+//                
+//                previousSequence.active = true;
+//                previousSequence.sequenceConfig.gameObject.SetActive(true);
+//                previousSequence.sequenceConfig.gameObject.SetActive(true);
+//                previousSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+//                rootConfig.sequenceModified.RaiseEvent(this.gameObject, previousSequence);
+//                    
+//                sourceSequence.sequenceConfig.gameObject.SetActive(false);
             }
             else
             {
                 boundaryReached.RaiseEvent(this.gameObject);
             }
+
+            return sourceSequence;
         }
         
         public Sequence ActivateNextSequence(Sequence sourceSequence)
         {
             JoinTools_JoinSettings sequenceSettings = joinSettingsCollection[sourceSequence];
-            Sequence nextSequence = sequenceSettings.previousSequence;
-            
-            if (nextSequence != null)
-            {
-                sourceSequence.active = false;
-                    
-                nextSequence.currentTime = 0;
-                nextSequence.active = true;
-                nextSequence.sequenceConfig.gameObject.SetActive(true);
-                nextSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                rootConfig.sequenceModified.RaiseEvent(this.gameObject, nextSequence);
 
-                sourceSequence.sequenceConfig.gameObject.SetActive(false);
+            if (sequenceSettings.nextDestination != null) {
+                Sequence nextSequence;
+                
+                if (sequenceSettings.nextDestination is Sequence sequence) {
+                    sourceSequence.active = false;
+                    nextSequence = sequence;
+                    nextSequence.currentTime = 0d;
+                    nextSequence.active = true;
+                    nextSequence.sequenceConfig.gameObject.SetActive(true);
+                    nextSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                    rootConfig.sequenceModified.RaiseEvent(this.gameObject, nextSequence);
+                    sourceSequence.sequenceConfig.gameObject.SetActive(false);
+                }
+                else if (sequenceSettings.nextDestination is AxisModifier_TouchFork touchFork) {
+                    nextSequence = touchFork.GetDestinationBranch().sequence;
+                    if (nextSequence != sourceSequence) {
+                        for (int i = 0; i < touchFork.branchingPaths.Count; i++) {
+                            touchFork.branchingPaths[i].sequence.active = false;
+                        }
+                        JoinTools_ForkJoinData nextForkData = forkDataList.Find(x => x.sequence == nextSequence);
+                        nextSequence.currentTime = nextForkData.markerPlacement == MarkerPlacement.StartOfSequence ? 0d : nextSequence.sourcePlayable.duration;
+                        nextSequence.active = true;
+                        nextSequence.sequenceConfig.gameObject.SetActive(true);
+                        nextSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                        rootConfig.sequenceModified.RaiseEvent(this.gameObject, nextSequence);
+                        sourceSequence.sequenceConfig.gameObject.SetActive(false);
+                    }
+                }
+                
             }
             else
             {
                 boundaryReached.RaiseEvent(this.gameObject);
             }
+
+            return sourceSequence;
+
+
+//            JoinTools_ForkJoinData currentForkData = forkDataList.Find(x => x.sequence == sourceSequence);
+//            
+//            if (currentForkData != null) {
+//                JoinTools_ForkJoinData nextForkData = forkDataList.Find(x => x.sequence == nextSequence);
+//            }
+//            else {
+//                
+//                Sequence nextSequence = sequenceSettings.nextDestination;
+//                
+//                            
+//                if (nextSequence != null)  { }
+//
+//                if (currentForkData != null && nextForkData != null) {
+//                    nextSequence.currentTime = nextForkData.markerPlacement == MarkerPlacement.StartOfSequence ? 0d : nextSequence.sourcePlayable.duration;
+//                } else {
+//                    nextSequence.currentTime = 0d;
+//                }
+//                
+//                nextSequence.active = true;
+//                nextSequence.sequenceConfig.gameObject.SetActive(true);
+//                nextSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+//                rootConfig.sequenceModified.RaiseEvent(this.gameObject, nextSequence);
+//
+//                sourceSequence.sequenceConfig.gameObject.SetActive(false);
+//            }
+//            else
+//            {
+//                boundaryReached.RaiseEvent(this.gameObject);
+//            }
+//
+//            return sourceSequence;
         }
-        
-        public JoinTools_JoinSettings UpdateForkSibling()
+
+        private void TriggerSimpleSwitch(Sequence sourceSequence, Sequence siblingSequence)
         {
             
         }
+
+        private void TriggerForkSwitch()
+        {
+            
+        }
+        
+        public JoinTools_JoinSettings SetPreviousSequence(Sequence sourceSequence, Sequence siblingSequence)
+        {
+            JoinTools_JoinSettings sequenceSettings = joinSettingsCollection[sourceSequence];
+            sequenceSettings.previousDestination = siblingSequence;
+            return sequenceSettings;
+        }
+        
+        public JoinTools_JoinSettings SetNextSequence(Sequence sourceSequence, Sequence siblingSequence)
+        {
+            JoinTools_JoinSettings sequenceSettings = joinSettingsCollection[sourceSequence];
+            sequenceSettings.nextDestination = siblingSequence;
+            return sequenceSettings;
+        }
+
 
 #if UNITY_EDITOR
         
@@ -199,12 +304,12 @@ namespace AltSalt.Sequencing
         {
             if (marker is IJoinSequence joinSequence && marker is JoinTools_Marker joinMarker) {
                     
-                Sequence siblingSequence = joinSequence.sequenceToJoin;
+                ScriptableObject joinDestination = joinSequence.joinDestination;
                 
                 if (joinMarker.markerPlacement == MarkerPlacement.StartOfSequence) {
-                    joinSettings.previousSequence = siblingSequence;
+                    joinSettings.previousDestination = joinDestination;
                 } else {
-                    joinSettings.nextSequence = siblingSequence;
+                    joinSettings.nextDestination = joinDestination;
                 }
             }
 
@@ -214,6 +319,9 @@ namespace AltSalt.Sequencing
         private static JoinTools SetForkData(JoinTools joinTools, Sequence sequence, IMarker marker)
         {
             if (marker is JoinTools_ForkMarker forkJoinMarker) {
+                if (forkJoinMarker.joinDestination == null) {
+                    return joinTools;
+                }
                 joinTools.forkDataList.Add(new JoinTools_ForkJoinData(sequence, forkJoinMarker, joinTools.forkTransitionSpread));
             }
 

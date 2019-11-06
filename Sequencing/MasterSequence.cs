@@ -107,7 +107,7 @@ namespace AltSalt.Sequencing
             Sequence targetSequence = eventPayload.GetScriptableObjectValue() as Sequence;
             Sequence_Config sequenceConfig = sequenceConfigs.Find(x => x.sequence == targetSequence);
             
-            if (sequenceConfig == null) return;
+            if (sequenceConfig == null || sequenceConfig.DependenciesLoaded() == false) return;
 
             int requestPriority = eventPayload.GetIntValue();
             string moduleName = eventPayload.GetStringValue();

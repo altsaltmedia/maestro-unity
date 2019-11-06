@@ -86,7 +86,8 @@ namespace AltSalt.Sequencing.Touch
         {
             this.axisModifier = axisModifier;
             this.sequence = touchData.sequence;
-            this.inverted = axisMarker.inverted;    
+            this.inverted = axisMarker.inverted;
+            this.description = axisMarker.description;
             this.markerMasterTime = MasterSequence.LocalToMasterTime(touchData.sequence.sequenceConfig.masterSequence, touchData.sequence, axisMarker.time);
             
             if (axisMarker.axisType == AxisType.Y)

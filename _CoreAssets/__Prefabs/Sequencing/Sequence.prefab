@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 9192232105761766021}
   - component: {fileID: 3825933744865969490}
   m_Layer: 0
-  m_Name: SequenceElement
+  m_Name: Sequence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,12 +90,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sequence: {fileID: 0}
-  _previousSequence: {fileID: 0}
-  _nextSequence: {fileID: 0}
-  _boundaryReached:
-    simpleEvent: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
-  _sequenceModified:
-    complexEvent: {fileID: 11400000, guid: c1d1f8736e35847b594e918788a62e52, type: 2}
 --- !u!114 &114615924759454770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +121,7 @@ PlayableDirector:
   m_PlayableAsset: {fileID: 0}
   m_InitialState: 0
   m_WrapMode: 0
-  m_DirectorUpdateMode: 3
+  m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings: []
   m_ExposedReferences:

@@ -137,8 +137,8 @@ namespace AltSalt.Sequencing.Autorun
                 
                 if(i <= endTimes.Count - 1) {
                     interval = new Autorun_Interval(startTimes[i], endTimes[i], descriptions[i]);
-                } else  {
-                    interval = new Autorun_Interval(startTimes[i], 100000, descriptions[i]);
+                } else {
+                    interval = new Autorun_Interval(startTimes[i], double.MaxValue, descriptions[i]);
                 }
                 
                 if(videoIntervalIds.Contains(i) == true) {

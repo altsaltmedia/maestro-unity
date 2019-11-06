@@ -83,12 +83,20 @@ namespace AltSalt.Sequencing
             sequence.sequenceConfig = this;
             
             GetPlayableDirector();
+            if (playableDirector.playableAsset == null) {
+                playableDirector.playableAsset = sequence.sourcePlayable;
+            }
             
             syncTimeline = gameObject.GetComponent<Sequence_SyncTimeline>();
             syncTimeline.sequence = sequence;
 
             processModify = gameObject.GetComponent<Sequence_ProcessModify>();
             processModify.sequence = sequence;
+        }
+
+        public bool DependenciesLoaded()
+        {
+            return playableDirector != null && syncTimeline != null && processModify != null && masterSequence != null;
         }
 
         void GetPlayableDirector()

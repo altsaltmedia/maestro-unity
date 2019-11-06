@@ -25,6 +25,13 @@ namespace AltSalt.Sequencing
         public void ModifySequence(float timeModifier)
         {
             sequence.currentTime += timeModifier;
+            
+//            if (sequence.invert == false) {
+//                sequence.currentTime += timeModifier;
+//            }
+//            else {
+//                sequence.currentTime += timeModifier * -1f;
+//            }
 
             RootConfig rootConfig = sequence.sequenceConfig.masterSequence.rootConfig;
             
@@ -45,19 +52,6 @@ namespace AltSalt.Sequencing
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject, sequence);
             }
         }
-
-        public static Sequence_ProcessModify SetPreviousSequence(Sequence_ProcessModify sequenceProcessModify, Sequence targetSequence)
-        {
-            sequenceProcessModify.previousSequence = targetSequence;
-            return sequenceProcessModify;
-        }
-        
-        public static Sequence_ProcessModify SetNextSequence(Sequence_ProcessModify sequenceProcessModify, Sequence targetSequence)
-        {
-            sequenceProcessModify.nextSequence = targetSequence;
-            return sequenceProcessModify;
-        }
-
 //
 //        private bool CanExecuteModify(EventPayload eventPayload, out float timeModifier)
 //        {

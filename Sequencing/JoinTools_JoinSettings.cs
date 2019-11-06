@@ -5,21 +5,21 @@ namespace AltSalt.Sequencing
     public class JoinTools_JoinSettings
     {
         [SerializeField]
-        private Sequence _previousSequence;
+        private ScriptableObject _previousDestination;
 
-        public Sequence previousSequence
+        public ScriptableObject previousDestination
         {
-            get =>  _previousSequence;
-            set =>  _previousSequence= value;
+            get =>  _previousDestination;
+            set =>  _previousDestination= value;
         }
 
         [SerializeField]
-        private Sequence _nextSequence;
+        private ScriptableObject _nextDestination;
 
-        public Sequence nextSequence
+        public ScriptableObject nextDestination
         {
-            get => _nextSequence;
-            set => _nextSequence = value;
+            get => _nextDestination;
+            set => _nextDestination = value;
         }
     }
 }

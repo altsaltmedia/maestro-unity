@@ -17,6 +17,15 @@ namespace AltSalt.Sequencing
         }
 
         [SerializeField]
+        private bool _invert;
+
+        public bool invert
+        {
+            get => _invert;
+            private set => _invert = value;
+        }
+
+        [SerializeField]
         private Sequence _sequence;
 
         public Sequence sequence
@@ -29,6 +38,13 @@ namespace AltSalt.Sequencing
         {
             this.branchKey = branchKey;
             this.sequence = sequence;
+        }
+        
+        public JoinTools_BranchingPath(JoinTools_BranchKey branchKey, Sequence sequence, bool invert)
+        {
+            this.branchKey = branchKey;
+            this.sequence = sequence;
+            this.invert = invert;
         }
 
     }

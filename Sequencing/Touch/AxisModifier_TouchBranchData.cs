@@ -36,24 +36,22 @@ namespace AltSalt.Sequencing.Touch
         //            {"X Positive", BranchType.xPos }
         //        };
 
-        public AxisModifier_TouchBranchData(JoinTools_BranchKey branchKey, Sequence sequence, Touch_Data touchData, AxisModifier axisModifier) : base(
-            branchKey, sequence)
+        public AxisModifier_TouchBranchData(JoinTools_BranchingPath branchingPath, Touch_Data touchData, AxisModifier axisModifier) : base(
+            branchingPath.branchKey, branchingPath.sequence, branchingPath.invert)
         {
-            this.branchKey = branchKey;
-            this.sequence = sequence;
             this.touchData = touchData;
 
-            if (branchKey == axisModifier.yPositiveKey) {
-                branchType = BranchType.yPos;
+            if (branchKey == axisModifier.yNorthKey) {
+                branchType = BranchType.yNorth;
             }
-            else if (branchKey == axisModifier.yNegativeKey) {
-                branchType = BranchType.yNeg;
+            else if (branchKey == axisModifier.ySouthKey) {
+                branchType = BranchType.ySouth;
             }
-            else if (branchKey == axisModifier.xPositiveKey) {
-                branchType = BranchType.xPos;
+            else if (branchKey == axisModifier.xEastKey) {
+                branchType = BranchType.xEast;
             }
-            else if (branchKey == axisModifier.xNegativeKey) {
-                branchType = BranchType.xNeg;
+            else if (branchKey == axisModifier.xWestKey) {
+                branchType = BranchType.xWest;
             }
         }
     }

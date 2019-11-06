@@ -62,9 +62,17 @@ namespace AltSalt.Sequencing.Touch
                     continue;
                 }
                 
-                if(touchData.sequence.invert == true) {
-                    touchController.momentumModifierOutput *= -1f;
-                }
+//                AxisModifier_ForkExtents forkExtents = touchController.axisModifier
+//                    .touchExtentsCollection[touchData.masterSequence].Find(x => x.sequence == touchData.sequence) as AxisModifier_ForkExtents;
+//
+//                if (forkExtents != null &&
+//                    forkExtents.touchFork.branchingPaths.Find(x => x.sequence == touchData.sequence).invert == true) {
+//                    touchController.swipeModifierOutput *= -1f;
+//                }
+                
+//                if(touchData.sequence.invert == true) {
+//                    touchController.momentumModifierOutput *= -1f;
+//                }
                 
                 if (touchData.forceForward == true) {
                     touchController.momentumModifierOutput = Mathf.Abs(touchController.momentumModifierOutput);

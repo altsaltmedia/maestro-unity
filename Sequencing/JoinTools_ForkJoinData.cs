@@ -35,6 +35,15 @@ namespace AltSalt.Sequencing
         }
 
         [SerializeField]
+        private string _description;
+
+        public string description
+        {
+            get => _description;
+            private set => _description = value;
+        }
+
+        [SerializeField]
         [TitleGroup("$"+nameof(forkTitle))]
         private MarkerPlacement _markerPlacement;
 
@@ -47,7 +56,8 @@ namespace AltSalt.Sequencing
         public JoinTools_ForkJoinData(Sequence sequence, JoinTools_ForkMarker forkMarker, double forkTransitionSpread)
         {
             this.sequence = sequence;
-            this.markerPlacement = forkMarker.markerPlacement;    
+            this.markerPlacement = forkMarker.markerPlacement;
+            this.description = forkMarker.description;
             
             if (forkMarker is JoinTools_ForkJoinPrevious) {
                 this.extents = new Input_Extents(forkMarker.time, forkMarker.time + forkTransitionSpread);
@@ -55,7 +65,7 @@ namespace AltSalt.Sequencing
                 this.extents = new Input_Extents(forkMarker.time - forkTransitionSpread, forkMarker.time);
             }
 
-            this.fork = forkMarker.fork;
+            this.fork = forkMarker.joinDestination as AxisModifier_TouchFork;
         }
     }
 }

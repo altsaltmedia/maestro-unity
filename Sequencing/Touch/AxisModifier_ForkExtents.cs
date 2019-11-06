@@ -50,25 +50,28 @@ namespace AltSalt.Sequencing.Touch
             this.axisModifier = axisModifier;
             this.sequence = touchData.sequence;
             this.markerPlacement = forkJoinData.markerPlacement;
+            this.description = forkJoinData.description;
                 
             if (this.markerPlacement == MarkerPlacement.EndOfSequence) {
                 this.startTransitionThreshold = MasterSequence.LocalToMasterTime(forkJoinData.sequence.sequenceConfig.masterSequence, forkJoinData.sequence, forkJoinData.extents.startTime);
                 this.startTime = this.startTransitionThreshold - axisModifier.resetSpread;
                 this.endTime = MasterSequence.LocalToMasterTime(forkJoinData.sequence.sequenceConfig.masterSequence, forkJoinData.sequence, forkJoinData.extents.endTime);
+                this.endTransitionThreshold = this.endTime;
             } else {
                 this.startTime = MasterSequence.LocalToMasterTime(forkJoinData.sequence.sequenceConfig.masterSequence, forkJoinData.sequence, forkJoinData.extents.startTime);
-                this.endTransitionThreshold = MasterSequence.LocalToMasterTime(forkJoinData.sequence.sequenceConfig.masterSequence, forkJoinData.sequence, forkJoinData.extents.endTime);
-                this.endTime = this.endTransitionThreshold + axisModifier.resetSpread;
+                this.startTransitionThreshold = MasterSequence.LocalToMasterTime(forkJoinData.sequence.sequenceConfig.masterSequence, forkJoinData.sequence, forkJoinData.extents.endTime);
+                this.endTime = this.startTransitionThreshold + axisModifier.resetSpread;;
+                this.endTransitionThreshold = this.endTime;
             }
-                
+            
             this.touchFork = forkJoinData.fork;
                 
             for (int i = 0; i < touchFork.branchingPaths.Count; i++)
             {
-                AxisModifier_TouchBranchData touchBranchData = new AxisModifier_TouchBranchData(touchFork.branchingPaths[i].branchKey, touchFork.branchingPaths[i].sequence, touchData, axisModifier);
+                AxisModifier_TouchBranchData touchBranchData = new AxisModifier_TouchBranchData(touchFork.branchingPaths[i], touchData, axisModifier);
                 this.branchDictionary.Add(touchBranchData.branchType, touchBranchData);
             }
-                
+
         }
     }
 }

@@ -15,7 +15,7 @@ namespace AltSalt.Sequencing.Touch
     public class Touch_Controller : Input_Controller
     {
         [SerializeField]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [FoldoutGroup("Swipe Variables")]
         private V2Reference _swipeForce;
 
@@ -24,7 +24,19 @@ namespace AltSalt.Sequencing.Touch
             get => _swipeForce.Value;
             set => _swipeForce.Variable.SetValue(value);
         }
-        
+
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private FloatReference _ySensitivity;
+
+        private float ySensitivity => _ySensitivity.Variable.value;
+
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private FloatReference _xSensitivity;
+
+        private float xSensitivity => _xSensitivity.Variable.value;
+
         [ValidateInput("IsPopulated")]
         private FloatReference _timeModifier;
         
@@ -189,17 +201,21 @@ namespace AltSalt.Sequencing.Touch
 
         public void UpdateSwipeHistory()
         {
-            if (swipeHistoryIndex < swipeYHistory.Length) {
-                swipeYHistory[swipeHistoryIndex] = Mathf.Abs(swipeForce.y);
-                swipeXHistory[swipeHistoryIndex] = Mathf.Abs(swipeForce.x);
-                swipeHistoryIndex++;
+            if (swipeHistoryIndex < swipeYHistory.Length - 1) {
+                swipeYHistory[swipeHistoryIndex] = Mathf.Abs(swipeForce.y) / ySensitivity;
+                swipeXHistory[swipeHistoryIndex] = Mathf.Abs(swipeForce.x) / xSensitivity;
+            }
+
+            swipeHistoryIndex++;
+            if (swipeHistoryIndex > swipeYHistory.Length - 1) {
+                swipeHistoryIndex = 0;
             }
         }
         
         public void ResetSwipeHistory()
         {
-            swipeYHistory = new float[10];
-            swipeXHistory = new float[10];
+            swipeYHistory = new float[20];
+            swipeXHistory = new float[20];
             swipeHistoryIndex = 0;
         }
 
@@ -221,9 +237,9 @@ namespace AltSalt.Sequencing.Touch
             }
 
             if (totalYForce > totalXForce) {
-                modifiedSwipeForce = new Vector3(sourceSwipeForce.y, 0);
+                modifiedSwipeForce = new Vector3(0, sourceSwipeForce.y);
             } else {
-                modifiedSwipeForce = new Vector3(0, sourceSwipeForce.x);
+                modifiedSwipeForce = new Vector3(sourceSwipeForce.x, 0);
             }
 
             return modifiedSwipeForce;

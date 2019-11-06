@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace AltSalt.Sequencing
@@ -24,6 +26,7 @@ namespace AltSalt.Sequencing
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
+        [OnValueChanged(nameof(Configure))]
         private List<MasterSequence> _masterSequences = new List<MasterSequence>();
 
         public List<MasterSequence> masterSequences
@@ -42,11 +45,17 @@ namespace AltSalt.Sequencing
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
+        [OnValueChanged(nameof(Configure))]
         private List<Input_RootDataCollector> _rootDataCollectors = new List<Input_RootDataCollector>();
 
         public List<Input_RootDataCollector> rootDataCollectors
         {
             get => _rootDataCollectors;
+        }
+
+        private void Start()
+        {
+            Configure();
         }
 
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.4f, 1)]
@@ -67,6 +76,11 @@ namespace AltSalt.Sequencing
             
         }
 
+        private static bool IsPopulated(ComplexEventTrigger attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+        
         private static bool IsPopulated(List<MasterSequence> attribute)
         {
             return Utils.IsPopulated(attribute);

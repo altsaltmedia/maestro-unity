@@ -31,10 +31,10 @@ namespace AltSalt.Sequencing.Touch
         [SerializeField]
         private TouchExtentsCollection _touchExtentsCollection = new TouchExtentsCollection();
 
-        private TouchExtentsCollection touchExtentsCollection
+        public TouchExtentsCollection touchExtentsCollection
         {
             get => _touchExtentsCollection;
-            set => _touchExtentsCollection = value;
+            private set => _touchExtentsCollection = value;
         }
 
         [ValidateInput(nameof(IsPopulated))]
@@ -92,48 +92,48 @@ namespace AltSalt.Sequencing.Touch
         [SerializeField]
         [ReadOnly]
         [Required]
-        private JoinTools_BranchKey _yPositiveKey;
+        private JoinTools_BranchKey _yNorthKey;
 
-        public JoinTools_BranchKey yPositiveKey
+        public JoinTools_BranchKey yNorthKey
         {
-            get => _yPositiveKey;
-            set => _yPositiveKey = value;
+            get => _yNorthKey;
+            set => _yNorthKey = value;
         }
         
         [TitleGroup("Branch Keys")]
         [SerializeField]
         [ReadOnly]
         [Required]
-        private JoinTools_BranchKey _yNegativeKey;
+        private JoinTools_BranchKey _ySouthKey;
 
-        public JoinTools_BranchKey yNegativeKey
+        public JoinTools_BranchKey ySouthKey
         {
-            get => _yNegativeKey;
-            set => _yNegativeKey = value;
+            get => _ySouthKey;
+            set => _ySouthKey = value;
         }
 
         [TitleGroup("Branch Keys")]
         [SerializeField]
         [ReadOnly]
         [Required]
-        private JoinTools_BranchKey _xPositiveKey;
+        private JoinTools_BranchKey _xEastKey;
 
-        public JoinTools_BranchKey xPositiveKey
+        public JoinTools_BranchKey xEastKey
         {
-            get => _xPositiveKey;
-            set => _xPositiveKey = value;
+            get => _xEastKey;
+            set => _xEastKey = value;
         }
 
         [TitleGroup("Branch Keys")]
         [SerializeField]
         [ReadOnly]
         [Required]
-        private JoinTools_BranchKey _xNegativeKey;
+        private JoinTools_BranchKey _xWestKey;
 
-        public JoinTools_BranchKey xNegativeKey
+        public JoinTools_BranchKey xWestKey
         {
-            get => _xNegativeKey;
-            set => _xNegativeKey = value;
+            get => _xWestKey;
+            set => _xWestKey = value;
         }
 
 #if UNITY_EDITOR
@@ -167,20 +167,20 @@ namespace AltSalt.Sequencing.Touch
 
         private void PopulateBranchKeys()
         {
-            if (yPositiveKey == null) {
-                yPositiveKey = Utils.GetScriptableObject(nameof(VarDependencies.yPositiveBranch)) as JoinTools_BranchKey;
+            if (yNorthKey == null) {
+                yNorthKey = Utils.GetScriptableObject(nameof(VarDependencies.yNorthBranch)) as JoinTools_BranchKey;
             }
 
-            if (yNegativeKey == null) {
-                yNegativeKey = Utils.GetScriptableObject(nameof(VarDependencies.yNegativeBranch)) as JoinTools_BranchKey;
+            if (ySouthKey == null) {
+                ySouthKey = Utils.GetScriptableObject(nameof(VarDependencies.ySouthBranch)) as JoinTools_BranchKey;
             }
 
-            if (xPositiveKey == null) {
-                xPositiveKey = Utils.GetScriptableObject(nameof(VarDependencies.xPositiveBranch)) as JoinTools_BranchKey;
+            if (xEastKey == null) {
+                xEastKey = Utils.GetScriptableObject(nameof(VarDependencies.xEastBranch)) as JoinTools_BranchKey;
             }
 
-            if (xNegativeKey == null) {
-                xNegativeKey = Utils.GetScriptableObject(nameof(VarDependencies.xNegativeBranch)) as JoinTools_BranchKey;
+            if (xWestKey == null) {
+                xWestKey = Utils.GetScriptableObject(nameof(VarDependencies.xWestBranch)) as JoinTools_BranchKey;
             }
         }
 
@@ -269,13 +269,13 @@ namespace AltSalt.Sequencing.Touch
         }
 #endif
         
-        public virtual void Update()
+        public void RefreshAxes()
         {
-            foreach (var touchExtents in touchExtentsCollection) {
+            foreach (KeyValuePair<MasterSequence, List<AxisModifier_TouchExtents>> touchExtentsItem in touchExtentsCollection) {
                 
-                double masterTime = touchExtents.Key.elapsedTime;
+                double masterTime = touchExtentsItem.Key.elapsedTime;
 
-                if (AxisModifier_TouchExtents.TimeWithinExtents(masterTime, touchExtents.Value, out var currentExtents)) {
+                if (AxisModifier_TouchExtents.TimeWithinExtents(masterTime, touchExtentsItem.Value, out var currentExtents)) {
                     
                     if (currentExtents is AxisModifier_AxisExtents axisExtents) {
                         AxisModifier_SimpleSwitch.ActivateSwitch(masterTime, axisExtents);
@@ -286,9 +286,24 @@ namespace AltSalt.Sequencing.Touch
                 }
             }
         }
+        
+        public void CallRefreshBranchStates()
+        {
+            foreach (KeyValuePair<MasterSequence, List<AxisModifier_TouchExtents>> touchExtentsItem in touchExtentsCollection) {
+                
+                double masterTime = touchExtentsItem.Key.elapsedTime;
+                
+                if (AxisModifier_TouchExtents.TimeWithinExtents(masterTime, touchExtentsItem.Value, out var currentExtents)) {
+                    
+                    if (currentExtents is AxisModifier_ForkExtents forkExtents) {
+                        AxisModifier_ForkSwitch.RefreshBranchStates(forkExtents);
+                    }
+                }
+            }
+        }
 
         [Serializable]
-        private class TouchExtentsCollection : SerializableDictionaryBase<MasterSequence, List<AxisModifier_TouchExtents>>
+        public class TouchExtentsCollection : SerializableDictionaryBase<MasterSequence, List<AxisModifier_TouchExtents>>
         { }
         
         [Serializable]
