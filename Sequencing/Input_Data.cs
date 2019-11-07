@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace AltSalt.Sequencing
@@ -7,6 +8,8 @@ namespace AltSalt.Sequencing
     public class Input_Data {
             
         [SerializeField]
+        [TitleGroup("$"+nameof(dataTitle))]
+        [ReadOnly]
         private Sequence _sequence;
 
         public Sequence sequence
@@ -15,5 +18,6 @@ namespace AltSalt.Sequencing
             set => _sequence = value;
         }
 
+        protected virtual string dataTitle => "";
     }
 }

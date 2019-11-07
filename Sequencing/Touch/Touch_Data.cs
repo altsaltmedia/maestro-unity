@@ -21,15 +21,15 @@ namespace AltSalt.Sequencing.Touch
 
         [SerializeField]
         [FoldoutGroup("Data")]
-        private List<Input_Extents> _pauseMomentumIntervals;
+        private List<Extents> _pauseMomentumIntervals;
 
-        public List<Input_Extents> pauseMomentumIntervals
+        public List<Extents> pauseMomentumIntervals
         {
             get => _pauseMomentumIntervals;
             set => _pauseMomentumIntervals = value;
         }
 
-        [ReadOnly]
+        
         [ShowInInspector]
         [FoldoutGroup("Data")]
         private bool _forceForward;
@@ -40,7 +40,7 @@ namespace AltSalt.Sequencing.Touch
             set => _forceForward = value;
         }
 
-        [ReadOnly]
+        
         [ShowInInspector]
         [FoldoutGroup("Data")]
         private bool _forceBackward;
@@ -76,16 +76,18 @@ namespace AltSalt.Sequencing.Touch
         [FormerlySerializedAs("_axisSwitchTrack"),ReadOnly]
         [SerializeField]
         [FoldoutGroup("Data")]
-        private Input_Track _inputConfigTrack;
+        private ConfigTrack _inputConfigTrack;
 
-        public Input_Track inputConfigTrack
+        public ConfigTrack inputConfigTrack
         {
             get => _inputConfigTrack;
             set => _inputConfigTrack = value;
         }
 
-        public static Touch_Data CreateInstance(Sequence sequence, List<Input_Extents> pauseMomentumIntervals,
-            Input_Track inputConfigTrack, MasterSequence masterSequence)
+        protected override string dataTitle => sequence.name;
+
+        public static Touch_Data CreateInstance(Sequence sequence, List<Extents> pauseMomentumIntervals,
+            ConfigTrack inputConfigTrack, MasterSequence masterSequence)
         {
             //var inputData = ScriptableObject.CreateInstance(typeof(TouchData)) as TouchData;
             var inputData = new Touch_Data();

@@ -8,18 +8,30 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Sequencing
 {
     [CreateAssetMenu(menuName = "AltSalt/Sequencing/Sequence")]
-    public class Sequence : ScriptableObject
+    public class Sequence : JoinerDestination
     {
         [SerializeField]
+        [TitleGroup("$"+nameof(propertiesTitle))]
         private bool _active = false;
         
         public bool active {
             get => _active;
             set => _active = value;
         }
+        
+        [SerializeField]
+        [TitleGroup("$"+nameof(propertiesTitle))]
+        private double _currentTime;
+
+        public double currentTime
+        {
+            get => _currentTime;
+            set => _currentTime = value;
+        }
 
         [Required]
         [SerializeField]
+        [TitleGroup("$"+nameof(propertiesTitle))]
         private PlayableAsset _sourcePlayable;
         
         public PlayableAsset sourcePlayable {
@@ -29,6 +41,8 @@ namespace AltSalt.Sequencing
 
         [SerializeField]
         [ReadOnly]
+        [InfoBox("This value must be set at runtime via a Sequence Config component.")]
+        [TitleGroup("$"+nameof(propertiesTitle))]
         private Sequence_Config _sequenceConfig;
         
         public Sequence_Config sequenceConfig {
@@ -37,36 +51,21 @@ namespace AltSalt.Sequencing
         }
 
         [SerializeField]
+        [TitleGroup("$"+nameof(defaultsTitle))]
         private bool _defaultStatus;
 
         protected bool defaultStatus
         {
             get => _defaultStatus;
         }
-
+        
         [SerializeField]
-        private double _currentTime;
-
-        public double currentTime
-        {
-            get => _currentTime;
-            set => _currentTime = value;
-        }
-
-        [SerializeField]
+        [TitleGroup("$"+nameof(defaultsTitle))]
         private double _defaultTime;
 
         private double defaultTime
         {
             get => _defaultTime;
-        }
-
-        [SerializeField]
-        private bool _invert = false;
-        
-        public bool invert
-        {
-            get => _invert;
         }
 
         [TitleGroup("Autopopulated Fields")]
@@ -79,7 +78,9 @@ namespace AltSalt.Sequencing
             set => _videoSequenceActive = value;
         }
 
-        [PropertySpace(10)]
+        private string propertiesTitle => "Properties";
+        
+        private string defaultsTitle => "Defaults";
         
         private void Start()
         {

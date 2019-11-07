@@ -18,11 +18,11 @@ using System.Text;
 using SimpleJSON;
 using UnityEngine.Experimental.XR;
 using UnityEngine.SceneManagement;
+using UnityEngine.Timeline;
 
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine.Timeline;
 #endif
 
 namespace AltSalt
@@ -37,20 +37,16 @@ namespace AltSalt
 
     public enum MaterialAttributeType { Color, Float }
 
-    public enum BranchType { ySouth, yNorth, xWest, xEast }
-    
     public enum AxisType { X, Y }
+    
+    public enum SwipeDirection { yPositive, yNegative, xPositive, xNegative }
 
     public enum AxisDestination { fromAxis, toAxis }
 
     public enum DataType { stringType, floatType, boolType, intType, scriptableObjectType, systemObjectType }
 
     public enum ComparisonValues { GreaterThan, LessThan, EqualTo }
-
-    public enum SimpleSwitchType { XtoY, YtoX }
     
-    public enum InvertSwitchType { ActivateYNeg, DeactivateYNeg, ActivateXNeg, DeactivateXNeg }
-
     public enum VarDependencies {
         AppSettings,
         ModifySettings,
@@ -891,7 +887,7 @@ namespace AltSalt
             return vector3;
         }
 
-        public static int GetV3Direction(Vector3 vector3)
+        public static int GetV3Sign(Vector3 vector3)
         {
             float vectorValue = vector3.x + vector3.y;
             if(vectorValue >= 0) {
@@ -920,6 +916,39 @@ namespace AltSalt
             float distance = Mathf.Abs(rawValue);
             float exponentVal = distance > 0 ? Mathf.Pow(distance, power) : 0;
             return exponentVal *= sign;
+        }
+        
+        public static Vector2 GetVector2Direction(Vector2[] vectors, bool invertX = false, bool invertY = false)
+        {
+            Vector2 vectorTotals = GetVector2Totals(vectors);
+            
+            if (Mathf.Abs(vectorTotals.x) > Mathf.Abs(vectorTotals.y)) {
+                
+                if (invertX) {
+                    vectorTotals.x *= -1f;
+                }
+
+                return vectorTotals.x > 0 ? new Vector2(1, 0) : new Vector2(-1, 0);
+            }
+            
+            if (invertY) {
+                vectorTotals.y *= -1f;
+            }
+
+            return vectorTotals.y > 0 ? new Vector2(0, 1) : new Vector2(0, -1);
+        }
+
+        public static Vector2 GetVector2Totals(Vector2[] vectors)
+        {
+            float totalXForce = 0;
+            float totalYForce = 0;
+
+            for (int z = 0; z < vectors.Length; z++) {
+                totalXForce += vectors[z].x;
+                totalYForce += vectors[z].y;
+            }
+            
+            return new Vector2(totalXForce, totalYForce);
         }
 
         public static List<int> AllIndexesOf(this string str, string value)

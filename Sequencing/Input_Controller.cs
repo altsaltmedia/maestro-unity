@@ -6,11 +6,11 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Sequencing
 {
     [ExecuteInEditMode]
-    public abstract class Input_Controller : Input_RootDataCollector
+    public abstract class Input_Controller : RootDataCollector
     {
-        public JoinTools joinTools
+        public Joiner joiner
         {
-            get => rootConfig.joinTools;
+            get => rootConfig.joiner;
         }
         
         [ValidateInput(nameof(IsPopulated))]

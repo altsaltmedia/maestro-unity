@@ -14,41 +14,31 @@ namespace AltSalt.Sequencing.Autorun
 {
     [ExecuteInEditMode]
     [Serializable]
-    public partial class Autorun_Controller : Input_Controller
+    public class Autorun_Controller : Input_Controller
     {
+        [SerializeField]
         private Autoplayer _autoplayer;
 
-        private Autoplayer autoplayer
-        {
-            get => _autoplayer;
-        }
-        
+        private Autoplayer autoplayer => _autoplayer;
+
+        [SerializeField]
         private Lerper _lerper;
 
-        private Lerper lerper
-        {
-            get => _lerper;
-        }
-        
+        public Lerper lerper => _lerper;
+
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
         private BoolReference _isReversing;
 
-        public bool isReversing
-        {
-            get => _isReversing.Value;
-        }
+        public bool isReversing => _isReversing.Value;
 
         [SerializeField]
         [InfoBox("Autorun data is populated dynamically from connected Master Sequences")]
         private List<Autorun_Data> _autorunData = new List<Autorun_Data>();
 
-        public List<Autorun_Data> autorunData
-        {
-            get => _autorunData;
-        }
+        public List<Autorun_Data> autorunData => _autorunData;
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 
         public override void ConfigureData()
         {
@@ -71,7 +61,10 @@ namespace AltSalt.Sequencing.Autorun
                         CreateAutorunData(sequence, item1, item2, item3, item4, item5));
                 }
             }
+
+#if UNITY_EDITOR
             EditorUtility.SetDirty(this);
+#endif
         }
 
         private static Tuple<List<double>, List<double>, List<int>, List<string>, List<int>> GetConfigTimes(IEnumerable<IMarker> markers)
@@ -86,18 +79,18 @@ namespace AltSalt.Sequencing.Autorun
 
             foreach (IMarker marker in markers) {
                 
-                if (marker is Autorun_Start) {
+                if (marker is AutorunMarker_Start) {
                     autoplayStarts.Add(marker.time);
                 }
 
-                else if (marker is Autorun_End) {
+                else if (marker is AutorunMarker_End) {
                     autoplayEnds.Add(marker.time);
                     isEndIds.Add(markerId - 1);
                 }
 
-                else if(marker is Autorun_Pause) {
-                    autoplayEnds.Add(marker.time - .015d);
-                    autoplayStarts.Add(marker.time + .015d);
+                else if(marker is AutorunMarker_Pause) {
+                    autoplayEnds.Add(marker.time);
+                    autoplayStarts.Add(marker.time);
                 }
 
                 if (marker is IVideoConfigurator videoConfigurator && videoConfigurator.isVideoSequence == true)  {
@@ -116,14 +109,14 @@ namespace AltSalt.Sequencing.Autorun
         
         private static Autorun_Data CreateAutorunData(Sequence targetSequence, List<double> autoplayStarts, List<double> autoplayEnds, List<int> videoIntervalIds, List<string> descriptions, List<int> isEndIds)
         {
-            List<Autorun_Interval> autorunIntervals = CreateAutorunIntervals(autoplayStarts, autoplayEnds, videoIntervalIds, descriptions, isEndIds);
+            List<AutorunExtents> autorunIntervals = CreateAutorunExtents(autoplayStarts, autoplayEnds, videoIntervalIds, descriptions, isEndIds);
             
             return Autorun_Data.CreateInstance(targetSequence, autorunIntervals);
         }
         
-        private static List<Autorun_Interval> CreateAutorunIntervals(List<double> startTimes, List<double> endTimes, List<int> videoIntervalIds, List<string> descriptions, List<int> isEndIds)
+        private static List<AutorunExtents> CreateAutorunExtents(List<double> startTimes, List<double> endTimes, List<int> videoIntervalIds, List<string> descriptions, List<int> isEndIds)
         {
-            List<Autorun_Interval> autorunIntervals = new List<Autorun_Interval>();
+            List<AutorunExtents> autorunExtents = new List<AutorunExtents>();
 
             if(startTimes.Count != endTimes.Count) {
                 if(startTimes.Count != endTimes.Count + 1) {
@@ -133,30 +126,30 @@ namespace AltSalt.Sequencing.Autorun
 
             for(int i=0; i<startTimes.Count; i++)
             {
-                Autorun_Interval interval;
+                AutorunExtents extents;
                 
                 if(i <= endTimes.Count - 1) {
-                    interval = new Autorun_Interval(startTimes[i], endTimes[i], descriptions[i]);
+                    extents = new AutorunExtents(startTimes[i], endTimes[i], descriptions[i]);
                 } else {
-                    interval = new Autorun_Interval(startTimes[i], double.MaxValue, descriptions[i]);
+                    extents = new AutorunExtents(startTimes[i], double.MaxValue, descriptions[i]);
                 }
                 
                 if(videoIntervalIds.Contains(i) == true) {
-                    interval.isVideoSequence = true;
+                    extents.isVideoSequence = true;
                 }
 
                 if (isEndIds.Contains(i) == true)
                 {
-                    interval.isEnd = true;
+                    extents.isEnd = true;
                 }
                 
-                autorunIntervals.Add(interval);
+                autorunExtents.Add(extents);
             }
 
-            return autorunIntervals;
+            return autorunExtents;
         }
 
-#endif
+//#endif
 
         private static bool IsPopulated(BoolReference attribute)
         {

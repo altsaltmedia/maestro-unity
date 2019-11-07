@@ -8,6 +8,7 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
+using System;
 using AltSalt.Sequencing;
 using UnityEngine;
 using HedgehogTeam.EasyTouch;
@@ -182,6 +183,42 @@ namespace AltSalt
 
         [FoldoutGroup("Debug Variables")]
         public FloatReference gestureActionTimeDebug = new FloatReference();
+        
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private StringReference _swipeDirection;
+
+        private string swipeDirection
+        {
+            get => _swipeDirection.Value;
+            set => _swipeDirection.Variable.SetValue(value);
+        }
+
+        [ShowInInspector]
+        private Vector2[] _swipeHistory = new Vector2[10];
+
+        private Vector2[] swipeHistory
+        {
+            get => _swipeHistory;
+            set => _swipeHistory = value;
+        }
+
+        [ShowInInspector]
+        [ReadOnly]
+        private int _swipeHistoryIndex;
+
+        private int swipeHistoryIndex
+        {
+            get => _swipeHistoryIndex;
+            set => _swipeHistoryIndex = value;
+        }
+        
+        private static SwipeMonitor ResetSwipeHistory(SwipeMonitor swipeMonitor)
+        {
+            swipeMonitor.swipeHistory = new Vector2[10];
+            swipeMonitor.swipeHistoryIndex = 0;
+            return swipeMonitor;
+        }
 
         // Update is called once per frame
         void Update()
@@ -205,6 +242,7 @@ namespace AltSalt
 
         public void OnTouchStart(Gesture gesture)
         {
+            ResetSwipeHistory(this);
             touchStartPosition.Variable.SetValue(gesture.position);
             OnTouchStartEvent.RaiseEvent(this.gameObject);
         }
@@ -231,15 +269,16 @@ namespace AltSalt
         public void OnSwipe(Gesture gesture)
         {
             Vector2 swipeVector = gesture.deltaPosition;
+            swipeDirection = GetSwipeDirection(this, swipeVector);
 
             // Get swipe value and compare w/ previous one to see
             // if we're reversing direction. If so, halt momentum.
             Vector3 swipeDistance = Utils.ConvertV2toV3(swipeVector);
             if (momentumActive == true) {
-                int swipeDirection = Utils.GetV3Direction(swipeDistance);
-                int momentumDirection = Utils.GetV3Direction(momentumForce);
+                int swipeSign = Utils.GetV3Sign(swipeDistance);
+                int momentumSign = Utils.GetV3Sign(momentumForce);
 
-                if (swipeDirection != momentumDirection) {
+                if (swipeSign != momentumSign) {
                     HaltMomentum();
                 }
             }
@@ -248,6 +287,33 @@ namespace AltSalt
 
             swipeForce = newSwipeForce;
             OnSwipeEvent.RaiseEvent(this.gameObject);
+        }
+        
+        private static string GetSwipeDirection(SwipeMonitor swipeMonitor, Vector2 deltaPosition)
+        {
+            UpdateSwipeHistory(swipeMonitor, deltaPosition);
+            Vector2 vectorDirection = Utils.GetVector2Direction(swipeMonitor.swipeHistory, swipeMonitor.invertXInput,
+                swipeMonitor.invertYInput);
+                
+            if (Mathf.Abs(vectorDirection.x) > Mathf.Abs(vectorDirection.y)) {
+                return vectorDirection.x > 0 ? nameof(SwipeDirection.xPositive) : nameof(SwipeDirection.xNegative);
+            }
+            
+            return vectorDirection.y > 0 ? nameof(SwipeDirection.yPositive) : nameof(SwipeDirection.yNegative);
+        }
+
+        private static Vector2[] UpdateSwipeHistory(SwipeMonitor swipeMonitor, Vector2 deltaPosition)
+        {
+            if (swipeMonitor.swipeHistoryIndex < swipeMonitor.swipeHistory.Length - 1) {
+                swipeMonitor.swipeHistory[swipeMonitor.swipeHistoryIndex] = deltaPosition;
+            }
+
+            swipeMonitor.swipeHistoryIndex++;
+            if (swipeMonitor.swipeHistoryIndex > swipeMonitor.swipeHistory.Length - 1) {
+                swipeMonitor.swipeHistoryIndex = 0;
+            }
+            
+            return swipeMonitor.swipeHistory;
         }
 
         public void OnSwipeEnd(Gesture gesture)
@@ -348,17 +414,10 @@ namespace AltSalt
         {
             var fromAxis = eventPayload.GetScriptableObjectValue(AxisDestination.fromAxis) as Axis;
             var toAxis = eventPayload.GetScriptableObjectValue(AxisDestination.fromAxis) as Axis;
-            //         Debug.Log("cached momentum at update");
-			//Debug.Log(momentumCache.Value.ToString("F8"));
-			//Debug.Log("update momentum");
-			//Debug.Log(eventPayload.GetStringValue("fromAxis"));
-			//Debug.Log(eventPayload.GetStringValue("toAxis"));
 
             // Replace momentum on the new axis with momentum from the old axis.
             // Also, convert the momentum to the opposite sign if need be.
             momentumCache.Variable._value[Utils.GetAxisId(toAxis.ToString())] = momentumCache.Variable.value[Utils.GetAxisId(fromAxis.ToString())];
-            
-            //Debug.Log(momentumCache.Value.ToString("F8"));
         }
 
         private static bool IsPopulated(FloatReference attribute)
@@ -377,6 +436,11 @@ namespace AltSalt
         }
 
         private static bool IsPopulated(V3Reference attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+        
+        private static bool IsPopulated(StringReference attribute)
         {
             return Utils.IsPopulated(attribute);
         }

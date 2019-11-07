@@ -47,7 +47,7 @@ namespace AltSalt.Sequencing.Autorun
                     continue;
                 }
                 
-                if (Autorun_Interval.TimeWithinThreshold(autorunData.sequence.currentTime,
+                if (AutorunExtents.TimeWithinThreshold(autorunData.sequence.currentTime,
                         autorunData.autorunIntervals, out var currentInterval) == false)
                     continue;
 
@@ -66,7 +66,12 @@ namespace AltSalt.Sequencing.Autorun
 
                 AutoplaySequence(autorunController.requestModifyToSequence, this, autorunData.sequence, autoplayModifer);
             
-                if (autorunData.autoplayActive == true && (autorunData.sequence.currentTime > currentInterval.endTime || autorunData.sequence.currentTime < currentInterval.startTime))  {
+                if (autorunData.autoplayActive == true &&
+                    (Mathf.Approximately((float)autorunData.sequence.currentTime, (float)currentInterval.endTime)
+                     || autorunData.sequence.currentTime > currentInterval.endTime
+                     || Mathf.Approximately((float)autorunData.sequence.currentTime, (float)currentInterval.startTime)
+                     || autorunData.sequence.currentTime < currentInterval.startTime)) {
+                    
                     autorunData.autoplayActive = false;
                     easingUtility.Reset();
                     if (currentInterval.isEnd == true) {
@@ -76,7 +81,7 @@ namespace AltSalt.Sequencing.Autorun
             }
         }
         
-        private static float CalculateAutoplayModifier(Sequence targetSequence, Input_Extents currentInterval,
+        private static float CalculateAutoplayModifier(Sequence targetSequence, Extents currentInterval,
             bool isReversing, float easeThreshold, EasingUtility easingUtility)
         {
             float timeModifier = 0f;
@@ -94,7 +99,7 @@ namespace AltSalt.Sequencing.Autorun
             return timeModifier;
         }
             
-        private static bool WithinEaseThreshold(Sequence targetSequence, Input_Extents currentInterval,
+        private static bool WithinEaseThreshold(Sequence targetSequence, Extents currentInterval,
             bool isReversing, float easeThreshold)
         {
             if (isReversing == true)

@@ -36,28 +36,23 @@ namespace AltSalt.Sequencing
 
         [Required]
         [SerializeField]
-        private JoinTools _joinTools;
+        private Joiner _joiner;
 
-        public JoinTools joinTools
+        public Joiner joiner
         {
-            get => _joinTools;
+            get => _joiner;
         }
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
         [OnValueChanged(nameof(Configure))]
-        private List<Input_RootDataCollector> _rootDataCollectors = new List<Input_RootDataCollector>();
+        private List<RootDataCollector> _rootDataCollectors = new List<RootDataCollector>();
 
-        public List<Input_RootDataCollector> rootDataCollectors
+        public List<RootDataCollector> rootDataCollectors
         {
             get => _rootDataCollectors;
         }
-
-        private void Start()
-        {
-            Configure();
-        }
-
+        
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.4f, 1)]
         public void Configure()
         {
@@ -66,8 +61,8 @@ namespace AltSalt.Sequencing
                 masterSequences[i].Init();
             }
             
-            joinTools.rootConfig = this;
-            joinTools.ConfigureData();
+            joiner.rootConfig = this;
+            joiner.ConfigureData();
 
             for (int i = 0; i < rootDataCollectors.Count; i++) {
                 rootDataCollectors[i].rootConfig = this;
@@ -86,7 +81,7 @@ namespace AltSalt.Sequencing
             return Utils.IsPopulated(attribute);
         }
 
-        private static bool IsPopulated(List<Input_RootDataCollector> attribute)
+        private static bool IsPopulated(List<RootDataCollector> attribute)
         {
             return Utils.IsPopulated(attribute);
         }

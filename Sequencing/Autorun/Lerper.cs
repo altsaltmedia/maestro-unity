@@ -18,7 +18,7 @@ namespace AltSalt.Sequencing.Autorun
             get => _frameStepValue.Value;
         }
         
-        private delegate Autorun_Data CoroutineCallback(Autorun_Controller autorunController, Autorun_Data autorunData, Autorun_Interval interval);
+        private delegate Autorun_Data CoroutineCallback(Autorun_Controller autorunController, Autorun_Data autorunData, AutorunExtents extents);
 
         public void TriggerLerpSequence(Sequence targetSequence)
         {
@@ -26,7 +26,7 @@ namespace AltSalt.Sequencing.Autorun
 
             if (autorunData.sequence.active == true && autorunData.isLerping == false)
             {
-                if (Autorun_Interval.TimeWithinThreshold(autorunData.sequence.currentTime,
+                if (AutorunExtents.TimeWithinThreshold(autorunData.sequence.currentTime,
                         autorunData.autorunIntervals, out var currentInterval) == false) return;
 
                 autorunData.isLerping = true;
@@ -39,23 +39,23 @@ namespace AltSalt.Sequencing.Autorun
             }
         }
 
-        private Autorun_Data CheckEndLerp(Autorun_Controller autorunController, Autorun_Data autorunData, Autorun_Interval interval)
+        private Autorun_Data CheckEndLerp(Autorun_Controller autorunController, Autorun_Data autorunData, AutorunExtents extents)
         {
             if (autorunController.isReversing == false)
             {
-                if (autorunData.sequence.currentTime > interval.endTime)
+                if (autorunData.sequence.currentTime > extents.endTime)
                 {
                     autorunData.isLerping = false;
                     StopCoroutine(coroutine);
-                    TriggerInputActionComplete();
+                    autorunController.lerper.TriggerInputActionComplete();
                 }
             }
             else
             {
-                if (autorunData.sequence.currentTime < interval.startTime) {
+                if (autorunData.sequence.currentTime < extents.startTime) {
                     autorunData.isLerping = false;
                     StopCoroutine(coroutine);
-                    TriggerInputActionComplete();
+                    autorunController.lerper.TriggerInputActionComplete();
                 }    
             }
 
@@ -88,7 +88,7 @@ namespace AltSalt.Sequencing.Autorun
         }
 
         private static IEnumerator LerpSequence(Autorun_Controller autorunController, Input_Module source,
-            Autorun_Data autorunData, float timeModifier, Autorun_Interval currentInterval, CoroutineCallback callback)
+            Autorun_Data autorunData, float timeModifier, AutorunExtents currentExtents, CoroutineCallback callback)
         {
             while(true) {
 
@@ -107,7 +107,7 @@ namespace AltSalt.Sequencing.Autorun
                 }
                 
                 autorunController.requestModifyToSequence.RaiseEvent(source.gameObject, eventPayload);
-                callback(autorunController, autorunData, currentInterval);
+                callback(autorunController, autorunData, currentExtents);
                 yield return new WaitForEndOfFrame();
             }
         }

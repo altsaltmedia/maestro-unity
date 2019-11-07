@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _axisType: 0
   _active: 0
-  _inverted: 0
+  _inverted: 1

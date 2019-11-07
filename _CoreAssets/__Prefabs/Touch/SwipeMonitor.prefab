@@ -155,6 +155,10 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 89226eeb653f84f74be0ec46f6d55269, type: 2}
+  _swipeDirection:
+    UseConstant: 0
+    ConstantValue: 
+    Variable: {fileID: 11400000, guid: 34e308602a6794bd2b6d1fc7948aeb18, type: 2}
 --- !u!114 &114697932136561384
 MonoBehaviour:
   m_ObjectHideFlags: 0

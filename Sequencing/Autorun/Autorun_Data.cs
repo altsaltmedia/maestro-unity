@@ -10,9 +10,9 @@ namespace AltSalt.Sequencing.Autorun
     {
         [SerializeField]
         [ReadOnly]
-        private List<Autorun_Interval> _autorunIntervals;
+        private List<AutorunExtents> _autorunIntervals;
 
-        public List<Autorun_Interval> autorunIntervals
+        public List<AutorunExtents> autorunIntervals
         {
             get => _autorunIntervals;
             set => _autorunIntervals = value;
@@ -34,7 +34,9 @@ namespace AltSalt.Sequencing.Autorun
             set => _isLerping = value;
         }
 
-        public static Autorun_Data CreateInstance(Sequence sequence, List<Autorun_Interval> autorunIntervals)
+        protected override string dataTitle => sequence.name;
+
+        public static Autorun_Data CreateInstance(Sequence sequence, List<AutorunExtents> autorunIntervals)
         {
             //var inputData = ScriptableObject.CreateInstance(typeof(AutorunData)) as AutorunData;
             var inputData = new Autorun_Data {sequence = sequence, autorunIntervals = autorunIntervals};

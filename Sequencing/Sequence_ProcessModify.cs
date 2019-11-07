@@ -39,13 +39,13 @@ namespace AltSalt.Sequencing
                 sequence.currentTime = 0;
                 sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject, sequence);
-                rootConfig.joinTools.ActivatePreviousSequence(sequence);
+                rootConfig.joiner.ActivatePreviousSequence(sequence);
                 
             } else if (sequence.currentTime > sequence.sourcePlayable.duration) {
                 sequence.currentTime = sequence.sourcePlayable.duration;
                 sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject, sequence);
-                rootConfig.joinTools.ActivateNextSequence(sequence);
+                rootConfig.joiner.ActivateNextSequence(sequence);
                 
             } else  {
                 sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
