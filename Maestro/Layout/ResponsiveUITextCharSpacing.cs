@@ -1,0 +1,41 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+using Sirenix.OdinInspector;
+
+namespace AltSalt.Maestro
+{
+    public class ResponsiveUITextCharSpacing : ResponsiveUIText, IResponsiveSaveable
+    {
+        public List<float> breakpointCharSpacing = new List<float>();
+
+#if UNITY_EDITOR
+        
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        [InfoBox("Saves the position at the current breakpoint index.")]
+        public void SaveValue()
+        {
+            if (aspectRatioBreakpoints.Count < 1) {
+                Debug.LogError("You must specify at least one breakpoint to save element values.", this);
+                return;
+            }
+
+            int targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
+
+            Utils.ExpandList(breakpointCharSpacing, targetBreakpointIndex);
+            breakpointCharSpacing[targetBreakpointIndex] = textMeshProUGUI.characterSpacing;
+
+        }
+#endif
+
+        public override void ExecuteResponsiveAction()
+        {
+            base.ExecuteResponsiveAction();
+            SetValue(breakpointIndex);
+        }
+
+        public void SetValue(int activeIndex)
+        {
+            textMeshProUGUI.characterSpacing = breakpointCharSpacing[activeIndex];
+        }
+    }
+}
