@@ -203,14 +203,18 @@ namespace AltSalt.Maestro.Sequencing.Touch
                     var sequence = masterSequences[i].sequenceConfigs[q].sequence;
                     TimelineAsset rootTimelineAsset = sequence.sourcePlayable as TimelineAsset;
 
-                    IEnumerable<IMarker> markers = rootTimelineAsset.markerTrack.GetMarkers().OrderBy(s => s.time);
-                    var (item1, item2) = GetConfigTimes(markers);
-                    
+                    var markerConfig = Tuple.Create(new List<double>(), new List<double>());
+
+                    if (rootTimelineAsset.markerTrack != null) {
+                        IEnumerable<IMarker> markers = rootTimelineAsset.markerTrack.GetMarkers().OrderBy(s => s.time);
+                        markerConfig = GetConfigTimes(markers);
+                    }
+                        
                     ConfigTrack inputConfigTrack =
                         Utils.GetTrackFromTimelineAsset(rootTimelineAsset, typeof(ConfigTrack)) as ConfigTrack;
 
                     touchDataList.Add(
-                        CreateTouchData(sequence, item1, item2, inputConfigTrack, masterSequences[i]));
+                        CreateTouchData(sequence, markerConfig.Item1, markerConfig.Item2, inputConfigTrack, masterSequences[i]));
                 }
             }
     

@@ -62,7 +62,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         {
             for (int q = 0; q < intervals.Count; q++) {
                 if(sourceTime >= intervals[q].startTime &&
-                   sourceTime < intervals[q].endTime) {
+                   sourceTime <= intervals[q].endTime) {
                     currentExtents = intervals[q];
                     return true;
                 }

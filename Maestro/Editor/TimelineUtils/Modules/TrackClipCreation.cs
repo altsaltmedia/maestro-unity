@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
+using AltSalt.Maestro.Sequencing;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
@@ -9,6 +10,7 @@ using UnityEngine.Timeline;
 using UnityEngine.Playables;
 using UnityEditor.Timeline;
 using TMPro;
+using AltSalt.Maestro.Sequencing.Autorun;
 
 namespace AltSalt.Maestro
 {
@@ -79,6 +81,9 @@ namespace AltSalt.Maestro
             PasteTracks,
             DuplicateTracks,
             GroupTrack,
+            AutoplayStart,
+            AutoplayPause,
+            AutoplayEnd,
             TMProColorTrack,
             RectTransformPosTrack,
             SpriteColorTrack,
@@ -224,6 +229,27 @@ namespace AltSalt.Maestro
                         TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
                     };
                     AddToToggleData(toggleData, EnableCondition.TrackSelected, button);
+                    break;
+                
+                case nameof(ButtonNames.AutoplayStart):
+                    button.clickable.clicked += () => {
+                        Selection.activeObject = TriggerCreateMarker(TimelineEditor.inspectedAsset.markerTrack, typeof(AutorunMarker_Start), TimelineUtilsCore.CurrentTime);
+                        TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    break;
+                
+                case nameof(ButtonNames.AutoplayPause):
+                    button.clickable.clicked += () => {
+                        Selection.activeObject = TriggerCreateMarker(TimelineEditor.inspectedAsset.markerTrack, typeof(AutorunMarker_Pause), TimelineUtilsCore.CurrentTime);
+                        TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    break;
+                
+                case nameof(ButtonNames.AutoplayEnd):
+                    button.clickable.clicked += () => {
+                        Selection.activeObject = TriggerCreateMarker(TimelineEditor.inspectedAsset.markerTrack, typeof(AutorunMarker_End), TimelineUtilsCore.CurrentTime);
+                        TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+                    };
                     break;
 
                 case nameof(ButtonNames.TMProColorTrack):
@@ -987,6 +1013,34 @@ namespace AltSalt.Maestro
             TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
 
             return groupTrack;
+        }
+
+        public static ConfigMarker TriggerCreateMarker(MarkerTrack markerTrack, Type markerType, double targetTime)
+        {
+            ConfigMarker configMarker = null;
+            
+            switch (markerType.Name) {
+
+                    case nameof(AutorunMarker_Start):
+                    {
+                        configMarker = markerTrack.CreateMarker<AutorunMarker_Start>(targetTime);
+                    }
+                        break;
+
+                    case nameof(AutorunMarker_Pause):
+                    {
+                        configMarker = markerTrack.CreateMarker<AutorunMarker_Pause>(targetTime);
+                    }
+                        break;
+
+                    case nameof(AutorunMarker_End):
+                    {
+                        configMarker = markerTrack.CreateMarker<AutorunMarker_End>(targetTime);
+                    }
+                        break;
+            }
+
+            return configMarker;
         }
 
         public class TrackData

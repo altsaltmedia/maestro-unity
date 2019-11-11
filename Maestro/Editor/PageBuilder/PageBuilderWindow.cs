@@ -29,15 +29,26 @@ namespace AltSalt.Maestro
             { typeof(EditColorVarClip), "edit-color-var-clip" },
             { typeof(EditRectTransformResponsivePosClip), "edit-rect-transform-responsive-pos-clip" },
             { typeof(EditRectTransformResponsiveScaleClip), "edit-rect-transform-responsive-scale-clip" },
-            { typeof(EditScrollSnapController), "edit-scroll-snap-controller" }
+            { typeof(EditScrollSnapController), "edit-scroll-snap-controller" } 
         };
 
         static List<ChildUIElementsWindow> childWindows = new List<ChildUIElementsWindow>();
 
+        enum PanelNames
+        {
+            Tools,
+            ConfigureWindow
+        }
+
         enum ButtonNames
         {
-            RefreshLayout
+            ToolsButton,
+            ConfigureWindowButton,
+            RefreshLayout,
         }
+
+        Button toolsButton;
+        Button configureWindowButton;
 
         [MenuItem("Tools/AltSalt/Page Builder")]
         public static void ShowWindow()
@@ -89,7 +100,7 @@ namespace AltSalt.Maestro
             rootVisualElement.styleSheets.Add(styleSheet);
 
             // Loads and clones our VisualTree (eg. our UXML structure) inside the root.
-            var pageBuilderTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_AltSalt/__Core/EditorTools/Editor/PageBuilder/PageBuilderWindow_UXML.uxml");
+            var pageBuilderTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_AltSalt/Maestro/Editor/PageBuilder/PageBuilderWindow_UXML.uxml");
             VisualElement pageBuilderStructure = pageBuilderTree.CloneTree();
             rootVisualElement.Add(pageBuilderStructure);
 
@@ -120,6 +131,26 @@ namespace AltSalt.Maestro
         {
             switch (button.name) {
 
+                case nameof(ButtonNames.ToolsButton):
+                    toolsButton = button;
+                    button.clickable.clicked += () => {
+                        toolsButton.AddToClassList("active");
+                        configureWindowButton.RemoveFromClassList("active");
+                        ShowVisualElement(rootVisualElement.Query<VisualElement>(nameof(PanelNames.Tools)));
+                        HideVisualElement(rootVisualElement.Query<VisualElement>(nameof(PanelNames.ConfigureWindow)));
+                    };
+                    break;
+
+                case nameof(ButtonNames.ConfigureWindowButton):
+                    configureWindowButton = button;
+                    button.clickable.clicked += () => {
+                        configureWindowButton.AddToClassList("active");
+                        toolsButton.RemoveFromClassList("active");
+                        HideVisualElement(rootVisualElement.Query<VisualElement>(nameof(PanelNames.Tools)));
+                        ShowVisualElement(rootVisualElement.Query<VisualElement>(nameof(PanelNames.ConfigureWindow)));
+                    };
+                    break;
+
                 case nameof(ButtonNames.RefreshLayout):
                     button.clickable.clicked += () => {
                         RenderLayout();
@@ -128,6 +159,18 @@ namespace AltSalt.Maestro
             }
 
             return button;
+        }
+
+        static VisualElement ShowVisualElement(VisualElement visualElement)
+        {
+            visualElement.style.display = DisplayStyle.Flex;
+            return visualElement;
+        }
+
+        static VisualElement HideVisualElement(VisualElement visualElement)
+        {
+            visualElement.style.display = DisplayStyle.None;
+            return visualElement;
         }
 
     }

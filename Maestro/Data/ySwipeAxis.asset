@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: ySwipeAxis
   m_EditorClassIdentifier: 
   _axisType: 1
-  _active: 1
+  _active: 0
   _inverted: 0

@@ -242,7 +242,7 @@ namespace AltSalt.Maestro
 
                 // Only search for AltSalt custom scripts & ignore boilerplate values from
                 // SerializableElement, prefabs and other miscellaneous components w/o instances
-                if (componentType.Namespace != "AltSalt" || component.GetType().IsSubclassOf(typeof(SerializableElement)) || EditorUtility.IsPersistent(component.gameObject) == true || component == null) {
+                if (componentType.Namespace != null && componentType.Namespace.Contains("AltSalt") == false || component.GetType().IsSubclassOf(typeof(SerializableElement)) || EditorUtility.IsPersistent(component.gameObject) == true || component == null) {
                     continue;
                 }
 
@@ -454,7 +454,7 @@ namespace AltSalt.Maestro
                         }
                     }
 
-                    eventItem.Add("target", target.name);
+                    eventItem.Add("target", target == null ? "unpopulated" : target.name);
                     eventItem.Add("method", unityEvent.GetPersistentMethodName(i));
                     eventData.Add(eventItem);
                 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.UIElements;
 
 namespace AltSalt.Maestro.Sequencing.Autorun
 {
@@ -25,14 +26,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             get => _autoplayEaseThreshold;
         }
 
-        [SerializeField]
-        private EasingUtility _easingUtility = new EasingUtility();
-
-        private EasingUtility easingUtility
-        {
-            get => _easingUtility;
-        }
-        
         protected virtual void Update()
         {
             if (_isparentModuleNull || autorunController.appSettings.autoplayActive.Value == false) {
@@ -62,10 +55,12 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     autoplayModifer = frameStepValue;
                 }
 #endif
-                autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, autorunController.isReversing, autoplayEaseThreshold, easingUtility);
+                autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, autorunData.loop, autorunController.isReversing, autoplayEaseThreshold, autorunData.easingUtility);
 
                 AutoplaySequence(autorunController.requestModifyToSequence, this, autorunData.sequence, autoplayModifer);
-            
+                
+                if(autorunData.loop == true) continue;
+
                 if (autorunData.autoplayActive == true &&
                     (Mathf.Approximately((float)autorunData.sequence.currentTime, (float)currentInterval.endTime)
                      || autorunData.sequence.currentTime > currentInterval.endTime
@@ -73,20 +68,17 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                      || autorunData.sequence.currentTime < currentInterval.startTime)) {
                     
                     autorunData.autoplayActive = false;
-                    easingUtility.Reset();
-                    if (currentInterval.isEnd == true) {
-                        TriggerInputActionComplete();
-                    }
+                    autorunData.easingUtility.Reset();
                 }
             }
         }
         
-        private static float CalculateAutoplayModifier(Sequence targetSequence, Extents currentInterval,
+        private static float CalculateAutoplayModifier(Sequence targetSequence, Extents currentInterval, bool loop,
             bool isReversing, float easeThreshold, EasingUtility easingUtility)
         {
             float timeModifier = 0f;
 
-            if (WithinEaseThreshold(targetSequence, currentInterval, isReversing, easeThreshold)) {
+            if (loop == false && WithinEaseThreshold(targetSequence, currentInterval, isReversing, easeThreshold)) {
                 timeModifier = easingUtility.GetMultiplier();
             } else {
                 timeModifier = 1f;
@@ -137,7 +129,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
                 
                 if (autorunController.autorunData[q].sequence.active == true) {
-                    
                     autorunController.autorunData[q].autoplayActive = true;
                 }
             }
@@ -149,8 +140,30 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 
                 if (autorunController.autorunData[q].sequence.active == true) {
                     autorunController.autorunData[q].autoplayActive = false;
-                    easingUtility.Reset();
+                    autorunController.autorunData[q].easingUtility.Reset();
                 }
+            }
+        }
+
+        public void ActivateLoop(Sequence targetSequence)
+        {
+            Autorun_Data autorunData = autorunController.autorunData.Find(autorunMatchData => autorunMatchData.sequence == targetSequence);
+            if (autorunData != null) {
+                autorunData.loop = true;
+            }
+            else {
+                Debug.Log("Autoplayer does not contain data for target sequence.");
+            }
+        }
+        
+        public void DeactivateLoop(Sequence targetSequence)
+        {
+            Autorun_Data autorunData = autorunController.autorunData.Find(autorunMatchData => autorunMatchData.sequence == targetSequence);
+            if (autorunData != null) {
+                autorunData.loop = false;
+            }
+            else {
+                Debug.Log("Autoplayer does not contain data for target sequence.");
             }
         }
 

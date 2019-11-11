@@ -11,8 +11,8 @@ xsi:schemaLocation="
                         UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
 "
 >
-	<engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/Modules/ClipSelectionManipulation_UXML.uxml" name="ClipSelectionManipulation" />
-    <engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/Modules/TrackClipCreation_UXML.uxml" name="TrackClipCreation" />
+	<engine:Template path="Assets/_AltSalt/Maestro/Editor/TimelineUtils/Modules/ClipSelectionManipulation_UXML.uxml" name="ClipSelectionManipulation" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Editor/TimelineUtils/Modules/TrackClipCreation_UXML.uxml" name="TrackClipCreation" />
 
     <engine:VisualElement class="altsalt page-builder-window">
     	<engine:ScrollView>

@@ -68,7 +68,7 @@ namespace AltSalt.Maestro
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.GetStylesheetPath());
             rootVisualElement.styleSheets.Add(styleSheet);
 
-            var structureTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_AltSalt/__Core/EditorTools/Editor/TextUtils/TextUtilsWindow_UXML.uxml");
+            var structureTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_AltSalt/Maestro/Editor/TextUtils/TextUtilsWindow_UXML.uxml");
             VisualElement structure = structureTree.CloneTree();
             rootVisualElement.Add(structure);
 

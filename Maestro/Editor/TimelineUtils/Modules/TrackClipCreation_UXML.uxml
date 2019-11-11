@@ -14,9 +14,10 @@ xsi:schemaLocation="
 "
 >
 
-<engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/Modules/TrackClipCreationGroups/SimpleTracks_UXML.uxml" name="SimpleTracks" />
-<engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/Modules/TrackClipCreationGroups/DecoratorTracks_UXML.uxml" name="DecoratorTracks" />
-<engine:Template path="Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/Modules/TrackClipCreationGroups/ComplexTracks_UXML.uxml" name="ComplexTracks" />
+<engine:Template path="Assets/_AltSalt/Maestro/Editor/TimelineUtils/Modules/TrackClipCreationGroups/Markers_UXML.uxml" name="Configuration" />
+<engine:Template path="Assets/_AltSalt/Maestro/Editor/TimelineUtils/Modules/TrackClipCreationGroups/SimpleTracks_UXML.uxml" name="SimpleTracks" />
+<engine:Template path="Assets/_AltSalt/Maestro/Editor/TimelineUtils/Modules/TrackClipCreationGroups/DecoratorTracks_UXML.uxml" name="DecoratorTracks" />
+<engine:Template path="Assets/_AltSalt/Maestro/Editor/TimelineUtils/Modules/TrackClipCreationGroups/ComplexTracks_UXML.uxml" name="ComplexTracks" />
 
 <engine:VisualElement class="track-clip-creation" name="track-clip-creation">
 
@@ -42,6 +43,8 @@ xsi:schemaLocation="
 
 			<engine:VisualElement class="section___content">
 		  		
+				<engine:Instance template="Configuration" />
+
 				<engine:Instance template="SimpleTracks" />
 
 				<engine:Instance template="DecoratorTracks" />

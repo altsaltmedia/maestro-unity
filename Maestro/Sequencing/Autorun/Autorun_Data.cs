@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             set => _autorunIntervals = value;
         }
 
+        [ShowInInspector]
         private bool _autoplayActive;
 
         public bool autoplayActive
@@ -26,12 +28,37 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             set => _autoplayActive = value;
         }
 
+        [ShowInInspector]
         private bool _isLerping;
 
         public bool isLerping
         {
             get => _isLerping;
             set => _isLerping = value;
+        }
+
+        [ShowInInspector]
+        private bool _loop;
+
+        public bool loop
+        {
+            get => _loop;
+            set => _loop = value;
+        }
+        
+        [SerializeField]
+        private EasingUtility _easingUtility = new EasingUtility();
+
+        public EasingUtility easingUtility
+        {
+            get => _easingUtility;
+        }
+
+        private IEnumerator _lerpCoroutine;
+
+        public IEnumerator lerpCoroutine {
+            get => _lerpCoroutine;
+            set => _lerpCoroutine = value;
         }
 
         protected override string dataTitle => sequence.name;

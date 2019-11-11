@@ -53,6 +53,7 @@ namespace AltSalt.Maestro
             activeScene.Variable.SetValue(sceneName);
             StartCoroutine(AsyncLoad(sceneName, LoadSceneMode.Single));
         }
+        
 
         // Otherwise, single scene loads necessitate doing a fade out before doing the load,
         // and additive scenes are loaded immediately without a call to the fader

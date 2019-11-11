@@ -104,7 +104,7 @@ namespace AltSalt.Maestro
             rootVisualElement.styleSheets.Add(styleSheet);
 
             // Loads and clones our VisualTree (eg. our UXML structure) inside the root.
-            var timelineUtilitiesTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_AltSalt/__Core/EditorTools/Editor/TimelineUtils/TimelineUtilsWindow_UXML.uxml");
+            var timelineUtilitiesTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_AltSalt/Maestro/Editor/TimelineUtils/TimelineUtilsWindow_UXML.uxml");
             timelineUtilsStructure = timelineUtilitiesTree.CloneTree();
             rootVisualElement.Add(timelineUtilsStructure);
 

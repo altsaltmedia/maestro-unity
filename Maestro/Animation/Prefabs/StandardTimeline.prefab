@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4942472062882772}
   - component: {fileID: 320612190713747116}
   - component: {fileID: -2485728263257889689}
+  - component: {fileID: 6416722693999385806}
   m_Layer: 0
   m_Name: StandardTimeline
   m_TagString: Untagged
@@ -70,3 +71,15 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 00a2b24214f8a443581542514270dc00, type: 2}
+--- !u!114 &6416722693999385806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176190904042262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0357559043efc4433a896d19b3bf8d0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

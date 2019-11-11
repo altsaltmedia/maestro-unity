@@ -54,11 +54,15 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     
                     TimelineAsset rootTimelineAsset = sequence.sourcePlayable as TimelineAsset;
 
-                    IEnumerable<IMarker> markers = rootTimelineAsset.markerTrack.GetMarkers().OrderBy(s => s.time);
-                    var (item1, item2, item3, item4, item5) = GetConfigTimes(markers);
+                    var markerConfig = Tuple.Create(new List<double>(), new List<double>(), new List<int>(), new List<string>(), new List<int>());
+
+                    if (rootTimelineAsset.markerTrack != null) {
+                        IEnumerable<IMarker> markers = rootTimelineAsset.markerTrack.GetMarkers().OrderBy(s => s.time);
+                        markerConfig = GetConfigTimes(markers);
+                    }
 
                     autorunData.Add(
-                        CreateAutorunData(sequence, item1, item2, item3, item4, item5));
+                        CreateAutorunData(sequence, markerConfig.Item1, markerConfig.Item2, markerConfig.Item3, markerConfig.Item4, markerConfig.Item5));
                 }
             }
 

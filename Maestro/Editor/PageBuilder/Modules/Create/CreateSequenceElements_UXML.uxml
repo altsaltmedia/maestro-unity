@@ -14,7 +14,7 @@ xsi:schemaLocation="
 	<engine:VisualElement class="section" name="create-sequence-elements">
         <engine:VisualElement class="section___content">
 
-            <engine:Foldout class="foldout col-full" text="Sequences" value="false">
+            <engine:Foldout class="foldout col-full" text="Sequencing" value="false">
                 <engine:VisualElement class="section">
                     <engine:VisualElement class="section___content">
                         <engine:Button text="New simple director" class="col-full" name="NewSimpleDirector" />

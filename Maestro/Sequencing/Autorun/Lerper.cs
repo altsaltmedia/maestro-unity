@@ -11,13 +11,18 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _frameStepValue;
         
-        private IEnumerator coroutine;
-
         private float frameStepValue
         {
             get => _frameStepValue.Value;
         }
-        
+
+        [SerializeField]
+        private double _lerpThreshold = .03d;
+
+        private double lerpThreshold {
+            get => _lerpThreshold;
+        }
+
         private delegate Autorun_Data CoroutineCallback(Autorun_Controller autorunController, Autorun_Data autorunData, AutorunExtents extents);
 
         public void TriggerLerpSequence(Sequence targetSequence)
@@ -26,37 +31,44 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
             if (autorunData.sequence.active == true && autorunData.isLerping == false)
             {
-                if (AutorunExtents.TimeWithinThreshold(autorunData.sequence.currentTime,
+                double thresholdModifier = lerpThreshold;
+                if(autorunController.isReversing == true) {
+                    thresholdModifier *= -1d;
+                }
+
+                if (AutorunExtents.TimeWithinThreshold(autorunData.sequence.currentTime + thresholdModifier,
                         autorunData.autorunIntervals, out var currentInterval) == false) return;
 
                 autorunData.isLerping = true;
 
-                float timeModifier = CalculateLerpModifier(frameStepValue, autorunController.isReversing);
+                float lerpModifier = 0f;
 
-                coroutine = LerpSequence(autorunController, this, autorunData,
-                    timeModifier, currentInterval, CheckEndLerp);
-                StartCoroutine(coroutine);
+#if UNITY_EDITOR
+                lerpModifier = Time.smoothDeltaTime;
+#else
+                if (Application.platform == RuntimePlatform.Android)  {
+                    lerpModifier = frameStepValue * 3f;
+                } else  {
+                    lerpModifier = frameStepValue;
+                }
+#endif
+                lerpModifier *= CalculateLerpModifier(autorunController.isReversing);
+
+                autorunData.lerpCoroutine = LerpSequence(autorunController, this, autorunData,
+                    lerpModifier, currentInterval, CheckEndLerp);
+                StartCoroutine(autorunData.lerpCoroutine);
             }
         }
 
         private Autorun_Data CheckEndLerp(Autorun_Controller autorunController, Autorun_Data autorunData, AutorunExtents extents)
         {
-            if (autorunController.isReversing == false)
-            {
-                if (autorunData.sequence.currentTime > extents.endTime)
-                {
-                    autorunData.isLerping = false;
-                    StopCoroutine(coroutine);
-                    autorunController.lerper.TriggerInputActionComplete();
-                }
-            }
-            else
-            {
-                if (autorunData.sequence.currentTime < extents.startTime) {
-                    autorunData.isLerping = false;
-                    StopCoroutine(coroutine);
-                    autorunController.lerper.TriggerInputActionComplete();
-                }    
+            if(Mathf.Approximately((float)autorunData.sequence.currentTime, (float)extents.endTime)
+             || autorunData.sequence.currentTime > extents.endTime
+             || Mathf.Approximately((float)autorunData.sequence.currentTime, (float)extents.startTime)
+             || autorunData.sequence.currentTime < extents.startTime) {
+
+                autorunData.isLerping = false;
+                StopCoroutine(autorunData.lerpCoroutine);
             }
 
             return autorunData;
@@ -77,14 +89,14 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         }
 
 
-        private static float CalculateLerpModifier(float lerpValue, bool isReversing)
+        private static float CalculateLerpModifier(bool isReversing)
         {
-            if (isReversing == true)
+            if (isReversing == false)
             {
-                return lerpValue * -1f;
+                return 1f;
             }
 
-            return lerpValue;
+            return -1f;
         }
 
         private static IEnumerator LerpSequence(Autorun_Controller autorunController, Input_Module source,
@@ -111,7 +123,18 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 yield return new WaitForEndOfFrame();
             }
         }
-        
+
+        public void DeactivateLerp()
+        {
+            for (int i = 0; i < autorunController.autorunData.Count; i++) {
+                if(autorunController.autorunData[i].lerpCoroutine != null) {
+                    StopCoroutine(autorunController.autorunData[i].lerpCoroutine);
+                }
+                autorunController.autorunData[i].isLerping = false;
+            }
+
+        }
+
         private static bool IsPopulated(FloatReference attribute)
         {
             return Utils.IsPopulated(attribute);

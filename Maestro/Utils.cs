@@ -120,7 +120,7 @@ namespace AltSalt.Maestro
 
         public static string GetStylesheetPath()
         {
-            return "Assets/_AltSalt/__Core/EditorTools/Editor/_Base/EditorStyles.uss";
+            return "Assets/_AltSalt/Maestro/Editor/EditorStyles.uss";
         }
 
         public static bool TargetComponentSelected(GameObject currentSelection, Type targetType)
