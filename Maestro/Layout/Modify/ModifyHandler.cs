@@ -41,7 +41,7 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR
         void OnGUI()
         {
-            activeLayoutName = "Current layout: " + modifySettings.activeLayout.name;
+            activeLayoutName = "Current layout: " + modifySettings._activeLayoutConfig.name;
             activeTextFamilyName = "Current text family: " + modifySettings.activeTextFamily.name;
         }
 
@@ -68,17 +68,17 @@ namespace AltSalt.Maestro
             TriggerTextUpdate(textCollectionBank);
 
             if(modifySettings.activeTextFamily.supportedLayouts.Count == 0) {
-                modifySettings.activeLayout = modifySettings.defaultLayout;
+                modifySettings._activeLayoutConfig = modifySettings._defaultLayoutConfig;
                 layoutUpdateTrigger.RaiseEvent(this.gameObject);
             } else {
                 bool triggerLayoutChange = true;
                 for(int i=0; i<modifySettings.activeTextFamily.supportedLayouts.Count; i++) {
-                    if(modifySettings.activeLayout == modifySettings.activeTextFamily.supportedLayouts[i]) {
+                    if(modifySettings._activeLayoutConfig == modifySettings.activeTextFamily.supportedLayouts[i]) {
                         triggerLayoutChange = false;
                     }
                 }
                 if(triggerLayoutChange == true) {
-                    modifySettings.activeLayout = modifySettings.activeTextFamily.supportedLayouts[0];
+                    modifySettings._activeLayoutConfig = modifySettings.activeTextFamily.supportedLayouts[0];
                     layoutUpdateTrigger.RaiseEvent(this.gameObject);
                 }
             }
@@ -86,10 +86,10 @@ namespace AltSalt.Maestro
 
         public void TriggerLayoutModify(EventPayload eventPayload)
         {
-            modifySettings.activeLayout = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as Layout;
+            modifySettings._activeLayoutConfig = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as LayoutConfig;
             TriggerLayoutUpdate();
 
-            if (modifySettings.activeLayout.supportedTextFamilies.Count == 0) {
+            if (modifySettings._activeLayoutConfig.supportedTextFamilies.Count == 0) {
 
                 modifySettings.activeTextFamily = modifySettings.defaultTextFamily;
                 textUpdateTrigger.RaiseEvent(this.gameObject);
@@ -97,12 +97,12 @@ namespace AltSalt.Maestro
             } else {
                 bool triggerLayoutChange = true;
                 for (int i = 0; i < modifySettings.activeTextFamily.supportedLayouts.Count; i++) {
-                    if (modifySettings.activeTextFamily == modifySettings.activeLayout.supportedTextFamilies[i]) {
+                    if (modifySettings.activeTextFamily == modifySettings._activeLayoutConfig.supportedTextFamilies[i]) {
                         triggerLayoutChange = false;
                     }
                 }
                 if (triggerLayoutChange == true) {
-                    modifySettings.activeTextFamily = modifySettings.activeLayout.supportedTextFamilies[0];
+                    modifySettings.activeTextFamily = modifySettings._activeLayoutConfig.supportedTextFamilies[0];
                     textUpdateTrigger.RaiseEvent(this.gameObject);
                 }
             }

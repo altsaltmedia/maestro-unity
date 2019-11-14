@@ -23,7 +23,7 @@ namespace AltSalt.Maestro
 
             modifySettings = Utils.GetModifySettings();
             GUILayout.Label("Current text family: " + modifySettings.activeTextFamily.name, textStyle);
-            GUILayout.Label("Current layout: " + modifySettings.activeLayout.name, textStyle);
+            GUILayout.Label("Current layout: " + modifySettings._activeLayoutConfig.name, textStyle);
         }
 
         protected virtual void OnGUI()

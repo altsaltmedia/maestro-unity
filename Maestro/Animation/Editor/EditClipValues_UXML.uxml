@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformPosClip_UXML.uxml" name="EditRectTransformPosClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditTMProColorClip_UXML.uxml" name="EditTMProColorClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformScaleClip_UXML.uxml" name="EditRectTransformScaleClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformRotationClip_UXML.uxml" name="EditRectTransformRotationClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditSpriteColorClip_UXML.uxml" name="EditSpriteColorClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditFloatVarClip_UXML.uxml" name="EditFloatVarClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditColorVarClip_UXML.uxml" name="EditColorVarClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformResponsivePosClip_UXML.uxml" name="EditRectTransformResponsivePosClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformResponsiveScaleClip_UXML.uxml" name="EditRectTransformResponsiveScaleClip" />
+
+    <engine:VisualElement class="section-container" name="edit-clips">
+
+        <engine:Foldout class="foldout" text="Animation > Edit Clips" value="true">
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+
+                    <engine:Instance template="EditRectTransformPosClip" />
+
+                    <engine:Instance template="EditTMProColorClip" />
+
+                    <engine:Instance template="EditRectTransformScaleClip" />
+
+                    <engine:Instance template="EditRectTransformRotationClip" />
+
+                    <engine:Instance template="EditSpriteColorClip" />
+
+                    <engine:Instance template="EditFloatVarClip" />
+
+                    <engine:Instance template="EditColorVarClip" />
+
+                    <engine:Instance template="EditRectTransformResponsivePosClip" />
+
+                    <engine:Instance template="EditRectTransformResponsiveScaleClip" />
+
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+
+        </engine:Foldout>
+
+    </engine:VisualElement>
+
+</engine:UXML>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+    <engine:VisualElement class="section-container">
+        
+        <engine:Foldout class="foldout" text="Sequencing > Touch Config" value="true" name="AxisConfig">
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="touch markers" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Axis Switch" class="col-full" name="AxisMarker" />
+                    <engine:Button text="Axis Switch (Join Next)" class="col-full" name="AxisJoinNext" />
+                    <engine:Button text="Axis Switch (Join Previous)" class="col-full" name="AxisJoinPrevious" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="touch data" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Create Touch Fork" class="col-full" name="CreateSimpleFork" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        </engine:Foldout>
+
+    </engine:VisualElement>
+
+</engine:UXML>

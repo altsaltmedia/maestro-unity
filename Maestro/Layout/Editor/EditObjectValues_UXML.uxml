@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+    <engine:Template path="Assets/_AltSalt/Maestro/Layout/Editor/EditRectTransformComponent_UXML.uxml" name="EditRectTransformComponent" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Layout/Editor/EditTMProComponent_UXML.uxml" name="EditTMProComponent" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Layout/Editor/EditSpriteComponent_UXML.uxml" name="EditSpriteComponent" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Layout/Editor/EditScrollSnapController_UXML.uxml" name="EditScrollSnapController" />
+
+    <engine:VisualElement class="section-container" name="edit-object-values">
+
+        <engine:Foldout class="foldout" text="Layout > Edit Object Values" value="true">
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+
+                    <engine:Instance template="EditRectTransformComponent" />
+
+                    <engine:Instance template="EditTMProComponent" />
+
+                    <engine:Instance template="EditSpriteComponent" />
+
+                    <engine:Instance template="EditScrollSnapController" />
+
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+
+        </engine:Foldout>
+
+    </engine:VisualElement>
+
+</engine:UXML>

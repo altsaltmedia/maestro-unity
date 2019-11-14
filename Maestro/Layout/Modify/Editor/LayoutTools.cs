@@ -8,7 +8,7 @@ namespace AltSalt.Maestro
 
     public class LayoutTools : ModifyTools
     {
-        Layout targetLayout;
+        LayoutConfig targetLayout;
         protected string loadedTextFamilyName;
 
         [MenuItem("Tools/AltSalt/Layout Tools")]
@@ -28,7 +28,7 @@ namespace AltSalt.Maestro
 
             GUILayout.Space(10);
 
-            targetLayout = EditorGUILayout.ObjectField("Target Layout", targetLayout, typeof(Layout), false) as Layout;
+            targetLayout = EditorGUILayout.ObjectField("Target Layout", targetLayout, typeof(LayoutConfig), false) as LayoutConfig;
 
             GUILayout.Space(20);
 
@@ -74,7 +74,7 @@ namespace AltSalt.Maestro
         {
             if (EditorUtility.DisplayDialog("Set new layout?", "This will set the active layout to " + targetLayout.name +
                 " in ModifySettings and update all responsive elements with corresponding data, and (if needed) trigger text family change to " + loadedTextFamilyName + ".", "Proceed", "Cancel")) {
-                modifySettings.activeLayout = targetLayout;
+                modifySettings._activeLayoutConfig = targetLayout;
                 layoutUpdate.RaiseEvent(this, "layout tools", "editor window");
                 if (targetLayout.supportedTextFamilies.Count == 0) {
                     modifySettings.activeTextFamily = modifySettings.defaultTextFamily;

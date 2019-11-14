@@ -15,32 +15,32 @@ namespace AltSalt.Maestro
         [Title("$activeLayoutName")]
         [Title("Layout Condition")]
         [InfoBox("ActiveLayout in Modify Settings will be compared against this condition")]
-        Layout activeLayoutCondition;
+        LayoutConfig _activeLayoutConfigCondition;
 
         public override void SyncValues()
         {
             base.SyncValues();
-            if (activeLayoutCondition == null) {
+            if (_activeLayoutConfigCondition == null) {
                 conditionEventTitle = "Please populate a layout as your condition.";
                 return;
             }
 
-            conditionEventTitle = "Trigger Condition : Active layout is " + activeLayoutCondition.name;
+            conditionEventTitle = "Trigger Condition : Active layout is " + _activeLayoutConfigCondition.name;
         }
 
         public override bool CheckCondition()
         {
             base.CheckCondition();
-            if (modifySettings.activeLayout == activeLayoutCondition) {
+            if (modifySettings._activeLayoutConfig == _activeLayoutConfigCondition) {
                 return true;
             }
 
             return false;
         }
 
-        public Layout GetCondition()
+        public LayoutConfig GetCondition()
         {
-            return activeLayoutCondition;
+            return _activeLayoutConfigCondition;
         }
 
     }

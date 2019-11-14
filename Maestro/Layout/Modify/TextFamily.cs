@@ -17,6 +17,6 @@ namespace AltSalt.Maestro
         public int priority;
 
         [SerializeField]
-        public List<Layout> supportedLayouts = new List<Layout>();
+        public List<LayoutConfig> supportedLayouts = new List<LayoutConfig>();
     }   
 }

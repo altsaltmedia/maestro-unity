@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Timeline;
+using AltSalt.Maestro.Animation;
 
 namespace AltSalt.Maestro
 {
@@ -25,8 +26,8 @@ namespace AltSalt.Maestro
             }
 
             if(TimelineEditor.inspectedAsset != null) {
-                newSelection.AddRange(TrackClipCreation.DuplicateTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects));
-                TimelineUtilsCore.RefreshTimelineContentsAddedOrRemoved();
+                newSelection.AddRange(TrackPlacement.DuplicateTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects));
+                TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
             }
 
             Selection.objects = newSelection.ToArray();

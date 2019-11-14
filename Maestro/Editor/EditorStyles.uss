@@ -20,6 +20,10 @@
 	background: #B4B4B4;
 }
 
+.unity-foldout__toggle {
+	width: 275px;
+}
+
 .unity-foldout__content {
 	padding-top: 10px;
 	margin-left: 0;
@@ -55,6 +59,9 @@
 
 .section___content {
 	margin-bottom: 10px;
+	justify-content: flex-start;
+	flex-shrink: 1;
+	flex-grow: 1;
 }
 
 .selection {
@@ -93,11 +100,13 @@
 
 .col-1 {
 	flex-grow: 1;
+	flex-shrink: 1;
 	width: 70px;
 }
 
 .col-15-percent {
 	flex-grow: 1;
+	flex-shrink: 1;
 	margin-right: 5px;
 	width: 35px;
 	margin-bottom: 5px;
@@ -105,6 +114,7 @@
 
 .col-30-percent {
 	flex-grow: 1;
+	flex-shrink: 1;
 	width: 77.5px;
 	margin-right: 5px;
 	margin-bottom: 5px;
@@ -112,18 +122,22 @@
 
 .col-40-percent {
 	flex-grow: 1;
+	flex-shrink: 1;
 	width: 110px;
 	margin-right: 5px;
 	margin-bottom: 5px;
 }
 
 .col-40-percent .unity-label {
+	flex-shrink: 1;
+	flex-grow: 1;
 	width: 60px;
 	min-width: 0;
 }
 
 .col-one-third {
 	flex-grow: 1;
+	flex-shrink: 1;
 	margin-right: 5px;
 	width: 88.3px;
 	margin-bottom: 5px;
@@ -131,6 +145,7 @@
 
 .col-quarter {
 	flex-grow: 1;
+	flex-shrink: 1;
 	width: 68.75px;
 	margin-right: 5px;
 	margin-bottom: 5px;
@@ -138,6 +153,7 @@
 
 .col-three-quarters {
 	flex-grow: 1;
+	flex-shrink: 1;
 	width: 201.25px;
 	margin-right: 5px;
 	margin-bottom: 5px;
@@ -145,6 +161,7 @@
 
 .col-half {
 	flex-grow: 1;
+	flex-shrink: 1;
 	width: 135px;
 	margin-right: 5px;
 	margin-bottom: 5px;
@@ -152,6 +169,7 @@
 
 .col-full {
 	flex-grow: 1;
+	flex-shrink: 1;
 	width: 275px;	
 	margin-bottom: 5px;
 }

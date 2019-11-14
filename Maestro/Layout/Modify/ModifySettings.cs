@@ -16,9 +16,9 @@ namespace AltSalt.Maestro
         public TextFamily activeTextFamily;
 
         [Required]
-        public Layout defaultLayout;
+        public LayoutConfig _defaultLayoutConfig;
 
         [Required]
-        public Layout activeLayout;
+        public LayoutConfig _activeLayoutConfig;
     }
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+	<engine:VisualElement class="section-container">
+        
+        <engine:Foldout class="foldout" text="Sequencing > Autorun Config" value="true" name="AutorunConfig">
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="autorun markers" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Autoplay Start" class="col-full" name="AutoplayStart" />
+                    <engine:Button text="Autoplay Pause" class="col-full" name="AutoplayPause" />
+                    <engine:Button text="Autoplay End" class="col-full" name="AutoplayEnd" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        </engine:Foldout>
+
+    </engine:VisualElement>
+
+</engine:UXML>

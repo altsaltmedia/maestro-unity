@@ -86,16 +86,16 @@ namespace AltSalt.Maestro
                 if (targetTextFamily.supportedLayouts.Count > 0) {
                     bool triggerLayoutChange = true;
                     for (int i = 0; i < targetTextFamily.supportedLayouts.Count; i++) {
-                        if (modifySettings.activeLayout == targetTextFamily.supportedLayouts[i]) {
+                        if (modifySettings._activeLayoutConfig == targetTextFamily.supportedLayouts[i]) {
                             triggerLayoutChange = false;
-                            loadedLayoutName = modifySettings.activeLayout.name;
+                            loadedLayoutName = modifySettings._activeLayoutConfig.name;
                         }
                     }
                     if (triggerLayoutChange == true) {
                         loadedLayoutName = targetTextFamily.supportedLayouts[0].name;
                     }
                 } else {
-                    loadedLayoutName = modifySettings.defaultLayout.name;
+                    loadedLayoutName = modifySettings._defaultLayoutConfig.name;
                 }
 
                 GUILayout.Label("'" + targetTextFamily.name + "' text family loaded layout: " + loadedLayoutName);
@@ -288,17 +288,17 @@ namespace AltSalt.Maestro
                 modifySettings.activeTextFamily = targetTextFamily;
                 textUpdate.RaiseEvent(this, "text tools", "editor window", textCollectionBank);
                 if (targetTextFamily.supportedLayouts.Count == 0) {
-                    modifySettings.activeLayout = modifySettings.defaultLayout;
+                    modifySettings._activeLayoutConfig = modifySettings._defaultLayoutConfig;
                     layoutUpdate.RaiseEvent(this, "text tools", "editor window");
                 } else {
                     bool triggerLayoutChange = true;
                     for (int i = 0; i < targetTextFamily.supportedLayouts.Count; i++) {
-                        if (modifySettings.activeLayout == modifySettings.activeTextFamily.supportedLayouts[i]) {
+                        if (modifySettings._activeLayoutConfig == modifySettings.activeTextFamily.supportedLayouts[i]) {
                             triggerLayoutChange = false;
                         }
                     }
                     if (triggerLayoutChange == true) {
-                        modifySettings.activeLayout = targetTextFamily.supportedLayouts[0];
+                        modifySettings._activeLayoutConfig = targetTextFamily.supportedLayouts[0];
                         layoutUpdate.RaiseEvent(this, "text tools", "editor window");
                     }
                 }
@@ -312,17 +312,17 @@ namespace AltSalt.Maestro
                 modifySettings.activeTextFamily = targetTextFamily;
                 textUpdate.RaiseEvent(this, "text tools", "editor window", textCollectionBank);
                 if (targetTextFamily.supportedLayouts.Count == 0) {
-                    modifySettings.activeLayout = modifySettings.defaultLayout;
+                    modifySettings._activeLayoutConfig = modifySettings._defaultLayoutConfig;
                     layoutUpdate.RaiseEvent(this, "text tools", "editor window");
                 } else {
                     bool triggerLayoutChange = true;
                     for (int i = 0; i < modifySettings.activeTextFamily.supportedLayouts.Count; i++) {
-                        if (modifySettings.activeLayout == targetTextFamily.supportedLayouts[i]) {
+                        if (modifySettings._activeLayoutConfig == targetTextFamily.supportedLayouts[i]) {
                             triggerLayoutChange = false;
                         }
                     }
                     if (triggerLayoutChange == true) {
-                        modifySettings.activeLayout = targetTextFamily.supportedLayouts[0];
+                        modifySettings._activeLayoutConfig = targetTextFamily.supportedLayouts[0];
                         layoutUpdate.RaiseEvent(this, "text tools", "editor window");
                     }
                 }

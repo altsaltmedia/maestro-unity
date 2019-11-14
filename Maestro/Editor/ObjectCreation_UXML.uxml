@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+	<engine:VisualElement class="section-container" name="game-object-creation">
+
+        <engine:Foldout class="foldout" text="Utilities > Game Object Creation" value="true">
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <editor:PropertyField label="object name :" class="col-full" value="[INSERT NAME HERE]" binding-path="objectName"/>
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Toggle text="select created object" class="manipulate-toggle-transpose" binding-path="selectCreatedObject"/>
+                    <engine:Label text="" class="col-1 placeholder" />
+                    <engine:Label text="" class="col-15-percent placeholder"/>
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content margin-bottom-0">
+                    <engine:Button text="Rename Element(s)" class="col-full" name="RenameElements" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section" name="hierarchy-selection">
+                    <engine:VisualElement class="section___content">
+
+                        <engine:Foldout class="foldout col-full" text="Hierarchy Selection" value="false">
+                            <engine:VisualElement class="section">
+                                <engine:VisualElement class="section___content">
+                                    <engine:Button text="Save Selection" class="col-full" name="SaveSelection" />
+                                    <engine:Button text="Load Selection" class="col-full" name="LoadSelection" />
+                                    <engine:Button text="Select All Children" class="col-full" name="SelectAllChildren" />
+                                    <engine:Button text="Add All Children to Selection" class="col-full" name="AddAllChildrenToSelection" />
+                                    <engine:Button text="Copy Game Objects" class="col-full" name="CopyGameObjects" />
+                                    <engine:Button text="Paste Game Objects" class="col-full" name="PasteGameObjects" />
+                                </engine:VisualElement>
+
+                            </engine:VisualElement>
+                        </engine:Foldout>
+
+                    </engine:VisualElement>
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

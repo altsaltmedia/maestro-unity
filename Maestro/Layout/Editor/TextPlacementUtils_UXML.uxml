@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+    <engine:VisualElement class="section-container" name="edit-object-values">
+
+        <engine:Foldout class="foldout" text="Layout > Text Placement Utils" value="true" name="TextPlacementUtils">
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+
+                	<engine:ScrollView>
+
+                        <engine:VisualElement class="section-container">
+                            <engine:VisualElement class="section">
+
+                                <engine:VisualElement class="section___title">
+                                    <engine:Label text="onion skin" />
+                                </engine:VisualElement>
+
+                                <engine:VisualElement class="section___content">
+
+                                    <editor:PropertyField label="Onion Skin Object :" class="col-full" binding-path="onionSkin" name="OnionSkin"/>
+
+                                    <editor:PropertyField label="Enable / Disable :" class="col-full" binding-path="toggleOnionSkin" name="ToggleOnionSkin"/>
+
+                                    <engine:Button text="Populate" class="col-full" name="PopulateOnionSkin" />
+
+                                    <engine:Button text="Set Position" class="col-full" name="PositionOnionSkin" />
+
+                                    <engine:Button text="Select" class="col-full" name="SelectOnionSkin" />
+
+                                    <engine:Label text="Alignment : " class="col-1" />
+                                    <engine:Button text="L" class="col-15-percent" name="AlignLeft"/>
+                                    <engine:Button text="C" class="col-15-percent" name="AlignCenter"/>
+                                    <engine:Button text="R" class="col-15-percent" name="AlignRight"/>
+                                    <engine:Button text="J" class="col-15-percent" name="Justify"/>
+                                    <engine:Button text="F" class="col-15-percent" name="Flush"/>
+
+                                </engine:VisualElement>
+
+                                <engine:VisualElement class="section___title">
+                                    <engine:Label text="extraction" />
+                                </engine:VisualElement>
+
+                                <engine:VisualElement class="section___content">
+
+                                    <engine:Button text="Extract Text" class="col-full" name="ExtractText" />
+
+                                    <editor:PropertyField label="Opening Wrapper :" class="col-full" binding-path="openingWrapper" name="OpeningWrapper"/>
+
+                                    <editor:PropertyField label="Closing Wrapper :" class="col-full" binding-path="closingWrapper" name="ClosingWrapper"/>
+
+                                    <engine:Button text="Extract Text Lines" class="col-full" name="ExtractTextLines" />
+
+                                    <engine:Button text="Refresh Layout" class="col-full" name="RefreshLayout" />
+
+                                </engine:VisualElement>
+
+                            </engine:VisualElement>
+                            
+                        </engine:VisualElement>
+
+                	</engine:ScrollView>
+
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+
+        </engine:Foldout>
+
+    </engine:VisualElement>
+    
+
+</engine:UXML>

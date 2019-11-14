@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+
+    <engine:Template path="Assets/_AltSalt/Maestro/Editor/PageBuilder/Modules/Create/CreateOtherElements_UXML.uxml" name="CreateOtherElements" />
+    
+
+    <engine:VisualElement class="altsalt page-builder-window">
+
+        <editor:Toolbar class="toolbar">
+            <editor:ToolbarButton class="toolbar-button" text="Modules" name="ModulesButton" />
+            <editor:ToolbarButton class="toolbar-button active" text="Configure Window" name="ConfigureWindowButton" />
+        </editor:Toolbar>
+
+        
+        <!-- MODULES -->
+
+        <engine:ScrollView class="create-edit-tools border-bottom-1" name="Modules"  style="display:none">
+
+<!--             
+            <engine:Instance template="CreateOtherElements" />
+
+
+            <engine:Instance template="EditScrollSnapController" />
+
+            <engine:VisualElement class="section-container">
+                <engine:VisualElement class="section">
+                    <engine:VisualElement class="section___content">
+                        
+                    </engine:VisualElement>
+                </engine:VisualElement>
+            </engine:VisualElement> -->
+
+        </engine:ScrollView>
+
+        <!-- CONFIGURE WINDOW -->
+
+        <engine:ScrollView name="ConfigureWindow">
+
+            <engine:VisualElement class="section-container" name="">
+
+                <engine:VisualElement class="section">
+
+                    <!-- LAYOUT -->
+
+                    <engine:VisualElement class="section___content">
+                            <engine:Label class="bold" text="Layout" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="Layout Objects" class="col-full" name="LayoutObjects" />
+                        <engine:Button text="Edit Object Values" class="col-full" name="EditObjectValues" />
+                        <engine:Button text="Text Placement Utils" class="col-full" name="TextPlacementUtils" />
+                    </engine:VisualElement>
+
+
+                    <!-- SEQUENCING -->
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Label class="bold" text="Sequencing" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="Sequencing Structures" class="col-full" name="SequencingStructures" />
+                        <engine:Button text="Join Config" class="col-full" name="JoinConfig" />
+                        <engine:Button text="Touch Config" class="col-full" name="TouchConfig" />
+                        <engine:Button text="Autorun Config" class="col-full" name="AutorunConfig" />
+                    </engine:VisualElement>
+
+
+                    <!-- TIMELINE -->
+
+                    <engine:VisualElement class="section___content">
+                            <engine:Label class="bold" text="Timeline" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="Track Placement" class="col-full" name="TrackPlacement" />
+                        <engine:Button text="Timeline Asset Placement" class="col-full" name="TimelineAssetPlacement" />
+                        <engine:Button text="Timeline Monitor" class="col-full" name="TimelineMonitor" />
+                    </engine:VisualElement>
+
+
+                    <!-- ANIMATION -->
+
+                    <engine:VisualElement class="section___content">
+                            <engine:Label class="bold" text="Animation" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="Simple Animation" class="col-full" name="SimpleAnimation" />
+                        <engine:Button text="Animation Tracks" class="col-full" name="AnimationTracks" />
+                        <engine:Button text="Edit Animation Clips" class="col-full" name="EditClipValues" />
+                    </engine:VisualElement>
+
+
+                    <!-- AUDIO -->
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Label class="bold" text="Audio" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="Audio Structures" class="col-full" name="AudioStructures" />
+                        <engine:Button text="Audio Tracks" class="col-full" name="AudioTracks" />
+                    </engine:VisualElement>
+
+
+                    <!-- SIMPLE LOGIC -->
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Label class="bold" text="Simple Logic" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="Simple Logic Structures" class="col-full" name="LogicStructures" />
+                        <engine:Button text="Event Tracks" class="col-full" name="EventTracks" />
+                    </engine:VisualElement>
+
+                    
+                    <!-- COMPLEX LOGIC AND SENSORS -->
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Label class="bold" text="Complex Logic / Sensors" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="Complex Logic Structures" class="col-full" name="LogicStructures" />
+                        <engine:Button text="Sensor Structures" class="col-full" name="LogicStructures" />
+                    </engine:VisualElement>
+
+
+                   <!-- COMPLEX LOGIC AND SENSORS -->
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Label class="bold" text="Modify" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="Layout Tools" class="col-full" name="LayoutTools" />
+                        <engine:Button text="Text Tools" class="col-full" name="TextTools" />
+                    </engine:VisualElement>
+
+
+                    <!-- UTILITIES -->
+
+                    <engine:VisualElement class="section___content">
+                            <engine:Label class="bold" text="Utilities" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+                        <engine:Button text="Object Creation" class="col-full" name="ObjectCreation" />
+                        <engine:Button text="Hierarchy Selection" class="col-full" name="HierarchySelection" />
+                        <engine:Button text="Responsive Utils" class="col-full" name="ResponsiveUtils" />
+                        <engine:Button text="Register Dependencies" class="col-full" name="RegisterDependencies" />
+                    </engine:VisualElement>
+
+
+                    <!-- REFRESH -->
+
+                    <engine:VisualElement class="section___content">
+                            <engine:Label class="bold" text="Misc." />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+
+                        <engine:Button text="Refresh Module Windows" class="col-full" name="RefreshModuleWindows" />
+                        <engine:Button text="Reset Control Panel" class="col-full" name="ResetControlPanel" />
+
+                    </engine:VisualElement>
+
+
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+
+        </engine:ScrollView>
+
+    </engine:VisualElement>
+
+</engine:UXML>

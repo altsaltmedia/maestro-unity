@@ -22,7 +22,7 @@ namespace AltSalt.Maestro
         {
             GetModifySettings();
 
-            activeLayoutName = "Active layout: " + modifySettings.activeLayout.name;
+            activeLayoutName = "Active layout: " + modifySettings._activeLayoutConfig.name;
             activeTextFamilyName = "Active text family: " + modifySettings.activeTextFamily.name;
         }
 

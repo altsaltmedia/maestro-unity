@@ -100,7 +100,7 @@ namespace AltSalt.Maestro
 
         void GetActiveLayoutName()
         {
-            activeLayoutName = "Current active layout: " + modifySettings.activeLayout.name;
+            activeLayoutName = "Current active layout: " + modifySettings._activeLayoutConfig.name;
         }
 
         [InfoBox("Force reset of the element's scene name and serializable ID.")]

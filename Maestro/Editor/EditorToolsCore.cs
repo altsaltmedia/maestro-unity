@@ -12,16 +12,6 @@ namespace AltSalt.Maestro
         public static string ToggleableGroup = "toggleable-group";
         public static string UpdateWindowTrigger = "update-window-trigger";
 
-        public static ChildUIElementsWindow CreateAndBindChildWindow(Type targetType, EditorWindow parentWindow, string targetUXMLName)
-        {
-            var childWindow = ScriptableObject.CreateInstance(targetType.Name) as ChildUIElementsWindow;
-            childWindow.Init(parentWindow);
-            VisualElement childWindowUXML = parentWindow.rootVisualElement.Query(targetUXMLName);
-            SerializedObject childWindowSerialized = new SerializedObject(childWindow);
-            childWindowUXML.Bind(childWindowSerialized);
-            return childWindow;
-        }
-
         // 
         public static VisualElementToggleData AddToVisualElementToggleData(VisualElementToggleData targetToggleData, Enum targetCondition, VisualElement elementToAdd)
         {

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<UXML xmlns="UnityEngine.UIElements">
-  <!-- Creates the button. -->
-  <Button class="altsalt-button">      
-    <!-- Adds a VisualElement child (corresponding to the button's icon). -->
-    <VisualElement class="altsalt-button-icon"/>   
-  </Button>
-</UXML>

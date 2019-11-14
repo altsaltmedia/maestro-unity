@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+	<engine:VisualElement class="section-container" name="create-core-elements">
+
+        <engine:Foldout class="foldout" text="Layout > Layout Objects" value="true">
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content margin-bottom-0">
+                    <engine:Button text="New Text" class="col-full" name="NewText" />
+                    <engine:Button text="New Sprite" class="col-full" name="NewSprite" />
+                    <engine:Button text="New Empty Container" class="col-full" name="NewEmptyContainer" />
+                    <engine:Button text="New Empty Responsive Container" class="col-full" name="NewEmptyResponsiveContainer" />
+                    <engine:Button text="New Container" class="col-full" name="NewContainer" />
+                    <engine:Button text="New Responsive Container" class="col-full" name="NewResponsiveContainer" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

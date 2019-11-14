@@ -262,7 +262,7 @@ namespace AltSalt.Maestro
                 tempObject.Remove(nonserializedProperties[i]);
             }
             data = tempObject.ToString(2);
-            string directoryPath = Utils.GetDirectory(new string[] { "/Resources", "/Layouts", "/" + SceneManager.GetActiveScene().name, "/" + modifySettings.activeLayout.name });
+            string directoryPath = Utils.GetDirectory(new string[] { "/Resources", "/Layouts", "/" + SceneManager.GetActiveScene().name, "/" + modifySettings._activeLayoutConfig.name });
             string fileName = this.name + id.ToString();
             string filePath = Utils.GetFilePath(directoryPath, fileName, ".json");
 
@@ -296,9 +296,9 @@ namespace AltSalt.Maestro
         [PropertyOrder(7)]
         public void LoadData()
         {
-            var jsonTextFile = Resources.Load<TextAsset>("Layouts/" + sceneName + "/" + modifySettings.activeLayout.name + "/" + this.name + id.ToString());
+            var jsonTextFile = Resources.Load<TextAsset>("Layouts/" + sceneName + "/" + modifySettings._activeLayoutConfig.name + "/" + this.name + id.ToString());
             if (jsonTextFile != null) {
-                Debug.Log("Populating " + this.name + " with stored data for " + modifySettings.activeLayout.name + " layout", this);
+                Debug.Log("Populating " + this.name + " with stored data for " + modifySettings._activeLayoutConfig.name + " layout", this);
                 JsonUtility.FromJsonOverwrite(jsonTextFile.ToString(), this);
             }
         }
