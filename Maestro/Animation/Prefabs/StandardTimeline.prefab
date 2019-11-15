@@ -71,6 +71,11 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 00a2b24214f8a443581542514270dc00, type: 2}
+  _timelineCurrentTime:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 0fbf8f44e4dad49eb8f9c318eb4667b4, type: 2}
+  _onGraphStart: {fileID: 11400000, guid: 87530e998b45847529374d024ccfda83, type: 2}
 --- !u!114 &6416722693999385806
 MonoBehaviour:
   m_ObjectHideFlags: 0

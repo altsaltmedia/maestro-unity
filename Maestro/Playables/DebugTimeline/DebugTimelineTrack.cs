@@ -20,11 +20,18 @@ namespace AltSalt.Maestro
             DebugTimelineMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(go, behaviour);
 #if UNITY_EDITOR
-            behaviour.timelineCurrentTime.Variable = Utils.GetFloatVariable(nameof(VarDependencies.TimelineCurrentTime));
+            if(go.TryGetComponent(typeof(TrackAssetConfig), out Component component) == false) {
+                go.AddComponent(typeof(TrackAssetConfig));
+            }
+            
+            TrackAssetConfig trackAssetConfig = component as TrackAssetConfig;
+            
+            behaviour.timelineCurrentTime.Variable = trackAssetConfig.timelineCurrentTime;
             if (Application.isPlaying == false) {
                 TimelineEditor.inspectedDirector.time = behaviour.timelineCurrentTime.Value;
             }
-            behaviour.onGraphStart.SimpleEventTarget = Utils.GetSimpleEvent(nameof(VarDependencies.OnGraphStart));
+
+            behaviour.onGraphStart.SimpleEventTarget = trackAssetConfig.onGraphStart;
 #endif
             return trackPlayable;
         }
