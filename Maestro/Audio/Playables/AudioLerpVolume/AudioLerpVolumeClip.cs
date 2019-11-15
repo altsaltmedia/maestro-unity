@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Audio
 {
     [Serializable]
     public class AudioLerpVolumeClip : LerpToTargetClip

@@ -21,11 +21,15 @@ xsi:schemaLocation="
     <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformResponsivePosClip_UXML.uxml" name="EditRectTransformResponsivePosClip" />
     <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformResponsiveScaleClip_UXML.uxml" name="EditRectTransformResponsiveScaleClip" />
 
-    <engine:VisualElement class="section-container" name="edit-clips">
+    <engine:VisualElement name="edit-animation-clips">
 
-        <engine:Foldout class="foldout" text="Animation > Edit Clips" value="true">
+        <engine:Foldout class="foldout" text="Animation > Edit Animation Clips" value="true">
 
             <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="edit animation clips" />
+                </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
 

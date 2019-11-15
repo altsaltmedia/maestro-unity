@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Audio
 {
     [Serializable]
     [ExecuteInEditMode]

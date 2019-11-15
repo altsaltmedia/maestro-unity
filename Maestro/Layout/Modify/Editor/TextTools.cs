@@ -8,7 +8,7 @@ using System.Xml;
 using System.IO;
 using System.Linq;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout.Modify
 {
     public class TextTools : ModifyTools
     {
@@ -21,7 +21,7 @@ namespace AltSalt.Maestro
         protected TextCollectionBank textCollectionBank;
         protected TextFamily targetTextFamily;
 
-        [MenuItem("Tools/AltSalt/Text Tools")]
+        [MenuItem("Tools/Maestro/Text Tools")]
         public static void ShowWindow()
         {
             var window = GetWindow<TextTools>();

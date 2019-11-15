@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityEngine.Audio;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Audio
 {
     [TrackColor(0.545149f, 0.895372f, 0.2679245f)]
     [TrackClipType(typeof(AudioLerpSnapshotClip))]

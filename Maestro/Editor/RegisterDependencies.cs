@@ -23,15 +23,17 @@ namespace AltSalt.Maestro
         string callbackScenePath = "";
         string callbackSceneName = "";
 
-        [MenuItem("Tools/AltSalt/Register Dependencies")]
+        [MenuItem("Tools/Maestro/Register Dependencies")]
         public static void ShowWindow()
         {
             var window = GetWindow<RegisterDependencies>();
+            window.ShowTitle();
+            window.Show();
         }
 
-        static void Init()
+        private void ShowTitle()
         {
-            EditorWindow.GetWindow(typeof(RegisterDependencies)).Show();
+            titleContent = new GUIContent("Register Dependencies");
         }
 
         public void OnGUI()

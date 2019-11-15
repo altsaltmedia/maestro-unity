@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Audio
 {
     [RequireComponent(typeof(AudioSource))]
     public class AudioSourceController : MonoBehaviour

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout.Modify
 {
 
     public class LayoutTools : ModifyTools
@@ -11,7 +11,7 @@ namespace AltSalt.Maestro
         LayoutConfig targetLayout;
         protected string loadedTextFamilyName;
 
-        [MenuItem("Tools/AltSalt/Layout Tools")]
+        [MenuItem("Tools/Maestro/Layout Tools")]
         public static void ShowWindow()
         {
             var window = GetWindow<LayoutTools>();

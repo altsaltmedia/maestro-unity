@@ -18,7 +18,7 @@ namespace AltSalt.Maestro
         {
             base.Configure(parentModuleWindow, childRootUXMLName);
 
-            moduleChildUXML = parentModuleWindow.moduleWindowUXML.Query<Foldout>("EditRectTransformResponsiveScaleClip", EditorToolsCore.ToggleableGroup);
+            moduleChildUXML = parentModuleWindow.moduleWindowUXML.Query<Foldout>("EditRectTransformResponsiveScaleClip", ModuleUtils.toggleableGroup);
 
             var propertyFields = moduleChildUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);

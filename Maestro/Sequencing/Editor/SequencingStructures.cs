@@ -18,7 +18,7 @@ namespace AltSalt.Maestro.Sequencing
             var buttons = moduleWindowUXML.Query<Button>();
             buttons.ForEach(SetupButton);
 
-            var updateWindowTriggers = moduleWindowUXML.Query<VisualElement>(null, EditorToolsCore.UpdateWindowTrigger);
+            var updateWindowTriggers = moduleWindowUXML.Query<VisualElement>(null, ModuleUtils.updateWindowTrigger);
             updateWindowTriggers.ForEach(SetupUpdateWindowTriggers);
 
             UpdateDisplay();
@@ -62,15 +62,15 @@ namespace AltSalt.Maestro.Sequencing
         void UpdateDisplay()
         {
             if (sequenceControllerObject != null) {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.SequenceControllerObjectPopulated, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceControllerObjectPopulated, true);
             } else {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.SequenceControllerObjectPopulated, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceControllerObjectPopulated, false);
             }
 
             if (_targetSequenceCollection != null && newSequenceName.Length > 0) {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.SequenceListNamePopulated, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceListNamePopulated, true);
             } else {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.SequenceListNamePopulated, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceListNamePopulated, false);
             }
         }
 
@@ -100,7 +100,7 @@ namespace AltSalt.Maestro.Sequencing
                     button.clickable.clicked += () => {
                         SequencingStructures.CreateSwipeDirector(Selection.activeTransform, _targetSequenceCollection, newSequenceName);
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.SequenceListNamePopulated, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SequenceListNamePopulated, button);
                     break;
             }
 

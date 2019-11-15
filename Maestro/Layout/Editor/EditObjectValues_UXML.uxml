@@ -16,7 +16,7 @@ xsi:schemaLocation="
     <engine:Template path="Assets/_AltSalt/Maestro/Layout/Editor/EditSpriteComponent_UXML.uxml" name="EditSpriteComponent" />
     <engine:Template path="Assets/_AltSalt/Maestro/Layout/Editor/EditScrollSnapController_UXML.uxml" name="EditScrollSnapController" />
 
-    <engine:VisualElement class="section-container" name="edit-object-values">
+    <engine:VisualElement name="edit-object-values">
 
         <engine:Foldout class="foldout" text="Layout > Edit Object Values" value="true">
 

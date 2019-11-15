@@ -12,31 +12,27 @@ xsi:schemaLocation="
 "
 >
 
-	<engine:VisualElement name="object-creation">
+	<engine:VisualElement name="hierarchy-selection">
 
-        <engine:Foldout class="foldout" text="Utilities > Object Creation" value="true" name="ObjectCreation">
+        <engine:Foldout class="foldout" text="Utilities > Hierarchy Selection" value="false" name="HierarchySelection">            
 
             <engine:VisualElement class="section">
 
                 <engine:VisualElement class="section___content">
-                    <engine:Label class="bold" text="object creation" />
+                    <engine:Label class="bold" text="hierarchy selection" />
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
-                    <editor:PropertyField label="object name :" class="col-full" value="" binding-path="objectName"/>
-                </engine:VisualElement>
-
-                <engine:VisualElement class="section___content">
-                    <engine:Toggle text="select created object" class="manipulate-toggle-transpose" binding-path="selectCreatedObject"/>
-                    <engine:Label text="" class="col-1 placeholder" />
-                    <engine:Label text="" class="col-15-percent placeholder"/>
-                </engine:VisualElement>
-
-                <engine:VisualElement class="section___content">
-                    <engine:Button text="Rename Element(s)" class="col-full" name="RenameElements" />
+                    <engine:Button text="Save Selection" class="col-full" name="SaveSelection" />
+                    <engine:Button text="Load Selection" class="col-full" name="LoadSelection" />
+                    <engine:Button text="Select All Children" class="col-full" name="SelectAllChildren" />
+                    <engine:Button text="Add All Children to Selection" class="col-full" name="AddAllChildrenToSelection" />
+                    <engine:Button text="Copy Game Objects" class="col-full" name="CopyGameObjects" />
+                    <engine:Button text="Paste Game Objects" class="col-full" name="PasteGameObjects" />
                 </engine:VisualElement>
 
             </engine:VisualElement>
+        
         </engine:Foldout>
     </engine:VisualElement>
 

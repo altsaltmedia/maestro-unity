@@ -24,7 +24,7 @@ namespace AltSalt.Maestro.Animation
 //        public static SelectionChangedDelegate selectionChangedDelegate = () => {};
 
         private Dictionary<Type, string> _childWindowData = new Dictionary<Type, string> {
-            { typeof(TimelineAssetPlacement), "clip-selection-manipulation" },
+            { typeof(TimelineAssetManipulation), "clip-selection-manipulation" },
             { typeof(TrackPlacement), "track-clip-creation" }
         };
 

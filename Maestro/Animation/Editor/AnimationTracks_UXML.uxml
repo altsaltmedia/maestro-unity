@@ -24,9 +24,9 @@ xsi:schemaLocation="
 
 	    <engine:VisualElement class="section manipulate">
 
-			<engine:VisualElement class="section___title">
-				<engine:Label text="animation tracks" />
-		  	</engine:VisualElement>
+			<engine:VisualElement class="section___content">
+                <engine:Label class="bold" text="animation tracks" />
+            </engine:VisualElement>
 
 			<engine:VisualElement class="section___content">
 		  		

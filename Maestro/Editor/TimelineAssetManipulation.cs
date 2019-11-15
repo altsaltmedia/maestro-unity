@@ -11,14 +11,22 @@ using UnityEngine.UIElements;
 
 namespace AltSalt.Maestro
 {
-    public class TimelineAssetPlacement : ModuleWindow
+    public class TimelineAssetManipulation : ModuleWindow
     {
-        static FloatField currentTimeField;
-        static TimelineAssetPlacement _timelineAssetPlacementWindow;
+        private static FloatField currentTimeField;
+
+        private static TimelineAssetManipulation _timelineAssetManipulation;
+
+        private static TimelineAssetManipulation timelineAssetManipulation
+        {
+            get => _timelineAssetManipulation;
+            set => _timelineAssetManipulation = value;
+        }
 
         protected override ModuleWindow Configure(ControlPanel controlPanel, string uxmlPath)
         {
             base.Configure(controlPanel, uxmlPath);
+            timelineAssetManipulation = this;
             
             var propertyFields = moduleWindowUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
@@ -44,12 +52,6 @@ namespace AltSalt.Maestro
 
         static VisualElementToggleData toggleData = new VisualElementToggleData();
         
-        public float newClipDuration = .5f;
-        public EasingFunction.Ease clipEaseType = EasingFunction.Ease.EaseInOutQuad;
-        public string clipName = "";
-        public bool selectCreatedClip = true;
-        public bool advancePlayhead = true;
-
         public int selectionCount = 1;
         public bool callTransposeUnselectedClips = false;
         public float durationMultiplier = 1;
@@ -62,14 +64,11 @@ namespace AltSalt.Maestro
         {
             DurationMultiplier,
             TargetDuration,
-            TargetSpacing,
-            NewClipDuration
+            TargetSpacing
         }
         
         enum ButtonNames
         {
-            NewClips,
-            RenameClips,
             SelectEndingBefore,
             SelectStartingBefore,
             SelectEndingAfter,
@@ -92,7 +91,6 @@ namespace AltSalt.Maestro
             SetSequentialOrderReverse,
             DeselectAll,
             RefreshTimelineWindow,
-            RefreshLayout,
             SelectSourceObjects,
             SelectTargetTracks
         }
@@ -115,27 +113,27 @@ namespace AltSalt.Maestro
         void UpdateDisplay()
         {
             if (TimelineEditor.selectedClips.Length > 0) {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ClipsSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ClipsSelected, true);
             } else {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ClipsSelected, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ClipsSelected, false);
             }
 
             if (Utils.TargetTypeSelected(Selection.objects, typeof(TrackAsset)) == true || TimelineEditor.selectedClips.Length > 0) {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TrackOrClipSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackOrClipSelected, true);
             } else {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TrackOrClipSelected, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackOrClipSelected, false);
             }
 
             if (Utils.FilterSelection(Selection.objects, typeof(TrackAsset)).Length > 0 || TimelineEditor.selectedClips.Length > 0) {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ObjectsSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ObjectsSelected, true);
             } else {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ObjectsSelected, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ObjectsSelected, false);
             }
 
             if (TimelineEditor.selectedClips.Length > 0) {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ClipSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ClipSelected, true);
             } else {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ClipSelected, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ClipSelected, false);
             }
         }
 
@@ -168,13 +166,6 @@ namespace AltSalt.Maestro
                     });
                     break;
                 
-                case nameof(PropertyFieldNames.NewClipDuration):
-                    propertyField.RegisterCallback<ChangeEvent<float>>((ChangeEvent<float> evt) => {
-                        if (evt.newValue < .1f) {
-                            newClipDuration = .1f;
-                        }
-                    });
-                    break;
             }
 
             return propertyField;
@@ -183,23 +174,6 @@ namespace AltSalt.Maestro
         Button SetupButton(Button button)
         {
             switch (button.name) {
-                
-                case nameof(ButtonNames.NewClips):
-                    button.clickable.clicked += () => {
-                        TriggerCreateClips(selectCreatedClip, advancePlayhead, newClipDuration, clipName, clipEaseType);
-                    };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.TrackOrClipSelected, button);
-                    break;
-
-                case nameof(ButtonNames.RenameClips):
-                    button.clickable.clicked += () => {
-                        if (clipName.Length > 0) {
-                            TimelineUtils.RenameClips(clipName, TimelineEditor.selectedClips);
-                            TimelineUtils.RefreshTimelineContentsModified();
-                        }
-                    };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipSelected, button);
-                    break;
 
                 case nameof(ButtonNames.SelectEndingBefore):
                     button.clickable.clicked += () => {
@@ -263,7 +237,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = SetToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.TransposeToPlayhead):
@@ -271,7 +245,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = TransposeToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.ResizeToPlayhead):
@@ -279,7 +253,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = ResizeToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.ResizeAndTransposeToPlayhead):
@@ -287,7 +261,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = ResizeAndTransposeToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, GetAllTimelineClips());
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.MultiplyDuration):
@@ -295,7 +269,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = MultiplyDuration(GetCurrentClipSelection(), durationMultiplier, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.MultiplyDurationAndTranspose):
@@ -303,7 +277,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = MultiplyDurationAndTranspose(GetCurrentClipSelection(), durationMultiplier, callTransposeUnselectedClips, GetAllTimelineClips());
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.SetDuration):
@@ -311,7 +285,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = SetDuration(GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.SetDurationAndTranspose):
@@ -319,7 +293,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = SetDurationAndTranspose(GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.SetSpacing):
@@ -327,7 +301,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = SetSpacing(GetCurrentClipSelection(), targetSpacing, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.AddSubtractSpacing):
@@ -335,7 +309,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = AddSubtractSpacing(GetCurrentClipSelection(), GetAllTimelineClips(), targetSpacing);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.SetSequentialOrder):
@@ -343,7 +317,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = SetSequentialOrder(GetCurrentClipSelection(), GetAllTimelineClips(), callTransposeUnselectedClips, TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.SetSequentialOrderReverse):
@@ -351,7 +325,7 @@ namespace AltSalt.Maestro
                         TimelineEditor.selectedClips = SetSequentialOrderReverse(GetCurrentClipSelection(), GetAllTimelineClips(), callTransposeUnselectedClips, TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.RefreshTimelineWindow):
@@ -370,30 +344,18 @@ namespace AltSalt.Maestro
                     button.clickable.clicked += () => {
                         SelectSourceObjects();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.TrackOrClipSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackOrClipSelected, button);
                     break;
 
                 case nameof(ButtonNames.SelectTargetTracks):
                     button.clickable.clicked += () => {
                         SelectTargetTracks();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ObjectsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ObjectsSelected, button);
                     break;
             }
 
             return button;
-        }
-        
-        [MenuItem("Edit/AltSalt/Create New Clip(s)", false, 0)]
-        public static void HotkeyTriggerCreateClips()
-        {
-            bool selectCreatedClip = _timelineAssetPlacementWindow.selectCreatedClip;
-            bool advancePlayhead = _timelineAssetPlacementWindow.advancePlayhead;
-            float newClipDuration = _timelineAssetPlacementWindow.newClipDuration;
-            string clipName = _timelineAssetPlacementWindow.clipName;
-            EasingFunction.Ease clipEaseType = _timelineAssetPlacementWindow.clipEaseType;
-
-            TriggerCreateClips(selectCreatedClip, advancePlayhead, newClipDuration, clipName, clipEaseType);
         }
 
         [MenuItem("Edit/AltSalt/Select Source Objects", false, 0)]
@@ -416,178 +378,6 @@ namespace AltSalt.Maestro
             TimelineEditor.selectedClips = new TimelineClip[0];
             Selection.objects = new UnityEngine.Object[0];
             TimelineUtils.RefreshTimelineContentsModified();
-        }
-        
-        public static void TriggerCreateClips(bool selectCreatedClip, bool advancePlayhead, float newClipDuration, string clipName, EasingFunction.Ease clipEaseType)
-        {
-            if (selectCreatedClip == true) {
-                TimelineEditor.selectedClips = CreateClips(TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, newClipDuration, clipName, clipEaseType);
-            } else {
-                CreateClips(TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, newClipDuration, clipName, clipEaseType);
-            }
-            TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
-
-            if (advancePlayhead == true) {
-                TimelineUtils.currentTime += newClipDuration;
-                TimelineUtils.RefreshTimelineRedrawWindow();
-            }
-        }
-        
-        public static TimelineClip[] CreateClips(PlayableDirector targetDirector, UnityEngine.Object[] objectSelection, TimelineClip[] clipSelection, float duration, string clipName, EasingFunction.Ease easeType)
-        {
-            List<TimelineClip> timelineClips = new List<TimelineClip>();
-            List<TrackAsset> targetTracks = new List<TrackAsset>();
-
-            for (int i = 0; i < objectSelection.Length; i++) {
-                if (objectSelection[i] is TrackAsset && objectSelection[i] is GroupTrack == false) {
-                    targetTracks.Add(objectSelection[i] as TrackAsset);
-                }
-            }
-
-            for (int i = 0; i < clipSelection.Length; i++) {
-                TrackAsset trackAsset = clipSelection[i].parentTrack;
-
-                // It is possible to have multiple clips selected on the same track,
-                // so this conditional prevents us from adding duplicates
-                if (targetTracks.Contains(trackAsset) == false) {
-                    targetTracks.Add(trackAsset);
-                }
-            }
-
-            for (int i = 0; i < targetTracks.Count; i++) {
-                TimelineClip newClip = targetTracks[i].CreateDefaultClip();
-                newClip.start = TimelineUtils.currentTime;
-                newClip.duration = duration;
-                PopulateClip(targetDirector, targetTracks[i], easeType, newClip);
-                timelineClips.Add(newClip);
-            }
-
-            TimelineClip[] timelineClipsArray = timelineClips.ToArray();
-
-            if (clipName.Length > 0) {
-                TimelineUtils.RenameClips(clipName, timelineClipsArray);
-            }
-
-            TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
-            return timelineClipsArray;
-        }
-
-        static PlayableAsset PopulateClip(PlayableDirector targetDirector, TrackAsset parentTrack, EasingFunction.Ease easeType, TimelineClip timelineClip)
-        {
-            UnityEngine.Object sourceObject = null;
-            foreach (PlayableBinding playableBinding in parentTrack.outputs) {
-                sourceObject = targetDirector.GetGenericBinding(playableBinding.sourceObject);
-            }
-
-            switch (timelineClip.asset.GetType().Name) {
-
-                case nameof(TMProColorClip): {
-                        TMProColorClip asset = timelineClip.asset as TMProColorClip;
-                        TMP_Text component = sourceObject as TMP_Text;
-                        if (component != null) {
-                            asset.template.initialColor = component.color;
-                            asset.template.targetColor = component.color;
-                        }
-                        asset.template.ease = easeType;
-                        return asset;
-                    }
-
-                case nameof(RectTransformPosClip): {
-                        RectTransformPosClip asset = timelineClip.asset as RectTransformPosClip;
-                        RectTransform component = sourceObject as RectTransform;
-                        if (component != null) {
-                            asset.template.initialPosition = component.anchoredPosition3D;
-                            asset.template.targetPosition = component.anchoredPosition3D;
-                        }
-                        asset.template.ease = easeType;
-                        return asset;
-                    }
-
-                case nameof(SpriteColorClip): {
-                        SpriteColorClip asset = timelineClip.asset as SpriteColorClip;
-                        SpriteRenderer component = sourceObject as SpriteRenderer;
-                        if (component != null) {
-                            asset.template.initialColor = component.color;
-                            asset.template.targetColor = component.color;
-                        }
-                        asset.template.ease = easeType;
-                        return asset;
-                    }
-
-                case nameof(RectTransformScaleClip): {
-                        RectTransformScaleClip asset = timelineClip.asset as RectTransformScaleClip;
-                        RectTransform component = sourceObject as RectTransform;
-                        if (component != null) {
-                            asset.template.initialScale = component.localScale;
-                            asset.template.targetScale = component.localScale;
-                        }
-                        asset.template.ease = easeType;
-                        return asset;
-                    }
-
-                case nameof(RectTransformRotationClip): {
-                        RectTransformRotationClip asset = timelineClip.asset as RectTransformRotationClip;
-                        RectTransform component = sourceObject as RectTransform;
-                        if (component != null) {
-                            asset.template.initialRotation = component.localEulerAngles;
-                            asset.template.targetRotation = component.localEulerAngles;
-                        }
-                        asset.template.ease = easeType;
-                        return asset;
-                    }
-
-                case nameof(LerpFloatVarClip): {
-                        LerpFloatVarClip asset = timelineClip.asset as LerpFloatVarClip;
-                        FloatVariable component = sourceObject as FloatVariable;
-                        if (component != null) {
-                            asset.template.initialValue = component.value;
-                            asset.template.targetValue = component.value;
-                        }
-                        asset.template.ease = easeType;
-                        return asset;
-                    }
-
-                case nameof(LerpColorVarClip): {
-                        LerpColorVarClip asset = timelineClip.asset as LerpColorVarClip;
-                        ColorVariable component = sourceObject as ColorVariable;
-                        if (component != null) {
-                            asset.template.initialColor = component.value;
-                            asset.template.targetColor = component.value;
-                        }
-                        asset.template.ease = easeType;
-                        return asset;
-                    }
-
-                case nameof(TMProCharSpacingClip): {
-                        TMProCharSpacingClip asset = timelineClip.asset as TMProCharSpacingClip;
-                        TMP_Text component = sourceObject as TMP_Text;
-                        if (component != null) {
-                            asset.template.initialValue = component.characterSpacing;
-                            asset.template.targetValue = component.characterSpacing;
-                        }
-                        asset.template.ease = easeType;
-                        return asset;
-                    }
-
-                case nameof(ResponsiveVector3Clip): {
-                        ResponsiveVector3Clip asset = timelineClip.asset as ResponsiveVector3Clip;
-                        RectTransform component = sourceObject as RectTransform;
-                        if (component != null) {
-
-                            if(parentTrack is ResponsiveRectTransformPosTrack) {
-                                asset.template.breakpointInitialValue.Add(component.anchoredPosition3D);
-                                asset.template.breakpointTargetValue.Add(component.anchoredPosition3D);
-                            } else if (parentTrack is ResponsiveRectTransformScaleTrack) {
-                                asset.template.breakpointInitialValue.Add(component.localScale);
-                                asset.template.breakpointTargetValue.Add(component.localScale);
-                            }
-                        }
-                        asset.template.ease = easeType;
-                        return asset;
-                    }
-            }
-
-            return null;
         }
 
         public static TimelineClip[] SelectEndingBefore(Object[] selection)

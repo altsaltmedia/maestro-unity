@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Video;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Audio
 {    
     public class AudioFadePlayVolumeMixerBehaviour : LerpToTargetMixerBehaviour
     {

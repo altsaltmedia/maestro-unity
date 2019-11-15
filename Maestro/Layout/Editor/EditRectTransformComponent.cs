@@ -92,9 +92,9 @@ namespace AltSalt.Maestro.Layout
             moduleChildUXML.value = dependencySelected;
 
             if (Selection.gameObjects.Length > 1) {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.MultipleObjectsSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MultipleObjectsSelected, true);
             } else {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.MultipleObjectsSelected, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MultipleObjectsSelected, false);
             }
         }
 
@@ -120,7 +120,7 @@ namespace AltSalt.Maestro.Layout
                     break;
 
                 case nameof(PropertyFieldNames.SetIntervalOnValueChange):
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleObjectsSelected, propertyField);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleObjectsSelected, propertyField);
                     break;
 
                 case nameof(PropertyFieldNames.TransposePosition):
@@ -197,7 +197,7 @@ namespace AltSalt.Maestro.Layout
                     button.clickable.clicked += () => {
                         SetPositionUsingInterval(Selection.gameObjects, position, positionInterval);
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleObjectsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleObjectsSelected, button);
                     break;
 
                 case nameof(ButtonNames.PopulatePivot):

@@ -18,7 +18,7 @@ namespace AltSalt.Maestro
         {
             base.Configure(parentModuleWindow, childRootUXMLName);
 
-            moduleChildUXML = parentModuleWindow.moduleWindowUXML.Query<Foldout>("EditRectTransformResponsivePosClip", EditorToolsCore.ToggleableGroup);
+            moduleChildUXML = parentModuleWindow.moduleWindowUXML.Query<Foldout>("EditRectTransformResponsivePosClip", ModuleUtils.toggleableGroup);
 
             var propertyFields = moduleChildUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
@@ -106,9 +106,9 @@ namespace AltSalt.Maestro
             moduleChildUXML.value = dependencySelected;
 
             if (TimelineEditor.selectedClips.Length > 1) {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.MultipleClipsSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MultipleClipsSelected, true);
             } else {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.MultipleClipsSelected, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MultipleClipsSelected, false);
             }
         }
 
@@ -135,7 +135,7 @@ namespace AltSalt.Maestro
                     break;
 
                 case nameof(PropertyFieldNames.SetInitIntervalOnValueChange):
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleClipsSelected, propertyField);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleClipsSelected, propertyField);
                     break;
 
                 case nameof(PropertyFieldNames.InitialPosInterval):
@@ -166,7 +166,7 @@ namespace AltSalt.Maestro
                     break;
 
                 case nameof(PropertyFieldNames.SetTargetIntervalOnValueChange):
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleClipsSelected, propertyField);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleClipsSelected, propertyField);
                     break;
 
                 case nameof(PropertyFieldNames.TargetPosInterval):
@@ -176,7 +176,7 @@ namespace AltSalt.Maestro
                             TimelineUtils.RefreshTimelineContentsModified();
                         }
                     });
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleClipsSelected, propertyField);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleClipsSelected, propertyField);
                     break;
             }
 
@@ -213,7 +213,7 @@ namespace AltSalt.Maestro
                         SetInitPosUsingInterval(TimelineEditor.selectedClips, initialPos, initialPosInterval);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleClipsSelected, button);
                     break;
 
                 case nameof(ButtonNames.PopulateTargetPosFromSelection):
@@ -242,7 +242,7 @@ namespace AltSalt.Maestro
                         SetTargetPosUsingInterval(TimelineEditor.selectedClips, targetPos, targetPosInterval);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleClipsSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MultipleClipsSelected, button);
                     break;
             }
 

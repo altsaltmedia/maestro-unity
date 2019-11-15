@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using AltSalt.Maestro.Animation;
-using DoozyUI.Internal;
+using System.Reflection;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,16 +16,24 @@ namespace AltSalt.Maestro
         public delegate void SelectionChangedDelegate();
         public static SelectionChangedDelegate selectionChangedDelegate = () => { };
 
-        private enum PanelNames
+        private enum ElementNames
         {
-            Modules,
-            ConfigureWindow
+            ConfigureWindow,
+            ModuleButtons,
+            RefreshButtons,
+            Modules
         }
 
-        private enum ButtonNames
+        private enum WindowButtonNames
         {
             ModulesButton,
             ConfigureWindowButton,
+            RefreshModuleWindows,
+            ResetControlPanel
+        }
+
+        private enum ModuleNames
+        {
             LayoutObjects,
             EditObjectValues,
             TextPlacementUtils,
@@ -35,7 +42,9 @@ namespace AltSalt.Maestro
             TouchConfig,
             AutorunConfig,
             TrackPlacement,
-            TimelineAssetPlacement,
+            TimelineAssetManipulation,
+            ClipPlacement,
+            PopulateAnimationClips,
             TimelineMonitor,
             SimpleAnimation,
             AnimationTracks,
@@ -51,99 +60,103 @@ namespace AltSalt.Maestro
             ObjectCreation,
             HierarchySelection,
             ResponsiveUtils,
-            RegisterDependencies,
-            RefreshModuleWindows,
-            ResetControlPanel
+            RegisterDependencies
         }
 
-        private static Dictionary<ModuleNamespace, List<ButtonNames>> _buttonNamespaces = new Dictionary<ModuleNamespace, List<ButtonNames>>
+        private static Dictionary<ModuleNamespace, List<ModuleNames>> _moduleNamespaces = new Dictionary<ModuleNamespace, List<ModuleNames>>
         {
-            {ModuleNamespace.Layout, new List<ButtonNames>
+            {ModuleNamespace.Layout, new List<ModuleNames>
             {
-                ButtonNames.LayoutObjects,
-                ButtonNames.EditObjectValues,
-                ButtonNames.TextPlacementUtils,
+                ModuleNames.LayoutObjects,
+                ModuleNames.EditObjectValues,
+                ModuleNames.TextPlacementUtils,
             }},
-            {ModuleNamespace.Sequencing, new List<ButtonNames>
+            {ModuleNamespace.Sequencing, new List<ModuleNames>
             {
-                ButtonNames.SequencingStructures,
-                ButtonNames.JoinConfig,
+                ModuleNames.SequencingStructures,
+                ModuleNames.JoinConfig,
             }},
-            {ModuleNamespace.Touch, new List<ButtonNames>
+            {ModuleNamespace.Touch, new List<ModuleNames>
             {
-                ButtonNames.TouchConfig,
+                ModuleNames.TouchConfig,
             }},
-            {ModuleNamespace.Autorun, new List<ButtonNames>
+            {ModuleNamespace.Autorun, new List<ModuleNames>
             {
-                ButtonNames.AutorunConfig
+                ModuleNames.AutorunConfig
             }},
-            {ModuleNamespace.Animation, new List<ButtonNames>
+            {ModuleNamespace.Animation, new List<ModuleNames>
             {
-                ButtonNames.SimpleAnimation,
-                ButtonNames.AnimationTracks,
-                ButtonNames.EditAnimationClips
+                ModuleNames.SimpleAnimation,
+                ModuleNames.AnimationTracks,
+                ModuleNames.EditAnimationClips
             }},
-            {ModuleNamespace.Audio, new List<ButtonNames>
+            {ModuleNamespace.Audio, new List<ModuleNames>
             {
-                ButtonNames.AudioStructures,
-                ButtonNames.AudioTracks
+                ModuleNames.AudioStructures,
+                ModuleNames.AudioTracks
             }},
-            {ModuleNamespace.Root, new List<ButtonNames>
+            {ModuleNamespace.Root, new List<ModuleNames>
             {
-                ButtonNames.TrackPlacement,
-                ButtonNames.TimelineAssetPlacement,
-                ButtonNames.TimelineMonitor,
-                ButtonNames.SimpleLogicStructures,
-                ButtonNames.EventTracks,
-                ButtonNames.ObjectCreation,
-                ButtonNames.HierarchySelection,
-                ButtonNames.ResponsiveUtils,
-                ButtonNames.RegisterDependencies
+                ModuleNames.TrackPlacement,
+                ModuleNames.TimelineAssetManipulation,
+                ModuleNames.ClipPlacement,
+                ModuleNames.TimelineMonitor,
+                ModuleNames.SimpleLogicStructures,
+                ModuleNames.EventTracks,
+                ModuleNames.ObjectCreation,
+                ModuleNames.HierarchySelection,
+                ModuleNames.ResponsiveUtils,
+                ModuleNames.RegisterDependencies
             }},
-            {ModuleNamespace.Logic, new List<ButtonNames>
+            {ModuleNamespace.Logic, new List<ModuleNames>
             {
-                ButtonNames.ComplexLogicStructures,
+                ModuleNames.ComplexLogicStructures,
             }},
-            {ModuleNamespace.Sensors, new List<ButtonNames>
+            {ModuleNamespace.Sensors, new List<ModuleNames>
             {
-                ButtonNames.SensorStructures
+                ModuleNames.SensorStructures
             }},
-            {ModuleNamespace.Modify, new List<ButtonNames>
+            {ModuleNamespace.Modify, new List<ModuleNames>
             {
-                ButtonNames.LayoutTools,
-                ButtonNames.TextTools
+                ModuleNames.LayoutTools,
+                ModuleNames.TextTools
             }}
         };
+        
+        private static Dictionary<ModuleNamespace, List<ModuleNames>> moduleNamespaces => _moduleNamespaces;
 
-        private static Dictionary<ButtonNames, List<ButtonNames>> _buttonDependencies = new Dictionary<ButtonNames, List<ButtonNames>>
+        private static Dictionary<ModuleNames, List<ModuleNames>> _moduleDependencies = new Dictionary<ModuleNames, List<ModuleNames>>
         {
-            { ButtonNames.ObjectCreation, new List<ButtonNames>()
+            { ModuleNames.ObjectCreation, new List<ModuleNames>()
             {
-                ButtonNames.LayoutObjects,
-                ButtonNames.SequencingStructures,
-                ButtonNames.AutorunConfig,
-                ButtonNames.TouchConfig,
-                ButtonNames.TrackPlacement,
-                ButtonNames.AudioStructures,
-                ButtonNames.SimpleLogicStructures,
-                ButtonNames.ComplexLogicStructures,
+                ModuleNames.LayoutObjects,
+                ModuleNames.SequencingStructures,
+                ModuleNames.AutorunConfig,
+                ModuleNames.TouchConfig,
+                ModuleNames.TrackPlacement,
+                ModuleNames.AudioStructures,
+                ModuleNames.SimpleLogicStructures,
+                ModuleNames.ComplexLogicStructures,
             }},
-            { ButtonNames.TrackPlacement, new List<ButtonNames>()
+            { ModuleNames.TrackPlacement, new List<ModuleNames>()
             {    
-                ButtonNames.AnimationTracks,
-                ButtonNames.AudioTracks,
-                ButtonNames.EventTracks
-            }}
+                ModuleNames.AnimationTracks,
+                ModuleNames.AudioTracks,
+                ModuleNames.EventTracks,
+            }},
+            { ModuleNames.TimelineAssetManipulation, new List<ModuleNames>()
+            {    
+                ModuleNames.ClipPlacement
+            }},
+            { ModuleNames.ClipPlacement, new List<ModuleNames>()
+            {    
+                ModuleNames.PopulateAnimationClips
+            }},
         };
 
-        private static Dictionary<ButtonNames, List<ButtonNames>> buttonDependencies => _buttonDependencies;
+        private static Dictionary<ModuleNames, List<ModuleNames>> moduleDependencies => _moduleDependencies;
 
-        private static Dictionary<ModuleNamespace, List<ButtonNames>> buttonNamespaces
-        {
-            get => _buttonNamespaces;
-            set => _buttonNamespaces = value;
-        }
-
+        
         private VisualElement _modulesUXML;
 
         private VisualElement modulesUXML {
@@ -180,18 +193,26 @@ namespace AltSalt.Maestro
             get => _trackPlacement;
             private set => _trackPlacement = value;
         }
+        
+        private ClipPlacement _clipPlacement;
 
-        private UQueryBuilder<Button> _buttons;
-
-        private UQueryBuilder<Button> buttons
+        public ClipPlacement clipPlacement
         {
-            get => _buttons;
-            set => _buttons = value;
+            get => _clipPlacement;
+            private set => _clipPlacement = value;
         }
 
-        private List<ButtonNames> _disabledButtonNames = new List<ButtonNames>();
+        private UQueryBuilder<Button> _moduleButtons;
+
+        private UQueryBuilder<Button> moduleButtons
+        {
+            get => _moduleButtons;
+            set => _moduleButtons = value;
+        }
+
+        private List<ModuleNames> _disabledButtonNames = new List<ModuleNames>();
         
-        private List<ButtonNames> disabledButtonNames
+        private List<ModuleNames> disabledButtonNames
         {
             get => _disabledButtonNames;
             set => _disabledButtonNames = value;
@@ -257,112 +278,153 @@ namespace AltSalt.Maestro
             VisualElement pageBuilderStructure = pageBuilderTree.CloneTree();
             rootVisualElement.Add(pageBuilderStructure);
 
-            modulesUXML = rootVisualElement.Query<ScrollView>(nameof(PanelNames.Modules));
+            VisualElement refreshButtonUXML = rootVisualElement.Query<VisualElement>(nameof(ElementNames.RefreshButtons));
+            List<Button> windowButtons = refreshButtonUXML.Query<Button>().ToList();
+            windowButtons.AddRange(rootVisualElement.Query<ToolbarButton>().ToList());
+            windowButtons.ForEach(SetupWindowButton);
             
-            buttons = rootVisualElement.Query<Button>();
-            buttons.ForEach(SetupButton);
+            VisualElement moduleButtonsUXML = rootVisualElement.Query<VisualElement>(nameof(ElementNames.ModuleButtons));
+            moduleButtons = moduleButtonsUXML.Query<Button>();
+            moduleButtons.ForEach(SetupModuleButton);
+            
+            modulesUXML = rootVisualElement.Query<ScrollView>(nameof(ElementNames.Modules));
             
             // To be used for eventual horizontal mode
             //var labels = rootVisualElement.Query<Label>();
             //labels.ForEach(ChangeLabel);
         }
-        
-        Button SetupButton(Button button)
+
+        private void SetupWindowButton(Button button)
         {
             switch (button.name) {
                 
-                default:
-                    if (ModuleTypeExists(this, button.name) == false) {
-                        button.SetEnabled(false);
-                        button.text += " (module not installed)";
-                    }
-                    button.clickable.clicked += () =>
-                    {
-                        TriggerCreateModuleWindow(this, button.name);
-                        RefreshButtons(this);
-                    };
-                    break;
-                
-                case nameof(ButtonNames.ModulesButton):
+                case nameof(WindowButtonNames.ModulesButton):
                     modulesButton = button;
                     button.clickable.clicked += () => {
                         modulesButton.AddToClassList("active");
                         configureWindowButton.RemoveFromClassList("active");
-                        ShowVisualElement(rootVisualElement.Query<VisualElement>(nameof(PanelNames.Modules)));
-                        HideVisualElement(rootVisualElement.Query<VisualElement>(nameof(PanelNames.ConfigureWindow)));
+                        ShowVisualElement(rootVisualElement.Query<VisualElement>(nameof(ElementNames.Modules)));
+                        HideVisualElement(rootVisualElement.Query<VisualElement>(nameof(ElementNames.ConfigureWindow)));
                     };
                     break;
 
-                case nameof(ButtonNames.ConfigureWindowButton):
+                case nameof(WindowButtonNames.ConfigureWindowButton):
                     configureWindowButton = button;
                     button.clickable.clicked += () => {
                         configureWindowButton.AddToClassList("active");
                         modulesButton.RemoveFromClassList("active");
-                        HideVisualElement(rootVisualElement.Query<VisualElement>(nameof(PanelNames.Modules)));
-                        ShowVisualElement(rootVisualElement.Query<VisualElement>(nameof(PanelNames.ConfigureWindow)));
+                        HideVisualElement(rootVisualElement.Query<VisualElement>(nameof(ElementNames.Modules)));
+                        ShowVisualElement(rootVisualElement.Query<VisualElement>(nameof(ElementNames.ConfigureWindow)));
                     };
                     break;
 
-                case nameof(ButtonNames.RefreshModuleWindows):
+                case nameof(WindowButtonNames.RefreshModuleWindows):
                     button.clickable.clicked += () => {
                         RefreshModuleWindows(this);
                     };
                     break;
                 
-                case nameof(ButtonNames.ResetControlPanel):
+                case nameof(WindowButtonNames.ResetControlPanel):
                     button.clickable.clicked += () => {
                         ResetControlPanel(this);
                     };
                     break;
             }
+        }
+
+        private Button SetupModuleButton(Button button)
+        {
+
+            switch (button.name) {
+
+                case nameof(ModuleNames.RegisterDependencies):
+                    button.clickable.clicked += RegisterDependencies.ShowWindow;
+                    break;
+
+                case nameof(ModuleNames.TextTools):
+                case nameof(ModuleNames.LayoutTools):
+                {
+                    if (ModuleTypeExists(this, button.name, out Type moduleType) == false) {
+                        button.SetEnabled(false);
+                        button.text += " (module not installed)";
+                    }
+                    else {
+                        button.clickable.clicked += () =>
+                        {
+                            var moduleInstance = ScriptableObject.CreateInstance(moduleType);
+                            moduleType.GetMethod("ShowWindow").Invoke(moduleInstance, new object[] { });
+                        };
+                    }
+                    break;
+                }
+
+                default:
+                {
+                    if (ModuleTypeExists(this, button.name, out Type moduleType) == false) {
+                        button.SetEnabled(false);
+                        button.text += " (module not installed)";
+                    }
+                    else {
+                        button.clickable.clicked += () =>
+                        {
+                            TriggerCreateModuleWindow(this, button.name);
+                            RefreshButtons(this);
+                        };
+                    }
+                    break;
+                }
+
+            }
 
             return button;
         }
 
-        private static bool ModuleTypeExists(ControlPanel controlPanel, string buttonString)
+        private static bool ModuleTypeExists(ControlPanel controlPanel, string moduleString, out Type moduleType)
         {
-            if (ButtonNames.TryParse(buttonString, out ButtonNames buttonName) == false) {
-                Debug.Log($"Unable to find data for button {buttonString}. Is your button named correctly?");
+            moduleType = null;
+            
+            if (ModuleNames.TryParse(moduleString, out ModuleNames module) == false) {
+                //Debug.Log($"Unable to find data for module {moduleString}. Is your button named correctly?");
                 return false;
             }
             
-            ModuleNamespaceStrings moduleNamespaceStrings = GetNamespaceStrings(buttonName);
-            Type moduleType = Type.GetType($"{moduleNamespaceStrings.name}.{buttonName}");
+            ModuleNamespaceStrings moduleNamespaceStrings = GetNamespaceStrings(module);
+            moduleType = Type.GetType($"{moduleNamespaceStrings.name}.{module}");
 
             if (moduleType != null) {
                 return true;
-            } else {
-                controlPanel.disabledButtonNames.Add(buttonName);
-                return false;
             }
+
+            controlPanel.disabledButtonNames.Add(module);
+            return false;
         }
 
-        private static ModuleWindow TriggerCreateModuleWindow(ControlPanel controlPanel, string buttonString)
+        private static ModuleWindow TriggerCreateModuleWindow(ControlPanel controlPanel, string moduleString)
         {
             ModuleWindow moduleWindow = null;
             
-            if (ButtonNames.TryParse(buttonString, out ButtonNames buttonName) == false) {
-                Debug.Log($"Unable to find data for button {buttonString}. Is your button named correctly?");   
+            if (ModuleNames.TryParse(moduleString, out ModuleNames moduleName) == false) {
+                Debug.Log($"Unable to find data for module {moduleString}. Is your button named correctly?");   
             }
             
-            else if (controlPanel.disabledButtonNames.Contains(buttonName) == true) {
-                Debug.Log($"{buttonString} module already created.");
+            else if (controlPanel.disabledButtonNames.Contains(moduleName) == true) {
+                Debug.Log($"{moduleString} module already created.");
             }
             
             else {
                 
-                if (ButtonHasDependencies(buttonName, out ButtonNames buttonDependency)) {
-                    TriggerCreateModuleWindow(controlPanel, buttonDependency.ToString());
+                if (ModuleHasDependencies(moduleName, out ModuleNames moduleDependency)) {
+                    TriggerCreateModuleWindow(controlPanel, moduleDependency.ToString());
                 }
                 
-                ModuleNamespaceStrings moduleNamespaceStrings = GetNamespaceStrings(buttonName);
+                ModuleNamespaceStrings moduleNamespaceStrings = GetNamespaceStrings(moduleName);
 
-                if (CreateModuleWindow(controlPanel, moduleNamespaceStrings.name, buttonString,
-                    moduleNamespaceStrings.editorPath + buttonString + "_UXML.uxml", out moduleWindow)) {
+                if (CreateModuleWindow(controlPanel, moduleNamespaceStrings.name, moduleString,
+                    moduleNamespaceStrings.editorPath + moduleString + "_UXML.uxml", out moduleWindow)) {
                     controlPanel.createdModuleWindows.Add(moduleWindow);
                     controlPanel.modulesUXML.Add(moduleWindow.moduleWindowUXML);
-                    controlPanel.disabledButtonNames.Add(buttonName);
-                    if (ControlPanel.buttonDependencies.ContainsKey(buttonName)) {
+                    controlPanel.disabledButtonNames.Add(moduleName);
+                    if (ControlPanel.moduleDependencies.ContainsKey(moduleName)) {
                         SaveDependency(controlPanel, moduleWindow);
                     }
                 }
@@ -391,27 +453,27 @@ namespace AltSalt.Maestro
             return false;
         }
         
-        private static ModuleNamespaceStrings GetNamespaceStrings(ButtonNames buttonName)
+        private static ModuleNamespaceStrings GetNamespaceStrings(ModuleNames moduleName)
         {
-            foreach (KeyValuePair<ModuleNamespace, List<ButtonNames>> buttonItem in buttonNamespaces) {
-                if (buttonItem.Value.Contains(buttonName)) {
-                    return ProjectNamespaceData.namespaceData[buttonItem.Key];
+            foreach (KeyValuePair<ModuleNamespace, List<ModuleNames>> moduleNamespace in moduleNamespaces) {
+                if (moduleNamespace.Value.Contains(moduleName)) {
+                    return ProjectNamespaceData.namespaceData[moduleNamespace.Key];
                 }
             }
 
             return null;
         }
 
-        private static bool ButtonHasDependencies(ButtonNames buttonName, out ButtonNames buttonDependency)
+        private static bool ModuleHasDependencies(ModuleNames moduleName, out ModuleNames moduleDependency)
         {
-            foreach (KeyValuePair<ButtonNames, List<ButtonNames>> buttonDependencyData in buttonDependencies) {
-                if (buttonDependencyData.Value.Contains(buttonName)) {
-                    buttonDependency = buttonDependencyData.Key;
+            foreach (KeyValuePair<ModuleNames, List<ModuleNames>> buttonDependencyData in moduleDependencies) {
+                if (buttonDependencyData.Value.Contains(moduleName)) {
+                    moduleDependency = buttonDependencyData.Key;
                     return true;
                 }
             }
 
-            buttonDependency = ButtonNames.ObjectCreation; // Default value 
+            moduleDependency = ModuleNames.ObjectCreation; // Default value 
             return false;
         }
 
@@ -419,15 +481,21 @@ namespace AltSalt.Maestro
         {
             switch (moduleWindow) {
 
-                case ObjectCreation gameObjectCreation:
+                case ObjectCreation objectCreation:
                 {
-                    controlPanel.objectCreation = gameObjectCreation;
+                    controlPanel.objectCreation = objectCreation;
                     break;
                 }
 
                 case TrackPlacement trackPlacement:
                 {
                     controlPanel.trackPlacement = trackPlacement;
+                    break;
+                }
+                
+                case ClipPlacement clipPlacement:
+                {
+                    controlPanel.clipPlacement = clipPlacement;
                     break;
                 }
             }
@@ -458,9 +526,9 @@ namespace AltSalt.Maestro
 
         private static UQueryBuilder<Button> RefreshButtons(ControlPanel controlPanel)
         {    
-            controlPanel.buttons.ForEach(button =>
+            controlPanel.moduleButtons.ForEach(button =>
             {
-                if (ButtonNames.TryParse(button.name, out ButtonNames buttonName) != true) return;
+                if (ModuleNames.TryParse(button.name, out ModuleNames buttonName) != true) return;
                 
                 if (controlPanel.disabledButtonNames.Contains(buttonName)) {
                     button.SetEnabled(false);
@@ -469,7 +537,7 @@ namespace AltSalt.Maestro
                 }
             });
 
-            return controlPanel.buttons;
+            return controlPanel.moduleButtons;
         }
 
         private static ControlPanel ResetControlPanel(ControlPanel controlPanel)

@@ -10,40 +10,60 @@ using UnityEngine.Playables;
 
 namespace AltSalt.Maestro
 {
-    public class ResponsiveUtils : EditorWindow
+    public class ResponsiveUtils : ModuleWindow
     {
         public float breakpoint = 1.78f;
 
-        static VisualElement responsiveElementListContainer;
-        ListView responsiveElementListView;
-        List<IResponsive> selectedElements = new List<IResponsive>();
-        SimpleEventTrigger screenResized = new SimpleEventTrigger();
+        private static VisualElement responsiveElementListContainer;
+        private ListView responsiveElementListView;
+        private List<IResponsive> selectedElements = new List<IResponsive>();
+        private SimpleEventTrigger screenResized = new SimpleEventTrigger();
 
-        bool listViewExpanded;
+        private bool listViewExpanded;
 
-        [MenuItem("Tools/AltSalt/Responsive Utils")]
+        [MenuItem("Tools/Maestro/Responsive Utils")]
         public static void ShowWindow()
         {
-            var window = GetWindow<ResponsiveUtils>();
+            var moduleWindow = CreateInstance<ResponsiveUtils>();
+            moduleWindow.Init();
+            moduleWindow.Show();
         }
 
-        static void Init()
+        private void Init()
         {
-            EditorWindow.GetWindow(typeof(ResponsiveUtils)).Show();
+            titleContent = new GUIContent("Responsive Utils");
+            ModuleWindow moduleWindow = Configure(null, ProjectNamespaceData.namespaceData[ModuleNamespace.Root].editorPath + nameof(ResponsiveUtils)+"_UXML.uxml");
+            
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.GetStylesheetPath());
+            rootVisualElement.AddToClassList("altsalt");
+            rootVisualElement.styleSheets.Add(styleSheet);
+            
+            rootVisualElement.Add(moduleWindow.moduleWindowUXML);
         }
 
         void OnEnable()
         {
-            titleContent = new GUIContent("Responsive Utils");
-            RenderLayout();
-            screenResized.SimpleEventTarget = Utils.GetSimpleEvent("ScreenResized");
             Selection.selectionChanged += UpdateResponsiveElementList;
-            
         }
 
         void OnDisable()
         {
             Selection.selectionChanged -= UpdateResponsiveElementList;
+        }
+        
+        protected override ModuleWindow Configure(ControlPanel controlPanel, string uxmlPath)
+        {
+            base.Configure(controlPanel, uxmlPath);
+            
+            responsiveElementListContainer = moduleWindowUXML.Query("ResponsiveElementListContainer");
+            screenResized.SimpleEventTarget = Utils.GetSimpleEvent(nameof(VarDependencies.ScreenResized));
+            
+            UpdateResponsiveElementList();
+            
+            var buttons = moduleWindowUXML.Query<Button>();
+            buttons.ForEach(SetupButton);
+
+            return this;
         }
 
         void OnHierarchyChange()
@@ -56,32 +76,10 @@ namespace AltSalt.Maestro
             AddBreakpoint,
             SaveResponsiveValues,
             TriggerScreenResized,
-            ToggleListView,
-            RefreshLayout
+            ToggleListView
         }
 
-        void RenderLayout()
-        {
-            rootVisualElement.Clear();
-            AssetDatabase.Refresh();
-
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.GetStylesheetPath());
-            rootVisualElement.styleSheets.Add(styleSheet);
-
-            var pageBuilderTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_AltSalt/Maestro/Editor/ResponsiveUtilsWindow_UXML.uxml");
-            VisualElement pageBuilderStructure = pageBuilderTree.CloneTree();
-            rootVisualElement.Add(pageBuilderStructure);
-
-            responsiveElementListContainer = rootVisualElement.Query("ResponsiveElementListContainer");
-
-            SerializedObject serializedObject = new SerializedObject(this);
-            rootVisualElement.Bind(serializedObject);
-
-            var buttons = rootVisualElement.Query<Button>();
-            buttons.ForEach(SetupButton);
-        }
-
-        Button SetupButton(Button button)
+        private Button SetupButton(Button button)
         {
             switch (button.name) {
 
@@ -116,19 +114,17 @@ namespace AltSalt.Maestro
                         ToggleListView(responsiveElementListView, listViewExpanded);
                     };
                     break;
-
-                case nameof(ButtonNames.RefreshLayout):
-                    button.clickable.clicked += () => {
-                        RenderLayout();
-                    };
-                    break;
             }
 
             return button;
         }
 
-        void UpdateResponsiveElementList()
+        private void UpdateResponsiveElementList()
         {
+            if (responsiveElementListContainer == null) {
+                return;
+            }
+            
             responsiveElementListContainer.Clear();
 
             List<IResponsive> responsiveElements = new List<IResponsive>();
@@ -164,7 +160,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        static Label CreateBreakpointLabel(List<IResponsive> list)
+        private static Label CreateBreakpointLabel(List<IResponsive> list)
         {
             List<float> breakpointValues = new List<float>();
             for (int q = 0; q < list.Count; q++) {
@@ -189,7 +185,7 @@ namespace AltSalt.Maestro
             return label;
         }
 
-        ListView CreateResponsiveElementListView(List<IResponsive> list, bool expandListView)
+        private ListView CreateResponsiveElementListView(List<IResponsive> list, bool expandListView)
         {
             Func<VisualElement> makeItem = () => new Label();
 
@@ -257,7 +253,7 @@ namespace AltSalt.Maestro
             return saveableList.ToArray();
         }
 
-        static ListView ToggleListView(ListView targetListView, bool expandListView)
+        private static ListView ToggleListView(ListView targetListView, bool expandListView)
         {
             if (targetListView != null) {
                 if (expandListView == true) {

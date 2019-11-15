@@ -2,7 +2,7 @@
 using UnityEngine.Playables;
 using UnityEngine.Audio;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Audio
 {
     [ExecuteInEditMode]
     public class AudioLerpSnapshotMixerBehaviour : LerpToTargetMixerBehaviour

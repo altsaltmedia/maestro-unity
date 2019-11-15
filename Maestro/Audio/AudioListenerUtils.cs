@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Audio
 {
     public class AudioListenerUtils : MonoBehaviour
     {

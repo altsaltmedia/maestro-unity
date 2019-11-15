@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Audio
 {
     [Serializable]
     public class AudioFadePlayVolumeClip : LerpToTargetClip

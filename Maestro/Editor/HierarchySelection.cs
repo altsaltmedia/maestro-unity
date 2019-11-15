@@ -1,11 +1,197 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
-    public static class HierarchySelection
+    public class HierarchySelection : ModuleWindow
     {
+        protected override ModuleWindow Configure(ControlPanel controlPanel, string uxmlPath)
+        {
+            base.Configure(controlPanel, uxmlPath);
+
+            toggleData.Clear();
+
+            var buttons = moduleWindowUXML.Query<Button>();
+            buttons.ForEach(SetupButton);
+
+            UpdateDisplay();
+            ControlPanel.selectionChangedDelegate += UpdateDisplay;
+
+            return this;
+        }
+        
+        void OnDestroy()
+        {
+            ControlPanel.selectionChangedDelegate -= UpdateDisplay;
+        }
+        
+        private VisualElementToggleData _toggleData = new VisualElementToggleData();
+
+        private VisualElementToggleData toggleData
+        {
+            get => _toggleData;
+            set => _toggleData = value;
+        }
+
+        private UnityEngine.Object[] _savedSelection = new Object[0];
+
+        private Object[] savedSelection
+        {
+            get => _savedSelection;
+            set => _savedSelection = value;
+        }
+
+        private List<GameObject> _objectsToCopy = new List<GameObject>();
+
+        private List<GameObject> objectsToCopy
+        {
+            get => _objectsToCopy;
+            set => _objectsToCopy = value;
+        }
+
+        enum ButtonNames
+        {
+            SaveSelection,
+            LoadSelection,
+            SelectAllChildren,
+            AddAllChildrenToSelection,
+            CopyGameObjects,
+            PasteGameObjects
+        }
+        
+        enum EnableCondition
+        {
+            SelectionSaved,
+            ObjectSelected,
+            GameObjectSelected,
+            GameObjectsCopied
+        }
+
+        private void UpdateDisplay()
+        {
+            if(Selection.objects.Length > 0) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ObjectSelected, true);
+            } else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ObjectSelected, false);
+            }
+            
+            if (savedSelection.Length > 0) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SelectionSaved, true);
+            }
+            else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SelectionSaved, false);
+            }
+            
+            if(Selection.gameObjects.Length > 0) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.GameObjectSelected, true);
+            } else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.GameObjectSelected, false);
+            }
+            
+            if(objectsToCopy.Count > 0) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.GameObjectsCopied, true);
+            } else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.GameObjectsCopied, false);
+            }
+        }
+
+        private Button SetupButton(Button button)
+        {
+            switch (button.name) {
+
+                case nameof(ButtonNames.SaveSelection):
+                    button.clickable.clicked += () => { savedSelection = Selection.objects; };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ObjectSelected,
+                        button);
+                    break;
+
+                case nameof(ButtonNames.LoadSelection):
+                    button.clickable.clicked += () => { Selection.objects = savedSelection; };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SelectionSaved,
+                        button);
+                    break;
+
+                case nameof(ButtonNames.SelectAllChildren):
+                    button.clickable.clicked += () =>
+                    {
+                        List<GameObject> newSelection = new List<GameObject>();
+                        GameObject[] gameObjectChildren = Utils.GetChildGameObjects(Selection.gameObjects);
+
+                        newSelection.AddRange(gameObjectChildren);
+
+                        Selection.objects = newSelection.ToArray();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
+                        button);
+                    break;
+
+                case nameof(ButtonNames.AddAllChildrenToSelection):
+                    button.clickable.clicked += () =>
+                    {
+                        List<GameObject> newSelection = new List<GameObject>();
+                        GameObject[] gameObjectChildren = Utils.GetChildGameObjects(Selection.gameObjects);
+
+                        newSelection.AddRange(Selection.gameObjects);
+                        newSelection.AddRange(gameObjectChildren);
+
+                        Selection.objects = newSelection.ToArray();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
+                        button);
+                    break;
+
+                case nameof(ButtonNames.CopyGameObjects):
+                    button.clickable.clicked += () =>
+                    {
+                        for (int z = 0; z < objectsToCopy.Count; z++) {
+                            DestroyImmediate(objectsToCopy[z]);
+                        }
+
+                        objectsToCopy.Clear();
+                        Array.Sort(Selection.gameObjects, new Utils.GameObjectSort());
+                        for (int i = 0; i < Selection.gameObjects.Length; i++) {
+                            GameObject copy = Utils.DuplicateObject(Selection.gameObjects[i]);
+                            copy.transform.localPosition = Selection.gameObjects[i].transform.localPosition;
+                            Undo.RegisterCreatedObjectUndo(copy, "Copy game object");
+                            objectsToCopy.Add(copy);
+                        }
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
+                        button);
+                    break;
+
+                case nameof(ButtonNames.PasteGameObjects):
+                    button.clickable.clicked += () =>
+                    {
+                        for (int i = 0; i < Selection.gameObjects.Length; i++) {
+                            for (int z = objectsToCopy.Count - 1; z >= 0; z--) {
+                                GameObject copy = Utils.DuplicateObject(objectsToCopy[z]);
+                                copy.hideFlags = HideFlags.None;
+                                Undo.RegisterCreatedObjectUndo(copy, "Paste game object");
+                                Undo.SetTransformParent(copy.transform, Selection.gameObjects[i].transform,
+                                    "Set parent on pasted object");
+                            }
+                        }
+
+                        for (int z = 0; z < objectsToCopy.Count; z++) {
+                            DestroyImmediate(objectsToCopy[z]);
+                        }
+
+                        objectsToCopy.Clear();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectsCopied,
+                        button);
+                    break;
+
+            }
+
+            return button;
+        }
+        
         public static void ShowSelectionTools()
         {
             if (GUILayout.Button("Select Content Object")) {

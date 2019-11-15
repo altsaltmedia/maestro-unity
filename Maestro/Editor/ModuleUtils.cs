@@ -3,11 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UIElements;
 
 namespace AltSalt.Maestro
 {
     public static class ModuleUtils
     {
+        private const string _toggleableGroup = "toggleable-group";
+        
+        public static string toggleableGroup => _toggleableGroup;
+        
+        private const string _updateWindowTrigger = "update-window-trigger";
+        
+        public static string updateWindowTrigger => _updateWindowTrigger;
+        
         private static ModuleReferences _moduleReferences;
 
         public static ModuleReferences moduleReferences {
@@ -58,8 +67,14 @@ namespace AltSalt.Maestro
             } else if (selectedTransforms.Length == 1) {
                 newElement.transform.SetParent(selectedTransforms[0]);
             }
-
+            
+            FocusHierarchyWindow();
             return newElement;
+        }
+
+        private static void FocusHierarchyWindow()
+        {
+            EditorApplication.ExecuteMenuItem("Window/General/Hierarchy");
         }
 
         public static GameObject[] AddComponentToSelection(GameObject[] gameObjects, Type componentToAdd)
@@ -78,6 +93,33 @@ namespace AltSalt.Maestro
             }
 
             return gameObjectList.ToArray();
+        }
+
+        public static VisualElementToggleData AddToVisualElementToggleData(VisualElementToggleData targetToggleData, Enum targetCondition, VisualElement elementToAdd)
+        {
+            if (targetToggleData.ContainsKey(targetCondition)) {
+                targetToggleData[targetCondition].Add(elementToAdd);
+            } else {
+                List<VisualElement> visualElementList = new List<VisualElement>();
+                visualElementList.Add(elementToAdd);
+                targetToggleData.Add(targetCondition, visualElementList);
+            }
+
+            return targetToggleData;
+        }
+
+        public static VisualElementToggleData ToggleVisualElements(VisualElementToggleData sourceToggleData, Enum targetCondition, bool targetStatus = false)
+        {
+            if (sourceToggleData.ContainsKey(targetCondition)) {
+                List<VisualElement> visualElementList = sourceToggleData[targetCondition];
+                for (int i = 0; i < visualElementList.Count; i++) {
+                    if (visualElementList[i] is Foldout) {
+                        (visualElementList[i] as Foldout).value = targetStatus;
+                    }
+                    visualElementList[i].SetEnabled(targetStatus);
+                }
+            }
+            return sourceToggleData;
         }
     }
 }

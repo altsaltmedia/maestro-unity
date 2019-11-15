@@ -21,13 +21,13 @@ namespace AltSalt.Maestro.Animation
             var buttons = moduleWindowUXML.Query<Button>();
             buttons.ForEach(SetupButton);
 
-            var updateWindowTriggers = moduleWindowUXML.Query<VisualElement>(null, EditorToolsCore.UpdateWindowTrigger);
+            var updateWindowTriggers = moduleWindowUXML.Query<VisualElement>(null, ModuleUtils.updateWindowTrigger);
             updateWindowTriggers.ForEach(SetupUpdateWindowTriggers);
 
             UpdateDisplay();
             ControlPanel.selectionChangedDelegate += UpdateDisplay;
             TrackPlacement.allowBlankTracksChangedDelegate += UpdateDisplay;
-            TrackPlacement.triggerCreateClipDelegate += PopulateTrackAsset;
+            TrackPlacement.triggerCreateTrackDelegate += PopulateTrackAsset;
             
             return this;
         }
@@ -91,47 +91,47 @@ namespace AltSalt.Maestro.Animation
             // The user can force these buttons to enable by toggling allowBlankTracks //
             if (allowBlankTracks == true) {
 
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TextSelected, true);
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, true);
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, true);
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.FloatVarPopulated, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TextSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.FloatVarPopulated, true);
 
             }
             else {
 
                 if (Utils.TargetComponentSelected(Selection.gameObjects, typeof(TMP_Text))) {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TextSelected, true);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TextSelected, true);
                 }
                 else {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TextSelected, false);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TextSelected, false);
                 }
 
                 if (Utils.TargetComponentSelected(Selection.gameObjects, typeof(RectTransform))) {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, true);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, true);
                 }
                 else {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, false);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.RectTransformSelected, false);
                 }
 
                 if (Utils.TargetComponentSelected(Selection.gameObjects, typeof(SpriteRenderer))) {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, true);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, true);
                 }
                 else {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, false);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, false);
                 }
 
                 if (targetFloat != null) {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.FloatVarPopulated, true);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.FloatVarPopulated, true);
                 }
                 else {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.FloatVarPopulated, false);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.FloatVarPopulated, false);
                 }
 
                 if (targetColor != null) {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ColorVarPopulated, true);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ColorVarPopulated, true);
                 }
                 else {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.ColorVarPopulated, false);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ColorVarPopulated, false);
                 }
 
             }
@@ -152,7 +152,7 @@ namespace AltSalt.Maestro.Animation
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.TextSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TextSelected, button);
                     break;
 
                 case nameof(ButtonNames.RectTransformPosTrack):
@@ -171,7 +171,7 @@ namespace AltSalt.Maestro.Animation
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
                     break;
 
                 case nameof(ButtonNames.SpriteColorTrack):
@@ -186,7 +186,7 @@ namespace AltSalt.Maestro.Animation
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.SpriteSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SpriteSelected, button);
                     break;
 
                 case nameof(ButtonNames.RectTransformScaleTrack):
@@ -206,7 +206,7 @@ namespace AltSalt.Maestro.Animation
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
                     break;
 
                 case nameof(ButtonNames.RectTransformRotationTrack):
@@ -226,7 +226,7 @@ namespace AltSalt.Maestro.Animation
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
                     break;
 
                 case nameof(ButtonNames.FloatVarTrack):
@@ -246,7 +246,7 @@ namespace AltSalt.Maestro.Animation
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.FloatVarPopulated, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.FloatVarPopulated, button);
                     break;
 
                 case nameof(ButtonNames.ColorVarTrack):
@@ -266,7 +266,7 @@ namespace AltSalt.Maestro.Animation
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.ColorVarPopulated, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ColorVarPopulated, button);
                     break;
 
                 case nameof(ButtonNames.TMProCharSpacingTrack):
@@ -285,7 +285,7 @@ namespace AltSalt.Maestro.Animation
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.TextSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TextSelected, button);
                     break;
 
                 case nameof(ButtonNames.ResponsiveRectTransformPosTrack):
@@ -300,7 +300,7 @@ namespace AltSalt.Maestro.Animation
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
                     break;
 
                 case nameof(ButtonNames.ResponsiveRectTransformScaleTrack):
@@ -320,7 +320,7 @@ namespace AltSalt.Maestro.Animation
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
                     break;
             }
 

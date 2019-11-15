@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout.Modify
 {
     public class ModifyTools : EditorWindow
     {

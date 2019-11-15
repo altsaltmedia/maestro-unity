@@ -12,13 +12,13 @@ xsi:schemaLocation="
 "
 >
 
-	<engine:VisualElement class="section-container" name="create-core-elements">
+	<engine:VisualElement name="create-core-elements">
 
         <engine:Foldout class="foldout" text="Layout > Layout Objects" value="true">
 
             <engine:VisualElement class="section">
 
-                <engine:VisualElement class="section___content margin-bottom-0">
+                <engine:VisualElement class="section___content">
                     <engine:Button text="New Text" class="col-full" name="NewText" />
                     <engine:Button text="New Sprite" class="col-full" name="NewSprite" />
                     <engine:Button text="New Empty Container" class="col-full" name="NewEmptyContainer" />

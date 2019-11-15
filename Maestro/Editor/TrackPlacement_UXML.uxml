@@ -20,9 +20,9 @@ xsi:schemaLocation="
 
 	    <engine:VisualElement class="section manipulate">
 
-			<engine:VisualElement class="section___title">
-				<engine:Label text="track placement" />
-		  	</engine:VisualElement>
+			<engine:VisualElement class="section___content">
+                <engine:Label class="bold" text="track placement" />
+            </engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">
 		  		<engine:Button text="Copy Track(s)" class="col-full" name="CopyTracks" />

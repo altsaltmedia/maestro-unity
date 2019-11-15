@@ -13,29 +13,9 @@ xsi:schemaLocation="
 >
 <engine:VisualElement class="clip-selection-manipulation" name="clip-selection-manipulation">
 	
-	<engine:Foldout class="foldout" text="Animation > Clip Placement" value="true">
+	<engine:Foldout class="foldout" text="Timeline > Timeline Asset Manipulation" value="true">
 
 		<engine:VisualElement class="section selection">
-
-			<engine:VisualElement class="section___title">
-				<engine:Label text="create" />
-		  	</engine:VisualElement>
-
-			<engine:VisualElement class="section___content">
-				<editor:PropertyField label="new clip duration :" value="0.5" binding-path="newClipDuration" name="NewClipDuration"/>
-			</engine:VisualElement>
-
-		  	<engine:VisualElement class="section___content">
-		  		<editor:PropertyField label="clip name :" class="col-full" value="" binding-path="clipName"/>
-		  		<editor:PropertyField label="easing type :" class="col-full" binding-path="clipEaseType" name="ClipEaseType"/>
-				<engine:Toggle text="select created clip(s)" class="col-half update-window-trigger" binding-path="selectCreatedClip"/>
-				<engine:Toggle text="advance playhead" class="col-half margin-right-0 update-window-trigger" binding-path="advancePlayhead"/>
-		  	</engine:VisualElement>
-
-		  	<engine:VisualElement class="section___content">
-		  		<engine:Button text="New Clip(s)" class="col-full" name="NewClips" />
-		  		<engine:Button text="Rename Clip(s)" class="col-full" name="RenameClips" />
-	  		</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___title">
 				<engine:Label text="select" />

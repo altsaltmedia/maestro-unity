@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Audio
 {
     [Serializable]
     public class AudioLerpVolumeBehaviour : LerpToTargetBehaviour

@@ -22,7 +22,7 @@ namespace AltSalt.Maestro.Layout
         [SerializeField]
         public string closingWrapper;
 
-        [MenuItem("Tools/AltSalt/Text Placement Utils")]
+        [MenuItem("Tools/Maestro/Text Placement Utils")]
         public static void ShowWindow()
         {
             var moduleWindow = CreateInstance<TextPlacementUtils>();
@@ -32,11 +32,12 @@ namespace AltSalt.Maestro.Layout
 
         private void Init()
         {
-            titleContent = new GUIContent("Text Utils");
-            ModuleWindow moduleWindow = Configure(null, ProjectNamespaceData.namespaceData[ModuleNamespace.Layout].editorPath + nameof(textPlacementUtils)+"_UXML.uxml");
+            titleContent = new GUIContent("Text Placement Utils");
+            ModuleWindow moduleWindow = Configure(null, ProjectNamespaceData.namespaceData[ModuleNamespace.Layout].editorPath + nameof(TextPlacementUtils)+"_UXML.uxml");
             
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.GetStylesheetPath());
             rootVisualElement.styleSheets.Add(styleSheet);
+            rootVisualElement.AddToClassList("altsalt");
             
             rootVisualElement.Add(moduleWindow.moduleWindowUXML);
         }

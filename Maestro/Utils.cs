@@ -163,7 +163,7 @@ namespace AltSalt.Maestro
             return false;
         }
 
-        public static GameObject[] RenameElements(string newName, GameObject[] targetObjects)
+        public static UnityEngine.Object[] RenameElements(string newName, UnityEngine.Object[] targetObjects)
         {
             Array.Sort(targetObjects, new Utils.GameObjectSort());
 

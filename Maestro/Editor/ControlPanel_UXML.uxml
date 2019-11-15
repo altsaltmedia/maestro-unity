@@ -48,9 +48,9 @@ xsi:schemaLocation="
 
         <engine:ScrollView name="ConfigureWindow">
 
-            <engine:VisualElement class="section-container" name="">
+            <engine:VisualElement class="section-container">
 
-                <engine:VisualElement class="section">
+                <engine:VisualElement class="section" name="ModuleButtons">
 
                     <!-- LAYOUT -->
 
@@ -76,6 +76,7 @@ xsi:schemaLocation="
                         <engine:Button text="Join Config" class="col-full" name="JoinConfig" />
                         <engine:Button text="Touch Config" class="col-full" name="TouchConfig" />
                         <engine:Button text="Autorun Config" class="col-full" name="AutorunConfig" />
+                        <engine:Button text="Navigation Config" class="col-full" name="NavigationConfig" />
                     </engine:VisualElement>
 
 
@@ -87,7 +88,8 @@ xsi:schemaLocation="
 
                     <engine:VisualElement class="section___content">
                         <engine:Button text="Track Placement" class="col-full" name="TrackPlacement" />
-                        <engine:Button text="Timeline Asset Placement" class="col-full" name="TimelineAssetPlacement" />
+                        <engine:Button text="Timeline Asset Manipulation" class="col-full" name="TimelineAssetManipulation" />
+                        <engine:Button text="Clip Placement" class="col-full" name="ClipPlacement" />
                         <engine:Button text="Timeline Monitor" class="col-full" name="TimelineMonitor" />
                     </engine:VisualElement>
 
@@ -101,7 +103,7 @@ xsi:schemaLocation="
                     <engine:VisualElement class="section___content">
                         <engine:Button text="Simple Animation" class="col-full" name="SimpleAnimation" />
                         <engine:Button text="Animation Tracks" class="col-full" name="AnimationTracks" />
-                        <engine:Button text="Edit Animation Clips" class="col-full" name="EditClipValues" />
+                        <engine:Button text="Edit Animation Clips" class="col-full" name="EditAnimationClips" />
                     </engine:VisualElement>
 
 
@@ -141,13 +143,14 @@ xsi:schemaLocation="
                     </engine:VisualElement>
 
 
-                   <!-- COMPLEX LOGIC AND SENSORS -->
+                   <!-- MODIFY -->
 
                     <engine:VisualElement class="section___content">
                         <engine:Label class="bold" text="Modify" />
                     </engine:VisualElement>
 
                     <engine:VisualElement class="section___content">
+                        <engine:Button text="Modify Structures" class="col-full" name="ModifyStructures" />
                         <engine:Button text="Layout Tools" class="col-full" name="LayoutTools" />
                         <engine:Button text="Text Tools" class="col-full" name="TextTools" />
                     </engine:VisualElement>
@@ -166,7 +169,10 @@ xsi:schemaLocation="
                         <engine:Button text="Register Dependencies" class="col-full" name="RegisterDependencies" />
                     </engine:VisualElement>
 
+                </engine:VisualElement>
 
+                <engine:VisualElement class="section" name="RefreshButtons">
+                    
                     <!-- REFRESH -->
 
                     <engine:VisualElement class="section___content">
@@ -179,7 +185,6 @@ xsi:schemaLocation="
                         <engine:Button text="Reset Control Panel" class="col-full" name="ResetControlPanel" />
 
                     </engine:VisualElement>
-
 
                 </engine:VisualElement>
 

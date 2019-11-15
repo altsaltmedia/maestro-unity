@@ -17,8 +17,8 @@ namespace AltSalt.Maestro
         public delegate void AllowBlankTracksChangedDelegate();
         public static AllowBlankTracksChangedDelegate allowBlankTracksChangedDelegate = () => { };
         
-        public delegate TrackAsset TriggerCreateClipDelegate(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject);
-        public static TriggerCreateClipDelegate triggerCreateClipDelegate =
+        public delegate TrackAsset TriggerCreateTrackDelegate(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject);
+        public static TriggerCreateTrackDelegate triggerCreateTrackDelegate =
             (targetDirector, targetTrack, targetObject) => targetTrack;
 
         protected override ModuleWindow Configure(ControlPanel controlPanel, string uxmlPath)
@@ -30,7 +30,7 @@ namespace AltSalt.Maestro
             var buttons = moduleWindowUXML.Query<Button>();
             buttons.ForEach(SetupButton);
 
-            var updateWindowTriggers = moduleWindowUXML.Query<VisualElement>(null, EditorToolsCore.UpdateWindowTrigger);
+            var updateWindowTriggers = moduleWindowUXML.Query<VisualElement>(null, ModuleUtils.updateWindowTrigger);
             updateWindowTriggers.ForEach(SetupUpdateWindowTriggers);
 
             UpdateDisplay();
@@ -77,29 +77,29 @@ namespace AltSalt.Maestro
             // The user can force these buttons to enable by toggling allowBlankTracks //
             if (allowBlankTracks == true) {
 
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, true);
 
             } else {
 
                 if (Utils.TargetTypeSelected(Selection.objects, typeof(TrackAsset))) {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, true);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, true);
                 } else {
-                    EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, false);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, false);
                 }
             }
 
             // These elements cannot be overriden by allowBlankTracks //
 
             if (Utils.TargetTypeSelected(Selection.objects, typeof(TrackAsset))) {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TrackSelectedForCopying, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelectedForCopying, true);
             } else {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.TrackSelectedForCopying, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelectedForCopying, false);
             }
 
             if (copiedTracks.Count > 0) {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.CopiedTracksPopulated, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.CopiedTracksPopulated, true);
             } else {
-                EditorToolsCore.ToggleVisualElements(toggleData, EnableCondition.CopiedTracksPopulated, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.CopiedTracksPopulated, false);
             }
         }
 
@@ -111,25 +111,28 @@ namespace AltSalt.Maestro
                     button.clickable.clicked += () => {
                         copiedTracks = CopyTracks(TimelineEditor.inspectedDirector, Selection.objects);
                         TimelineUtils.RefreshTimelineContentsModified();
+                        TimelineUtils.FocusTimelineWindow();
                         UpdateDisplay(); // This will update the status of the PasteTracks button
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelectedForCopying, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelectedForCopying, button);
                     break;
 
                 case nameof(ButtonNames.PasteTracks):
                     button.clickable.clicked += () => {
                         Selection.objects = PasteTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, copiedTracks);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                        TimelineUtils.FocusTimelineWindow();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.CopiedTracksPopulated, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.CopiedTracksPopulated, button);
                     break;
 
                 case nameof(ButtonNames.DuplicateTracks):
                     button.clickable.clicked += () => {
                         Selection.objects = DuplicateTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                        TimelineUtils.FocusTimelineWindow();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelectedForCopying, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelectedForCopying, button);
                     break;
 
                 case nameof(ButtonNames.GroupTrack):
@@ -140,8 +143,9 @@ namespace AltSalt.Maestro
                             TriggerCreateGroupTrack(TimelineEditor.inspectedAsset, Selection.objects);
                         }
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                        TimelineUtils.FocusTimelineWindow();
                     };
-                    EditorToolsCore.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelected, button);
                     break;
             }
 
@@ -338,7 +342,7 @@ namespace AltSalt.Maestro
                     if (requiredObjectType != null && Utils.TargetTypeSelected(sourceObjects[i], requiredObjectType) == true) {
                         TrackAsset newTrack = CreateNewTrack(targetTimelineAsset, parentTrack, trackType);
                         trackAssets.Add(newTrack);
-                        triggerCreateClipDelegate.Invoke(targetDirector, newTrack, sourceObjects[i]);
+                        triggerCreateTrackDelegate.Invoke(targetDirector, newTrack, sourceObjects[i]);
                     }
                 }
             } else {
@@ -362,7 +366,7 @@ namespace AltSalt.Maestro
                     if (requiredComponentType != null && Utils.TargetComponentSelected(sortedGameObjects[i], requiredComponentType) == true) {
                         TrackAsset newTrack = CreateNewTrack(targetTimelineAsset, parentTrack, trackType);
                         trackAssets.Add(newTrack);
-                        triggerCreateClipDelegate.Invoke(targetDirector, newTrack, sortedGameObjects[i]);
+                        triggerCreateTrackDelegate.Invoke(targetDirector, newTrack, sortedGameObjects[i]);
                     }
                 }
             } else {

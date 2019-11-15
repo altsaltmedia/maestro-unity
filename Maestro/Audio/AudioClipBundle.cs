@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Audio
 {
     [CreateAssetMenu(menuName = "AltSalt/Audio Clip Bundle")]
     public class AudioClipBundle : RegisterableScriptableObject

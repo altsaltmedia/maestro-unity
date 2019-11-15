@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AltSalt.Maestro.Sequencing;
+using UnityEditor;
 using UnityEditor.Timeline;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -22,6 +23,7 @@ namespace AltSalt.Maestro
             set {
                 PopulateTimeReference();
                 _currentTime.Variable.SetValue(value);
+                TimelineEditor.inspectedDirector.time = value;
             }
 
         }
@@ -92,6 +94,11 @@ namespace AltSalt.Maestro
 
                 return _configTrack;
             }
+        }
+
+        public static void FocusTimelineWindow()
+        {
+            EditorApplication.ExecuteMenuItem("Window/Sequencing/Timeline");
         }
 
         private static FloatReference PopulateTimeReference()

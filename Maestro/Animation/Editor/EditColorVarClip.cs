@@ -16,7 +16,7 @@ namespace AltSalt.Maestro
         {
             base.Configure(parentModuleWindow, childRootUXMLName);
 
-            moduleChildUXML = parentModuleWindow.moduleWindowUXML.Query<Foldout>("EditColorVarClip", EditorToolsCore.ToggleableGroup);
+            moduleChildUXML = parentModuleWindow.moduleWindowUXML.Query<Foldout>("EditColorVarClip", ModuleUtils.toggleableGroup);
 
             var propertyFields = moduleChildUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
