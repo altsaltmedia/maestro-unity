@@ -8,7 +8,7 @@ using UnityEngine.Timeline;
 using UnityEditor.Timeline;
 using UnityEngine.Playables;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     public class EditRectTransformResponsiveScaleClip : ChildModuleWindow
     {

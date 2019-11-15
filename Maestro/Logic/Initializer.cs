@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Logic
 {
     public class Initializer : MonoBehaviour
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEditor;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     public class ResponsiveTextSize : ResponsiveText, IResponsiveSaveable
     {      

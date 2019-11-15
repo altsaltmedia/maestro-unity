@@ -143,19 +143,6 @@ xsi:schemaLocation="
                     </engine:VisualElement>
 
 
-                   <!-- MODIFY -->
-
-                    <engine:VisualElement class="section___content">
-                        <engine:Label class="bold" text="Modify" />
-                    </engine:VisualElement>
-
-                    <engine:VisualElement class="section___content">
-                        <engine:Button text="Modify Structures" class="col-full" name="ModifyStructures" />
-                        <engine:Button text="Layout Tools" class="col-full" name="LayoutTools" />
-                        <engine:Button text="Text Tools" class="col-full" name="TextTools" />
-                    </engine:VisualElement>
-
-
                     <!-- UTILITIES -->
 
                     <engine:VisualElement class="section___content">
@@ -165,6 +152,9 @@ xsi:schemaLocation="
                     <engine:VisualElement class="section___content">
                         <engine:Button text="Object Creation" class="col-full" name="ObjectCreation" />
                         <engine:Button text="Hierarchy Selection" class="col-full" name="HierarchySelection" />
+                        <engine:Button text="Modify Structures" class="col-full" name="ModifyStructures" />
+                        <engine:Button text="Layout Tools" class="col-full" name="LayoutTools" />
+                        <engine:Button text="Text Tools" class="col-full" name="TextTools" />
                         <engine:Button text="Responsive Utils" class="col-full" name="ResponsiveUtils" />
                         <engine:Button text="Register Dependencies" class="col-full" name="RegisterDependencies" />
                     </engine:VisualElement>

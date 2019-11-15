@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HedgehogTeam.EasyTouch;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Sensors
 {
     public class SwipeDebugger : MonoBehaviour
     {

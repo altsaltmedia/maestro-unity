@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using AltSalt.Maestro.Layout;
 
 namespace AltSalt.Maestro.Animation
 {

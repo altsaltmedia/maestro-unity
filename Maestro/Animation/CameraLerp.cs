@@ -1,19 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[ExecuteInEditMode]
-public class CameraLerp : MonoBehaviour {
+namespace  AltSalt.Maestro.Animation
+{
+    
+    [ExecuteInEditMode]
+    public class CameraLerp : MonoBehaviour {
 
-    RectTransform rectTransform;
-    Vector3 vector3;
+        RectTransform rectTransform;
+        Vector3 vector3;
 
-    void Start()
-    {
-        rectTransform = GetComponent<RectTransform>();
+        void Start()
+        {
+            rectTransform = GetComponent<RectTransform>();
+        }
+
+        public void LerpToTarget (Vector3 targetVector) {
+            rectTransform.position = Vector3.SmoothDamp(rectTransform.position, targetVector, ref vector3, Time.deltaTime);
+        }
     }
 
-    public void LerpToTarget (Vector3 targetVector) {
-        rectTransform.position = Vector3.SmoothDamp(rectTransform.position, targetVector, ref vector3, Time.deltaTime);
-	}
 }
+    

@@ -7,7 +7,7 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using SimpleJSON;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     [ExecuteInEditMode]
     public abstract class ResponsiveElement : SerializableElement, IResponsive

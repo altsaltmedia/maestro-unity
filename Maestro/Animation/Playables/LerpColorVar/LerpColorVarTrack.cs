@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.745149f, 0.495372f, 0.8679245f)]
     [TrackClipType(typeof(LerpColorVarClip))]

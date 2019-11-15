@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using TMPro;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     public class TMProTypewriterMixerBehaviour : LerpToTargetMixerBehaviour
     {

@@ -105,6 +105,8 @@ namespace AltSalt.Maestro
                 ModuleNames.EventTracks,
                 ModuleNames.ObjectCreation,
                 ModuleNames.HierarchySelection,
+                ModuleNames.LayoutTools,
+                ModuleNames.TextTools,
                 ModuleNames.ResponsiveUtils,
                 ModuleNames.RegisterDependencies
             }},
@@ -116,11 +118,6 @@ namespace AltSalt.Maestro
             {
                 ModuleNames.SensorStructures
             }},
-            {ModuleNamespace.Modify, new List<ModuleNames>
-            {
-                ModuleNames.LayoutTools,
-                ModuleNames.TextTools
-            }}
         };
         
         private static Dictionary<ModuleNamespace, List<ModuleNames>> moduleNamespaces => _moduleNamespaces;
@@ -342,19 +339,12 @@ namespace AltSalt.Maestro
                     break;
 
                 case nameof(ModuleNames.TextTools):
+                    button.clickable.clicked += TextTools.ShowWindow;
+                    break;
+                
                 case nameof(ModuleNames.LayoutTools):
                 {
-                    if (ModuleTypeExists(this, button.name, out Type moduleType) == false) {
-                        button.SetEnabled(false);
-                        button.text += " (module not installed)";
-                    }
-                    else {
-                        button.clickable.clicked += () =>
-                        {
-                            var moduleInstance = ScriptableObject.CreateInstance(moduleType);
-                            moduleType.GetMethod("ShowWindow").Invoke(moduleInstance, new object[] { });
-                        };
-                    }
+                    button.clickable.clicked += LayoutTools.ShowWindow;
                     break;
                 }
 

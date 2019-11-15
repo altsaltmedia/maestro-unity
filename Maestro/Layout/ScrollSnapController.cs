@@ -10,7 +10,7 @@ using UnityEngine.Events;
 using UnityEditor;
 #endif
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(ResponsiveAutoWidthHeight))]

@@ -5,7 +5,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 #endif
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [Serializable]
     public class LerpColorVarBehaviour : LerpToTargetBehaviour

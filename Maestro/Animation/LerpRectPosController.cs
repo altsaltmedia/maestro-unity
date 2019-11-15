@@ -2,7 +2,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [ExecuteInEditMode]
     public class LerpRectPosController : MonoBehaviour

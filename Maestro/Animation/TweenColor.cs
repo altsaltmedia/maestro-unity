@@ -2,7 +2,7 @@
 using DG.Tweening;
 using TMPro;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     public class TweenColor : TweenController
     {

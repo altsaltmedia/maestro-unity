@@ -8,7 +8,7 @@ using System.Xml;
 using System.IO;
 using System.Linq;
 
-namespace AltSalt.Maestro.Layout.Modify
+namespace AltSalt.Maestro
 {
     public class TextTools : ModifyTools
     {

@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro {
+namespace AltSalt.Maestro.Logic {
     
     public class ValueChangeFloat : ValueChange {
 

@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using TMPro;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.2981132f, 0.5f, 0.1065063f)]
     [TrackClipType(typeof(ResponsiveFloatClip))]

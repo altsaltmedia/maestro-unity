@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     public class SpriteUtils : MonoBehaviour
     {

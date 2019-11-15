@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
 
     public class FloatText : MonoBehaviour

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     [ExecuteInEditMode]
     public class RelativeElementController : MonoBehaviour

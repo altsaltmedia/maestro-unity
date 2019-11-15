@@ -7,7 +7,7 @@ using UnityEditor.UIElements;
 using UnityEngine.Timeline;
 using UnityEditor.Timeline;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     public class EditRectTransformPosClip : ChildModuleWindow
     {

@@ -2,7 +2,7 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro 
+namespace AltSalt.Maestro.Layout 
 {
 
 #if UNITY_EDITOR

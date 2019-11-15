@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 using TMPro;
 using UnityEngine.UI;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     public class ImageUIColorMixerBehaviour : LerpToTargetMixerBehaviour
     {

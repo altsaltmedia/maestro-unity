@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 using DG.Tweening;
 using UnityEngine.Timeline;
 
-namespace AltSalt.Maestro.Sequencing
+namespace AltSalt.Maestro.Animation
 {
     public class DirectorTools : MonoBehaviour
     {
@@ -17,11 +17,6 @@ namespace AltSalt.Maestro.Sequencing
         public void SetTime(float time)
         {
             playableDirector.time = time;
-        }
-
-        public void SetTime(Sequence sequence)
-        {
-            playableDirector.time = sequence.currentTime;
         }
 
         public void SetSpeed(float targetSpeed)

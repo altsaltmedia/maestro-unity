@@ -13,7 +13,7 @@ using UnityEngine;
 using HedgehogTeam.EasyTouch;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Sensors
 {
     public class SwipeMonitor : MonoBehaviour
     {

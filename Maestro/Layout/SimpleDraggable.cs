@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(ResizableBoxCollider2D))]

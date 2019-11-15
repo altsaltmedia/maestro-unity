@@ -2,7 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine.Video;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     public class SimpleVideoPlayer : MonoBehaviour
     {

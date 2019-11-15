@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Sensors
 {
     public class HandheldUtils : MonoBehaviour
     {

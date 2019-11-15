@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro {
+namespace AltSalt.Maestro.Sensors {
     
     public class SetSwipeSensitivity : MonoBehaviour {
 

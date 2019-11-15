@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Logic.ConditionResponse
 {
     [ExecuteInEditMode]
     public class ConditionResponseTriggerBehaviour : MonoBehaviour

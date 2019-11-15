@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     public class ResponsiveSprite : ResponsiveElement
     {

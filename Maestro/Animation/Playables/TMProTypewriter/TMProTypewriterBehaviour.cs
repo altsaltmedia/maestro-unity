@@ -7,7 +7,7 @@ https://www.altsalt.com / ricky@altsalt.com
 **********************************************/
 using System;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [Serializable]
     public class TMProTypewriterBehaviour : LerpToTargetBehaviour

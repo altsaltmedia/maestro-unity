@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using TMPro;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.6981132f, 0f, 0.1065063f)]
     [TrackClipType(typeof(TMProColorClip))]

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {    
     public class LerpColorVarMixerBehaviour : LerpToTargetMixerBehaviour
     {

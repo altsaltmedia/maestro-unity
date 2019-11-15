@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.1981132f, 0.5f, 0.7065063f)]
     [TrackClipType(typeof(ResponsiveVector3Clip))]

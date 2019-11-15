@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     public class ResponsiveScale : ResponsiveRectTransform, IResponsiveSaveable
     {

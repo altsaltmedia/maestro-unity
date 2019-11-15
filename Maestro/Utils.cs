@@ -369,8 +369,8 @@ namespace AltSalt.Maestro
                 for (int i = 0; i < addedComponents.Count; i++) {
                     Component duplicateComponent = duplicate.AddComponent(addedComponents[i].instanceComponent.GetType());
                     EditorUtility.CopySerialized(addedComponents[i].instanceComponent, duplicateComponent);
-                    if(duplicateComponent is ResponsiveElement) {
-                        (duplicateComponent as ResponsiveElement).Reinitialize();
+                    if(duplicateComponent is SerializableElement) {
+                        (duplicateComponent as SerializableElement).Reinitialize();
                     }
                 }
             } else {

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DoozyUI;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Logic
 {
 
     public class BoolUIUpdate : MonoBehaviour

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Video;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     public class LerpVideoPlayerTimeMixerBehaviour : LerpToTargetMixerBehaviour
     {

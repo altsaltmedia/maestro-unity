@@ -8,7 +8,6 @@ namespace AltSalt.Maestro
         {
             { ModuleNamespace.Root, new ModuleNamespaceStrings("AltSalt.Maestro", "Assets/_AltSalt/Maestro/") },
             { ModuleNamespace.Layout, new ModuleNamespaceStrings( "AltSalt.Maestro.Layout", "Assets/_AltSalt/Maestro/Layout/")},
-            { ModuleNamespace.Modify, new ModuleNamespaceStrings( "AltSalt.Maestro.Layout.Modify", "Assets/_AltSalt/Maestro/Layout/Modify/")},
             { ModuleNamespace.Sequencing, new ModuleNamespaceStrings( "AltSalt.Maestro.Sequencing", "Assets/_AltSalt/Maestro/Sequencing/")},
             { ModuleNamespace.Autorun, new ModuleNamespaceStrings( "AltSalt.Maestro.Sequencing.Autorun", "Assets/_AltSalt/Maestro/Sequencing/Autorun/")},
             { ModuleNamespace.Touch, new ModuleNamespaceStrings( "AltSalt.Maestro.Sequencing.Touch", "Assets/_AltSalt/Maestro/Sequencing/Touch/")},

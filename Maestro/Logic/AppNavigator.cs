@@ -18,7 +18,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Logic
 {
     public class AppNavigator : MonoBehaviour {
         

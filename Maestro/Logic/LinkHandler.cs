@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Logic
 {
     public class LinkHandler : MonoBehaviour
     {

@@ -8,7 +8,7 @@ using Sirenix.OdinInspector;
 using UnityEditor.Timeline;
 #endif
 
-namespace AltSalt.Maestro {
+namespace AltSalt.Maestro.Logic {
 
     [ExecuteInEditMode]
 	public class PrepareScene : MonoBehaviour {

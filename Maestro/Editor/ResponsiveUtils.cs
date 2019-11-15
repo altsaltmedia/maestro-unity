@@ -297,7 +297,7 @@ namespace AltSalt.Maestro
         public static IResponsive[] AddBreakpointToSelectedElements(IResponsive[] responsiveElements, float targetBreakpoint)
         {            
             for (int q = 0; q < responsiveElements.Length; q++) {
-                if(responsiveElements[q] is ResponsiveElement) {
+                if(responsiveElements[q] is IResponsive) {
                     responsiveElements[q].AddBreakpoint(targetBreakpoint);
                 } else if(responsiveElements[q] is ResponsiveLerpToTargetBehaviour) {
                     responsiveElements[q].AddBreakpoint(targetBreakpoint);

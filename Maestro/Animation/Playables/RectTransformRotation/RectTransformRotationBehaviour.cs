@@ -8,7 +8,7 @@ using UnityEditor;
 #endif
 
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [Serializable]
     public class RectTransformRotationBehaviour : LerpToTargetBehaviour

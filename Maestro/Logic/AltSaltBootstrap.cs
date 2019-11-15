@@ -12,7 +12,7 @@ using UnityEngine;
 using System.Collections;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Logic
 {
     public class AltSaltBootstrap : MonoBehaviour
     {

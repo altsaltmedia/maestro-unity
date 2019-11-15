@@ -2,7 +2,6 @@ public enum ModuleNamespace
 {
     Root,
     Layout,
-    Modify,
     Sequencing,
     Autorun,
     Touch,

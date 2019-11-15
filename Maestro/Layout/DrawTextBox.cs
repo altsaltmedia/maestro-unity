@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     [RequireComponent(typeof(TextMeshPro))]
     public class DrawTextBox : DrawBoundingBox

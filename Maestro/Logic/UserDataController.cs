@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Logic
 {
     [ExecuteInEditMode]
     public class UserDataController : MonoBehaviour

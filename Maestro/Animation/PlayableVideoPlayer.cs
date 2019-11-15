@@ -2,7 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine.Video;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
 #if UNITY_EDITOR
     [ExecuteInEditMode]

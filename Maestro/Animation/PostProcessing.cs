@@ -4,7 +4,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using DG.Tweening;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     public class PostProcessing : MonoBehaviour
     {

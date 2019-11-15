@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     public class TextAnimate : MonoBehaviour
     {

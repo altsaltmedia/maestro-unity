@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     [RequireComponent(typeof(ResizableBoxCollider2D))]
     public class Touchable : MonoBehaviour, IPointerClickHandler

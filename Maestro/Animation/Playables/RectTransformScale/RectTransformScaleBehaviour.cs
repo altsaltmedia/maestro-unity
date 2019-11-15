@@ -3,7 +3,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.Playables;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [Serializable]
     public class RectTransformScaleBehaviour : LerpToTargetBehaviour

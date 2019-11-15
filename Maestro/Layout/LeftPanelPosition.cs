@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using AltSalt;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
 	[ExecuteInEditMode]
 	public class LeftPanelPosition : ResponsiveRectTransform {

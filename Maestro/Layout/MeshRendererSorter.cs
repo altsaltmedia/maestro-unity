@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 #endif
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     #if UNITY_EDITOR
     [ExecuteInEditMode]

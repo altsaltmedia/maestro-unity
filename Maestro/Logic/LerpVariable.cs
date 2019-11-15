@@ -5,7 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     public class LerpVariable

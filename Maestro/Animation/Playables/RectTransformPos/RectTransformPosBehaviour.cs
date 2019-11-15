@@ -14,7 +14,7 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 #endif
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [Serializable]
     public class RectTransformPosBehaviour : LerpToTargetBehaviour

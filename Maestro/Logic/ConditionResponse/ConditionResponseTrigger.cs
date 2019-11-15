@@ -10,7 +10,7 @@ using System.Reflection;
 using UnityEditor;
 #endif
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Logic.ConditionResponse
 {
     [Serializable]
     [ExecuteInEditMode]

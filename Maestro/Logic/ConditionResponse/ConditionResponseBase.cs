@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Logic.ConditionResponse
 {
     [Serializable]
     [ExecuteInEditMode]

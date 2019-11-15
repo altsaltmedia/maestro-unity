@@ -4,7 +4,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.EventSystems;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     [RequireComponent(typeof(ResizableBoxCollider2D))]
     public abstract class DraggableBase : InteractableRectTransform, IDragHandler, IEndDragHandler

@@ -9,7 +9,7 @@ https://www.altsalt.com / ricky@altsalt.com
 using System;
 using UnityEngine;
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [Serializable]
     public class RectTransformRelativePosBehaviour : LerpToTargetBehaviour

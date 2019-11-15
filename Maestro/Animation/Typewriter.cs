@@ -7,7 +7,7 @@ using TMPro;
 using UnityEditor;
 #endif
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Animation
 {
     [ExecuteInEditMode]
     public class Typewriter : MonoBehaviour
