@@ -67,6 +67,8 @@ namespace AltSalt.Maestro.Layout
         {
             base.Configure(controlPanel, uxmlPath);
 
+            textPlacementUtils = this;
+
             var propertyFields = moduleWindowUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
 

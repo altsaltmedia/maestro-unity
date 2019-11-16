@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+    <engine:VisualElement class="timeline-monitor-window">
+
+        <engine:Foldout class="foldout" text="Timeline > Timeline Monitor" value="true" name="TimelineMonitor">
+
+        	<engine:ScrollView>
+
+                    <engine:VisualElement class="section">
+
+                        <engine:VisualElement class="section___content">
+                            <engine:Label class="bold" text="timeline monitor" />
+                        </engine:VisualElement>
+                       
+                       <engine:VisualElement class="section___content border-top-1 justify-content-flex-start list-container" name="ClipListContainer">
+
+                        <!-- Populated with objects via script -->
+
+                       </engine:VisualElement>
+
+                       <engine:VisualElement class="section___content">
+                            <engine:Label text="Display Type : " class="col-half" name="DisplayTypeLabel"/>
+                            <engine:Toggle text="enabled" class="col-15-percent update-window-trigger" binding-path="enabled" name="Enabled"/>
+                            <engine:Button text="Toggle View" class="col-full" name="ToggleView" />
+                            <engine:Button text="Add to Selection" class="col-full" name="AddToSelection" />
+                            <engine:Button text="Remove from Selection" class="col-full" name="RemoveFromSelection" />
+                            <engine:Button text="Deselect All" class="col-full" name="DeselectAll" />
+                        </engine:VisualElement>
+
+                    </engine:VisualElement>
+
+        	</engine:ScrollView>
+
+        </engine:Foldout>
+
+    </engine:VisualElement>
+
+</engine:UXML>

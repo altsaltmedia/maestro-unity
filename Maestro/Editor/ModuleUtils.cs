@@ -121,5 +121,17 @@ namespace AltSalt.Maestro
             }
             return sourceToggleData;
         }
+
+        public static ListView ToggleListView(ListView targetListView, bool expandListView)
+        {
+            if (targetListView != null) {
+                if (expandListView == true) {
+                    targetListView.AddToClassList("expanded");
+                } else {
+                    targetListView.RemoveFromClassList("expanded");
+                }
+            }
+            return targetListView;
+        }
     }
 }

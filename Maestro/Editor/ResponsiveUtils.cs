@@ -13,13 +13,39 @@ namespace AltSalt.Maestro
     public class ResponsiveUtils : ModuleWindow
     {
         public float breakpoint = 1.78f;
+        public bool listViewExpanded = true;
 
-        private static VisualElement responsiveElementListContainer;
-        private ListView responsiveElementListView;
-        private List<IResponsive> selectedElements = new List<IResponsive>();
-        private SimpleEventTrigger screenResized = new SimpleEventTrigger();
+        private VisualElement _listContainer;
 
-        private bool listViewExpanded;
+        private VisualElement listContainer
+        {
+            get => _listContainer;
+            set => _listContainer = value;
+        }
+
+        private ListView _listView;
+
+        private ListView listView
+        {
+            get => _listView;
+            set => _listView = value;
+        }
+
+        private List<IResponsive> _selectedElements = new List<IResponsive>();
+
+        private List<IResponsive> selectedElements
+        {
+            get => _selectedElements;
+            set => _selectedElements = value;
+        }
+
+        private SimpleEventTrigger _screenResized = new SimpleEventTrigger();
+
+        private SimpleEventTrigger screenResized
+        {
+            get => _screenResized;
+            set => _screenResized = value;
+        }
 
         [MenuItem("Tools/Maestro/Responsive Utils")]
         public static void ShowWindow()
@@ -41,24 +67,25 @@ namespace AltSalt.Maestro
             rootVisualElement.Add(moduleWindow.moduleWindowUXML);
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
-            Selection.selectionChanged += UpdateResponsiveElementList;
+            Init();
+            Selection.selectionChanged += CallUpdateListView;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
-            Selection.selectionChanged -= UpdateResponsiveElementList;
+            Selection.selectionChanged -= CallUpdateListView;
         }
         
         protected override ModuleWindow Configure(ControlPanel controlPanel, string uxmlPath)
         {
             base.Configure(controlPanel, uxmlPath);
             
-            responsiveElementListContainer = moduleWindowUXML.Query("ResponsiveElementListContainer");
+            listContainer = moduleWindowUXML.Query("ResponsiveElementListContainer");
             screenResized.SimpleEventTarget = Utils.GetSimpleEvent(nameof(VarDependencies.ScreenResized));
             
-            UpdateResponsiveElementList();
+            UpdateListView(this);
             
             var buttons = moduleWindowUXML.Query<Button>();
             buttons.ForEach(SetupButton);
@@ -66,12 +93,12 @@ namespace AltSalt.Maestro
             return this;
         }
 
-        void OnHierarchyChange()
+        private void OnHierarchyChange()
         {
-            UpdateResponsiveElementList();
+            UpdateListView(this);
         }
 
-        enum ButtonNames
+        private enum ButtonNames
         {
             AddBreakpoint,
             SaveResponsiveValues,
@@ -91,7 +118,7 @@ namespace AltSalt.Maestro
                             AddBreakpointToSelectedElements(Selection.gameObjects, breakpoint);
                             AddBreakpointToSelectedElements(TimelineEditor.selectedClips, breakpoint);
                         }
-                        UpdateResponsiveElementList();
+                        UpdateListView(this);
                     };
                     break;
 
@@ -111,7 +138,7 @@ namespace AltSalt.Maestro
                 case nameof(ButtonNames.ToggleListView):
                     button.clickable.clicked += () => {
                         listViewExpanded = !listViewExpanded;
-                        ToggleListView(responsiveElementListView, listViewExpanded);
+                        ModuleUtils.ToggleListView(listView, listViewExpanded);
                     };
                     break;
             }
@@ -119,13 +146,18 @@ namespace AltSalt.Maestro
             return button;
         }
 
-        private void UpdateResponsiveElementList()
+        private void CallUpdateListView()
         {
-            if (responsiveElementListContainer == null) {
-                return;
+            UpdateListView(this);
+        }
+
+        private static VisualElement UpdateListView(ResponsiveUtils responsiveUtils)
+        {
+            if (responsiveUtils.listContainer == null) {
+                return responsiveUtils.listContainer;
             }
             
-            responsiveElementListContainer.Clear();
+            responsiveUtils.listContainer.Clear();
 
             List<IResponsive> responsiveElements = new List<IResponsive>();
 
@@ -143,21 +175,23 @@ namespace AltSalt.Maestro
             if(responsiveElements.Count > 0) {
 
                 Label breakpointLabel = CreateBreakpointLabel(responsiveElements);
-                responsiveElementListContainer.Add(breakpointLabel);
+                responsiveUtils.listContainer.Add(breakpointLabel);
 
-                responsiveElementListView = CreateResponsiveElementListView(responsiveElements, listViewExpanded);
-                responsiveElementListContainer.Add(responsiveElementListView);
+                responsiveUtils.listView = CreateListView(responsiveUtils, responsiveElements, responsiveUtils.listViewExpanded);
+                responsiveUtils.listContainer.Add(responsiveUtils.listView);
 
-                rootVisualElement.RegisterCallback<MouseCaptureOutEvent>((MouseCaptureOutEvent evt) => {
-                    if (evt.target != responsiveElementListView) {
-                        selectedElements.Clear();
+                responsiveUtils.rootVisualElement.RegisterCallback<MouseCaptureOutEvent>((MouseCaptureOutEvent evt) => {
+                    if (evt.target != responsiveUtils.listView) {
+                        responsiveUtils.selectedElements.Clear();
                     }
                 });
 
             } else {
                 Label label = new Label("No responsive elements selected");
-                responsiveElementListContainer.Add(label);
+                responsiveUtils.listContainer.Add(label);
             }
+
+            return responsiveUtils.listContainer;
         }
 
         private static Label CreateBreakpointLabel(List<IResponsive> list)
@@ -185,41 +219,44 @@ namespace AltSalt.Maestro
             return label;
         }
 
-        private ListView CreateResponsiveElementListView(List<IResponsive> list, bool expandListView)
+        private static ListView CreateListView(ResponsiveUtils responsiveUtils, List<IResponsive> listElements, bool expandListView)
         {
             Func<VisualElement> makeItem = () => new Label();
 
-            Action<VisualElement, int> bindItem = (e, i) => {
-                string objectString;
-                if (list[i].Name.Length > 10) {
-                    objectString = list[i].Name.Substring(0, 10);
-                } else {
-                    objectString = list[i].Name;
-                }
-                string aspectRatioNames = string.Format("({0})", string.Join(", ", list[i].AspectRatioBreakpoints.ToArray()));
+            Action<VisualElement, int> bindItem = (labelText, index) =>
+            {
+                string objectString = listElements[index].Name.LimitLength(10);
 
-                (e as Label).text = objectString + " - " + list[i].GetType().Name + " " + aspectRatioNames;
+                string aspectRatioNames = string.Format("({0})", string.Join(", ", listElements[index].AspectRatioBreakpoints.ToArray()));
+
+                (labelText as Label).text = objectString + " - " + listElements[index].GetType().Name + " " + aspectRatioNames;
             };
 
             const int itemHeight = 16;
 
-            var listView = new ListView(list, itemHeight, makeItem, bindItem);
-            listView.selectionType = SelectionType.Multiple;
+            var listView = new ListView(listElements, itemHeight, makeItem, bindItem)
+            {
+                selectionType = SelectionType.Multiple
+            };
 
-            listView.onItemChosen += obj => {
-                if (obj is ResponsiveLerpToTargetBehaviour) {
-                    var clipAsset = ResponsiveUtilsCore.GetClipAssetFromResponsiveBehaviour(obj as ResponsiveLerpToTargetBehaviour);
-                    var parentTrack = ResponsiveUtilsCore.GetParentTrackFromResponsiveBehaviour(obj as ResponsiveLerpToTargetBehaviour);
+            listView.onItemChosen += item => {
+                
+                if (item is ResponsiveLerpToTargetBehaviour behaviour) {
+                    
+                    var clipAsset = ResponsiveUtilsCore.GetClipAssetFromResponsiveBehaviour(behaviour);
+                    var parentTrack = ResponsiveUtilsCore.GetParentTrackFromResponsiveBehaviour(behaviour);
                     TimelineEditor.selectedClip = TimelineUtils.GetTimelineClipFromTrackAsset(clipAsset, parentTrack);
-                } else if(obj is UnityEngine.Object) {
-                    Selection.activeObject = obj as UnityEngine.Object;
-                } 
+                    
+                } else if(item is UnityEngine.Object unityObject) {
+                    Selection.activeObject = unityObject;
+                }
+                
             };
-            listView.onSelectionChanged += objects => {
-                selectedElements = objects.ConvertAll(item => (IResponsive)item);
+            listView.onSelectionChanged += items => {
+                responsiveUtils.selectedElements = items.ConvertAll(item => (IResponsive)item);
             };
 
-            return ToggleListView(listView, expandListView);
+            return ModuleUtils.ToggleListView(listView, expandListView);
         }
 
         public static IResponsiveSaveable[] SaveResponsiveValues(GameObject[] selectedObjects)
@@ -251,18 +288,6 @@ namespace AltSalt.Maestro
                 }
             }
             return saveableList.ToArray();
-        }
-
-        private static ListView ToggleListView(ListView targetListView, bool expandListView)
-        {
-            if (targetListView != null) {
-                if (expandListView == true) {
-                    targetListView.RemoveFromClassList("expanded");
-                } else {
-                    targetListView.AddToClassList("expanded");
-                }
-            }
-            return targetListView;
         }
 
         public static IResponsive[] AddBreakpointToSelectedElements(GameObject[] selectedObjects, float targetBreakpoint)

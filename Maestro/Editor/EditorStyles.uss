@@ -228,9 +228,9 @@
 	-unity-text-align: middle-center;
 }
 
-/** Responsive Utils **/
+/** List Elements **/
 
-.responsive-utils-window .responsive-element-list-container .unity-list-view {
+.list-container .unity-list-view {
 	flex-grow: 1;
 	width: 275px;
 	border-color: #000;
@@ -238,10 +238,16 @@
 	height: 32px;
 }
 
-.responsive-utils-window .responsive-element-list-container .unity-list-view.expanded {
+.list-container .unity-list-view.expanded {
 	height: 200px;
 }
 
-.responsive-utils-window .responsive-element-list-container > .unity-label {
+.list-container > .unity-label {
 	width: 275px;
+}
+
+/** Timeline Monitor **/
+
+.timeline-monitor-window .unity-toggle__input {
+	margin-top: 0;
 }

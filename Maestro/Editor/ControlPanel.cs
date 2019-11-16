@@ -230,19 +230,19 @@ namespace AltSalt.Maestro
             window.Show();
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             titleContent = new GUIContent("Maestro Story Engine");
             RenderLayout();
             Selection.selectionChanged += SelectionChangedCallback;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             Selection.selectionChanged -= SelectionChangedCallback;
         }
 
-        void SelectionChangedCallback()
+        private void SelectionChangedCallback()
         {
             if (selectionChangedDelegate == null) {
                 RenderLayout();
@@ -250,7 +250,7 @@ namespace AltSalt.Maestro
             selectionChangedDelegate.Invoke();
         }
 
-        void OnInspectorUpdate()
+        private void OnInspectorUpdate()
         {
             inspectorUpdateDelegate.Invoke();
         }

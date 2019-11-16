@@ -1085,6 +1085,29 @@ namespace AltSalt.Maestro
                 }
             }
 
+            return GetObjectsFromTrackSelection(trackAssets, sourceDirector);
+        }
+
+        public static UnityEngine.Object GetObjectFromTrackSelection(TrackAsset trackAsset, PlayableDirector sourceDirector)
+        {
+            UnityEngine.Object sourceObject = null;
+
+            foreach (PlayableBinding playableBinding in trackAsset.outputs) {
+                UnityEngine.Object objectBinding = sourceDirector.GetGenericBinding(playableBinding.sourceObject);
+                if (objectBinding is Component) {
+                    sourceObject = (objectBinding as Component).gameObject;
+                } else {
+                    sourceObject = objectBinding;
+                }
+            }
+
+            return sourceObject;
+        }
+        
+        public static UnityEngine.Object[] GetObjectsFromTrackSelection(List<TrackAsset> trackAssets, PlayableDirector sourceDirector)
+        {
+            List<UnityEngine.Object> newObjectSelection = new List<UnityEngine.Object>();
+            
             for (int i = 0; i < trackAssets.Count; i++) {
 
                 foreach (PlayableBinding playableBinding in trackAssets[i].outputs) {

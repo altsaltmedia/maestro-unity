@@ -106,6 +106,16 @@ namespace AltSalt.Maestro
             double aspectRatio = height / width;
             return Math.Pow(0.561993755433366d, aspectRatio) * 10.03014554127636d;
         }
+        
+        public static string LimitLength(this string source, int maxLength)
+        {
+            if (source.Length <= maxLength)
+            {
+                return source;
+            }
+
+            return source.Substring(0, maxLength);
+        }
 
 #if UNITY_EDITOR
         public static GUISkin AltSaltSkin {
