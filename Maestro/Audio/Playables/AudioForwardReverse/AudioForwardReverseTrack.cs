@@ -12,14 +12,14 @@ namespace AltSalt.Maestro.Audio
     {
 
 #if UNITY_EDITOR
-        public void StoreUtilVars()
+        public void StoreUtilVars(GameObject go)
         {
             foreach (var clip in GetClips()) {
                 var myAsset = clip.asset as AudioForwardReverseClip;
                 if (myAsset) {
-                    myAsset.isReversing.Variable = Utils.GetBoolVariable("IsReversing");
-                    myAsset.frameStepValue.Variable = Utils.GetFloatVariable("FrameStepValue");
-                    myAsset.swipeModifier.Variable = Utils.GetFloatVariable("SwipeModifier");
+                    myAsset.isReversing.Variable = go.GetComponent<TrackAssetConfig>().isReversing;
+                    myAsset.frameStepValue.Variable = go.GetComponent<TrackAssetConfig>().frameStepValue;
+                    myAsset.swipeModifierOutput.Variable = go.GetComponent<TrackAssetConfig>().swipeModifierOutput;;
                 }
             }
         }
@@ -28,7 +28,7 @@ namespace AltSalt.Maestro.Audio
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
 #if UNITY_EDITOR
-            StoreUtilVars();
+            StoreUtilVars(go);
 #endif
             StoreClipProperties(go);
             return ScriptPlayable<AudioForwardReverseMixerBehaviour>.Create(graph, inputCount);

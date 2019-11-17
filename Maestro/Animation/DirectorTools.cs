@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Playables;
 using DG.Tweening;
+using UnityEngine.Events;
 using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro.Animation
@@ -9,9 +10,19 @@ namespace AltSalt.Maestro.Animation
     {
         PlayableDirector playableDirector;
 
-        void Start()
+        [SerializeField]
+        private UnityEvent _endEvent;
+
+        private UnityEvent endEvent
+        {
+            get => _endEvent;
+            set => _endEvent = value;
+        }
+
+        private void Start()
         {
             playableDirector = GetComponent<PlayableDirector>();
+            playableDirector.stopped += CallEndEvent;
         }
 
         public void SetTime(float time)
@@ -24,6 +35,11 @@ namespace AltSalt.Maestro.Animation
             if(playableDirector.playableGraph.IsValid() == true) {
                 playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(targetSpeed);
             }
+        }
+
+        private void CallEndEvent(PlayableDirector playableDirector)
+        {
+            this.endEvent.Invoke();
         }
 
         public void Reset()

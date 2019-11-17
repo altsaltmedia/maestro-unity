@@ -56,28 +56,57 @@ namespace AltSalt.Maestro
             private set => _onGraphStart = value;
         }
 
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private FloatReference _frameStepValue;
+
+        public FloatVariable frameStepValue
+        {
+            get => _frameStepValue.Variable;
+            private set => _frameStepValue.Variable = value;
+        }
+        
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private FloatReference _swipeModifierOutput;
+
+        public FloatVariable swipeModifierOutput
+        {
+            get => _swipeModifierOutput.Variable;
+            private set => _swipeModifierOutput.Variable = value;
+        }
+
         private void OnEnable()
         {
-            if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
+            #if UNITY_EDITOR
+                if (appSettings == null) {
+                    appSettings = Utils.GetAppSettings();
+                }
 
-            if (isReversing == null) {
-                isReversing = Utils.GetBoolVariable(nameof(VarDependencies.IsReversing));
-            }
+                if (isReversing == null) {
+                    isReversing = Utils.GetBoolVariable(nameof(VarDependencies.IsReversing));
+                }
 
-            if (scrubberActive == null) {
-                scrubberActive = Utils.GetBoolVariable(nameof(VarDependencies.ScrubberActive));
-            }
+                if (scrubberActive == null) {
+                    scrubberActive = Utils.GetBoolVariable(nameof(VarDependencies.ScrubberActive));
+                }
 
-            if (timelineCurrentTime == null) {
-                timelineCurrentTime = Utils.GetFloatVariable(nameof(VarDependencies.TimelineCurrentTime));
-            }
+                if (timelineCurrentTime == null) {
+                    timelineCurrentTime = Utils.GetFloatVariable(nameof(VarDependencies.TimelineCurrentTime));
+                }
 
-            if (onGraphStart == null) {
-                onGraphStart = Utils.GetSimpleEvent(nameof(VarDependencies.OnGraphStart));
-            }
-            
+                if (onGraphStart == null) {
+                    onGraphStart = Utils.GetSimpleEvent(nameof(VarDependencies.OnGraphStart));
+                }
+
+                if (frameStepValue == null) {
+                    frameStepValue = Utils.GetFloatVariable(nameof(VarDependencies.FrameStepValue));
+                }
+
+                if (swipeModifierOutput == null) {
+                    swipeModifierOutput = Utils.GetFloatVariable(nameof(VarDependencies.SwipeModifierOutput));
+                }
+            #endif
         }
 
         private static bool IsPopulated(BoolReference attribute)

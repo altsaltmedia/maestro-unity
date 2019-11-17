@@ -11,7 +11,7 @@ namespace AltSalt.Maestro.Audio
 
         public BoolReference isReversing;
         public FloatReference frameStepValue;
-        public FloatReference swipeModifier;
+        public FloatReference swipeModifierOutput;
 
         public override Playable CreatePlayable (PlayableGraph graph, GameObject owner)
         {
@@ -19,7 +19,7 @@ namespace AltSalt.Maestro.Audio
             template.endTime = endTime;
             template.isReversing.Variable = isReversing.Variable;
             template.frameStepValue.Variable = frameStepValue.Variable;
-            template.swipeModifier.Variable = swipeModifier.Variable;
+            template.swipeModifier.Variable = swipeModifierOutput.Variable;
 
             var playable = ScriptPlayable<AudioForwardReverseBehaviour>.Create(graph, template);
             return playable;

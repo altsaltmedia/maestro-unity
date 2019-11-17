@@ -57,6 +57,8 @@ namespace AltSalt.Maestro
         SceneWidth,
         SceneHeight,
         TimelineCurrentTime,
+        FrameStepValue,
+        SwipeModifierOutput,
         OnGraphStart,
         ResponsiveElementEnable,
         ResponsiveElementDisable,

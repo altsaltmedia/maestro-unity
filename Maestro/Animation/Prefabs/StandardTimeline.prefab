@@ -76,6 +76,14 @@ MonoBehaviour:
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 0fbf8f44e4dad49eb8f9c318eb4667b4, type: 2}
   _onGraphStart: {fileID: 11400000, guid: 87530e998b45847529374d024ccfda83, type: 2}
+  _frameStepValue:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 1e19d88d8db1b4a37b05030830ea63cf, type: 2}
+  _swipeModifierOutput:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 360c5582a8dd14c3681d73b9132dabe5, type: 2}
 --- !u!114 &6416722693999385806
 MonoBehaviour:
   m_ObjectHideFlags: 0

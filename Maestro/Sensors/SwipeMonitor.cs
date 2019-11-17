@@ -414,9 +414,11 @@ namespace AltSalt.Maestro.Sensors
             var fromAxis = eventPayload.GetScriptableObjectValue(AxisDestination.fromAxis) as Axis;
             var toAxis = eventPayload.GetScriptableObjectValue(AxisDestination.fromAxis) as Axis;
 
+            float modifier = 1f;
+
             // Replace momentum on the new axis with momentum from the old axis.
             // Also, convert the momentum to the opposite sign if need be.
-            momentumCache.Variable._value[Utils.GetAxisId(toAxis.ToString())] = momentumCache.Variable.value[Utils.GetAxisId(fromAxis.ToString())];
+            momentumCache.Variable._value[Utils.GetAxisId(toAxis.ToString())] = momentumCache.Variable.value[Utils.GetAxisId(fromAxis.ToString())] * modifier;
         }
 
         private static bool IsPopulated(FloatReference attribute)

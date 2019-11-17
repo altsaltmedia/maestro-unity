@@ -43,21 +43,43 @@ namespace AltSalt.Maestro.Sequencing.Touch
             
             touchController.momentumModifierOutput = 0;
 
+            // Force the momentum values to correspond to our axis based on whether we are reversing
+            // or not (which is determined by the swipe applier)
             if (touchController.yMomentumAxis.active) 
             {
                 if (touchController.yMomentumAxis.inverted == false) {
-                    touchController.momentumModifierOutput += momentumForceToApply.y;
+                    if (touchController.isReversing == false) {
+                        touchController.momentumModifierOutput += Mathf.Abs(momentumForceToApply.y);
+                    }
+                    else {
+                        touchController.momentumModifierOutput += Mathf.Abs(momentumForceToApply.y) * -1f;
+                    }
                 } else {
-                    touchController.momentumModifierOutput += momentumForceToApply.y * -1f;
+                    if (touchController.isReversing == false) {
+                        touchController.momentumModifierOutput += Mathf.Abs(momentumForceToApply.y) * -1f;
+                    }
+                    else {
+                        touchController.momentumModifierOutput += Mathf.Abs(momentumForceToApply.y);
+                    }
                 }
             }
             
             if (touchController.xMomentumAxis.active)
             {
                 if (touchController.xMomentumAxis.inverted == false) {
-                    touchController.momentumModifierOutput += momentumForceToApply.x;
+                    if (touchController.isReversing == false) {
+                        touchController.momentumModifierOutput += Mathf.Abs(momentumForceToApply.x);
+                    }
+                    else {
+                        touchController.momentumModifierOutput += Mathf.Abs(momentumForceToApply.x) * -1f;
+                    }
                 } else {
-                    touchController.momentumModifierOutput += momentumForceToApply.x * -1f;
+                    if (touchController.isReversing == false) {
+                        touchController.momentumModifierOutput += Mathf.Abs(momentumForceToApply.x) * -1f;
+                    }
+                    else {
+                        touchController.momentumModifierOutput += Mathf.Abs(momentumForceToApply.x);
+                    }
                 }
             }
 
