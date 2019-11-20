@@ -70,7 +70,7 @@ namespace AltSalt.Maestro.Sequencing
             }
         }
 
-        double _masterTotalTime;
+        private double _masterTotalTime;
         
         public double masterTotalTime {
             get {
@@ -79,6 +79,16 @@ namespace AltSalt.Maestro.Sequencing
                 }
                 return _masterTotalTime;
             }
+        }
+
+        [ShowInInspector]
+        [ReadOnly]
+        private bool _hasActiveSequence;
+
+        public bool hasActiveSequence
+        {
+            get => _hasActiveSequence;
+            set => _hasActiveSequence = value;
         }
 
         private void Start()
@@ -202,17 +212,39 @@ namespace AltSalt.Maestro.Sequencing
             return activeSequence;
         }
 
-        public void RefreshElapsedTime(EventPayload eventPayload)
+        public void RefreshMasterSequence(EventPayload eventPayload)
         {
-            Sequence targetSequence = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as Sequence;
-            MasterTimeData masterTimeData = masterTimeDataList.Find(x => x.sequence == targetSequence);
-                
-            if(masterTimeData != null) {
-                elapsedTime = masterTimeData.masterTimeStart + targetSequence.currentTime;
+            hasActiveSequence = GetActiveStatusFromSequences(sequenceConfigs);
+
+            if (hasActiveSequence == true) {
+               RefreshElapsedTime(this, eventPayload);
             }
         }
 
-        static List<MasterTimeData> GenerateSequenceData(List<Sequence_Config> sourceSequenceConfigs)
+        private static bool GetActiveStatusFromSequences(List<Sequence_Config> sequenceConfigs)
+        {
+            for (int i = 0; i < sequenceConfigs.Count; i++) {
+                if (sequenceConfigs[i].sequence.active == true) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static double RefreshElapsedTime(MasterSequence masterSequence, EventPayload eventPayload)
+        {
+            Sequence targetSequence = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as Sequence;
+            MasterTimeData masterTimeData = masterSequence.masterTimeDataList.Find(x => x.sequence == targetSequence);
+                
+            if(masterTimeData != null) {
+                masterSequence.elapsedTime = masterTimeData.masterTimeStart + targetSequence.currentTime;
+            }
+
+            return masterSequence.elapsedTime;
+        }
+
+        private static List<MasterTimeData> GenerateSequenceData(List<Sequence_Config> sourceSequenceConfigs)
         {
             List<MasterTimeData> sequenceData = new List<MasterTimeData>();
             for (int i = 0; i < sourceSequenceConfigs.Count; i++)

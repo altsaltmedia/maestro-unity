@@ -81,8 +81,6 @@ namespace AltSalt.Maestro.Sequencing.Touch
             bool withinExtents = false;
 
             for (int q = 0; q < extents.Count; q++) {
-                if (extents[q].sequence.active == false) continue;
-                        
                 if(sourceTime >= extents[q].startTime &&
                    sourceTime <= extents[q].endTime) {
                     currentExtents = extents[q];

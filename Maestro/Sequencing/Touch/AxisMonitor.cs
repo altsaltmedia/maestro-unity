@@ -34,58 +34,17 @@ namespace AltSalt.Maestro.Sequencing.Touch
             get => _touchExtentsCollection;
             private set => _touchExtentsCollection = value;
         }
-
-        [ValidateInput(nameof(IsPopulated))]
-        [FoldoutGroup("Switch Dependencies")]
-        [SerializeField]
-        private ComplexEventTrigger _convertMomentum;
-
-        public ComplexEventTrigger convertMomentum
-        {
-            get => _convertMomentum;
-            set => _convertMomentum = value;
-        }
-
-        [ValidateInput(nameof(IsPopulated))]
-        [FoldoutGroup("Switch Dependencies")]
-        [SerializeField]
-        private FloatReference _resetSpread;
-
-        public float resetSpread
-        {
-            get => _resetSpread.Value;
-        }
         
         [ValidateInput(nameof(IsPopulated))]
         [FoldoutGroup("Switch Dependencies")]
         [SerializeField]
-        private FloatReference _swipeTransitionSpread;
+        private FloatReference _axisTransitionSpread;
 
-        public float swipeTransitionSpread
+        public float axisTransitionSpread
         {
-            get => _swipeTransitionSpread.Value;
+            get => _axisTransitionSpread.Value;
         }
-        
-        [ValidateInput(nameof(IsPopulated))]
-        [FoldoutGroup("Switch Dependencies")]
-        [SerializeField]
-        private FloatReference _momentumTransitionSpread;
 
-        public float momentumTransitionSpread
-        {
-            get => _momentumTransitionSpread.Value;
-        }
-        
-        [ValidateInput(nameof(IsPopulated))]
-        [FoldoutGroup("Switch Dependencies")]
-        [SerializeField]
-        private FloatReference _invertTransitionSpread;
-
-        public float invertTransitionSpread
-        {
-            get => _invertTransitionSpread.Value;
-        }
-        
         [TitleGroup("Branch Keys")]
         [SerializeField]
         [ReadOnly]
@@ -274,6 +233,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
         public void RefreshAxes()
         {
             foreach (KeyValuePair<MasterSequence, List<TouchExtents>> touchExtentsItem in touchExtentsCollection) {
+
+                if (touchExtentsItem.Key.hasActiveSequence == false) continue;
                 
                 double masterTime = touchExtentsItem.Key.elapsedTime;
 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5339541314759043643}
   - component: {fileID: 3318923730177639291}
   m_Layer: 12
-  m_Name: AxisModifier
+  m_Name: AxisMonitor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,24 +79,10 @@ MonoBehaviour:
     isExpanded: 0
     _keyValues: []
     _keys: []
-  _convertMomentum:
-    complexEvent: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
-  _resetSpread:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: bc2564f0a71134de7af265805f3cb21e, type: 2}
-  _swipeTransitionSpread:
+  _axisTransitionSpread:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 36d38cb5ece114eb0bfedc4e4952dabd, type: 2}
-  _momentumTransitionSpread:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: dc0713764ec1a4cdaa3f9affdfc2d6af, type: 2}
-  _invertTransitionSpread:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 6a43f748a303a4bcbb7990dd32c38b27, type: 2}
   _yNorthKey: {fileID: 0}
   _ySouthKey: {fileID: 0}
   _xEastKey: {fileID: 0}
@@ -189,7 +175,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: AltSalt.Maestro.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   doNotRecord: 0
 --- !u!1 &2614246155531537207
@@ -266,10 +252,6 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 9e868af6a8f2749a197bc4c8cca51970, type: 2}
-  _momentumForce:
-    UseConstant: 0
-    ConstantValue: {x: 0, y: 0}
-    Variable: {fileID: 11400000, guid: f622ace9e18b44dddaacabde456d3ef4, type: 2}
   _yMomentumAxis: {fileID: 11400000, guid: f42a426f4dfb54a94938a16ec1f3c2e3, type: 2}
   _xMomentumAxis: {fileID: 11400000, guid: f88bf119e8f2c4cf3877691a94127d64, type: 2}
   _isReversing:
@@ -291,10 +273,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8093800959205900994}
   - component: {fileID: 2334433779831845473}
+  - component: {fileID: 8132643687515368099}
   - component: {fileID: 8140058799231212654}
   - component: {fileID: 4742324807908144558}
   m_Layer: 12
-  m_Name: MomentumModifier
+  m_Name: MomentumApplier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -332,8 +315,46 @@ MonoBehaviour:
   _touchController: {fileID: 6351633449510160952}
   _momentumApplied:
     simpleEvent: {fileID: 11400000, guid: 5d2e39e0dde6d4a07a757b7c25df22fb, type: 2}
+  _swipeMonitorMomentumCache:
+    UseConstant: 0
+    ConstantValue: {x: 0, y: 0}
+    Variable: {fileID: 11400000, guid: 9c73add5e07354026b81333b1eb40cb3, type: 2}
+  _momentumDecay:
+    UseConstant: 0
+    ConstantValue: 0.935
+    Variable: {fileID: 11400000, guid: 4c80310b758254a649b9ade806f99505, type: 2}
   _pauseSequenceComplete:
     simpleEvent: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
+--- !u!114 &8132643687515368099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8771448038486601892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: bf5075b16b1fc4eddae6ca56d96655e7, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2334433779831845473}
+        m_MethodName: RefreshLocalMomentum
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  doNotRecord: 0
 --- !u!114 &8140058799231212654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,12 +367,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: a2e4c5a50b2c44620a2c0a046f85ab80, type: 2}
+  Event: {fileID: 11400000, guid: 70b79ca86b9cd48488582825731bcfac, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2334433779831845473}
-        m_MethodName: UpdateSequenceWithMomentum
+        m_MethodName: HaltMomentum
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2334433779831845473}
+        m_MethodName: TriggerInputActionComplete
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -381,6 +413,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2334433779831845473}
+        m_MethodName: HaltMomentum
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2334433779831845473}
         m_MethodName: TriggerInputActionComplete
         m_Mode: 1
         m_Arguments:
@@ -407,7 +450,7 @@ GameObject:
   - component: {fileID: 7502520908444273291}
   - component: {fileID: 5768031951818456644}
   m_Layer: 12
-  m_Name: SwipeModifier
+  m_Name: SwipeApplier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -5,7 +5,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
     public static class AxisUtils
     {
-        public static AxisExtents ActivateAxisExtents(double masterTime, AxisExtents activeExtents)
+        public static TouchExtents ActivateAxisExtents(double masterTime, AxisExtents activeExtents)
         {
             // Since we are currently within the extents, set the swipe to true
             activeExtents.swipeAxis.inverted = activeExtents.inverted;
@@ -23,20 +23,35 @@ namespace AltSalt.Maestro.Sequencing.Touch
             }
 
             // Check transition thresholds to either activate or deactivate adjacent extents
-            if (activeExtents.previousTouchExtents != null && activeExtents.previousTouchExtents is AxisExtents previousAxisExtents) {
+            if (activeExtents.previousTouchExtents != null) {
                     
                 if (masterTime <= activeExtents.startTransitionThreshold) {
 
-                    return SetTransitionState(activeExtents, previousAxisExtents);
-                }
-            } 
-                
+                    switch (activeExtents.previousTouchExtents) {
+                        
+                        case AxisExtents previousAxisExtents:
+                            return SetAxisTransitionState(activeExtents, previousAxisExtents);
 
-            if (activeExtents.nextTouchExtents != null && activeExtents.nextTouchExtents is AxisExtents nextAxisExtents) {
+                        case TouchForkExtents previousForkExtents:
+                            return SetForkTransitionState(activeExtents.axisMonitor.touchController, previousForkExtents);
+                        
+                    }
+                }
+            }
+
+            if (activeExtents.nextTouchExtents != null) {
                     
                 if (masterTime >= activeExtents.endTransitionThreshold) {
 
-                    return SetTransitionState(activeExtents, nextAxisExtents);
+                    switch (activeExtents.nextTouchExtents) {
+                        
+                        case AxisExtents nextTouchExtents:
+                            return SetAxisTransitionState(activeExtents, nextTouchExtents);
+
+                        case TouchForkExtents nextForkExtents:
+                            return SetForkTransitionState(activeExtents.axisMonitor.touchController, nextForkExtents);
+                        
+                    }
                 }
             }
 
@@ -46,25 +61,26 @@ namespace AltSalt.Maestro.Sequencing.Touch
         public static AxisExtents SetDefaultState(AxisExtents activeExtents)
         {
             activeExtents.axisMonitor.SetTransitionStatus(false);
-
             Touch_Controller touchController = activeExtents.axisMonitor.touchController;
             
+            // Deactivate the opposing swipe axis
             if (activeExtents.swipeAxis == touchController.ySwipeAxis) {
                 touchController.xSwipeAxis.active = false;
             } else if (activeExtents.swipeAxis == touchController.xSwipeAxis) {
                 touchController.ySwipeAxis.active = false;
             }
-            
+
             if (activeExtents.momentumAxis == touchController.yMomentumAxis) {
                 touchController.xMomentumAxis.active = false;
-            } else if (activeExtents.swipeAxis == touchController.xSwipeAxis) {
+                
+            } else if (activeExtents.momentumAxis == touchController.xMomentumAxis) {
                 touchController.yMomentumAxis.active = false;
             }
 
             return activeExtents;
         }
 
-        public static AxisExtents SetTransitionState(AxisExtents activeExtents, AxisExtents siblingAxisExtents)
+        public static AxisExtents SetAxisTransitionState(AxisExtents activeExtents, AxisExtents siblingAxisExtents)
         {
             activeExtents.axisMonitor.SetTransitionStatus(true);
             
@@ -75,20 +91,27 @@ namespace AltSalt.Maestro.Sequencing.Touch
             siblingAxisExtents.momentumAxis.inverted =
                 siblingAxisExtents.inverted;
 
-            EventPayload eventPayload = EventPayload.CreateInstance();
-
-            if (activeExtents.axisMonitor.touchController.isReversing == false) {
-                eventPayload.Set(AxisDestination.fromAxis, activeExtents.momentumAxis);
-                eventPayload.Set(AxisDestination.toAxis, siblingAxisExtents.momentumAxis);
-            }
-            else {
-                eventPayload.Set(AxisDestination.fromAxis, siblingAxisExtents.momentumAxis);
-                eventPayload.Set(AxisDestination.toAxis, activeExtents.momentumAxis);
-            }
-
-            activeExtents.axisMonitor.convertMomentum.RaiseEvent(activeExtents.axisMonitor.gameObject, eventPayload);
-
             return activeExtents;
+        }
+
+        public static TouchForkExtents SetForkTransitionState(Touch_Controller touchController, TouchForkExtents touchForkExtents)
+        {
+            touchController.axisMonitor.SetTransitionStatus(true);
+            TouchBranchingPathData activeBranch = TouchForkUtils.GetActiveBranch(touchController, touchForkExtents);
+            
+            if (activeBranch.branchKey == touchForkExtents.axisMonitor.yNorthKey ||
+                activeBranch.branchKey == touchForkExtents.axisMonitor.ySouthKey) {
+                touchController.ySwipeAxis.active = true;
+                touchController.yMomentumAxis.active = true;
+            }
+            
+            else if (activeBranch.branchKey == touchForkExtents.axisMonitor.xEastKey ||
+                     activeBranch.branchKey == touchForkExtents.axisMonitor.xWestKey) {
+                touchController.xSwipeAxis.active = true;
+                touchController.xMomentumAxis.active = true;
+            }
+
+            return touchForkExtents;
         }
     }
 }

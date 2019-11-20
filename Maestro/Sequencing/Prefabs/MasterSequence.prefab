@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59556b9505d434bd8b2f763a20a325ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rootConfig: {fileID: 0}
   _activeInputModule:
     _name: 
     _priority: 0
@@ -79,7 +80,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: AltSalt.Maestro.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   doNotRecord: 0
 --- !u!114 &-4565310156302280025
@@ -110,7 +111,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: AltSalt.Maestro.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   doNotRecord: 0
 --- !u!114 &3751399025017232430
@@ -131,7 +132,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2390398158691485511}
-        m_MethodName: RefreshElapsedTime
+        m_MethodName: RefreshMasterSequence
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -141,6 +142,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: AltSalt.Maestro.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   doNotRecord: 0

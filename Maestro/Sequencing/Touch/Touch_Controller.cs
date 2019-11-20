@@ -29,13 +29,13 @@ namespace AltSalt.Maestro.Sequencing.Touch
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _ySensitivity;
 
-        private float ySensitivity => _ySensitivity.Variable.value;
+        public float ySensitivity => _ySensitivity.Variable.value;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _xSensitivity;
 
-        private float xSensitivity => _xSensitivity.Variable.value;
+        public float xSensitivity => _xSensitivity.Variable.value;
 
         [ValidateInput("IsPopulated")]
         private FloatReference _timeModifier;
@@ -70,7 +70,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
         [Required]
         private MomentumApplier _momentumApplier;
 
-        private MomentumApplier momentumApplier
+        public MomentumApplier momentumApplier
         {
             get => _momentumApplier;
             set => _momentumApplier = value;
@@ -117,18 +117,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             get => _momentumModifierOutput.Value;
             set => _momentumModifierOutput.Variable.SetValue(value);
         }
-        
-        [SerializeField]
-        [FoldoutGroup("Momentum Variables")]
-        [ValidateInput("IsPopulated")]
-        private V2Reference _momentumForce;
 
-        public Vector2 momentumForce
-        {
-            get => _momentumForce.Value;
-            set => _momentumForce.Variable.SetValue(value);
-        }
-        
         [Required]
         [SerializeField]
         [FoldoutGroup("Momentum Variables")]
@@ -186,6 +175,42 @@ namespace AltSalt.Maestro.Sequencing.Touch
             }
             
             return new Vector2(0, vector2.y);
+        }
+        
+        public static Touch_Controller RefreshIsReversing(Touch_Controller touchController, SwipeDirection swipeDirection, Axis sourceAxis)
+        {
+            switch (swipeDirection) {
+                
+                case SwipeDirection.yPositive:
+                case SwipeDirection.xPositive:
+                {
+                    if (sourceAxis.inverted == false) {
+                        touchController.isReversing = false;
+                    }
+                    else {
+                        touchController.isReversing = true;
+                    }
+
+                    break;
+                }
+                case SwipeDirection.yNegative:
+                case SwipeDirection.xNegative:
+                {
+                    if (sourceAxis.inverted == false) {
+                        touchController.isReversing = true;
+                    }
+                    else {
+                        touchController.isReversing = false;
+                    }
+
+                    break;
+                }
+                
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(swipeDirection), swipeDirection, null);
+            }
+
+            return touchController;
         }
 
 //#if UNITY_EDITOR

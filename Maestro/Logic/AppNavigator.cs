@@ -41,7 +41,14 @@ namespace AltSalt.Maestro.Logic
         [Required]
         SimpleEventTrigger timescaleChanged;
 
-        string sceneName;
+        private string _sceneName;
+
+        private string sceneName
+        {
+            get => _sceneName;
+            set => _sceneName = value;
+        }
+
         LoadSceneMode loadMode;
 
         Dictionary<string, AsyncOperationHandle<SceneInstance>> sceneInstances = new Dictionary<string, AsyncOperationHandle<SceneInstance>>();
@@ -82,7 +89,12 @@ namespace AltSalt.Maestro.Logic
             AsyncOperationHandle asyncLoad = Addressables.LoadSceneAsync(xSceneName, xLoadMode);
 
             asyncLoad.Completed += SceneLoadCallback;
-            sceneInstances.Add(xSceneName, asyncLoad.Convert<SceneInstance>());
+
+            // If we're in single load mode, scenes are unloaded automatically.
+            // If additive, we need to store a reference to the scene to unload it later.
+            if (xLoadMode == LoadSceneMode.Additive) {
+                sceneInstances.Add(xSceneName, asyncLoad.Convert<SceneInstance>());
+            }
             
             while (!asyncLoad.IsDone) {
                 yield return null;
@@ -105,6 +117,7 @@ namespace AltSalt.Maestro.Logic
             //AsyncOperation asyncLoad = SceneManager.UnloadSceneAsync(xSceneName);
 
             AsyncOperationHandle<SceneInstance> unloadInstance = sceneInstances[xSceneName];
+            sceneInstances.Remove(xSceneName);
 
             AsyncOperationHandle asyncLoad = Addressables.UnloadSceneAsync(unloadInstance);
 

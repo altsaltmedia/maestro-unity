@@ -99,9 +99,12 @@ namespace AltSalt.Maestro.Sensors
         private bool isSwiping = false;
 
         // Momentum variables
-        [Required]
+        [ValidateInput(nameof(IsPopulated))]
         [FoldoutGroup("Momentum Variables")]
-        public SimpleEventTrigger MomentumUpdate;
+        [SerializeField]
+        private SimpleEventTrigger _momentumUpdate;
+
+        private SimpleEventTrigger momentumUpdate => _momentumUpdate;
 
         [Required]
         [FoldoutGroup("Momentum Variables")]
@@ -121,20 +124,27 @@ namespace AltSalt.Maestro.Sensors
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
-        [InfoBox("MomentumForce is generated and modified dynamically at run time", InfoMessageType.Info)]
+        [InfoBox("Momentum is generated and modified dynamically at run time", InfoMessageType.Info)]
         [SerializeField]
-		private V2Reference _momentumForce;
+		private V2Reference _swipeMonitorMomentum;
 
-        private Vector2 momentumForce
+        private Vector2 swipeMonitorMomentum
         {
-            get => _momentumForce.Value;
-            set => _momentumForce.Variable.SetValue(value);
+            get => _swipeMonitorMomentum.Value;
+            set => _swipeMonitorMomentum.Variable.SetValue(value);
         }
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
-        [InfoBox("MomentumCache is generated and modified dynamically at run time", InfoMessageType.Info)]
-		public V3Reference momentumCache;
+        [InfoBox("Momentum Cache is generated and modified dynamically at run time", InfoMessageType.Info)]
+        [SerializeField]
+        private V2Reference _swipeMonitorMomentumCache;
+
+        private Vector2 swipeMonitorMomentumCache
+        {
+            get => _swipeMonitorMomentumCache.Value;
+            set => _swipeMonitorMomentumCache.Variable.SetValue(value);
+        }
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
@@ -142,7 +152,14 @@ namespace AltSalt.Maestro.Sensors
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
-        public FloatReference momentumDecay = new FloatReference(.935f);
+        [SerializeField]
+        private FloatReference _momentumDecay = new FloatReference(.935f);
+
+        private float momentumDecay
+        {
+            get => _momentumDecay.Value;
+            set => _momentumDecay.Variable.SetValue(value);
+        }
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
@@ -164,7 +181,13 @@ namespace AltSalt.Maestro.Sensors
         [FoldoutGroup("Momentum Variables")]
         public FloatReference pauseMomentumThreshold = new FloatReference();
 
-        private bool momentumActive = false;
+        private bool _hasMomentum = false;
+
+        private bool hasMomentum
+        {
+            get => _hasMomentum;
+            set => _hasMomentum = value;
+        }
 
         // Debug variables
         [Required]
@@ -220,21 +243,21 @@ namespace AltSalt.Maestro.Sensors
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            if(momentumActive == true) {
+            if(hasMomentum == true) {
                 // All momentum is executed through momentumForce. However, we calculate the momentumForce
                 // via a momentumCache, which is modified dynamically based on swipe input, decay value, etc.
-                momentumForce = new Vector2(momentumCache.Value.x, momentumCache.Value.y);
+                swipeMonitorMomentum = new Vector2(swipeMonitorMomentumCache.x, swipeMonitorMomentumCache.y);
 				
-				MomentumUpdate.RaiseEvent(this.gameObject);
+				momentumUpdate.RaiseEvent(this.gameObject);
 				
-				if (momentumForce.sqrMagnitude < .00001f) {
+				if (swipeMonitorMomentum.sqrMagnitude < .00001f) {
                     MomentumDepleted.RaiseEvent(this.gameObject);
-                    momentumCache.Variable.SetValue(new Vector3(0, 0, 0));
-                    momentumActive = false;
+                    swipeMonitorMomentumCache = new Vector2(0, 0);
+                    hasMomentum = false;
 				} else {
-					momentumCache.Variable.SetValue(new Vector3(momentumCache.Value.x * momentumDecay.Value, momentumCache.Value.y * momentumDecay.Value, momentumCache.Value.z * momentumDecay.Value));            
+					swipeMonitorMomentumCache = new Vector2(swipeMonitorMomentumCache.x * momentumDecay, swipeMonitorMomentumCache.y * momentumDecay);            
 				}
             }
         }
@@ -273,9 +296,9 @@ namespace AltSalt.Maestro.Sensors
             // Get swipe value and compare w/ previous one to see
             // if we're reversing direction. If so, halt momentum.
             Vector3 swipeDistance = Utils.ConvertV2toV3(swipeVector);
-            if (momentumActive == true) {
+            if (hasMomentum == true) {
                 int swipeSign = Utils.GetV3Sign(swipeDistance);
-                int momentumSign = Utils.GetV3Sign(momentumForce);
+                int momentumSign = Utils.GetV3Sign(swipeMonitorMomentum);
 
                 if (swipeSign != momentumSign) {
                     HaltMomentum();
@@ -324,8 +347,6 @@ namespace AltSalt.Maestro.Sensors
                 isFlicked.Variable.SetValue(false);
             }
 
-            OnSwipeEndEvent.RaiseEvent(this.gameObject);
-
             // Debug
             /**/ swipeMagnitudeDebug.Variable.SetValue(gesture.deltaPosition.sqrMagnitude);
             /**/ swipeVectorDebug.Variable.SetValue(gesture.swipeVector);
@@ -337,6 +358,7 @@ namespace AltSalt.Maestro.Sensors
             // Cancel momentum on certain long swipe gestures with low delta at the end of the movement.
             if(gesture.deltaPosition.sqrMagnitude < cancelMomentumMagnitudeThreshold && gesture.actionTime > cancelMomentumTimeThreshold) {
                 MomentumDepleted.RaiseEvent(this.gameObject);
+                OnSwipeEndEvent.RaiseEvent(this.gameObject);
                 return;
             }
 
@@ -358,13 +380,15 @@ namespace AltSalt.Maestro.Sensors
             AddMomentum(swipeMomentum / normalizedGestureTime);
 
 			isSwiping = false;
+            
+            OnSwipeEndEvent.RaiseEvent(this.gameObject);
         }
 
         public void AddMomentum(Vector3 momentumVector)
         {
-            Vector3 momentumAdd = new Vector3(momentumCache.Value.x + momentumVector.x, momentumCache.Value.y + momentumVector.y, momentumCache.Value.z + momentumVector.z);
-            momentumCache.Variable.SetValue(momentumAdd);
-			momentumActive = true;
+            Vector3 momentumAdd = new Vector3(swipeMonitorMomentumCache.x + momentumVector.x, swipeMonitorMomentumCache.y + momentumVector.y);
+            swipeMonitorMomentumCache = momentumAdd;
+			hasMomentum = true;
         }
 
         private Vector3 NormalizeVectorInfo(Vector2 rawVector, float minMax)
@@ -404,23 +428,16 @@ namespace AltSalt.Maestro.Sensors
 
         public void HaltMomentum()
         {
-            momentumActive = false;
-            momentumCache.Variable.SetValue(new Vector3(0, 0, 0));
-            momentumForce = new Vector2(0, 0);
+            hasMomentum = false;
+            swipeMonitorMomentumCache = new Vector3(0, 0, 0);
+            swipeMonitorMomentum = new Vector2(0, 0);
         }
 
-        public void UpdateMomentum(EventPayload eventPayload)
+        private static bool IsPopulated(SimpleEventTrigger attribute)
         {
-            var fromAxis = eventPayload.GetScriptableObjectValue(AxisDestination.fromAxis) as Axis;
-            var toAxis = eventPayload.GetScriptableObjectValue(AxisDestination.fromAxis) as Axis;
-
-            float modifier = 1f;
-
-            // Replace momentum on the new axis with momentum from the old axis.
-            // Also, convert the momentum to the opposite sign if need be.
-            momentumCache.Variable._value[Utils.GetAxisId(toAxis.ToString())] = momentumCache.Variable.value[Utils.GetAxisId(fromAxis.ToString())] * modifier;
+            return Utils.IsPopulated(attribute);
         }
-
+        
         private static bool IsPopulated(FloatReference attribute)
         {
             return Utils.IsPopulated(attribute);

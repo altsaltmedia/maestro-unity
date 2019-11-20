@@ -78,18 +78,20 @@ namespace AltSalt.Maestro.Sequencing.Touch
                 this.startTime = previousTouchExtents.endTime;
                 this.previousTouchExtents = previousTouchExtents;
 
-                if (previousTouchExtents is AxisExtents previousAxisExtents) {
+                switch (previousTouchExtents) {
 
-                    if (previousAxisExtents.inverted == true) {
-                        this.startTransitionThreshold = this.markerMasterTime + this.axisMonitor.invertTransitionSpread;
+                    case AxisExtents previousAxisExtents:
+                    {
+                        this.startTransitionThreshold =
+                                this.markerMasterTime + this.axisMonitor.axisTransitionSpread;
                     }
-                    else {
-                        this.startTransitionThreshold = this.markerMasterTime + this.axisMonitor.swipeTransitionSpread;
-                    }
+                        break;
+
+                    case TouchForkExtents forkExtents:
+                        this.startTransitionThreshold = this.startTime + this.axisMonitor.axisTransitionSpread;
+                        break;
                 }
-                else {
-                    this.startTransitionThreshold = this.startTime;
-                }
+
             } else {
                 this.startTime = this.markerMasterTime;
                 this.startTransitionThreshold = this.markerMasterTime;
@@ -109,16 +111,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
                     case AxisExtents nextAxisExtents:
                     {
                         this.endTime = nextAxisExtents.markerMasterTime;
-
-                        if (nextAxisExtents.inverted == true) {
-                            this.endTransitionThreshold =
-                                nextAxisExtents.markerMasterTime - this.axisMonitor.invertTransitionSpread;
-                        }
-                        else {
-                            this.endTransitionThreshold =
-                                nextAxisExtents.markerMasterTime - this.axisMonitor.swipeTransitionSpread;
-                        }
-
+                        this.endTransitionThreshold =
+                                nextAxisExtents.markerMasterTime - this.axisMonitor.axisTransitionSpread;
                         break;
                     }
                 }

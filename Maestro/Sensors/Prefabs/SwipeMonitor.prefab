@@ -94,29 +94,29 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 1000
     Variable: {fileID: 11400000, guid: d73a83a0d85e04ca0bbc17e3d696ce42, type: 2}
-  MomentumUpdate:
+  _momentumUpdate:
     simpleEvent: {fileID: 11400000, guid: a2e4c5a50b2c44620a2c0a046f85ab80, type: 2}
   MomentumDepleted:
     simpleEvent: {fileID: 11400000, guid: 327c2d62b621b46d491fb9265f17f6ed, type: 2}
   xMomentumAxis: {fileID: 11400000, guid: f88bf119e8f2c4cf3877691a94127d64, type: 2}
   yMomentumAxis: {fileID: 11400000, guid: f42a426f4dfb54a94938a16ec1f3c2e3, type: 2}
   zMomentumAxis: {fileID: 11400000, guid: 0ff6d39eb4be84e459d1db349ebb85bb, type: 2}
-  _momentumForce:
+  _swipeMonitorMomentum:
     UseConstant: 0
     ConstantValue: {x: 0, y: 0}
     Variable: {fileID: 11400000, guid: f622ace9e18b44dddaacabde456d3ef4, type: 2}
-  momentumCache:
+  _swipeMonitorMomentumCache:
     UseConstant: 0
-    ConstantValue: {x: 0, y: 0, z: 0}
-    Variable: {fileID: 11400000, guid: 1113c0f29734b4d6e870dcbd907d743e, type: 2}
+    ConstantValue: {x: 0, y: 0}
+    Variable: {fileID: 11400000, guid: 9c73add5e07354026b81333b1eb40cb3, type: 2}
   momentumMinMax:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 2306cb87b509e4704b699b6f2b21f96c, type: 2}
-  momentumDecay:
-    UseConstant: 0
+  _momentumDecay:
+    UseConstant: 1
     ConstantValue: 0.935
-    Variable: {fileID: 11400000, guid: 4c80310b758254a649b9ade806f99505, type: 2}
+    Variable: {fileID: 0}
   momentumSensitivity:
     UseConstant: 0
     ConstantValue: 0
@@ -281,6 +281,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: AltSalt.Maestro.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   doNotRecord: 0

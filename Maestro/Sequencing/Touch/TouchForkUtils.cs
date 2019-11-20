@@ -8,24 +8,32 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
     public static class TouchForkUtils
     {
-        public static TouchForkExtents ActivateTouchFork(double masterTime, TouchForkExtents touchForkExtents)
+        public static TouchExtents ActivateTouchFork(double masterTime, TouchForkExtents touchForkExtents)
         {
             Touch_Controller touchController = touchForkExtents.axisMonitor.touchController;
 
-            TouchBranchingPathData activeBranch = GetActiveBranch(touchForkExtents);
+            TouchBranchingPathData activeBranch = GetActiveBranch(touchController, touchForkExtents);
                 
             // If we are beyond the transition thresholds, set the adjacent sequence based on swipe input
             if (touchForkExtents.markerPlacement == MarkerPlacement.EndOfSequence && masterTime >= touchForkExtents.startTransitionThreshold ||
                 touchForkExtents.markerPlacement == MarkerPlacement.StartOfSequence && masterTime <= touchForkExtents.startTransitionThreshold) {
                 
-                return SetTransitionState(touchController, touchForkExtents, activeBranch);
+                return SetForkTransitionState(touchController, touchForkExtents, activeBranch);
                 
+            }
+
+            if (touchForkExtents.markerPlacement == MarkerPlacement.StartOfSequence && masterTime >= touchForkExtents.endTransitionThreshold) {
+
+                if (touchForkExtents.nextTouchExtents is AxisExtents nextAxisExtents) {
+                    return SetAxisTransitionState(touchController, nextAxisExtents); 
+                }
+
             }
 
             return SetDefaultState(touchController, touchForkExtents, activeBranch);
         }
 
-        private static TouchForkExtents SetTransitionState(Touch_Controller touchController, TouchForkExtents touchForkExtents, TouchBranchingPathData activeBranch)
+        private static TouchForkExtents SetForkTransitionState(Touch_Controller touchController, TouchForkExtents touchForkExtents, TouchBranchingPathData activeBranch)
         {
             touchController.joiner.SetForkStatus(true);
             
@@ -38,25 +46,25 @@ namespace AltSalt.Maestro.Sequencing.Touch
                     
                 case nameof(SwipeDirection.yPositive):
                     UpdateBranchStates(AxisType.Y, touchForkExtents, activeBranch);
-                    UpdateTouchVariables(AxisType.Y, touchForkExtents, activeBranch);
+                    UpdateTouchVariables(SwipeDirection.yPositive, touchForkExtents, activeBranch);
                     touchForkExtents.touchFork.SetDestinationBranch(touchForkExtents.axisMonitor.ySouthKey);
                     break;
                     
                 case nameof(SwipeDirection.yNegative):
                     UpdateBranchStates(AxisType.Y, touchForkExtents, activeBranch);
-                    UpdateTouchVariables(AxisType.Y, touchForkExtents, activeBranch);
+                    UpdateTouchVariables(SwipeDirection.yNegative, touchForkExtents, activeBranch);
                     touchForkExtents.touchFork.SetDestinationBranch(touchForkExtents.axisMonitor.yNorthKey);
                     break;
                     
                 case nameof(SwipeDirection.xPositive):
                     UpdateBranchStates(AxisType.X, touchForkExtents, activeBranch);
-                    UpdateTouchVariables(AxisType.X, touchForkExtents, activeBranch);
+                    UpdateTouchVariables(SwipeDirection.xPositive, touchForkExtents, activeBranch);
                     touchForkExtents.touchFork.SetDestinationBranch(touchForkExtents.axisMonitor.xEastKey);
                     break;
                     
                 case nameof(SwipeDirection.xNegative):
                     UpdateBranchStates(AxisType.X, touchForkExtents, activeBranch);
-                    UpdateTouchVariables(AxisType.X, touchForkExtents, activeBranch);
+                    UpdateTouchVariables(SwipeDirection.xNegative, touchForkExtents, activeBranch);
                     touchForkExtents.touchFork.SetDestinationBranch(touchForkExtents.axisMonitor.xWestKey);
                     break;
             }
@@ -64,9 +72,20 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return touchForkExtents;
         }
 
+        private static AxisExtents SetAxisTransitionState(Touch_Controller touchController, AxisExtents axisExtents)
+        {
+            touchController.axisMonitor.SetTransitionStatus(true);
+            
+            axisExtents.swipeAxis.active = true;
+            axisExtents.momentumAxis.active = true;
+
+            return axisExtents;
+        }
+
         private static TouchForkExtents SetDefaultState(Touch_Controller touchController, TouchForkExtents touchForkExtents, TouchBranchingPathData activeBranch)
         {
             touchController.joiner.SetForkStatus(false);
+            touchController.axisMonitor.SetTransitionStatus(false);
 
             // Flip axes accordingly
             if (activeBranch.branchKey == touchForkExtents.axisMonitor.yNorthKey ||
@@ -94,14 +113,20 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return touchForkExtents;
         }
         
-        private static TouchBranchingPathData GetActiveBranch(TouchForkExtents touchForkExtents)
+        public static TouchBranchingPathData GetActiveBranch(Touch_Controller touchController, TouchForkExtents touchForkExtents)
         {
-            foreach (KeyValuePair<BranchKey, TouchBranchingPathData>  branchData in
-                touchForkExtents.branchDictionary.Where(branchData => branchData.Value.sequence.active == true)) {
-                return branchData.Value;
+            List<MasterSequence> masterSequences = touchController.rootConfig.masterSequences;
+            for (int i = 0; i < masterSequences.Count; i++) {
+                if (masterSequences[i].hasActiveSequence == true) {
+                    foreach (KeyValuePair<BranchKey, TouchBranchingPathData> branchData in
+                        touchForkExtents.branchDictionary.Where(branchData =>
+                            masterSequences[i].sequenceConfigs.Find(x => x.sequence == branchData.Value.sequence))) {
+                        return branchData.Value;
+                    }
+                }
             }
-
-            throw new DataMisalignedException("No active branches found. Did you set up your fork correctly?");
+            
+            throw new DataMisalignedException("No active sequence found. Did you set up your fork correctly?");
         }
 
         private static TouchForkExtents UpdateBranchStates(AxisType axisType, TouchForkExtents touchForkExtents, TouchBranchingPathData activeBranch)
@@ -111,15 +136,16 @@ namespace AltSalt.Maestro.Sequencing.Touch
             // through the transition smoothly; i.e. if the user is swiping along the Y axis
             // but we are currently on the X branch, we need to make the X branch advance to
             // the transition point regardless of input; also, if either of the Y axes had previously
-            // been put into the transition state, they need to be reset.
+            // been put into the transition state, they need to be reset. The opposite applies if the user
+            // is moving along the X axis.
             if (axisType == AxisType.Y) {
-                SetTransitionState(activeBranch, touchForkExtents,
+                SetBranchOverrides(activeBranch, touchForkExtents,
                     new[] {touchForkExtents.axisMonitor.xEastKey, touchForkExtents.axisMonitor.xWestKey});
                 ResetBranches(touchForkExtents,
                     new[] {touchForkExtents.axisMonitor.yNorthKey, touchForkExtents.axisMonitor.ySouthKey});
             }
             else {
-                SetTransitionState(activeBranch, touchForkExtents,
+                SetBranchOverrides(activeBranch, touchForkExtents,
                     new[] {touchForkExtents.axisMonitor.yNorthKey, touchForkExtents.axisMonitor.ySouthKey});
                 ResetBranches(touchForkExtents, 
                     new[] { touchForkExtents.axisMonitor.xEastKey, touchForkExtents.axisMonitor.xWestKey });
@@ -128,7 +154,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return touchForkExtents;
         }
         
-        private static TouchForkExtents SetTransitionState(TouchBranchingPathData activeBranch, TouchForkExtents touchForkExtents, BranchKey[] targetBranchKeys)
+        private static TouchForkExtents SetBranchOverrides(TouchBranchingPathData activeBranch, TouchForkExtents touchForkExtents, BranchKey[] targetBranchKeys)
         {
             for (int q = 0; q < targetBranchKeys.Length; q++) {
 
@@ -176,26 +202,26 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return touchForkExtents;
         }
 
-        private static TouchForkExtents UpdateTouchVariables(AxisType axisType, TouchForkExtents touchForkExtents, TouchBranchingPathData activeBranch)
+        private static TouchForkExtents UpdateTouchVariables(SwipeDirection swipeDirection, TouchForkExtents touchForkExtents, TouchBranchingPathData activeBranch)
         {
             Touch_Controller touchController = touchForkExtents.axisMonitor.touchController;
             
-            if (axisType == AxisType.Y) {
-                if (activeBranch.branchKey == touchForkExtents.axisMonitor.yNorthKey ||
-                    activeBranch.branchKey == touchForkExtents.axisMonitor.ySouthKey) {
-                    touchController.ySwipeAxis.inverted = activeBranch.invert;
-                    touchController.yMomentumAxis.inverted = activeBranch.invert;
-                }
+            if (activeBranch.branchKey == touchForkExtents.axisMonitor.yNorthKey ||
+                activeBranch.branchKey == touchForkExtents.axisMonitor.ySouthKey) {
+                touchController.ySwipeAxis.inverted = activeBranch.invert;
+                touchController.yMomentumAxis.inverted = activeBranch.invert;
+
+                Touch_Controller.RefreshIsReversing(touchController, swipeDirection, touchController.yMomentumAxis);
             }
             
-            else {
-                if (activeBranch.branchKey == touchForkExtents.axisMonitor.xEastKey ||
-                    activeBranch.branchKey == touchForkExtents.axisMonitor.xWestKey) {
-                    touchController.xSwipeAxis.inverted = activeBranch.invert;
-                    touchController.xMomentumAxis.inverted = activeBranch.invert;
-                }
+            else if (activeBranch.branchKey == touchForkExtents.axisMonitor.xEastKey ||
+                activeBranch.branchKey == touchForkExtents.axisMonitor.xWestKey) {
+                touchController.xSwipeAxis.inverted = activeBranch.invert;
+                touchController.xMomentumAxis.inverted = activeBranch.invert;
+                
+                Touch_Controller.RefreshIsReversing(touchController, swipeDirection, touchController.xMomentumAxis);
             }
-            
+
             return touchForkExtents;
         }
 

@@ -44,12 +44,14 @@ namespace AltSalt.Maestro.Sequencing.Touch
             this.markerPlacement = forkData.markerPlacement;
             this.description = forkData.description;
 
+            double forkTransitionSpread = axisMonitor.touchController.rootConfig.joiner.forkTransitionSpread;
+            
             if (this.markerPlacement == MarkerPlacement.EndOfSequence) {
-                double localStartTime = forkData.forkMarker.time - axisMonitor.touchController.rootConfig.joiner.forkTransitionSpread;
+                double localStartTime = forkData.forkMarker.time - forkTransitionSpread;
                 this.startTransitionThreshold =
                     MasterSequence.LocalToMasterTime(forkData.sequence.sequenceConfig.masterSequence, forkData.sequence,
                         localStartTime);
-                this.startTime = this.startTransitionThreshold - axisMonitor.resetSpread;
+                this.startTime = this.startTransitionThreshold - axisMonitor.axisTransitionSpread;
                 this.endTransitionThreshold = MasterSequence.LocalToMasterTime(forkData.sequence.sequenceConfig.masterSequence, forkData.sequence,
                     forkData.forkMarker.time);
                 this.endTime = this.endTransitionThreshold;
@@ -57,7 +59,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             else {
                 this.startTime = 0d;
                 this.startTransitionThreshold =
-                    this.startTime + axisMonitor.touchController.rootConfig.joiner.forkTransitionSpread;
+                    this.startTime + forkTransitionSpread;
             }
             
             this.touchFork = forkData.fork;
@@ -83,7 +85,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                 this.endTransitionThreshold = double.MaxValue;
                 this.endTime = double.MaxValue;
             } else if (nextTouchExtents is AxisExtents axisExtents) {
-                this.endTransitionThreshold = axisExtents.markerMasterTime;
+                this.endTransitionThreshold = axisExtents.markerMasterTime - axisMonitor.axisTransitionSpread;
                 this.endTime = axisExtents.markerMasterTime;
             } else if (nextTouchExtents is TouchForkExtents forkExtents) {
                 this.endTransitionThreshold = forkExtents.startTime;
