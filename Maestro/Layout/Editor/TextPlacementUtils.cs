@@ -48,6 +48,7 @@ namespace AltSalt.Maestro.Layout
             PositionOnionSkin,
             SelectOnionSkin,
             ExtractText,
+            ExtractTextLetters,
             ExtractTextLines,
             RefreshLayout,
             AlignLeft,
@@ -157,6 +158,14 @@ namespace AltSalt.Maestro.Layout
                     };
                     break;
 
+                case nameof(ButtonNames.ExtractTextLetters):
+                    button.clickable.clicked += () => {
+                        TMP_Text[] textSelection = GetTextComponents(Selection.gameObjects);
+                        GUIUtility.systemCopyBuffer = ExtractTextByLetters(textSelection, openingWrapper, closingWrapper);
+                        Debug.Log("Copied string to clipboard");
+                    };
+                    break;
+                
                 case nameof(ButtonNames.ExtractTextLines):
                     button.clickable.clicked += () => {
                         TMP_Text[] textSelection = GetTextComponents(Selection.gameObjects);
@@ -233,6 +242,33 @@ namespace AltSalt.Maestro.Layout
 
             for (int z = 0; z < selection.Length; z++) {
                 fullString += selection[z].text + " "; 
+            }
+
+            return fullString;
+        }
+        
+        public static string ExtractTextByLetters(TMP_Text[] selection, string openingWrapper, string closingWrapper)
+        {
+            string fullString = "";
+
+            for(int z=0; z<selection.Length; z++) {
+
+                TMP_Text textRenderer = selection[z];
+
+                for (int i = 0; i < textRenderer.textInfo.characterCount; i++) {
+
+                    string character = textRenderer.text.Substring(i, 1);
+                    
+                    if (string.IsNullOrEmpty(character.Trim())) {
+                        continue;
+                    }
+                    
+                    string characterString = openingWrapper + "\n";
+                    characterString += ("\t" + character + "\n");
+                    characterString += closingWrapper + "\n";
+
+                    fullString += characterString;                    
+                }
             }
 
             return fullString;

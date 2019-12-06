@@ -254,7 +254,7 @@ namespace AltSalt.Maestro.Logic {
             if(deviceBreakpoints.Count > 0) {
                 int breakpointIndex = Utils.GetValueIndexInList(deviceAspectRatio.Value, deviceBreakpoints);
                 SceneDimension sceneDimension = sceneDimensions[breakpointIndex];
-
+                
                 switch (sceneDimension.targetAspectRatio) {
 
                     case AspectRatioType.x9x16:

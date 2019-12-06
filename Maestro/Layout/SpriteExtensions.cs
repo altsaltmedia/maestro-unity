@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace AltSalt.Maestro.Layout
 {
-    public class SpriteUtils : MonoBehaviour
+    public class SpriteExtensions : MonoBehaviour
     {
         SpriteRenderer spriteRenderer;
 

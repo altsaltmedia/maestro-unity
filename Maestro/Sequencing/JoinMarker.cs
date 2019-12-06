@@ -7,6 +7,11 @@ namespace AltSalt.Maestro.Sequencing
     [HideInMenu]
     public class JoinMarker : ConfigMarker
     {
+        [SerializeField]
+        private string _description;
+
+        public string description => _description;
+        
         public virtual MarkerPlacement markerPlacement => MarkerPlacement.Manual;
 
 //        This code doesn't work; likely a Unity bug 

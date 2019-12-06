@@ -171,7 +171,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
             Joiner.ForkDataCollection forkDataCollection = axisMonitor.touchController.joiner.forkDataCollection;
             
-            if (forkDataCollection.ContainsKey(touchData.sequence)) {
+            if (forkDataCollection.ContainsKey(touchData.sequence) && forkDataCollection[touchData.sequence][0].fork is TouchFork) {
                 for (int i = 0; i < forkDataCollection[touchData.sequence].Count; i++) {
                     touchExtentsData.Add(new TouchForkExtents(axisMonitor, touchData, forkDataCollection[touchData.sequence][i]));
                 }

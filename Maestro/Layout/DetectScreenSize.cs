@@ -37,6 +37,10 @@ namespace AltSalt.Maestro.Layout {
 
         void SaveScreenValues()
         {
+            // Sometimes these values are erroneous, so make sure
+            // we don't use them when they do
+            if (Screen.width <= 0 || Screen.height <= 0) return;
+            
             deviceWidth.Variable.SetValue(Screen.width);
             deviceHeight.Variable.SetValue(Screen.height);
             deviceAspectRatio.Variable.SetValue((float)Screen.height / Screen.width);

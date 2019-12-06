@@ -49,9 +49,9 @@ namespace AltSalt.Maestro.Animation
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            if (Application.isPlaying == true) {
-                if (trackBindingComponent != null) {
-                    trackBindingComponent.anchoredPosition3D = originalValue;
+            if (trackBindingComponent != null) {
+                if (Application.isPlaying == true && scrubberActive == true) {
+                    trackBindingComponent.anchoredPosition3D = new Vector3(1000, 1000);;
                 }
             }
         }

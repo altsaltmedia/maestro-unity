@@ -51,7 +51,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             switch (operation) {
 
                 case ComparisonValues.EqualTo:
-                    if (Mathf.Approximately(intReference.Value, intConditionVar.Value) == true) {
+                    if (intReference.Value == intConditionVar.Value) {
                         return true;
                     }
                     break;

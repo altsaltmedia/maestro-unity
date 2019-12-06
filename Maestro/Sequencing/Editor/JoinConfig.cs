@@ -61,7 +61,7 @@ namespace AltSalt.Maestro.Sequencing
                     button.clickable.clicked += () =>
                     {
                         Selection.activeObject = TriggerCreateMarker(TimelineUtils.configTrack,
-                            typeof(ForkMarker_JoinNext), 0);
+                            typeof(ForkMarker_JoinPrevious), 0);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
                     break;

@@ -14,7 +14,7 @@ xsi:schemaLocation="
 
 	<engine:VisualElement name="hierarchy-selection">
 
-        <engine:Foldout class="foldout" text="Utilities > Hierarchy Selection" value="false" name="HierarchySelection">            
+        <engine:Foldout class="foldout" text="Utilities > Hierarchy Selection" value="false" name="HierarchySelection">    
 
             <engine:VisualElement class="section">
 
@@ -29,6 +29,20 @@ xsi:schemaLocation="
                     <engine:Button text="Add All Children to Selection" class="col-full" name="AddAllChildrenToSelection" />
                     <engine:Button text="Copy Game Objects" class="col-full" name="CopyGameObjects" />
                     <engine:Button text="Paste Game Objects" class="col-full" name="PasteGameObjects" />
+
+                    <engine:Foldout class="foldout" text="Advanced" value="false">
+
+                        <engine:VisualElement class="section">
+
+                            <engine:VisualElement class="section___content">
+                                <engine:Button text="Select Odds in Selection" class="col-full" name="SelectOddsInSelection" />
+                                <engine:Button text="Select Evens in Selection" class="col-full" name="SelectEvensInSelection" />
+                            </engine:VisualElement>
+
+                        </engine:VisualElement>
+
+                    </engine:Foldout>
+
                 </engine:VisualElement>
 
             </engine:VisualElement>

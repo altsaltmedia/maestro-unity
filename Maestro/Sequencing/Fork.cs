@@ -38,16 +38,26 @@ namespace AltSalt.Maestro.Sequencing
 
         protected virtual bool readonlyBranchingPaths => false;
 
-        public BranchingPath SetDestinationBranch(BranchKey branchKey)
+        public void SetDestinationBranch(BranchKey branchKey)
         {
             BranchingPath branchingPath = branchingPaths.Find(x => x.branchKey == branchKey);
             destinationBranch = branchingPath;
-            return branchingPath;
         }
 
-        public BranchingPath GetDestinationBranch()
+        public void DeactivateFork()
         {
-            return destinationBranch;
+            destinationBranch.sequence = null;
+        }
+
+        public bool TryGetDestinationBranch(out BranchingPath branchingPath)
+        {
+            if (destinationBranch.sequence != null) {
+                branchingPath = destinationBranch;
+                return true;
+            }
+            
+            branchingPath = null;
+            return false;
         }
             
         private static bool IsPopulated(List<BranchingPath> attribute)

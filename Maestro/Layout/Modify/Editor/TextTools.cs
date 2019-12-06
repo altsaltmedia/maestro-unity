@@ -249,7 +249,7 @@ namespace AltSalt.Maestro
                     Transform textTransform = transform.GetChild(i);
                     GetLocalizedTexts(textList, textTransform);
                     TextLoader localizedText = textTransform.gameObject.GetComponent<TextLoader>();
-                    if(textTransform.gameObject.activeInHierarchy == true && localizedText != null) {
+                    if(textTransform.gameObject.activeInHierarchy == true && localizedText != null && localizedText.isActiveAndEnabled == true) {
                         textList.Add(localizedText);
                     }
                 }

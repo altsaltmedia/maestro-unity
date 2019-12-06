@@ -35,9 +35,9 @@ namespace AltSalt.Maestro
         }
 
         [SerializeField]
+        [ShowIf(nameof(hasDefault))]
         private Color _defaultValue;
 
-        [ShowIf(nameof(hasDefault))]
         public Color defaultValue
         {
             get => _defaultValue;

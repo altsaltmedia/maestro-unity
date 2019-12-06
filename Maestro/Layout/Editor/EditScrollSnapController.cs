@@ -113,7 +113,7 @@ namespace AltSalt.Maestro.Layout
                     relativePage.referenceObject = component.Content.GetChild(dependencyGameObject.transform.GetSiblingIndex() - 1) as RectTransform;
 
                     ScrollSnapController.ScrollSnapElement dependencyData;
-                    SpriteUtils iconSprite = null;
+                    SpriteExtensions iconSprite = null;
 
                     if (addIcon == true) {
                         // Create and parent an icon to go with the panel
@@ -125,7 +125,7 @@ namespace AltSalt.Maestro.Layout
                         SetIconInterval(iconInterval, component.SnapUtils);
 
                         // Set icon sprite to be saved onto the component
-                        iconSprite = iconElement.GetComponentInChildren<SpriteUtils>();
+                        iconSprite = iconElement.GetComponentInChildren<SpriteExtensions>();
                     }
 
                     // Initialize dependency
@@ -139,7 +139,7 @@ namespace AltSalt.Maestro.Layout
 
                     // Replace array element values with properties of our new created element
                     serializedArrayElement.FindPropertyRelative(nameof(dependencyData.sourceTransform)).objectReferenceValue = dependencyData.sourceTransform as RectTransform;
-                    serializedArrayElement.FindPropertyRelative(nameof(dependencyData.elementIcon)).objectReferenceValue = dependencyData.elementIcon as SpriteUtils;
+                    serializedArrayElement.FindPropertyRelative(nameof(dependencyData.elementIcon)).objectReferenceValue = dependencyData.elementIcon as SpriteExtensions;
                     serializedArrayElement.FindPropertyRelative(nameof(dependencyData.iconEnabledColor)).colorValue = dependencyData.iconEnabledColor;
                     serializedArrayElement.FindPropertyRelative(nameof(dependencyData.iconDisabledColor)).colorValue = dependencyData.iconDisabledColor;
                     serializedComponent.ApplyModifiedProperties();

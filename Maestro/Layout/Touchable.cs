@@ -1,20 +1,23 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout
 {
     [RequireComponent(typeof(ResizableBoxCollider2D))]
     public class Touchable : MonoBehaviour, IPointerClickHandler
     {
-        [SerializeField]
-        bool active = true;
-        public bool Active {
+        [FormerlySerializedAs("active"),SerializeField]
+        bool _active = true;
+        
+        public bool active {
             get {
-                return active;
+                return _active;
             }
             set {
-                active = value;
+                _active = value;
             }
         }
 
@@ -24,6 +27,31 @@ namespace AltSalt.Maestro.Layout
         {
             if(active == true) {
                 unityEvent.Invoke();
+            }
+        }
+
+        private void Start()
+        {
+            if (active == false) {
+                if (TryGetComponent(typeof(BoxCollider2D), out var boxCollider) == true) {
+                    (boxCollider as BoxCollider2D).enabled = false;   
+                }
+            }
+        }
+
+        public void Activate()
+        {
+            active = true;
+            if (TryGetComponent(typeof(BoxCollider2D), out var boxCollider) == true) {
+                (boxCollider as BoxCollider2D).enabled = true;   
+            }
+        }
+        
+        public void Deactivate()
+        {
+            active = false;
+            if (TryGetComponent(typeof(BoxCollider2D), out var boxCollider) == true) {
+                (boxCollider as BoxCollider2D).enabled = false;
             }
         }
     }

@@ -226,7 +226,7 @@ namespace AltSalt.Maestro.Layout
             public RectTransform sourceTransform;
 
             [SerializeField]
-            public SpriteUtils elementIcon;
+            public SpriteExtensions elementIcon;
 
             [SerializeField]
             public UnityEvent activateEvent;
@@ -242,7 +242,7 @@ namespace AltSalt.Maestro.Layout
             [SerializeField]
             public Color iconDisabledColor = new Color(1, 1, 1, 1);
 
-            public ScrollSnapElement(RectTransform rectTransform, SpriteUtils elementIcon = null)
+            public ScrollSnapElement(RectTransform rectTransform, SpriteExtensions elementIcon = null)
             {
                 this.sourceTransform = rectTransform;
                 if (elementIcon != null) {

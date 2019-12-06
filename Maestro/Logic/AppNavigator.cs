@@ -117,7 +117,10 @@ namespace AltSalt.Maestro.Logic
             //AsyncOperation asyncLoad = SceneManager.UnloadSceneAsync(xSceneName);
 
             AsyncOperationHandle<SceneInstance> unloadInstance = sceneInstances[xSceneName];
-            sceneInstances.Remove(xSceneName);
+
+            if (sceneInstances.ContainsKey(xSceneName)) {
+                sceneInstances.Remove(xSceneName);
+            }
 
             AsyncOperationHandle asyncLoad = Addressables.UnloadSceneAsync(unloadInstance);
 

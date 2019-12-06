@@ -10,9 +10,9 @@ namespace AltSalt.Maestro.Sequencing
     public class ForkData : Input_Data
     {
         [SerializeField]
-        private TouchFork _fork;
+        private Fork _fork;
 
-        public TouchFork fork
+        public Fork fork
         {
             get => _fork;
             private set => _fork = value;
@@ -33,12 +33,12 @@ namespace AltSalt.Maestro.Sequencing
         }
 
         [SerializeField]
-        private ForkMarker _forkMarker;
+        private JoinMarker _joinMarker;
         
-        public ForkMarker forkMarker
+        public JoinMarker joinMarker
         {
-            get => _forkMarker;
-            private set => _forkMarker = value;
+            get => _joinMarker;
+            private set => _joinMarker = value;
         }
 
         [TitleGroup("$"+nameof(dataTitle))]
@@ -50,12 +50,12 @@ namespace AltSalt.Maestro.Sequencing
             private set => _markerPlacement = value;
         }
 
-        public ForkData(Sequence sequence, ForkMarker forkMarker)
+        public ForkData(Sequence sequence, JoinMarker joinMarker, Fork fork)
         {
             this.sequence = sequence;
-            this.forkMarker = forkMarker;
-            this.markerPlacement = forkMarker.markerPlacement;
-            this.description = forkMarker.description;
+            this.joinMarker = joinMarker;
+            this.markerPlacement = joinMarker.markerPlacement;
+            this.description = joinMarker.description;
             
 //            if (forkMarker is ForkMarker_JoinPrevious) {
 //                this.extents = new Extents(forkMarker.time, forkMarker.time + forkTransitionSpread);
@@ -63,7 +63,7 @@ namespace AltSalt.Maestro.Sequencing
 //                this.extents = new Extents(forkMarker.time - forkTransitionSpread, forkMarker.time);
 //            }
 
-            this.fork = forkMarker.joinDestination as TouchFork;
+            this.fork = fork;
         }
     }
 }

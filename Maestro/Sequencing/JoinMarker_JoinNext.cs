@@ -5,9 +5,9 @@ namespace AltSalt.Maestro.Sequencing
     public class JoinMarker_JoinNext : JoinMarker, JoinMarker_IJoinSequence
     {
         [SerializeField]
-        private Sequence _nextSequence;
+        private JoinerDestination _nextDestination;
 
-        public JoinerDestination joinDestination => _nextSequence;
+        public JoinerDestination joinDestination => _nextDestination;
 
         public override MarkerPlacement markerPlacement => MarkerPlacement.EndOfSequence;
     }

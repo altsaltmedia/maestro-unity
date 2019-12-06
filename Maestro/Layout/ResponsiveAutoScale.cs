@@ -6,13 +6,15 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro.Layout
 {
-#if UNITY_EDITOR
+
     [ExecuteInEditMode]
-#endif
     public class ResponsiveAutoScale : ResponsiveRectTransform
     {
         [ValueDropdown(nameof(dimensionValues))]
         [SerializeField]
+#if UNITY_EDITOR
+        [OnValueChanged(nameof(UpdateDimensions))]
+#endif
         List<DimensionType> baseDimensionTypes = new List<DimensionType>();
 
         private ValueDropdownList<DimensionType> dimensionValues = new ValueDropdownList<DimensionType>(){
@@ -22,6 +24,9 @@ namespace AltSalt.Maestro.Layout
 
         [ValueDropdown(nameof(aspectRatioValues))]
         [SerializeField]
+#if UNITY_EDITOR
+        [OnValueChanged(nameof(UpdateDimensions))]
+#endif
         List<AspectRatioType> objectAspectRatios = new List <AspectRatioType>();
 
         private ValueDropdownList<AspectRatioType> aspectRatioValues = new ValueDropdownList<AspectRatioType>(){
@@ -33,9 +38,15 @@ namespace AltSalt.Maestro.Layout
 
         [SerializeField]
         [Range(0, 3)]
+#if UNITY_EDITOR
+        [OnValueChanged(nameof(UpdateDimensions))]
+#endif
         List<float> dimensionPercentages = new List<float>();
 
         [SerializeField]
+#if UNITY_EDITOR
+        [OnValueChanged(nameof(UpdateDimensions))]
+#endif
         List<float> maxDimensionValues = new List<float>();
 
 #if UNITY_EDITOR
@@ -61,6 +72,10 @@ namespace AltSalt.Maestro.Layout
                 maxDimensionValues.Add(0);
             }
 
+            if (hasBreakpoints == false) {
+                return;
+            }
+
             if(baseDimensionTypes.Count <= aspectRatioBreakpoints.Count) {
                 Utils.ExpandList(baseDimensionTypes, aspectRatioBreakpoints.Count);
             }
@@ -75,7 +90,7 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        void OnValidate()
+        void UpdateDimensions()
         {
             UpdateBreakpointDependencies();
             ExecuteResponsiveAction();

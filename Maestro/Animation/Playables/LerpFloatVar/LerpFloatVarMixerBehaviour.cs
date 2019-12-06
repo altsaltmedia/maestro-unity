@@ -53,11 +53,17 @@ namespace AltSalt.Maestro.Animation
             if (trackBinding != null) {
                 if (Application.isPlaying == true && scrubberActive == true) {
                     trackBinding.SetValue(originalValue);
-                } else {
-#if UNITY_EDITOR
-                    trackBinding.SetValue(originalValue);
-#endif
                 }
+#if UNITY_EDITOR
+                if(Application.isPlaying == false) {
+                    if (trackBinding.hasDefault == true) {
+                        trackBinding.SetDefaultValue();
+                    }
+                    else {
+                        trackBinding.SetValue(originalValue);
+                    }
+                }
+#endif
             }
         }
     }   

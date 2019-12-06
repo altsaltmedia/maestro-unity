@@ -47,13 +47,13 @@ namespace AltSalt.Maestro.Sequencing.Touch
             double forkTransitionSpread = axisMonitor.touchController.rootConfig.joiner.forkTransitionSpread;
             
             if (this.markerPlacement == MarkerPlacement.EndOfSequence) {
-                double localStartTime = forkData.forkMarker.time - forkTransitionSpread;
+                double localStartTime = forkData.joinMarker.time - forkTransitionSpread;
                 this.startTransitionThreshold =
                     MasterSequence.LocalToMasterTime(forkData.sequence.sequenceConfig.masterSequence, forkData.sequence,
                         localStartTime);
                 this.startTime = this.startTransitionThreshold - axisMonitor.axisTransitionSpread;
                 this.endTransitionThreshold = MasterSequence.LocalToMasterTime(forkData.sequence.sequenceConfig.masterSequence, forkData.sequence,
-                    forkData.forkMarker.time);
+                    forkData.joinMarker.time);
                 this.endTime = this.endTransitionThreshold;
             }
             else {
@@ -62,7 +62,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                     this.startTime + forkTransitionSpread;
             }
             
-            this.touchFork = forkData.fork;
+            this.touchFork = forkData.fork as TouchFork;
                 
             for (int i = 0; i < touchFork.branchingPaths.Count; i++)
             {

@@ -60,7 +60,9 @@ namespace AltSalt.Maestro
             SelectAllChildren,
             AddAllChildrenToSelection,
             CopyGameObjects,
-            PasteGameObjects
+            PasteGameObjects,
+            SelectOddsInSelection,
+            SelectEvensInSelection
         }
         
         enum EnableCondition
@@ -186,10 +188,57 @@ namespace AltSalt.Maestro
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectsCopied,
                         button);
                     break;
-
+                
+                case nameof(ButtonNames.SelectOddsInSelection):
+                    button.clickable.clicked += () =>
+                        {
+                            Selection.objects = SelectOddsInSelection(Selection.gameObjects);
+                        };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
+                        button);
+                    break;
+                
+                case nameof(ButtonNames.SelectEvensInSelection):
+                    button.clickable.clicked += () =>
+                    {
+                        Selection.objects = SelectEvensInSelection(Selection.gameObjects);
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
+                        button);
+                    break;
             }
 
             return button;
+        }
+
+        public static GameObject[] SelectOddsInSelection(GameObject[] selection)
+        {
+            List<GameObject> newSelection = new List<GameObject>();
+
+            for (int i = 0; i < selection.Length; i++) {
+                int sibindex = selection[i].transform.GetSiblingIndex();
+
+                if (sibindex % 2 == 0) {
+                    newSelection.Add(selection[i]);
+                }
+            }
+
+            return newSelection.ToArray();
+        }
+        
+        public static GameObject[] SelectEvensInSelection(GameObject[] selection)
+        {
+            List<GameObject> newSelection = new List<GameObject>();
+
+            for (int i = 0; i < selection.Length; i++) {
+                int sibindex = selection[i].transform.GetSiblingIndex();
+
+                if (sibindex % 2 == 1) {
+                    newSelection.Add(selection[i]);
+                }
+            }
+
+            return newSelection.ToArray();
         }
         
         public static void ShowSelectionTools()

@@ -32,10 +32,9 @@ namespace AltSalt.Maestro
             get => _value;
             set => _value = value;
         }
-        
-        public bool hasDefault;
 
         [SerializeField]
+        [ShowIf(nameof(hasDefault))]
         private float _defaultValue;
 
         [ShowIf("hasDefault")]

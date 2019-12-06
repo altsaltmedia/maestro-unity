@@ -61,6 +61,8 @@ xsi:schemaLocation="
 
                                     <editor:PropertyField label="Closing Wrapper :" class="col-full" binding-path="closingWrapper" name="ClosingWrapper"/>
 
+                                    <engine:Button text="Extract Text Letters" class="col-full" name="ExtractTextLetters" />
+
                                     <engine:Button text="Extract Text Lines" class="col-full" name="ExtractTextLines" />
 
                                     <engine:Button text="Refresh Layout" class="col-full" name="RefreshLayout" />

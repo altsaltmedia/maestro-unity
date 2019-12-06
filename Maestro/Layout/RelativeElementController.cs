@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro.Layout
 {
@@ -13,6 +14,9 @@ namespace AltSalt.Maestro.Layout
 
         int elementCount;
         List<int> elementKeys = new List<int>();
+        
+        [ShowInInspector]
+        [ReadOnly]
         List<RelativeElement> sortedElements = new List<RelativeElement>();
 
         void Start()
@@ -49,6 +53,9 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
+        [InfoBox("Trigger relative action.")]
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        [PropertyOrder(8)]
         public void ExecuteRelativity()
         {
             for (int i = 0; i < sortedElements.Count; i++) {
