@@ -39,16 +39,16 @@ namespace AltSalt.Maestro
         {
             base.UpdateBreakpointDependencies();
 
-            if (HasBreakpoints == true) {
+            if (hasBreakpoints == true) {
 
                 int initialCount = breakpointInitialValue.Count;
-                Utils.ExpandList(breakpointInitialValue, aspectRatioBreakpoints.Count);
+                Utils.ExpandList(breakpointInitialValue, _aspectRatioBreakpoints.Count);
                 for(int i = initialCount; i<breakpointInitialValue.Count; i++) {
                     breakpointInitialValue[i] = breakpointInitialValue[initialCount - 1];
                 }
 
                 int targetCount = breakpointTargetValue.Count;
-                Utils.ExpandList(breakpointTargetValue, aspectRatioBreakpoints.Count);
+                Utils.ExpandList(breakpointTargetValue, _aspectRatioBreakpoints.Count);
                 for (int i = targetCount; i < breakpointTargetValue.Count; i++) {
                     breakpointTargetValue[i] = breakpointTargetValue[initialCount - 1];
                 }
@@ -58,8 +58,8 @@ namespace AltSalt.Maestro
 
         public Vector3 GetInitialValueAtBreakpoint(float targetAspectRatio)
         {
-            if(AspectRatioBreakpoints.Count > 0) {
-                int breakpointIndex = Utils.GetValueIndexInList(targetAspectRatio, AspectRatioBreakpoints);
+            if(aspectRatioBreakpoints.Count > 0) {
+                int breakpointIndex = Utils.GetValueIndexInList(targetAspectRatio, aspectRatioBreakpoints);
                 return breakpointInitialValue[breakpointIndex];
             } else {
                 return breakpointInitialValue[0];
@@ -68,8 +68,8 @@ namespace AltSalt.Maestro
 
         public List<Vector3> SaveNewInitialValue(Vector3 targetValue)
         {
-            if (HasBreakpoints == true) {
-                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, AspectRatioBreakpoints);
+            if (hasBreakpoints == true) {
+                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
                 breakpointInitialValue[breakpointIndex] = targetValue;
             } else {
                 breakpointInitialValue[0] = targetValue;
@@ -82,8 +82,8 @@ namespace AltSalt.Maestro
 
         public Vector3 GetTargetValueAtBreakpoint(float targetAspectRatio)
         {
-            if (AspectRatioBreakpoints.Count > 0) {
-                int breakpointIndex = Utils.GetValueIndexInList(targetAspectRatio, AspectRatioBreakpoints);
+            if (aspectRatioBreakpoints.Count > 0) {
+                int breakpointIndex = Utils.GetValueIndexInList(targetAspectRatio, aspectRatioBreakpoints);
                 return breakpointTargetValue[breakpointIndex];
             } else {
                 return breakpointTargetValue[0];
@@ -92,8 +92,8 @@ namespace AltSalt.Maestro
 
         public List<Vector3> SaveNewTargetValue(Vector3 targetValue)
         {
-            if (HasBreakpoints == true) {
-                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, AspectRatioBreakpoints);
+            if (hasBreakpoints == true) {
+                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
                 breakpointTargetValue[breakpointIndex] = targetValue;
             } else {
                 breakpointTargetValue[0] = targetValue;

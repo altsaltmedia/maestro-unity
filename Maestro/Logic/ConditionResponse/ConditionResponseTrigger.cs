@@ -355,7 +355,12 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                 if (attribute.Count > 0) {
                     bool isValid = true;
                     for (int i = 0; i < attribute.Count; i++) {
-                        if (attribute[i].GetCondition() == null) {
+                        if (attribute[i].GetReference() == null) {
+                            isValid = false;
+                            break;
+                        }
+                        
+                        if (attribute[i].GetCondition() == null || Utils.IsPopulated(attribute[i].GetCondition()) == false) {
                             isValid = false;
                             break;
                         }
@@ -379,7 +384,12 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                 if (attribute.Count > 0) {
                     bool isValid = true;
                     for (int i = 0; i < attribute.Count; i++) {
-                        if (attribute[i].GetCondition() == null) {
+                        if (attribute[i].GetReference() == null) {
+                            isValid = false;
+                            break;
+                        }
+                        
+                        if (attribute[i].GetCondition() == null || Utils.IsPopulated(attribute[i].GetCondition()) == false) {
                             isValid = false;
                             break;
                         }

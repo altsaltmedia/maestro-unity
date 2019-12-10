@@ -43,11 +43,11 @@ namespace AltSalt.Maestro.Layout
             if (orientations.Count == 0) {
                 orientations.Add(DimensionType.Vertical);
             }
-            if(multiplier.Count <= aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(multiplier, aspectRatioBreakpoints.Count);
+            if(multiplier.Count <= _aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(multiplier, _aspectRatioBreakpoints.Count);
             }
-            if(orientations.Count <= aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(orientations, aspectRatioBreakpoints.Count);
+            if(orientations.Count <= _aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(orientations, _aspectRatioBreakpoints.Count);
             }
         }
 
@@ -80,7 +80,7 @@ namespace AltSalt.Maestro.Layout
         {
             base.ExecuteResponsiveAction();
 
-            if(HasBreakpoints == true) {
+            if(hasBreakpoints == true) {
                 SetValue(breakpointIndex);
             } else {
                 SetValue(0);

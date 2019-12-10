@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using AltSalt.Maestro.Layout;
 using UnityEngine;
 using UnityEditor;
 
@@ -8,13 +10,22 @@ namespace AltSalt.Maestro
 
     public class LayoutTools : ModifyTools
     {
+        private static LayoutTools _layoutTools;
+
+        private static LayoutTools layoutTools
+        {
+            get => _layoutTools;
+            set => _layoutTools = value;
+        }
+
         LayoutConfig targetLayout;
-        protected string loadedTextFamilyName;
+        protected string textFamilyDependencyNames;
 
         [MenuItem("Tools/Maestro/Layout Tools")]
         public static void ShowWindow()
         {
             var window = GetWindow<LayoutTools>();
+            layoutTools = window;
         }
 
         static void Init()
@@ -32,36 +43,36 @@ namespace AltSalt.Maestro
 
             GUILayout.Space(20);
 
-            base.OnGUI();
-
-            GUILayout.Space(20);
-
             if (targetLayout != null) {
-                if (targetLayout.supportedTextFamilies.Count > 0) {
+                if (targetLayout.textFamilyDependencies.Count > 0) {
                     bool triggerTextChange = true;
-                    for (int i = 0; i < targetLayout.supportedTextFamilies.Count; i++) {
-                        if (modifySettings.activeTextFamily == targetLayout.supportedTextFamilies[i]) {
-                            triggerTextChange = false;
-                            loadedTextFamilyName = modifySettings.activeTextFamily.name;
+                    string textFamilyNames = "";
+                    for (int i = 0; i < targetLayout.textFamilyDependencies.Count; i++) {
+                        textFamilyNames += targetLayout.textFamilyDependencies[i].name;
+                        if (i <= targetLayout.textFamilyDependencies.Count - 2) {
+                            textFamilyNames += ", ";
                         }
                     }
-                    if (triggerTextChange == true) {
-                        loadedTextFamilyName = targetLayout.supportedTextFamilies[0].name;
-                    }
+                    textFamilyDependencyNames = textFamilyNames;
                 } else {
-                    loadedTextFamilyName = modifySettings.defaultTextFamily.name;
+                    textFamilyDependencyNames = "NONE";
                 }
-                GUILayout.Label("'" + targetLayout.name + "' layout loaded text family: " + loadedTextFamilyName);
+                GUILayout.Label("'" + targetLayout.name + "' layout loaded text families: " + textFamilyDependencyNames);
             }
 
             EditorGUI.BeginDisabledGroup(DisableLayoutUpdate());
-            if (GUILayout.Button("Trigger Layout Update")) {
-                TriggerLayoutUpdate();
+            if (GUILayout.Button("Activate Layout")) {
+                ActivateLayout();
+            }
+            if (GUILayout.Button("Deactivate Layout")) {
+                DeactivateLayout();
             }
             EditorGUI.EndDisabledGroup();
+            
+            base.OnGUI();
         }
 
-        bool DisableLayoutUpdate()
+        private bool DisableLayoutUpdate()
         {
             if(targetLayout == null) {
                 return true;
@@ -70,30 +81,66 @@ namespace AltSalt.Maestro
             }
         }
 
-        void TriggerLayoutUpdate()
+        private void ActivateLayout()
         {
-            if (EditorUtility.DisplayDialog("Set new layout?", "This will set the active layout to " + targetLayout.name +
-                " in ModifySettings and update all responsive elements with corresponding data, and (if needed) trigger text family change to " + loadedTextFamilyName + ".", "Proceed", "Cancel")) {
-                modifySettings._activeLayoutConfig = targetLayout;
-                layoutUpdate.RaiseEvent(this, "layout tools", "editor window");
-                if (targetLayout.supportedTextFamilies.Count == 0) {
-                    modifySettings.activeTextFamily = modifySettings.defaultTextFamily;
-                    textUpdate.RaiseEvent(this, "layout tools", "editor window");
-                } else {
-                    bool triggerTextChange = true;
-                    for (int i = 0; i < targetLayout.supportedTextFamilies.Count; i++) {
-                        if (modifySettings.activeTextFamily == targetLayout.supportedTextFamilies[i]) {
-                            triggerTextChange = false;
-                        }
-                    }
-                    if (triggerTextChange == true) {
-                        modifySettings.activeTextFamily = targetLayout.supportedTextFamilies[0];
-                        textUpdate.RaiseEvent(this, "layout tools", "editor window");
-                    }
-                }
+            if (EditorUtility.DisplayDialog("Set new layout?", 
+                "This will activate the layout " + targetLayout.name +
+                "and update all responsive elements with corresponding data," +
+                "and (if needed) trigger text family changes to " + textFamilyDependencyNames +
+                " and update ALL texts.", "Proceed", "Cancel")) {
+                TriggerLayoutUpdate(true);
             }
         }
 
+        private void DeactivateLayout()
+        {
+            if (EditorUtility.DisplayDialog("Set new layout?",
+                "This will deactivate the layout " + targetLayout.name +
+                "and update all responsive elements with corresponding data," +
+                "and (if needed) trigger text family changes to " + textFamilyDependencyNames +
+                " and update ALL texts.", "Proceed", "Cancel")) {
+                TriggerLayoutUpdate(false);
+            }
+        }
+
+        private void TriggerLayoutUpdate(bool targetStatus)
+        {
+            bool triggerTextChange;
+            
+            if (targetStatus == true) {
+                ModifyHandler.ActivateOriginLayout(targetLayout, out triggerTextChange);
+            }
+            else {
+                ModifyHandler.DeactivateOriginLayout(targetLayout, out triggerTextChange);
+            }
+            LayoutUpdate();
+
+            if (triggerTextChange == true) {
+                TextTools.TextRefreshAll();
+            }
+        }
+
+        public static void LayoutUpdate()
+        {
+            UnityEngine.Object[] responsiveObjects = Utils.CullSelection(Utils.GetAllGameObjects(), typeof(ResponsiveElement));
+            List<ResponsiveElement> responsiveElements = new List<ResponsiveElement>();
+            
+            for (int i = 0; i < responsiveObjects.Length; i++) {
+                GameObject gameObject = responsiveObjects[i] as GameObject;
+                if (gameObject.active == true) {
+                    responsiveElements.Add(gameObject.GetComponent<ResponsiveElement>());
+                }
+            }
+            responsiveElements.Sort(new ResponsiveUtilsCore.ResponsiveElementSort());
+
+            for (int i = 0; i < responsiveElements.Count; i++) {
+                if (responsiveElements[i].isActiveAndEnabled == true) {
+                    responsiveElements[i].CallExecuteLayoutUpdate(LayoutTools.layoutTools);
+                }
+            }
+            
+            layoutUpdate.RaiseEvent(layoutTools, "Editor tools", "Layout tools");
+        }
     }
 
 }

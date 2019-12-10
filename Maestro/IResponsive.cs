@@ -15,28 +15,28 @@ namespace AltSalt.Maestro {
 
     public interface IResponsive
     {
-        string Name {
+        string elementName {
             get;
         }
 
-        List<float> AspectRatioBreakpoints {
+        List<float> aspectRatioBreakpoints {
             get;
         }
 
-        bool HasBreakpoints {
+        bool hasBreakpoints {
             get;
             set;
         }
 
-        int Priority {
+        int priority {
             get;
         }
 
-        Scene ParentScene {
+        Scene parentScene {
             get;
         }
 
-        bool LogElementOnLayoutUpdate {
+        bool logElementOnLayoutUpdate {
             get;
         }
 

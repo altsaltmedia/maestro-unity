@@ -11,6 +11,7 @@ https://www.altsalt.com / ricky@altsalt.com
 using UnityEngine;
 using Sirenix.OdinInspector;
 using TMPro;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -27,19 +28,18 @@ namespace AltSalt.Maestro
 
         [Required]
         [SerializeField]
-        ModifySettings modifySettings;
-
-        [Required]
-        [SerializeField]
         public string key;
 
-        [Required]
+        [FormerlySerializedAs("textCollectionBank"),Required]
         [SerializeField]
-        public TextCollectionBank textCollectionBank;
+        [Header("$"+nameof(GetActiveTextFamilyName))]
+        private TextCollectionBank _textCollectionBank;
+
+        public TextCollectionBank textCollectionBank => _textCollectionBank;
 
         TMP_Text textComponent;
 
-        void Start()
+        private void Start()
         {
             if(appSettings.modifyTextActive == true && textCollectionBank != null) {
                 PopulateWithText();
@@ -47,10 +47,19 @@ namespace AltSalt.Maestro
         }
 
 #if UNITY_EDITOR
-        void OnEnable()
+        private string GetActiveTextFamilyName()
         {
-            if(Application.isPlaying == false && modifySettings == null) {
-                modifySettings = Utils.GetModifySettings();
+            if (textCollectionBank != null) {
+                return "Active Text Family: " + textCollectionBank.GetActiveTextFamilyName();
+            }
+
+            return "Please populate a text collection bank";
+        }
+        
+        private void Reset()
+        {
+            if (appSettings == null) {
+                appSettings = Utils.GetAppSettings();
             }
         }
 #endif
@@ -71,7 +80,12 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR
                 Undo.RecordObject(textComponent, "populate text");
 #endif
-                textComponent.SetText(textCollectionBank.GetText(modifySettings.activeTextFamily, key), true);
+                if (textCollectionBank.GetText(key, out string text)) {
+                    textComponent.SetText(text, true);    
+                }
+                else {
+                    Debug.Log(text, this);
+                }
             }
         }
 
@@ -93,13 +107,5 @@ namespace AltSalt.Maestro
             }
         }
 
-#if UNITY_EDITOR
-        void Reset()
-        {
-            if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
-        }
-#endif
     }
 }

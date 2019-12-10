@@ -51,7 +51,14 @@ namespace AltSalt.Maestro.Logic
 
         LoadSceneMode loadMode;
 
-        Dictionary<string, AsyncOperationHandle<SceneInstance>> sceneInstances = new Dictionary<string, AsyncOperationHandle<SceneInstance>>();
+        [ShowInInspector]
+        private Dictionary<string, AsyncOperationHandle<SceneInstance>> _sceneInstances = new Dictionary<string, AsyncOperationHandle<SceneInstance>>();
+
+        private Dictionary<string, AsyncOperationHandle<SceneInstance>> sceneInstances
+        {
+            get => _sceneInstances;
+            set => _sceneInstances = value;
+        }
 
         // The first scene will always be a single load, done immediately w/o a call to
         // make a fade out first, so we have a special case for it here
@@ -71,6 +78,7 @@ namespace AltSalt.Maestro.Logic
             loadMode = eventPayload.GetBoolValue(DataType.boolType) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
             if(loadMode == LoadSceneMode.Single) {
+                sceneInstances.Clear();
                 fadeOutTriggered.RaiseEvent(this.gameObject);
             } else {
                 StartCoroutine(AsyncLoad(sceneName, loadMode));
@@ -118,7 +126,7 @@ namespace AltSalt.Maestro.Logic
 
             AsyncOperationHandle<SceneInstance> unloadInstance = sceneInstances[xSceneName];
 
-            if (sceneInstances.ContainsKey(xSceneName)) {
+            if (sceneInstances.ContainsKey(xSceneName) == true) {
                 sceneInstances.Remove(xSceneName);
             }
 

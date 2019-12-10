@@ -118,7 +118,7 @@ namespace AltSalt.Maestro.Sequencing
                     sourceSequence.sequenceConfig.gameObject.SetActive(false);
                 }
                 else if (sequenceSettings.previousDestination is Fork fork) {
-                    if (fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
+                    if (fork.active == false || fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
                         boundaryReached.RaiseEvent(this.gameObject);
                     }
                     else {
@@ -165,7 +165,7 @@ namespace AltSalt.Maestro.Sequencing
                     sourceSequence.sequenceConfig.gameObject.SetActive(false);
                 }
                 else if (sequenceSettings.nextDestination is Fork fork) {
-                    if (fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
+                    if (fork.active == false || fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
                         boundaryReached.RaiseEvent(this.gameObject);
                     }
                     else {

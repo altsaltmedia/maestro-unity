@@ -13,18 +13,18 @@ namespace AltSalt.Maestro
         {
             public override int Compare(IResponsive x, IResponsive y)
             {
-                return x.Priority.CompareTo(y.Priority);
+                return x.priority.CompareTo(y.priority);
             }
         }
 
 #if UNITY_EDITOR
         public static List<float> AddBreakpointToResponsiveElement(IResponsive targetElement, float targetBreakpoint)
         {
-            List<float> aspectRatioBreakpoints = targetElement.AspectRatioBreakpoints;
-            targetElement.HasBreakpoints = true;
+            List<float> aspectRatioBreakpoints = targetElement.aspectRatioBreakpoints;
+            targetElement.hasBreakpoints = true;
 
             if (aspectRatioBreakpoints.Contains(targetBreakpoint)) {
-                EditorUtility.DisplayDialog("Breakpoint already exists", "The breakpoint " + targetBreakpoint.ToString("F2") + " already exists on " + targetElement.Name, "Okay");
+                EditorUtility.DisplayDialog("Breakpoint already exists", "The breakpoint " + targetBreakpoint.ToString("F2") + " already exists on " + targetElement.elementName, "Okay");
                 return aspectRatioBreakpoints;
             }
 

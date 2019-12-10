@@ -198,8 +198,8 @@ namespace AltSalt.Maestro
         {
             List<float> breakpointValues = new List<float>();
             for (int q = 0; q < list.Count; q++) {
-                for (int z = 0; z < list[q].AspectRatioBreakpoints.Count; z++) {
-                    float elementBreakpoint = list[q].AspectRatioBreakpoints[z];
+                for (int z = 0; z < list[q].aspectRatioBreakpoints.Count; z++) {
+                    float elementBreakpoint = list[q].aspectRatioBreakpoints[z];
                     if (breakpointValues.Contains(elementBreakpoint) == false) {
                         breakpointValues.Add(elementBreakpoint);
                     }
@@ -225,9 +225,9 @@ namespace AltSalt.Maestro
 
             Action<VisualElement, int> bindItem = (labelText, index) =>
             {
-                string objectString = listElements[index].Name.LimitLength(10);
+                string objectString = listElements[index].elementName.LimitLength(10);
 
-                string aspectRatioNames = string.Format("({0})", string.Join(", ", listElements[index].AspectRatioBreakpoints.ToArray()));
+                string aspectRatioNames = string.Format("({0})", string.Join(", ", listElements[index].aspectRatioBreakpoints.ToArray()));
 
                 (labelText as Label).text = objectString + " - " + listElements[index].GetType().Name + " " + aspectRatioNames;
             };

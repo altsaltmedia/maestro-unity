@@ -32,8 +32,8 @@ namespace AltSalt.Maestro.Layout
             if (heightMultipliers.Count == 0) {
                 heightMultipliers.Add(1f);
             }
-            if (widthMultipliers.Count <= aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(widthMultipliers, aspectRatioBreakpoints.Count);
+            if (widthMultipliers.Count <= _aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(widthMultipliers, _aspectRatioBreakpoints.Count);
             }
         }
 #endif
@@ -41,7 +41,7 @@ namespace AltSalt.Maestro.Layout
         public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
-            if(HasBreakpoints == true) {
+            if(hasBreakpoints == true) {
                 SetValue(breakpointIndex);
             } else {
                 SetValue(0);

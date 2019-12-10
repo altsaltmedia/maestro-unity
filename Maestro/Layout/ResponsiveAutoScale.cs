@@ -72,21 +72,21 @@ namespace AltSalt.Maestro.Layout
                 maxDimensionValues.Add(0);
             }
 
-            if (hasBreakpoints == false) {
+            if (_hasBreakpoints == false) {
                 return;
             }
 
-            if(baseDimensionTypes.Count <= aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(baseDimensionTypes, aspectRatioBreakpoints.Count);
+            if(baseDimensionTypes.Count <= _aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(baseDimensionTypes, _aspectRatioBreakpoints.Count);
             }
-            if(objectAspectRatios.Count <= aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(objectAspectRatios, aspectRatioBreakpoints.Count);
+            if(objectAspectRatios.Count <= _aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(objectAspectRatios, _aspectRatioBreakpoints.Count);
             }
-            if (dimensionPercentages.Count <= aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(dimensionPercentages, aspectRatioBreakpoints.Count);
+            if (dimensionPercentages.Count <= _aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(dimensionPercentages, _aspectRatioBreakpoints.Count);
             }
-            if (maxDimensionValues.Count <= aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(maxDimensionValues, aspectRatioBreakpoints.Count);
+            if (maxDimensionValues.Count <= _aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(maxDimensionValues, _aspectRatioBreakpoints.Count);
             }
         }
 
@@ -101,7 +101,7 @@ namespace AltSalt.Maestro.Layout
         {
             base.ExecuteResponsiveAction();
 
-            if(HasBreakpoints == true) {
+            if(hasBreakpoints == true) {
                 SetValue(breakpointIndex);
             } else {
                 SetValue(0);

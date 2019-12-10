@@ -18,8 +18,8 @@ namespace AltSalt.Maestro.Layout
         {
             GetBreakpointIndex();
 
-            if(hasBreakpoints == true) {
-                if(aspectRatioBreakpoints.Count < 1) {
+            if(_hasBreakpoints == true) {
+                if(_aspectRatioBreakpoints.Count < 1) {
                     Debug.LogWarning("You must specify at least one breakpoint to save element values.", this);
                     return;
                 }
@@ -44,7 +44,7 @@ namespace AltSalt.Maestro.Layout
 
         public void SetValue(int activeIndex)
         {
-            if(hasBreakpoints == true) {
+            if(_hasBreakpoints == true) {
 
                 if (activeIndex >= breakpointAnchorMax.Count ||
                     activeIndex >= breakpointAnchorMin.Count ||

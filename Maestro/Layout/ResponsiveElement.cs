@@ -6,6 +6,7 @@ using UnityEditor;
 using System.IO;
 using UnityEngine.SceneManagement;
 using SimpleJSON;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout
 {
@@ -36,50 +37,53 @@ namespace AltSalt.Maestro.Layout
         [ValidateInput(nameof(IsPopulated))]
         ComplexEventTrigger responsiveElementDisable = new ComplexEventTrigger();
 
-        public string Name {
+        public string elementName {
             get {
                 return this.name;
             }
         }
 
-        [SerializeField]
+        [FormerlySerializedAs("hasBreakpoints"),SerializeField]
 #if UNITY_EDITOR
         [OnValueChanged(nameof(PopulateDefaultBreakpointValues))]
 #endif
-        protected bool hasBreakpoints;
-        public bool HasBreakpoints {
+        protected bool _hasBreakpoints;
+        
+        public bool hasBreakpoints {
             get {
-                return hasBreakpoints;
+                return _hasBreakpoints;
             }
             set {
-                hasBreakpoints = value;
+                _hasBreakpoints = value;
             }
         }
 
-        [SerializeField]
+        [FormerlySerializedAs("priority"),SerializeField]
 #if UNITY_EDITOR
         [OnValueChanged(nameof(ResetResponsiveElementData))]
 #endif
-        protected int priority;
-        public int Priority {
+        protected int _priority
+            ;
+        public int priority {
             get {
-                return priority;
+                return _priority;
             }
         }
 
         [SerializeField]
-        protected bool logElementOnLayoutUpdate;
-        public bool LogElementOnLayoutUpdate {
+        protected bool _logElementOnLayoutUpdate;
+        
+        public bool logElementOnLayoutUpdate {
             get {
                 if (appSettings.logResponsiveElementActions.Value == true) {
                     return true;
                 } else {
-                    return logElementOnLayoutUpdate;
+                    return _logElementOnLayoutUpdate;
                 }
             }
         }
 
-        public Scene ParentScene {
+        public Scene parentScene {
             get {
                 return gameObject.scene;
             }
@@ -87,7 +91,7 @@ namespace AltSalt.Maestro.Layout
 
         protected int breakpointIndex;
 
-        [ShowIf(nameof(hasBreakpoints))]
+        [FormerlySerializedAs("aspectRatioBreakpoints"),ShowIf(nameof(_hasBreakpoints))]
         [PropertySpace]
         [InfoBox("You should always have x+1 breakpoint values; e.g., for 1 breakpoint at 1.34, you must specify 2 breakpoint values - one for aspect ratios wider than 1.34, and another for aspect ratios narrower than or equal to 1.34.")]
         [InfoBox("Breakpoint examples: To target devices narrow than iPad (aspect ratio 1.33), specify a breakpoint of 1.4; to target narrower than iPhone (1.77), specify a breakpoint of 1.78.")]
@@ -95,12 +99,15 @@ namespace AltSalt.Maestro.Layout
 #if UNITY_EDITOR
         [OnValueChanged(nameof(UpdateBreakpointDependencies))]
 #endif
-        public List<float> aspectRatioBreakpoints = new List<float>();
-        public List<float> AspectRatioBreakpoints {
+        public List<float> _aspectRatioBreakpoints = new List<float>();
+        public List<float> aspectRatioBreakpoints {
             get {
-                return aspectRatioBreakpoints;
+                return _aspectRatioBreakpoints;
             }
         }
+
+        private static bool overwriteAllLayoutFiles = false;
+        private static bool cancelSaveData = false;
 
         protected override void OnEnable()
         {
@@ -121,10 +128,11 @@ namespace AltSalt.Maestro.Layout
 
         public void CallExecuteLayoutUpdate(UnityEngine.Object callingObject)
         {
-            if (LogElementOnLayoutUpdate == true) {
+            RefreshActiveLayout();
+            if (logElementOnLayoutUpdate == true) {
                 Debug.Log("CallExecuteLayoutUpdate triggered!");
                 Debug.Log("Calling object : " + callingObject.name, callingObject);
-                Debug.Log("Triggered object : " + Name, gameObject);
+                Debug.Log("Triggered object : " + elementName, gameObject);
                 Debug.Log("Component : " + this.GetType().Name, gameObject);
                 Debug.Log("--------------------------");
             }
@@ -137,14 +145,14 @@ namespace AltSalt.Maestro.Layout
 
         protected void GetBreakpointIndex()
         {
-            if (hasBreakpoints == true) {
-                if (aspectRatioBreakpoints.Count < 1) {
+            if (_hasBreakpoints == true) {
+                if (_aspectRatioBreakpoints.Count < 1) {
 #if UNITY_EDITOR
                     LogBreakpointError();
 #endif
                     return;
                 } else {
-                    breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
+                    breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, _aspectRatioBreakpoints);
                 }
             } else {
                 breakpointIndex = 0;
@@ -181,16 +189,16 @@ namespace AltSalt.Maestro.Layout
 
         void PopulateDefaultBreakpoint()
         {
-            if(hasBreakpoints == true && aspectRatioBreakpoints.Count == 0) {
+            if(_hasBreakpoints == true && _aspectRatioBreakpoints.Count == 0) {
                 decimal tempVal = Convert.ToDecimal(sceneAspectRatio.Value);
                 tempVal = Math.Round(tempVal, 2);
-                aspectRatioBreakpoints.Add((float)tempVal + .01f);
+                _aspectRatioBreakpoints.Add((float)tempVal + .01f);
             }
         }
 
         protected virtual void UpdateBreakpointDependencies() {
-            if(aspectRatioBreakpoints.Count == 0) {
-                hasBreakpoints = false;
+            if(_aspectRatioBreakpoints.Count == 0) {
+                _hasBreakpoints = false;
             }
         }
 
@@ -229,10 +237,8 @@ namespace AltSalt.Maestro.Layout
 
         void PopulateNonSerializedProperties()
         {
-            nonserializedProperties.Clear();
-            nonserializedProperties.Add(nameof(id));
-            nonserializedProperties.Add(nameof(nonserializedProperties));
-            nonserializedProperties.Add(nameof(modifySettings));
+            base.PopulateNonSerializedProperties();
+            nonserializedProperties.Add(nameof(_logElementOnLayoutUpdate));
             nonserializedProperties.Add(nameof(appSettings));
             nonserializedProperties.Add(nameof(sceneWidth));
             nonserializedProperties.Add(nameof(sceneHeight));
@@ -249,29 +255,72 @@ namespace AltSalt.Maestro.Layout
             
         }
 
+        protected override void OnGUI()
+        {
+            base.OnGUI();
+            overwriteAllLayoutFiles = false;
+            cancelSaveData = false;
+        }
+
         [HorizontalGroup("Data Handler", 0.5f)]
         [InfoBox("Saves data based on current scene and active layout.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         [PropertyOrder(7)]
         public void SaveData()
         {
+            if (cancelSaveData == true) {
+                return;
+            }
+            
             Initialize();
+            RefreshActiveLayout();
             string data = JsonUtility.ToJson(this, true);
             var tempObject = JSON.Parse(data);
             for(int i=0; i<nonserializedProperties.Count; i++) {
                 tempObject.Remove(nonserializedProperties[i]);
             }
             data = tempObject.ToString(2);
-            string directoryPath = Utils.GetDirectory(new string[] { "/Resources", "/Layouts", "/" + SceneManager.GetActiveScene().name, "/" + modifySettings._activeLayoutConfig.name });
+
+            if (activeLayout == null) {
+                Debug.Log("No active layout found. Please populate a layout config.", this);
+                return;
+            }
+            
+            string directoryPath = Utils.GetDirectory(new string[] { "/Resources", "/Layouts", $"/{SceneManager.GetActiveScene().name}/{activeLayout.name}" });
             string fileName = this.name + id.ToString();
             string filePath = Utils.GetFilePath(directoryPath, fileName, ".json");
 
-            if(File.Exists(filePath)) {
-                if (EditorUtility.DisplayDialog("Overwrite existing file?",
-                "This will overwrite the existing data at " + Utils.GetFilePath(SceneManager.GetActiveScene().name, fileName) + ".", "Proceed", "Cancel")) {
-                    File.WriteAllText(filePath, data);
-                    AssetDatabase.Refresh();
+            if(File.Exists(filePath) && overwriteAllLayoutFiles == false) {
+
+                int option = EditorUtility.DisplayDialogComplex("Overwrite existing file?",
+                    "This will overwrite the existing data at " +
+                    Utils.GetFilePath($"{SceneManager.GetActiveScene().name}/{activeLayout.name}", fileName) + ".",
+                    "Yes to All", "Cancel", "Yes (Just Once)");
+                
+                switch (option) {
+                    
+                    case 0:
+                        overwriteAllLayoutFiles = true;
+                        File.WriteAllText(filePath, data);
+                        AssetDatabase.Refresh();
+                        break;
+
+                    case 1:
+                        cancelSaveData = true;
+                        Debug.Log("Save data cancelled");
+                        return;
+                    
+                    case 2:
+                        File.WriteAllText(filePath, data);
+                        AssetDatabase.Refresh();
+                        break;
+
+                    default:
+                        Debug.LogError("Option not recognized");
+                        break;
+                    
                 }
+                
             } else {
                 File.WriteAllText(filePath, data);
                 AssetDatabase.Refresh();
@@ -296,10 +345,14 @@ namespace AltSalt.Maestro.Layout
         [PropertyOrder(7)]
         public void LoadData()
         {
-            var jsonTextFile = Resources.Load<TextAsset>("Layouts/" + sceneName + "/" + modifySettings._activeLayoutConfig.name + "/" + this.name + id.ToString());
+            RefreshActiveLayout();
+            if(activeLayout == null) return;
+            
+            var jsonTextFile = Resources.Load<TextAsset>("Layouts/" + sceneName + "/" + activeLayout.name + "/" + this.name + id.ToString());
             if (jsonTextFile != null) {
-                Debug.Log("Populating " + this.name + " with stored data for " + modifySettings._activeLayoutConfig.name + " layout", this);
+                Debug.Log("Populating " + this.name + " with stored data for " + activeLayout.name + " layout", this);
                 JsonUtility.FromJsonOverwrite(jsonTextFile.ToString(), this);
+                ExecuteResponsiveAction();
             }
         }
 

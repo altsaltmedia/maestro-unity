@@ -15,12 +15,14 @@ namespace AltSalt.Maestro.Layout
         [InfoBox("Saves the position at the current breakpoint index.")]
         public void SaveValue()
         {
+            int targetBreakpointIndex = 0;
+            
             if (aspectRatioBreakpoints.Count < 1) {
-                Debug.LogError("You must specify at least one breakpoint to save element values.", this);
-                return;
+                targetBreakpointIndex = 0;
             }
-
-            int targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
+            else {
+                targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
+            }
 
             Utils.ExpandList(breakpointTextSize, targetBreakpointIndex);
             breakpointTextSize[targetBreakpointIndex] = textMeshPro.fontSize;
@@ -30,7 +32,12 @@ namespace AltSalt.Maestro.Layout
         public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
-            SetValue(breakpointIndex);
+            if (hasBreakpoints == true) {
+                SetValue(breakpointIndex);
+            }
+            else {
+                SetValue(0);
+            }
         }
 
         public void SetValue(int activeIndex)

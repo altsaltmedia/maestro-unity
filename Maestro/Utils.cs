@@ -134,6 +134,176 @@ namespace AltSalt.Maestro
         {
             return "Assets/_AltSalt/Maestro/Editor/EditorStyles.uss";
         }
+        
+        public static GameObject[] GetAllGameObjects()
+        {
+            return GetChildGameObjects(GetRootGameObjects());
+        }
+        
+        public static GameObject[] GetRootGameObjects()
+        {
+            GameObject[] rootGameObjects =  SceneManager.GetActiveScene().GetRootGameObjects();
+            Array.Sort(rootGameObjects, new GameObjectSort());
+            return rootGameObjects;
+        }
+
+        public static GameObject[] GetChildGameObjects(GameObject selection)
+        {
+            GameObject[] gameObjectArray = { selection };
+            return GetChildGameObjects(gameObjectArray);
+        }
+
+        public static GameObject[] GetChildGameObjects(GameObject[] selection)
+        {
+            List<GameObject> gameObjectList = new List<GameObject>();
+            for (int i = 0; i < selection.Length; i++) {
+                gameObjectList = TraverseTransformHierarchy(gameObjectList, selection[i].transform, selection[i].transform);
+            }
+            return gameObjectList.ToArray();
+        }
+
+        public delegate void TraverseTransformDelegate(List<GameObject> gameObjectList, Transform transform);
+
+        // Given an empty list of game objects and a root transform, will recursively go through the root
+        // transform's children and populate the list with the children in the order they appear in the hierarchy.
+        // Optionally, can take a delegate to perform custom handling on each child transform as we come across it.
+        public static List<GameObject> TraverseTransformHierarchy(List<GameObject> targetList, Transform rootTransform, Transform currentNode, TraverseTransformDelegate traverseTransformDelegate = null, bool includeRoot = false)
+        {
+            if(includeRoot == true) {
+                if(targetList.Contains(rootTransform.gameObject) == false) {
+                    if (traverseTransformDelegate != null) {
+                        traverseTransformDelegate.Invoke(targetList, rootTransform);
+                    } else {
+                        targetList.Add(rootTransform.gameObject);
+                    }
+                }
+            }
+
+            if (currentNode.childCount == 0) {
+                return targetList;
+            } else {
+                for (int i = 0; i < currentNode.childCount; i++) {
+                    Transform childTransform = currentNode.GetChild(i);
+                    if (traverseTransformDelegate != null) {
+                        traverseTransformDelegate.Invoke(targetList, childTransform);
+                    }
+                    else {
+                        targetList.Add(childTransform.gameObject);
+                    }
+                    TraverseTransformHierarchy(targetList, rootTransform, childTransform, traverseTransformDelegate);
+                }
+                return targetList;
+            }
+        }
+        
+        public static GameObject[] SortGameObjectSelection(GameObject[] gameObjects)
+        {
+            // Collect all selected game objects into a dictionary based on parent...
+            Dictionary<Transform, List<GameObject>> selectionByParent = new Dictionary<Transform, List<GameObject>>();
+            // (or, if it's a root and has no parent, save into a separate dictionary)
+            Dictionary<Transform, GameObject> selectionRootObjects = new Dictionary<Transform, GameObject>();
+
+            for (int i=0; i<gameObjects.Length; i++) {
+                Transform parent = gameObjects[i].transform.parent;
+
+                if(parent != null) {
+                    if(selectionByParent.ContainsKey(parent)) {
+                        selectionByParent[parent].Add(gameObjects[i]);
+                    } else {
+                        selectionByParent.Add(parent, new List<GameObject>());
+                        selectionByParent[parent].Add(gameObjects[i]);
+                    }
+                } else {
+                    selectionRootObjects.Add(gameObjects[i].transform, gameObjects[i]);
+                }
+            }
+
+            // Sort the game object lists underneath each node based on sibling index
+            foreach (KeyValuePair<Transform, List<GameObject>> childObjectList in selectionByParent) {
+                childObjectList.Value.Sort(new GameObjectSort());
+            }
+
+            // Add any root objects into our lists, inserting at the beginning if the list
+            // already exists, else creating a new list to house our root
+            foreach (KeyValuePair<Transform, GameObject> rootObject in selectionRootObjects) {
+                if (selectionByParent.ContainsKey(rootObject.Key)) {
+                    selectionByParent[rootObject.Key].Insert(0, rootObject.Value);
+                } else {
+                    selectionByParent.Add(rootObject.Key, new List<GameObject>());
+                    selectionByParent[rootObject.Key].Add(rootObject.Value);
+                }
+            }
+
+            // The list that we will contain our final, ordered selection
+            List<GameObject> finalOrderedSelection = new List<GameObject>();
+
+            // Our scene's root objects, in order
+            GameObject[] rootObjects = GetRootGameObjects();
+
+            for(int q=0; q<rootObjects.Length; q++) {
+                 
+                // Traverse all the game objects in our scene. As we hit each iteration, we build the list by comparing it to
+                // our dictionary of parents and child objects. Since this traversal is happening in order, this returns the
+                // same contents of our dictionary, just sorted based on each object's appearance in the hierarchy
+                List<GameObject> totalHierarchySelection = TraverseTransformHierarchy(new List<GameObject>(), rootObjects[q].transform, rootObjects[q].transform, (List<GameObject> hierarchySelection, Transform currentTransform) => {
+                    foreach (KeyValuePair<Transform, List<GameObject>> parentObject in selectionByParent) {
+                        for(int i=0; i<parentObject.Value.Count; i++) {
+                            if(currentTransform.gameObject == parentObject.Value[i]) {
+                                hierarchySelection.Add(currentTransform.gameObject);
+                            }
+                        }
+                    }
+                }, true);
+
+                finalOrderedSelection.AddRange(totalHierarchySelection);
+            }
+
+            return finalOrderedSelection.ToArray();
+        }
+
+        public class GameObjectSort : Comparer<GameObject>
+        {
+            public override int Compare(GameObject x, GameObject y)
+            {
+                return x.transform.GetSiblingIndex().CompareTo(y.transform.GetSiblingIndex());
+            }
+        }
+
+        public class TransformSort : Comparer<Transform>
+        {
+            public override int Compare(Transform x, Transform y)
+            {
+                return x.GetSiblingIndex().CompareTo(y.GetSiblingIndex());
+            }
+        }
+        
+        public class ModifyConfigSort : Comparer<IModifyConfig>
+        {
+            public override int Compare(IModifyConfig x, IModifyConfig y)
+            {
+                return x.priority.CompareTo(y.priority);
+            }
+        }
+
+        public static bool ContainsActiveModifyConfig(List<IModifyConfig> modifyConfigs, out IModifyConfig modifyConfig)
+        {
+            List<IModifyConfig> activeModifyConfigs = new List<IModifyConfig>();
+            for (int i = 0; i < modifyConfigs.Count; i++) {
+                if (modifyConfigs[i].active == true) {
+                    activeModifyConfigs.Add(modifyConfigs[i]);
+                }
+            }
+
+            if (activeModifyConfigs.Count > 0) {
+                // Set to the one with highest priority
+                activeModifyConfigs.Sort(new Utils.ModifyConfigSort());
+                modifyConfig = activeModifyConfigs[activeModifyConfigs.Count - 1];
+                return true;
+            }
+
+            modifyConfig = null;
+            return false;
+        }
 
         public static bool TargetComponentSelected(GameObject currentSelection, Type targetType)
         {
@@ -289,86 +459,6 @@ namespace AltSalt.Maestro
             return newSelection.ToArray();
         }
 
-        public static GameObject[] SortGameObjectSelection(GameObject[] gameObjects)
-        {
-            // Collect all selected game objects into a dictionary based on parent...
-            Dictionary<Transform, List<GameObject>> selectionByParent = new Dictionary<Transform, List<GameObject>>();
-            // (or, if it's a root and has no parent, save into a separate dictionary)
-            Dictionary<Transform, GameObject> selectionRootObjects = new Dictionary<Transform, GameObject>();
-
-            for (int i=0; i<gameObjects.Length; i++) {
-                Transform parent = gameObjects[i].transform.parent;
-
-                if(parent != null) {
-                    if(selectionByParent.ContainsKey(parent)) {
-                        selectionByParent[parent].Add(gameObjects[i]);
-                    } else {
-                        selectionByParent.Add(parent, new List<GameObject>());
-                        selectionByParent[parent].Add(gameObjects[i]);
-                    }
-                } else {
-                    selectionRootObjects.Add(gameObjects[i].transform, gameObjects[i]);
-                }
-            }
-
-            // Sort the game object lists underneath each node based on sibling index
-            foreach (KeyValuePair<Transform, List<GameObject>> childObjectList in selectionByParent) {
-                childObjectList.Value.Sort(new GameObjectSort());
-            }
-
-            // Add any root objects into our lists, inserting at the beginning if the list
-            // already exists, else creating a new list to house our root
-            foreach (KeyValuePair<Transform, GameObject> rootObject in selectionRootObjects) {
-                if (selectionByParent.ContainsKey(rootObject.Key)) {
-                    selectionByParent[rootObject.Key].Insert(0, rootObject.Value);
-                } else {
-                    selectionByParent.Add(rootObject.Key, new List<GameObject>());
-                    selectionByParent[rootObject.Key].Add(rootObject.Value);
-                }
-            }
-
-            // The list that we will contain our final, ordered selection
-            List<GameObject> finalOrderedSelection = new List<GameObject>();
-
-            // Our scene's root objects, in order
-            GameObject[] rootObjects = GetRootGameObjects();
-
-            for(int q=0; q<rootObjects.Length; q++) {
-                 
-                // Traverse all the game objects in our scene. As we hit each iteration, we build the list by comparing it to
-                // our dictionary of parents and child objects. Since this traversal is happening in order, this returns the
-                // same contents of our dictionary, just sorted based on each object's appearance in the hierarchy
-                List<GameObject> totalHierarchySelection = TraverseTransformHierarchy(new List<GameObject>(), rootObjects[q].transform, (List<GameObject> hierarchySelection, Transform currentTransform) => {
-                    foreach (KeyValuePair<Transform, List<GameObject>> parentObject in selectionByParent) {
-                        for(int i=0; i<parentObject.Value.Count; i++) {
-                            if(currentTransform.gameObject == parentObject.Value[i]) {
-                                hierarchySelection.Add(currentTransform.gameObject);
-                            }
-                        }
-                    }
-                }, true);
-
-                finalOrderedSelection.AddRange(totalHierarchySelection);
-            }
-
-            return finalOrderedSelection.ToArray();
-        }
-
-        public static GameObject[] GetChildGameObjects(GameObject selection)
-        {
-            GameObject[] gameObjectArray = { selection };
-            return GetChildGameObjects(gameObjectArray);
-        }
-
-        public static GameObject[] GetChildGameObjects(GameObject[] selection)
-        {
-            List<GameObject> gameObjectList = new List<GameObject>();
-            for (int i = 0; i < selection.Length; i++) {
-                gameObjectList.AddRange(TraverseTransformHierarchy(gameObjectList, selection[i].transform));
-            }
-            return gameObjectList.ToArray();
-        }
-
         public static GameObject DuplicateObject(GameObject sourceObject)
         {
             GameObject duplicate;
@@ -394,64 +484,6 @@ namespace AltSalt.Maestro
             duplicate.name = sourceObject.name;
 
             return duplicate;
-        }
-
-        public delegate void TraverseTransformDelegate(List<GameObject> gameObjectList, Transform transform);
-
-        // Given an empty list of game objects and a root transform, will recursively go through the root
-        // transform's children and populate the list with the children in the order they appear in the hierarchy.
-        // Optionally, can take a delegate to perform custom handling on each child transform as we come across it.
-        public static List<GameObject> TraverseTransformHierarchy(List<GameObject> targetList, Transform rootTransform, TraverseTransformDelegate traverseTransformDelegate = null, bool includeRoot = false)
-        {
-            if(includeRoot == true) {
-                if(targetList.Contains(rootTransform.gameObject) == false) {
-                    if (traverseTransformDelegate != null) {
-                        traverseTransformDelegate.Invoke(targetList, rootTransform);
-                    } else {
-                        targetList.Add(rootTransform.gameObject);
-                    }
-                }
-            }
-
-            if (rootTransform.childCount == 0) {
-                return targetList;
-            } else {
-                for (int i = 0; i < rootTransform.childCount; i++) {
-                    Transform childTransform = rootTransform.GetChild(i);
-
-                    if(traverseTransformDelegate != null) {
-                        traverseTransformDelegate.Invoke(targetList, childTransform);
-                    } else {
-                        targetList.Add(childTransform.gameObject);
-                    }
-
-                    TraverseTransformHierarchy(targetList, childTransform, traverseTransformDelegate);
-                }
-                return targetList;
-            }
-        }
-
-        public static GameObject[] GetRootGameObjects()
-        {
-            GameObject[] rootGameObjects =  SceneManager.GetActiveScene().GetRootGameObjects();
-            Array.Sort(rootGameObjects, new GameObjectSort());
-            return rootGameObjects;
-        }
-
-        public class GameObjectSort : Comparer<GameObject>
-        {
-            public override int Compare(GameObject x, GameObject y)
-            {
-                return x.transform.GetSiblingIndex().CompareTo(y.transform.GetSiblingIndex());
-            }
-        }
-
-        public class TransformSort : Comparer<Transform>
-        {
-            public override int Compare(Transform x, Transform y)
-            {
-                return x.GetSiblingIndex().CompareTo(y.GetSiblingIndex());
-            }
         }
 
         public class ClipTimeSort : Comparer<TimelineClip>

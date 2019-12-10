@@ -22,12 +22,17 @@ MonoBehaviour:
     to update  layout as well. Should be passed with a language, layout, or both as
     a parameter(s) in the EventPayload.
   requiredParameters:
-  - description: Language or Layout
+  - description: Text Family
     dataType: 4
     customKey: 0
     _customKey: {fileID: 0}
+  - description: Activate / deactivate
+    dataType: 2
+    customKey: 0
+    _customKey: {fileID: 0}
   optionalParameters:
-  - description: Language or Layout
+  - description: Text Collection Bank to target; if null, activates refreshes text
+      collections
     dataType: 4
     customKey: 0
     _customKey: {fileID: 0}

@@ -24,4 +24,8 @@ MonoBehaviour:
     dataType: 4
     customKey: 0
     _customKey: {fileID: 0}
+  - description: Activate / deactivate
+    dataType: 2
+    customKey: 0
+    _customKey: {fileID: 0}
   optionalParameters: []

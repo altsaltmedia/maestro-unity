@@ -25,14 +25,14 @@ namespace AltSalt.Maestro.Layout
         {
             base.OnRenderObject();
 
-            if (aspectRatioBreakpoints.Count < 1) {
+            if (_aspectRatioBreakpoints.Count < 1) {
                 Debug.LogWarning("ResponsiveAutoUIWidth created with a default breakpoint of 0!", this);
-                Utils.ExpandList(aspectRatioBreakpoints, 0);
+                Utils.ExpandList(_aspectRatioBreakpoints, 0);
             }
 
-            if (breakpointWidthMargin.Count <= aspectRatioBreakpoints.Count) {
+            if (breakpointWidthMargin.Count <= _aspectRatioBreakpoints.Count) {
                 Debug.LogWarning("ResponsiveAutoUIWidth, added default breakpoint value(s) of 0.", this);
-                Utils.ExpandList(breakpointWidthMargin, aspectRatioBreakpoints.Count);
+                Utils.ExpandList(breakpointWidthMargin, _aspectRatioBreakpoints.Count);
             }
 
             if (ValuesChanged() == true) {

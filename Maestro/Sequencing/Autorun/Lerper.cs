@@ -62,7 +62,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         private Autorun_Data CheckEndLerp(Autorun_Controller autorunController, Autorun_Data autorunData, AutorunExtents extents)
         {
-            if(Mathf.Approximately((float)autorunData.sequence.currentTime, (float)extents.endTime)
+            if(autorunData.sequence.active == false
+             || Mathf.Approximately((float)autorunData.sequence.currentTime, (float)extents.endTime)
              || autorunData.sequence.currentTime > extents.endTime
              || Mathf.Approximately((float)autorunData.sequence.currentTime, (float)extents.startTime)
              || autorunData.sequence.currentTime < extents.startTime) {

@@ -8,17 +8,46 @@ namespace AltSalt.Maestro
     [CreateAssetMenu(menuName = "AltSalt/Modify/Modify Settings")]
     public class ModifySettings : ScriptableObject
     {
-        [Header("Modify Settings")]
         [Required]
-        public TextFamily defaultTextFamily;
+        [SerializeField]
+        private List<LayoutConfig> _activeLayoutConfigs;
+
+        public List<LayoutConfig> activeLayoutConfigs
+        {
+            get => _activeLayoutConfigs;
+            set => _activeLayoutConfigs = value;
+        }
 
         [Required]
-        public TextFamily activeTextFamily;
+        [SerializeField]
+        private List<TextFamily> _activeTextFamilies;
+
+        public List<TextFamily> activeTextFamilies
+        {
+            get => _activeTextFamilies;
+            set => _activeTextFamilies = value;
+        }
 
         [Required]
-        public LayoutConfig _defaultLayoutConfig;
+        [SerializeField]
+        [TitleGroup("Defaults")]
+        private List<LayoutConfig> _defaultLayoutConfigs;
 
+        public List<LayoutConfig> defaultLayoutConfigs
+        {
+            get => _defaultLayoutConfigs;
+            set => _defaultLayoutConfigs = value;
+        }
+        
         [Required]
-        public LayoutConfig _activeLayoutConfig;
+        [SerializeField]
+        [TitleGroup("Defaults")]
+        private List<TextFamily> _defaultTextFamilies;
+
+        public List<TextFamily> defaultTextFamilies
+        {
+            get => _defaultTextFamilies;
+            set => _defaultTextFamilies = value;
+        }
     }
 }

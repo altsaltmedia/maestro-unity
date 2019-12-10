@@ -7,11 +7,20 @@ using UnityEditor.SceneManagement;
 using System.Xml;
 using System.IO;
 using System.Linq;
+using Sirenix.Utilities;
 
 namespace AltSalt.Maestro
 {
     public class TextTools : ModifyTools
     {
+        private static TextTools _textTools;
+
+        private static TextTools textTools
+        {
+            get => _textTools;
+            set => _textTools = value;
+        }
+
         Vector2 scrollPos;
         string filePath = "";
         string fileName = "";
@@ -25,6 +34,7 @@ namespace AltSalt.Maestro
         public static void ShowWindow()
         {
             var window = GetWindow<TextTools>();
+            textTools = window;
         }
 
         static void Init()
@@ -58,12 +68,12 @@ namespace AltSalt.Maestro
 
             GUILayout.Space(20);
 
-            rootObject = EditorGUILayout.ObjectField("Root Object", rootObject, typeof(GameObject), true) as GameObject;
+            rootObject = EditorGUILayout.ObjectField("Text Object Parent", rootObject, typeof(GameObject), true) as GameObject;
 
             textCollectionBank = EditorGUILayout.ObjectField("Text Collection Bank", textCollectionBank, typeof(TextCollectionBank), false) as TextCollectionBank;
             EditorGUI.BeginDisabledGroup(DisablePopulateGameObjects());
-            if (GUILayout.Button("Generate Keys for Game Objects")) {
-                GenerateKeysForGameObjects();
+            if (GUILayout.Button("Generate Keys for Text Objects")) {
+                GenerateKeysForTextObjects();
             }
             EditorGUI.EndDisabledGroup();
 
@@ -71,47 +81,50 @@ namespace AltSalt.Maestro
 
             targetTextFamily = EditorGUILayout.ObjectField("Text Family Destination", targetTextFamily, typeof(TextFamily), false) as TextFamily;
             EditorGUI.BeginDisabledGroup(DisablePopulateCorpus());
-            if (GUILayout.Button("Populate Bank")) {
-                PopulateCorpus();
+            if (GUILayout.Button(GetPopulateButtonString())) {
+                PopulateTextCollection();
             }
             EditorGUI.EndDisabledGroup();
-
-            GUILayout.Space(20);
-
-            base.OnGUI();
 
             GUILayout.Space(20);
 
             if (targetTextFamily != null) {
-                if (targetTextFamily.supportedLayouts.Count > 0) {
+                if (targetTextFamily.layoutDependencies.Count > 0) {
                     bool triggerLayoutChange = true;
-                    for (int i = 0; i < targetTextFamily.supportedLayouts.Count; i++) {
-                        if (modifySettings._activeLayoutConfig == targetTextFamily.supportedLayouts[i]) {
-                            triggerLayoutChange = false;
-                            loadedLayoutName = modifySettings._activeLayoutConfig.name;
+                    string layoutNames = "";
+                    for (int i = 0; i < targetTextFamily.layoutDependencies.Count; i++) {
+                        layoutNames += targetTextFamily.layoutDependencies[i].name;
+                        if (i <= targetTextFamily.layoutDependencies.Count - 2) {
+                            layoutNames += ", ";
                         }
                     }
-                    if (triggerLayoutChange == true) {
-                        loadedLayoutName = targetTextFamily.supportedLayouts[0].name;
-                    }
+                    layoutDependencyNames = layoutNames;
                 } else {
-                    loadedLayoutName = modifySettings._defaultLayoutConfig.name;
+                    layoutDependencyNames = "NONE";
                 }
 
-                GUILayout.Label("'" + targetTextFamily.name + "' text family loaded layout: " + loadedLayoutName);
+                GUILayout.Label("'" + targetTextFamily.name + "' text family loaded layouts: " + layoutDependencyNames);
             }
 
             EditorGUI.BeginDisabledGroup(DisableTextUpdate());
-            if (GUILayout.Button("Trigger Text Update")) {
-                TriggerTextUpdate();
+            if (GUILayout.Button("Activate " + GetTextCollectionString())) {
+                ActivateTextCollection();
+            }
+            if (GUILayout.Button("Deactivate " + GetTextCollectionString())) {
+                DeactivateTextCollection();
             }
             EditorGUI.EndDisabledGroup();
 
             EditorGUI.BeginDisabledGroup(DisableTextUpdateAll());
-            if (GUILayout.Button("Trigger Text Update (All)")) {
-                TriggerTextUpdateAll();
+            if (GUILayout.Button("Activate " + GetTextFamilyString() + " - All Texts")) {
+                ActivateTextFamilyAll();
+            }
+            if (GUILayout.Button("Deactivate " + GetTextFamilyString() + " - All Texts")) {
+                DeactivateTextFamilyAll();
             }
             EditorGUI.EndDisabledGroup();
+            
+            base.OnGUI();
 
             EditorGUILayout.EndScrollView();
         }
@@ -133,7 +146,7 @@ namespace AltSalt.Maestro
 
         private void GenerateKeysForInputFile()
         {
-            List<string> keyList = PopulateKeyList();
+            List<string> keyList = GetKeyList();
 
             int count = 0;
             XmlDocument xmlDocument = new XmlDocument();
@@ -153,9 +166,9 @@ namespace AltSalt.Maestro
             }
         }
 
-        private void GenerateKeysForGameObjects()
+        private void GenerateKeysForTextObjects()
         {
-            List<string> keyList = PopulateKeyList();
+            List<string> keyList = GetKeyList();
 
             List<TextLoader> localizedTexts = new List<TextLoader>();
             localizedTexts = GetLocalizedTexts(localizedTexts, rootObject.transform);
@@ -176,7 +189,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool DisablePopulateGameObjects()
+        private bool DisablePopulateGameObjects()
         {
             if (rootObject == null || textCollectionBank == null) {
                 return true;
@@ -185,7 +198,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool DisablePopulateCorpus()
+        private bool DisablePopulateCorpus()
         {
             if (filePath.Length == 0 || textCollectionBank == null || targetTextFamily == null) {
                 return true;
@@ -194,7 +207,34 @@ namespace AltSalt.Maestro
             }
         }
 
-        void PopulateCorpus()
+        private string GetPopulateButtonString()
+        {
+            if (textCollectionBank != null) {
+                return $"Populate {textCollectionBank.name}";
+            }
+
+            return "Populate Text Collection";
+        }
+
+        private string GetTextCollectionString()
+        {
+            if (targetTextFamily != null && textCollectionBank != null) {
+                return $"{targetTextFamily.name} - {textCollectionBank.name}";
+            }
+
+            return "Text Collection";
+        }
+
+        private string GetTextFamilyString()
+        {
+            if (targetTextFamily != null) {
+                return targetTextFamily.name;
+            }
+
+            return "Target Text Family";
+        }
+
+        private void PopulateTextCollection()
         {
             if (filePath != null) {
                 if (EditorUtility.DisplayDialog("Replace " + targetTextFamily.name + " text?", "This will populate the '" + textCollectionBank.name + "' text family '" +
@@ -223,7 +263,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        private List<string> PopulateKeyList()
+        private static List<string> GetKeyList()
         {
             TextAsset textAsset = Resources.Load("noun-list") as TextAsset;
             if (textAsset == null) {
@@ -240,7 +280,7 @@ namespace AltSalt.Maestro
             return keys;
         }
 
-        private List<TextLoader> GetLocalizedTexts(List<TextLoader> textList, Transform transform)
+        private static List<TextLoader> GetLocalizedTexts(List<TextLoader> textList, Transform transform)
         {
             if (transform.childCount == 0) {
                 return textList;
@@ -257,13 +297,13 @@ namespace AltSalt.Maestro
             }
         }
 
-        private string GetFilename(string path)
+        private static string GetFilename(string path)
         {
             int lastIndex = path.LastIndexOf("/", StringComparison.CurrentCulture);
             return path.Substring(lastIndex + 1);
         }
 
-        protected bool DisableTextUpdateAll()
+        private bool DisableTextUpdateAll()
         {
             if (targetTextFamily == null) {
                 return true;
@@ -272,7 +312,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        protected bool DisableTextUpdate()
+        private bool DisableTextUpdate()
         {
             if (textCollectionBank == null || targetTextFamily == null) {
                 return true;
@@ -281,52 +321,106 @@ namespace AltSalt.Maestro
             }
         }
 
-        protected void TriggerTextUpdate()
+        private void ActivateTextCollection()
         {
-            if (EditorUtility.DisplayDialog("Set active language and update texts?", "This will set the active language to " + targetTextFamily.name +
-                " in ModifySettings and update texts that use the " + textCollectionBank.name + " text bank, and (if needed) trigger a layout change to " + loadedLayoutName + ".", "Proceed", "Cancel")) {
-                modifySettings.activeTextFamily = targetTextFamily;
-                textUpdate.RaiseEvent(this, "text tools", "editor window", textCollectionBank);
-                if (targetTextFamily.supportedLayouts.Count == 0) {
-                    modifySettings._activeLayoutConfig = modifySettings._defaultLayoutConfig;
-                    layoutUpdate.RaiseEvent(this, "text tools", "editor window");
-                } else {
-                    bool triggerLayoutChange = true;
-                    for (int i = 0; i < targetTextFamily.supportedLayouts.Count; i++) {
-                        if (modifySettings._activeLayoutConfig == modifySettings.activeTextFamily.supportedLayouts[i]) {
-                            triggerLayoutChange = false;
-                        }
-                    }
-                    if (triggerLayoutChange == true) {
-                        modifySettings._activeLayoutConfig = targetTextFamily.supportedLayouts[0];
-                        layoutUpdate.RaiseEvent(this, "text tools", "editor window");
-                    }
-                }
+            if (EditorUtility.DisplayDialog("Activate text family and update texts?", 
+                "This will activate the " + targetTextFamily.name +
+                " text family and update texts that use the " + textCollectionBank.name +
+                " text collection bank, and (if needed) trigger layout changes to " + layoutDependencyNames + ".", "Proceed", "Cancel")) {
+                TriggerTextUpdate(true);
+                TextRefresh(textCollectionBank);
             }
         }
 
-        protected void TriggerTextUpdateAll()
+        private void DeactivateTextCollection()
         {
-            if (EditorUtility.DisplayDialog("Set active language and update texts?", "This will set the active language to " + targetTextFamily.name +
-                " in ModifySettings and update ALL texts, and (if needed) trigger a layout change to " + loadedLayoutName + ".", "Proceed", "Cancel")) {
-                modifySettings.activeTextFamily = targetTextFamily;
-                textUpdate.RaiseEvent(this, "text tools", "editor window", textCollectionBank);
-                if (targetTextFamily.supportedLayouts.Count == 0) {
-                    modifySettings._activeLayoutConfig = modifySettings._defaultLayoutConfig;
-                    layoutUpdate.RaiseEvent(this, "text tools", "editor window");
-                } else {
-                    bool triggerLayoutChange = true;
-                    for (int i = 0; i < modifySettings.activeTextFamily.supportedLayouts.Count; i++) {
-                        if (modifySettings._activeLayoutConfig == targetTextFamily.supportedLayouts[i]) {
-                            triggerLayoutChange = false;
-                        }
-                    }
-                    if (triggerLayoutChange == true) {
-                        modifySettings._activeLayoutConfig = targetTextFamily.supportedLayouts[0];
-                        layoutUpdate.RaiseEvent(this, "text tools", "editor window");
-                    }
+            if (EditorUtility.DisplayDialog("Deactivate text family and update texts?",
+                "This will deactivate the " + targetTextFamily.name +
+                " text family and update texts that use the " + textCollectionBank.name +
+                " text collection  bank, and (if needed) trigger layout changes to " + layoutDependencyNames + ".", "Proceed", "Cancel")) {
+                TriggerTextUpdate(false);
+                TextRefresh(textCollectionBank);
+            }
+        }
+
+        private void ActivateTextFamilyAll()
+        {
+            if (EditorUtility.DisplayDialog("Activate text family and update texts?",
+                "This will set the active language to " + targetTextFamily.name +
+                " and update ALL texts, and (if needed) trigger a layout change to " +
+                layoutDependencyNames + ".", "Proceed", "Cancel")) {
+                TriggerTextUpdate(true);
+                TextRefreshAll();
+            }
+        }
+
+        private void DeactivateTextFamilyAll()
+        {
+            if (EditorUtility.DisplayDialog("Deactivate text family  and update texts?",
+                "This will set the active language to " + targetTextFamily.name +
+                " and update ALL texts, and (if needed) trigger a layout change to " +
+                layoutDependencyNames + ".", "Proceed", "Cancel")) {
+                TriggerTextUpdate(false);
+                TextRefreshAll();
+            }
+        }
+
+        private void TriggerTextUpdate(bool targetStatus)
+        {
+            bool triggerLayoutChange;
+            
+            if (targetStatus == true) {
+                ModifyHandler.ActivateOriginTextFamily(targetTextFamily, out triggerLayoutChange);
+            }
+            else {
+                ModifyHandler.DeactivateOriginTextFamily(targetTextFamily, out triggerLayoutChange);
+            }
+
+            if (triggerLayoutChange == true) {
+                LayoutTools.LayoutUpdate();
+            }
+        }
+
+        private static void TextRefresh(TextCollectionBank targetTextCollection)
+        {
+            List<TextLoader> textLoaders = GetTextLoaders();
+
+            for (int i = 0; i < textLoaders.Count; i++) {
+                if(textLoaders[i].isActiveAndEnabled == true &&
+                   textLoaders[i].textCollectionBank != null &&
+                   textLoaders[i].textCollectionBank == targetTextCollection)
+                    textLoaders[i].PopulateWithText();
+            }
+            
+            textUpdate.RaiseEvent(textTools, "Editor tools", "Text tools");
+        }
+
+        public static void TextRefreshAll()
+        {
+            List<TextLoader> textLoaders = GetTextLoaders();
+
+            for (int i = 0; i < textLoaders.Count; i++) {
+                if (textLoaders[i].isActiveAndEnabled == true) {
+                    textLoaders[i].PopulateWithText();
                 }
             }
+            
+            textUpdate.RaiseEvent(textTools, "Editor tools", "Text tools");
+        }
+
+        private static List<TextLoader> GetTextLoaders()
+        {
+            UnityEngine.Object[] textObjects = Utils.CullSelection(Utils.GetAllGameObjects(), typeof(TextLoader));
+            List<TextLoader> textLoaders = new List<TextLoader>();
+            
+            for (int i = 0; i < textObjects.Length; i++) {
+                GameObject gameObject = textObjects[i] as GameObject;
+                if (gameObject.active == true) {
+                    textLoaders.Add(gameObject.GetComponent<TextLoader>());
+                }
+            }
+
+            return textLoaders;
         }
 
     }

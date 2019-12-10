@@ -8,39 +8,58 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class LayoutConditionResponse : ModifyConditionResponse
+    public class LayoutConditionResponse : ConditionResponseBase
     {
         [SerializeField]
         [Title("$conditionEventTitle")]
-        [Title("$activeLayoutName")]
-        [Title("Layout Condition")]
-        [InfoBox("ActiveLayout in Modify Settings will be compared against this condition")]
-        LayoutConfig _activeLayoutConfigCondition;
+        [Title("Layout Reference")]
+        private LayoutConfig _layoutReference;
+
+        private LayoutConfig layoutReference
+        {
+            get => _layoutReference;
+            set => _layoutReference = value;
+        }
+
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private BoolReference _activeLayoutCondition;
+
+        [Title("Layout Status Condition")]
+        private BoolReference activeLayoutCondition => _activeLayoutCondition;
 
         public override void SyncValues()
         {
-            base.SyncValues();
-            if (_activeLayoutConfigCondition == null) {
+            if (layoutReference == null) {
                 conditionEventTitle = "Please populate a layout as your condition.";
                 return;
             }
 
-            conditionEventTitle = "Trigger Condition : Active layout is " + _activeLayoutConfigCondition.name;
+            conditionEventTitle = "Trigger Condition : Layout " + layoutReference.name + " active is " + activeLayoutCondition.Value;
         }
 
         public override bool CheckCondition()
         {
-            base.CheckCondition();
-            if (modifySettings._activeLayoutConfig == _activeLayoutConfigCondition) {
+            if (layoutReference.active == activeLayoutCondition.Value) {
                 return true;
             }
 
             return false;
         }
-
-        public LayoutConfig GetCondition()
+        
+        public LayoutConfig GetReference()
         {
-            return _activeLayoutConfigCondition;
+            return layoutReference;
+        }
+
+        public BoolReference GetCondition()
+        {
+            return activeLayoutCondition;
+        }
+
+        private static bool IsPopulated(BoolReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
         }
 
     }

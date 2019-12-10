@@ -12,7 +12,16 @@ namespace AltSalt.Maestro.Sequencing
         private string _description;
 
         private string description => _description;
-        
+
+        [SerializeField]
+        private bool _active = true;
+
+        public bool active
+        {
+            get => _active;
+            private set => _active = value;
+        }
+
         [SerializeField]
         [ValidateInput(nameof(IsPopulated), "A fork must contain at least three paths.")]
         [DisableIf(nameof(readonlyBranchingPaths))]
@@ -44,9 +53,14 @@ namespace AltSalt.Maestro.Sequencing
             destinationBranch = branchingPath;
         }
 
+        public void ActivateFork()
+        {
+            active = true;
+        }
+        
         public void DeactivateFork()
         {
-            destinationBranch.sequence = null;
+            active = false;
         }
 
         public bool TryGetDestinationBranch(out BranchingPath branchingPath)

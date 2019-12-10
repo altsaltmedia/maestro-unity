@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 using Sirenix.OdinInspector;
-using UnityEngine.SceneManagement;
-using System.Text;
-using UnityEditor;
 
 namespace AltSalt.Maestro
 {
@@ -31,9 +26,40 @@ namespace AltSalt.Maestro
         bool initialized;
 
         [Required]
-        [Title("$activeLayoutName")]
+        [Title("$"+nameof(activeLayoutName))]
         [SerializeField]
-        protected ModifySettings modifySettings;
+        private ModifySettings _modifySettings;
+
+        protected ModifySettings modifySettings
+        {
+            get => _modifySettings;
+            set => _modifySettings = value;
+        }
+
+        [ShowInInspector]
+        [InfoBox("Active layout should be set by a ModifyHandler at runtime, or via the LayoutTools or TextTools." +
+                 "Do not touch this value unless you know what you're doing.", InfoMessageType.Warning)]
+        private bool _allowLayoutDebugging;
+        
+        [ShowInInspector]
+        [EnableIf(nameof(_allowLayoutDebugging))]
+        private LayoutConfig _activeLayout;
+
+        protected LayoutConfig activeLayout
+        {
+            get => _activeLayout;
+            set => _activeLayout = value;
+        }
+
+        [SerializeField]
+        [OnValueChanged(nameof(RefreshActiveLayout))]
+        private List<LayoutConfig> _layouts = new List<LayoutConfig>();
+
+        private List<LayoutConfig> layouts
+        {
+            get => _layouts;
+            set => _layouts = value;
+        }
 
         [SerializeField]
         [ReadOnly]
@@ -52,6 +78,14 @@ namespace AltSalt.Maestro
             }
             Initialize();
 #endif
+            RefreshActiveLayout();
+        }
+
+        protected void RefreshActiveLayout()
+        {
+            if (layouts.Count > 0) {
+                activeLayout = LayoutConfig.GetActiveLayout(layouts);
+            }
         }
 
 #if UNITY_EDITOR
@@ -93,14 +127,30 @@ namespace AltSalt.Maestro
             initialized = true;
         }
 
-        void OnGUI()
+        protected virtual void PopulateNonSerializedProperties()
         {
-            GetActiveLayoutName();
+            nonserializedProperties.Clear();
+            nonserializedProperties.Add(nameof(id));
+            nonserializedProperties.Add(nameof(sceneName));
+            nonserializedProperties.Add(nameof(initialized));
+            nonserializedProperties.Add(nameof(_layouts));
+            nonserializedProperties.Add(nameof(_modifySettings));
+            nonserializedProperties.Add(nameof(nonserializedProperties));
         }
 
-        void GetActiveLayoutName()
+        protected virtual void OnGUI()
         {
-            activeLayoutName = "Current active layout: " + modifySettings._activeLayoutConfig.name;
+            UpdateActiveLayoutName();
+        }
+
+        void UpdateActiveLayoutName()
+        {
+            if (activeLayout != null) {
+                activeLayoutName = "Current active layout: " + activeLayout.name;
+            }
+            else {
+                activeLayoutName = "No active layout.";
+            }
         }
 
         [InfoBox("Force reset of the element's scene name and serializable ID.")]

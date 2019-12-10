@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-
+using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor.Timeline;
 #endif
@@ -11,7 +11,12 @@ using UnityEditor.Timeline;
 namespace AltSalt.Maestro.Logic {
 
     [ExecuteInEditMode]
-	public class PrepareScene : MonoBehaviour {
+	public class PrepareScene : MonoBehaviour
+    {
+        [SerializeField]
+        private bool _resetTouchVariables = false;
+
+        private bool resetTouchVariables => _resetTouchVariables;
 
         [SerializeField]
         bool defaultX;
@@ -110,6 +115,15 @@ namespace AltSalt.Maestro.Logic {
             {"Horizontal", DimensionType.Horizontal }
         };
 
+        [SerializeField]
+        private UnityEvent _prepareSceneCompleteEvents;
+
+        private UnityEvent prepareSceneCompleteEvents
+        {
+            get => _prepareSceneCompleteEvents;
+            set => _prepareSceneCompleteEvents = value;
+        }
+
         void Start() {
             ResetScene();
 		}
@@ -126,14 +140,16 @@ namespace AltSalt.Maestro.Logic {
         public void ResetScene()
         {
             ResetVariables(variablesToReset);
-            
-            xSwipeAxis.active = defaultX;
-            ySwipeAxis.active = defaultY;
-            zSwipeAxis.active = defaultZ;
 
-            xMomentumAxis.active = defaultX;
-            yMomentumAxis.active = defaultY;
-            zMomentumAxis.active = defaultZ;
+            if (resetTouchVariables == true) {
+                xSwipeAxis.active = defaultX;
+                ySwipeAxis.active = defaultY;
+                zSwipeAxis.active = defaultZ;
+
+                xMomentumAxis.active = defaultX;
+                yMomentumAxis.active = defaultY;
+                zMomentumAxis.active = defaultZ;
+            }
 
             Time.timeScale = 1.0f;
 
@@ -155,6 +171,7 @@ namespace AltSalt.Maestro.Logic {
 
             if(delayStart == false) {
                 prepareSceneCompleted.RaiseEvent(this.gameObject);
+                prepareSceneCompleteEvents.Invoke();
             } else {
                 StartCoroutine(PrepareSceneCompleteTimedDelay());
             }
@@ -177,6 +194,7 @@ namespace AltSalt.Maestro.Logic {
         {
             yield return new WaitForSeconds(delayAmount);
             prepareSceneCompleted.RaiseEvent(this.gameObject);
+            prepareSceneCompleteEvents.Invoke();
         }
 
         void TriggerResetSequences()
@@ -195,10 +213,10 @@ namespace AltSalt.Maestro.Logic {
         {
             IResponsive element = eventPayload.objectDictionary[DataType.systemObjectType] as IResponsive;
             
-            if(element.ParentScene == this.gameObject.scene &&
+            if(element.parentScene == this.gameObject.scene &&
                 priorityResponsiveElements.Contains(element) == false && responsiveElements.Contains(element) == false) {
 
-                if(element.Priority > 0) {
+                if(element.priority > 0) {
                     priorityResponsiveElements.Add(element);
                 } else {
                     responsiveElements.Add(element);
@@ -227,7 +245,7 @@ namespace AltSalt.Maestro.Logic {
 
             // Start with lowest priority and end with highest priority
             for(int i= priorityResponsiveElements.Count - 1; i >= 0; i--) {
-                if(priorityResponsiveElements[i] != null && priorityResponsiveElements[i].Name.Length > 0) {
+                if(priorityResponsiveElements[i] != null && priorityResponsiveElements[i].elementName.Length > 0) {
                     priorityResponsiveElements[i].CallExecuteLayoutUpdate(this.gameObject);
                 } else {
                     priorityResponsiveElements.Remove(priorityResponsiveElements[i]);
@@ -236,7 +254,7 @@ namespace AltSalt.Maestro.Logic {
 
             // All other elements can be executed in any order
             for (int i=0; i<responsiveElements.Count; i++) {
-                if (responsiveElements[i] != null && responsiveElements[i].Name.Length > 0) {
+                if (responsiveElements[i] != null && responsiveElements[i].elementName.Length > 0) {
                     responsiveElements[i].CallExecuteLayoutUpdate(this.gameObject);
                 } else {
                     responsiveElements.Remove(responsiveElements[i]);

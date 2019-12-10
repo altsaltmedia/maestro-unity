@@ -8,40 +8,58 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class TextFamilyConditionResponse : ModifyConditionResponse
+    public class TextFamilyConditionResponse : ConditionResponseBase
     {
         [SerializeField]
         [Title("$conditionEventTitle")]
-        [Title("$activeTextFamilyName")]
-        [Title("Scriptable Object Reference")]
-        [InfoBox("ActiveTextFamily in Modify Settings will be compared against this condition")]
-        TextFamily activeTextFamilyCondition;
+        [Title("Text Family Reference")]
+        private TextFamily _textFamilyReference;
+
+        private TextFamily textFamilyReference
+        {
+            get => _textFamilyReference;
+            set => _textFamilyReference = value;
+        }
+        
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        [Title("Text Family Status Condition")]
+        private BoolReference _activeTextFamilyCondition;
+
+        private BoolReference activeTextFamilyCondition => _activeTextFamilyCondition;
 
         public override void SyncValues()
         {
-            base.SyncValues();
-            if (activeTextFamilyCondition == null) {
+            if (textFamilyReference == null) {
                 conditionEventTitle = "Please populate a text family as your condition.";
                 return;
             }
 
-            conditionEventTitle = "Trigger Condition : Active text family is " + activeTextFamilyCondition.name;
+            conditionEventTitle = "Trigger Condition : Text family " + textFamilyReference.name + " active is " + activeTextFamilyCondition.Value;
         }
 
         public override bool CheckCondition()
         {
-            base.CheckCondition();
-            if (modifySettings.activeTextFamily == activeTextFamilyCondition) {
+            if (textFamilyReference.active == activeTextFamilyCondition.Value) {
                 return true;
             }
 
             return false;
         }
 
-        public TextFamily GetCondition()
+        public TextFamily GetReference()
+        {
+            return textFamilyReference;
+        }
+        
+        public BoolReference GetCondition()
         {
             return activeTextFamilyCondition;
         }
-
+        
+        private static bool IsPopulated(BoolReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
     }
 }

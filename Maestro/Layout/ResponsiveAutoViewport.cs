@@ -51,8 +51,8 @@ namespace AltSalt.Maestro.Layout
             if (viewportModifiers.Count == 0) {
                 viewportModifiers.Add(new Rect(0,0,0,0));
             }
-            if (viewportModifiers.Count <= aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(viewportModifiers, aspectRatioBreakpoints.Count);
+            if (viewportModifiers.Count <= _aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(viewportModifiers, _aspectRatioBreakpoints.Count);
             }
         }
 #endif
