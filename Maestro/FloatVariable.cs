@@ -51,7 +51,7 @@ namespace AltSalt.Maestro
 
         public void SetValue(FloatVariable value)
         {
-            _value = value._value;
+            _value = value.value;
         }
 
         public void ApplyChange(float amount)
@@ -61,7 +61,17 @@ namespace AltSalt.Maestro
 
         public void ApplyChange(FloatVariable amount)
         {
-            _value += amount._value;
+            _value += amount.value;
+        }
+
+        public void Multiply(float multiplier)
+        {
+            _value *= multiplier;
+        }
+        
+        public void Multiply(FloatVariable multiplier)
+        {
+            _value *= multiplier.value;
         }
 
         public override void SetDefaultValue()

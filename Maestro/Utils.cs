@@ -885,6 +885,11 @@ namespace AltSalt.Maestro
             return baseNumber * desiredPercent;
         }
 
+        public static float NormalizeFloat(float currentValue, float minValue, float maxValue)
+        {
+            return (currentValue - minValue) / (maxValue - minValue);
+        }
+
         /*
         * @ClampVectorValue
         * 

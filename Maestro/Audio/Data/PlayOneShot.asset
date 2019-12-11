@@ -25,7 +25,7 @@ MonoBehaviour:
     customKey: 0
     _customKey: {fileID: 0}
   optionalParameters:
-  - description: Whether to randomize volume
-    dataType: 2
-    customKey: 0
-    _customKey: {fileID: 0}
+  - description: Volume level
+    dataType: 1
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 8b9af6247445a4d8d89fb45f6fa8e470, type: 2}

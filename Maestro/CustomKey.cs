@@ -7,7 +7,7 @@ namespace AltSalt.Maestro
 {
     [Serializable]
     [CreateAssetMenu(menuName = "AltSalt/Custom Key")]
-    public class CustomKey : ScriptableObject
+    public class CustomKey : RegisterableScriptableObject
     {
 #if UNITY_EDITOR
         [SerializeField]

@@ -7,7 +7,6 @@ namespace AltSalt.Maestro.Audio
 {
     public class AudioListenerUtils : MonoBehaviour
     {
-
         public void ActivateVolume()
         {
             AudioListener.volume = 1;

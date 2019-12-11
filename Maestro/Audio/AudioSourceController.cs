@@ -19,6 +19,9 @@ namespace AltSalt.Maestro.Audio
 
         [SerializeField]
         CustomKey volumeKey;
+        
+        [SerializeField]
+        CustomKey pitchKey;
 
         AudioSource oneShotHandler;
 
@@ -32,19 +35,21 @@ namespace AltSalt.Maestro.Audio
             AudioClipBundle audioClipBundle = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
             for (int i = 0; i < audioClipBundle.audioClipData.Count; i++) {
 
-                bool loopClip = false;
-
-                if (eventPayload.GetBoolValue(loopAudioKey) == true) {
-                    loopClip = true;
-                }
+                bool loopClip = eventPayload.GetBoolValue(loopAudioKey) == true;
 
                 float volume = 1f;
 
                 if (float.IsNaN(eventPayload.GetFloatValue(volumeKey)) == false) {
                     volume = eventPayload.GetFloatValue(volumeKey);
                 }
+                
+                float pitch = 1f;
 
-                AudioElement audioElement = new AudioElement(audioPrefab, transform, audioClipBundle.audioClipData[i], loopClip, volume, audioClipBundle);
+                if (float.IsNaN(eventPayload.GetFloatValue(pitchKey)) == false) {
+                    volume = eventPayload.GetFloatValue(pitchKey);
+                }
+
+                AudioElement audioElement = new AudioElement(audioPrefab, transform, audioClipBundle.audioClipData[i], loopClip, volume, pitch, audioClipBundle);
                 audioElements.Add(audioElement);
             }
         }
@@ -56,10 +61,10 @@ namespace AltSalt.Maestro.Audio
 
                 float volume = 1f;
 
-                if (eventPayload.GetBoolValue(DataType.boolType) == true) {
-                    volume = UnityEngine.Random.Range(.25f, 1f);
+                if (float.IsNaN(eventPayload.GetFloatValue(volumeKey)) == false) {
+                    volume = eventPayload.GetFloatValue(volumeKey);
                 }
-
+                
                 oneShotHandler.PlayOneShot(audioClipBundle.audioClipData[i].audioClip, volume);
             }
         }
@@ -82,7 +87,7 @@ namespace AltSalt.Maestro.Audio
             public AudioSource audioSource;
             public AudioClipBundle audioClipBundle;
 
-            public AudioElement(GameObject audioPrefab, Transform parent, AudioClipData audioClipData, bool loop, float volume, AudioClipBundle referenceBundle)
+            public AudioElement(GameObject audioPrefab, Transform parent, AudioClipData audioClipData, bool loop, float volume, float pitch, AudioClipBundle referenceBundle)
             {
                 audioSourceObject = Instantiate(audioPrefab);
                 audioSourceObject.transform.SetParent(parent.transform);
@@ -92,6 +97,7 @@ namespace AltSalt.Maestro.Audio
                 audioSource.outputAudioMixerGroup = audioClipData.targetMixerGroup;
                 audioSource.loop = loop;
                 audioSource.volume = volume;
+                audioSource.pitch = pitch;
                 audioSource.Play();
                 audioClipBundle = referenceBundle;
             }
