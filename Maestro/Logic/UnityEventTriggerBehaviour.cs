@@ -1,4 +1,5 @@
 using System.Collections;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,26 +8,29 @@ namespace AltSalt.Maestro.Logic
     public class UnityEventTriggerBehaviour : MonoBehaviour
     {
         [SerializeField]
+        private bool _hasDelay;
+        
+        private bool hasDelay => _hasDelay;
+    
+        [SerializeField]
+        [ShowIf(nameof(hasDelay))]
         private float _delay;
 
-        private float delay
-        {
-            get => _delay;
-            set => _delay = value;
-        }
+        private float delay => _delay;
 
         [SerializeField]
         private UnityEvent _unityEvent;
 
-        private UnityEvent unityEvent
-        {
-            get => _unityEvent;
-            set => _unityEvent = value;
-        }
-        
+        private UnityEvent unityEvent => _unityEvent;
+
         public void CallEvent()
         {
-            StartCoroutine(ExecuteEvent());
+            if (hasDelay) {
+               StartCoroutine(ExecuteEvent());
+            }
+            else {
+                unityEvent.Invoke();
+            }
         }
 
         private IEnumerator ExecuteEvent()

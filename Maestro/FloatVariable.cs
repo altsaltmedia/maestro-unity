@@ -38,7 +38,7 @@ namespace AltSalt.Maestro
         private float _defaultValue;
 
         [ShowIf("hasDefault")]
-        public float defaultValue
+        private float defaultValue
         {
             get => _defaultValue;
             set => _defaultValue = value;
@@ -46,32 +46,80 @@ namespace AltSalt.Maestro
 
         public void SetValue(float value)
         {
-            _value = value;
+            this.value = value;
         }
 
         public void SetValue(FloatVariable value)
         {
-            _value = value.value;
+            this.value = value.value;
         }
 
         public void ApplyChange(float amount)
         {
-            _value += amount;
+            value += amount;
         }
 
         public void ApplyChange(FloatVariable amount)
         {
-            _value += amount.value;
+            value += amount.value;
         }
 
         public void Multiply(float multiplier)
         {
-            _value *= multiplier;
+            value *= multiplier;
         }
         
         public void Multiply(FloatVariable multiplier)
         {
-            _value *= multiplier.value;
+            value *= multiplier.value;
+        }
+
+        public void ClampMax(float max)
+        {
+            if (value > max) {
+                value = max;
+            }
+        }
+        
+        public void ClampMax(FloatVariable max)
+        {
+            if (value > max.value) {
+                value = max.value;
+            }
+        }
+        
+        public void ClampMin(float max)
+        {
+            if (value < max) {
+                value = max;
+            }
+        }
+        
+        public void ClampMin(FloatVariable max)
+        {
+            if (value < max.value) {
+                value = max.value;
+            }
+        }
+
+        public void SetToSquareMagnitude(V2Variable v2Variable)
+        {
+            value = v2Variable.value.sqrMagnitude;
+        }
+
+        public void SetToDistance(float value)
+        {
+            this.value = Mathf.Abs(this.value - value);
+        }
+        
+        public void SetToDistance(FloatVariable value)
+        {
+            this.value = Mathf.Abs(this.value - value.value);
+        }
+
+        public void SetToRandom()
+        {
+            this.value = Random.value;
         }
 
         public override void SetDefaultValue()

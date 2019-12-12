@@ -32,7 +32,9 @@ namespace AltSalt.Maestro
 
         [FormerlySerializedAs("textCollectionBank"),Required]
         [SerializeField]
+#if UNITY_EDITOR
         [Header("$"+nameof(GetActiveTextFamilyName))]
+#endif
         private TextCollectionBank _textCollectionBank;
 
         public TextCollectionBank textCollectionBank => _textCollectionBank;

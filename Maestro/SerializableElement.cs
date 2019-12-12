@@ -26,7 +26,9 @@ namespace AltSalt.Maestro
         bool initialized;
 
         [Required]
+#if UNITY_EDITOR
         [Title("$"+nameof(activeLayoutName))]
+#endif
         [SerializeField]
         private ModifySettings _modifySettings;
 

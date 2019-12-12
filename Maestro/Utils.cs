@@ -118,6 +118,34 @@ namespace AltSalt.Maestro
 
             return source.Substring(0, maxLength);
         }
+        
+        public static bool ContainsActiveModifyConfig(List<IModifyConfig> modifyConfigs, out IModifyConfig modifyConfig)
+        {
+            List<IModifyConfig> activeModifyConfigs = new List<IModifyConfig>();
+            for (int i = 0; i < modifyConfigs.Count; i++) {
+                if (modifyConfigs[i].active == true) {
+                    activeModifyConfigs.Add(modifyConfigs[i]);
+                }
+            }
+
+            if (activeModifyConfigs.Count > 0) {
+                // Set to the one with highest priority
+                activeModifyConfigs.Sort(new Utils.ModifyConfigSort());
+                modifyConfig = activeModifyConfigs[activeModifyConfigs.Count - 1];
+                return true;
+            }
+
+            modifyConfig = null;
+            return false;
+        }
+        
+        public class ModifyConfigSort : Comparer<IModifyConfig>
+        {
+            public override int Compare(IModifyConfig x, IModifyConfig y)
+            {
+                return x.priority.CompareTo(y.priority);
+            }
+        }
 
 #if UNITY_EDITOR
         public static GUISkin AltSaltSkin {
@@ -275,34 +303,6 @@ namespace AltSalt.Maestro
             {
                 return x.GetSiblingIndex().CompareTo(y.GetSiblingIndex());
             }
-        }
-        
-        public class ModifyConfigSort : Comparer<IModifyConfig>
-        {
-            public override int Compare(IModifyConfig x, IModifyConfig y)
-            {
-                return x.priority.CompareTo(y.priority);
-            }
-        }
-
-        public static bool ContainsActiveModifyConfig(List<IModifyConfig> modifyConfigs, out IModifyConfig modifyConfig)
-        {
-            List<IModifyConfig> activeModifyConfigs = new List<IModifyConfig>();
-            for (int i = 0; i < modifyConfigs.Count; i++) {
-                if (modifyConfigs[i].active == true) {
-                    activeModifyConfigs.Add(modifyConfigs[i]);
-                }
-            }
-
-            if (activeModifyConfigs.Count > 0) {
-                // Set to the one with highest priority
-                activeModifyConfigs.Sort(new Utils.ModifyConfigSort());
-                modifyConfig = activeModifyConfigs[activeModifyConfigs.Count - 1];
-                return true;
-            }
-
-            modifyConfig = null;
-            return false;
         }
 
         public static bool TargetComponentSelected(GameObject currentSelection, Type targetType)
