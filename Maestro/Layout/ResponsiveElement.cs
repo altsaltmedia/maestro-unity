@@ -350,7 +350,9 @@ namespace AltSalt.Maestro.Layout
             
             var jsonTextFile = Resources.Load<TextAsset>("Layouts/" + sceneName + "/" + activeLayout.name + "/" + this.name + id.ToString());
             if (jsonTextFile != null) {
-                Debug.Log("Populating " + this.name + " with stored data for " + activeLayout.name + " layout", this);
+                if (appSettings.logResponsiveElementActions == true) {
+                    Debug.Log("Populating " + this.name + " with stored data for " + activeLayout.name + " layout", this);
+                } 
                 JsonUtility.FromJsonOverwrite(jsonTextFile.ToString(), this);
                 ExecuteResponsiveAction();
             }

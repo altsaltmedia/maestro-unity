@@ -238,7 +238,7 @@ namespace AltSalt.Maestro
             if (floatDictionary.ContainsKey(key)) {
                 return floatDictionary[key];
             } else {
-                Debug.Log("Key for float value not found in EventPayload");
+//                Debug.Log("Key for float value not found in EventPayload");
                 return float.NaN;
             }
         }

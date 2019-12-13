@@ -52,12 +52,12 @@ namespace AltSalt.Maestro.Logic
         LoadSceneMode loadMode;
 
         [ShowInInspector]
-        private Dictionary<string, AsyncOperationHandle<SceneInstance>> _sceneInstances = new Dictionary<string, AsyncOperationHandle<SceneInstance>>();
+        private Dictionary<string, AsyncOperationHandle<SceneInstance>> _addressableSceneInstances = new Dictionary<string, AsyncOperationHandle<SceneInstance>>();
 
-        private Dictionary<string, AsyncOperationHandle<SceneInstance>> sceneInstances
+        private Dictionary<string, AsyncOperationHandle<SceneInstance>> addressableSceneInstances
         {
-            get => _sceneInstances;
-            set => _sceneInstances = value;
+            get => _addressableSceneInstances;
+            set => _addressableSceneInstances = value;
         }
 
         // The first scene will always be a single load, done immediately w/o a call to
@@ -78,7 +78,9 @@ namespace AltSalt.Maestro.Logic
             loadMode = eventPayload.GetBoolValue(DataType.boolType) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
             if(loadMode == LoadSceneMode.Single) {
-                sceneInstances.Clear();
+                if (appSettings.useAddressables == true) {
+                    addressableSceneInstances.Clear();
+                }
                 fadeOutTriggered.RaiseEvent(this.gameObject);
             } else {
                 StartCoroutine(AsyncLoad(sceneName, loadMode));
@@ -89,27 +91,40 @@ namespace AltSalt.Maestro.Logic
         {
             StartCoroutine(AsyncLoad(sceneName, loadMode));
         }
-        
-        IEnumerator AsyncLoad (string xSceneName, LoadSceneMode xLoadMode)
+
+        private IEnumerator AsyncLoad (string xSceneName, LoadSceneMode xLoadMode)
         {
-            //AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(xSceneName, xLoadMode);
+            if (appSettings.useAddressables == true) {
+                
+                AsyncOperationHandle asyncLoad = Addressables.LoadSceneAsync(xSceneName, xLoadMode);
+                asyncLoad.Completed += AddressablesSceneLoadCallback;
 
-            AsyncOperationHandle asyncLoad = Addressables.LoadSceneAsync(xSceneName, xLoadMode);
-
-            asyncLoad.Completed += SceneLoadCallback;
-
-            // If we're in single load mode, scenes are unloaded automatically.
-            // If additive, we need to store a reference to the scene to unload it later.
-            if (xLoadMode == LoadSceneMode.Additive) {
-                sceneInstances.Add(xSceneName, asyncLoad.Convert<SceneInstance>());
+                // If we're in single load mode, scenes are unloaded automatically.
+                // If additive, we need to store a reference to the scene to unload it later.
+                if (xLoadMode == LoadSceneMode.Additive) {
+                    addressableSceneInstances.Add(xSceneName, asyncLoad.Convert<SceneInstance>());
+                }
+                
+                while (!asyncLoad.IsDone) {
+                    yield return null;
+                }
             }
+            else {
+                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(xSceneName, xLoadMode);
+                asyncLoad.completed += SceneLoadCallback;
             
-            while (!asyncLoad.IsDone) {
-                yield return null;
+                while (!asyncLoad.isDone) {
+                    yield return null;
+                }
             }
         }
-        
-        void SceneLoadCallback(AsyncOperationHandle asyncOperation)
+
+        private void AddressablesSceneLoadCallback(AsyncOperationHandle asyncOperation)
+        {
+            sceneLoadCompleted.RaiseEvent(this.gameObject);
+        }
+
+        private void SceneLoadCallback(AsyncOperation asyncOperation)
         {
             sceneLoadCompleted.RaiseEvent(this.gameObject);
         }
@@ -120,20 +135,26 @@ namespace AltSalt.Maestro.Logic
             StartCoroutine(AsyncUnload(unloadSceneName));
         }
 
-        IEnumerator AsyncUnload(string xSceneName)
+        private IEnumerator AsyncUnload(string xSceneName)
         {
-            //AsyncOperation asyncLoad = SceneManager.UnloadSceneAsync(xSceneName);
+            if (appSettings.useAddressables == true) {
+                AsyncOperationHandle<SceneInstance> unloadInstance = addressableSceneInstances[xSceneName];
 
-            AsyncOperationHandle<SceneInstance> unloadInstance = sceneInstances[xSceneName];
+                if (addressableSceneInstances.ContainsKey(xSceneName) == true) {
+                    addressableSceneInstances.Remove(xSceneName);
+                }
 
-            if (sceneInstances.ContainsKey(xSceneName) == true) {
-                sceneInstances.Remove(xSceneName);
+                AsyncOperationHandle asyncLoad = Addressables.UnloadSceneAsync(unloadInstance);
+
+                while (!asyncLoad.IsDone) {
+                    yield return null;
+                }
             }
-
-            AsyncOperationHandle asyncLoad = Addressables.UnloadSceneAsync(unloadInstance);
-
-            while (!asyncLoad.IsDone) {
-                yield return null;
+            else {
+                AsyncOperation asyncLoad = SceneManager.UnloadSceneAsync(xSceneName);
+                while (!asyncLoad.isDone) {
+                    yield return null;
+                }
             }
         }
 

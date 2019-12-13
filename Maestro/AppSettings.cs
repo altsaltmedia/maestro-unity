@@ -37,6 +37,12 @@ namespace AltSalt.Maestro
         public FloatReference timescale;
 
         [ValidateInput("IsPopulated")]
+        [SerializeField]
+        private BoolReference _useAddressables;
+
+        public bool useAddressables => _useAddressables.Value;
+
+            [ValidateInput("IsPopulated")]
         public BoolReference debugEventsActive;
 
         [ValidateInput("IsPopulated")]

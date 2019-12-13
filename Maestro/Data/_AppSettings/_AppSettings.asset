@@ -52,6 +52,10 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: beef097a332dc486da519b47115b1e7d, type: 2}
+  _useAddressables:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 1f6936da4281a4928b4f21bcd8efb0c6, type: 2}
   debugEventsActive:
     UseConstant: 0
     ConstantValue: 0

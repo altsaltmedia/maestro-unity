@@ -49,11 +49,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 #if UNITY_EDITOR
                 autoplayModifer = Time.smoothDeltaTime;
 #else
-                if (Application.platform == RuntimePlatform.Android)  {
-                    autoplayModifer = frameStepValue * 3f;
-                } else  {
-                    autoplayModifer = frameStepValue;
-                }
+                autoplayModifer = frameStepValue;
 #endif
                 autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, autorunData.loop, autorunController.isReversing, autoplayEaseThreshold, autorunData.easingUtility);
 

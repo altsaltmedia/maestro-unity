@@ -46,11 +46,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 #if UNITY_EDITOR
                 lerpModifier = Time.smoothDeltaTime;
 #else
-                if (Application.platform == RuntimePlatform.Android)  {
-                    lerpModifier = frameStepValue * 3f;
-                } else  {
-                    lerpModifier = frameStepValue;
-                }
+                lerpModifier = frameStepValue;
 #endif
                 lerpModifier *= CalculateLerpModifier(autorunController.isReversing);
 
@@ -104,20 +100,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             Autorun_Data autorunData, float timeModifier, AutorunExtents currentExtents, CoroutineCallback callback)
         {
             while(true) {
-
                 EventPayload eventPayload = EventPayload.CreateInstance();
                 eventPayload.Set(DataType.scriptableObjectType, autorunData.sequence);
                 eventPayload.Set(DataType.intType, source.priority);
                 eventPayload.Set(DataType.stringType, source.gameObject.name);
-                
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    eventPayload.Set(DataType.floatType, timeModifier * 3f);
-                }
-                else
-                {
-                    eventPayload.Set(DataType.floatType, timeModifier);
-                }
+                eventPayload.Set(DataType.floatType, timeModifier);
                 
                 autorunController.requestModifyToSequence.RaiseEvent(source.gameObject, eventPayload);
                 callback(autorunController, autorunData, currentExtents);
