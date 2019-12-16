@@ -48,7 +48,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 float autoplayModifer = 0f;
 
 #if UNITY_EDITOR
-                autoplayModifer = Time.fixedDeltaTime;
+                autoplayModifer = Time.smoothDeltaTime;
 #else
                 autoplayModifer = frameStepValue;
 #endif

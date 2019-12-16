@@ -9,6 +9,7 @@ namespace AltSalt.Maestro.Sequencing
     public class Fork : JoinerDestination
     {
         [SerializeField]
+        
         private string _description;
 
         private string description => _description;
@@ -27,6 +28,8 @@ namespace AltSalt.Maestro.Sequencing
         [DisableIf(nameof(readonlyBranchingPaths))]
         [PropertyOrder(5)]
         [TitleGroup("Branches")]
+        [InfoBox("Remember: A fork MUST contain a definition for its origin branch, " +
+                 "so that it can be disabled when advancing to a subsequent branch.", InfoMessageType.Warning)]
         protected List<BranchingPath> _branchingPaths;
 
         public List<BranchingPath> branchingPaths

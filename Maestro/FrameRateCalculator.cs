@@ -132,7 +132,7 @@ namespace AltSalt.Maestro
 //                    }
 //                }
 
-//                text.SetText($"FPS: {framesPerSecond} \n Step Interval {frameStepInterval:F6}");
+                text.SetText($"FPS: {framesPerSecond} \n Step Interval {frameStepInterval:F6}");
             }
         }
 
