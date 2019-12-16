@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Timeline;
+using UnityEngine.UIElements;
 
 namespace AltSalt.Maestro.Sequencing
 {
@@ -86,6 +87,36 @@ namespace AltSalt.Maestro.Sequencing
         {
             get => _boundaryReached;
             set => _boundaryReached = value;
+        }
+        
+        [SerializeField]
+        [Required]
+        private CustomKey _forkKey;
+
+        private CustomKey forkKey
+        {
+            get => _forkKey;
+            set => _forkKey = value;
+        }
+
+        [SerializeField]
+        [Required]
+        private CustomKey _updateForkViaBranchKey;
+
+        private CustomKey updateForkViaBranchKey
+        {
+            get => _updateForkViaBranchKey;
+            set => _updateForkViaBranchKey = value;
+        }
+
+        [SerializeField]
+        [Required]
+        private CustomKey _updateForkViaSequence;
+
+        private CustomKey updateForkViaSequence
+        {
+            get => _updateForkViaSequence;
+            set => _updateForkViaSequence = value;
         }
 
         private void Start()
@@ -191,6 +222,42 @@ namespace AltSalt.Maestro.Sequencing
             }
 
             return sourceSequence;
+
+        }
+
+        public void UpdateFork(EventPayload eventPayload)
+        {
+            Fork targetFork = eventPayload.GetScriptableObjectValue(forkKey) as Fork;
+            BranchKey branchKey = eventPayload.GetScriptableObjectValue(updateForkViaBranchKey) as BranchKey;
+            Sequence sequence = eventPayload.GetScriptableObjectValue(updateForkViaSequence) as Sequence;
+            
+            // Only execute the update if joiner has data for the fork. This is
+            // to prevent potential conflicts if we have multiple joiners in one scene
+
+            bool containsTargetForkData = false;
+            foreach(KeyValuePair<Sequence, List<ForkData>> forkDatum in forkDataCollection)
+            {
+                if (forkDatum.Value.Find(x => x.fork == targetFork) != null) {
+                    containsTargetForkData = true;
+                    break;
+                }   
+            }
+            if (containsTargetForkData == false) {
+                return;
+            }
+
+            if (branchKey != null && sequence != null) {
+                Debug.LogError("Unable to update fork; please use either a branch key or sequence, not both.", this);
+                return;
+            }
+
+            if (branchKey != null) {
+                targetFork.SetDestinationBranch(branchKey);
+            }
+
+            if (sequence != null) {
+                targetFork.SetDestinationBranch(sequence);
+            }
 
         }
 

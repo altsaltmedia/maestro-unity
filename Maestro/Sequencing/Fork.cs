@@ -52,6 +52,12 @@ namespace AltSalt.Maestro.Sequencing
             BranchingPath branchingPath = branchingPaths.Find(x => x.branchKey == branchKey);
             destinationBranch = branchingPath;
         }
+        
+        public void SetDestinationBranch(Sequence sequence)
+        {
+            BranchingPath branchingPath = branchingPaths.Find(x => x.sequence == sequence);
+            destinationBranch = branchingPath;
+        }
 
         public void ActivateFork()
         {

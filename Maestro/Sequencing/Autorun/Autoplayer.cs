@@ -45,12 +45,14 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     continue;
 
                 
-                float autoplayModifer = 0f; 
+                float autoplayModifer = 0f;
+
 #if UNITY_EDITOR
-                autoplayModifer = Time.smoothDeltaTime;
+                autoplayModifer = Time.fixedDeltaTime;
 #else
                 autoplayModifer = frameStepValue;
 #endif
+                
                 autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, autorunData.loop, autorunController.isReversing, autoplayEaseThreshold, autorunData.easingUtility);
 
                 AutoplaySequence(autorunController.requestModifyToSequence, this, autorunData.sequence, autoplayModifer);

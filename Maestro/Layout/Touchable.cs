@@ -54,5 +54,15 @@ namespace AltSalt.Maestro.Layout
                 (boxCollider as BoxCollider2D).enabled = false;
             }
         }
+
+        public void Toggle()
+        {
+            if (active == false) {
+                Activate();
+            }
+            else {
+                Deactivate();
+            }
+        }
     }
 }

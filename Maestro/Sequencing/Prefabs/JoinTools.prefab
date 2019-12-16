@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6186026574368340016}
   - component: {fileID: 1495709949950452273}
+  - component: {fileID: 3156366569489139294}
   m_Layer: 12
   m_Name: JoinTools
   m_TagString: Untagged
@@ -106,3 +107,37 @@ MonoBehaviour:
     Variable: {fileID: 11400000, guid: b3e86449438674ff0ac944ba39781408, type: 2}
   _boundaryReached:
     simpleEvent: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
+  _forkKey: {fileID: 11400000, guid: f7fc8865371984745b968895500fffbf, type: 2}
+  _updateForkViaBranchKey: {fileID: 11400000, guid: ae02bea3066cf46bfbe115f66a1826f4,
+    type: 2}
+  _updateForkViaSequence: {fileID: 11400000, guid: ad4b899a49c5e4cde863005462c45926,
+    type: 2}
+--- !u!114 &3156366569489139294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57868647988261891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: bfbf28c8db33841d8bce679ac9fb5d0a, type: 2}
+  DeveloperDescription: 
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1495709949950452273}
+        m_MethodName: UpdateFork
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  doNotRecord: 0

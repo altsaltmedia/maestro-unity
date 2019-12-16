@@ -25,10 +25,22 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         private delegate Autorun_Data CoroutineCallback(Autorun_Controller autorunController, Autorun_Data autorunData, AutorunExtents extents);
 
+        public void TriggerLerpSequences()
+        {
+            for (int i = 0; i < autorunController.autorunData.Count; i++) {
+                AttemptLerpSequence(autorunController.autorunData[i]);
+            }
+        }
+
         public void TriggerLerpSequence(Sequence targetSequence)
         {
-            if(CanLerpSequence(targetSequence, autorunController, out var autorunData) == false) return;
+            if (HasLerpData(targetSequence, autorunController, out var autorunData) == false) return;
 
+            AttemptLerpSequence(autorunData);
+        }
+
+        private Autorun_Data AttemptLerpSequence(Autorun_Data autorunData) {
+            
             if (autorunData.sequence.active == true && autorunData.isLerping == false)
             {
                 double thresholdModifier = lerpThreshold;
@@ -37,7 +49,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 }
 
                 if (AutorunExtents.TimeWithinThreshold(autorunData.sequence.currentTime + thresholdModifier,
-                        autorunData.autorunIntervals, out var currentInterval) == false) return;
+                        autorunData.autorunIntervals, out var currentInterval) == false) return autorunData;
 
                 autorunData.isLerping = true;
 
@@ -54,6 +66,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     lerpModifier, currentInterval, CheckEndLerp);
                 StartCoroutine(autorunData.lerpCoroutine);
             }
+
+            return autorunData;
         }
 
         private Autorun_Data CheckEndLerp(Autorun_Controller autorunController, Autorun_Data autorunData, AutorunExtents extents)
@@ -71,7 +85,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             return autorunData;
         }
         
-        private static bool CanLerpSequence(Sequence targetSequence, Autorun_Controller autorunController, out Autorun_Data autorunData)
+        private static bool HasLerpData(Sequence targetSequence, Autorun_Controller autorunController, out Autorun_Data autorunData)
         {
             for (int i = 0; i < autorunController.autorunData.Count; i++)
             {
@@ -107,6 +121,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 eventPayload.Set(DataType.floatType, timeModifier);
                 
                 autorunController.requestModifyToSequence.RaiseEvent(source.gameObject, eventPayload);
+                
                 callback(autorunController, autorunData, currentExtents);
                 yield return new WaitForEndOfFrame();
             }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -57,7 +58,15 @@ namespace AltSalt.Maestro
             switch (button.name) {
 
                 case nameof(ButtonNames.RenameElements):
-                    button.clickable.clicked += () => { Utils.RenameElements(objectName, Selection.objects); };
+                    button.clickable.clicked += () =>
+                    {
+                        if (Selection.objects.ToList().Find(x => x is GameObject == null) != null) {
+                            Utils.RenameElements(objectName, Selection.objects);
+                        }
+                        else {
+                            Utils.RenameElements(objectName, Utils.SortGameObjectSelection(Selection.gameObjects));
+                        }
+                    };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ObjectSelected,
                         button);
                     break;

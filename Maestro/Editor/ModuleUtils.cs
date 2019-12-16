@@ -67,6 +67,8 @@ namespace AltSalt.Maestro
             } else if (selectedTransforms.Length == 1) {
                 newElement.transform.SetParent(selectedTransforms[0]);
             }
+
+            newElement.layer = selectedTransforms[0].gameObject.layer;
             
             FocusHierarchyWindow();
             return newElement;
