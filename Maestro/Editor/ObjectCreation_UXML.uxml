@@ -33,6 +33,11 @@ xsi:schemaLocation="
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
+                    <engine:Label class="col-half" text="current directory: " />
+                    <engine:Label class="bold col-half" name="DirectoryPath"/>
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
                     <engine:Button text="Rename Element(s)" class="col-full" name="RenameElements" />
                 </engine:VisualElement>
 

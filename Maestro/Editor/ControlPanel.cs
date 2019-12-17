@@ -128,12 +128,13 @@ namespace AltSalt.Maestro
             {
                 ModuleNames.LayoutObjects,
                 ModuleNames.SequencingStructures,
-                ModuleNames.AutorunConfig,
-                ModuleNames.TouchConfig,
                 ModuleNames.TrackPlacement,
+                ModuleNames.JoinConfig,
+                ModuleNames.TouchConfig,
+                ModuleNames.AutorunConfig,
                 ModuleNames.AudioStructures,
                 ModuleNames.SimpleLogicStructures,
-                ModuleNames.ComplexLogicStructures,
+                ModuleNames.ComplexLogicStructures
             }},
             { ModuleNames.TrackPlacement, new List<ModuleNames>()
             {    

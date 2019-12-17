@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,6 +18,12 @@ namespace AltSalt.Maestro
             var buttons = moduleWindowUXML.Query<Button>();
             buttons.ForEach(SetupButton);
 
+            directoryPathLabel = moduleWindowUXML.Query<Label>(nameof(LabelNames.DirectoryPath));
+
+            RefreshDirectoryName();
+            ControlPanel.inspectorUpdateDelegate += RefreshDirectoryName;
+            ControlPanel.selectionChangedDelegate += RefreshDirectoryName;
+
             UpdateDisplay();
             ControlPanel.selectionChangedDelegate += UpdateDisplay;
 
@@ -26,6 +32,8 @@ namespace AltSalt.Maestro
 
         void OnDestroy()
         {
+            ControlPanel.inspectorUpdateDelegate -= RefreshDirectoryName;
+            ControlPanel.selectionChangedDelegate -= RefreshDirectoryName;
             ControlPanel.selectionChangedDelegate -= UpdateDisplay;
         }
 
@@ -33,18 +41,44 @@ namespace AltSalt.Maestro
 
         public string objectName = "";
         public bool selectCreatedObject;
+
+        private Label directoryPathLabel;
+        public string selectedObjectDirectory = "";
+
+        private enum LabelNames
+        {
+            DirectoryPath,
+        }
         
-        enum ButtonNames
+        private enum ButtonNames
         {
             RenameElements,
         }
-        
-        enum EnableCondition
+
+        private enum EnableCondition
         {
             ObjectSelected
         }
 
-        void UpdateDisplay()
+        private void RefreshDirectoryName()
+        {
+            UnityEngine.Object[] selection =
+                Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets);
+            
+            if (selection.Length > 0) {
+                selectedObjectDirectory = GetSelectedObjectDirectory(selection[0]);
+                
+                if (string.IsNullOrEmpty(selectedObjectDirectory) == false) {
+                    directoryPathLabel.text = selectedObjectDirectory;
+                    return;
+                }
+            }
+
+            selectedObjectDirectory = string.Empty;
+            directoryPathLabel.text = "No path selected";
+        }
+
+        private void UpdateDisplay()
         {
             if(Selection.objects.Length > 0) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ObjectSelected, true);
@@ -73,6 +107,35 @@ namespace AltSalt.Maestro
             }
 
             return button;
+        }
+        
+        private static string GetSelectedObjectDirectory(UnityEngine.Object obj)
+        {
+            string emptyPath = "";
+            
+            if (obj == null){
+                return emptyPath;
+            }
+ 
+            string assetPath = AssetDatabase.GetAssetPath(obj);
+            if (assetPath.Length > 0)
+            {
+                if (File.Exists(assetPath))
+                {
+                    return Path.GetDirectoryName(assetPath);
+                }
+            }
+
+            string directoryPath = AssetDatabase.GetAssetPath(obj.GetInstanceID());
+            if (directoryPath.Length > 0)
+            {
+                if (Directory.Exists(directoryPath))
+                {
+                    return directoryPath;
+                }
+            }
+
+            return emptyPath;
         }
     }
 }

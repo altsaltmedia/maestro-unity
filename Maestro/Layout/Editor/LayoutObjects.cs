@@ -24,7 +24,7 @@ namespace AltSalt.Maestro.Layout
         
         private string objectName => controlPanel.objectCreation.objectName;
 
-        enum ButtonNames
+        private enum ButtonNames
         {
             NewText,
             NewSprite,
@@ -33,8 +33,8 @@ namespace AltSalt.Maestro.Layout
             NewEmptyResponsiveContainer,
             NewResponsiveContainer
         }
-        
-        Button SetupButton(Button button)
+
+        private Button SetupButton(Button button)
         {
             switch (button.name) {
 

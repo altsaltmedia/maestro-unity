@@ -64,8 +64,9 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         public static ConfigMarker TriggerCreateMarker(MarkerTrack markerTrack, Type markerType, double targetTime)
         {
             ConfigMarker configMarker = null;
+            string markerTypeName = markerType.Name; 
             
-            switch (markerType.Name) {
+            switch (markerTypeName) {
 
                 case nameof(AutorunMarker_Start):
                 {
@@ -85,6 +86,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 }
                     break;
             }
+
+            configMarker.name = markerTypeName;
 
             return configMarker;
         }

@@ -25,7 +25,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             AxisJoinPrevious
         }
 
-        Button SetupButton(Button button)
+        private Button SetupButton(Button button)
         {
             switch (button.name) {
 
@@ -63,8 +63,9 @@ namespace AltSalt.Maestro.Sequencing.Touch
         public static ConfigMarker TriggerCreateMarker(ConfigTrack configTrack, Type markerType, double targetTime)
         {
             ConfigMarker configMarker = null;
+            string markerTypeName = markerType.Name; 
             
-            switch (markerType.Name) {
+            switch (markerTypeName) {
 
                 case nameof(AxisMarker):
                 {
@@ -85,6 +86,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                     break;
             }
 
+            configMarker.name = markerTypeName;
             return configMarker;
         }
     }

@@ -1,6 +1,9 @@
 using System;
+using System.IO;
 using UnityEditor;
 using UnityEditor.Timeline;
+using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityEngine.UIElements;
 
@@ -15,15 +18,43 @@ namespace AltSalt.Maestro.Sequencing
             var buttons = moduleWindowUXML.Query<Button>();
             buttons.ForEach(SetupButton);
             
+            UpdateDisplay();
+            ControlPanel.inspectorUpdateDelegate += UpdateDisplay;
+            ControlPanel.selectionChangedDelegate += UpdateDisplay;
+            
             return this;
         }
+        private void OnDestroy()
+        {
+            ControlPanel.inspectorUpdateDelegate -= UpdateDisplay;
+            ControlPanel.selectionChangedDelegate -= UpdateDisplay;
+        }
         
-        enum ButtonNames
+        private enum ButtonNames
         {
             JoinNext,
             JoinPrevious,
             ForkJoinNext,
-            ForkJoinPrevious
+            ForkJoinPrevious,
+            SimpleFork
+        }
+
+        private static VisualElementToggleData toggleData = new VisualElementToggleData();
+        
+        private enum EnableCondition
+        {
+            DirectorySelected
+        }
+        
+        private string selectedObjectDirectory => controlPanel.objectCreation.selectedObjectDirectory;
+
+        private void UpdateDisplay()
+        {
+            if (String.IsNullOrEmpty(selectedObjectDirectory) == false) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectorySelected, true);
+            } else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectorySelected, false);
+            }
         }
 
         Button SetupButton(Button button)
@@ -65,6 +96,16 @@ namespace AltSalt.Maestro.Sequencing
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
                     break;
+                
+                case nameof(ButtonNames.SimpleFork):
+                    button.clickable.clicked += () =>
+                    {
+                        Selection.activeObject = TriggerCreateSimpleFork(selectedObjectDirectory);
+                        EditorUtility.FocusProjectWindow();
+                        EditorGUIUtility.PingObject(Selection.activeObject);
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectorySelected, button);
+                    break;
             }
 
             return button;
@@ -73,8 +114,9 @@ namespace AltSalt.Maestro.Sequencing
         public static ConfigMarker TriggerCreateMarker(ConfigTrack configTrack, Type markerType, double targetTime)
         {
             ConfigMarker configMarker = null;
+            string markerTypeName = markerType.Name; 
             
-            switch (markerType.Name) {
+            switch (markerTypeName) {
 
                 case nameof(JoinMarker_JoinNext):
                 {
@@ -101,7 +143,34 @@ namespace AltSalt.Maestro.Sequencing
                     break;
             }
 
+            configMarker.name = markerTypeName;
+
             return configMarker;
+        }
+
+        public static Fork TriggerCreateSimpleFork(string targetDirectory)
+        {
+            if (targetDirectory.Length > 0) {
+                
+                Fork newAsset = ScriptableObject.CreateInstance(typeof(Fork)) as Fork;
+                string finalPath = targetDirectory + "/New" + nameof(Fork) + ".asset";
+                
+                if (File.Exists(Path.GetFullPath(finalPath))) {
+                    if (EditorUtility.DisplayDialog("Overwrite existing file?", "This will overwrite the existing file at " + finalPath, "Proceed", "Cancel")) {
+                        AssetDatabase.CreateAsset(newAsset, finalPath);
+                    } else {
+                        return null;
+                    }
+                } else {
+                    AssetDatabase.CreateAsset(newAsset, finalPath);
+                }
+                
+                return newAsset;
+            } else {
+                Debug.Log("Creation cancelled");
+            }
+
+            return null;
         }
     }
 }

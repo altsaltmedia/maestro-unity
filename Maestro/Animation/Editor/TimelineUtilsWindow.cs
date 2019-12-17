@@ -164,7 +164,7 @@ namespace AltSalt.Maestro.Animation
                     GUILayout.Space(10);
 
                     if (GUILayout.Button("Create Debug Track")) {
-                        TimelineUtils.CreateDebugTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector);
+                        TimelineUtils.CreateDebugTrack(TimelineEditor.inspectedAsset);
                         controlPanel.RenderLayout();
                     }
 

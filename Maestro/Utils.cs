@@ -175,27 +175,71 @@ namespace AltSalt.Maestro
             return rootGameObjects;
         }
 
-        public static GameObject[] GetChildGameObjects(GameObject selection)
+        public static GameObject[] GetParentGameObjects(GameObject selection, bool includeRoot = false)
         {
             GameObject[] gameObjectArray = { selection };
-            return GetChildGameObjects(gameObjectArray);
+            return GetParentGameObjects(gameObjectArray, includeRoot);
         }
-
-        public static GameObject[] GetChildGameObjects(GameObject[] selection)
+        
+        public static GameObject[] GetParentGameObjects(GameObject[] selection, bool includeRoot = false)
         {
             List<GameObject> gameObjectList = new List<GameObject>();
             for (int i = 0; i < selection.Length; i++) {
-                gameObjectList = TraverseTransformHierarchy(gameObjectList, selection[i].transform, selection[i].transform);
+                gameObjectList = TraverseTransformParents(gameObjectList, selection[i].transform, selection[i].transform, null, includeRoot);
+            }
+            return gameObjectList.ToArray();
+        }
+
+        public static GameObject[] GetChildGameObjects(GameObject selection, bool includeRoot = false)
+        {
+            GameObject[] gameObjectArray = { selection };
+            return GetChildGameObjects(gameObjectArray, includeRoot);
+        }
+
+        public static GameObject[] GetChildGameObjects(GameObject[] selection, bool includeRoot = false)
+        {
+            List<GameObject> gameObjectList = new List<GameObject>();
+            for (int i = 0; i < selection.Length; i++) {
+                gameObjectList = TraverseTransformChildrenHierarchy(gameObjectList, selection[i].transform, selection[i].transform, null, includeRoot);
             }
             return gameObjectList.ToArray();
         }
 
         public delegate void TraverseTransformDelegate(List<GameObject> gameObjectList, Transform transform);
+        
+        public static List<GameObject> TraverseTransformParents(List<GameObject> targetList, Transform rootChildTransform, Transform currentNode, TraverseTransformDelegate traverseTransformDelegate = null, bool includeRoot = false)
+        {
+            if(includeRoot == true) {
+                if(targetList.Contains(rootChildTransform.gameObject) == false) {
+                    if (traverseTransformDelegate != null) {
+                        traverseTransformDelegate.Invoke(targetList, rootChildTransform);
+                    } else {
+                        targetList.Add(rootChildTransform.gameObject);
+                    }
+                }
+            }
+
+            if (currentNode.transform.parent == null) {
+                return targetList;
+            } else {
+                
+                Transform parentTransform = currentNode.parent;
+                if (traverseTransformDelegate != null) {
+                    traverseTransformDelegate.Invoke(targetList, parentTransform);
+                }
+                else {
+                    targetList.Add(parentTransform.gameObject);
+                }
+                TraverseTransformParents(targetList, rootChildTransform, parentTransform, traverseTransformDelegate);
+            
+                return targetList;
+            }
+        }
 
         // Given an empty list of game objects and a root transform, will recursively go through the root
         // transform's children and populate the list with the children in the order they appear in the hierarchy.
         // Optionally, can take a delegate to perform custom handling on each child transform as we come across it.
-        public static List<GameObject> TraverseTransformHierarchy(List<GameObject> targetList, Transform rootTransform, Transform currentNode, TraverseTransformDelegate traverseTransformDelegate = null, bool includeRoot = false)
+        public static List<GameObject> TraverseTransformChildrenHierarchy(List<GameObject> targetList, Transform rootTransform, Transform currentNode, TraverseTransformDelegate traverseTransformDelegate = null, bool includeRoot = false)
         {
             if(includeRoot == true) {
                 if(targetList.Contains(rootTransform.gameObject) == false) {
@@ -218,7 +262,7 @@ namespace AltSalt.Maestro
                     else {
                         targetList.Add(childTransform.gameObject);
                     }
-                    TraverseTransformHierarchy(targetList, rootTransform, childTransform, traverseTransformDelegate);
+                    TraverseTransformChildrenHierarchy(targetList, rootTransform, childTransform, traverseTransformDelegate);
                 }
                 return targetList;
             }
@@ -273,7 +317,7 @@ namespace AltSalt.Maestro
                 // Traverse all the game objects in our scene. As we hit each iteration, we build the list by comparing it to
                 // our dictionary of parents and child objects. Since this traversal is happening in order, this returns the
                 // same contents of our dictionary, just sorted based on each object's appearance in the hierarchy
-                List<GameObject> totalHierarchySelection = TraverseTransformHierarchy(new List<GameObject>(), rootObjects[q].transform, rootObjects[q].transform, (List<GameObject> hierarchySelection, Transform currentTransform) => {
+                List<GameObject> totalHierarchySelection = TraverseTransformChildrenHierarchy(new List<GameObject>(), rootObjects[q].transform, rootObjects[q].transform, (List<GameObject> hierarchySelection, Transform currentTransform) => {
                     foreach (KeyValuePair<Transform, List<GameObject>> parentObject in selectionByParent) {
                         for(int i=0; i<parentObject.Value.Count; i++) {
                             if(currentTransform.gameObject == parentObject.Value[i]) {

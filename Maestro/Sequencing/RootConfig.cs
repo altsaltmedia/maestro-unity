@@ -24,6 +24,16 @@ namespace AltSalt.Maestro.Sequencing
 
         public ComplexEventTrigger sequenceModified => _sequenceModified;
 
+        [Required]
+        [SerializeField]
+        private GameObject _masterSequenceContainer;
+
+        public GameObject masterSequenceContainer
+        {
+            get => _masterSequenceContainer;
+            set => _masterSequenceContainer = value;
+        }
+
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
         [OnValueChanged(nameof(Configure))]

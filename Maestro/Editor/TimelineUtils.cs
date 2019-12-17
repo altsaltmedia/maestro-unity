@@ -214,16 +214,19 @@ namespace AltSalt.Maestro
             return debugTrackFound;
         }
 
-        public static void CreateDebugTrack(TimelineAsset targetAsset, PlayableDirector targetDirector)
+        public static void CreateDebugTrack(TimelineAsset targetAsset)
         {
             TrackAsset debugTrack = targetAsset.CreateTrack(typeof(DebugTimelineTrack), null, "Debug Track");
-
-            PlayableDirector currentDirector = targetDirector;
-            currentDirector.SetGenericBinding(debugTrack, currentTimeReference.Variable);
             debugTrack.CreateDefaultClip();
-
             RefreshTimelineContentsAddedOrRemoved();
             createDebugTrackCalled = true;
+        }
+        
+        public static void CreateConfigTrack(TimelineAsset targetAsset)
+        {
+            TrackAsset configTrack = targetAsset.CreateTrack(typeof(ConfigTrack), null, "Config Track");
+            configTrack.CreateDefaultClip();
+            RefreshTimelineContentsAddedOrRemoved();
         }
 
         public static void RefreshTimelineWindow()

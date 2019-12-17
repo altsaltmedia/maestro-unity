@@ -74,7 +74,7 @@ namespace AltSalt.Maestro
             return newElement;
         }
 
-        private static void FocusHierarchyWindow()
+        public static void FocusHierarchyWindow()
         {
             EditorApplication.ExecuteMenuItem("Window/General/Hierarchy");
         }

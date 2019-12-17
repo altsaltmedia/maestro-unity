@@ -21,7 +21,7 @@ namespace AltSalt.Maestro.Sequencing
         public Sequence sequence
         {
             get => _sequence;
-            private set => _sequence = value;
+            set => _sequence = value;
         }
 
         [Required]

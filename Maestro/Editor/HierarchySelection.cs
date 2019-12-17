@@ -59,6 +59,7 @@ namespace AltSalt.Maestro
             LoadSelection,
             SelectAllChildren,
             AddAllChildrenToSelection,
+            AddAllParentsToSelection,
             CopyGameObjects,
             PasteGameObjects,
             SelectOddsInSelection,
@@ -139,6 +140,21 @@ namespace AltSalt.Maestro
 
                         newSelection.AddRange(Selection.gameObjects);
                         newSelection.AddRange(gameObjectChildren);
+
+                        Selection.objects = newSelection.ToArray();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
+                        button);
+                    break;
+                
+                case nameof(ButtonNames.AddAllParentsToSelection):
+                    button.clickable.clicked += () =>
+                    {
+                        List<GameObject> newSelection = new List<GameObject>();
+                        GameObject[] gameObjectParents = Utils.GetParentGameObjects(Selection.gameObjects);
+
+                        newSelection.AddRange(Selection.gameObjects);
+                        newSelection.AddRange(gameObjectParents);
 
                         Selection.objects = newSelection.ToArray();
                     };
