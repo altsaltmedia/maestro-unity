@@ -4,8 +4,10 @@ using System.Linq;
 using AltSalt.Maestro.Sequencing;
 using UnityEditor;
 using UnityEditor.Timeline;
+using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
@@ -149,7 +151,7 @@ namespace AltSalt.Maestro
                     if (i == 0) {
                         targetClips[i].displayName = newName;
                     } else {
-                        targetClips[i].displayName = string.Format("{0} ({1})", newName, i);
+                        targetClips[i].displayName = String.Format("{0} ({1})", newName, i);
                     }
                 }
 
@@ -254,6 +256,80 @@ namespace AltSalt.Maestro
         public static void RefreshTimelineSceneRedraw()
         {
             TimelineEditor.Refresh(RefreshReason.SceneNeedsUpdate);
+        }
+
+        public static Object[] GetAssociatedTracksFromSelection(Object[] objectSelection, TimelineClip[] clipSelection, TimelineAsset sourceTimelineAsset, PlayableDirector sourceDirector)
+        {
+            List<TrackAsset> trackAssets = new List<TrackAsset>();
+
+            for (int i = 0; i < objectSelection.Length; i++) {
+
+                foreach (PlayableBinding playableBinding in sourceTimelineAsset.outputs) {
+
+                    Object objectBinding = sourceDirector.GetGenericBinding(playableBinding.sourceObject);
+
+                    if (objectSelection[i] is GameObject && objectBinding is Component) {
+
+                        if (objectSelection[i] == (objectBinding as Component).gameObject) {
+                            trackAssets.Add(playableBinding.sourceObject as TrackAsset);
+                        }
+
+                    } else if (objectSelection[i] == objectBinding) {
+                        trackAssets.Add(playableBinding.sourceObject as TrackAsset);
+                    }
+                }
+
+            }
+
+            for (int i = 0; i < clipSelection.Length; i++) {
+                TrackAsset trackAsset = clipSelection[i].parentTrack;
+                if (trackAssets.Contains(trackAsset) == false) {
+                    trackAssets.Add(trackAsset);
+                }
+            }
+
+            List<TrackAsset> allParentTracks = new List<TrackAsset>();
+            for (int z=0; z<trackAssets.Count; z++) {
+                List<TrackAsset> parentTracks = GetParentTracks(trackAssets[z]);
+                
+                // Avoid adding duplicate parents to our selection
+                for (int m = 0; m < parentTracks.Count; m++) {
+                    if(allParentTracks.Contains(parentTracks[m]) == false) allParentTracks.Add(parentTracks[m]);
+                }
+            }
+
+            trackAssets.AddRange(allParentTracks);
+
+            return trackAssets.ToArray();
+        }
+
+        public static List<TrackAsset> GetParentTracks(TrackAsset trackAsset)
+        {
+            List<TrackAsset> parentTracks = new List<TrackAsset>();
+            if (trackAsset.parent != null && trackAsset.parent is GroupTrack) {
+                TrackAsset parentTrack = trackAsset.parent as TrackAsset;
+                parentTracks.Add(parentTrack);
+                parentTracks.AddRange(GetParentTracks(parentTrack));
+            }
+            return parentTracks;
+        }
+
+        public static TrackAsset[] SortTracks(TrackAsset[] selectedTracks)
+        {
+            List<TrackAsset> allTracks = GetAllTracks();
+            List<TrackAsset> sortedTracks = new List<TrackAsset>();
+            
+            for (int i = 0; i < allTracks.Count; i++) {
+                TrackAsset currentTrack = allTracks[i];
+                
+                for (int j = 0; j < selectedTracks.Length; j++) {
+                    if (currentTrack == selectedTracks[j]) {
+                        sortedTracks.Add(selectedTracks[j]);
+                    }
+                }
+            }
+
+            return sortedTracks.ToArray();
         }
     }
 }

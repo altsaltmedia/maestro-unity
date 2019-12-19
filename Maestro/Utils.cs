@@ -14,6 +14,7 @@ using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.Events;
 using System.IO;
+using System.Linq;
 using System.Text;
 using SimpleJSON;
 using UnityEngine.Experimental.XR;
@@ -200,7 +201,7 @@ namespace AltSalt.Maestro
         {
             List<GameObject> gameObjectList = new List<GameObject>();
             for (int i = 0; i < selection.Length; i++) {
-                gameObjectList = TraverseTransformChildrenHierarchy(gameObjectList, selection[i].transform, selection[i].transform, null, includeRoot);
+                gameObjectList = TraverseTransformChildren(gameObjectList, selection[i].transform, selection[i].transform, null, includeRoot);
             }
             return gameObjectList.ToArray();
         }
@@ -239,7 +240,7 @@ namespace AltSalt.Maestro
         // Given an empty list of game objects and a root transform, will recursively go through the root
         // transform's children and populate the list with the children in the order they appear in the hierarchy.
         // Optionally, can take a delegate to perform custom handling on each child transform as we come across it.
-        public static List<GameObject> TraverseTransformChildrenHierarchy(List<GameObject> targetList, Transform rootTransform, Transform currentNode, TraverseTransformDelegate traverseTransformDelegate = null, bool includeRoot = false)
+        public static List<GameObject> TraverseTransformChildren(List<GameObject> targetList, Transform rootTransform, Transform currentNode, TraverseTransformDelegate traverseTransformDelegate = null, bool includeRoot = false)
         {
             if(includeRoot == true) {
                 if(targetList.Contains(rootTransform.gameObject) == false) {
@@ -262,7 +263,7 @@ namespace AltSalt.Maestro
                     else {
                         targetList.Add(childTransform.gameObject);
                     }
-                    TraverseTransformChildrenHierarchy(targetList, rootTransform, childTransform, traverseTransformDelegate);
+                    TraverseTransformChildren(targetList, rootTransform, childTransform, traverseTransformDelegate);
                 }
                 return targetList;
             }
@@ -317,7 +318,7 @@ namespace AltSalt.Maestro
                 // Traverse all the game objects in our scene. As we hit each iteration, we build the list by comparing it to
                 // our dictionary of parents and child objects. Since this traversal is happening in order, this returns the
                 // same contents of our dictionary, just sorted based on each object's appearance in the hierarchy
-                List<GameObject> totalHierarchySelection = TraverseTransformChildrenHierarchy(new List<GameObject>(), rootObjects[q].transform, rootObjects[q].transform, (List<GameObject> hierarchySelection, Transform currentTransform) => {
+                List<GameObject> totalHierarchySelection = TraverseTransformChildren(new List<GameObject>(), rootObjects[q].transform, rootObjects[q].transform, (List<GameObject> hierarchySelection, Transform currentTransform) => {
                     foreach (KeyValuePair<Transform, List<GameObject>> parentObject in selectionByParent) {
                         for(int i=0; i<parentObject.Value.Count; i++) {
                             if(currentTransform.gameObject == parentObject.Value[i]) {
@@ -502,30 +503,344 @@ namespace AltSalt.Maestro
 
             return newSelection.ToArray();
         }
+        
+        
+        public static GameObject[] DuplicateHierarchy(GameObject selection)
+        {
+            return DuplicateHierarchy(new[] { selection });
+        }
+        
+        // Given a selection of game objects, we will traverse
+        // and duplicate the hierarchy starting from the root objects 
+        public static GameObject[] DuplicateHierarchy(GameObject[] selection)
+        {
+            // Prep for traversal by getting all child objects from our selection, filtering out the root objects
+            List<GameObject> childObjects = GetChildGameObjects(Utils.SortGameObjectSelection(selection)).ToList();
 
-        public static GameObject DuplicateObject(GameObject sourceObject)
+            for (int i = 0; i < childObjects.Count; i++) {
+                if (PrefabUtility.IsPartOfPrefabAsset(childObjects[i]) == true) {
+                    Debug.LogError("Duplicating prefab assets is not allowed. Please ensure your selection only contains prefab instances.");
+                    return selection;
+                }
+            }
+            
+            // Loop through our selection, and create a list of the root objects
+            List<GameObject> selectionRootObjects = new List<GameObject>();
+            for (int i = 0; i < selection.Length; i++) {
+                if (childObjects.Contains(selection[i]) == false) {
+                    selectionRootObjects.Add(selection[i]);
+                }
+            }
+            
+            // Given our list of root objects, pass those into our traversal function
+            List<GameObject> duplicatedHierarchy = new List<GameObject>();
+            for (int q = 0; q < selectionRootObjects.Count; q++) {
+                duplicatedHierarchy = TraverseAndDuplicateHierarchy(duplicatedHierarchy, new Dictionary<int, GameObject>(), selectionRootObjects[q]);
+            }
+            return duplicatedHierarchy.ToArray();
+        }
+        
+        // Given an empty list and a game object, will recursively traverse through the a hierarchy,
+        // duplicating and re-parenting the duplicates as it goes. Important to note: This method requires an
+        // empty dictionary, which we use to map instanceIDs of the old objects to the duplicated objects.
+        public static List<GameObject> TraverseAndDuplicateHierarchy(List<GameObject> targetList,
+            Dictionary<int, GameObject> originalDuplicateMap, GameObject currentParent, GameObject duplicatedParent = null)
+        {
+            // On the first call to this function, we duplicate the object passed in so
+            // we can begin re-parenting the children 
+            if (duplicatedParent == null) {
+                
+                // Use the overload of DuplicateGameObject that allows us to pass in a map, which
+                // will contain a record of all the objects that get created
+                duplicatedParent = Utils.DuplicateGameObject(currentParent, originalDuplicateMap, true);
+                targetList.Add(duplicatedParent);
+                
+                // Make sure to add any dynamically duplicated children in the case of prefabs 
+                GameObject[] duplicatedChildren = Utils.GetChildGameObjects(duplicatedParent);
+                for (int i = 0; i < duplicatedChildren.Length; i++) {
+                    if(targetList.Contains(duplicatedChildren[i]) == false) targetList.Add(duplicatedChildren[i]);
+                }
+            }
+            
+            // Begin traversing children
+            for (int i = 0; i < currentParent.transform.childCount; i++) {
+                GameObject currentChild = currentParent.transform.GetChild(i).gameObject;
+                
+                // Duplicate and re-parent the child, BUT ONLY if the current child isn't part of the same prefab
+                // instance as its parent. The reason for this is that game objects inside prefabs, when they get
+                // duplicated, must be cloned from a prefab asset, which already contains the whole hierarchy.
+                // This means that, by the time we get to a child object of the prefab instance, it's already been duplicated.
+                if (PrefabUtility.GetOutermostPrefabInstanceRoot(currentChild) != PrefabUtility.GetOutermostPrefabInstanceRoot(currentParent) &&
+                    PrefabUtility.GetNearestPrefabInstanceRoot(currentChild) != currentParent) {
+                    
+                    GameObject newDuplicatedParent = Utils.DuplicateGameObject(currentChild, originalDuplicateMap, true);
+                    newDuplicatedParent.transform.SetParent(duplicatedParent.transform);
+                    targetList.Add(newDuplicatedParent);
+                    
+                    // Make sure to add any dynamically duplicated children in the case of prefabs 
+                    GameObject[] duplicatedChildren = Utils.GetChildGameObjects(duplicatedParent);
+                    for (int j = 0; j < duplicatedChildren.Length; j++) {
+                        if(targetList.Contains(duplicatedChildren[j]) == false) targetList.Add(duplicatedChildren[j]);
+                    }
+                    
+                    TraverseAndDuplicateHierarchy(targetList, originalDuplicateMap, currentChild, newDuplicatedParent);
+                    continue;
+                }
+                
+                // If our current child is part of the parent prefab, we still need to traverse through its children to
+                // duplicate any added game objects that aren't part of the parent prefab. To do this, we check against our map
+                // to find the already duplicated object, and pass that in to allow for re-parenting as we drill down. 
+                if (originalDuplicateMap.ContainsKey(currentChild.GetInstanceID())) {
+                    TraverseAndDuplicateHierarchy(targetList, originalDuplicateMap, currentChild, originalDuplicateMap[currentChild.GetInstanceID()]);
+                }
+            }
+            
+            return targetList;
+        }
+
+        public static GameObject DuplicateGameObject(GameObject sourceObject, bool removeAutoGeneratedChildren = false)
         {
             GameObject duplicate;
-
-            GameObject prefabRoot = PrefabUtility.GetCorrespondingObjectFromSource(sourceObject) as GameObject;
-            if (prefabRoot != null) {
-                duplicate = (GameObject)PrefabUtility.InstantiatePrefab(prefabRoot);
-                PrefabUtility.SetPropertyModifications(duplicate, PrefabUtility.GetPropertyModifications(sourceObject));
-                List<AddedComponent> addedComponents = PrefabUtility.GetAddedComponents(sourceObject);
-                for (int i = 0; i < addedComponents.Count; i++) {
-                    Component duplicateComponent = duplicate.AddComponent(addedComponents[i].instanceComponent.GetType());
-                    EditorUtility.CopySerialized(addedComponents[i].instanceComponent, duplicateComponent);
-                    if(duplicateComponent is SerializableElement) {
-                        (duplicateComponent as SerializableElement).Reinitialize();
-                    }
-                }
-            } else {
-                duplicate = UnityEngine.Object.Instantiate(sourceObject);
+            
+            if (PrefabUtility.IsPartOfPrefabAsset(sourceObject) == true) {
+                Debug.LogError("Duplicating prefab assets is not allowed." +
+                               "Please ensure your selection only contains prefab instances.");
+                return sourceObject;
             }
-
+            
+            // Use special handling for any properly connected prefabs to maintain
+            // the prefab connection, otherwise just duplicate the object normally
+            if (PrefabUtility.GetPrefabInstanceStatus(sourceObject) == PrefabInstanceStatus.Connected) {
+                duplicate = DuplicatePrefabInstance(sourceObject);
+            } else {
+                duplicate = DuplicateSimpleGameObject(sourceObject, removeAutoGeneratedChildren);
+            }
+            
+            // Ensure that we set some correct housekeeping values for our objects
+            if (sourceObject.transform.parent != null) {
+                duplicate.transform.SetParent(sourceObject.transform.parent);
+            }
+            duplicate.transform.SetSiblingIndex(sourceObject.transform.GetSiblingIndex() + 1);
+            duplicate.name = sourceObject.name;
             duplicate.transform.position = sourceObject.transform.position;
             duplicate.transform.localScale = sourceObject.transform.localScale;
-            duplicate.name = sourceObject.name;
+            Undo.RegisterCreatedObjectUndo(duplicate, "duplicate " + sourceObject.name);
+            
+            return duplicate;
+        }
+
+        // Given an empty dictionary, this override creates a record of the original object
+        // instanceIDs to the duplicates, allowing us to see which ones have already been cloned
+        public static GameObject DuplicateGameObject(GameObject sourceObject, Dictionary<int, GameObject> originalDuplicateMap,
+            bool removeAutoGeneratedChildren = false)
+        {
+            GameObject duplicate = DuplicateGameObject(sourceObject, removeAutoGeneratedChildren);
+
+            GameObject[] sourceObjectHierarchy = Utils.GetChildGameObjects(sourceObject, true);
+            GameObject[] duplicateObjectHierarchy = Utils.GetChildGameObjects(duplicate, true);
+            
+            for (int i = 0; i < duplicateObjectHierarchy.Length; i++) {
+                if (originalDuplicateMap.ContainsKey(sourceObjectHierarchy[i].GetInstanceID()) == false) {
+                    originalDuplicateMap.Add(sourceObjectHierarchy[i].GetInstanceID(), duplicateObjectHierarchy[i]);
+                }
+            }
+
+            return duplicate;
+        }
+
+        // Duplicates a prefab by replicating its outermost prefab, then stripping away any
+        // part of the prefab hierarchy that's not needed based on an originally selected object
+        private static GameObject DuplicatePrefabInstance(GameObject selectedObject)
+        {
+            // Due to the fact that we may be working with nested prefabs, we need to traverse
+            // to the outer game object and duplicate the entire prefab hierarchy. The reason is that
+            // if a child prefab is instantiated as part of a parent prefab, the only way we can apply
+            // its property modifications and added components is by comparing against the parent prefab asset
+            GameObject outermostPrefabAsset = PrefabUtility.GetCorrespondingObjectFromSource(selectedObject);
+            GameObject duplicatedObject = PrefabUtility.InstantiatePrefab(outermostPrefabAsset) as GameObject;
+            
+            // Apply property modifications
+            PropertyModification[] propertyModifications = PrefabUtility.GetPropertyModifications(selectedObject);
+            PrefabUtility.SetPropertyModifications(duplicatedObject, propertyModifications);
+
+            // Apply added components by going to the root of both the
+            // original and duplicated instances to gather all of the additions
+            GameObject outermostSelectedInstance = PrefabUtility.GetOutermostPrefabInstanceRoot(selectedObject);
+            GameObject outermostDuplicateInstance = PrefabUtility.GetOutermostPrefabInstanceRoot(duplicatedObject);
+            GameObject migratedObject = MigrateAddedComponents(outermostSelectedInstance, outermostDuplicateInstance);
+            
+            //migratedObject = MigrateAddedGameObjects(outermostSelected, migratedObject);
+
+            // If our originally selected object was the outermost root of the
+            // prefab hierarchy, then we're done; just return the object we just migrated
+            if (selectedObject == PrefabUtility.GetOutermostPrefabInstanceRoot(selectedObject)) {
+                return migratedObject;
+            }
+            
+            // Otherwise, that means our target object is nested within the prefab hierarchy, so we need
+            // to strip out the part of the hierarchy we don't need. So we get a reference to the outer object,
+            // then unpack the parent until we get to the part of the hierarchy we want - the reason for this
+            // is we are unable to re-parent nested prefabs unless their parents have been unpacked.
+            duplicatedObject = ExtractNestedPrefabInstance(outermostDuplicateInstance, duplicatedObject);
+
+            // Re-parent our duplicated object out of the hierarchy, and set its sibling index so it resides beside our source object
+            duplicatedObject.transform.parent = selectedObject.transform.parent != null ? selectedObject.transform.parent : null;
+            duplicatedObject.transform.SetSiblingIndex(selectedObject.transform.parent.GetSiblingIndex() + 1);
+            
+            // Finally, delete the leftover hierarchy we don't need
+            UnityEngine.Object.DestroyImmediate(outermostDuplicateInstance);
+
+            return duplicatedObject;
+        }
+        
+        // Given a source prefab instance and a duplicate, will copy added components to the duplicate
+        private static GameObject MigrateAddedComponents(GameObject sourceObject, GameObject duplicateObject)
+        {
+            // Create a dictionary to map the old instanceIDs to the new game objects.
+            Dictionary<int, GameObject> migrationDictionary = new Dictionary<int, GameObject>();
+            
+            // It's possible that the source object may contain added game objects, and since
+            // our duplicate is of the original prefab, we need to filter out those added objects
+            List<GameObject> sourceObjectHierarchy = Utils.GetChildGameObjects(sourceObject, true).ToList();
+            List<GameObject> sanitizedSourceObjectHierarchy = new List<GameObject>();
+            for (int i = 0; i < sourceObjectHierarchy.Count; i++) {
+                GameObject childObject = sourceObjectHierarchy[i];
+                GameObject outermostRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(childObject); 
+                if (outermostRoot == sourceObject) {
+                    sanitizedSourceObjectHierarchy.Add(childObject);
+                }
+            }
+            
+            // No need to sanitize the duplicate hierarchy - it contains the objects we're trying to populate
+            GameObject[] duplicateObjectHierarchy = Utils.GetChildGameObjects(duplicateObject, true);
+
+            if (sanitizedSourceObjectHierarchy.Count != duplicateObjectHierarchy.Length) {
+                Debug.LogError("Sanitized source hierarchy and duplicate hierarchy are not identical. " +
+                               "Added components may not get duplicated as intended.");
+            }
+
+            // Map the old instanceIDs to the new objects
+            for (int i = 0; i < duplicateObjectHierarchy.Length; i++) {
+                migrationDictionary.Add(sanitizedSourceObjectHierarchy[i].GetInstanceID(), duplicateObjectHierarchy[i]);
+            }
+            
+            List<AddedComponent> addedComponents = PrefabUtility.GetAddedComponents(sourceObject);
+
+            for (int i = 0; i < addedComponents.Count; i++) {
+                foreach (var migrationNode in migrationDictionary) {
+                    
+                    // Put the added components on corresponding duplicate objects using our map 
+                    if (addedComponents[i].instanceComponent.gameObject.GetInstanceID() == migrationNode.Key) {
+                        
+                        Type addedComponentType = addedComponents[i].instanceComponent.GetType();
+                        Component migratedComponent = migrationNode.Value.AddComponent(addedComponentType);
+                        
+                        EditorUtility.CopySerialized(addedComponents[i].instanceComponent, migratedComponent);
+                        if(migratedComponent is SerializableElement serializableElement) {
+                            serializableElement.Reinitialize();
+                        }
+                    }
+                }
+            }
+
+            return duplicateObject;
+        }
+
+        private static GameObject MigrateAddedGameObjects(GameObject sourceObject, GameObject duplicateObject)
+        {
+            Dictionary<int, GameObject> migrationDictionary = new Dictionary<int, GameObject>();
+            
+            GameObject[] sourceObjectHierarchy = Utils.GetChildGameObjects(
+                PrefabUtility.GetOutermostPrefabInstanceRoot(sourceObject), true);
+            GameObject[] duplicateObjectHierarchy = Utils.GetChildGameObjects(
+                PrefabUtility.GetOutermostPrefabInstanceRoot(duplicateObject), true);
+
+            for (int i = 0; i < duplicateObjectHierarchy.Length; i++) {
+                migrationDictionary.Add(sourceObjectHierarchy[i].GetInstanceID(), duplicateObjectHierarchy[i]);
+            }
+            
+            List<AddedGameObject> addedObjects = PrefabUtility.GetAddedGameObjects(sourceObject);
+            GameObject[] sortedAddedObjects = new GameObject[addedObjects.Count];
+            for (int i = 0; i < addedObjects.Count; i++) {
+                sortedAddedObjects[i] = addedObjects[i].instanceGameObject;
+            }
+            Utils.SortGameObjectSelection(sortedAddedObjects);
+
+            for (int i = 0; i < sortedAddedObjects.Length; i++) {
+
+                foreach (var migrationNode in migrationDictionary) {
+
+                    GameObject parent = sortedAddedObjects[i].transform.parent.gameObject;
+
+                    if (parent.GetInstanceID() == migrationNode.Key) {
+
+//                        List<GameObject> childHierarchy = new List<GameObject>();
+//                        TraverseAndDuplicateChildrenHierarchy(childHierarchy, migrationNode.Value, parent);
+
+                        if (PrefabUtility.GetPrefabInstanceStatus(sortedAddedObjects[i]) ==
+                            PrefabInstanceStatus.Connected) {
+                            GameObject childPrefab = DuplicatePrefabInstance(sortedAddedObjects[i]);
+                            childPrefab.transform.SetParent(migrationNode.Value.transform);
+                        }
+                        else {
+                            GameObject[] childDuplicateHierarchy = Utils.DuplicateHierarchy(sortedAddedObjects[i]);
+                            childDuplicateHierarchy[0].transform.SetParent(migrationNode.Value.transform);
+                        }
+                        
+                    }
+                }
+            }
+
+            return duplicateObject;
+        }
+
+        // Unpacks a parent prefab until it reaches the target nested object
+        private static GameObject ExtractNestedPrefabInstance(GameObject parentObject, GameObject nestedObject)
+        {
+            if (PrefabUtility.IsPartOfAnyPrefab(parentObject) == false ||
+                PrefabUtility.IsPartOfAnyPrefab(nestedObject) == false) {
+                Debug.LogError("Both parameters must be prefabs");
+            }
+            
+            // Create a collection of all children from the root,
+            // as well as a smaller collection of children we actually want.
+            GameObject[] allHierarchyChildren = Utils.GetChildGameObjects(parentObject);
+            List<GameObject> targetChildren = Utils.GetChildGameObjects(nestedObject, true).ToList();
+            
+            // Traverse through the hierarchy, unpacking all of the prefabs in it, except for the ones
+            // that are a part of our nested object. We need to do this because you can't extract / re-parent
+            // a nested prefab without unpacking it first
+            PrefabUtility.UnpackPrefabInstance(parentObject, PrefabUnpackMode.OutermostRoot, InteractionMode.AutomatedAction);
+
+            for (int i = 0; i < allHierarchyChildren.Length; i++) {
+                GameObject currentChild = allHierarchyChildren[i];
+                if (PrefabUtility.IsPartOfPrefabInstance(currentChild) == true && targetChildren.Contains(currentChild) == false) {
+                    parentObject = PrefabUtility.GetOutermostPrefabInstanceRoot(allHierarchyChildren[i]);
+                    PrefabUtility.UnpackPrefabInstance(parentObject, PrefabUnpackMode.OutermostRoot, InteractionMode.AutomatedAction);
+                }
+            }
+
+            return nestedObject;
+        }
+
+        private static GameObject DuplicateSimpleGameObject(GameObject sourceObject, bool removeAutoGeneratedChildren)
+        {
+            GameObject duplicate = UnityEngine.Object.Instantiate(sourceObject);
+            GameObject[] duplicateChildren = Utils.GetChildGameObjects(duplicate);
+                
+            // By default, Unity will duplicate all of a game object's children.
+            // In some cases, we want to manually create the hierarchy one by one
+            // (or not at all), so this removes those auto-generated objects
+            if (removeAutoGeneratedChildren == true) {
+                for (int i = 0; i < duplicateChildren.Length; i++) {
+                    UnityEngine.Object.DestroyImmediate(duplicateChildren[i]);
+                }
+            }
+                
+            Component[] serializableComponents = sourceObject.GetComponents(typeof(SerializableElement));
+            for (int i = 0; i < serializableComponents.Length; i++) {
+                (serializableComponents[i] as SerializableElement).Reinitialize();
+            }
 
             return duplicate;
         }

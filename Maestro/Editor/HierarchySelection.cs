@@ -172,7 +172,7 @@ namespace AltSalt.Maestro
                         objectsToCopy.Clear();
                         Array.Sort(Selection.gameObjects, new Utils.GameObjectSort());
                         for (int i = 0; i < Selection.gameObjects.Length; i++) {
-                            GameObject copy = Utils.DuplicateObject(Selection.gameObjects[i]);
+                            GameObject copy = Utils.DuplicateGameObject(Selection.gameObjects[i]);
                             copy.transform.localPosition = Selection.gameObjects[i].transform.localPosition;
                             Undo.RegisterCreatedObjectUndo(copy, "Copy game object");
                             objectsToCopy.Add(copy);
@@ -187,7 +187,7 @@ namespace AltSalt.Maestro
                     {
                         for (int i = 0; i < Selection.gameObjects.Length; i++) {
                             for (int z = objectsToCopy.Count - 1; z >= 0; z--) {
-                                GameObject copy = Utils.DuplicateObject(objectsToCopy[z]);
+                                GameObject copy = Utils.DuplicateGameObject(objectsToCopy[z]);
                                 copy.hideFlags = HideFlags.None;
                                 Undo.RegisterCreatedObjectUndo(copy, "Paste game object");
                                 Undo.SetTransformParent(copy.transform, Selection.gameObjects[i].transform,

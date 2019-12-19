@@ -28,6 +28,8 @@ xsi:schemaLocation="
 		  		<engine:Button text="Copy Track(s)" class="col-full" name="CopyTracks" />
 		  		<engine:Button text="Paste Track(s)" class="col-full" name="PasteTracks" />
 		  		<engine:Button text="Duplicate Track(s)" class="col-full" name="DuplicateTracks" />
+		  		<engine:Button text="Clone Object-Track Groups" class="col-full" name="CloneObjectTrackGroups" />
+		  		<engine:Button text="Deep Clone Object-Track Groups" class="col-full" name="DeepCloneObjectTrackGroups" />
 	  		</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">

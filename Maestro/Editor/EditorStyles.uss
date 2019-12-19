@@ -218,6 +218,10 @@
 	-unity-text-align: middle-right;
 }
 
+.text-medium {
+	font-size: 11px;
+}
+
 /** Timeline Utils **/
 
 .timeline-utilities-window Button {

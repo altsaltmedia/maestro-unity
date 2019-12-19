@@ -41,7 +41,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        public static GameObject CreateNewElement(Transform[] selectedTransforms, GameObject sourceObject, string elementName = "", bool isParent = false)
+        public static GameObject CreateElement(Transform[] selectedTransforms, GameObject sourceObject, string elementName = "", bool isParent = false)
         {
             GameObject newElement = PrefabUtility.InstantiatePrefab(sourceObject) as GameObject;
             string undoMessage = "create " + sourceObject.name;
@@ -51,19 +51,28 @@ namespace AltSalt.Maestro
                 newElement.name = elementName;
             }
 
+            // Handling to set the newly created object as a parent to the current selection.
+            // When multiple objects are selected, we assume that the user wants the new object
+            // to be the parent to the selection. Optionally, passing in the isParent bool will also
+            // trigger this conditional.
             if (selectedTransforms.Length > 1 || (selectedTransforms.Length > 0 && isParent == true)) {
 
                 Array.Sort(selectedTransforms, new Utils.TransformSort());
+                
+                // Store the parent and sibIndex of the current selection first
                 Transform parentTransform = selectedTransforms[0].parent;
                 int sibIndex = selectedTransforms[0].GetSiblingIndex();
 
+                // Set the selection's parent to be the newly created object
                 for (int i = 0; i < selectedTransforms.Length; i++) {
                     Undo.SetTransformParent(selectedTransforms[i], newElement.transform, "set parent on game objects");
                 }
 
+                // Re-parent the newly created element so that it appears in the hierarchy where you'd expect it to be
                 Undo.SetTransformParent(newElement.transform, parentTransform, "set parent on new element");
                 newElement.transform.SetSiblingIndex(sibIndex);
 
+            // Otherwise, set the newly created element as the child of the current selection. 
             } else if (selectedTransforms.Length == 1) {
                 newElement.transform.SetParent(selectedTransforms[0]);
             }

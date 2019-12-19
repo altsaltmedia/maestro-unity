@@ -971,17 +971,6 @@ namespace AltSalt.Maestro
             return sourceClipsList.ToArray();
         }
 
-        static List<TrackAsset> GetParentTracks(TrackAsset trackAsset)
-        {
-            List<TrackAsset> parentTracks = new List<TrackAsset>();
-            if (trackAsset.parent != null && trackAsset.parent is GroupTrack) {
-                TrackAsset parentTrack = trackAsset.parent as TrackAsset;
-                parentTracks.Add(parentTrack);
-                parentTracks.AddRange(GetParentTracks(parentTrack));
-            }
-            return parentTracks;
-        }
-
         public static TimelineClip[] GetAllTimelineClips()
         {
             return GetAllTimelineClips(new Utils.ClipTimeSort());
@@ -1126,7 +1115,7 @@ namespace AltSalt.Maestro
         public static UnityEngine.Object[] SelectTargetTracks(UnityEngine.Object[] objectSelection, TimelineClip[] clipSelection, TimelineAsset sourceTimelineAsset, PlayableDirector sourceDirector)
         {
             UnityEngine.Object[] originalSelection = objectSelection;
-            objectSelection = GetAssociatedTracksFromSelection(objectSelection, clipSelection, sourceTimelineAsset, sourceDirector);
+            objectSelection = TimelineUtils.GetAssociatedTracksFromSelection(objectSelection, clipSelection, sourceTimelineAsset, sourceDirector);
 
             if (objectSelection.Length > 0) {
                 return objectSelection;
@@ -1134,46 +1123,6 @@ namespace AltSalt.Maestro
                 EditorUtility.DisplayDialog("No track(s) found", "There are no tracks associated with the object(s) selected", "Okay");
                 return originalSelection;
             }
-        }
-
-        public static UnityEngine.Object[] GetAssociatedTracksFromSelection(UnityEngine.Object[] objectSelection, TimelineClip[] clipSelection, TimelineAsset sourceTimelineAsset, PlayableDirector sourceDirector)
-        {
-            List<TrackAsset> trackAssets = new List<TrackAsset>();
-
-            for (int i = 0; i < objectSelection.Length; i++) {
-
-                foreach (PlayableBinding playableBinding in sourceTimelineAsset.outputs) {
-
-                    UnityEngine.Object objectBinding = sourceDirector.GetGenericBinding(playableBinding.sourceObject);
-
-                    if (objectSelection[i] is GameObject && objectBinding is Component) {
-
-                        if (objectSelection[i] == (objectBinding as Component).gameObject) {
-                            trackAssets.Add(playableBinding.sourceObject as TrackAsset);
-                        }
-
-                    } else if (objectSelection[i] == objectBinding) {
-                        trackAssets.Add(playableBinding.sourceObject as TrackAsset);
-                    }
-                }
-
-            }
-
-            for (int i = 0; i < clipSelection.Length; i++) {
-                TrackAsset trackAsset = clipSelection[i].parentTrack;
-                if (trackAssets.Contains(trackAsset) == false) {
-                    trackAssets.Add(trackAsset);
-                }
-            }
-
-            List<TrackAsset> parentTracks = new List<TrackAsset>();
-            foreach (TrackAsset trackAsset in trackAssets) {
-                parentTracks.AddRange(GetParentTracks(trackAsset));
-            }
-
-            trackAssets.AddRange(parentTracks);
-
-            return trackAssets.ToArray();
         }
 
         //public static UnityEngine.Object[] ShowTargetGroupTracks(TrackAsset[] trackAssets)

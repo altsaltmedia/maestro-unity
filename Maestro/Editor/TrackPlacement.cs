@@ -54,6 +54,7 @@ namespace AltSalt.Maestro
 
         enum EnableCondition
         {
+            GameObjectSelected,
             TrackSelectedForCopying,
             TrackSelected,
             CopiedTracksPopulated
@@ -64,6 +65,8 @@ namespace AltSalt.Maestro
             CopyTracks,
             PasteTracks,
             DuplicateTracks,
+            CloneObjectTrackGroups,
+            DeepCloneObjectTrackGroups,
             GroupTrack
         };
 
@@ -72,8 +75,16 @@ namespace AltSalt.Maestro
             AllowBlankTracks,
         };
 
-        void UpdateDisplay()
+        private void UpdateDisplay()
         {
+            // Disable window if the timeline window is inactive
+            if (TimelineEditor.inspectedAsset == null) {
+                moduleWindowUXML.SetEnabled(false);
+            }
+            else {
+                moduleWindowUXML.SetEnabled(true);
+            }
+
             // The user can force these buttons to enable by toggling allowBlankTracks //
             if (allowBlankTracks == true) {
 
@@ -89,6 +100,13 @@ namespace AltSalt.Maestro
             }
 
             // These elements cannot be overriden by allowBlankTracks //
+
+            if (Selection.gameObjects.Length > 0) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.GameObjectSelected, true);
+            }
+            else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.GameObjectSelected, false);
+            }
 
             if (Utils.TargetTypeSelected(Selection.objects, typeof(TrackAsset))) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelectedForCopying, true);
@@ -133,6 +151,30 @@ namespace AltSalt.Maestro
                         TimelineUtils.FocusTimelineWindow();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelectedForCopying, button);
+                    break;
+                
+                case nameof(ButtonNames.CloneObjectTrackGroups):
+                    button.clickable.clicked += () =>
+                    {
+                        Selection.objects = CloneObjectTrackGroups(Selection.gameObjects,
+                            TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, out copiedTracks);
+                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                        TimelineUtils.FocusTimelineWindow();
+                        UpdateDisplay(); // This will update the status of the PasteTracks button
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected, button);
+                    break;
+                
+                case nameof(ButtonNames.DeepCloneObjectTrackGroups):
+                    button.clickable.clicked += () =>
+                    {
+                        Selection.objects = DeepCloneObjectTrackGroups(Selection.gameObjects,
+                            TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, out copiedTracks);
+                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                        TimelineUtils.FocusTimelineWindow();
+                        UpdateDisplay(); // This will update the status of the PasteTracks button
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected, button);
                     break;
 
                 case nameof(ButtonNames.GroupTrack):
@@ -196,7 +238,8 @@ namespace AltSalt.Maestro
 
         public static TrackAsset[] PasteTracks(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, UnityEngine.Object[] destinationSelection, TimelineClip[] clipSelection, List<TrackData> sourceTrackData)
         {
-            TrackAsset[] pastedTracks = new TrackAsset[sourceTrackData.Count];
+            List<TrackAsset> pastedTracks = new List<TrackAsset>();
+
             TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
             if (parentTrack == null) {
                 parentTrack = GetDestinationTrackFromSelection(clipSelection);
@@ -205,8 +248,7 @@ namespace AltSalt.Maestro
             // Paste tracks
             for (int i = 0; i < sourceTrackData.Count; i++) {
                 TrackAsset trackAsset = targetTimelineAsset.CreateTrack(sourceTrackData[i].trackType, parentTrack, sourceTrackData[i].trackName);
-                pastedTracks[i] = trackAsset;
-
+                
                 foreach (PlayableBinding playableBinding in trackAsset.outputs) {
                     targetDirector.SetGenericBinding(playableBinding.sourceObject, sourceTrackData[i].trackBinding);
                 }
@@ -228,14 +270,17 @@ namespace AltSalt.Maestro
                         assetField.SetValue(pastedClip.asset, assetField.GetValue(trackClipAssetCopy));                        
                     }
                 }
+                
+                sourceTrackData[i].newTrackAsset = trackAsset; 
+                pastedTracks.Add(sourceTrackData[i].newTrackAsset);
             }
 
             // Set groups if applicable
             for (int i = 0; i < sourceTrackData.Count; i++) {
                 if (sourceTrackData[i].groupTrack != null) {
-                    for (int q = 0; q < pastedTracks.Length; q++) {
-                        if (pastedTracks[q].name == sourceTrackData[i].groupTrack.name) {
-                            pastedTracks[i].SetGroup(pastedTracks[q] as GroupTrack);
+                    for (int q = 0; q < sourceTrackData.Count; q++) {
+                        if (sourceTrackData[i].groupTrackID == sourceTrackData[q].trackAsset.GetInstanceID()) {
+                            sourceTrackData[i].newTrackAsset.SetGroup(sourceTrackData[q].newTrackAsset as GroupTrack);
                         }
                     }
                 }
@@ -243,7 +288,7 @@ namespace AltSalt.Maestro
 
             TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
 
-            return pastedTracks;
+            return pastedTracks.ToArray();
         }
 
         public static TrackAsset[] DuplicateTracks(TimelineAsset targetTimelineAsset, PlayableDirector sourceDirector, UnityEngine.Object[] sourceObjects)
@@ -308,6 +353,70 @@ namespace AltSalt.Maestro
             }
 
             return pastedTracks;
+        }
+        
+        public GameObject[] DeepCloneObjectTrackGroups(GameObject[] gameObjectSelection, 
+            TimelineAsset sourceTimelineAsset, PlayableDirector sourceDirector, out List<TrackData> trackData)
+        {
+            GameObject[] gameObjectHierarchy = Utils.GetChildGameObjects(Utils.SortGameObjectSelection(gameObjectSelection), true);
+            GameObject[] clonedObjects = Utils.DuplicateHierarchy(gameObjectHierarchy);
+            trackData = MapClonedObjectsToTrackData(gameObjectHierarchy, clonedObjects, sourceTimelineAsset,
+                sourceDirector);
+            return clonedObjects;
+        }
+
+        public GameObject[] CloneObjectTrackGroups(GameObject[] gameObjectSelection,
+            TimelineAsset sourceTimelineAsset, PlayableDirector sourceDirector, out List<TrackData> trackData)
+        {
+            GameObject[] sortedGameObjects = Utils.SortGameObjectSelection(gameObjectSelection);
+            List<GameObject> clonedObjects = new List<GameObject>();
+            
+            for (int i = 0; i < sortedGameObjects.Length; i++) {
+                clonedObjects.Add(Utils.DuplicateGameObject(sortedGameObjects[i]));     
+            }
+
+            trackData = MapClonedObjectsToTrackData(sortedGameObjects,
+                clonedObjects.ToArray(), sourceTimelineAsset, sourceDirector);
+
+            return clonedObjects.ToArray();
+        }
+
+        public List<TrackData> MapClonedObjectsToTrackData(GameObject[] originalObjects, GameObject[] clonedObjects, 
+            TimelineAsset sourceTimelineAsset, PlayableDirector sourceDirector)
+        {
+            List<TrackData> trackData = new List<TrackData>();
+            
+            UnityEngine.Object[] objectTracks = TimelineUtils.GetAssociatedTracksFromSelection(
+                originalObjects, new TimelineClip[] {}, sourceTimelineAsset, sourceDirector);
+
+            TrackAsset[] sortedTracks = TimelineUtils.SortTracks(Array.ConvertAll(objectTracks, x => (TrackAsset) x));
+
+            for (int i = 0; i < sortedTracks.Length; i++) {
+                
+                TrackAsset currentTrack = sortedTracks[i] as TrackAsset;
+                UnityEngine.Object sourceObject = new UnityEngine.Object();
+                
+                foreach (PlayableBinding playableBinding in currentTrack.outputs) {
+                    sourceObject = sourceDirector.GetGenericBinding(playableBinding.sourceObject);
+                }
+                
+                if (currentTrack is GroupTrack) {
+                    trackData.Add(new TrackData(currentTrack, sourceObject, currentTrack.GetClips()));
+                    continue;
+                }
+                
+                for (int j = 0; j < originalObjects.Length; j++) {
+
+                    if (sourceObject is Component component && originalObjects[j] == component.gameObject) {
+                        Type componentType = component.GetType();
+                        trackData.Add(new TrackData(currentTrack, clonedObjects[j].GetComponent(componentType), currentTrack.GetClips()));
+                    } else if (sourceObject is GameObject gameObject && originalObjects[j] == gameObject) {
+                        trackData.Add(new TrackData(currentTrack, clonedObjects[j], currentTrack.GetClips()));
+                    }
+                }
+            }
+
+            return trackData;
         }
 
         static bool ObjectsSelected()
@@ -443,16 +552,23 @@ namespace AltSalt.Maestro
         public class TrackData
         {
             public TrackAsset trackAsset;
+            public int trackPosition;
             public GroupTrack groupTrack;
+            public int groupTrackID;
             public Type trackType;
             public string trackName;
             public UnityEngine.Object trackBinding;
             public IEnumerable<TimelineClip> trackClips;
 
+            public TrackAsset newTrackAsset;
+
             public TrackData(TrackAsset trackAsset, UnityEngine.Object binding, IEnumerable<TimelineClip> trackClips)
             {
                 this.trackAsset = trackAsset;
                 this.groupTrack = trackAsset.GetGroup();
+                if (groupTrack != null) {
+                    this.groupTrackID = this.groupTrack.GetInstanceID();
+                }
                 this.trackType = trackAsset.GetType();
                 this.trackName = trackAsset.name;
                 this.trackBinding = binding;

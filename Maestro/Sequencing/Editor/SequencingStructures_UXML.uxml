@@ -23,11 +23,15 @@ xsi:schemaLocation="
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
-                    <engine:Button text="Root Config" class="col-full" name="RootConfig" />
+                    <engine:Button text="Root Config" class="col-full" name="RootConfig"/>
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
                     <editor:PropertyField label="Sequence name :" class="col-full update-window-trigger" value="" binding-path="sequenceName" name="SequenceName"/>
-                    <engine:Button text="Master Sequence + Config" class="col-full" name="MasterSequencePlusConfig" />
-                    <engine:Button text="Master Sequence" class="col-full" name="MasterSequence" />
+                    <engine:Button text="Master Sequence + Config" class="col-full" name="MasterSequencePlusConfig"/>
+                    <engine:Button text="Master Sequence" class="col-full" name="MasterSequence"/>
                     <engine:Button text="Sequence Config" class="col-full" name="SequenceConfig" />
+                    <engine:Button text="Simple Director" class="col-full" name="SimpleDirector" />
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
@@ -35,19 +39,43 @@ xsi:schemaLocation="
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
-                    <engine:Button text="New simple director" class="col-full" name="NewSimpleDirector" />
-                    <engine:Button text="New sequence touch applier" class="col-full" name="NewSequenceTouchApplier" />
-                    <engine:Button text="New sequence autoplayer" class="col-full" name="NewSequenceAutoplayer" />
+                    <engine:Button text="Sequence" class="col-full" name="Sequence" tooltip="Select a name and directory to activate"/>
+                    <engine:Button text="Timeline Asset" class="col-full" name="TimelineAsset" tooltip="Select a name and directory to activate"/>
                 </engine:VisualElement>
 
-                <engine:VisualElement class="section___content">
-                    <editor:PropertyField label="Sequence controller object :" class="col-full update-window-trigger" value="" binding-path="sequenceControllerObject" name="SequenceControllerObject"/>
-                </engine:VisualElement>
+
 
                 <engine:VisualElement class="section___content">
-                    <editor:PropertyField label="Target sequence list :" class="col-full update-window-trigger" value="" binding-path="targetSequenceList" name="TargetSequenceList"/>
-                    <engine:Button text="New swipe director" class="col-full" name="NewSwipeDirector" />
+                    <engine:Foldout class="foldout text-medium" text="Help" value="false">
+
+                        <engine:VisualElement class="section___content">
+                            <engine:TextElement class="bold" text="Master Sequence + Config" />
+                            <engine:TextElement text="Select a RootConfig, name, and directory to activate." />
+                        </engine:VisualElement>
+
+                        <engine:VisualElement class="section___content">
+                            <engine:TextElement class="bold" text="Master Sequence"/>
+                            <engine:TextElement text="Select a RootConfig and name to activate."/>
+                        </engine:VisualElement>
+
+                        <engine:VisualElement class="section___content">
+                            <engine:TextElement class="bold" text="Sequence Config" />
+                            <engine:TextElement text="Select a RootConfig, name, and directory to activate." />
+                        </engine:VisualElement>
+
+                        <engine:VisualElement class="section___content">
+                            <engine:TextElement class="bold" text="Simple Director" />
+                            <engine:TextElement text="Select a game object, name, and directory to activate." />
+                        </engine:VisualElement>
+
+                        <engine:VisualElement class="section___content">
+                            <engine:TextElement class="bold" text="Sequence and Timeline Asset" />
+                            <engine:TextElement text="Select a directory to activate." />
+                        </engine:VisualElement>
+
+                    </engine:Foldout>
                 </engine:VisualElement>
+
             </engine:VisualElement>
 
         </engine:Foldout>

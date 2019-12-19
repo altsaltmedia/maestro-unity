@@ -13,16 +13,28 @@ namespace AltSalt.Maestro
         static void DuplicateSelection()
         {
             List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
-            for (int i = 0; i < Selection.gameObjects.Length; i++) {
-        
-                GameObject sourceObject = Selection.gameObjects[i];
-                GameObject newGo = Utils.DuplicateObject(sourceObject);
 
-                newGo.transform.parent = sourceObject.transform.parent;
-                newGo.transform.SetSiblingIndex(sourceObject.transform.GetSiblingIndex() + 1);
-                Undo.RegisterCreatedObjectUndo(newGo, "Duplicate");
+            if (Selection.gameObjects.Length >= 1) {
+                
+                newSelection.AddRange(Utils.DuplicateHierarchy(Selection.gameObjects));
 
-                newSelection.Add(newGo);
+//                for (int i = 0; i < Selection.gameObjects.Length; i++) {
+//            
+//                    GameObject[] fullSelection = Utils.GetChildGameObjects(Selection.gameObjects[i], true);
+//                    GameObject rootObject = fullSelection[0];
+//                    GameObject newRootObject = Utils.DuplicateObject(rootObject);
+//
+//                    for (int q = 1; i < fullSelection.Length; q++) {
+//                        
+//                        GameObject newGo = Utils.DuplicateObject(rootObject);
+//
+//                        newGo.transform.parent = rootObject.transform.parent;
+//                        newGo.transform.SetSiblingIndex(rootObject.transform.GetSiblingIndex() + 1);
+//                        Undo.RegisterCreatedObjectUndo(newGo, "Duplicate");
+//
+//                        newSelection.Add(newGo);
+//                    }
+//                }
             }
 
             if(TimelineEditor.inspectedAsset != null) {
@@ -32,5 +44,6 @@ namespace AltSalt.Maestro
 
             Selection.objects = newSelection.ToArray();
         }
+        
     }
 }

@@ -40,7 +40,7 @@ namespace AltSalt.Maestro.Layout
 
                 case nameof(ButtonNames.NewText):
                     button.clickable.clicked += () => {
-                        createdGameObject = ModuleUtils.CreateNewElement(Selection.transforms, ModuleUtils.moduleReferences.textPrefab, objectName);
+                        createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.textPrefab, objectName);
                         if (selectCreatedObject == true) {
                             Selection.activeGameObject = createdGameObject;
                         }
@@ -49,7 +49,7 @@ namespace AltSalt.Maestro.Layout
 
                 case nameof(ButtonNames.NewSprite):
                     button.clickable.clicked += () => {
-                        createdGameObject = ModuleUtils.CreateNewElement(Selection.transforms, ModuleUtils.moduleReferences.spritePrefab, objectName);
+                        createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.spritePrefab, objectName);
                         if (selectCreatedObject == true) {
                             Selection.activeGameObject = createdGameObject;
                         }
@@ -58,7 +58,7 @@ namespace AltSalt.Maestro.Layout
 
                 case nameof(ButtonNames.NewContainer):
                     button.clickable.clicked += () => {
-                        createdGameObject = ModuleUtils.CreateNewElement(Selection.transforms, ModuleUtils.moduleReferences.containerPrefab, objectName, true);
+                        createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.containerPrefab, objectName, true);
                         if (selectCreatedObject == true) {
                             Selection.activeGameObject = createdGameObject;
                         }
@@ -67,7 +67,7 @@ namespace AltSalt.Maestro.Layout
 
                 case nameof(ButtonNames.NewEmptyContainer):
                     button.clickable.clicked += () => {
-                        createdGameObject = ModuleUtils.CreateNewElement(Selection.transforms, ModuleUtils.moduleReferences.containerPrefab, objectName);
+                        createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.containerPrefab, objectName);
                         if (selectCreatedObject == true) {
                             Selection.activeGameObject = createdGameObject;
                         }
@@ -76,7 +76,7 @@ namespace AltSalt.Maestro.Layout
 
                 case nameof(ButtonNames.NewEmptyResponsiveContainer):
                     button.clickable.clicked += () => {
-                        createdGameObject = ModuleUtils.CreateNewElement(Selection.transforms, ModuleUtils.moduleReferences.responsiveContainerPrefab, objectName);
+                        createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.responsiveContainerPrefab, objectName);
                         if (selectCreatedObject == true) {
                             Selection.activeGameObject = createdGameObject;
                         }
@@ -85,7 +85,7 @@ namespace AltSalt.Maestro.Layout
 
                 case nameof(ButtonNames.NewResponsiveContainer):
                     button.clickable.clicked += () => {
-                        createdGameObject = ModuleUtils.CreateNewElement(Selection.transforms, ModuleUtils.moduleReferences.responsiveContainerPrefab, objectName, true);
+                        createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.responsiveContainerPrefab, objectName, true);
                         if (selectCreatedObject == true) {
                             Selection.activeGameObject = createdGameObject;
                         }

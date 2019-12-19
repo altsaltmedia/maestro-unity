@@ -49,10 +49,9 @@ namespace AltSalt.Maestro.Sequencing
             MasterSequencePlusConfig,
             MasterSequence,
             SequenceConfig,
-            NewSimpleDirector,
-            NewSequenceTouchApplier,
-            NewSequenceAutoplayer,
-            NewSwipeDirector
+            SimpleDirector,
+            Sequence,
+            TimelineAsset
         }
 
         private enum EnableCondition
@@ -60,14 +59,12 @@ namespace AltSalt.Maestro.Sequencing
             MasterSequencePlusDependenciesPopulated,
             MasterSequenceDependenciesPopulated,
             SequenceConfigDependenciesPopulated,
-            SequenceControllerObjectPopulated,
-            SequenceListNamePopulated
+            SimpleDirectorDependenciesPopulated,
+            DirectoryAndNamePopulated
         }
 
         private enum UpdateWindowTriggers
         {
-            SequenceControllerObject,
-            TargetSequenceList,
             SequenceName
         }
 
@@ -95,17 +92,19 @@ namespace AltSalt.Maestro.Sequencing
             } else {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceConfigDependenciesPopulated, false);
             }
-
-            if (sequenceControllerObject != null) {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceControllerObjectPopulated, true);
+            
+            if (Selection.transforms.Length > 0 
+                && string.IsNullOrEmpty(selectedObjectDirectory) == false
+                && string.IsNullOrEmpty(sequenceName) == false) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SimpleDirectorDependenciesPopulated, true);
             } else {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceControllerObjectPopulated, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SimpleDirectorDependenciesPopulated, false);
             }
-
-            if (_targetSequenceCollection != null && sequenceName.Length > 0) {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceListNamePopulated, true);
+            
+            if (string.IsNullOrEmpty(selectedObjectDirectory) == false && string.IsNullOrEmpty(sequenceName) == false) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectoryAndNamePopulated, true);
             } else {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceListNamePopulated, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectoryAndNamePopulated, false);
             }
         }
 
@@ -117,6 +116,7 @@ namespace AltSalt.Maestro.Sequencing
                     button.clickable.clicked += () => {
                         Selection.activeObject = CreateRootConfig();
                         ModuleUtils.FocusHierarchyWindow();
+                        
                     };
                     break;
                 
@@ -150,29 +150,25 @@ namespace AltSalt.Maestro.Sequencing
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SequenceConfigDependenciesPopulated, button);
                     break;
 
-                case nameof(ButtonNames.NewSimpleDirector):
+                case nameof(ButtonNames.SimpleDirector):
                     button.clickable.clicked += () => {
-                        CreateStandardDirector();
+                        CreateSimpleDirector(Selection.transforms, selectedObjectDirectory, sequenceName);
                     };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SimpleDirectorDependenciesPopulated, button);
                     break;
-
-                case nameof(ButtonNames.NewSequenceTouchApplier):
+                
+                case nameof(ButtonNames.Sequence):
                     button.clickable.clicked += () => {
-                        SequencingStructures.CreateSequenceTouchApplier(Selection.activeTransform);
+                        CreateSequenceTimelinePair(selectedObjectDirectory, sequenceName);
                     };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectoryAndNamePopulated, button);
                     break;
-
-                case nameof(ButtonNames.NewSequenceAutoplayer):
+                
+                case nameof(ButtonNames.TimelineAsset):
                     button.clickable.clicked += () => {
-                        SequencingStructures.CreateSequenceAutoplayer(Selection.activeTransform);
+                        CreateTimelineAsset(selectedObjectDirectory, sequenceName);
                     };
-                    break;
-
-                case nameof(ButtonNames.NewSwipeDirector):
-                    button.clickable.clicked += () => {
-                        SequencingStructures.CreateSwipeDirector(Selection.activeTransform, _targetSequenceCollection, sequenceName);
-                    };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SequenceListNamePopulated, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectoryAndNamePopulated, button);
                     break;
             }
 
@@ -182,14 +178,7 @@ namespace AltSalt.Maestro.Sequencing
         private VisualElement SetupUpdateWindowTriggers(VisualElement visualElement)
         {
             switch (visualElement.name) {
-
-                case nameof(UpdateWindowTriggers.SequenceControllerObject):
-                case nameof(UpdateWindowTriggers.TargetSequenceList):
-                    visualElement.RegisterCallback<ChangeEvent<UnityEngine.Object>>((ChangeEvent<UnityEngine.Object> evt) => {
-                        UpdateDisplay();
-                    });
-                    break;
-
+                
                 case nameof(UpdateWindowTriggers.SequenceName):
                     visualElement.RegisterCallback<ChangeEvent<string>>((ChangeEvent<string> evt) => {
                         UpdateDisplay();
@@ -223,7 +212,7 @@ namespace AltSalt.Maestro.Sequencing
         
         public static GameObject CreateSequenceConfig(MasterSequence masterSequence, string targetDirectory, string name)
         {
-            Tuple<Sequence, TimelineAsset> sequencePair = CreateSequence(targetDirectory, name);
+            Tuple<Sequence, TimelineAsset> sequencePair = CreateSequenceTimelinePair(targetDirectory, name);
             if (sequencePair.Item1 != null) {
                 GameObject sequenceConfigObject = PrefabUtility.InstantiatePrefab(ModuleUtils.moduleReferences.sequenceConfig) as GameObject;
                 Undo.RegisterCreatedObjectUndo(sequenceConfigObject, "Create sequence config");
@@ -249,41 +238,40 @@ namespace AltSalt.Maestro.Sequencing
             return masterSequence.gameObject;
         }
 
-        public static Tuple<Sequence, TimelineAsset> CreateSequence(string targetDirectory, string name)
+        public static Tuple<Sequence, TimelineAsset> CreateSequenceTimelinePair(string targetDirectory, string name)
         {
             if (targetDirectory.Length > 0) {
 
-                TimelineAsset newTimelineAsset = ScriptableObject.CreateInstance(typeof(TimelineAsset)) as TimelineAsset;
-                newTimelineAsset.editorSettings.fps = 100f;
-
-                Sequence newSequence = ScriptableObject.CreateInstance(typeof(Sequence)) as Sequence;
-                newSequence.sourcePlayable = newTimelineAsset;
-                
                 string timelineAssetPath = targetDirectory + "/" + name + ".playable"; 
                 string sequencePath = targetDirectory + "/" + name + ".asset";
+
+                bool createAsset = true;
                 
                 if (File.Exists(Path.GetFullPath(sequencePath)) || File.Exists(Path.GetFullPath(timelineAssetPath))) {
-                    if (EditorUtility.DisplayDialog("Overwrite existing file?", "This will overwrite the existing file(s) at " + targetDirectory + "/" + name, "Proceed", "Cancel")) {
-                        PromptActivateSequence(newSequence);
-                        AssetDatabase.CreateAsset(newSequence, sequencePath);
-                        AssetDatabase.CreateAsset(newTimelineAsset, timelineAssetPath);
-                        TimelineUtils.CreateDebugTrack(newTimelineAsset);
-                        TimelineUtils.CreateConfigTrack(newTimelineAsset);
-                        return new Tuple<Sequence, TimelineAsset>(newSequence, newTimelineAsset);
-                    } else {
-                        return null;
+                    if (EditorUtility.DisplayDialog("Overwrite existing file?", 
+                        "This will overwrite the existing file(s) at " + targetDirectory + "/" + name, 
+                        "Proceed", "Cancel") == false) {
+                        createAsset = false;
                     }
-                } else {
+                }
+
+                if (createAsset == true) {
+                    TimelineAsset newTimelineAsset = ScriptableObject.CreateInstance(typeof(TimelineAsset)) as TimelineAsset;
+                    newTimelineAsset.editorSettings.fps = 100f;
+                    Sequence newSequence = ScriptableObject.CreateInstance(typeof(Sequence)) as Sequence;
+                    
                     PromptActivateSequence(newSequence);
                     AssetDatabase.CreateAsset(newSequence, sequencePath);
                     AssetDatabase.CreateAsset(newTimelineAsset, timelineAssetPath);
                     TimelineUtils.CreateDebugTrack(newTimelineAsset);
                     TimelineUtils.CreateConfigTrack(newTimelineAsset);
+                    newSequence.sourcePlayable = newTimelineAsset;
+                    EditorUtility.SetDirty(newSequence);
                     return new Tuple<Sequence, TimelineAsset>(newSequence, newTimelineAsset);
                 }
                 
             } else {
-                Debug.Log("Creation cancelled");
+                Debug.Log("Directory not valid");
             }
 
             return new Tuple<Sequence, TimelineAsset>(null, null);
@@ -300,16 +288,14 @@ namespace AltSalt.Maestro.Sequencing
             return targetSequence;
         }
         
-        public static PlayableDirector CreateStandardDirector()
+        public static PlayableDirector CreateSimpleDirector(Transform[] selectedTransforms, string targetDirectory, string name)
         {
-            string filePath = EditorUtility.SaveFilePanelInProject("Create a new timeline asset", "", "", "Please enter a file name for the new timeline asset");
-
-            if (filePath.Length > 0) {
-                TimelineAsset timelineAsset = CreateTimelineAsset(filePath);
-                PlayableDirector playableDirector = CreateElement(ModuleUtils.moduleReferences.standardDirector, Selection.activeTransform, "Create standard director").GetComponent<PlayableDirector>();
+            TimelineAsset timelineAsset = CreateTimelineAsset(targetDirectory, name);
+            
+            if (timelineAsset != null) {
+                PlayableDirector playableDirector = ModuleUtils.CreateElement(selectedTransforms, ModuleUtils.moduleReferences.standardDirector, name).GetComponent<PlayableDirector>();
                 playableDirector.playableAsset = timelineAsset;
-
-                Selection.activeGameObject = playableDirector.gameObject;
+                EditorUtility.SetDirty(playableDirector);
 
                 return playableDirector;
             } else {
@@ -318,128 +304,31 @@ namespace AltSalt.Maestro.Sequencing
 
             return null;
         }
-
-        public static GameObject CreateElement(GameObject targetElement, Transform parentTransform, string createMessage = "Create new element")
+        
+        private static TimelineAsset CreateTimelineAsset(string targetDirectory, string name)
         {
-            GameObject newElement = PrefabUtility.InstantiatePrefab(targetElement) as GameObject;
-            Undo.RegisterCreatedObjectUndo(newElement, createMessage);
-            if (parentTransform != null) {
-                newElement.transform.SetParent(parentTransform);
+            string timelineAssetPath = targetDirectory + "/" + name + ".playable";
+            
+            bool createAsset = true;
+            
+            if (File.Exists(Path.GetFullPath(timelineAssetPath))) {
+                if (EditorUtility.DisplayDialog("Overwrite existing file?", 
+                    "This will overwrite the existing file at " + timelineAssetPath, 
+                    "Proceed", "Cancel") == false) {
+                    createAsset = false;
+                } 
             }
 
-            return newElement;
+            if (createAsset == true) {
+                TimelineAsset newTimelineAsset = ScriptableObject.CreateInstance(typeof(TimelineAsset)) as TimelineAsset;
+                newTimelineAsset.editorSettings.fps = 100f;
+                AssetDatabase.CreateAsset(newTimelineAsset, timelineAssetPath);
+                TimelineUtils.CreateDebugTrack(newTimelineAsset);
+                TimelineUtils.CreateConfigTrack(newTimelineAsset);
+                return newTimelineAsset;
+            }
+
+            return null;
         }
-
-        public static GameObject CreateSequenceTouchApplier(Transform parentTransform)
-        {
-            GameObject sequenceTouchApplier = PrefabUtility.InstantiatePrefab(ModuleUtils.moduleReferences.sequenceTouchApplier) as GameObject;
-            Undo.RegisterCreatedObjectUndo(sequenceTouchApplier, "Create sequence touch applier");
-
-            if (parentTransform != null) {
-                sequenceTouchApplier.transform.SetParent(parentTransform);
-            }
-            return sequenceTouchApplier;
-        }
-
-        public static GameObject CreateSequenceAutoplayer(Transform parentTransform)
-        {
-            GameObject sequenceAutoplayer = PrefabUtility.InstantiatePrefab(ModuleUtils.moduleReferences.sequenceAutoplayer) as GameObject;
-            Undo.RegisterCreatedObjectUndo(sequenceAutoplayer, "Create sequence autoplayer");
-
-            if (parentTransform != null) {
-                sequenceAutoplayer.transform.SetParent(parentTransform);
-            }
-            return sequenceAutoplayer;
-        }
-
-
-        public static GameObject CreateSwipeDirector(Transform parentTransform, MasterSequence parentSequenceCollection, string elementName)
-        {
-            GameObject swipeDirector = PrefabUtility.InstantiatePrefab(ModuleUtils.moduleReferences.swipeDirector) as GameObject;
-            Undo.RegisterCreatedObjectUndo(swipeDirector, "Create swipe director");
-
-            if (parentTransform != null) {
-                swipeDirector.transform.SetParent(parentTransform);
-            }
-
-            if (elementName.Length > 0) {
-                swipeDirector.name = elementName;
-            }
-
-            string parentDirectoryPath = Utils.GetAssetPathFromObject(parentSequenceCollection);
-            string filePath = Path.GetDirectoryName(parentDirectoryPath) + "/" + elementName;
-
-            swipeDirector = AddSequenceToSwipeDirector(swipeDirector, parentSequenceCollection, filePath);
-            swipeDirector = AddTimelineAssetToSwipeDirector(swipeDirector, filePath);
-
-            Selection.activeTransform = swipeDirector.transform;
-            return swipeDirector;
-        }
-
-        private static GameObject AddSequenceToSwipeDirector(GameObject swipeDirector, MasterSequence targetSequenceCollection, string filePath)
-        {
-            Sequence newSequence = CreateSequence(filePath);
-            if (newSequence != null) {
-                swipeDirector.GetComponent<Sequence_SyncTimeline>().sequence = newSequence;
-                //targetSequenceCollection.rootConfig.rootDataCollectors.Add(newSequence.sequenceConfig);
-            }
-            return swipeDirector;
-        }
-
-        private static Sequence CreateSequence(string filePath)
-        {
-            Sequence newSequence = ScriptableObject.CreateInstance(typeof(Sequence)) as Sequence;
-
-            if (EditorUtility.DisplayDialog("Set sequence to active?", "Would you like to set sequence " + Path.GetFileName(filePath) + " to active?", "Yes", "No")) {
-                newSequence.active = true;
-            } else {
-                newSequence.active = false;
-            }
-
-            string finalPath = filePath + ".asset";
-
-            if (File.Exists(Path.GetFullPath(finalPath))) {
-                if (EditorUtility.DisplayDialog("Overwrite existing file?", "This will overwrite the existing file at " + finalPath, "Proceed", "Cancel")) {
-                    AssetDatabase.CreateAsset(newSequence, finalPath);
-                } else {
-                    EditorUtility.DisplayDialog("No sequence populated", "Sequence creation cancelled.", "Ok");
-                    return null;
-                }
-            } else {
-                AssetDatabase.CreateAsset(newSequence, finalPath);
-            }
-
-            return newSequence;
-        }
-
-        private static GameObject AddTimelineAssetToSwipeDirector(GameObject swipeDirector, string filePath)
-        {
-            TimelineAsset newTimelineAsset = CreateTimelineAsset(filePath);
-            if (newTimelineAsset != null) {
-                swipeDirector.GetComponent<PlayableDirector>().playableAsset = newTimelineAsset;
-            }
-            return swipeDirector;
-        }
-
-        private static TimelineAsset CreateTimelineAsset(string filePath)
-        {
-            TimelineAsset newTimelineAsset = ScriptableObject.CreateInstance(typeof(TimelineAsset)) as TimelineAsset;
-            newTimelineAsset.editorSettings.fps = 100f;
-            string finalPath = filePath + ".playable";
-
-            if (File.Exists(Path.GetFullPath(finalPath))) {
-                if (EditorUtility.DisplayDialog("Overwrite existing file?", "This will overwrite the existing file at " + finalPath, "Proceed", "Cancel")) {
-                    AssetDatabase.CreateAsset(newTimelineAsset, finalPath);
-                } else {
-                    EditorUtility.DisplayDialog("No assets created", "Timeline asset creation cancelled.", "Ok");
-                    return null;
-                }
-            } else {
-                AssetDatabase.CreateAsset(newTimelineAsset, finalPath);
-            }
-
-            return newTimelineAsset;
-        }
-
     }
 }
