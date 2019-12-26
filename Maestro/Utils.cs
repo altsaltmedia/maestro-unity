@@ -176,6 +176,22 @@ namespace AltSalt.Maestro
             return rootGameObjects;
         }
 
+        public static GameObject[] GetRootGameObjects(GameObject[] selection)
+        {
+            // Prep for traversal by getting all child objects from our selection, filtering out the root objects
+            List<GameObject> childObjects = GetChildGameObjects(Utils.SortGameObjectSelection(selection)).ToList();
+
+            List<GameObject> selectionRootObjects = new List<GameObject>();
+            // Loop through our selection, and create a list of the root objects
+            for (int i = 0; i < selection.Length; i++) {
+                if (childObjects.Contains(selection[i]) == false) {
+                    selectionRootObjects.Add(selection[i]);
+                }
+            }
+
+            return selectionRootObjects.ToArray();
+        }
+
         public static GameObject[] GetParentGameObjects(GameObject selection, bool includeRoot = false)
         {
             GameObject[] gameObjectArray = { selection };
@@ -409,7 +425,7 @@ namespace AltSalt.Maestro
 
             return targetObjects;
         }
-        public static UnityEngine.Object[] CullSelection(GameObject[] currentSelection, Type typeToSelect)
+        public static UnityEngine.Object[] FilterSelection(GameObject[] currentSelection, Type typeToSelect)
         {
             List<GameObject> newSelection = new List<GameObject>();
 
@@ -423,7 +439,7 @@ namespace AltSalt.Maestro
             return newSelection.ToArray();
         }
 
-        public static UnityEngine.Object[] CullSelection(GameObject[] currentSelection, Type[] typeToSelect)
+        public static UnityEngine.Object[] FilterSelection(GameObject[] currentSelection, Type[] typeToSelect)
         {
             List<GameObject> newSelection = new List<GameObject>();
 
@@ -439,29 +455,20 @@ namespace AltSalt.Maestro
             return newSelection.ToArray();
         }
 
-        public static UnityEngine.Object[] CullSelection(UnityEngine.Object[] currentSelection, Type typeToSelect)
+        public static UnityEngine.Object[] FilterSelection(UnityEngine.Object[] currentSelection, Type typeToSelect)
         {
             List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
 
             for (int i = 0; i < currentSelection.Length; i++) {
-                Type objectType = currentSelection[i].GetType();
-                if (objectType.IsSubclassOf(typeToSelect) || objectType == typeToSelect) {
-                    newSelection.Add(currentSelection[i]);
+                
+                if (typeToSelect == typeof(GameObject)) {
+                    if (currentSelection[i] is GameObject) {
+                        newSelection.Add(currentSelection[i]);
+                    }
                 }
-            }
-
-            return newSelection.ToArray();
-        }
-
-
-        public static UnityEngine.Object[] CullSelection(UnityEngine.Object[] currentSelection, Type[] typeToSelect)
-        {
-            List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
-
-            for (int i = 0; i < currentSelection.Length; i++) {
-                for (int q = 0; q < typeToSelect.Length; q++) {
+                else {
                     Type objectType = currentSelection[i].GetType();
-                    if (objectType.IsSubclassOf(typeToSelect[q]) || objectType == typeToSelect[q]) {
+                    if (objectType.IsSubclassOf(typeToSelect) || objectType == typeToSelect) {
                         newSelection.Add(currentSelection[i]);
                     }
                 }
@@ -471,7 +478,32 @@ namespace AltSalt.Maestro
         }
 
 
-        public static UnityEngine.Object[] FilterSelection(UnityEngine.Object[] currentSelection, Type typeToOmit)
+        public static UnityEngine.Object[] FilterSelection(UnityEngine.Object[] currentSelection, Type[] typeToSelect)
+        {
+            List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
+
+            for (int i = 0; i < currentSelection.Length; i++) {
+                for (int q = 0; q < typeToSelect.Length; q++) {
+                    
+                    if (typeToSelect[q] == typeof(GameObject)) {
+                        if (currentSelection[i] is GameObject) {
+                            newSelection.Add(currentSelection[i]);
+                        }
+                    }
+                    else {
+                        Type objectType = currentSelection[i].GetType();
+                        if (objectType.IsSubclassOf(typeToSelect[q]) || objectType == typeToSelect[q]) {
+                            newSelection.Add(currentSelection[i]);
+                        }
+                    }
+                }
+            }
+
+            return newSelection.ToArray();
+        }
+
+
+        public static UnityEngine.Object[] CullSelection(UnityEngine.Object[] currentSelection, Type typeToOmit)
         {
             List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
 
@@ -487,7 +519,7 @@ namespace AltSalt.Maestro
             return newSelection.ToArray();
         }
 
-        public static UnityEngine.Object[] FilterSelection(UnityEngine.Object[] currentSelection, Type[] typeToOmit)
+        public static UnityEngine.Object[] CullSelection(UnityEngine.Object[] currentSelection, Type[] typeToOmit)
         {
             List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
 
@@ -510,31 +542,26 @@ namespace AltSalt.Maestro
             return DuplicateHierarchy(new[] { selection });
         }
         
+        
         // Given a selection of game objects, we will traverse
         // and duplicate the hierarchy starting from the root objects 
         public static GameObject[] DuplicateHierarchy(GameObject[] selection)
         {
-            // Prep for traversal by getting all child objects from our selection, filtering out the root objects
-            List<GameObject> childObjects = GetChildGameObjects(Utils.SortGameObjectSelection(selection)).ToList();
-
-            for (int i = 0; i < childObjects.Count; i++) {
+            // Ensure our selection is valid
+            GameObject[] childObjects = GetChildGameObjects(Utils.SortGameObjectSelection(selection));
+            for (int i = 0; i < childObjects.Length; i++) {
                 if (PrefabUtility.IsPartOfPrefabAsset(childObjects[i]) == true) {
-                    Debug.LogError("Duplicating prefab assets is not allowed. Please ensure your selection only contains prefab instances.");
+                    Debug.LogError("Duplicating prefab assets is not allowed." +
+                                   "Please ensure your selection only contains prefab instances.");
                     return selection;
                 }
             }
             
-            // Loop through our selection, and create a list of the root objects
-            List<GameObject> selectionRootObjects = new List<GameObject>();
-            for (int i = 0; i < selection.Length; i++) {
-                if (childObjects.Contains(selection[i]) == false) {
-                    selectionRootObjects.Add(selection[i]);
-                }
-            }
+            GameObject[] selectionRootObjects = GetRootGameObjects(selection);
             
             // Given our list of root objects, pass those into our traversal function
             List<GameObject> duplicatedHierarchy = new List<GameObject>();
-            for (int q = 0; q < selectionRootObjects.Count; q++) {
+            for (int q = 0; q < selectionRootObjects.Length; q++) {
                 duplicatedHierarchy = TraverseAndDuplicateHierarchy(duplicatedHierarchy, new Dictionary<int, GameObject>(), selectionRootObjects[q]);
             }
             return duplicatedHierarchy.ToArray();
@@ -669,8 +696,6 @@ namespace AltSalt.Maestro
             GameObject outermostDuplicateInstance = PrefabUtility.GetOutermostPrefabInstanceRoot(duplicatedObject);
             GameObject migratedObject = MigrateAddedComponents(outermostSelectedInstance, outermostDuplicateInstance);
             
-            //migratedObject = MigrateAddedGameObjects(outermostSelected, migratedObject);
-
             // If our originally selected object was the outermost root of the
             // prefab hierarchy, then we're done; just return the object we just migrated
             if (selectedObject == PrefabUtility.GetOutermostPrefabInstanceRoot(selectedObject)) {
@@ -739,54 +764,6 @@ namespace AltSalt.Maestro
                         if(migratedComponent is SerializableElement serializableElement) {
                             serializableElement.Reinitialize();
                         }
-                    }
-                }
-            }
-
-            return duplicateObject;
-        }
-
-        private static GameObject MigrateAddedGameObjects(GameObject sourceObject, GameObject duplicateObject)
-        {
-            Dictionary<int, GameObject> migrationDictionary = new Dictionary<int, GameObject>();
-            
-            GameObject[] sourceObjectHierarchy = Utils.GetChildGameObjects(
-                PrefabUtility.GetOutermostPrefabInstanceRoot(sourceObject), true);
-            GameObject[] duplicateObjectHierarchy = Utils.GetChildGameObjects(
-                PrefabUtility.GetOutermostPrefabInstanceRoot(duplicateObject), true);
-
-            for (int i = 0; i < duplicateObjectHierarchy.Length; i++) {
-                migrationDictionary.Add(sourceObjectHierarchy[i].GetInstanceID(), duplicateObjectHierarchy[i]);
-            }
-            
-            List<AddedGameObject> addedObjects = PrefabUtility.GetAddedGameObjects(sourceObject);
-            GameObject[] sortedAddedObjects = new GameObject[addedObjects.Count];
-            for (int i = 0; i < addedObjects.Count; i++) {
-                sortedAddedObjects[i] = addedObjects[i].instanceGameObject;
-            }
-            Utils.SortGameObjectSelection(sortedAddedObjects);
-
-            for (int i = 0; i < sortedAddedObjects.Length; i++) {
-
-                foreach (var migrationNode in migrationDictionary) {
-
-                    GameObject parent = sortedAddedObjects[i].transform.parent.gameObject;
-
-                    if (parent.GetInstanceID() == migrationNode.Key) {
-
-//                        List<GameObject> childHierarchy = new List<GameObject>();
-//                        TraverseAndDuplicateChildrenHierarchy(childHierarchy, migrationNode.Value, parent);
-
-                        if (PrefabUtility.GetPrefabInstanceStatus(sortedAddedObjects[i]) ==
-                            PrefabInstanceStatus.Connected) {
-                            GameObject childPrefab = DuplicatePrefabInstance(sortedAddedObjects[i]);
-                            childPrefab.transform.SetParent(migrationNode.Value.transform);
-                        }
-                        else {
-                            GameObject[] childDuplicateHierarchy = Utils.DuplicateHierarchy(sortedAddedObjects[i]);
-                            childDuplicateHierarchy[0].transform.SetParent(migrationNode.Value.transform);
-                        }
-                        
                     }
                 }
             }
@@ -1556,7 +1533,4 @@ namespace AltSalt.Maestro
 
         }
     }
-
-
-
 }

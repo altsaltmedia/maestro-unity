@@ -410,7 +410,7 @@ namespace AltSalt.Maestro
 
         private static List<TextLoader> GetTextLoaders()
         {
-            UnityEngine.Object[] textObjects = Utils.CullSelection(Utils.GetAllGameObjects(), typeof(TextLoader));
+            UnityEngine.Object[] textObjects = Utils.FilterSelection(Utils.GetAllGameObjects(), typeof(TextLoader));
             List<TextLoader> textLoaders = new List<TextLoader>();
             
             for (int i = 0; i < textObjects.Length; i++) {

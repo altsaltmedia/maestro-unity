@@ -225,7 +225,7 @@ namespace AltSalt.Maestro.Layout
         public static TMP_Text[] GetTextComponents(GameObject[] selection) {
             Array.Sort(selection, new Utils.GameObjectSort());
 
-            UnityEngine.Object[] culledSelectionRaw = Utils.CullSelection(selection, typeof(TMP_Text));
+            UnityEngine.Object[] culledSelectionRaw = Utils.FilterSelection(selection, typeof(TMP_Text));
             var culledSelection = Array.ConvertAll(culledSelectionRaw, item => (GameObject)item);
 
             List<TMP_Text> components = new List<TMP_Text>();

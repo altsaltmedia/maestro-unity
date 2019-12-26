@@ -356,7 +356,7 @@ namespace AltSalt.Maestro.Animation
             List<TrackAsset> newTracks = new List<TrackAsset>();
             Type[] types = { typeof(TMP_Text), typeof(SpriteRenderer) };
 
-            UnityEngine.Object[] culledSelection = Utils.CullSelection(Selection.gameObjects, types);
+            UnityEngine.Object[] culledSelection = Utils.FilterSelection(Selection.gameObjects, types);
             GameObject[] selectionAsGameObjects = Array.ConvertAll(culledSelection, item => (GameObject)item);
             GameObject[] sortedSelection = Utils.SortGameObjectSelection(selectionAsGameObjects);
 

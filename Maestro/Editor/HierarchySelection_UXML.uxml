@@ -26,9 +26,11 @@ xsi:schemaLocation="
                     <engine:Button text="Save Selection" class="col-full" name="SaveSelection" />
                     <engine:Button text="Load Selection" class="col-full" name="LoadSelection" />
                     <engine:Button text="Select All Children" class="col-full" name="SelectAllChildren" />
+                    <engine:Button text="Select All Parents" class="col-full" name="SelectAllParents" />
                     <engine:Button text="Add All Children to Selection" class="col-full" name="AddAllChildrenToSelection" />
                     <engine:Button text="Add All Parents to Selection" class="col-full" name="AddAllParentsToSelection" />
-                    <engine:Button text="Copy Game Objects" class="col-full" name="CopyGameObjects" />
+                    <engine:Button text="Shallow Copy Game Objects" class="col-full" name="ShallowCopyGameObjects" />
+                    <engine:Button text="Deep Copy Game Objects" class="col-full" name="DeepCopyGameObjects" />
                     <engine:Button text="Paste Game Objects" class="col-full" name="PasteGameObjects" />
 
                     <engine:Foldout class="foldout" text="Advanced" value="false">

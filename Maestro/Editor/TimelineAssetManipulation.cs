@@ -124,7 +124,7 @@ namespace AltSalt.Maestro
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackOrClipSelected, false);
             }
 
-            if (Utils.FilterSelection(Selection.objects, typeof(TrackAsset)).Length > 0 || TimelineEditor.selectedClips.Length > 0) {
+            if (Utils.CullSelection(Selection.objects, typeof(TrackAsset)).Length > 0 || TimelineEditor.selectedClips.Length > 0) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ObjectsSelected, true);
             } else {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ObjectsSelected, false);
@@ -177,28 +177,28 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.SelectEndingBefore):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = SelectEndingBefore(Selection.objects);
+                        TimelineEditor.selectedClips = TimelineUtils.SelectClipsEndingBefore(Selection.objects, TimelineUtils.currentTime);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SelectStartingBefore):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = SelectStartingBefore(Selection.objects);
+                        TimelineEditor.selectedClips = TimelineUtils.SelectClipsStartingBefore(Selection.objects, TimelineUtils.currentTime);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SelectEndingAfter):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = SelectEndingAfter(Selection.objects);
+                        TimelineEditor.selectedClips = TimelineUtils.SelectClipsEndingAfter(Selection.objects, TimelineUtils.currentTime);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     break;
 
                 case nameof(ButtonNames.SelectStartingAfter):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = SelectStartingAfter(Selection.objects);
+                        TimelineEditor.selectedClips = TimelineUtils.SelectClipsStartingAfter(Selection.objects, TimelineUtils.currentTime);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     break;
@@ -378,54 +378,6 @@ namespace AltSalt.Maestro
             TimelineEditor.selectedClips = new TimelineClip[0];
             Selection.objects = new UnityEngine.Object[0];
             TimelineUtils.RefreshTimelineContentsModified();
-        }
-
-        public static TimelineClip[] SelectEndingBefore(Object[] selection)
-        {
-            List<TimelineClip> clipSelection = new List<TimelineClip>();
-            foreach (TimelineClip clip in GetTimelineClipsFromSelection(selection)) {
-                if (clip.end < TimelineUtils.currentTime) {
-                    clipSelection.Add(clip);
-                }
-            }
-
-            return clipSelection.ToArray();
-        }
-
-        public static TimelineClip[] SelectStartingAfter(Object[] selection)
-        {
-            List<TimelineClip> clipSelection = new List<TimelineClip>();
-            foreach (TimelineClip clip in GetTimelineClipsFromSelection(selection)) {
-                if (clip.start > TimelineUtils.currentTime) {
-                    clipSelection.Add(clip);
-                }
-            }
-
-            return clipSelection.ToArray();
-        }
-
-        public static TimelineClip[] SelectEndingAfter(Object[] selection)
-        {
-            List<TimelineClip> clipSelection = new List<TimelineClip>();
-            foreach (TimelineClip clip in GetTimelineClipsFromSelection(selection)) {
-                if (clip.end > TimelineUtils.currentTime) {
-                    clipSelection.Add(clip);
-                }
-            }
-
-            return clipSelection.ToArray();
-        }
-
-        public static TimelineClip[] SelectStartingBefore(Object[] selection)
-        {
-            List<TimelineClip> clipSelection = new List<TimelineClip>();
-            foreach (TimelineClip clip in GetTimelineClipsFromSelection(selection)) {
-                if (clip.start < TimelineUtils.currentTime) {
-                    clipSelection.Add(clip);
-                }
-            }
-
-            return clipSelection.ToArray();
         }
 
         public static TimelineClip[] AddPrevClipToSelection(TimelineClip[] selectedClips, float timeReference, int clipCount = 0)
@@ -1000,36 +952,6 @@ namespace AltSalt.Maestro
             return allClips.ToArray();
         }
 
-
-        static TimelineClip[] GetTimelineClipsFromSelection(UnityEngine.Object[] selection)
-        {
-            List<TimelineClip> selectedTrackClips = new List<TimelineClip>();
-            bool trackAssetSelected = false;
-
-            List<TrackAsset> selectedTrackAssets = new List<TrackAsset>();
-
-            if (selection != null && selection.Length > 0) {
-                for (int i = 0; i < selection.Length; i++) {
-                    if (selection[i] is TrackAsset) {
-                        trackAssetSelected = true;
-                        TrackAsset trackAsset = selection[i] as TrackAsset;
-
-                        selectedTrackAssets.Add(trackAsset);
-                        selectedTrackAssets.AddRange(TimelineUtils.GetChildTracks(trackAsset));
-                    }
-                }
-            }
-
-            if (trackAssetSelected == true) {
-                for(int z=0; z<selectedTrackAssets.Count; z++) {
-                    selectedTrackClips.AddRange(selectedTrackAssets[z].GetClips());
-                }
-                return selectedTrackClips.ToArray();
-
-            } else {
-                return GetAllTimelineClips();
-            }
-        }
 
         public static TimelineClip[] GetCurrentClipSelection()
         {

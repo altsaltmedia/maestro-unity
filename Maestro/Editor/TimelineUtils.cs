@@ -331,5 +331,83 @@ namespace AltSalt.Maestro
 
             return sortedTracks.ToArray();
         }
+
+        public static TimelineClip[] SelectClipsEndingBefore(Object[] selection, float targetTime)
+        {
+            List<TimelineClip> clipSelection = new List<TimelineClip>();
+            foreach (TimelineClip clip in GetTimelineClipsFromSelection(selection)) {
+                if (clip.end < targetTime) {
+                    clipSelection.Add(clip);
+                }
+            }
+
+            return clipSelection.ToArray();
+        }
+
+        public static TimelineClip[] SelectClipsStartingAfter(Object[] selection, float targetTime)
+        {
+            List<TimelineClip> clipSelection = new List<TimelineClip>();
+            foreach (TimelineClip clip in TimelineUtils.GetTimelineClipsFromSelection(selection)) {
+                if (clip.start > targetTime) {
+                    clipSelection.Add(clip);
+                }
+            }
+
+            return clipSelection.ToArray();
+        }
+
+        public static TimelineClip[] SelectClipsEndingAfter(Object[] selection, float targetTime)
+        {
+            List<TimelineClip> clipSelection = new List<TimelineClip>();
+            foreach (TimelineClip clip in TimelineUtils.GetTimelineClipsFromSelection(selection)) {
+                if (clip.end > targetTime) {
+                    clipSelection.Add(clip);
+                }
+            }
+
+            return clipSelection.ToArray();
+        }
+
+        public static TimelineClip[] SelectClipsStartingBefore(Object[] selection, float targetTime)
+        {
+            List<TimelineClip> clipSelection = new List<TimelineClip>();
+            foreach (TimelineClip clip in TimelineUtils.GetTimelineClipsFromSelection(selection)) {
+                if (clip.start < targetTime) {
+                    clipSelection.Add(clip);
+                }
+            }
+
+            return clipSelection.ToArray();
+        }
+        
+        public static TimelineClip[] GetTimelineClipsFromSelection(Object[] selection)
+        {
+            List<TimelineClip> selectedTrackClips = new List<TimelineClip>();
+            bool trackAssetSelected = false;
+
+            List<TrackAsset> selectedTrackAssets = new List<TrackAsset>();
+
+            if (selection != null && selection.Length > 0) {
+                for (int i = 0; i < selection.Length; i++) {
+                    if (selection[i] is TrackAsset) {
+                        trackAssetSelected = true;
+                        TrackAsset trackAsset = selection[i] as TrackAsset;
+
+                        selectedTrackAssets.Add(trackAsset);
+                        selectedTrackAssets.AddRange(TimelineUtils.GetChildTracks(trackAsset));
+                    }
+                }
+            }
+
+            if (trackAssetSelected == true) {
+                for(int z=0; z<selectedTrackAssets.Count; z++) {
+                    selectedTrackClips.AddRange(selectedTrackAssets[z].GetClips());
+                }
+                return selectedTrackClips.ToArray();
+
+            } else {
+                return TimelineAssetManipulation.GetAllTimelineClips();
+            }
+        }
     }
 }

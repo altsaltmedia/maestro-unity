@@ -122,7 +122,7 @@ namespace AltSalt.Maestro
 
         public static void LayoutUpdate()
         {
-            UnityEngine.Object[] responsiveObjects = Utils.CullSelection(Utils.GetAllGameObjects(), typeof(ResponsiveElement));
+            UnityEngine.Object[] responsiveObjects = Utils.FilterSelection(Utils.GetAllGameObjects(), typeof(ResponsiveElement));
             List<ResponsiveElement> responsiveElements = new List<ResponsiveElement>();
             
             for (int i = 0; i < responsiveObjects.Length; i++) {

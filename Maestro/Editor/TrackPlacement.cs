@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
+using Sirenix.Utilities;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
@@ -55,9 +56,10 @@ namespace AltSalt.Maestro
         enum EnableCondition
         {
             GameObjectSelected,
-            TrackSelectedForCopying,
             TrackSelected,
-            CopiedTracksPopulated
+            TrackSelectedForGrouping,
+            CopiedTracksPopulated,
+            ObjectsAndTracksSelected
         };
 
         enum ButtonNames
@@ -67,6 +69,8 @@ namespace AltSalt.Maestro
             DuplicateTracks,
             CloneObjectTrackGroups,
             DeepCloneObjectTrackGroups,
+            MapSelectionToTracks,
+            RemoveTrackBindings,
             GroupTrack
         };
 
@@ -88,14 +92,14 @@ namespace AltSalt.Maestro
             // The user can force these buttons to enable by toggling allowBlankTracks //
             if (allowBlankTracks == true) {
 
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelectedForGrouping, true);
 
             } else {
 
                 if (Utils.TargetTypeSelected(Selection.objects, typeof(TrackAsset))) {
-                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, true);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelectedForGrouping, true);
                 } else {
-                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, false);
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelectedForGrouping, false);
                 }
             }
 
@@ -109,15 +113,22 @@ namespace AltSalt.Maestro
             }
 
             if (Utils.TargetTypeSelected(Selection.objects, typeof(TrackAsset))) {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelectedForCopying, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, true);
             } else {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelectedForCopying, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TrackSelected, false);
             }
 
             if (copiedTracks.Count > 0) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.CopiedTracksPopulated, true);
             } else {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.CopiedTracksPopulated, false);
+            }
+            
+            if (Utils.TargetTypeSelected(Selection.objects, typeof(TrackAsset)) &&
+                Utils.CullSelection(Selection.objects, typeof(TrackAsset)).Length > 0) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ObjectsAndTracksSelected, true);
+            } else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ObjectsAndTracksSelected, false);
             }
         }
 
@@ -132,12 +143,13 @@ namespace AltSalt.Maestro
                         TimelineUtils.FocusTimelineWindow();
                         UpdateDisplay(); // This will update the status of the PasteTracks button
                     };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelectedForCopying, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelected, button);
                     break;
 
                 case nameof(ButtonNames.PasteTracks):
                     button.clickable.clicked += () => {
                         Selection.objects = PasteTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects, TimelineEditor.selectedClips, copiedTracks);
+                        TimelineEditor.selectedClips = TimelineUtils.SelectClipsStartingAfter(Selection.objects, 0f);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                         TimelineUtils.FocusTimelineWindow();
                     };
@@ -147,10 +159,11 @@ namespace AltSalt.Maestro
                 case nameof(ButtonNames.DuplicateTracks):
                     button.clickable.clicked += () => {
                         Selection.objects = DuplicateTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects);
+                        TimelineEditor.selectedClips = TimelineUtils.SelectClipsStartingAfter(Selection.objects, 0f);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                         TimelineUtils.FocusTimelineWindow();
                     };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelectedForCopying, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelected, button);
                     break;
                 
                 case nameof(ButtonNames.CloneObjectTrackGroups):
@@ -169,12 +182,34 @@ namespace AltSalt.Maestro
                     button.clickable.clicked += () =>
                     {
                         Selection.objects = DeepCloneObjectTrackGroups(Selection.gameObjects,
-                            TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, out copiedTracks);
+                        TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, out copiedTracks);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                         TimelineUtils.FocusTimelineWindow();
                         UpdateDisplay(); // This will update the status of the PasteTracks button
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected, button);
+                    break;
+                
+                case nameof(ButtonNames.MapSelectionToTracks):
+                    button.clickable.clicked += () =>
+                    {
+                        Selection.objects = MapSelectionToTracks(Selection.objects, TimelineEditor.inspectedDirector);
+                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                        TimelineUtils.FocusTimelineWindow();
+                        UpdateDisplay(); // This will update the status of the PasteTracks button
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ObjectsAndTracksSelected, button);
+                    break;
+                
+                case nameof(ButtonNames.RemoveTrackBindings):
+                    button.clickable.clicked += () =>
+                    {
+                        Selection.objects = RemoveTrackBindings(Selection.objects, TimelineEditor.inspectedDirector);
+                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                        TimelineUtils.FocusTimelineWindow();
+                        UpdateDisplay(); // This will update the status of the PasteTracks button
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelected, button);
                     break;
 
                 case nameof(ButtonNames.GroupTrack):
@@ -187,14 +222,14 @@ namespace AltSalt.Maestro
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                         TimelineUtils.FocusTimelineWindow();
                     };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TrackSelectedForGrouping, button);
                     break;
             }
 
             return button;
         }
 
-        VisualElement SetupUpdateWindowTriggers(VisualElement visualElement)
+        private VisualElement SetupUpdateWindowTriggers(VisualElement visualElement)
         {
             switch (visualElement.name) {
 
@@ -418,25 +453,144 @@ namespace AltSalt.Maestro
 
             return trackData;
         }
-
-        static bool ObjectsSelected()
+        
+        public static UnityEngine.Object[] MapSelectionToTracks(UnityEngine.Object[] selection,  PlayableDirector sourceDirector)
         {
-            if (Selection.objects.Length > 0) {
-                return true;
-            } else {
+            UnityEngine.Object[] objectsToMap = Utils.CullSelection(selection, typeof(TrackAsset));
+
+            UnityEngine.Object[] trackSelectionRaw = Utils.FilterSelection(selection, typeof(TrackAsset));
+            TrackAsset[] trackSelection = Array.ConvertAll(trackSelectionRaw, x => (TrackAsset) x);
+
+            if (objectsToMap.Length != trackSelection.Length) {
+                Debug.LogError("Number of objects selected must equal number of tracks selected");
+                EditorUtility.DisplayDialog("Map unsuccessful",
+                    "Number of objects selected must equal number of tracks selected", "Ok");
+                return selection;
+            }
+
+            if (CanMapObjectsToTracks(objectsToMap, trackSelection, sourceDirector) == true) {
+                MapObjectsToTracks(objectsToMap, trackSelection, sourceDirector);
+            }
+
+            return trackSelection;
+        }
+
+        private static bool CanMapObjectsToTracks(UnityEngine.Object[] selection, TrackAsset[] trackSelection, PlayableDirector sourceDirector)
+        {
+            UnityEngine.Object[] gameObjectSelection = Utils.FilterSelection(selection, typeof(GameObject));
+            
+            if (gameObjectSelection.Length > 0 &&
+                Utils.CullSelection(selection, typeof(GameObject)).Length > 0) {
+                Debug.LogError("Selection cannot contain both game objects and other objects; please map groups separately.");
+                EditorUtility.DisplayDialog("Map unsuccessful",
+                    "Selection cannot contain both game objects and other objects; please map groups separately.",
+                    "Ok");
                 return false;
             }
-        }
+            
+            if (gameObjectSelection.Length > 0) {
+                selection = Utils.SortGameObjectSelection(Array.ConvertAll(gameObjectSelection, x => (GameObject) x));
+            }
 
-        static bool TracksSelected()
-        {
-            for (int i = 0; i < Selection.objects.Length; i++) {
-                if (Selection.objects[i] is TrackAsset) {
-                    return true;
+            TrackAsset[] sortedTracks = TimelineUtils.SortTracks(trackSelection);
+            
+            bool canMapTracks = true;
+
+            for (int i = 0; i < sortedTracks.Length; i++) {
+
+                TrackAsset currentTrack = sortedTracks[i];
+
+                if (currentTrack is GroupTrack) {
+                    Debug.LogError("Selected track is group track. Group tracks cannot be mapped.");
+                    canMapTracks = false;
+                    continue;
+                }
+
+                Type bindingType = null;
+
+                foreach (PlayableBinding playableBinding in currentTrack.outputs) {
+                    bindingType = playableBinding.outputTargetType;
+                }
+
+                if (bindingType.IsSubclassOf(typeof(Component))) {
+                    
+                    UnityEngine.Object currentObject = selection[i];
+                    if (currentObject is GameObject == false || (currentObject as GameObject).TryGetComponent(bindingType, out Component component) == false) {
+                        Debug.LogError(
+                            $"Object {selection[i].name} does not match track {sortedTracks[i]}, aborting operation.",
+                            selection[i]);
+                        canMapTracks = false;
+                    }
+                }
+                else {
+                    if (selection[i].GetType() != bindingType) {
+                        Debug.LogError(
+                            $"Object {selection[i].name} does not match required object binding for {sortedTracks[i]}, aborting operation.");
+                        canMapTracks = false;
+                    }
                 }
             }
-            return false;
+
+            if (canMapTracks == false) {
+                EditorUtility.DisplayDialog("Map unsuccessful", "Please check the console for details.", "Ok");
+            }
+
+            return canMapTracks;
         }
+
+        private static TrackAsset[] MapObjectsToTracks(UnityEngine.Object[] selection,
+            TrackAsset[] trackSelection, PlayableDirector sourceDirector)
+        {
+            UnityEngine.Object[] gameObjectSelection = Utils.FilterSelection(selection, typeof(GameObject));
+            if (gameObjectSelection.Length > 0) {
+                selection = Utils.SortGameObjectSelection(Array.ConvertAll(gameObjectSelection, x => (GameObject) x));
+            }
+
+            TrackAsset[] sortedTracks = TimelineUtils.SortTracks(trackSelection);
+            
+            Undo.RecordObject(sourceDirector, "bind object to track");
+            
+            for (int i = 0; i < sortedTracks.Length; i++) {
+
+                TrackAsset currentTrack = sortedTracks[i];
+                    
+                Type bindingType = null;
+                PlayableBinding trackBinding;
+
+                foreach (PlayableBinding playableBinding in currentTrack.outputs) {
+                    bindingType = playableBinding.outputTargetType;
+                    trackBinding = playableBinding;
+                }
+
+                if (bindingType.IsSubclassOf(typeof(Component))) {
+                    GameObject currentObject = selection[i] as GameObject;
+                    sourceDirector.SetGenericBinding(trackBinding.sourceObject, currentObject.GetComponent(bindingType));
+                }
+                else {
+                    sourceDirector.SetGenericBinding(trackBinding.sourceObject, selection[i]);
+                }
+            }
+
+            return sortedTracks;
+        }
+
+        public static TrackAsset[] RemoveTrackBindings(UnityEngine.Object[] selection, PlayableDirector sourceDirector)
+        {
+            TrackAsset[] selectedTracks =
+                Array.ConvertAll(Utils.FilterSelection(selection, typeof(TrackAsset)), x => (TrackAsset) x);
+
+            Undo.RecordObject(sourceDirector, "remove track bindings");
+            
+            for (int i = 0; i < selectedTracks.Length; i++) {
+            
+                foreach (PlayableBinding playableBinding in selectedTracks[i].outputs) {
+                    sourceDirector.SetGenericBinding(playableBinding.sourceObject, null);
+                }
+            }
+
+            return selectedTracks;
+        }
+
 
         public static TrackAsset[] TriggerCreateTrack(TimelineAsset targetTimelineAsset, PlayableDirector targetDirector, UnityEngine.Object[] sourceObjects, Type trackType, Type requiredObjectType, UnityEngine.Object[] destinationSelection, TimelineClip[] clipSelection)
         {

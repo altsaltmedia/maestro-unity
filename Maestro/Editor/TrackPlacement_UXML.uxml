@@ -30,6 +30,8 @@ xsi:schemaLocation="
 		  		<engine:Button text="Duplicate Track(s)" class="col-full" name="DuplicateTracks" />
 		  		<engine:Button text="Clone Object-Track Groups" class="col-full" name="CloneObjectTrackGroups" />
 		  		<engine:Button text="Deep Clone Object-Track Groups" class="col-full" name="DeepCloneObjectTrackGroups" />
+		  		<engine:Button text="Map Selection to Tracks" class="col-full" name="MapSelectionToTracks" />
+		  		<engine:Button text="Remove Track Bindings" class="col-full" name="RemoveTrackBindings" />
 	  		</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">

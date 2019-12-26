@@ -58,9 +58,11 @@ namespace AltSalt.Maestro
             SaveSelection,
             LoadSelection,
             SelectAllChildren,
+            SelectAllParents,
             AddAllChildrenToSelection,
             AddAllParentsToSelection,
-            CopyGameObjects,
+            ShallowCopyGameObjects,
+            DeepCopyGameObjects,
             PasteGameObjects,
             SelectOddsInSelection,
             SelectEvensInSelection
@@ -127,6 +129,20 @@ namespace AltSalt.Maestro
                         newSelection.AddRange(gameObjectChildren);
 
                         Selection.objects = newSelection.ToArray();
+                        ModuleUtils.FocusHierarchyWindow();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
+                        button);
+                    break;
+                
+                case nameof(ButtonNames.SelectAllParents):
+                    button.clickable.clicked += () =>
+                    {
+                        List<GameObject> newSelection = new List<GameObject>();
+                        GameObject[] gameObjectParents = Utils.GetParentGameObjects(Selection.gameObjects);
+
+                        Selection.objects = gameObjectParents;
+                        ModuleUtils.FocusHierarchyWindow();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
                         button);
@@ -142,6 +158,7 @@ namespace AltSalt.Maestro
                         newSelection.AddRange(gameObjectChildren);
 
                         Selection.objects = newSelection.ToArray();
+                        ModuleUtils.FocusHierarchyWindow();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
                         button);
@@ -151,18 +168,16 @@ namespace AltSalt.Maestro
                     button.clickable.clicked += () =>
                     {
                         List<GameObject> newSelection = new List<GameObject>();
-                        GameObject[] gameObjectParents = Utils.GetParentGameObjects(Selection.gameObjects);
+                        GameObject[] gameObjectsAndParents = Utils.GetParentGameObjects(Selection.gameObjects, true);
 
-                        newSelection.AddRange(Selection.gameObjects);
-                        newSelection.AddRange(gameObjectParents);
-
-                        Selection.objects = newSelection.ToArray();
+                        Selection.objects = gameObjectsAndParents;
+                        ModuleUtils.FocusHierarchyWindow();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
                         button);
                     break;
 
-                case nameof(ButtonNames.CopyGameObjects):
+                case nameof(ButtonNames.ShallowCopyGameObjects):
                     button.clickable.clicked += () =>
                     {
                         for (int z = 0; z < objectsToCopy.Count; z++) {
@@ -172,11 +187,33 @@ namespace AltSalt.Maestro
                         objectsToCopy.Clear();
                         Array.Sort(Selection.gameObjects, new Utils.GameObjectSort());
                         for (int i = 0; i < Selection.gameObjects.Length; i++) {
-                            GameObject copy = Utils.DuplicateGameObject(Selection.gameObjects[i]);
-                            copy.transform.localPosition = Selection.gameObjects[i].transform.localPosition;
+                            GameObject copy = Utils.DuplicateGameObject(Selection.gameObjects[i], true);
+                            copy.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild |
+                                             HideFlags.HideInHierarchy;
                             Undo.RegisterCreatedObjectUndo(copy, "Copy game object");
                             objectsToCopy.Add(copy);
                         }
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
+                        button);
+                    break;
+                
+                case nameof(ButtonNames.DeepCopyGameObjects):
+                    button.clickable.clicked += () =>
+                    {
+                        for (int z = 0; z < objectsToCopy.Count; z++) {
+                            DestroyImmediate(objectsToCopy[z]);
+                        }
+
+                        objectsToCopy.Clear();
+                        Array.Sort(Selection.gameObjects, new Utils.GameObjectSort());
+                        
+                        GameObject[] copiedHierarchy = Utils.DuplicateHierarchy(Selection.gameObjects);
+                        for (int i = 0; i < copiedHierarchy.Length; i++) {
+                            copiedHierarchy[i].hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild |
+                                                           HideFlags.HideInHierarchy;    
+                        }
+                        objectsToCopy.AddRange(copiedHierarchy);
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectSelected,
                         button);
@@ -185,21 +222,27 @@ namespace AltSalt.Maestro
                 case nameof(ButtonNames.PasteGameObjects):
                     button.clickable.clicked += () =>
                     {
+                        List<GameObject> newSelection = new List<GameObject>();
+                            
                         for (int i = 0; i < Selection.gameObjects.Length; i++) {
-                            for (int z = objectsToCopy.Count - 1; z >= 0; z--) {
-                                GameObject copy = Utils.DuplicateGameObject(objectsToCopy[z]);
-                                copy.hideFlags = HideFlags.None;
-                                Undo.RegisterCreatedObjectUndo(copy, "Paste game object");
-                                Undo.SetTransformParent(copy.transform, Selection.gameObjects[i].transform,
-                                    "Set parent on pasted object");
+                            
+                            GameObject[] pastedHierarchy = Utils.DuplicateHierarchy(objectsToCopy.ToArray());
+
+                            for (int j = 0; j < pastedHierarchy.Length; j++) {
+                                newSelection.Add(pastedHierarchy[j]);
+                                pastedHierarchy[j].hideFlags = HideFlags.None;
+                            }
+
+                            GameObject[] rootObjects = Utils.GetRootGameObjects(Utils.SortGameObjectSelection(pastedHierarchy));
+
+                            for (int j = 0; j < rootObjects.Length; j++) {
+                                Undo.SetTransformParent(rootObjects[j].transform, Selection.gameObjects[i].transform,
+                                    "Set parent on pasted object");    
                             }
                         }
 
-                        for (int z = 0; z < objectsToCopy.Count; z++) {
-                            DestroyImmediate(objectsToCopy[z]);
-                        }
-
-                        objectsToCopy.Clear();
+                        Selection.objects = newSelection.ToArray();
+                        ModuleUtils.FocusHierarchyWindow();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.GameObjectsCopied,
                         button);

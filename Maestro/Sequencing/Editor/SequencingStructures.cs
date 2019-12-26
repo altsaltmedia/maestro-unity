@@ -70,7 +70,7 @@ namespace AltSalt.Maestro.Sequencing
 
         private void UpdateDisplay()
         {
-            if(Utils.CullSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig)).Length > 0
+            if(Utils.FilterSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig)).Length > 0
                && string.IsNullOrEmpty(selectedObjectDirectory) == false
                && string.IsNullOrEmpty(sequenceName) == false) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MasterSequencePlusDependenciesPopulated, true);
@@ -78,14 +78,14 @@ namespace AltSalt.Maestro.Sequencing
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MasterSequencePlusDependenciesPopulated, false);
             }
             
-            if(Utils.CullSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig)).Length > 0
+            if(Utils.FilterSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig)).Length > 0
                && string.IsNullOrEmpty(sequenceName) == false) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MasterSequenceDependenciesPopulated, true);
             } else {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MasterSequenceDependenciesPopulated, false);
             }
 
-            if (Utils.CullSelection(Selection.gameObjects, typeof(MasterSequence)).Length > 0
+            if (Utils.FilterSelection(Selection.gameObjects, typeof(MasterSequence)).Length > 0
                 && string.IsNullOrEmpty(selectedObjectDirectory) == false
                 && string.IsNullOrEmpty(sequenceName) == false) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceConfigDependenciesPopulated, true);
@@ -122,7 +122,7 @@ namespace AltSalt.Maestro.Sequencing
                 
                 case nameof(ButtonNames.MasterSequencePlusConfig):
                     button.clickable.clicked += () => {
-                        GameObject rootConfig = Utils.CullSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig))[0] as GameObject;
+                        GameObject rootConfig = Utils.FilterSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig))[0] as GameObject;
                         GameObject masterSequence = CreateMasterSequence(rootConfig.GetComponent<RootConfig>(), sequenceName);
                         Selection.activeObject = CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(), selectedObjectDirectory, sequenceName);
                         ModuleUtils.FocusHierarchyWindow();
@@ -133,7 +133,7 @@ namespace AltSalt.Maestro.Sequencing
                 case nameof(ButtonNames.MasterSequence):
                     button.clickable.clicked += () =>
                     {
-                        GameObject rootConfig = Utils.CullSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig))[0] as GameObject;
+                        GameObject rootConfig = Utils.FilterSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig))[0] as GameObject;
                         Selection.activeObject = CreateMasterSequence(rootConfig.GetComponent<RootConfig>(), sequenceName);
                         ModuleUtils.FocusHierarchyWindow();
                     };
@@ -143,7 +143,7 @@ namespace AltSalt.Maestro.Sequencing
                 case nameof(ButtonNames.SequenceConfig):
                     button.clickable.clicked += () =>
                     {
-                        GameObject masterSequence = Utils.CullSelection(Selection.gameObjects, typeof(MasterSequence))[0] as GameObject;
+                        GameObject masterSequence = Utils.FilterSelection(Selection.gameObjects, typeof(MasterSequence))[0] as GameObject;
                         Selection.activeObject = CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(), selectedObjectDirectory, sequenceName);
                         ModuleUtils.FocusHierarchyWindow();
                     };
