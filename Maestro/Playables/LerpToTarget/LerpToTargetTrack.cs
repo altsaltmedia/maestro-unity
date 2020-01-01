@@ -57,7 +57,7 @@ namespace AltSalt.Maestro
                     myAsset.directorObject = directorObject;
                 }
 
-                //MigrateClip(clip, directorObject);
+                MigrateClip(clip, directorObject);
             }
         }
 
@@ -187,6 +187,8 @@ namespace AltSalt.Maestro
 
                             assetField.SetValue(migratedClip.asset, assetField.GetValue(trackClipAssetCopy));                        
                         }
+
+                        migratedClipAsset.template.ease = originalClipAsset.template.responsiveEase;
                     }
 
                     GroupTrack groupTrack = this.GetGroup();
@@ -302,6 +304,8 @@ namespace AltSalt.Maestro
 
                             assetField.SetValue(migratedClip.asset, assetField.GetValue(trackClipAssetCopy));
                         }
+                        
+                        migratedClipAsset.template.ease = originalClipAsset.template.responsiveEase;
                     }
 
                     GroupTrack groupTrack = this.GetGroup();

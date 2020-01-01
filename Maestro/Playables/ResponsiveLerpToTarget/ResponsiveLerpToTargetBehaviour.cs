@@ -74,7 +74,6 @@ namespace AltSalt.Maestro
         public bool logElementOnLayoutUpdate {
             get
             {
-                return false;
                 if (appSettings.logResponsiveElementActions.Value == true) {
                     return true;
                 } else {
@@ -130,7 +129,7 @@ namespace AltSalt.Maestro
             }
 #endif
             base.OnPlayableCreate(playable);
-            //responsiveElementEnable.RaiseEvent(clipAsset, parentScene.name, clipAsset.name, this);
+            responsiveElementEnable.RaiseEvent(clipAsset, parentScene.name, clipAsset.name, this);
 
             easingFunction = EasingFunction.GetEasingFunction(ease);
             CallExecuteLayoutUpdate(directorObject);
