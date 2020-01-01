@@ -7,7 +7,7 @@ namespace AltSalt.Maestro.Audio
     [Serializable]
     public class AudioLerpVolumeClip : LerpToTargetClip
     {
-        public new AudioLerpVolumeBehaviour template = new AudioLerpVolumeBehaviour ();
+        public AudioLerpVolumeBehaviour template = new AudioLerpVolumeBehaviour ();
         
         public override Playable CreatePlayable (PlayableGraph graph, GameObject owner)
         {

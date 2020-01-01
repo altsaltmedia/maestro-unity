@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Audio
 {
@@ -8,6 +9,7 @@ namespace AltSalt.Maestro.Audio
     public class AudioForwardReverseBehaviour : LerpToTargetBehaviour
     {
         [SerializeField]
+        [FormerlySerializedAs("clipEndTime")]
         private float _clipEndTime;
 
         public float clipEndTime
@@ -16,6 +18,7 @@ namespace AltSalt.Maestro.Audio
             set => _clipEndTime = value;
         }
         
+        [SerializeField]
         private BoolReference _isReversing;
 
         public BoolReference isReversing
@@ -24,6 +27,7 @@ namespace AltSalt.Maestro.Audio
             set => _isReversing = value;
         }
         
+        [SerializeField]
         private FloatReference _frameStepValue;
 
         public FloatReference frameStepValue
@@ -32,6 +36,7 @@ namespace AltSalt.Maestro.Audio
             set => _frameStepValue = value;
         }
         
+        [SerializeField]
         private FloatReference _swipeModifier;
 
         public FloatReference swipeModifier

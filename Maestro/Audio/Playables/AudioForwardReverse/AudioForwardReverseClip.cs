@@ -18,7 +18,6 @@ namespace AltSalt.Maestro.Audio
             set => _template = value;
         }
         
-        [SerializeField]
         private BoolReference _isReversing;
 
         public BoolReference isReversing
@@ -26,8 +25,7 @@ namespace AltSalt.Maestro.Audio
             get => _isReversing;
             set => _isReversing = value;
         }
-
-        [SerializeField]
+        
         private FloatReference _frameStepValue;
 
         public FloatReference frameStepValue
@@ -35,8 +33,7 @@ namespace AltSalt.Maestro.Audio
             get => _frameStepValue;
             set => _frameStepValue = value;
         }
-
-        [SerializeField]
+        
         private FloatReference _swipeModifierOutput;
 
         public FloatReference swipeModifierOutput
