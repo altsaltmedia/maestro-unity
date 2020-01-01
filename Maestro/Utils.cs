@@ -164,6 +164,14 @@ namespace AltSalt.Maestro
             return "Assets/_AltSalt/Maestro/Editor/EditorStyles.uss";
         }
         
+        // Will add (Clone) before a file extension
+        public static string GetCloneAssetPath(string filePath)
+        {
+            string fileExtension = Path.GetExtension(filePath);
+            string modifiedExtension = fileExtension.Replace(".", "(Clone).");
+            return filePath.Replace(fileExtension, modifiedExtension);
+        }
+        
         public static GameObject[] GetAllGameObjects()
         {
             return GetChildGameObjects(GetRootGameObjects());

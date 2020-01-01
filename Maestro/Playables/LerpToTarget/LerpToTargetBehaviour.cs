@@ -10,6 +10,7 @@ using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro
@@ -28,6 +29,7 @@ namespace AltSalt.Maestro
         }
         
         [SerializeField]
+        [FormerlySerializedAs("ease")]
         private EasingFunction.Ease _ease = EasingFunction.Ease.EaseInOutQuad;
 
         public EasingFunction.Ease ease

@@ -56,12 +56,12 @@ namespace AltSalt.Maestro
             set => _directorObject = value;
         }
         
-        private BoolReference _scrubberActive = new BoolReference();
+        public BoolReference _scrubberActive = new BoolReference();
 
-        public BoolVariable scrubberActive
+        public bool scrubberActive
         {
-            get => _scrubberActive.Variable;
-            set => _scrubberActive.Variable = value;
+            get => _scrubberActive.Value;
+            set => _scrubberActive.Variable.SetValue(value);
         }
         
         private TrackAsset _parentTrack;

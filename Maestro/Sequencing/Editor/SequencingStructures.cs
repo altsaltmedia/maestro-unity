@@ -449,7 +449,7 @@ namespace AltSalt.Maestro.Sequencing
             var playableAsset = playableDirector.playableAsset;
             var sourceAssetPath = AssetDatabase.GetAssetPath(playableAsset);
                 
-            string clonePath = sourceAssetPath.Replace(".", "(Clone).");
+            string clonePath = Utils.GetCloneAssetPath(sourceAssetPath);
             if (!AssetDatabase.CopyAsset(sourceAssetPath, clonePath)) {
                 Debug.LogError("Unable to clone asset");
                 return sourceObject;
@@ -498,7 +498,7 @@ namespace AltSalt.Maestro.Sequencing
                 return false;
             }
 
-            string clonedAssetPath = sourceAssetPath.Replace(".", "(Clone).");
+            string clonedAssetPath = Utils.GetCloneAssetPath(sourceAssetPath);
             if (File.Exists(clonedAssetPath)) {
                 Debug.LogError("Duplicate asset detected; aborting clone attempt", selection);
                 return false;
@@ -532,8 +532,8 @@ namespace AltSalt.Maestro.Sequencing
                 MigrateTimelineConfig(sourceObject, clonedObject);
                 
                 var sourceAssetPath = AssetDatabase.GetAssetPath(sourceObject.GetComponent<Sequence_Config>().sequence);
-                
-                string clonePath = sourceAssetPath.Replace(".", "(Clone).");
+
+                string clonePath = Utils.GetCloneAssetPath(sourceAssetPath);
                 if (!AssetDatabase.CopyAsset(sourceAssetPath, clonePath)) {
                     Debug.LogError("Unable to clone asset");
                     return selection;
@@ -601,8 +601,8 @@ namespace AltSalt.Maestro.Sequencing
                 Debug.LogError("Sequence path not valid", selection);
                 return false;
             }
-            
-            string clonedAssetPath = sourceAssetPath.Replace(".", "(Clone).");
+
+            string clonedAssetPath = Utils.GetCloneAssetPath(sourceAssetPath);
             if (File.Exists(clonedAssetPath)) {
                 Debug.LogError("Duplicate asset detected; aborting clone attempt", selection);
                 return false;

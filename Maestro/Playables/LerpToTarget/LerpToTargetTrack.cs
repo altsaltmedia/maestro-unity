@@ -187,8 +187,8 @@ namespace AltSalt.Maestro
 
                             assetField.SetValue(migratedClip.asset, assetField.GetValue(trackClipAssetCopy));                        
                         }
-
-                        migratedClipAsset.template.ease = originalClipAsset.template.responsiveEase;
+                        // This value should come over automatically
+                        //migratedClipAsset.template.ease = originalClipAsset.template.responsiveEase;
                     }
 
                     GroupTrack groupTrack = this.GetGroup();
@@ -304,8 +304,8 @@ namespace AltSalt.Maestro
 
                             assetField.SetValue(migratedClip.asset, assetField.GetValue(trackClipAssetCopy));
                         }
-                        
-                        migratedClipAsset.template.ease = originalClipAsset.template.responsiveEase;
+                        // This value should come over automatically
+                        //migratedClipAsset.template.ease = originalClipAsset.template.responsiveEase;
                     }
 
                     GroupTrack groupTrack = this.GetGroup();
@@ -408,7 +408,7 @@ namespace AltSalt.Maestro
         protected LerpToTargetMixerBehaviour StoreMixerProperties(GameObject go, LerpToTargetMixerBehaviour trackMixer)
         {
             trackMixer.directorObject = go;
-            trackMixer.scrubberActive = go.GetComponent<TrackAssetConfig>().scrubberActive;
+            trackMixer._scrubberActive.Variable = go.GetComponent<TrackAssetConfig>().scrubberActive;
             trackMixer.parentTrack = this;
             return trackMixer;
         }
