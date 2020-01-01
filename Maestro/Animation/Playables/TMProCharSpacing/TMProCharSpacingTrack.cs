@@ -8,7 +8,7 @@ namespace AltSalt.Maestro.Animation
     [TrackColor(0.2981132f, 0.5f, 0.1065063f)]
     [TrackClipType(typeof(ResponsiveFloatClip))]
     [TrackBindingType(typeof(TMP_Text))]
-    public class TMProCharSpacingTrack : ResponsiveLerpToTargetTrack
+    public class TMProCharSpacingTrack : LerpToTargetTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {

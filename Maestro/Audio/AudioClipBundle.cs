@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 
 namespace AltSalt.Maestro.Audio
 {
-    [CreateAssetMenu(menuName = "AltSalt/Audio Clip Bundle")]
+    [CreateAssetMenu(menuName = "AltSalt/Audio/Audio Clip Bundle", order = 0)]
     public class AudioClipBundle : RegisterableScriptableObject
     {
 #if UNITY_EDITOR

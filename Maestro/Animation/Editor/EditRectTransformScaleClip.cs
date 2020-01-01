@@ -156,7 +156,7 @@ namespace AltSalt.Maestro.Animation
 
             for (int i = 0; i < clipSelection.Length; i++) {
                 if (clipSelection[i].asset is RectTransformScaleClip) {
-                    value = (clipSelection[i].asset as RectTransformScaleClip).template.initialScale;
+                    value = (clipSelection[i].asset as RectTransformScaleClip).template.initialValue;
                     break;
                 }
             }
@@ -174,7 +174,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     RectTransformScaleClip clipAsset = clipSelection[i].asset as RectTransformScaleClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial scale");
-                    clipAsset.template.initialScale = targetValue;
+                    clipAsset.template.initialValue = targetValue;
                 }
             }
 
@@ -188,7 +188,7 @@ namespace AltSalt.Maestro.Animation
 
             for (int i = 0; i < clipSelection.Length; i++) {
                 if (clipSelection[i].asset is RectTransformScaleClip) {
-                    value = (clipSelection[i].asset as RectTransformScaleClip).template.targetScale;
+                    value = (clipSelection[i].asset as RectTransformScaleClip).template.targetValue;
                     break;
                 }
             }
@@ -206,7 +206,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     RectTransformScaleClip clipAsset = clipSelection[i].asset as RectTransformScaleClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target scale");
-                    clipAsset.template.targetScale = targetValue;
+                    clipAsset.template.targetValue = targetValue;
                 }
             }
 

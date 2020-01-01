@@ -132,7 +132,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        Button SetupButton(Button button)
+        private Button SetupButton(Button button)
         {
             switch (button.name) {
 
@@ -294,7 +294,7 @@ namespace AltSalt.Maestro
                     pastedClip.start = trackClip.start;
                     
                     Type assetType = pastedClip.asset.GetType();
-                    FieldInfo[] assetFields = assetType.GetFields();
+                    FieldInfo[] assetFields = assetType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
                     // Need to create a copy of the asset, otherwise the new clip
                     // will use references to the old clip's asset values
@@ -354,7 +354,7 @@ namespace AltSalt.Maestro
                     pastedClip.start = trackClip.start;
 
                     Type assetType = pastedClip.asset.GetType();
-                    FieldInfo[] assetFields = assetType.GetFields();
+                    FieldInfo[] assetFields = assetType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
                     // Need to create a copy of the asset, otherwise the new clip
                     // will use references to the old clip's asset values

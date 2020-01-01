@@ -34,24 +34,24 @@ namespace AltSalt.Maestro.Animation
                 if (inputWeight >= 1f) {
                     modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
 #if UNITY_ANDROID
-                    trackBinding.SetTime((double)Mathf.Lerp(input.initialTimeAndroid, input.targetTimeAndroid, input.easingFunction(0f, 1f, modifier)));
+                    trackBinding.SetTime((double)Mathf.Lerp(input.initialValueAndroid, input.targetValueAndroid, input.easingFunction(0f, 1f, modifier)));
 #else
-                    trackBinding.SetTime((double)Mathf.Lerp(input.initialTime, input.targetTime, input.easingFunction(0f, 1f, modifier)));
+                    trackBinding.SetTime((double)Mathf.Lerp(input.initialValueIOS, input.targetValueIOS, input.easingFunction(0f, 1f, modifier)));
 #endif
                 }
                 else {
                     if (currentTime >= input.endTime) {
 #if UNITY_ANDROID
-                        trackBinding.SetTime(input.targetTimeAndroid);
+                        trackBinding.SetTime(input.targetValueAndroid);
 #else
-                        trackBinding.SetTime(input.targetTime);
+                        trackBinding.SetTime(input.targetValueIOS);
 #endif
                     }
                     else if (i == 0 && currentTime <= input.startTime) {
 #if UNITY_ANDROID
-                        trackBinding.SetTime(input.initialTimeAndroid);
+                        trackBinding.SetTime(input.initialValueAndroid);
 #else
-                        trackBinding.SetTime(input.initialTime);
+                        trackBinding.SetTime(input.initialValueIOS);
 #endif
                     }
                 }

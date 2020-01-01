@@ -9,8 +9,8 @@ namespace AltSalt.Maestro.Animation
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
             RectTransform trackBinding = playerData as RectTransform;
-            ScriptPlayable<RectTransformScaleBehaviour> inputPlayable;
-            RectTransformScaleBehaviour input;
+            ScriptPlayable<ResponsiveVector3Behaviour> inputPlayable;
+            ResponsiveVector3Behaviour input;
             RectTransform trackBindingComponent;
 
             if (!trackBinding)
@@ -21,19 +21,19 @@ namespace AltSalt.Maestro.Animation
             for (int i = 0; i < inputCount; i++)
             {
                 inputWeight = playable.GetInputWeight(i);
-                inputPlayable = (ScriptPlayable<RectTransformScaleBehaviour>)playable.GetInput(i);
+                inputPlayable = (ScriptPlayable<ResponsiveVector3Behaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
                 
                 trackBindingComponent = trackBinding.GetComponent<RectTransform>();
                 
                 if(inputWeight >= 1f) {
                     modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
-                    trackBindingComponent.localScale = Vector3.Lerp(input.initialScale, input.targetScale, input.easingFunction(0f, 1f, modifier));
+                    trackBindingComponent.localScale = Vector3.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, modifier));
                 } else {
                     if(currentTime >= input.endTime) {
-                        trackBindingComponent.localScale = input.targetScale;
+                        trackBindingComponent.localScale = input.targetValue;
                     } else if (i == 0 && currentTime <= input.startTime) {
-                        trackBindingComponent.localScale = input.initialScale;
+                        trackBindingComponent.localScale = input.initialValue;
                     }
                 }
             }

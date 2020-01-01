@@ -13,7 +13,7 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Long Variable")]
+    [CreateAssetMenu(menuName = "AltSalt/Variables/Long Variable")]
     public class LongVariable : VariableBase
     {
 #if UNITY_EDITOR

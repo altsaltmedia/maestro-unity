@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Audio
 {
@@ -11,29 +12,76 @@ namespace AltSalt.Maestro.Audio
     {
         [ValueDropdown(nameof(crossfadeValues))]
         [PropertySpace(6, 6)]
-        public bool crossfade;
+        [FormerlySerializedAs("crossfade")]
+        [SerializeField]
+        private bool _crossfade;
 
-        ValueDropdownList<bool> crossfadeValues = new ValueDropdownList<bool>() {
+        public bool crossfade
+        {
+            get => _crossfade;
+            set => _crossfade = value;
+        }
+
+        private ValueDropdownList<bool> crossfadeValues = new ValueDropdownList<bool>() {
             { "No", false},
             { "Yes", true }
         };
 
         [ShowIf(nameof(crossfade))]
         [PropertySpace(0, 6)]
-        public FadeType fadeType;
+        [FormerlySerializedAs("fadeType")]
+        [SerializeField]
+        private FadeType _fadeType;
+
+        public FadeType fadeType
+        {
+            get => _fadeType;
+            set => _fadeType = value;
+        }
 
         [BoxGroup("Starting Snapshot")]
         [PropertySpace(0, 6)]
-        public AudioMixerSnapshot fromSnapshot;
+        [FormerlySerializedAs("fromSnapshot")]
+        [SerializeField]
+        private AudioMixerSnapshot _fromSnapshot;
+
+        public AudioMixerSnapshot fromSnapshot
+        {
+            get => _fromSnapshot;
+            set => _fromSnapshot = value;
+        }
 
         [BoxGroup("Target Snapshot")]
-        public AudioMixerSnapshot targetSnapshot;
+        [FormerlySerializedAs("targetSnapshot")]
+        [SerializeField]
+        private AudioMixerSnapshot _targetSnapshot;
+
+        public AudioMixerSnapshot targetSnapshot
+        {
+            get => _targetSnapshot;
+            set => _targetSnapshot = value;
+        }
 
         [BoxGroup("Target Snapshot")]
-        public float targetStartingWeight;
+        [FormerlySerializedAs("targetStartingWeight")]
+        [SerializeField]
+        private float _targetStartingWeight;
+
+        public float targetStartingWeight
+        {
+            get => _targetStartingWeight;
+            set => _targetStartingWeight = value;
+        }
 
         [BoxGroup("Target Snapshot")]
-        public float targetEndingWeight;
+        [FormerlySerializedAs("targetEndingWeight")]
+        [SerializeField]
+        private float _targetEndingWeight;
 
+        public float targetEndingWeight
+        {
+            get => _targetEndingWeight;
+            set => _targetEndingWeight = value;
+        }
     }
 }

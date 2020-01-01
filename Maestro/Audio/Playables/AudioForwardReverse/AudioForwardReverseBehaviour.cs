@@ -7,19 +7,46 @@ namespace AltSalt.Maestro.Audio
     [Serializable]
     public class AudioForwardReverseBehaviour : LerpToTargetBehaviour
     {
-        public float clipEndTime;
+        [SerializeField]
+        private float _clipEndTime;
 
-        [HideInInspector]
-        public BoolReference isReversing;
+        public float clipEndTime
+        {
+            get => _clipEndTime;
+            set => _clipEndTime = value;
+        }
+        
+        private BoolReference _isReversing;
 
-        [HideInInspector]
-        public FloatReference frameStepValue;
+        public BoolReference isReversing
+        {
+            get => _isReversing;
+            set => _isReversing = value;
+        }
+        
+        private FloatReference _frameStepValue;
 
-        [HideInInspector]
-        public FloatReference swipeModifier;
+        public FloatReference frameStepValue
+        {
+            get => _frameStepValue;
+            set => _frameStepValue = value;
+        }
+        
+        private FloatReference _swipeModifier;
 
-        [HideInInspector]
-        public bool playingTriggered = false;
+        public FloatReference swipeModifier
+        {
+            get => _swipeModifier;
+            set => _swipeModifier = value;
+        }
+        
+        private bool _playingTriggered = false;
+
+        public bool playingTriggered
+        {
+            get => _playingTriggered;
+            set => _playingTriggered = value;
+        }
 
         private static bool IsPopulated(FloatReference attribute)
         {

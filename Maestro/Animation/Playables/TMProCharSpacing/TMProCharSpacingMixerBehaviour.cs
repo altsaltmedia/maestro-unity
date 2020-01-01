@@ -4,7 +4,7 @@ using TMPro;
 
 namespace AltSalt.Maestro.Animation
 {
-    public class TMProCharSpacingMixerBehaviour : ResponsiveLerpToTargetMixerBehaviour
+    public class TMProCharSpacingMixerBehaviour : LerpToTargetMixerBehaviour
     {
         TMP_Text trackBinding;
         ScriptPlayable<ResponsiveFloatBehaviour> inputPlayable;

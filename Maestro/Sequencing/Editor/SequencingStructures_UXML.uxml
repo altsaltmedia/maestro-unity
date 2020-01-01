@@ -27,7 +27,8 @@ xsi:schemaLocation="
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
-                    <editor:PropertyField label="Sequence name :" class="col-full update-window-trigger" value="" binding-path="sequenceName" name="SequenceName"/>
+                    <editor:PropertyField label="structure name :" class="col-full update-window-trigger" value="" binding-path="sequenceName" name="SequenceName"/>
+                    <engine:Toggle text="select on creation" class="margin-bottom-5" binding-path="selectOnCreation"/>
                     <engine:Button text="Master Sequence + Config" class="col-full" name="MasterSequencePlusConfig"/>
                     <engine:Button text="Master Sequence" class="col-full" name="MasterSequence"/>
                     <engine:Button text="Sequence Config" class="col-full" name="SequenceConfig" />
@@ -39,11 +40,18 @@ xsi:schemaLocation="
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
-                    <engine:Button text="Sequence" class="col-full" name="Sequence" tooltip="Select a name and directory to activate"/>
-                    <engine:Button text="Timeline Asset" class="col-full" name="TimelineAsset" tooltip="Select a name and directory to activate"/>
+                    <engine:Button text="Sequence" class="col-full" name="Sequence"/>
+                    <engine:Button text="Timeline Asset" class="col-full" name="TimelineAsset"/>
                 </engine:VisualElement>
 
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="duplication" />
+                </engine:VisualElement>
 
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Clone Timeline" class="col-full" name="CloneTimeline"/>
+                    <engine:Button text="Sibling Sequence Config" class="col-full" name="SiblingSequenceConfig"/>
+                </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
                     <engine:Foldout class="foldout text-medium" text="Help" value="false">

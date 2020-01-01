@@ -13,7 +13,7 @@ using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro
 {
-    public class LerpToTargetMixerBehaviour : PlayableBehaviour
+    public abstract class LerpToTargetMixerBehaviour : PlayableBehaviour
     {
         private double _currentTime;
 
@@ -24,11 +24,30 @@ namespace AltSalt.Maestro
         }
 
         // Utility vars - specified here to prevent garbage collection
-        protected int inputCount;
-        protected float inputWeight;
-        protected float modifier;
+        private int _inputCount;
+
+        protected int inputCount
+        {
+            get => _inputCount;
+            set => _inputCount = value;
+        }
+
+        private float _inputWeight;
+
+        protected float inputWeight
+        {
+            get => _inputWeight;
+            set => _inputWeight = value;
+        }
+
+        private float _modifier;
+
+        protected float modifier
+        {
+            get => _modifier;
+            set => _modifier = value;
+        }
         
-        [SerializeField]
         private GameObject _directorObject;
 
         public GameObject directorObject
@@ -36,17 +55,15 @@ namespace AltSalt.Maestro
             get => _directorObject;
             set => _directorObject = value;
         }
+        
+        private BoolReference _scrubberActive = new BoolReference();
 
-        [SerializeField]
-        public BoolReference _scrubberActive = new BoolReference();
-
-        public bool scrubberActive
+        public BoolVariable scrubberActive
         {
-            get => _scrubberActive.Value;
-            set => _scrubberActive.Variable.SetValue(value);
+            get => _scrubberActive.Variable;
+            set => _scrubberActive.Variable = value;
         }
-
-        [SerializeField]
+        
         private TrackAsset _parentTrack;
 
         public TrackAsset parentTrack
@@ -64,10 +81,11 @@ namespace AltSalt.Maestro
             currentTime = playable.GetGraph().GetRootPlayable(0).GetTime();
         }
 
-        // This ProcessFrame() method should be implemented and overridden in inheriting mixer behaviours
-        public override void ProcessFrame(Playable playable, FrameData info, object playerData)
-        {
-            // Do nothing
-        }
+//        This ProcessFrame() method should be implemented and overridden in inheriting mixer behaviours
+//
+//        public override void ProcessFrame(Playable playable, FrameData info, object playerData)
+//        {
+//            
+//        }
     }   
 }

@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro
 {   
-    [CreateAssetMenu(menuName = "AltSalt/Axis")]
+    [CreateAssetMenu(menuName = "AltSalt/Touch/Axis")]
 	public class Axis : ScriptableObject {
 
         [SerializeField]

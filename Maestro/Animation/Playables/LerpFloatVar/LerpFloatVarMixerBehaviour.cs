@@ -6,8 +6,8 @@ namespace AltSalt.Maestro.Animation
     public class LerpFloatVarMixerBehaviour : LerpToTargetMixerBehaviour
     {
         FloatVariable trackBinding;
-        ScriptPlayable<LerpFloatVarBehaviour> inputPlayable;
-        LerpFloatVarBehaviour input;
+        ScriptPlayable<FloatBehaviour> inputPlayable;
+        FloatBehaviour input;
         bool originalValueSet;
         float originalValue;
 
@@ -28,7 +28,7 @@ namespace AltSalt.Maestro.Animation
             for (int i = 0; i < inputCount; i++)
             {
                 inputWeight = playable.GetInputWeight(i);
-                inputPlayable = (ScriptPlayable<LerpFloatVarBehaviour>)playable.GetInput(i);
+                inputPlayable = (ScriptPlayable<FloatBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
                 
                 if (inputWeight >= 1f) {

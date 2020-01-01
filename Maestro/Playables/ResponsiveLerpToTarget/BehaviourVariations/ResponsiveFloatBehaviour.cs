@@ -1,21 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
     [Serializable]
     public class ResponsiveFloatBehaviour : ResponsiveLerpToTargetBehaviour
     {
+        [ShowInInspector]
+        private bool _editMode;
+
+        private bool editMode
+        {
+            get => _editMode;
+            set => _editMode = value;
+        }
+        
         // initialPosition and targetPosition don't refresh in inspector for
         // some reason, but they work as intended
-        [HideInInspector]
-        public float initialValue;
-        [HideInInspector]
-        public float targetValue;
+        [ShowIf(nameof(editMode))]
+        [ShowInInspector]
+        private float _initialValue;
 
-        public List<float> breakpointInitialValue = new List<float>();
-        public List<float> breakpointTargetValue = new List<float>();
+        public float initialValue
+        {
+            get => _initialValue;
+            set => _initialValue = value;
+        }
+
+        [ShowIf(nameof(editMode))]
+        [ShowInInspector]
+        private float _targetValue;
+
+        public float targetValue
+        {
+            get => _targetValue;
+            set => _targetValue = value;
+        }
+
+        [FormerlySerializedAs("breakpointInitialValue")]
+        [SerializeField]
+        private List<float> _breakpointInitialValue = new List<float>();
+
+        public List<float> breakpointInitialValue
+        {
+            get => _breakpointInitialValue;
+            set => _breakpointInitialValue = value;
+        }
+
+        [FormerlySerializedAs("breakpointTargetValue")]
+        [SerializeField]
+        private List<float> _breakpointTargetValue = new List<float>();
+
+        public List<float> breakpointTargetValue
+        {
+            get => _breakpointTargetValue;
+            set => _breakpointTargetValue = value;
+        }
 
 #if UNITY_EDITOR
         protected override void UpdateBreakpointDependencies()

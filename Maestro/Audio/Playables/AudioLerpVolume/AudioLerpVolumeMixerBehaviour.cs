@@ -7,11 +7,10 @@ namespace AltSalt.Maestro.Audio
     public class AudioLerpVolumeMixerBehaviour : LerpToTargetMixerBehaviour
     {
         AudioSource trackBinding;
-        ScriptPlayable<AudioLerpVolumeBehaviour> inputPlayable;
-        AudioLerpVolumeBehaviour input;
+        ScriptPlayable<FloatBehaviour> inputPlayable;
+        FloatBehaviour input;
 
         double doubleModifier;
-
 
         public double DoubleEasingFunction(double start, double end, double value) {
             return ((end - start) * value) + start;
@@ -29,26 +28,20 @@ namespace AltSalt.Maestro.Audio
             for (int i = 0; i < inputCount; i++)
             {
                 inputWeight = playable.GetInputWeight(i);
-                inputPlayable = (ScriptPlayable<AudioLerpVolumeBehaviour>)playable.GetInput(i);
+                inputPlayable = (ScriptPlayable<FloatBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
                 
                 if (inputWeight >= 1f) {
                     doubleModifier = inputPlayable.GetTime() / inputPlayable.GetDuration();
-                    trackBinding.volume = Mathf.Lerp(input.initialVolume, input.targetVolume, (float)DoubleEasingFunction(0f, 1f, doubleModifier));
+                    trackBinding.volume = Mathf.Lerp(input.initialValue, input.targetValue, (float)DoubleEasingFunction(0f, 1f, doubleModifier));
                 } else {
                     if (currentTime >= input.endTime) {
-                        trackBinding.volume = input.targetVolume;
+                        trackBinding.volume = input.targetValue;
                     }
                     else if (i == 0 && currentTime <= input.startTime && input.disableReset == false) {
-                        trackBinding.volume = input.initialVolume;
+                        trackBinding.volume = input.initialValue;
                     }
                 }
-
-#if UNITY_EDITOR
-                if (input.debugCurrentVolume == true) {
-                    Debug.Log("Current volume: " + trackBinding.volume.ToString("F4"));
-                }
-#endif
             }
         }
         

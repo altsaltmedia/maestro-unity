@@ -190,7 +190,7 @@ namespace AltSalt.Maestro.Animation
 
             for (int i = 0; i < clipSelection.Length; i++) {
                 if (clipSelection[i].asset is LerpColorVarClip) {
-                    value = (clipSelection[i].asset as LerpColorVarClip).template.initialColor;
+                    value = (clipSelection[i].asset as LerpColorVarClip).template.initialValue;
                     break;
                 }
             }
@@ -208,7 +208,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     LerpColorVarClip clipAsset = clipSelection[i].asset as LerpColorVarClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial color");
-                    clipAsset.template.initialColor = targetValue;
+                    clipAsset.template.initialValue = targetValue;
                 }
             }
 
@@ -225,8 +225,8 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     LerpColorVarClip clipAsset = clipSelection[i].asset as LerpColorVarClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial color");
-                    Color originalColor = clipAsset.template.initialColor;
-                    clipAsset.template.initialColor = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
+                    Color originalColor = clipAsset.template.initialValue;
+                    clipAsset.template.initialValue = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
                 }
             }
 
@@ -240,7 +240,7 @@ namespace AltSalt.Maestro.Animation
 
             for (int i = 0; i < clipSelection.Length; i++) {
                 if (clipSelection[i].asset is LerpColorVarClip) {
-                    value = (clipSelection[i].asset as LerpColorVarClip).template.targetColor;
+                    value = (clipSelection[i].asset as LerpColorVarClip).template.targetValue;
                     break;
                 }
             }
@@ -258,7 +258,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     LerpColorVarClip clipAsset = clipSelection[i].asset as LerpColorVarClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target color");
-                    clipAsset.template.targetColor = targetValue;
+                    clipAsset.template.targetValue = targetValue;
                 }
             }
 
@@ -275,8 +275,8 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     LerpColorVarClip clipAsset = clipSelection[i].asset as LerpColorVarClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target color");
-                    Color originalColor = clipAsset.template.targetColor;
-                    clipAsset.template.targetColor = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
+                    Color originalColor = clipAsset.template.targetValue;
+                    clipAsset.template.targetValue = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
                 }
             }
 

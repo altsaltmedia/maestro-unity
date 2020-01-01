@@ -6,6 +6,7 @@ using UnityEngine.Video;
 namespace AltSalt.Maestro.Audio
 {
     [TrackColor(0.245149f, 0.595372f, 0.1679245f)]
+    [TrackClipType(typeof(FloatClip))]
     [TrackClipType(typeof(AudioLerpVolumeClip))]
     [TrackBindingType(typeof(AudioSource))]
     public class AudioLerpVolumeTrack : LerpToTargetTrack

@@ -14,7 +14,7 @@ using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Float Variable")]
+    [CreateAssetMenu(menuName = "AltSalt/Variables/Float Variable")]
     public class FloatVariable : VariableBase
     {
 #if UNITY_EDITOR

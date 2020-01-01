@@ -1,13 +1,22 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Audio
 {
     [Serializable]
     public class AudioLerpSnapshotClip : LerpToTargetClip
     {
-        public AudioLerpSnapshotBehaviour template = new AudioLerpSnapshotBehaviour();
+        [FormerlySerializedAs("template")]
+        [SerializeField]
+        private AudioLerpSnapshotBehaviour _template = new AudioLerpSnapshotBehaviour();
+
+        private AudioLerpSnapshotBehaviour template
+        {
+            get => _template;
+            set => _template = value;
+        }
 
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {

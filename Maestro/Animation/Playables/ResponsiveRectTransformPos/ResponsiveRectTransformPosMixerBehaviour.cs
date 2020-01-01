@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 
 namespace AltSalt.Maestro.Animation
 {
-    public class ResponsiveRectTransformPosMixerBehaviour : ResponsiveLerpToTargetMixerBehaviour
+    public class ResponsiveRectTransformPosMixerBehaviour : LerpToTargetMixerBehaviour
     {
         RectTransform trackBinding;
         ScriptPlayable<ResponsiveVector3Behaviour> inputPlayable;

@@ -7,7 +7,7 @@ namespace AltSalt.Maestro.Animation
     [TrackColor(0.1981132f, 0.5f, 0.7065063f)]
     [TrackClipType(typeof(ResponsiveVector3Clip))]
     [TrackBindingType(typeof(RectTransform))]
-    public class ResponsiveRectTransformScaleTrack : ResponsiveLerpToTargetTrack
+    public class ResponsiveRectTransformScaleTrack : LerpToTargetTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {

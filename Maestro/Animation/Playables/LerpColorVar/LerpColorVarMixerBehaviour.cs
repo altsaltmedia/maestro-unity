@@ -6,8 +6,8 @@ namespace AltSalt.Maestro.Animation
     public class LerpColorVarMixerBehaviour : LerpToTargetMixerBehaviour
     {
         ColorVariable trackBinding;
-        ScriptPlayable<LerpColorVarBehaviour> inputPlayable;
-        LerpColorVarBehaviour input;
+        ScriptPlayable<ColorBehaviour> inputPlayable;
+        ColorBehaviour input;
         bool originalValueSet;
         Color originalValue;
 
@@ -28,18 +28,18 @@ namespace AltSalt.Maestro.Animation
             for (int i = 0; i < inputCount; i++)
             {
                 inputWeight = playable.GetInputWeight(i);
-                inputPlayable = (ScriptPlayable<LerpColorVarBehaviour>)playable.GetInput(i);
+                inputPlayable = (ScriptPlayable<ColorBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
                 
                 if (inputWeight >= 1f) {
                     modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
-                    trackBinding.SetValue(Color.Lerp(input.initialColor, input.targetColor, input.easingFunction(0f, 1f, modifier)));
+                    trackBinding.SetValue(Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, modifier)));
                 } else {
                     if (currentTime >= input.endTime) {
-                        trackBinding.SetValue(input.targetColor);
+                        trackBinding.SetValue(input.targetValue);
                     }
                     else if (i == 0 && currentTime <= input.startTime) {
-                        trackBinding.SetValue(input.initialColor);
+                        trackBinding.SetValue(input.initialValue);
                     }
                 }
             }

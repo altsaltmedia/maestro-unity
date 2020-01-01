@@ -1,17 +1,49 @@
 using System;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Audio
 {
     [Serializable]
     public class AudioForwardReverseClip : LerpToTargetClip
     {
-        public new AudioForwardReverseBehaviour template = new AudioForwardReverseBehaviour ();
+        [FormerlySerializedAs("template")]
+        [SerializeField]
+        private AudioForwardReverseBehaviour _template = new AudioForwardReverseBehaviour ();
 
-        public BoolReference isReversing;
-        public FloatReference frameStepValue;
-        public FloatReference swipeModifierOutput;
+        private AudioForwardReverseBehaviour template
+        {
+            get => _template;
+            set => _template = value;
+        }
+        
+        [SerializeField]
+        private BoolReference _isReversing;
+
+        public BoolReference isReversing
+        {
+            get => _isReversing;
+            set => _isReversing = value;
+        }
+
+        [SerializeField]
+        private FloatReference _frameStepValue;
+
+        public FloatReference frameStepValue
+        {
+            get => _frameStepValue;
+            set => _frameStepValue = value;
+        }
+
+        [SerializeField]
+        private FloatReference _swipeModifierOutput;
+
+        public FloatReference swipeModifierOutput
+        {
+            get => _swipeModifierOutput;
+            set => _swipeModifierOutput = value;
+        }
 
         public override Playable CreatePlayable (PlayableGraph graph, GameObject owner)
         {

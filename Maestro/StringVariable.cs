@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/String Variable")]
+    [CreateAssetMenu(menuName = "AltSalt/Variables/String Variable")]
     public class StringVariable : VariableBase
     {
 #if UNITY_EDITOR

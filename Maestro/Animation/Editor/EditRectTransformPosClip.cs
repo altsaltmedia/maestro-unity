@@ -242,7 +242,7 @@ namespace AltSalt.Maestro.Animation
 
             for (int i = 0; i < clipSelection.Length; i++) {
                 if (clipSelection[i].asset is RectTransformPosClip) {
-                    value = (clipSelection[i].asset as RectTransformPosClip).template.initialPosition;
+                    value = (clipSelection[i].asset as RectTransformPosClip).template.initialValue;
                     break;
                 }
             }
@@ -260,7 +260,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     RectTransformPosClip clipAsset = clipSelection[i].asset as RectTransformPosClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial position");
-                    clipAsset.template.initialPosition = targetValue;
+                    clipAsset.template.initialValue = targetValue;
                 }
             }
 
@@ -279,7 +279,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     RectTransformPosClip clipAsset = clipSelection[i].asset as RectTransformPosClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial interval position");
-                    clipAsset.template.initialPosition = sourceValue;
+                    clipAsset.template.initialValue = sourceValue;
                     sourceValue += interval;
                 }
             }
@@ -296,8 +296,8 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clipSelection[i]);
                     RectTransformPosClip clipAsset = clipSelection[i].asset as RectTransformPosClip;
                     Undo.RecordObject(clipAsset, "transpose clip(s) initial position");
-                    Vector3 originalPosition = clipAsset.template.initialPosition;
-                    clipAsset.template.initialPosition = new Vector3(originalPosition.x + transposeValue.x, originalPosition.y + transposeValue.y, originalPosition.z + transposeValue.z);
+                    Vector3 originalPosition = clipAsset.template.initialValue;
+                    clipAsset.template.initialValue = new Vector3(originalPosition.x + transposeValue.x, originalPosition.y + transposeValue.y, originalPosition.z + transposeValue.z);
                 }
             }
 
@@ -311,7 +311,7 @@ namespace AltSalt.Maestro.Animation
 
             for (int i = 0; i < clipSelection.Length; i++) {
                 if (clipSelection[i].asset is RectTransformPosClip) {
-                    value = (clipSelection[i].asset as RectTransformPosClip).template.targetPosition;
+                    value = (clipSelection[i].asset as RectTransformPosClip).template.targetValue;
                     break;
                 }
             }
@@ -329,7 +329,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     RectTransformPosClip clipAsset = clipSelection[i].asset as RectTransformPosClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target position");
-                    clipAsset.template.targetPosition = targetValue;
+                    clipAsset.template.targetValue = targetValue;
                 }
             }
 
@@ -345,8 +345,8 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clipSelection[i]);
                     RectTransformPosClip clipAsset = clipSelection[i].asset as RectTransformPosClip;
                     Undo.RecordObject(clipAsset, "transpose clip(s) target position");
-                    Vector3 originalPosition = clipAsset.template.targetPosition;
-                    clipAsset.template.targetPosition = new Vector3(originalPosition.x + transposeValue.x, originalPosition.y + transposeValue.y, originalPosition.z + transposeValue.z);
+                    Vector3 originalPosition = clipAsset.template.targetValue;
+                    clipAsset.template.targetValue = new Vector3(originalPosition.x + transposeValue.x, originalPosition.y + transposeValue.y, originalPosition.z + transposeValue.z);
                 }
             }
 
@@ -365,7 +365,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     RectTransformPosClip clipAsset = clipSelection[i].asset as RectTransformPosClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target interval position");
-                    clipAsset.template.targetPosition = sourceValue;
+                    clipAsset.template.targetValue = sourceValue;
                     sourceValue += interval;
                 }
             }

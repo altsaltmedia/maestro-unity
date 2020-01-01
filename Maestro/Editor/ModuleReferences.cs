@@ -5,7 +5,6 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Module References")]
     public class ModuleReferences : ScriptableObject
     {
         [Required]

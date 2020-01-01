@@ -178,7 +178,7 @@ namespace AltSalt.Maestro.Animation
 
             for (int i = 0; i < clipSelection.Length; i++) {
                 if (clipSelection[i].asset is RectTransformRotationClip) {
-                    value = (clipSelection[i].asset as RectTransformRotationClip).template.initialRotation;
+                    value = (clipSelection[i].asset as RectTransformRotationClip).template.initialValue;
                     break;
                 }
             }
@@ -196,7 +196,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     RectTransformRotationClip clipAsset = clipSelection[i].asset as RectTransformRotationClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial rotation");
-                    clipAsset.template.initialRotation = targetValue;
+                    clipAsset.template.initialValue = targetValue;
                 }
             }
 
@@ -210,7 +210,7 @@ namespace AltSalt.Maestro.Animation
 
             for (int i = 0; i < clipSelection.Length; i++) {
                 if (clipSelection[i].asset is RectTransformRotationClip) {
-                    value = (clipSelection[i].asset as RectTransformRotationClip).template.targetRotation;
+                    value = (clipSelection[i].asset as RectTransformRotationClip).template.targetValue;
                     break;
                 }
             }
@@ -228,7 +228,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     RectTransformRotationClip clipAsset = clipSelection[i].asset as RectTransformRotationClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target rotation");
-                    clipAsset.template.targetRotation = targetValue;
+                    clipAsset.template.targetValue = targetValue;
                 }
             }
 
@@ -245,8 +245,8 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clipSelection[i]);
                     RectTransformRotationClip clipAsset = clipSelection[i].asset as RectTransformRotationClip;
                     Undo.RecordObject(clipAsset, "transpose clip(s) initial rotation");
-                    Vector3 originalValue = clipAsset.template.initialRotation;
-                    clipAsset.template.initialRotation = new Vector3(originalValue.x + transposeValue.x, originalValue.y + transposeValue.y, originalValue.z + transposeValue.z);
+                    Vector3 originalValue = clipAsset.template.initialValue;
+                    clipAsset.template.initialValue = new Vector3(originalValue.x + transposeValue.x, originalValue.y + transposeValue.y, originalValue.z + transposeValue.z);
                 }
             }
 
@@ -262,8 +262,8 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clipSelection[i]);
                     RectTransformRotationClip clipAsset = clipSelection[i].asset as RectTransformRotationClip;
                     Undo.RecordObject(clipAsset, "transpose clip(s) target rotation");
-                    Vector3 originalValue = clipAsset.template.targetRotation;
-                    clipAsset.template.targetRotation = new Vector3(originalValue.x + transposeValue.x, originalValue.y + transposeValue.y, originalValue.z + transposeValue.z);
+                    Vector3 originalValue = clipAsset.template.targetValue;
+                    clipAsset.template.targetValue = new Vector3(originalValue.x + transposeValue.x, originalValue.y + transposeValue.y, originalValue.z + transposeValue.z);
                 }
             }
 

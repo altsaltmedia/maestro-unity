@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Vector2 Variable")]
+    [CreateAssetMenu(menuName = "AltSalt/Variables/Vector2 Variable")]
     public class V2Variable : VariableBase
     {
 #if UNITY_EDITOR

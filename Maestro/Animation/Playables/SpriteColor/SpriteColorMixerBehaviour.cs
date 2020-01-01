@@ -7,8 +7,8 @@ namespace AltSalt.Maestro.Animation
     public class SpriteColorMixerBehaviour : LerpToTargetMixerBehaviour
     {
         SpriteRenderer trackBinding;
-        ScriptPlayable<SpriteColorBehaviour> inputPlayable;
-        SpriteColorBehaviour input;
+        ScriptPlayable<ColorBehaviour> inputPlayable;
+        ColorBehaviour input;
         SpriteRenderer trackBindingComponent;
         Color originalValue;
 
@@ -29,17 +29,17 @@ namespace AltSalt.Maestro.Animation
             for (int i = 0; i < inputCount; i++)
             {
                 inputWeight = playable.GetInputWeight(i);
-                inputPlayable = (ScriptPlayable<SpriteColorBehaviour>)playable.GetInput(i);
+                inputPlayable = (ScriptPlayable<ColorBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
                 
                 if(inputWeight >= 1f) {
                     modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
-                    trackBindingComponent.color = Color.Lerp(input.initialColor, input.targetColor, input.easingFunction(0f, 1f, modifier));
+                    trackBindingComponent.color = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, modifier));
                 } else {
                     if(currentTime >= input.endTime) {
-                        trackBindingComponent.color = input.targetColor;
+                        trackBindingComponent.color = input.targetValue;
                     } else if (i == 0 && currentTime <= input.startTime) {
-                        trackBindingComponent.color = input.initialColor;
+                        trackBindingComponent.color = input.initialValue;
                     }
                 }
             }

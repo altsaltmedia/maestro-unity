@@ -1,13 +1,23 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
+using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro
 {
     [Serializable]
     public class ResponsiveVector3Clip : ResponsiveLerpToTargetClip
     {
-        public ResponsiveVector3Behaviour template = new ResponsiveVector3Behaviour();
+        [FormerlySerializedAs("template")]
+        [SerializeField]
+        private ResponsiveVector3Behaviour _template = new ResponsiveVector3Behaviour();
+
+        public ResponsiveVector3Behaviour template
+        {
+            get => _template;
+            set => _template = value;
+        }
 
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {

@@ -20,8 +20,8 @@ namespace AltSalt.Maestro.Animation
                         TMProColorClip asset = timelineClip.asset as TMProColorClip;
                         TMP_Text component = sourceObject as TMP_Text;
                         if (component != null) {
-                            asset.template.initialColor = component.color;
-                            asset.template.targetColor = component.color;
+                            asset.template.initialValue = component.color;
+                            asset.template.targetValue = component.color;
                         }
                         asset.template.ease = easeType;
                         return asset;
@@ -31,8 +31,8 @@ namespace AltSalt.Maestro.Animation
                         RectTransformPosClip asset = timelineClip.asset as RectTransformPosClip;
                         RectTransform component = sourceObject as RectTransform;
                         if (component != null) {
-                            asset.template.initialPosition = component.anchoredPosition3D;
-                            asset.template.targetPosition = component.anchoredPosition3D;
+                            asset.template.initialValue = component.anchoredPosition3D;
+                            asset.template.targetValue = component.anchoredPosition3D;
                         }
                         asset.template.ease = easeType;
                         return asset;
@@ -42,8 +42,8 @@ namespace AltSalt.Maestro.Animation
                         SpriteColorClip asset = timelineClip.asset as SpriteColorClip;
                         SpriteRenderer component = sourceObject as SpriteRenderer;
                         if (component != null) {
-                            asset.template.initialColor = component.color;
-                            asset.template.targetColor = component.color;
+                            asset.template.initialValue = component.color;
+                            asset.template.targetValue = component.color;
                         }
                         asset.template.ease = easeType;
                         return asset;
@@ -53,8 +53,8 @@ namespace AltSalt.Maestro.Animation
                         RectTransformScaleClip asset = timelineClip.asset as RectTransformScaleClip;
                         RectTransform component = sourceObject as RectTransform;
                         if (component != null) {
-                            asset.template.initialScale = component.localScale;
-                            asset.template.targetScale = component.localScale;
+                            asset.template.initialValue = component.localScale;
+                            asset.template.targetValue = component.localScale;
                         }
                         asset.template.ease = easeType;
                         return asset;
@@ -64,8 +64,8 @@ namespace AltSalt.Maestro.Animation
                         RectTransformRotationClip asset = timelineClip.asset as RectTransformRotationClip;
                         RectTransform component = sourceObject as RectTransform;
                         if (component != null) {
-                            asset.template.initialRotation = component.localEulerAngles;
-                            asset.template.targetRotation = component.localEulerAngles;
+                            asset.template.initialValue = component.localEulerAngles;
+                            asset.template.targetValue = component.localEulerAngles;
                         }
                         asset.template.ease = easeType;
                         return asset;
@@ -86,8 +86,8 @@ namespace AltSalt.Maestro.Animation
                         LerpColorVarClip asset = timelineClip.asset as LerpColorVarClip;
                         ColorVariable component = sourceObject as ColorVariable;
                         if (component != null) {
-                            asset.template.initialColor = component.value;
-                            asset.template.targetColor = component.value;
+                            asset.template.initialValue = component.value;
+                            asset.template.targetValue = component.value;
                         }
                         asset.template.ease = easeType;
                         return asset;

@@ -12,10 +12,8 @@ using UnityEngine;
 namespace AltSalt.Maestro.Animation
 {
     [Serializable]
-    public class RectTransformRelativePosBehaviour : LerpToTargetBehaviour
+    public class RectTransformRelativePosBehaviour : GameObjectReferenceBehaviour
     {
-        public GameObject originReferenceObject;
-        public GameObject targetReferenceObject;
         public Vector3 offsetVector = new Vector3(0,0,5);
     }
 }

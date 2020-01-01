@@ -1,28 +1,24 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
-#if UNITY_EDITOR
-using Sirenix.OdinInspector;
-#endif
 
-namespace AltSalt.Maestro.Animation
+namespace AltSalt.Maestro
 {
     [Serializable]
-    public class SpriteColorBehaviour : LerpToTargetBehaviour
+    public class ColorBehaviour : LerpToTargetBehaviour
     {
-        [FormerlySerializedAs("initialColor")]
         [SerializeField]
-        private Color _initialValue = new Color(0,0,0,0);
+        private Color _initialValue;
 
         public Color initialValue
         {
             get => _initialValue;
             set => _initialValue = value;
         }
-
-        [FormerlySerializedAs("targetColor")]
+        
         [SerializeField]
-        private Color _targetValue = new Color(0,0,0,1);
+        private Color _targetValue;
 
         public Color targetValue
         {
@@ -31,6 +27,13 @@ namespace AltSalt.Maestro.Animation
         }
 
 #if UNITY_EDITOR
+        
+        public override object SetInitialValueToTarget()
+        {
+            initialValue = targetValue;
+            return initialValue;
+        }
+        
         [HorizontalGroup("Row 1", 0.5f)]
         [Button(ButtonSizes.Large), GUIColor(0.7f, 0.4f, 0.7f, 0.9f)]
         public void InitialTransparent()

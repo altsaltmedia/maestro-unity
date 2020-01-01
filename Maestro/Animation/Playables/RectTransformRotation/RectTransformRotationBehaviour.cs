@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Playables;
-
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -13,8 +13,25 @@ namespace AltSalt.Maestro.Animation
     [Serializable]
     public class RectTransformRotationBehaviour : LerpToTargetBehaviour
     {
-        public Vector3 initialRotation = new Vector3(0, 0, 0);
-        public Vector3 targetRotation = new Vector3(0, 0, 0);
+        [FormerlySerializedAs("initialRotation")]
+        [SerializeField]
+        private Vector3 _initialValue = new Vector3(0, 0, 0);
+
+        public Vector3 initialValue
+        {
+            get => _initialValue;
+            set => _initialValue = value;
+        }
+
+        [FormerlySerializedAs("targetRotation")]
+        [SerializeField]
+        private Vector3 _targetValue = new Vector3(0, 0, 0);
+
+        public Vector3 targetValue
+        {
+            get => _targetValue;
+            set => _targetValue = value;
+        }
 
 #if UNITY_EDITOR
 
@@ -23,7 +40,7 @@ namespace AltSalt.Maestro.Animation
         public void SaveActiveObjectInitialRotation()
         {
             RectTransform rectTransform = Selection.activeGameObject.GetComponent<RectTransform>();
-            initialRotation = rectTransform.localEulerAngles;
+            initialValue = rectTransform.localEulerAngles;
         }
 
 
@@ -32,7 +49,7 @@ namespace AltSalt.Maestro.Animation
         public void SaveActiveObjectTargetRotation()
         {
             RectTransform rectTransform = Selection.activeGameObject.GetComponent<RectTransform>();
-            targetRotation = rectTransform.localEulerAngles;
+            targetValue = rectTransform.localEulerAngles;
         }
 #endif
     }

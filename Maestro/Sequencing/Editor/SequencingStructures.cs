@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using System.IO;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace AltSalt.Maestro.Sequencing
@@ -40,6 +42,7 @@ namespace AltSalt.Maestro.Sequencing
         public RootDataCollector sequenceControllerObject;
         public MasterSequence _targetSequenceCollection;
         public string sequenceName = "";
+        public bool selectOnCreation = true;
         
         private string selectedObjectDirectory => controlPanel.objectCreation.selectedObjectDirectory;
 
@@ -51,7 +54,9 @@ namespace AltSalt.Maestro.Sequencing
             SequenceConfig,
             SimpleDirector,
             Sequence,
-            TimelineAsset
+            TimelineAsset,
+            CloneTimeline,
+            SiblingSequenceConfig
         }
 
         private enum EnableCondition
@@ -60,7 +65,9 @@ namespace AltSalt.Maestro.Sequencing
             MasterSequenceDependenciesPopulated,
             SequenceConfigDependenciesPopulated,
             SimpleDirectorDependenciesPopulated,
-            DirectoryAndNamePopulated
+            DirectoryAndNamePopulated,
+            PlayableDirectorSelected,
+            SiblingSequeenceConfigDependenciesPopulated
         }
 
         private enum UpdateWindowTriggers
@@ -106,6 +113,19 @@ namespace AltSalt.Maestro.Sequencing
             } else {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectoryAndNamePopulated, false);
             }
+            
+            if (Utils.FilterSelection(Selection.gameObjects, typeof(PlayableDirector)).Length > 0) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.PlayableDirectorSelected, true);
+            } else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.PlayableDirectorSelected, false);
+            }
+            
+            if (Utils.FilterSelection(Selection.gameObjects, typeof(Sequence_Config)).Length > 0
+                && string.IsNullOrEmpty(selectedObjectDirectory) == false) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SiblingSequeenceConfigDependenciesPopulated, true);
+            } else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SiblingSequeenceConfigDependenciesPopulated, false);
+            }
         }
 
         private Button SetupButton(Button button)
@@ -124,7 +144,12 @@ namespace AltSalt.Maestro.Sequencing
                     button.clickable.clicked += () => {
                         GameObject rootConfig = Utils.FilterSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig))[0] as GameObject;
                         GameObject masterSequence = CreateMasterSequence(rootConfig.GetComponent<RootConfig>(), sequenceName);
-                        Selection.activeObject = CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(), selectedObjectDirectory, sequenceName);
+                        if (selectOnCreation == true) {
+                            Selection.activeObject = CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(), selectedObjectDirectory, sequenceName);
+                        }
+                        else {
+                            CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(), selectedObjectDirectory, sequenceName);
+                        }
                         ModuleUtils.FocusHierarchyWindow();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MasterSequencePlusDependenciesPopulated, button);
@@ -134,7 +159,13 @@ namespace AltSalt.Maestro.Sequencing
                     button.clickable.clicked += () =>
                     {
                         GameObject rootConfig = Utils.FilterSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig))[0] as GameObject;
-                        Selection.activeObject = CreateMasterSequence(rootConfig.GetComponent<RootConfig>(), sequenceName);
+                        if (selectOnCreation == true) {
+                            Selection.activeObject =
+                                CreateMasterSequence(rootConfig.GetComponent<RootConfig>(), sequenceName);
+                        }
+                        else {
+                            CreateMasterSequence(rootConfig.GetComponent<RootConfig>(), sequenceName);
+                        }
                         ModuleUtils.FocusHierarchyWindow();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MasterSequenceDependenciesPopulated, button);
@@ -144,7 +175,14 @@ namespace AltSalt.Maestro.Sequencing
                     button.clickable.clicked += () =>
                     {
                         GameObject masterSequence = Utils.FilterSelection(Selection.gameObjects, typeof(MasterSequence))[0] as GameObject;
-                        Selection.activeObject = CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(), selectedObjectDirectory, sequenceName);
+                        if (selectOnCreation == true) {
+                            Selection.activeObject = CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(),
+                                selectedObjectDirectory, sequenceName);
+                        }
+                        else {
+                            CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(),
+                                selectedObjectDirectory, sequenceName);
+                        }
                         ModuleUtils.FocusHierarchyWindow();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SequenceConfigDependenciesPopulated, button);
@@ -152,23 +190,62 @@ namespace AltSalt.Maestro.Sequencing
 
                 case nameof(ButtonNames.SimpleDirector):
                     button.clickable.clicked += () => {
-                        CreateSimpleDirector(Selection.transforms, selectedObjectDirectory, sequenceName);
+                        if (selectOnCreation == true) {
+                            Selection.activeObject = CreateSimpleDirector(Selection.transforms, selectedObjectDirectory, sequenceName);
+                        }
+                        else {
+                            CreateSimpleDirector(Selection.transforms, selectedObjectDirectory, sequenceName);
+                        }
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SimpleDirectorDependenciesPopulated, button);
                     break;
                 
                 case nameof(ButtonNames.Sequence):
                     button.clickable.clicked += () => {
-                        CreateSequenceTimelinePair(selectedObjectDirectory, sequenceName);
+                        if (selectOnCreation == true) {
+                            var ( sequence, timelineAsset) = CreateSequenceTimelinePair(selectedObjectDirectory, sequenceName);
+                            Selection.objects = new UnityEngine.Object[] { sequence, timelineAsset };
+                        } else {
+                            CreateSequenceTimelinePair(selectedObjectDirectory, sequenceName);
+                        }
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectoryAndNamePopulated, button);
                     break;
                 
                 case nameof(ButtonNames.TimelineAsset):
                     button.clickable.clicked += () => {
-                        CreateTimelineAsset(selectedObjectDirectory, sequenceName);
+                        if (selectOnCreation == true) {
+                            Selection.activeObject = CreateTimelineAsset(selectedObjectDirectory, sequenceName);
+                        }
+                        else {
+                            CreateTimelineAsset(selectedObjectDirectory, sequenceName);
+                        }
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectoryAndNamePopulated, button);
+                    break;
+                
+                case nameof(ButtonNames.CloneTimeline):
+                    button.clickable.clicked += () => {
+                        if (selectOnCreation == true) {
+                            Selection.objects = CloneTimeline(Selection.gameObjects);
+                        }
+                        else {
+                            CloneTimeline(Selection.gameObjects);
+                        }
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.PlayableDirectorSelected, button);
+                    break;
+                
+                case nameof(ButtonNames.SiblingSequenceConfig):
+                    button.clickable.clicked += () => {
+                        if (selectOnCreation == true) {
+                            Selection.objects = CreateSiblingSequenceConfig(Selection.gameObjects);
+                        }
+                        else {
+                            CreateSiblingSequenceConfig(Selection.gameObjects);
+                        }
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SiblingSequeenceConfigDependenciesPopulated, button);
                     break;
             }
 
@@ -212,18 +289,18 @@ namespace AltSalt.Maestro.Sequencing
         
         public static GameObject CreateSequenceConfig(MasterSequence masterSequence, string targetDirectory, string name)
         {
-            Tuple<Sequence, TimelineAsset> sequencePair = CreateSequenceTimelinePair(targetDirectory, name);
-            if (sequencePair.Item1 != null) {
+            var ( newSequence, newTimelineAsset ) = CreateSequenceTimelinePair(targetDirectory, name);
+            if (newSequence != null) {
                 GameObject sequenceConfigObject = PrefabUtility.InstantiatePrefab(ModuleUtils.moduleReferences.sequenceConfig) as GameObject;
                 Undo.RegisterCreatedObjectUndo(sequenceConfigObject, "Create sequence config");
 
                 sequenceConfigObject.name = name;
                 
                 Sequence_Config sequenceConfig = sequenceConfigObject.GetComponent<Sequence_Config>();
-                sequenceConfig.sequence = sequencePair.Item1;
+                sequenceConfig.sequence = newSequence;
 
                 PlayableDirector playableDirector = sequenceConfigObject.GetComponent<PlayableDirector>();
-                playableDirector.playableAsset = sequencePair.Item2;
+                playableDirector.playableAsset = newTimelineAsset;
 
                 masterSequence.sequenceConfigs.Add(sequenceConfigObject.GetComponent<Sequence_Config>());
                 EditorUtility.SetDirty(masterSequence);
@@ -329,6 +406,209 @@ namespace AltSalt.Maestro.Sequencing
             }
 
             return null;
+        }
+
+        public static GameObject[] CloneTimeline(GameObject[] selection)
+        {
+            bool selectionValid = true;
+
+            for (int i = 0; i < selection.Length; i++) {
+                if (CanCloneTimeline(selection[i]) == false) {
+                    selectionValid = false;
+                }
+            }
+
+            if (selectionValid == false) {
+                EditorUtility.DisplayDialog("Clone unsuccessful",
+                    "Please make sure your selected objects contain playable directors and a clone doesn't already exist", "Ok");
+                return selection;
+            }
+
+            List<GameObject> clonedObjects = new List<GameObject>(); 
+
+            for (int i = 0; i < selection.Length; i++) {
+                
+                GameObject sourceObject = selection[i];
+                GameObject clonedObject = Utils.DuplicateGameObject(sourceObject);
+                MigrateTimelineConfig(sourceObject, clonedObject);
+                
+                clonedObject.name += " (Clone)";
+                
+                Undo.SetTransformParent(clonedObject.transform, sourceObject.transform.parent, "Set timeline clone parent");
+                clonedObject.transform.SetSiblingIndex(sourceObject.transform.GetSiblingIndex() + 1);
+                
+                clonedObjects.Add(clonedObject);
+            }
+
+            return clonedObjects.ToArray();
+        }
+
+        private static GameObject MigrateTimelineConfig(GameObject sourceObject, GameObject targetObject)
+        {
+            var playableDirector = sourceObject.GetComponent<PlayableDirector>();
+            var playableAsset = playableDirector.playableAsset;
+            var sourceAssetPath = AssetDatabase.GetAssetPath(playableAsset);
+                
+            string clonePath = sourceAssetPath.Replace(".", "(Clone).");
+            if (!AssetDatabase.CopyAsset(sourceAssetPath, clonePath)) {
+                Debug.LogError("Unable to clone asset");
+                return sourceObject;
+            }
+            var clonedPlayableAsset = AssetDatabase.LoadMainAssetAtPath(clonePath) as PlayableAsset;
+
+            var clonedPlayableDirector = targetObject.GetComponent<PlayableDirector>();
+            clonedPlayableDirector.playableAsset = clonedPlayableAsset;
+
+            var originalBindings = playableAsset.outputs.GetEnumerator();
+            var clonedBindings = clonedPlayableAsset.outputs.GetEnumerator();
+
+            while (originalBindings.MoveNext()) {
+                var originalSourceObject = originalBindings.Current.sourceObject;
+
+                clonedBindings.MoveNext();
+
+                var clonedSourceObject = clonedBindings.Current.sourceObject;
+
+                clonedPlayableDirector.SetGenericBinding(
+                    clonedSourceObject,
+                    playableDirector.GetGenericBinding(originalSourceObject)
+                );
+            }
+
+            return targetObject;
+        }
+
+        public static bool CanCloneTimeline(GameObject selection)
+        {
+            var playableDirector = selection.GetComponent<PlayableDirector>();
+            if (playableDirector == null) {
+                Debug.LogError("Playable director not found", selection);
+                return false;
+            }
+
+            var playableAsset = playableDirector.playableAsset;
+            if (playableAsset == null) {
+                Debug.LogError("Playable asset not set on playable director", selection);
+                return false;
+            }
+
+            var sourceAssetPath = AssetDatabase.GetAssetPath(playableAsset);
+            if (string.IsNullOrEmpty(sourceAssetPath)) {
+                Debug.LogError("Timeline asset path not valid", selection);
+                return false;
+            }
+
+            string clonedAssetPath = sourceAssetPath.Replace(".", "(Clone).");
+            if (File.Exists(clonedAssetPath)) {
+                Debug.LogError("Duplicate asset detected; aborting clone attempt", selection);
+                return false;
+            }
+
+            return true;
+        }
+
+        public static GameObject[] CreateSiblingSequenceConfig(GameObject[] selection)
+        {
+            bool selectionValid = true;
+
+            for (int i = 0; i < selection.Length; i++) {
+                if (CanCreateSiblingSequenceConfig(selection[i]) == false) {
+                    selectionValid = false;
+                }
+            }
+
+            if (selectionValid == false) {
+                EditorUtility.DisplayDialog("Clone unsuccessful",
+                    "Please make sure your selected objects contain playable directors and that clones don't already exist", "Ok");
+                return selection;
+            }
+
+            List<GameObject> clonedObjects = new List<GameObject>(); 
+            
+            for (int i = 0; i < selection.Length; i++) {
+                
+                GameObject sourceObject = selection[i];
+                GameObject clonedObject = Utils.DuplicateGameObject(sourceObject);
+                MigrateTimelineConfig(sourceObject, clonedObject);
+                
+                var sourceAssetPath = AssetDatabase.GetAssetPath(sourceObject.GetComponent<Sequence_Config>().sequence);
+                
+                string clonePath = sourceAssetPath.Replace(".", "(Clone).");
+                if (!AssetDatabase.CopyAsset(sourceAssetPath, clonePath)) {
+                    Debug.LogError("Unable to clone asset");
+                    return selection;
+                }
+                var clonedSequence = AssetDatabase.LoadMainAssetAtPath(clonePath) as Sequence;
+
+                var clonedSequenceConfig = clonedObject.GetComponent<Sequence_Config>();
+                clonedSequenceConfig.sequence = clonedSequence;
+
+                TimelineAsset clonedTimelineAsset = clonedObject.GetComponent<PlayableDirector>().playableAsset as TimelineAsset;
+                clonedSequence.sourcePlayable = clonedTimelineAsset;
+
+                foreach (var trackAsset in clonedTimelineAsset.GetOutputTracks()) {
+                    IEnumerable<TimelineClip> timelineClips = trackAsset.GetClips();
+                    var timelineClipsArray = timelineClips.ToArray();
+
+                    if (timelineClipsArray.Length > 0) {
+                        
+                        // Delete all of the clips on each track, except for the last clip 
+                        for (int j = 0; j < timelineClipsArray.Length - 1; j++) {
+                            clonedTimelineAsset.DeleteClip(timelineClipsArray[j]);
+                        }
+                        
+                        // Set each track's last clip to the start of the timeline
+                        timelineClipsArray[timelineClipsArray.Length - 1].start = 0;
+//                        if (timelineClipsArray[timelineClipsArray.Length - 1].asset is LerpToTargetBehaviour
+//                            lerpToTargetBehaviour) {
+//                            
+//                        }
+
+                    }
+                }
+                
+                clonedObject.name += " (Clone)";
+                
+                Undo.SetTransformParent(clonedObject.transform, sourceObject.transform.parent, "Set timeline clone parent");
+                clonedObject.transform.SetSiblingIndex(sourceObject.transform.GetSiblingIndex() + 1);
+                
+                clonedObjects.Add(clonedObject);
+            }
+
+            return clonedObjects.ToArray();
+        }
+        
+        public static bool CanCreateSiblingSequenceConfig(GameObject selection)
+        {
+            if (CanCloneTimeline(selection) == false) {
+                return false;
+            }
+
+            var sequenceConfig = selection.GetComponent<Sequence_Config>();
+            if (sequenceConfig == null) {
+                Debug.LogError("Sequence config component not found", selection);
+                return false;
+            }
+
+            var sequence = sequenceConfig.sequence;
+            if (sequence == null) {
+                Debug.LogError("No sequence populated on sequence config", selection);
+                return false;
+            }
+
+            string sourceAssetPath = AssetDatabase.GetAssetPath(sequence);
+            if (string.IsNullOrEmpty(sourceAssetPath)) {
+                Debug.LogError("Sequence path not valid", selection);
+                return false;
+            }
+            
+            string clonedAssetPath = sourceAssetPath.Replace(".", "(Clone).");
+            if (File.Exists(clonedAssetPath)) {
+                Debug.LogError("Duplicate asset detected; aborting clone attempt", selection);
+                return false;
+            }
+            
+            return true;
         }
     }
 }

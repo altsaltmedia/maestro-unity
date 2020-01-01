@@ -188,7 +188,7 @@ namespace AltSalt.Maestro.Animation
 
             for (int i = 0; i < clipSelection.Length; i++) {
                 if (clipSelection[i].asset is TMProColorClip) {
-                    value = (clipSelection[i].asset as TMProColorClip).template.initialColor;
+                    value = (clipSelection[i].asset as TMProColorClip).template.initialValue;
                     break;
                 }
             }
@@ -206,7 +206,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     TMProColorClip clipAsset = clipSelection[i].asset as TMProColorClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial color");
-                    clipAsset.template.initialColor = targetValue;
+                    clipAsset.template.initialValue = targetValue;
                 }
             }
 
@@ -223,8 +223,8 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     TMProColorClip clipAsset = clipSelection[i].asset as TMProColorClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial color");
-                    Color originalColor = clipAsset.template.initialColor;
-                    clipAsset.template.initialColor = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
+                    Color originalColor = clipAsset.template.initialValue;
+                    clipAsset.template.initialValue = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
                 }
             }
 
@@ -239,7 +239,7 @@ namespace AltSalt.Maestro.Animation
 
             for (int i = 0; i < clipSelection.Length; i++) {
                 if (clipSelection[i].asset is TMProColorClip) {
-                    value = (clipSelection[i].asset as TMProColorClip).template.targetColor;
+                    value = (clipSelection[i].asset as TMProColorClip).template.targetValue;
                     break;
                 }
             }
@@ -257,7 +257,7 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     TMProColorClip clipAsset = clipSelection[i].asset as TMProColorClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target color");
-                    clipAsset.template.targetColor = targetValue;
+                    clipAsset.template.targetValue = targetValue;
                 }
             }
 
@@ -274,8 +274,8 @@ namespace AltSalt.Maestro.Animation
                     changedClips.Add(clip);
                     TMProColorClip clipAsset = clipSelection[i].asset as TMProColorClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial color");
-                    Color originalColor = clipAsset.template.targetColor;
-                    clipAsset.template.targetColor = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
+                    Color originalColor = clipAsset.template.targetValue;
+                    clipAsset.template.targetValue = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
                 }
             }
 

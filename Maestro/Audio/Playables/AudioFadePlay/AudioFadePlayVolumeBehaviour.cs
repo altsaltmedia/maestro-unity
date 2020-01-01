@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Audio
 {
@@ -12,7 +13,15 @@ namespace AltSalt.Maestro.Audio
         public bool debugCurrentVolume;
 #endif
         [ReadOnly]
-        public List<AudioSource> targetAudioSources = new List<AudioSource>();
+        [FormerlySerializedAs("targetAudioSources")]
+        [SerializeField]
+        private List<AudioSource> _targetAudioSources = new List<AudioSource>();
+
+        public List<AudioSource> targetAudioSources
+        {
+            get => _targetAudioSources;
+            set => _targetAudioSources = value;
+        }
     }
 
 }

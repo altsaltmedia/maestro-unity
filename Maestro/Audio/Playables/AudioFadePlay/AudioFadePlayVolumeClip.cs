@@ -2,15 +2,32 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Audio
 {
     [Serializable]
     public class AudioFadePlayVolumeClip : LerpToTargetClip
     {
-        public AudioFadePlayVolumeBehaviour template = new AudioFadePlayVolumeBehaviour();
+        [FormerlySerializedAs("template")]
+        [SerializeField]
+        private AudioFadePlayVolumeBehaviour _template = new AudioFadePlayVolumeBehaviour();
 
-        public List<ExposedAudioSource> targetAudioSources = new List<ExposedAudioSource>();
+        private AudioFadePlayVolumeBehaviour template
+        {
+            get => _template;
+            set => _template = value;
+        }
+
+        [FormerlySerializedAs("targetAudioSources")]
+        [SerializeField]
+        private List<ExposedAudioSource> _targetAudioSources = new List<ExposedAudioSource>();
+
+        private List<ExposedAudioSource> targetAudioSources
+        {
+            get => _targetAudioSources;
+            set => _targetAudioSources = value;
+        }
 
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
@@ -33,7 +50,15 @@ namespace AltSalt.Maestro.Audio
     [Serializable]
     public class ExposedAudioSource
     {
-        public ExposedReference<AudioSource> audioSource;
+        [FormerlySerializedAs("audioSource")]
+        [SerializeField]
+        private ExposedReference<AudioSource> _audioSource;
+
+        public ExposedReference<AudioSource> audioSource
+        {
+            get => _audioSource;
+            set => _audioSource = value;
+        }
     }
 
 }

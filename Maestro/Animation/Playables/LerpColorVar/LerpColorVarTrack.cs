@@ -5,6 +5,7 @@ using UnityEngine.Timeline;
 namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.745149f, 0.495372f, 0.8679245f)]
+    [TrackClipType(typeof(ColorClip))]
     [TrackClipType(typeof(LerpColorVarClip))]
     [TrackBindingType(typeof(ColorVariable))]
     public class LerpColorVarTrack : LerpToTargetTrack
@@ -25,9 +26,9 @@ namespace AltSalt.Maestro.Animation
 #if UNITY_EDITOR
 
             
-            //        // SYNTAX FOR MARKING PROPERTIES TO NOT BE SAVED IN EDIT MODE, CAN ITERATE
-            //        // THROUGH ALL PROPERTIES DYNAMICALLY OR USE DEBUG.LOG STATEMENT BELOW TO FIND
-            //        // NAMES OF SERIALIZED PROPERTIES AND MARK THEM EXPLICITY
+            // SYNTAX FOR MARKING PROPERTIES TO NOT BE SAVED IN EDIT MODE, CAN ITERATE
+            // THROUGH ALL PROPERTIES DYNAMICALLY OR USE DEBUG.LOG STATEMENT BELOW TO FIND
+            // NAMES OF SERIALIZED PROPERTIES AND MARK THEM EXPLICITY
 
             //ColorVariable trackBinding = director.GetGenericBinding(this) as ColorVariable;
             //if (trackBinding == null)

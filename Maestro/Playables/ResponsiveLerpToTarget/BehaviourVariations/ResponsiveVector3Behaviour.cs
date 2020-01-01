@@ -2,21 +2,63 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
     [Serializable]
     public class ResponsiveVector3Behaviour : ResponsiveLerpToTargetBehaviour
     {
-        public bool editMode;
+        [ShowInInspector]
+        private bool _editMode;
+
+        private bool editMode
+        {
+            get => _editMode;
+            set => _editMode = value;
+        }
 
         // initialPosition and targetPosition don't refresh in inspector for
         // some reason, but they work as intended
-        public Vector3 initialValue = new Vector3(0, 0, 0);
-        public Vector3 targetValue = new Vector3(0, 0, 0);
+        [ShowIf(nameof(editMode))]
+        [ShowInInspector]
+        private Vector3 _initialValue;
 
-        public List<Vector3> breakpointInitialValue = new List<Vector3>();
-        public List<Vector3> breakpointTargetValue = new List<Vector3>();
+        public Vector3 initialValue
+        {
+            get => _initialValue;
+            set => _initialValue = value;
+        }
+
+        [ShowIf(nameof(editMode))]
+        [ShowInInspector]
+        private Vector3 _targetValue;
+
+        public Vector3 targetValue
+        {
+            get => _targetValue;
+            set => _targetValue = value;
+        }
+
+        [FormerlySerializedAs("breakpointInitialValue")]
+        [SerializeField]
+        private List<Vector3> _breakpointInitialValue = new List<Vector3>();
+
+        public List<Vector3> breakpointInitialValue
+        {
+            get => _breakpointInitialValue;
+            set => _breakpointInitialValue = value;
+        }
+
+        [FormerlySerializedAs("breakpointTargetValue")]
+        [SerializeField]
+        private List<Vector3> _breakpointTargetValue = new List<Vector3>();
+
+        public List<Vector3> breakpointTargetValue
+        {
+            get => _breakpointTargetValue;
+            set => _breakpointTargetValue = value;
+        }
 
 #if UNITY_EDITOR
         [ShowIf(nameof(editMode))]

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Serialization;
@@ -6,18 +6,17 @@ using UnityEngine.Serialization;
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public class FloatClip : LerpToTargetClip
+    public class ColorClip : LerpToTargetClip
     {
-        [FormerlySerializedAs("template")]
         [SerializeField]
-        private FloatBehaviour _template = new FloatBehaviour();
+        private ColorBehaviour _template = new ColorBehaviour();
 
-        public FloatBehaviour template
+        public ColorBehaviour template
         {
             get => _template;
             set => _template = value;
         }
-
+        
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
             template.startTime = startTime;
@@ -27,8 +26,9 @@ namespace AltSalt.Maestro
             template.clipAsset = this;
             template.directorObject = directorObject;
             
-            var playable = ScriptPlayable<FloatBehaviour>.Create(graph, template);
+            var playable = ScriptPlayable<ColorBehaviour>.Create(graph, template);
             return playable;
         }
+        
     }
 }
