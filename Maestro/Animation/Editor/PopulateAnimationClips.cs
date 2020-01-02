@@ -14,10 +14,10 @@ namespace AltSalt.Maestro.Animation
                 sourceObject = targetDirector.GetGenericBinding(playableBinding.sourceObject);
             }
 
-            switch (timelineClip.asset.GetType().Name) {
+            switch (parentTrack.GetType().Name) {
 
-                case nameof(TMProColorClip): {
-                        TMProColorClip asset = timelineClip.asset as TMProColorClip;
+                case nameof(TMProColorTrack): {
+                        ColorClip asset = timelineClip.asset as ColorClip;
                         TMP_Text component = sourceObject as TMP_Text;
                         if (component != null) {
                             asset.template.initialValue = component.color;
@@ -27,19 +27,19 @@ namespace AltSalt.Maestro.Animation
                         return asset;
                     }
 
-                case nameof(RectTransformPosClip): {
-                        RectTransformPosClip asset = timelineClip.asset as RectTransformPosClip;
+                case nameof(RectTransformPosTrack): {
+                        ResponsiveVector3Clip asset = timelineClip.asset as ResponsiveVector3Clip;
                         RectTransform component = sourceObject as RectTransform;
                         if (component != null) {
-                            asset.template.initialValue = component.anchoredPosition3D;
-                            asset.template.targetValue = component.anchoredPosition3D;
+                            asset.template.breakpointInitialValue.Add(component.anchoredPosition3D);
+                            asset.template.breakpointTargetValue.Add(component.anchoredPosition3D);
                         }
                         asset.template.ease = easeType;
                         return asset;
                     }
 
-                case nameof(SpriteColorClip): {
-                        SpriteColorClip asset = timelineClip.asset as SpriteColorClip;
+                case nameof(SpriteColorTrack): {
+                        ColorClip asset = timelineClip.asset as ColorClip;
                         SpriteRenderer component = sourceObject as SpriteRenderer;
                         if (component != null) {
                             asset.template.initialValue = component.color;
@@ -49,30 +49,30 @@ namespace AltSalt.Maestro.Animation
                         return asset;
                     }
 
-                case nameof(RectTransformScaleClip): {
-                        RectTransformScaleClip asset = timelineClip.asset as RectTransformScaleClip;
+                case nameof(RectTransformScaleTrack): {
+                        ResponsiveVector3Clip asset = timelineClip.asset as ResponsiveVector3Clip;
                         RectTransform component = sourceObject as RectTransform;
                         if (component != null) {
-                            asset.template.initialValue = component.localScale;
-                            asset.template.targetValue = component.localScale;
+                            asset.template.breakpointInitialValue.Add(component.localScale);
+                            asset.template.breakpointTargetValue.Add(component.localScale);
                         }
                         asset.template.ease = easeType;
                         return asset;
                     }
 
-                case nameof(RectTransformRotationClip): {
-                        RectTransformRotationClip asset = timelineClip.asset as RectTransformRotationClip;
+                case nameof(RectTransformRotationTrack): {
+                        ResponsiveVector3Clip asset = timelineClip.asset as ResponsiveVector3Clip;
                         RectTransform component = sourceObject as RectTransform;
                         if (component != null) {
-                            asset.template.initialValue = component.localEulerAngles;
-                            asset.template.targetValue = component.localEulerAngles;
+                            asset.template.breakpointInitialValue.Add(component.localEulerAngles);
+                            asset.template.breakpointTargetValue.Add(component.localEulerAngles);
                         }
                         asset.template.ease = easeType;
                         return asset;
                     }
 
-                case nameof(LerpFloatVarClip): {
-                        LerpFloatVarClip asset = timelineClip.asset as LerpFloatVarClip;
+                case nameof(LerpFloatVarTrack): {
+                        FloatClip asset = timelineClip.asset as FloatClip;
                         FloatVariable component = sourceObject as FloatVariable;
                         if (component != null) {
                             asset.template.initialValue = component.value;
@@ -82,8 +82,8 @@ namespace AltSalt.Maestro.Animation
                         return asset;
                     }
 
-                case nameof(LerpColorVarClip): {
-                        LerpColorVarClip asset = timelineClip.asset as LerpColorVarClip;
+                case nameof(LerpColorVarTrack): {
+                        ColorClip asset = timelineClip.asset as ColorClip;
                         ColorVariable component = sourceObject as ColorVariable;
                         if (component != null) {
                             asset.template.initialValue = component.value;
@@ -93,36 +93,23 @@ namespace AltSalt.Maestro.Animation
                         return asset;
                     }
 
-                case nameof(TMProCharSpacingClip): {
-                        TMProCharSpacingClip asset = timelineClip.asset as TMProCharSpacingClip;
+                case nameof(TMProCharSpacingTrack): {
+                        ResponsiveFloatClip asset = timelineClip.asset as ResponsiveFloatClip;
                         TMP_Text component = sourceObject as TMP_Text;
                         if (component != null) {
-                            asset.template.initialValue = component.characterSpacing;
-                            asset.template.targetValue = component.characterSpacing;
+                            asset.template.breakpointInitialValue.Add(component.characterSpacing);
+                            asset.template.breakpointTargetValue.Add(component.characterSpacing);
                         }
                         asset.template.ease = easeType;
                         return asset;
                     }
 
-                case nameof(ResponsiveVector3Clip): {
-                        ResponsiveVector3Clip asset = timelineClip.asset as ResponsiveVector3Clip;
-                        RectTransform component = sourceObject as RectTransform;
-                        if (component != null) {
-
-                            if(parentTrack is ResponsiveRectTransformPosTrack) {
-                                asset.template.breakpointInitialValue.Add(component.anchoredPosition3D);
-                                asset.template.breakpointTargetValue.Add(component.anchoredPosition3D);
-                            } else if (parentTrack is ResponsiveRectTransformScaleTrack) {
-                                asset.template.breakpointInitialValue.Add(component.localScale);
-                                asset.template.breakpointTargetValue.Add(component.localScale);
-                            }
-                        }
-                        asset.template.ease = easeType;
-                        return asset;
-                    }
+                default:
+                {
+                    Debug.LogError("Track type not recognized");
+                    return null;
+                }
             }
-
-            return null;
         }
     }
 }

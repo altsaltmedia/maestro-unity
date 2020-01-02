@@ -6,7 +6,6 @@ using TMPro;
 namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.6981132f, 0f, 0.1065063f)]
-    [TrackClipType(typeof(SpriteColorClip))]
     [TrackClipType(typeof(ColorClip))]
     [TrackBindingType(typeof(SpriteRenderer))]
     public class SpriteColorTrack : LerpToTargetTrack

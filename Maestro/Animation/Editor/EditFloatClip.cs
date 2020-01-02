@@ -9,13 +9,13 @@ using UnityEditor.Timeline;
 
 namespace AltSalt.Maestro.Animation
 {
-    public class EditRectTransformScaleClip : ChildModuleWindow
+    public class EditFloatClip : ChildModuleWindow
     {
         protected override ChildModuleWindow Configure(ParentModuleWindow parentModuleWindow, string childRootUXMLName)
         {
             base.Configure(parentModuleWindow, childRootUXMLName);
 
-            moduleChildUXML = parentModuleWindow.moduleWindowUXML.Query<Foldout>("EditRectTransformScaleClip", ModuleUtils.toggleableGroup);
+            moduleChildUXML = parentModuleWindow.moduleWindowUXML.Query<Foldout>("EditFloatClip", ModuleUtils.toggleableGroup);
 
             var propertyFields = moduleChildUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
@@ -24,6 +24,7 @@ namespace AltSalt.Maestro.Animation
             buttons.ForEach(SetupButton);
 
             UpdateDisplay();
+
             ControlPanel.selectionChangedDelegate += UpdateDisplay;
 
             return this;
@@ -34,15 +35,15 @@ namespace AltSalt.Maestro.Animation
             ControlPanel.selectionChangedDelegate -= UpdateDisplay;
         }
 
-        public Vector3 initialValue = new Vector3(1, 1, 1);
-        public Vector3 targetValue = new Vector3(1, 1, 1);
+        public float initialValue;
+        public float targetValue;
 
         static bool populateButtonPressed = false;
 
         enum PropertyFieldNames
         {
             InitialValue,
-            TargetValue,
+            TargetValue
         }
 
         enum ButtonNames
@@ -60,7 +61,7 @@ namespace AltSalt.Maestro.Animation
             bool dependencySelected = false;
 
             for (int i = 0; i < TimelineEditor.selectedClips.Length; i++) {
-                if (TimelineEditor.selectedClips[i].asset is RectTransformScaleClip) {
+                if (TimelineEditor.selectedClips[i].asset is FloatClip) {
                     dependencySelected = true;
                     break;
                 }
@@ -75,8 +76,8 @@ namespace AltSalt.Maestro.Animation
             switch (propertyField.name) {
 
                 case nameof(PropertyFieldNames.InitialValue):
-                    propertyField.RegisterCallback<ChangeEvent<Vector3>>((ChangeEvent<Vector3> evt) => {
-                        if(populateButtonPressed == false) {
+                    propertyField.RegisterCallback<ChangeEvent<float>>((ChangeEvent<float> evt) => {
+                        if (populateButtonPressed == false) {
                             SetInitialValue(TimelineEditor.selectedClips, initialValue);
                             TimelineUtils.RefreshTimelineContentsModified();
                         }
@@ -85,7 +86,7 @@ namespace AltSalt.Maestro.Animation
                     break;
 
                 case nameof(PropertyFieldNames.TargetValue):
-                    propertyField.RegisterCallback<ChangeEvent<Vector3>>((ChangeEvent<Vector3> evt) => {
+                    propertyField.RegisterCallback<ChangeEvent<float>>((ChangeEvent<float> evt) => {
                         if (populateButtonPressed == false) {
                             SetTargetValue(TimelineEditor.selectedClips, targetValue);
                             TimelineUtils.RefreshTimelineContentsModified();
@@ -93,7 +94,6 @@ namespace AltSalt.Maestro.Animation
                         populateButtonPressed = false;
                     });
                     break;
-
             }
 
             return propertyField;
@@ -149,14 +149,14 @@ namespace AltSalt.Maestro.Animation
             return button;
         }
 
-        public static Vector3 GetInitialValueFromSelection(TimelineClip[] clipSelection)
+        public static float GetInitialValueFromSelection(TimelineClip[] clipSelection)
         {
-            Vector3 value = new Vector3(0, 0, 0);
+            float value = float.NaN;
             Array.Sort(clipSelection, new Utils.ClipTimeSort());
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is RectTransformScaleClip) {
-                    value = (clipSelection[i].asset as RectTransformScaleClip).template.initialValue;
+                if (clipSelection[i].asset is FloatClip) {
+                    value = (clipSelection[i].asset as FloatClip).template.initialValue;
                     break;
                 }
             }
@@ -164,16 +164,16 @@ namespace AltSalt.Maestro.Animation
             return value;
         }
 
-        public static TimelineClip[] SetInitialValue(TimelineClip[] clipSelection, Vector3 targetValue)
+        public static TimelineClip[] SetInitialValue(TimelineClip[] clipSelection, float targetValue)
         {
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is RectTransformScaleClip) {
+                if (clipSelection[i].asset is FloatClip) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    RectTransformScaleClip clipAsset = clipSelection[i].asset as RectTransformScaleClip;
-                    Undo.RecordObject(clipAsset, "set clip(s) initial scale");
+                    FloatClip clipAsset = clipSelection[i].asset as FloatClip;
+                    Undo.RecordObject(clipAsset, "set clip(s) initial value");
                     clipAsset.template.initialValue = targetValue;
                 }
             }
@@ -181,14 +181,14 @@ namespace AltSalt.Maestro.Animation
             return changedClips.ToArray();
         }
 
-        public static Vector3 GetTargetValueFromSelection(TimelineClip[] clipSelection)
+        public static float GetTargetValueFromSelection(TimelineClip[] clipSelection)
         {
-            Vector3 value = new Vector3(0, 0, 0);
+            float value = float.NaN;
             Array.Sort(clipSelection, new Utils.ClipTimeSort());
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is RectTransformScaleClip) {
-                    value = (clipSelection[i].asset as RectTransformScaleClip).template.targetValue;
+                if (clipSelection[i].asset is FloatClip) {
+                    value = (clipSelection[i].asset as FloatClip).template.targetValue;
                     break;
                 }
             }
@@ -196,23 +196,21 @@ namespace AltSalt.Maestro.Animation
             return value;
         }
 
-        public static TimelineClip[] SetTargetValue(TimelineClip[] clipSelection, Vector3 targetValue)
+        public static TimelineClip[] SetTargetValue(TimelineClip[] clipSelection, float targetValue)
         {
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is RectTransformScaleClip) {
+                if (clipSelection[i].asset is FloatClip) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    RectTransformScaleClip clipAsset = clipSelection[i].asset as RectTransformScaleClip;
-                    Undo.RecordObject(clipAsset, "set clip(s) target scale");
+                    FloatClip clipAsset = clipSelection[i].asset as FloatClip;
+                    Undo.RecordObject(clipAsset, "set clip(s) target value");
                     clipAsset.template.targetValue = targetValue;
                 }
             }
 
             return changedClips.ToArray();
         }
-
-
     }
 }

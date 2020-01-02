@@ -11,15 +11,9 @@ xsi:schemaLocation="
                         UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
 "
 >
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformPosClip_UXML.uxml" name="EditRectTransformPosClip" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditTMProColorClip_UXML.uxml" name="EditTMProColorClip" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformScaleClip_UXML.uxml" name="EditRectTransformScaleClip" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformRotationClip_UXML.uxml" name="EditRectTransformRotationClip" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditSpriteColorClip_UXML.uxml" name="EditSpriteColorClip" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditFloatVarClip_UXML.uxml" name="EditFloatVarClip" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditColorVarClip_UXML.uxml" name="EditColorVarClip" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformResponsivePosClip_UXML.uxml" name="EditRectTransformResponsivePosClip" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditRectTransformResponsiveScaleClip_UXML.uxml" name="EditRectTransformResponsiveScaleClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditColorClip_UXML.uxml" name="EditColorClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditResponsiveVector3Clip_UXML.uxml" name="EditResponsiveVector3Clip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditFloatClip_UXML.uxml" name="EditFloatClip" />
 
     <engine:VisualElement name="edit-animation-clips">
 
@@ -33,23 +27,11 @@ xsi:schemaLocation="
 
                 <engine:VisualElement class="section___content">
 
-                    <engine:Instance template="EditRectTransformPosClip" />
+                    <engine:Instance template="EditColorClip" />
 
-                    <engine:Instance template="EditTMProColorClip" />
+                    <engine:Instance template="EditResponsiveVector3Clip" />
 
-                    <engine:Instance template="EditRectTransformScaleClip" />
-
-                    <engine:Instance template="EditRectTransformRotationClip" />
-
-                    <engine:Instance template="EditSpriteColorClip" />
-
-                    <engine:Instance template="EditFloatVarClip" />
-
-                    <engine:Instance template="EditColorVarClip" />
-
-                    <engine:Instance template="EditRectTransformResponsivePosClip" />
-
-                    <engine:Instance template="EditRectTransformResponsiveScaleClip" />
+                    <engine:Instance template="EditFloatClip" />
 
                 </engine:VisualElement>
 

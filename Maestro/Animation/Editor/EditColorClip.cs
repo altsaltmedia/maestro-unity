@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -9,13 +9,13 @@ using UnityEditor.Timeline;
 
 namespace AltSalt.Maestro.Animation
 {
-    public class EditSpriteColorClip : ChildModuleWindow
+    public class EditColorClip : ChildModuleWindow
     {
         protected override ChildModuleWindow Configure(ParentModuleWindow parentModuleWindow, string childRootUXMLName)
         {
             base.Configure(parentModuleWindow, childRootUXMLName);
 
-            moduleChildUXML = parentModuleWindow.moduleWindowUXML.Query<Foldout>("EditSpriteColorClip", ModuleUtils.toggleableGroup);
+            moduleChildUXML = parentModuleWindow.moduleWindowUXML.Query<Foldout>("EditColorClip", ModuleUtils.toggleableGroup);
 
             var propertyFields = moduleChildUXML.Query<PropertyField>();
             propertyFields.ForEach(SetupPropertyField);
@@ -63,7 +63,7 @@ namespace AltSalt.Maestro.Animation
             bool dependencySelected = false;
 
             for (int i = 0; i < TimelineEditor.selectedClips.Length; i++) {
-                if (TimelineEditor.selectedClips[i].asset is SpriteColorClip) {
+                if (TimelineEditor.selectedClips[i].asset is ColorClip) {
                     dependencySelected = true;
                     break;
                 }
@@ -186,8 +186,8 @@ namespace AltSalt.Maestro.Animation
             Array.Sort(clipSelection, new Utils.ClipTimeSort());
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is SpriteColorClip) {
-                    value = (clipSelection[i].asset as SpriteColorClip).template.initialValue;
+                if (clipSelection[i].asset is ColorClip) {
+                    value = (clipSelection[i].asset as ColorClip).template.initialValue;
                     break;
                 }
             }
@@ -200,10 +200,10 @@ namespace AltSalt.Maestro.Animation
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is SpriteColorClip) {
+                if (clipSelection[i].asset is ColorClip) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    SpriteColorClip clipAsset = clipSelection[i].asset as SpriteColorClip;
+                    ColorClip clipAsset = clipSelection[i].asset as ColorClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial color");
                     clipAsset.template.initialValue = targetValue;
                 }
@@ -217,10 +217,10 @@ namespace AltSalt.Maestro.Animation
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is SpriteColorClip) {
+                if (clipSelection[i].asset is ColorClip) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    SpriteColorClip clipAsset = clipSelection[i].asset as SpriteColorClip;
+                    ColorClip clipAsset = clipSelection[i].asset as ColorClip;
                     Undo.RecordObject(clipAsset, "set clip(s) initial color");
                     Color originalColor = clipAsset.template.initialValue;
                     clipAsset.template.initialValue = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
@@ -236,8 +236,8 @@ namespace AltSalt.Maestro.Animation
             Array.Sort(clipSelection, new Utils.ClipTimeSort());
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is SpriteColorClip) {
-                    value = (clipSelection[i].asset as SpriteColorClip).template.targetValue;
+                if (clipSelection[i].asset is ColorClip) {
+                    value = (clipSelection[i].asset as ColorClip).template.targetValue;
                     break;
                 }
             }
@@ -250,10 +250,10 @@ namespace AltSalt.Maestro.Animation
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is SpriteColorClip) {
+                if (clipSelection[i].asset is ColorClip) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    SpriteColorClip clipAsset = clipSelection[i].asset as SpriteColorClip;
+                    ColorClip clipAsset = clipSelection[i].asset as ColorClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target color");
                     clipAsset.template.targetValue = targetValue;
                 }
@@ -267,10 +267,10 @@ namespace AltSalt.Maestro.Animation
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is SpriteColorClip) {
+                if (clipSelection[i].asset is ColorClip) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    SpriteColorClip clipAsset = clipSelection[i].asset as SpriteColorClip;
+                    ColorClip clipAsset = clipSelection[i].asset as ColorClip;
                     Undo.RecordObject(clipAsset, "set clip(s) target color");
                     Color originalColor = clipAsset.template.targetValue;
                     clipAsset.template.targetValue = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);

@@ -6,7 +6,6 @@ namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.245149f, 0.895372f, 0.5679245f)]
     [TrackClipType(typeof(FloatClip))]
-    [TrackClipType(typeof(LerpFloatVarClip))]
     [TrackBindingType(typeof(FloatVariable))]
     public class LerpFloatVarTrack : LerpToTargetTrack
     {

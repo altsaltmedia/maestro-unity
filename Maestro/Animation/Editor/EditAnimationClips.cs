@@ -7,17 +7,11 @@ namespace AltSalt.Maestro.Animation
     {
         private Dictionary<Type, string> _childWindowData = new Dictionary<Type, string>
         {
-            { typeof(EditTMProColorClip), nameof(EditTMProColorClip) },
-            { typeof(EditRectTransformPosClip), nameof(EditRectTransformPosClip) },
-            { typeof(EditSpriteColorClip), nameof(EditSpriteColorClip) },
-            { typeof(EditRectTransformScaleClip), nameof(EditRectTransformScaleClip) },
-            { typeof(EditRectTransformRotationClip), nameof(EditRectTransformRotationClip) },
-            { typeof(EditFloatVarClip), nameof(EditFloatVarClip) },
-            { typeof(EditColorVarClip), nameof(EditColorVarClip) },
-            { typeof(EditRectTransformResponsivePosClip), nameof(EditRectTransformResponsivePosClip) },
-            { typeof(EditRectTransformResponsiveScaleClip), nameof(EditRectTransformResponsiveScaleClip) }
+            { typeof(EditColorClip), nameof(EditColorClip) },
+            { typeof(EditResponsiveVector3Clip), nameof(EditResponsiveVector3Clip) },
+            { typeof(EditFloatClip), nameof(EditFloatClip) },
         };
-
+        
         protected override Dictionary<Type, string> childWindowData
         {
             get => _childWindowData;

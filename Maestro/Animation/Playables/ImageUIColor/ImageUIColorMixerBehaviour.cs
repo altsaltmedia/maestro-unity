@@ -8,8 +8,8 @@ namespace AltSalt.Maestro.Animation
     public class ImageUIColorMixerBehaviour : LerpToTargetMixerBehaviour
     {
         Image trackBinding;
-        ScriptPlayable<ImageUIColorBehaviour> inputPlayable;
-        ImageUIColorBehaviour input;
+        ScriptPlayable<ColorBehaviour> inputPlayable;
+        ColorBehaviour input;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
@@ -23,7 +23,7 @@ namespace AltSalt.Maestro.Animation
             for (int i = 0; i < inputCount; i++)
             {
                 inputWeight = playable.GetInputWeight(i);
-                inputPlayable = (ScriptPlayable<ImageUIColorBehaviour>)playable.GetInput(i);
+                inputPlayable = (ScriptPlayable<ColorBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
 
                 if(inputWeight >= 1f) {

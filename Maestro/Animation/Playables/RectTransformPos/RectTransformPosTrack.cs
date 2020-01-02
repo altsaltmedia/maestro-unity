@@ -6,7 +6,6 @@ namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.1981132f, 0.5f, 0.1065063f)]
     [TrackClipType(typeof(ResponsiveVector3Clip))]
-    [TrackClipType(typeof(RectTransformPosClip))]
     [TrackBindingType(typeof(RectTransform))]
     public class RectTransformPosTrack : LerpToTargetTrack
     {

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.6981132f, 0f, 0.1065063f)]
-    [TrackClipType(typeof(ImageUIColorClip))]
+    [TrackClipType(typeof(ColorClip))]
     [TrackBindingType(typeof(Image))]
     public class ImageUIColorTrack : LerpToTargetTrack
     {
