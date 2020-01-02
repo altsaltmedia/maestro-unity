@@ -18,7 +18,7 @@ namespace AltSalt.Maestro.Audio
             set => _template = value;
         }
         
-        private BoolReference _isReversing;
+        private BoolReference _isReversing = new BoolReference();
 
         public BoolReference isReversing
         {
@@ -26,7 +26,7 @@ namespace AltSalt.Maestro.Audio
             set => _isReversing = value;
         }
         
-        private FloatReference _frameStepValue;
+        private FloatReference _frameStepValue = new FloatReference();
 
         public FloatReference frameStepValue
         {
@@ -34,7 +34,7 @@ namespace AltSalt.Maestro.Audio
             set => _frameStepValue = value;
         }
         
-        private FloatReference _swipeModifierOutput;
+        private FloatReference _swipeModifierOutput = new FloatReference();
 
         public FloatReference swipeModifierOutput
         {
