@@ -24,23 +24,13 @@ namespace AltSalt.Maestro
         [ReadOnly]
         [SerializeField]
         bool initialized;
-
-        [Required]
+        
 #if UNITY_EDITOR
         [Title("$"+nameof(activeLayoutName))]
 #endif
-        [SerializeField]
-        private ModifySettings _modifySettings;
-
-        protected ModifySettings modifySettings
-        {
-            get => _modifySettings;
-            set => _modifySettings = value;
-        }
-
         [ShowInInspector]
         [InfoBox("Active layout should be set by a ModifyHandler at runtime, or via the LayoutTools or TextTools." +
-                 "Do not touch this value unless you know what you're doing.", InfoMessageType.Warning)]
+                 " Do not touch this value unless you know what you're doing.", InfoMessageType.Warning)]
         private bool _allowLayoutDebugging;
         
         [ShowInInspector]
@@ -75,9 +65,6 @@ namespace AltSalt.Maestro
         protected virtual void OnEnable()
         {
 #if UNITY_EDITOR
-            if (modifySettings == null) {
-                modifySettings = Utils.GetModifySettings();
-            }
             Initialize();
 #endif
             RefreshActiveLayout();
@@ -136,7 +123,6 @@ namespace AltSalt.Maestro
             nonserializedProperties.Add(nameof(sceneName));
             nonserializedProperties.Add(nameof(initialized));
             nonserializedProperties.Add(nameof(_layouts));
-            nonserializedProperties.Add(nameof(_modifySettings));
             nonserializedProperties.Add(nameof(nonserializedProperties));
         }
 

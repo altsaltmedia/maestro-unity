@@ -485,7 +485,7 @@ namespace AltSalt.Maestro
                         }
                     } else if (element is string || element is bool || element is float) {
                         RegisterComponentListDependency(element, rootComponent, fieldInfo.Name, sceneName);
-                    } else {
+                    } else if(element != null) {
                         TraverseObjectFields(element, rootComponent, sceneName);
                     }
                 }

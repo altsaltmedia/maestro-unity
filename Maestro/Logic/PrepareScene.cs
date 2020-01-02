@@ -11,12 +11,14 @@ using UnityEditor.Timeline;
 namespace AltSalt.Maestro.Logic {
 
     [ExecuteInEditMode]
-	public class PrepareScene : MonoBehaviour
+	public class PrepareScene : MonoBehaviour, ISkipRegistration
     {
         [SerializeField]
         private bool _resetTouchVariables = false;
 
         private bool resetTouchVariables => _resetTouchVariables;
+
+        public bool DoNotRecord => true;
 
         [SerializeField]
         bool defaultX;
