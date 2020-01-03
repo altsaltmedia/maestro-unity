@@ -19,6 +19,8 @@ namespace AltSalt.Maestro.Animation
             set => _template = value;
         }
         
+        public override LerpToTargetBehaviour templateReference => template;
+        
         [SerializeField]
         [FormerlySerializedAs("originReferenceObject")]
         private ExposedReference<GameObject> _originReferenceObject;

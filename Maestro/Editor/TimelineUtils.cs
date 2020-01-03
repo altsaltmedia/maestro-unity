@@ -406,8 +406,37 @@ namespace AltSalt.Maestro
                 return selectedTrackClips.ToArray();
 
             } else {
-                return TimelineAssetManipulation.GetAllTimelineClips();
+                return GetAllTimelineClips();
             }
+        }
+
+        public static TimelineClip[] GetAllTimelineClips()
+        {
+            return GetAllTimelineClips(new Utils.ClipTimeSort());
+        }
+
+        public static TimelineClip[] GetAllTimelineClips(Comparer<TimelineClip> comparer)
+        {
+            IEnumerable<PlayableBinding> playableBindings = TimelineEditor.inspectedAsset.outputs;
+
+            List<TimelineClip> allClips = new List<TimelineClip>();
+
+            foreach (PlayableBinding playableBinding in playableBindings) {
+                TrackAsset trackAsset = playableBinding.sourceObject as TrackAsset;
+
+                // Skip playable bindings that don't contain track assets (e.g. markers)
+                if (trackAsset == null || trackAsset.hasClips == false || trackAsset is DebugTimelineTrack) {
+                    continue;
+                }
+
+                allClips.AddRange(trackAsset.GetClips());
+            }
+
+            if (comparer != null) {
+                allClips.Sort(comparer);
+            }
+
+            return allClips.ToArray();
         }
     }
 }

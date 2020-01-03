@@ -23,12 +23,12 @@ namespace AltSalt.Maestro
     public abstract class LerpToTargetTrack : TrackAsset
     {
         [SerializeField]
-        private bool _migrated;
+        private bool _requiredForSiblingSequence;
 
-        public bool migrated
+        public bool requiredForSiblingSequence
         {
-            get => _migrated;
-            set => _migrated = value;
+            get => _requiredForSiblingSequence;
+            set => _requiredForSiblingSequence = value;
         }
 
 //        This method should be overridden in child classes; a sample body is provided below

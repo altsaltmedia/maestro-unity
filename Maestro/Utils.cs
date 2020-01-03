@@ -165,10 +165,10 @@ namespace AltSalt.Maestro
         }
         
         // Will add (Clone) before a file extension
-        public static string GetCloneAssetPath(string filePath)
+        public static string GetCloneAssetPath(string filePath, string suffix = "(Clone)")
         {
             string fileExtension = Path.GetExtension(filePath);
-            string modifiedExtension = fileExtension.Replace(".", "(Clone).");
+            string modifiedExtension = fileExtension.Replace(".", $"{suffix}.");
             return filePath.Replace(fileExtension, modifiedExtension);
         }
         

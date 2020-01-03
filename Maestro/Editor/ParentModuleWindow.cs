@@ -13,7 +13,7 @@ namespace AltSalt.Maestro
 
         private List<ChildModuleWindow> _childWindows = new List<ChildModuleWindow>();
 
-        protected List<ChildModuleWindow> childWindows
+        private List<ChildModuleWindow> childWindows
         {
             get => _childWindows;
             set => _childWindows = value;
@@ -26,8 +26,8 @@ namespace AltSalt.Maestro
             var uxmlTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxmlPath);
             this.moduleWindowUXML = uxmlTree.CloneTree();
             
-            SerializedObject childWindowSerialized = new SerializedObject(this);
-            this.moduleWindowUXML.Bind(childWindowSerialized);
+            SerializedObject parentWindowSerialized = new SerializedObject(this);
+            this.moduleWindowUXML.Bind(parentWindowSerialized);
             
             foreach (KeyValuePair<Type, string> childWindow in childWindowData) {
                 childWindows.Add(ChildModuleWindow.CreateModuleChildWindow(childWindow.Key, this, childWindow.Value));

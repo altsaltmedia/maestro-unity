@@ -15,7 +15,6 @@ xsi:schemaLocation="
 >
 
 <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/SimpleTracks_UXML.uxml" name="SimpleTracks" />
-<engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/DecoratorTracks_UXML.uxml" name="DecoratorTracks" />
 <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/ComplexTracks_UXML.uxml" name="ComplexTracks" />
 
 <engine:VisualElement class="track-clip-creation" name="track-clip-creation">
@@ -31,8 +30,6 @@ xsi:schemaLocation="
 			<engine:VisualElement class="section___content">
 		  		
 				<engine:Instance template="SimpleTracks" />
-
-				<engine:Instance template="DecoratorTracks" />
 
 				<engine:Instance template="ComplexTracks" />
 

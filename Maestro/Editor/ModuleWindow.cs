@@ -38,8 +38,8 @@ namespace AltSalt.Maestro
             var uxmlTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxmlPath);
             this.moduleWindowUXML = uxmlTree.CloneTree();
             
-            SerializedObject childWindowSerialized = new SerializedObject(this);
-            this.moduleWindowUXML.Bind(childWindowSerialized);
+            SerializedObject moduleWindowSerialized = new SerializedObject(this);
+            this.moduleWindowUXML.Bind(moduleWindowSerialized);
 
             return this;
         }

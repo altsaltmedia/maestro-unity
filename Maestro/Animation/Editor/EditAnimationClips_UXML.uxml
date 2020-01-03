@@ -11,9 +11,9 @@ xsi:schemaLocation="
                         UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
 "
 >
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditColorClip_UXML.uxml" name="EditColorClip" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditResponsiveVector3Clip_UXML.uxml" name="EditResponsiveVector3Clip" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Animation/Editor/EditFloatClip_UXML.uxml" name="EditFloatClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Editor/EditColorClip_UXML.uxml" name="EditColorClip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Editor/EditResponsiveVector3Clip_UXML.uxml" name="EditResponsiveVector3Clip" />
+    <engine:Template path="Assets/_AltSalt/Maestro/Editor/EditFloatClip_UXML.uxml" name="EditFloatClip" />
 
     <engine:VisualElement name="edit-animation-clips">
 

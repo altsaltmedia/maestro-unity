@@ -61,6 +61,14 @@ namespace AltSalt.Maestro
         }
 
 #if UNITY_EDITOR
+        
+        public override object SetInitialValueToTarget()
+        {
+            breakpointInitialValue.Clear();
+            breakpointInitialValue.AddRange(breakpointTargetValue);
+            return initialValue;
+        }
+        
         protected override void UpdateBreakpointDependencies()
         {
             base.UpdateBreakpointDependencies();

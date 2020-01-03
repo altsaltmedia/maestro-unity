@@ -143,7 +143,7 @@ namespace AltSalt.Maestro
             timelineCurrentTime = Utils.GetFloatVariable(nameof(VarDependencies.TimelineCurrentTime));
 
             if (TimelineEditor.inspectedAsset != null) {
-                allTimelineClips = TimelineAssetManipulation.GetAllTimelineClips();
+                allTimelineClips = TimelineUtils.GetAllTimelineClips();
             }
 
             if (this.controlPanel != null) {
@@ -194,7 +194,7 @@ namespace AltSalt.Maestro
             lastTimeValue = timelineCurrentTime.value;
             previousClipSelection = TimelineEditor.selectedClips;
 
-            allTimelineClips = TimelineAssetManipulation.GetAllTimelineClips();
+            allTimelineClips = TimelineUtils.GetAllTimelineClips();
             UpdateListView(this);
         }
 

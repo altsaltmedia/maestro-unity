@@ -287,41 +287,6 @@ namespace AltSalt.Maestro.Animation
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TextSelected, button);
                     break;
-
-                case nameof(ButtonNames.ResponsiveRectTransformPosTrack):
-                    button.clickable.clicked += () =>
-                    {
-                        if (selectCreatedObject == true) {
-                            Selection.objects = CreateResponsiveRectTransformPosTrack();
-                        }
-                        else {
-                            CreateResponsiveRectTransformPosTrack();
-                        }
-
-                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
-                    };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
-                    break;
-
-                case nameof(ButtonNames.ResponsiveRectTransformScaleTrack):
-                    button.clickable.clicked += () =>
-                    {
-                        if (selectCreatedObject == true) {
-                            Selection.objects = TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset,
-                                TimelineEditor.inspectedDirector, Selection.gameObjects,
-                                typeof(ResponsiveRectTransformScaleTrack), typeof(RectTransform), Selection.objects,
-                                TimelineEditor.selectedClips);
-                        }
-                        else {
-                            TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector,
-                                Selection.gameObjects, typeof(ResponsiveRectTransformScaleTrack), typeof(RectTransform),
-                                Selection.objects, TimelineEditor.selectedClips);
-                        }
-
-                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
-                    };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
-                    break;
             }
 
             return button;
@@ -383,9 +348,9 @@ namespace AltSalt.Maestro.Animation
             bool selectCreatedObject = animationTracks.selectCreatedObject;
 
             if(selectCreatedObject == true) {
-                Selection.objects = CreateResponsiveRectTransformPosTrack();
+                Selection.objects = CreateRectTransformPosTrack();
             } else {
-                CreateResponsiveRectTransformPosTrack();
+                CreateRectTransformPosTrack();
             }
 
             TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
@@ -401,9 +366,9 @@ namespace AltSalt.Maestro.Animation
             return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(SpriteColorTrack), typeof(SpriteRenderer), Selection.objects, TimelineEditor.selectedClips);
         }
 
-        public static TrackAsset[] CreateResponsiveRectTransformPosTrack()
+        public static TrackAsset[] CreateRectTransformPosTrack()
         {
-            return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(ResponsiveRectTransformPosTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
+            return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformPosTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
         }
         
         private static TrackAsset PopulateTrackAsset(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject)
@@ -420,8 +385,6 @@ namespace AltSalt.Maestro.Animation
                     case nameof(RectTransformPosTrack):
                     case nameof(RectTransformScaleTrack):
                     case nameof(RectTransformRotationTrack):
-                    case nameof(ResponsiveRectTransformPosTrack):
-                    case nameof(ResponsiveRectTransformScaleTrack):
                         targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<RectTransform>());
                         break;
 

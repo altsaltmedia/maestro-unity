@@ -154,14 +154,14 @@ namespace AltSalt.Maestro
                         if (evt.newValue < .1f) {
                             targetDuration = .1f;
                         }
-                        TimelineEditor.selectedClips = SetDuration(GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
+                        TimelineEditor.selectedClips = SetDuration(GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     });
                     break;
 
                 case nameof(PropertyFieldNames.TargetSpacing):
                     propertyField.RegisterCallback<ChangeEvent<float>>((ChangeEvent<float> evt) => {
-                        TimelineEditor.selectedClips = SetSpacing(GetCurrentClipSelection(), targetSpacing, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
+                        TimelineEditor.selectedClips = SetSpacing(GetCurrentClipSelection(), targetSpacing, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     });
                     break;
@@ -234,7 +234,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.SetToPlayhead):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = SetToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
+                        TimelineEditor.selectedClips = SetToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -242,7 +242,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.TransposeToPlayhead):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = TransposeToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
+                        TimelineEditor.selectedClips = TransposeToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -250,7 +250,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.ResizeToPlayhead):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ResizeToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
+                        TimelineEditor.selectedClips = ResizeToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -258,7 +258,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.ResizeAndTransposeToPlayhead):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = ResizeAndTransposeToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, GetAllTimelineClips());
+                        TimelineEditor.selectedClips = ResizeAndTransposeToPlayhead(GetCurrentClipSelection(), TimelineUtils.currentTime, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips());
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -266,7 +266,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.MultiplyDuration):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = MultiplyDuration(GetCurrentClipSelection(), durationMultiplier, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
+                        TimelineEditor.selectedClips = MultiplyDuration(GetCurrentClipSelection(), durationMultiplier, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -274,7 +274,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.MultiplyDurationAndTranspose):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = MultiplyDurationAndTranspose(GetCurrentClipSelection(), durationMultiplier, callTransposeUnselectedClips, GetAllTimelineClips());
+                        TimelineEditor.selectedClips = MultiplyDurationAndTranspose(GetCurrentClipSelection(), durationMultiplier, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips());
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -282,7 +282,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.SetDuration):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = SetDuration(GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
+                        TimelineEditor.selectedClips = SetDuration(GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -290,7 +290,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.SetDurationAndTranspose):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = SetDurationAndTranspose(GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
+                        TimelineEditor.selectedClips = SetDurationAndTranspose(GetCurrentClipSelection(), targetDuration, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -298,7 +298,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.SetSpacing):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = SetSpacing(GetCurrentClipSelection(), targetSpacing, callTransposeUnselectedClips, GetAllTimelineClips(), TransposeTargetClips);
+                        TimelineEditor.selectedClips = SetSpacing(GetCurrentClipSelection(), targetSpacing, callTransposeUnselectedClips, TimelineUtils.GetAllTimelineClips(), TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -306,7 +306,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.AddSubtractSpacing):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = AddSubtractSpacing(GetCurrentClipSelection(), GetAllTimelineClips(), targetSpacing);
+                        TimelineEditor.selectedClips = AddSubtractSpacing(GetCurrentClipSelection(), TimelineUtils.GetAllTimelineClips(), targetSpacing);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -314,7 +314,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.SetSequentialOrder):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = SetSequentialOrder(GetCurrentClipSelection(), GetAllTimelineClips(), callTransposeUnselectedClips, TransposeTargetClips);
+                        TimelineEditor.selectedClips = SetSequentialOrder(GetCurrentClipSelection(), TimelineUtils.GetAllTimelineClips(), callTransposeUnselectedClips, TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -322,7 +322,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.SetSequentialOrderReverse):
                     button.clickable.clicked += () => {
-                        TimelineEditor.selectedClips = SetSequentialOrderReverse(GetCurrentClipSelection(), GetAllTimelineClips(), callTransposeUnselectedClips, TransposeTargetClips);
+                        TimelineEditor.selectedClips = SetSequentialOrderReverse(GetCurrentClipSelection(), TimelineUtils.GetAllTimelineClips(), callTransposeUnselectedClips, TransposeTargetClips);
                         TimelineUtils.RefreshTimelineContentsModified();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ClipsSelected, button);
@@ -386,7 +386,7 @@ namespace AltSalt.Maestro
             newSelection.AddRange(selectedClips);
 
             for (int i = 0; i < clipCount; i++) {
-                TimelineClip previousClip = GetPreviousClip(newSelection, GetAllTimelineClips(), timeReference);
+                TimelineClip previousClip = GetPreviousClip(newSelection, TimelineUtils.GetAllTimelineClips(), timeReference);
                 newSelection.Add(previousClip);
             }
 
@@ -428,7 +428,7 @@ namespace AltSalt.Maestro
             newSelection.AddRange(selectedClips);
 
             for (int i = 0; i < clipCount; i++) {
-                TimelineClip nextClip = GetNextClip(newSelection, GetAllTimelineClips(), timeReference);
+                TimelineClip nextClip = GetNextClip(newSelection, TimelineUtils.GetAllTimelineClips(), timeReference);
                 newSelection.Add(nextClip);
             }
 
@@ -922,37 +922,7 @@ namespace AltSalt.Maestro
 
             return sourceClipsList.ToArray();
         }
-
-        public static TimelineClip[] GetAllTimelineClips()
-        {
-            return GetAllTimelineClips(new Utils.ClipTimeSort());
-        }
-
-        public static TimelineClip[] GetAllTimelineClips(Comparer<TimelineClip> comparer)
-        {
-            IEnumerable<PlayableBinding> playableBindings = TimelineEditor.inspectedAsset.outputs;
-
-            List<TimelineClip> allClips = new List<TimelineClip>();
-
-            foreach (PlayableBinding playableBinding in playableBindings) {
-                TrackAsset trackAsset = playableBinding.sourceObject as TrackAsset;
-
-                // Skip playable bindings that don't contain track assets (e.g. markers)
-                if (trackAsset == null || trackAsset.hasClips == false || trackAsset is DebugTimelineTrack) {
-                    continue;
-                }
-
-                allClips.AddRange(trackAsset.GetClips());
-            }
-
-            if (comparer != null) {
-                allClips.Sort(comparer);
-            }
-
-            return allClips.ToArray();
-        }
-
-
+        
         public static TimelineClip[] GetCurrentClipSelection()
         {
             return GetCurrentClipSelection(new Utils.ClipTimeSort());

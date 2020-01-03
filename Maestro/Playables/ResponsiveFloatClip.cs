@@ -18,6 +18,7 @@ namespace AltSalt.Maestro
             get => _template;
             set => _template = value;
         }
+        public override LerpToTargetBehaviour templateReference => template;
 
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {

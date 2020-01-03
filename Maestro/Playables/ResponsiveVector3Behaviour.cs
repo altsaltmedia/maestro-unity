@@ -61,6 +61,13 @@ namespace AltSalt.Maestro
         }
 
 #if UNITY_EDITOR
+        public override object SetInitialValueToTarget()
+        {
+            breakpointInitialValue.Clear();
+            breakpointInitialValue.AddRange(breakpointTargetValue);
+            return initialValue;
+        }
+        
         [ShowIf(nameof(editMode))]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SaveInitial()

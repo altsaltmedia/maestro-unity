@@ -12,11 +12,13 @@ namespace AltSalt.Maestro
         [SerializeField]
         private GameObjectReferenceBehaviour _template = new GameObjectReferenceBehaviour ();
 
-        public GameObjectReferenceBehaviour template
+        private GameObjectReferenceBehaviour template
         {
             get => _template;
             set => _template = value;
         }
+        
+        public override LerpToTargetBehaviour templateReference => template;
 
         //This allows you to use GameObjects in your Scene
         [SerializeField]

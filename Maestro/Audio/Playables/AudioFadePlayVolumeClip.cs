@@ -18,6 +18,8 @@ namespace AltSalt.Maestro.Audio
             get => _template;
             set => _template = value;
         }
+        
+        public override LerpToTargetBehaviour templateReference => template;
 
         [FormerlySerializedAs("targetAudioSources")]
         [SerializeField]

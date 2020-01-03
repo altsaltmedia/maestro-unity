@@ -6,6 +6,7 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using System.IO;
 using System.Linq;
+using UnityEditor.Timeline;
 using UnityEngine.UIElements;
 
 namespace AltSalt.Maestro.Sequencing
@@ -237,12 +238,14 @@ namespace AltSalt.Maestro.Sequencing
                     break;
                 
                 case nameof(ButtonNames.SiblingSequenceConfig):
-                    button.clickable.clicked += () => {
+                    button.clickable.clicked += () =>
+                    {
+                        TrackAsset[] trackSelection = Array.ConvertAll(Utils.FilterSelection(Selection.objects, typeof(TrackAsset)), x => (TrackAsset) x);
                         if (selectOnCreation == true) {
-                            Selection.objects = CreateSiblingSequenceConfig(Selection.gameObjects);
+                            Selection.objects = CreateSiblingSequenceConfig(Selection.gameObjects, trackSelection);
                         }
                         else {
-                            CreateSiblingSequenceConfig(Selection.gameObjects);
+                            CreateSiblingSequenceConfig(Selection.gameObjects, trackSelection);
                         }
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SiblingSequeenceConfigDependenciesPopulated, button);
@@ -507,75 +510,151 @@ namespace AltSalt.Maestro.Sequencing
             return true;
         }
 
-        public static GameObject[] CreateSiblingSequenceConfig(GameObject[] selection)
+        public static GameObject[] CreateSiblingSequenceConfig(GameObject[] gameObjectSelection, TrackAsset[] trackSelection)
         {
             bool selectionValid = true;
 
-            for (int i = 0; i < selection.Length; i++) {
-                if (CanCreateSiblingSequenceConfig(selection[i]) == false) {
+            for (int i = 0; i < gameObjectSelection.Length; i++) {
+                if (CanCreateSiblingSequenceConfig(gameObjectSelection[i]) == false) {
                     selectionValid = false;
                 }
             }
 
             if (selectionValid == false) {
                 EditorUtility.DisplayDialog("Clone unsuccessful",
-                    "Please make sure your selected objects contain playable directors and that clones don't already exist", "Ok");
-                return selection;
+                    "Please make sure your selected objects contain playable directors and that siblings don't already exist", "Ok");
+                return gameObjectSelection;
             }
 
-            List<GameObject> clonedObjects = new List<GameObject>(); 
+            List<GameObject> clonedSequenceObjects = new List<GameObject>(); 
             
-            for (int i = 0; i < selection.Length; i++) {
+            for (int i = 0; i < gameObjectSelection.Length; i++) {
                 
-                GameObject sourceObject = selection[i];
-                GameObject clonedObject = Utils.DuplicateGameObject(sourceObject);
-                MigrateTimelineConfig(sourceObject, clonedObject);
-                
-                var sourceAssetPath = AssetDatabase.GetAssetPath(sourceObject.GetComponent<Sequence_Config>().sequence);
+                // Components whose data we'll use for migration
+                GameObject sourceSequenceObject = gameObjectSelection[i];
+                PlayableDirector sourceDirector = sourceSequenceObject.GetComponent<PlayableDirector>();
+                Sequence_Config sourceConfigComponent = sourceSequenceObject.GetComponent<Sequence_Config>();
 
-                string clonePath = Utils.GetCloneAssetPath(sourceAssetPath);
-                if (!AssetDatabase.CopyAsset(sourceAssetPath, clonePath)) {
-                    Debug.LogError("Unable to clone asset");
-                    return selection;
+                // Objects to receive the data
+                GameObject siblingSequenceObject = Utils.DuplicateGameObject(sourceSequenceObject);
+                siblingSequenceObject.name += " (Sibling)";
+                PlayableDirector siblingDirector = siblingSequenceObject.GetComponent<PlayableDirector>();
+                Sequence_Config siblingConfigComponent = siblingSequenceObject.GetComponent<Sequence_Config>();
+                
+                // Clone the sequence
+                Sequence siblingSequence = CreateSiblingSequence(sourceConfigComponent);
+                if (siblingSequence == null) {
+                    return gameObjectSelection;
                 }
-                var clonedSequence = AssetDatabase.LoadMainAssetAtPath(clonePath) as Sequence;
+                siblingConfigComponent.sequence = siblingSequence;
 
-                var clonedSequenceConfig = clonedObject.GetComponent<Sequence_Config>();
-                clonedSequenceConfig.sequence = clonedSequence;
-
-                TimelineAsset clonedTimelineAsset = clonedObject.GetComponent<PlayableDirector>().playableAsset as TimelineAsset;
-                clonedSequence.sourcePlayable = clonedTimelineAsset;
-
-                foreach (var trackAsset in clonedTimelineAsset.GetOutputTracks()) {
-                    IEnumerable<TimelineClip> timelineClips = trackAsset.GetClips();
-                    var timelineClipsArray = timelineClips.ToArray();
-
-                    if (timelineClipsArray.Length > 0) {
-                        
-                        // Delete all of the clips on each track, except for the last clip 
-                        for (int j = 0; j < timelineClipsArray.Length - 1; j++) {
-                            clonedTimelineAsset.DeleteClip(timelineClipsArray[j]);
-                        }
-                        
-                        // Set each track's last clip to the start of the timeline
-                        timelineClipsArray[timelineClipsArray.Length - 1].start = 0;
-//                        if (timelineClipsArray[timelineClipsArray.Length - 1].asset is LerpToTargetBehaviour
-//                            lerpToTargetBehaviour) {
-//                            
-//                        }
-
-                    }
+                TimelineAsset siblingTimelineAsset = CreateSiblingTimelineAsset(sourceConfigComponent);
+                if (siblingTimelineAsset == null) {
+                    return gameObjectSelection;
                 }
+                siblingSequence.sourcePlayable = siblingTimelineAsset;
+                siblingDirector.playableAsset = siblingTimelineAsset;
                 
-                clonedObject.name += " (Clone)";
+                // Copy and paste tracks slated for migration
+                TrackAsset[] siblingTracks = CreateSiblingTracks(sourceDirector, siblingDirector, trackSelection);
                 
-                Undo.SetTransformParent(clonedObject.transform, sourceObject.transform.parent, "Set timeline clone parent");
-                clonedObject.transform.SetSiblingIndex(sourceObject.transform.GetSiblingIndex() + 1);
+                // Remove unneeded clips and set connecting clips to start of timeline  
+                SanitizeSiblingTracks(siblingTimelineAsset, siblingTracks);
+
+                // Some housekeeping to make sure everything is placed correctly
+                Undo.SetTransformParent(siblingConfigComponent.transform, sourceSequenceObject.transform.parent, "Set timeline clone parent");
+                siblingConfigComponent.transform.SetSiblingIndex(sourceSequenceObject.transform.GetSiblingIndex() + 1);
                 
-                clonedObjects.Add(clonedObject);
+                clonedSequenceObjects.Add(siblingSequenceObject);
             }
 
-            return clonedObjects.ToArray();
+            return clonedSequenceObjects.ToArray();
+        }
+
+        private static Sequence CreateSiblingSequence(Sequence_Config sourceSequenceConfig)
+        {
+            string sourceAssetPath = AssetDatabase.GetAssetPath(sourceSequenceConfig.sequence);
+            string clonePath = Utils.GetCloneAssetPath(sourceAssetPath, "(Sibling)");
+            if (!AssetDatabase.CopyAsset(sourceAssetPath, clonePath)) {
+                Debug.LogError("Unable to clone asset");
+                return null;
+            }
+            return AssetDatabase.LoadMainAssetAtPath(clonePath) as Sequence;
+        }
+
+        private static TimelineAsset CreateSiblingTimelineAsset(Sequence_Config sourceSequenceConfig)
+        {
+            // Create new timeline asset
+            string sourceAssetPath = AssetDatabase.GetAssetPath(sourceSequenceConfig.sequence.sourcePlayable);
+            string clonePath = Utils.GetCloneAssetPath(sourceAssetPath, "(Sibling)");
+            
+            return CreateTimelineAsset(Path.GetDirectoryName(clonePath), Path.GetFileNameWithoutExtension(clonePath));
+        }
+        
+        private static TrackAsset[] CreateSiblingTracks(PlayableDirector sourceDirector, PlayableDirector siblingDirector, TrackAsset[] trackSelection)
+        {
+            TimelineAsset sourceTimelineAsset = sourceDirector.playableAsset as TimelineAsset;
+            TimelineAsset siblingTimelineAsset = siblingDirector.playableAsset as TimelineAsset;
+            
+            List<TrackAsset> tracksToCopy = new List<TrackAsset>();
+            List<TrackAsset> parentTracks = new List<TrackAsset>();
+            
+            // Flag any manually selected tracks for copying
+            tracksToCopy.AddRange(trackSelection);
+            for (int i = 0; i < trackSelection.Length; i++) {
+                parentTracks.AddRange(TimelineUtils.GetParentTracks(trackSelection[i]));
+            }
+            
+            // Add any additional tracks that have been marked as required
+            foreach (var trackAsset in sourceTimelineAsset.GetOutputTracks()) {
+                if (trackAsset is LerpToTargetTrack lerpToTargetTrack &&
+                    lerpToTargetTrack.requiredForSiblingSequence == true) {
+                    if (tracksToCopy.Contains(trackAsset) == false) {
+                        tracksToCopy.Add(trackAsset);
+                    }
+                    parentTracks.AddRange(TimelineUtils.GetParentTracks(trackAsset));
+                }
+            }
+            
+            // Add all parent tracks to preserve track hierarchy
+            for (int j = 0; j < parentTracks.Count; j++) {
+                if (tracksToCopy.Contains(parentTracks[j]) == false) {
+                    tracksToCopy.Add(parentTracks[j]);
+                }
+            }
+            
+            TrackAsset[] sortedTracks = TimelineUtils.SortTracks(tracksToCopy.ToArray());
+            List<TrackPlacement.TrackData> trackData = TrackPlacement.CopyTracks(sourceDirector, sortedTracks, false);
+            
+            return TrackPlacement.PasteTracks(siblingTimelineAsset, siblingDirector,
+                null, null, trackData);
+        }
+
+        private static TrackAsset[] SanitizeSiblingTracks(TimelineAsset targetTimelineAsset, TrackAsset[] targetTracks)
+        {
+            for (int q = 0; q < targetTracks.Length; q++) {
+                IEnumerable<TimelineClip> timelineClips = targetTracks[q].GetClips();
+                var timelineClipsArray = timelineClips.ToArray();
+
+                if (timelineClipsArray.Length > 0) {
+                        
+                    // Delete all of the clips on each track, except for the last clip 
+                    for (int j = 0; j < timelineClipsArray.Length - 1; j++) {
+                        targetTimelineAsset.DeleteClip(timelineClipsArray[j]);
+                    }
+                        
+                    TimelineClip connectingClip = timelineClipsArray[timelineClipsArray.Length - 1];
+                        
+                    // Set each track's last clip to the start of the timeline
+                    connectingClip.start = 0;
+                    if (connectingClip.asset is LerpToTargetClip lerpToTargetClip) {
+                        lerpToTargetClip.templateReference.SetInitialValueToTarget();
+                    }
+
+                }
+            }
+
+            return targetTracks;
         }
         
         public static bool CanCreateSiblingSequenceConfig(GameObject selection)

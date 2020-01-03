@@ -17,11 +17,12 @@ xsi:schemaLocation="
             <engine:Foldout class="foldout col-full" text="Simple Tracks" value="true">
                 <engine:VisualElement class="section">
                     <engine:VisualElement class="section___content margin-bottom-0">
-                        <engine:Button text="New TextMeshPro Color Track(s)" class="col-full" name="TMProColorTrack" />
-                        <engine:Button text="New RectTransform Pos Track(s)" class="col-full" name="RectTransformPosTrack" />
-                        <engine:Button text="New SpriteColor Track(s)" class="col-full" name="SpriteColorTrack" />
-                        <engine:Button text="New RectTransform Scale Track(s)" class="col-full" name="RectTransformScaleTrack" />
-                        <engine:Button text="New RectTransform Rotation Track(s)" class="col-full margin-bottom-0" name="RectTransformRotationTrack" />
+                        <engine:Button text="TextMeshPro Color Track(s)" class="col-full" name="TMProColorTrack" />
+                        <engine:Button text="TextMeshPro Character Spacing Track(s)" class="col-full" name="TMProCharSpacingTrack" />
+                        <engine:Button text="SpriteColor Track(s)" class="col-full" name="SpriteColorTrack" />
+                        <engine:Button text="RectTransform Pos Track(s)" class="col-full" name="RectTransformPosTrack" />
+                        <engine:Button text="RectTransform Scale Track(s)" class="col-full" name="RectTransformScaleTrack" />
+                        <engine:Button text="RectTransform Rotation Track(s)" class="col-full margin-bottom-0" name="RectTransformRotationTrack" />
                     </engine:VisualElement>
                 </engine:VisualElement>
             </engine:Foldout>

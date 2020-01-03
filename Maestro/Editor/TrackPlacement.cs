@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Reflection;
 using System.Collections.Generic;
 using Sirenix.Utilities;
@@ -245,19 +246,19 @@ namespace AltSalt.Maestro
             return visualElement;
         }
 
-        public static List<TrackData> CopyTracks(PlayableDirector sourceDirector, UnityEngine.Object[] sourceObjects)
+        public static List<TrackData> CopyTracks(PlayableDirector sourceDirector, UnityEngine.Object[] sourceObjects, bool includeChildTracks = false)
         {
             List<TrackData> tracksToCopy = new List<TrackData>();
             for (int i = 0; i < sourceObjects.Length; i++) {
                 if (sourceObjects[i] is TrackAsset) {
-                    List<TrackData> trackData = GetTrackData(sourceDirector, sourceObjects[i] as TrackAsset);
+                    List<TrackData> trackData = GetTrackData(sourceDirector, sourceObjects[i] as TrackAsset, includeChildTracks);
                     tracksToCopy.AddRange(trackData);
                 }
             }
             return tracksToCopy;
         }
 
-        static List<TrackData> GetTrackData(PlayableDirector sourceDirector, TrackAsset sourceTrack)
+        static List<TrackData> GetTrackData(PlayableDirector sourceDirector, TrackAsset sourceTrack, bool includeChildTracks = true)
         {
             List<TrackData> trackData = new List<TrackData>();
             UnityEngine.Object sourceObject = new UnityEngine.Object();
@@ -265,8 +266,10 @@ namespace AltSalt.Maestro
                 sourceObject = sourceDirector.GetGenericBinding(playableBinding.sourceObject);
             }
             trackData.Add(new TrackData(sourceTrack, sourceObject, sourceTrack.GetClips()));
-            foreach (TrackAsset childTrack in sourceTrack.GetChildTracks()) {
-                trackData.AddRange(GetTrackData(sourceDirector, childTrack));
+            if (includeChildTracks == true) {
+                foreach (TrackAsset childTrack in sourceTrack.GetChildTracks()) {
+                    trackData.AddRange(GetTrackData(sourceDirector, childTrack));
+                }
             }
             return trackData;
         }
@@ -275,14 +278,23 @@ namespace AltSalt.Maestro
         {
             List<TrackAsset> pastedTracks = new List<TrackAsset>();
 
-            TrackAsset parentTrack = GetDestinationTrackFromSelection(destinationSelection);
-            if (parentTrack == null) {
+            TrackAsset parentTrack = null;
+
+            // Attempt to find a parent track (if any) from selection 
+            if (destinationSelection != null) {
+                parentTrack = GetDestinationTrackFromSelection(destinationSelection);
+            }
+            if (parentTrack == null && clipSelection != null) {
                 parentTrack = GetDestinationTrackFromSelection(clipSelection);
             }
 
             // Paste tracks
             for (int i = 0; i < sourceTrackData.Count; i++) {
                 TrackAsset trackAsset = targetTimelineAsset.CreateTrack(sourceTrackData[i].trackType, parentTrack, sourceTrackData[i].trackName);
+                
+                if (trackAsset is LerpToTargetTrack lerpToTargetTrack) {
+                    lerpToTargetTrack.requiredForSiblingSequence = sourceTrackData[i].requiredForSiblingSequence;
+                }
                 
                 foreach (PlayableBinding playableBinding in trackAsset.outputs) {
                     targetDirector.SetGenericBinding(playableBinding.sourceObject, sourceTrackData[i].trackBinding);
@@ -436,7 +448,7 @@ namespace AltSalt.Maestro
                 }
                 
                 if (currentTrack is GroupTrack) {
-                    trackData.Add(new TrackData(currentTrack, sourceObject, currentTrack.GetClips()));
+                    trackData.Add(new TrackData(currentTrack, sourceObject, new TimelineClip[]{}));
                     continue;
                 }
                 
@@ -706,6 +718,7 @@ namespace AltSalt.Maestro
         public class TrackData
         {
             public TrackAsset trackAsset;
+            public bool requiredForSiblingSequence;
             public int trackPosition;
             public GroupTrack groupTrack;
             public int groupTrackID;
@@ -719,6 +732,9 @@ namespace AltSalt.Maestro
             public TrackData(TrackAsset trackAsset, UnityEngine.Object binding, IEnumerable<TimelineClip> trackClips)
             {
                 this.trackAsset = trackAsset;
+                if (trackAsset is LerpToTargetTrack lerpToTargetTrack) {
+                    requiredForSiblingSequence = lerpToTargetTrack.requiredForSiblingSequence;
+                }
                 this.groupTrack = trackAsset.GetGroup();
                 if (groupTrack != null) {
                     this.groupTrackID = this.groupTrack.GetInstanceID();

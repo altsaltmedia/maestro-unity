@@ -18,6 +18,8 @@ namespace AltSalt.Maestro.Audio
             set => _template = value;
         }
         
+        public override LerpToTargetBehaviour templateReference => template;
+        
         private BoolReference _isReversing = new BoolReference();
 
         public BoolReference isReversing

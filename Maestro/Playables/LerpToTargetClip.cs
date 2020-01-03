@@ -21,14 +21,7 @@ namespace AltSalt.Maestro
         // creating subclasses; it won't work. Instead, create a new instance of your behaviour in question.
         // private LerpToTargetBehaviour template = new LerpToTargetBehaviour();
 
-        [SerializeField]
-        private bool _migrated;
-
-        public bool migrated
-        {
-            get => _migrated;
-            set => _migrated = value;
-        }
+        public abstract LerpToTargetBehaviour templateReference { get; }
 
         private AppSettings _appSettings;
 
