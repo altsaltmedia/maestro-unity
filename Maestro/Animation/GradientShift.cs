@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro.Layout {
+namespace AltSalt.Maestro.Animation {
 
     #if UNITY_EDITOR
     [ExecuteInEditMode]
