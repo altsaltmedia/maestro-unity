@@ -13,7 +13,7 @@ namespace AltSalt.Maestro
         public bool hasDefault
         {
             get => _hasDefault;
-            protected set => _hasDefault = value;
+            set => _hasDefault = value;
         }
         public abstract void SetDefaultValue();
     }

@@ -26,19 +26,19 @@ namespace AltSalt.Maestro
         public void Raise()
         {
             if(CallerRegistered() == true) {
-                if(logCallersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                if(logCallersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                     LogCaller();
                 }
-                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                     LogListenersHeading(listeners.Count);
                 }
                 for (int i = listeners.Count - 1; i >= 0; i--) {
-                    if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                    if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                         LogListenerOnRaise(listeners[i]);
                     }
                     listeners[i].OnEventRaised(EventPayload.CreateInstance());
                 }
-                if (logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                if (logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                     LogClosingLine();
                 }
                 ClearCaller();
@@ -48,14 +48,14 @@ namespace AltSalt.Maestro
         public void Raise(object value)
         {
             if (CallerRegistered() == true) {
-                if (logCallersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                if (logCallersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                     LogCaller();
                 }
-                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                     LogListenersHeading(listeners.Count);
                 }
                 for (int i = listeners.Count - 1; i >= 0; i--) {
-                    if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                    if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                         LogListenerOnRaise(listeners[i]);
                     }
 
@@ -65,7 +65,7 @@ namespace AltSalt.Maestro
                         listeners[i].OnEventRaised(EventPayload.CreateInstance(value));
                     }
                 }
-                if (logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                if (logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                     LogClosingLine();
                 }
                 ClearCaller();

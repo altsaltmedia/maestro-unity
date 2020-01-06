@@ -10,9 +10,16 @@ namespace AltSalt.Maestro.Logic
         [SerializeField]
         private AppSettings _appSettings;
 
-        public AppSettings appSettings
+        private AppSettings appSettings
         {
-            get => _appSettings;
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
             set => _appSettings = value;
         }
 

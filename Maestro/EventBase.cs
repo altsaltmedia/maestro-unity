@@ -6,10 +6,22 @@ namespace AltSalt.Maestro
 
     public abstract class EventBase : RegisterableScriptableObject, IDependable
     {
-
-        [SerializeField]
         [Required]
-        protected AppSettings appSettings;
+        [SerializeField]
+        [ReadOnly]
+        private AppSettings _appSettings;
+
+        protected AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+        }
 
         protected UnityEngine.Object callerObject;
         protected string callerScene = "";
@@ -23,15 +35,6 @@ namespace AltSalt.Maestro
 
         [SerializeField]
         protected bool logListenersOnRaise;
-
-#if UNITY_EDITOR
-        void Awake()
-        {
-            if (appSettings == null) {
-                    appSettings = Utils.GetAppSettings();
-                }
-        }
-#endif
 
         public void StoreCaller(GameObject caller)
         {

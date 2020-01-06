@@ -38,7 +38,7 @@ namespace AltSalt.Maestro
         private float _defaultValue;
 
         [ShowIf("hasDefault")]
-        private float defaultValue
+        public float defaultValue
         {
             get => _defaultValue;
             set => _defaultValue = value;

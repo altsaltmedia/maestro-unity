@@ -74,7 +74,7 @@ namespace AltSalt.Maestro
         public bool logElementOnLayoutUpdate {
             get
             {
-                if (appSettings.logResponsiveElementActions.Value == true) {
+                if (appSettings.logResponsiveElementActions == true) {
                     return true;
                 } else {
                     return _logElementOnLayoutUpdate;

@@ -14,10 +14,23 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [SerializeField]
         [HideInInspector]
         protected string conditionEventTitle;
+        
+        [ShowInInspector]
+        [ReadOnly]
+        private static AppSettings _appSettings;
 
-        [Required]
-        [SerializeField]
-        AppSettings appSettings;
+        private static AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
 
         [PropertySpace]
         [ValidateInput("IsPopulated")]
@@ -31,22 +44,12 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         public void TriggerResponse(GameObject caller, bool triggerOnStart)
         {
-            GetAppSettings();
             if (CheckCondition() == true) {
                 if(appSettings.logConditionResponses == true) {
                     LogConditionResponse(caller, triggerOnStart);
                 }
                 response.Invoke();
             }
-        }
-
-        void GetAppSettings()
-        {
-#if UNITY_EDITOR
-            if(appSettings == null) {
-                    appSettings = Utils.GetAppSettings();
-                }
-#endif
         }
 
         void LogConditionResponse(GameObject callerObject, bool triggerOnStart)

@@ -15,7 +15,15 @@ namespace AltSalt.Maestro.Sequencing
 
         public AppSettings appSettings
         {
-            get => _appSettings;
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
         }
         
         [ValidateInput(nameof(IsPopulated))]

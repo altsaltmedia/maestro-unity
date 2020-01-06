@@ -23,6 +23,7 @@ namespace AltSalt.Maestro
 
         public abstract LerpToTargetBehaviour templateReference { get; }
 
+        // App Settings is populated dynamically via LerpToTargetTrack at runtime
         private AppSettings _appSettings;
 
         public AppSettings appSettings

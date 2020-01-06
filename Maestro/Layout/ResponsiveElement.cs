@@ -6,6 +6,7 @@ using UnityEditor;
 using System.IO;
 using UnityEngine.SceneManagement;
 using SimpleJSON;
+using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout
@@ -15,7 +16,21 @@ namespace AltSalt.Maestro.Layout
     {
         [Required]
         [SerializeField]
-        protected AppSettings appSettings;
+        [ReadOnly]
+        private AppSettings _appSettings;
+
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
@@ -75,7 +90,7 @@ namespace AltSalt.Maestro.Layout
         
         public bool logElementOnLayoutUpdate {
             get {
-                if (appSettings.logResponsiveElementActions.Value == true) {
+                if (appSettings.logResponsiveElementActions == true) {
                     return true;
                 } else {
                     return _logElementOnLayoutUpdate;
@@ -137,7 +152,7 @@ namespace AltSalt.Maestro.Layout
                 Debug.Log("--------------------------");
             }
 
-            if (appSettings.modifyLayoutActive.Value == true) {
+            if (appSettings.modifyLayoutActive == true) {
                 LoadData();
             }
             ExecuteResponsiveAction();
@@ -210,10 +225,6 @@ namespace AltSalt.Maestro.Layout
 
         protected virtual void PopulateDependencies()
         {
-            if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
-
             if (sceneWidth.Variable == null) {
                 sceneWidth.Variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneWidth));
             }
@@ -286,7 +297,7 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
             
-            string directoryPath = Utils.GetDirectory(new string[] { "/Resources", "/Layouts", $"/{SceneManager.GetActiveScene().name}/{activeLayout.name}" });
+            string directoryPath = Utils.GetDirectory(new string[] { "Resources", "Layouts", $"{SceneManager.GetActiveScene().name}/{activeLayout.name}" });
             string fileName = this.name + id.ToString();
             string filePath = Utils.GetFilePath(directoryPath, fileName, ".json");
 

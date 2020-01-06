@@ -37,7 +37,22 @@ namespace AltSalt.Maestro.Sequencing
         }
 
         [Required]
-        public AppSettings appSettings;
+        [SerializeField]
+        [ReadOnly]
+        private AppSettings _appSettings;
+        
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
 
         [ValidateInput(nameof(IsPopulated))]
         public BoolReference scrubberActive;
@@ -165,7 +180,7 @@ namespace AltSalt.Maestro.Sequencing
 
         void OnDisable()
         {
-            if (editorListenerCreated == true && appSettings.debugEventsActive == true) {
+            if (editorListenerCreated == true) {
                 DisableListener();
             }
         }

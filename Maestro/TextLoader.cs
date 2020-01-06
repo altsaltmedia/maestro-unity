@@ -8,6 +8,7 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
+using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -24,7 +25,21 @@ namespace AltSalt.Maestro
     {
         [Required]
         [SerializeField]
-        AppSettings appSettings;
+        [ReadOnly]
+        private AppSettings _appSettings;
+
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
 
         [Required]
         [SerializeField]
@@ -56,13 +71,6 @@ namespace AltSalt.Maestro
             }
 
             return "Please populate a text collection bank";
-        }
-        
-        private void Reset()
-        {
-            if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
         }
 #endif
 

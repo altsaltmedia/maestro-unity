@@ -18,8 +18,9 @@ namespace AltSalt.Maestro
     [Serializable]
     public abstract class LerpToTargetBehaviour : PlayableBehaviour
     {
+        // App Settings is populated dynamically via LerpToTargetTrack at runtime
         [Required]
-        [SerializeField]
+        [ReadOnly]
         private AppSettings _appSettings;
 
         public AppSettings appSettings

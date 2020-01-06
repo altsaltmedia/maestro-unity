@@ -8,6 +8,7 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
+using System;
 using UnityEngine;
 using System.Collections;
 using Sirenix.OdinInspector;
@@ -18,8 +19,22 @@ namespace AltSalt.Maestro.Logic
     {
         [Required]
         [SerializeField]
-        AppSettings appSettings;
+        [ReadOnly]
+        private AppSettings _appSettings;
 
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
+        
         [Required]
         [SerializeField]
         ComplexEventTrigger initializeAppTrigger;

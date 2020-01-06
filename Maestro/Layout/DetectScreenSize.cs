@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro.Layout {
@@ -10,7 +11,20 @@ namespace AltSalt.Maestro.Layout {
 
         [Required]
         [SerializeField]
-        AppSettings appSettings;
+        private AppSettings _appSettings;
+
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
@@ -30,12 +44,12 @@ namespace AltSalt.Maestro.Layout {
 
         float internalHeightValue;
 
-		void Start()
+        private void Start()
 		{
             SaveScreenValues();
 		}
 
-        void SaveScreenValues()
+        private void SaveScreenValues()
         {
             // Sometimes these values are erroneous, so make sure
             // we don't use them when they do
@@ -46,7 +60,7 @@ namespace AltSalt.Maestro.Layout {
             deviceAspectRatio.Variable.SetValue((float)Screen.height / Screen.width);
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
 
             void OnGUI()
             {

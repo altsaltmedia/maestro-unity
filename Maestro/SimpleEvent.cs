@@ -24,7 +24,7 @@ namespace AltSalt.Maestro
         public void Raise()
         {
             if(CallerRegistered() == true) {
-                if (logCallersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                if (logCallersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                     LogCaller();
                 }
                 if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
@@ -36,7 +36,7 @@ namespace AltSalt.Maestro
                     }
                     listeners[i].OnEventRaised();
                 }
-                if(logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners.Value == true) {
+                if(logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                     LogClosingLine();
                 }
                 ClearCaller();

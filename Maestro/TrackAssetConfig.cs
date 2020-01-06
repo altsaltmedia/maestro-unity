@@ -6,14 +6,22 @@ namespace AltSalt.Maestro
 {
     public class TrackAssetConfig : MonoBehaviour
     {
-        [SerializeField]
         [Required]
+        [SerializeField]
+        [ReadOnly]
         private AppSettings _appSettings;
 
         public AppSettings appSettings
         {
-            get =>  _appSettings;
-            private set => _appSettings = value;
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
         }
 
         [SerializeField]

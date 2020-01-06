@@ -79,7 +79,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         private void Update()
         {
-            if (hasMomentum == false || touchController.appSettings.pauseMomentum == true) return;
+            if (hasMomentum == false || touchController.appSettings.momentumActive == true) return;
             
             float momentumModifier;
 

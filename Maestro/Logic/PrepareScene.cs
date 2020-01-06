@@ -13,6 +13,24 @@ namespace AltSalt.Maestro.Logic {
     [ExecuteInEditMode]
 	public class PrepareScene : MonoBehaviour, ISkipRegistration
     {
+        [Required]
+        [SerializeField]
+        [ReadOnly]
+        private AppSettings _appSettings;
+
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
+
         [SerializeField]
         private bool _resetTouchVariables = false;
 
@@ -240,6 +258,10 @@ namespace AltSalt.Maestro.Logic {
         public void CallExecuteLayoutUpdate()
         {
             PopulateSceneDimensions();
+
+            if (appSettings.responsiveLayoutActive == false) {
+                return;
+            }
 
             // We track all priority responsive elements separately
             // because sorting is an expensive operation

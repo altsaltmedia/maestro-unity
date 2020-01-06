@@ -24,7 +24,22 @@ namespace AltSalt.Maestro.Logic
         
         // Scene transition variables
         [Required]
-        public AppSettings appSettings;
+        [SerializeField]
+        [ReadOnly]
+        private AppSettings _appSettings;
+        
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
         
         [ValidateInput("IsPopulated")]
         public StringReference activeScene;

@@ -149,6 +149,25 @@ namespace AltSalt.Maestro
         }
 
 #if UNITY_EDITOR
+        public static string Capitalize(this string source)
+        {
+            switch (source) {
+
+                case null:
+                {
+                    throw new ArgumentNullException(nameof(source));
+                }
+
+                case "":
+                {
+                    throw new ArgumentException($"{nameof(source)} must not be empty");
+                }
+
+                default:
+                    return source.First().ToString().ToUpper() + source.Substring(1);
+            }
+        }
+        
         public static GUISkin AltSaltSkin {
 
             get {
@@ -159,9 +178,72 @@ namespace AltSalt.Maestro
             }
         }
 
+        public static string GetProjecttPath()
+        {
+            return "Assets/__Project/";
+        }
+
+        public static string GetAbsoluteProjectPath()
+        {
+            return Application.dataPath + "/__Project";
+        }
+        
+        public static string GetSharedPath()
+        {
+            return GetProjecttPath() + "Scenes/Shared";
+        }
+        
+        public static string GetAltSaltPath()
+        {
+            return "Assets/_AltSalt/";
+        }
+        
+        public static string GetMaestroPath()
+        {
+            return GetAltSaltPath() + "Maestro/";
+        }
+        
         public static string GetStylesheetPath()
         {
-            return "Assets/_AltSalt/Maestro/Editor/EditorStyles.uss";
+            return GetMaestroPath() + "Editor/EditorStyles.uss";
+        }
+        
+        public static string GetDirectory(string[] subfolders)
+        {
+            string directoryPath = GetProjecttPath();
+
+            for (int i = 0; i < subfolders.Length; i++) {
+                if (AssetDatabase.IsValidFolder(($"{directoryPath}/{subfolders[i]}")) == false) {
+                    AssetDatabase.CreateFolder(directoryPath, subfolders[i]);
+                }
+                directoryPath += "/" + subfolders[i];
+            }
+            return directoryPath;
+        }
+
+        public static string GetFilePath(string basePath, string fileName, string extension = "")
+        {
+            StringBuilder path = new StringBuilder(basePath);
+            string[] pathComponents = { "/", fileName, extension };
+            for (int i = 0; i < pathComponents.Length; i++) {
+                path.Append(pathComponents[i]);
+            }
+            return path.ToString();
+        }
+
+        public static string GetAssetPathFromObject(UnityEngine.Object targetObject)
+        {
+            string targetGUID = GetGUIDFromObject(targetObject);
+            return AssetDatabase.GUIDToAssetPath(targetGUID);
+        }
+
+        public static string GetGUIDFromObject(UnityEngine.Object targetObject)
+        {
+            string guid;
+            long file;
+
+            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(targetObject, out guid, out file);
+            return guid;
         }
         
         // Will add (Clone) before a file extension
@@ -837,49 +919,6 @@ namespace AltSalt.Maestro
                 return x.start.CompareTo(y.start);
             }
         }
-
-        public static string GetProjectPath()
-        {
-            return Application.dataPath + "/__Project";
-        }
-
-        public static string GetDirectory(string[] subfolders)
-        {
-            string directoryPath = GetProjectPath();
-
-            for (int i = 0; i < subfolders.Length; i++) {
-                directoryPath += subfolders[i];
-                if (!Directory.Exists(directoryPath)) {
-                    Directory.CreateDirectory(directoryPath);
-                }
-            }
-            return directoryPath;
-        }
-
-        public static string GetFilePath(string basePath, string fileName, string extension = "")
-        {
-            StringBuilder path = new StringBuilder(basePath);
-            string[] pathComponents = { "/", fileName, extension };
-            for (int i = 0; i < pathComponents.Length; i++) {
-                path.Append(pathComponents[i]);
-            }
-            return path.ToString();
-        }
-
-        public static string GetAssetPathFromObject(UnityEngine.Object targetObject)
-        {
-            string targetGUID = GetGUIDFromObject(targetObject);
-            return AssetDatabase.GUIDToAssetPath(targetGUID);
-        }
-
-        public static string GetGUIDFromObject(UnityEngine.Object targetObject)
-        {
-            string guid;
-            long file;
-
-            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(targetObject, out guid, out file);
-            return guid;
-        }
 #endif
         public static TrackAsset GetTrackFromTimelineAsset(TimelineAsset timelineAsset, Type trackType)
         {
@@ -991,13 +1030,27 @@ namespace AltSalt.Maestro
             Debug.LogWarning("More than one matching asset found for search " + assetName + ". Please check to see if this is intentional.");
         }
 
+        public static ScriptableObject CreateScriptableObjectAsset(Type assetType, string name, string[] subfolders)
+        {
+            var instance = ScriptableObject.CreateInstance(assetType);
+            string productionSettingsDirectory = Utils.GetDirectory(subfolders);
+            string filePath = Utils.GetFilePath(productionSettingsDirectory, name, ".asset");
+            AssetDatabase.CreateAsset(instance, filePath);
+            return AssetDatabase.LoadMainAssetAtPath(filePath) as ScriptableObject;
+        }
+
         public static AppSettings GetAppSettings()
         {
             string[] guids;
             string path;
 
-            guids = AssetDatabase.FindAssets("t:" + nameof(VarDependencies.AppSettings));
+            guids = AssetDatabase.FindAssets("t:" + nameof(AppSettings), new [] { GetSharedPath() });
 
+            if (guids.Length < 1) {
+                Debug.Log($"App settings not found, creating new instance.");
+                return CreateScriptableObjectAsset(typeof(AppSettings), nameof(AppSettings), new string[] {"Scenes", "Shared", "AppSettings"}) as AppSettings;
+            }
+            
             if(guids.Length > 1) {
                 Debug.LogWarning("More than one matching App Settings asset found. Please check to see if this is intentional.");
             }
@@ -1035,6 +1088,11 @@ namespace AltSalt.Maestro
 
             guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
 
+            if (guids.Length < 1) {
+                Debug.Log($"Asset {target} of type  {typeName} not found.");
+                return null;
+            }
+            
             if (guids.Length > 1) {
                 LogDuplicateAssetWarning(target);
             }
@@ -1052,6 +1110,11 @@ namespace AltSalt.Maestro
 
             guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
 
+            if (guids.Length < 1) {
+                Debug.Log($"Asset {target} of type  {typeName} not found.");
+                return null;
+            }
+            
             if (guids.Length > 1) {
                 LogDuplicateAssetWarning(target);
             }
@@ -1069,6 +1132,11 @@ namespace AltSalt.Maestro
 
             guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
 
+            if (guids.Length < 1) {
+                Debug.Log($"Asset {target} of type  {typeName} not found.");
+                return null;
+            }
+            
             if (guids.Length > 1) {
                 LogDuplicateAssetWarning(target);
             }
@@ -1086,6 +1154,11 @@ namespace AltSalt.Maestro
 
             guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
 
+            if (guids.Length < 1) {
+                Debug.Log($"Asset {target} of type  {typeName} not found.");
+                return null;
+            }
+            
             if (guids.Length > 1) {
                 LogDuplicateAssetWarning(target);
             }
@@ -1103,6 +1176,11 @@ namespace AltSalt.Maestro
 
             guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
 
+            if (guids.Length < 1) {
+                Debug.Log($"Asset {target} of type  {typeName} not found.");
+                return null;
+            }
+            
             if (guids.Length > 1) {
                 LogDuplicateAssetWarning(target);
             }

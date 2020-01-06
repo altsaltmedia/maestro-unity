@@ -28,7 +28,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         protected virtual void Update()
         {
-            if (_isparentModuleNull || autorunController.appSettings.autoplayActive.Value == false) {
+            if (_isparentModuleNull || autorunController.appSettings.autoplayActive == false) {
                 return;
             }
 

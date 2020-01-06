@@ -8,21 +8,26 @@ namespace AltSalt.Maestro.Logic
     [ExecuteInEditMode]
     public class UserDataController : MonoBehaviour
     {
+        [Required]
         [SerializeField]
         [ReadOnly]
-        AppSettings appSettings;
+        private AppSettings _appSettings;
+        
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
 
         [SerializeField]
-        List<UserDatum> userData = new List<UserDatum>();
-
-#if UNITY_EDITOR
-        void OnEnable()
-        {
-            if(appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
-        }
-#endif
+        private List<UserDatum> userData = new List<UserDatum>();
 
         public void CallWriteToStoredData(EventPayload eventPayload)
         {

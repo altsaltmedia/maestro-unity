@@ -26,7 +26,21 @@ namespace AltSalt.Maestro.Sequencing
 
         [Required]
         [SerializeField]
-        AppSettings appSettings;
+        [ReadOnly]
+        private AppSettings _appSettings;
+        
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
 
         [ReadOnly]
         [SerializeField]
