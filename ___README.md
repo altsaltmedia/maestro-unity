@@ -1,6 +1,10 @@
-<!----------------------
- # AltSalt Main Folder #
-========================
+<!-----------------------
+ # Maestro Story Engine #
+=========================
 
-This folder contains all the common elements to be used across
-all AltSalt projects.
+
+This is the Maestro Story Engine for creating interactive stories.
+
+
+Made with <3
+by AltSalt Media, LLC.
