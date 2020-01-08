@@ -35,7 +35,7 @@ namespace AltSalt.Maestro.Layout
             titleContent = new GUIContent("Text Placement Utils");
             ModuleWindow moduleWindow = Configure(null, ProjectNamespaceData.namespaceData[ModuleNamespace.Layout].editorPath + nameof(TextPlacementUtils)+"_UXML.uxml");
             
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.GetStylesheetPath());
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.stylesheetPath);
             rootVisualElement.styleSheets.Add(styleSheet);
             rootVisualElement.AddToClassList("altsalt");
             

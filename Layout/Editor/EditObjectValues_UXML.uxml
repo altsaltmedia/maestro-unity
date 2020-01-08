@@ -11,10 +11,10 @@ xsi:schemaLocation="
                         UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
 "
 >
-    <engine:Template path="Assets/_AltSalt/Maestro/Layout/Editor/EditRectTransformComponent_UXML.uxml" name="EditRectTransformComponent" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Layout/Editor/EditTMProComponent_UXML.uxml" name="EditTMProComponent" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Layout/Editor/EditSpriteComponent_UXML.uxml" name="EditSpriteComponent" />
-    <engine:Template path="Assets/_AltSalt/Maestro/Layout/Editor/EditScrollSnapController_UXML.uxml" name="EditScrollSnapController" />
+    <engine:Template path="Assets/AltSalt/Maestro/Layout/Editor/EditRectTransformComponent_UXML.uxml" name="EditRectTransformComponent" />
+    <engine:Template path="Assets/AltSalt/Maestro/Layout/Editor/EditTMProComponent_UXML.uxml" name="EditTMProComponent" />
+    <engine:Template path="Assets/AltSalt/Maestro/Layout/Editor/EditSpriteComponent_UXML.uxml" name="EditSpriteComponent" />
+    <engine:Template path="Assets/AltSalt/Maestro/Layout/Editor/EditScrollSnapController_UXML.uxml" name="EditScrollSnapController" />
 
     <engine:VisualElement name="edit-object-values">
 

@@ -37,36 +37,36 @@ namespace AltSalt.Maestro
         // Production settings
         // In production, these values will vary depending on app state
         
-        public bool hasBeenOpened => productionSettings.hasBeenOpened.value;
+        public bool hasBeenOpened => productionSettings.hasBeenOpened;
         
-        public bool autoplayActive => productionSettings.autoplayActive.value;
+        public bool autoplayActive => productionSettings.autoplayActive;
         
-        public bool momentumActive => productionSettings.momentumActive.value;
+        public bool momentumActive => productionSettings.momentumActive;
         
-        public bool musicActive => productionSettings.musicActive.value;
+        public bool musicActive => productionSettings.musicActive;
         
-        public bool soundEffectsActive => productionSettings.soundEffectsActive.value;
+        public bool soundEffectsActive => productionSettings.soundEffectsActive;
         
-        public float timescale => productionSettings.timescale.value;
+        public float timescale => productionSettings.timescale;
         
         
         // Debug settings
         
-        public bool responsiveLayoutActive => debugSettings.responsiveLayoutActive.value;
+        public bool responsiveLayoutActive => debugSettings.responsiveLayoutActive;
         
-        public bool saveDataActive => debugSettings.saveDataActive.value;
+        public bool saveDataActive => debugSettings.saveDataActive;
         
-        public bool modifyTextActive => debugSettings.modifyTextActive.value;
+        public bool modifyTextActive => debugSettings.modifyTextActive;
         
-        public bool modifyLayoutActive => debugSettings.modifyLayoutActive.value;
+        public bool modifyLayoutActive => debugSettings.modifyLayoutActive;
         
-        public bool useAddressables => debugSettings.useAddressables.value;
+        public bool useAddressables => debugSettings.useAddressables;
 
-        public bool logEventCallersAndListeners => debugSettings.logEventCallersAndListeners.value;
+        public bool logEventCallersAndListeners => debugSettings.logEventCallersAndListeners;
         
-        public bool logResponsiveElementActions => debugSettings.logResponsiveElementActions.value;
+        public bool logResponsiveElementActions => debugSettings.logResponsiveElementActions;
         
-        public bool logConditionResponses => debugSettings.logConditionResponses.value;
+        public bool logConditionResponses => debugSettings.logConditionResponses;
 
         [InfoBox("Finds and / or creates settings.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
@@ -97,7 +97,7 @@ namespace AltSalt.Maestro
 
         private static ScriptableObject CreateAppSetting(Type assetType, string name)
         {
-            return Utils.CreateScriptableObjectAsset(assetType, name, new string[] {"Scenes", "Shared", "AppSettings"});
+            return Utils.CreateScriptableObjectAsset(assetType, name, Utils.settingsPath);
         }
 
     }

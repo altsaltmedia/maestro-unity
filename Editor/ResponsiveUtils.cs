@@ -60,7 +60,7 @@ namespace AltSalt.Maestro
             titleContent = new GUIContent("Responsive Utils");
             ModuleWindow moduleWindow = Configure(null, ProjectNamespaceData.namespaceData[ModuleNamespace.Root].editorPath + nameof(ResponsiveUtils)+"_UXML.uxml");
             
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.GetStylesheetPath());
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.stylesheetPath);
             rootVisualElement.AddToClassList("altsalt");
             rootVisualElement.styleSheets.Add(styleSheet);
             

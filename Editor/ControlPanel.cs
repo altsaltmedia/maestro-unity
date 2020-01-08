@@ -268,7 +268,7 @@ namespace AltSalt.Maestro
             
             AssetDatabase.Refresh();
 
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.GetStylesheetPath());
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.stylesheetPath);
             rootVisualElement.styleSheets.Add(styleSheet);
 
             // Loads and clones our VisualTree (eg. our UXML structure) inside the root.

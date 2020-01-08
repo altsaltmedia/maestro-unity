@@ -10,14 +10,12 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.Events;
 using System.IO;
 using System.Linq;
 using System.Text;
 using SimpleJSON;
-using UnityEngine.Experimental.XR;
 using UnityEngine.SceneManagement;
 using UnityEngine.Timeline;
 
@@ -92,6 +90,7 @@ namespace AltSalt.Maestro
 
     public static class Utils
     {
+        private static MaestroConfig configAsset;
 
         public static Color transparent = new Color(1, 1, 1, 0);
         public static float pageHeight = 6.3f;
@@ -178,57 +177,106 @@ namespace AltSalt.Maestro
             }
         }
 
-        public static string GetProjecttPath()
+//        private static string CreateConfigFolder()
+//        {
+//            string[] subfolders = {nameof(AltSalt), nameof(MaestroConfig)};
+//            string currentFolder = "Assets";
+//            for (int i = 0; i < subfolders.Length; i++) {
+//                if (AssetDatabase.IsValidFolder(($"{currentFolder}/{subfolders[i]}")) == false) {
+//                    AssetDatabase.CreateFolder(currentFolder, subfolders[i]);
+//                }
+//                currentFolder += "/" + subfolders[i];
+//            }
+//
+//            return currentFolder + "/";
+//        }
+
+        private static void GetConfigAsset()
         {
-            return "Assets/__Project/";
+            if (configAsset == null) {
+                configAsset = GetScriptableObject(nameof(MaestroConfig)) as MaestroConfig;
+                
+                if (configAsset == null) {
+                    var instance = ScriptableObject.CreateInstance(typeof(MaestroConfig));
+                    string configDirectory = GetDirectory(new[] {"Assets", nameof(AltSalt), nameof(MaestroConfig)});
+                    string filePath = Utils.GetFilePath(configDirectory, nameof(MaestroConfig), ".asset");
+                    AssetDatabase.CreateAsset(instance, filePath);
+                    configAsset = AssetDatabase.LoadMainAssetAtPath(filePath) as MaestroConfig;
+                }
+            }
         }
 
-        public static string GetAbsoluteProjectPath()
+        public static string rootNamespace => $"{nameof(AltSalt)}.{nameof(Maestro)}";
+
+        public static string projectPath
         {
-            return Application.dataPath + "/__Project";
+            get
+            {
+                GetConfigAsset();
+                return configAsset.projectAssetsPath;
+            }
         }
-        
-        public static string GetSharedPath()
+
+        public static string settingsPath
         {
-            return GetProjecttPath() + "Scenes/Shared";
+            get
+            {
+                GetConfigAsset();
+                return configAsset.settingsPath;
+            }
         }
-        
-        public static string GetAltSaltPath()
+
+        public static string scriptsPath
         {
-            return "Assets/_AltSalt/";
+            get
+            {
+                GetConfigAsset();
+                return configAsset.scriptsPath;
+            }
         }
-        
-        public static string GetMaestroPath()
+
+        public static string stylesheetPath => scriptsPath + "/Editor/EditorStyles.uss";
+
+        public static string GetProjectDirectory(string[] subfolders)
         {
-            return GetAltSaltPath() + "Maestro/";
-        }
-        
-        public static string GetStylesheetPath()
-        {
-            return GetMaestroPath() + "Editor/EditorStyles.uss";
+            List<string> projectSubfolders = projectPath.Split(new[] {"/"}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            projectSubfolders.AddRange(subfolders);
+
+            return GetDirectory(projectSubfolders.ToArray());
         }
         
         public static string GetDirectory(string[] subfolders)
         {
-            string directoryPath = GetProjecttPath();
-
-            for (int i = 0; i < subfolders.Length; i++) {
-                if (AssetDatabase.IsValidFolder(($"{directoryPath}/{subfolders[i]}")) == false) {
-                    AssetDatabase.CreateFolder(directoryPath, subfolders[i]);
-                }
-                directoryPath += "/" + subfolders[i];
+            string currentFolder = subfolders[0];
+            
+            if (AssetDatabase.IsValidFolder(($"{currentFolder}")) == false) {
+                AssetDatabase.CreateFolder("", currentFolder);
             }
-            return directoryPath;
+
+            for (int i = 1; i < subfolders.Length; i++) {
+                if (AssetDatabase.IsValidFolder(($"{currentFolder}/{subfolders[i]}")) == false) {
+                    AssetDatabase.CreateFolder(currentFolder, subfolders[i]);
+                }
+                currentFolder += "/" + subfolders[i];
+            }
+            return currentFolder + "/";
         }
 
         public static string GetFilePath(string basePath, string fileName, string extension = "")
         {
             StringBuilder path = new StringBuilder(basePath);
-            string[] pathComponents = { "/", fileName, extension };
+            string[] pathComponents = { fileName, extension };
             for (int i = 0; i < pathComponents.Length; i++) {
                 path.Append(pathComponents[i]);
             }
             return path.ToString();
+            
+        }
+
+        public static string ConvertRelativeToAbsolutePath(string assetPath)
+        {
+            string sanitizedPath = assetPath.Replace("Assets/", "");
+            return Application.dataPath + sanitizedPath;
         }
 
         public static string GetAssetPathFromObject(UnityEngine.Object targetObject)
@@ -1030,10 +1078,11 @@ namespace AltSalt.Maestro
             Debug.LogWarning("More than one matching asset found for search " + assetName + ". Please check to see if this is intentional.");
         }
 
-        public static ScriptableObject CreateScriptableObjectAsset(Type assetType, string name, string[] subfolders)
+        public static ScriptableObject CreateScriptableObjectAsset(Type assetType, string name, string path)
         {
             var instance = ScriptableObject.CreateInstance(assetType);
-            string productionSettingsDirectory = Utils.GetDirectory(subfolders);
+            string[] arrayPath = path.Split(new[]{'/'}, StringSplitOptions.RemoveEmptyEntries);
+            string productionSettingsDirectory = Utils.GetDirectory(arrayPath);
             string filePath = Utils.GetFilePath(productionSettingsDirectory, name, ".asset");
             AssetDatabase.CreateAsset(instance, filePath);
             return AssetDatabase.LoadMainAssetAtPath(filePath) as ScriptableObject;
@@ -1041,14 +1090,15 @@ namespace AltSalt.Maestro
 
         public static AppSettings GetAppSettings()
         {
-            string[] guids;
+            string[] rawGuids;
             string path;
 
-            guids = AssetDatabase.FindAssets("t:" + nameof(AppSettings), new [] { GetSharedPath() });
+            rawGuids = AssetDatabase.FindAssets("t:" + nameof(AppSettings), new [] { settingsPath, projectPath });
+            string[] guids = rawGuids.Distinct().ToArray();
 
             if (guids.Length < 1) {
                 Debug.Log($"App settings not found, creating new instance.");
-                return CreateScriptableObjectAsset(typeof(AppSettings), nameof(AppSettings), new string[] {"Scenes", "Shared", "AppSettings"}) as AppSettings;
+                return CreateScriptableObjectAsset(typeof(AppSettings), nameof(AppSettings), settingsPath) as AppSettings;
             }
             
             if(guids.Length > 1) {

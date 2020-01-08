@@ -49,7 +49,7 @@ namespace AltSalt.Maestro
             GUILayout.Space(20);
 
             if (GUILayout.Button("Remove Dependencies Folder")) {
-                if (EditorUtility.DisplayDialog("Remove dependencies folder?", "This will delete the dependencies folder at " + Utils.GetAbsoluteProjectPath() + "/z_Dependencies", "Proceed", "Cancel")) {
+                if (EditorUtility.DisplayDialog("Remove dependencies folder?", "This will delete the dependencies folder at " + Utils.projectPath + "/z_Dependencies", "Proceed", "Cancel")) {
                     RemoveDependenciesFolder();
                 }
             }
@@ -152,7 +152,7 @@ namespace AltSalt.Maestro
 
         void TriggerRegisterDependenciesInTargetScene()
         {
-            string componentRegistryScenePath = Utils.GetAbsoluteProjectPath() + "/z_Dependencies/Components/" + targetSceneName;
+            string componentRegistryScenePath = Utils.projectPath + "/z_Dependencies/Components/" + targetSceneName;
 
             if (EditorUtility.DisplayDialog("Register dependencies from " + targetSceneName + "?", "This will delete the component dependencies folder at " + componentRegistryScenePath + " then scan " + targetSceneName +
                 " for dependencies. \n\nThis will likely put the variables folder out of sync (use all scenes registration to sync all dependencies)", "Proceed", "Cancel")) {
@@ -642,10 +642,10 @@ namespace AltSalt.Maestro
 
         void RemoveDependenciesFolder()
         {
-            string dependenciesFolderPath = Utils.GetAbsoluteProjectPath() + "/z_Dependencies";
+            string dependenciesFolderPath = Utils.projectPath + "z_Dependencies";
 
-            if(Directory.Exists(dependenciesFolderPath)) {
-                Directory.Delete(dependenciesFolderPath, true);
+            if(AssetDatabase.IsValidFolder(dependenciesFolderPath) == true) {
+                FileUtil.DeleteFileOrDirectory(dependenciesFolderPath);
             }
             
             AssetDatabase.Refresh();
@@ -653,7 +653,7 @@ namespace AltSalt.Maestro
 
         string GetComponentRegistryFilePath(string sceneName, string gameObjectName)
         {
-            string registryPath = Utils.GetDirectory(new string[] { "z_Dependencies", "Components", sceneName });
+            string registryPath = Utils.GetProjectDirectory(new string[] { "z_Dependencies", "Components", sceneName });
             return Utils.GetFilePath(registryPath, gameObjectName, ".json");
         }
 
@@ -669,7 +669,7 @@ namespace AltSalt.Maestro
             }
             directoryPath[2] = asset.GetType().Name;
 
-            string registryPath = Utils.GetDirectory(directoryPath);
+            string registryPath = Utils.GetProjectDirectory(directoryPath);
             return Utils.GetFilePath(registryPath, asset.name, ".json");
         }
 

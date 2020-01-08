@@ -297,7 +297,7 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
             
-            string directoryPath = Utils.GetDirectory(new string[] { "Resources", "Layouts", $"{SceneManager.GetActiveScene().name}/{activeLayout.name}" });
+            string directoryPath = Utils.GetProjectDirectory(new string[] { "Scenes", SceneManager.GetActiveScene().name, "Layout", "Resources", activeLayout.name });
             string fileName = this.name + id.ToString();
             string filePath = Utils.GetFilePath(directoryPath, fileName, ".json");
 
@@ -305,7 +305,7 @@ namespace AltSalt.Maestro.Layout
 
                 int option = EditorUtility.DisplayDialogComplex("Overwrite existing file?",
                     "This will overwrite the existing data at " +
-                    Utils.GetFilePath($"{SceneManager.GetActiveScene().name}/{activeLayout.name}", fileName) + ".",
+                    Utils.GetFilePath(directoryPath, fileName) + ".",
                     "Yes to All", "Cancel", "Yes (Just Once)");
                 
                 switch (option) {
@@ -358,14 +358,18 @@ namespace AltSalt.Maestro.Layout
         {
             RefreshActiveLayout();
             if(activeLayout == null) return;
-            
-            var jsonTextFile = Resources.Load<TextAsset>("Layouts/" + sceneName + "/" + activeLayout.name + "/" + this.name + id.ToString());
+
+            string path = activeLayout.name + "/" + this.name + id.ToString();
+            var jsonTextFile = Resources.Load<TextAsset>(path);
             if (jsonTextFile != null) {
                 if (appSettings.logResponsiveElementActions == true) {
                     Debug.Log("Populating " + this.name + " with stored data for " + activeLayout.name + " layout", this);
                 } 
                 JsonUtility.FromJsonOverwrite(jsonTextFile.ToString(), this);
                 ExecuteResponsiveAction();
+            }
+            else {
+                Debug.Log("File not found at resources path " + path);
             }
         }
 
