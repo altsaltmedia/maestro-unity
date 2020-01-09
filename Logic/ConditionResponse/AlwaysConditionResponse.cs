@@ -11,19 +11,13 @@ namespace AltSalt.Maestro.Logic.ConditionResponse {
     [ExecuteInEditMode]
     public class AlwaysConditionResponse : ConditionResponseBase
     {
-        [Title("$conditionEventTitle")]
-
+        [Title("$"+nameof(conditionEventTitle))]
         public override void SyncValues(Object callingObject)
         {
             base.SyncValues(callingObject);
             conditionEventTitle = "Has no conditions and will always execute.";
         }
-
-        public override bool CheckCondition()
-        {
-            return true;
-        }
-
+        
     }
 
 }

@@ -1513,7 +1513,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.variable == null ? false : true;
+                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
             }
         }
 
@@ -1523,7 +1523,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.variable == null ? false : true;
+                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
             }
         }
 
@@ -1533,7 +1533,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.variable == null ? false : true;
+                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
             }
         }
 
@@ -1544,7 +1544,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.GetVariable(attribute.callingObject) == null ? false : true;
+                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
             }
         }
 
@@ -1554,7 +1554,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.variable == null ? false : true;
+                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
             }
         }
 
@@ -1564,7 +1564,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.variable == null ? false : true;
+                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
             }
         }
 

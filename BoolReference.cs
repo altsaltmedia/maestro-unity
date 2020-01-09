@@ -10,8 +10,6 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using System;
 using Sirenix.OdinInspector;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
@@ -22,7 +20,6 @@ namespace AltSalt.Maestro
 	public class BoolReference : VariableReference
     {
 		[FormerlySerializedAs("ConstantValue")]
-		[PropertySpace]
 		[SerializeField]
 		[ValueDropdown("boolValueList")]
 		private bool _constantValue;
@@ -34,17 +31,16 @@ namespace AltSalt.Maestro
 		}
 
         [FormerlySerializedAs("Variable")]
-        [PropertySpace]
-		[SerializeField]
+        [SerializeField]
         [OnValueChanged(nameof(UpdateReferenceName))]
         private BoolVariable _variable;
 
         public BoolVariable GetVariable(Object callingObject)
 		{
 #if UNITY_EDITOR
-			this.callingObject = callingObject;
-			if (hasSearchedForAsset == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-				hasSearchedForAsset = true;
+			this.parentObject = callingObject;
+			if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
+				searchAttempted = true;
 				LogMissingReferenceMessage(GetType().Name);
 				_variable = Utils.GetScriptableObject(referenceName) as BoolVariable;
 				if (_variable != null) {
@@ -62,18 +58,25 @@ namespace AltSalt.Maestro
 
 		public BoolReference()
 		{ }
-
+		
+		
+		public BoolReference(bool value)
+		{
+			useConstant = true;
+			constantValue = value;
+		}
+		
 		public bool GetValue(UnityEngine.Object callingObject)
 		{
-			this.callingObject = callingObject;
+			this.parentObject = callingObject;
 			return useConstant ? constantValue : GetVariable(callingObject).value;
 		}
 
 		protected override void UpdateReferenceName()
 		{
-			if (GetVariable(callingObject) != null) {
-				hasSearchedForAsset = false;
-				referenceName = GetVariable(callingObject).name;
+			if (GetVariable(parentObject) != null) {
+				searchAttempted = false;
+				referenceName = GetVariable(parentObject).name;
 			}
 //			else {
 //				referenceName = "";

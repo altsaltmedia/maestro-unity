@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
@@ -23,20 +24,24 @@ namespace AltSalt.Maestro
         [OnValueChanged(nameof(UpdateReferenceName))]
         private V2Variable _variable;
 
-        public V2Variable variable
+        public V2Variable GetVariable(Object callingObject)
         {
-            get
-            {
 #if UNITY_EDITOR
-                if (hasSearchedForAsset == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                    hasSearchedForAsset = true;
-                    LogMissingReferenceMessage(GetType().Name);
-                    _variable = Utils.GetScriptableObject(referenceName) as V2Variable;
+            this.parentObject = callingObject;
+            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
+                searchAttempted = true;
+                LogMissingReferenceMessage(GetType().Name);
+                _variable = Utils.GetScriptableObject(referenceName) as V2Variable;
+                if (_variable != null) {
+                    LogFoundReferenceMessage(GetType().Name, _variable);
                 }
-#endif
-                return _variable;
             }
-            set => _variable = value;
+#endif
+            return _variable;
+        }
+        public void SetVariable(V2Variable value)
+        {
+            _variable = value;
         }
 
         public V2Reference()
@@ -48,22 +53,21 @@ namespace AltSalt.Maestro
             constantValue = value;
         }
 
-        public Vector2 value => useConstant ? constantValue : variable.value;
+        public Vector2 GetValue(Object callingObject)
+        {
+            this.parentObject = callingObject;
+            return useConstant ? constantValue : GetVariable(callingObject).value;
+        }
 
         protected override void UpdateReferenceName()
         {
             if (_variable != null) {
-                hasSearchedForAsset = false;
+                searchAttempted = false;
                 referenceName = _variable.name;
             }
 //            else {
 //                referenceName = "";
 //            }
-        }
-
-        public static implicit operator Vector2(V2Reference reference)
-        {
-            return reference.value;
         }
     }
 }

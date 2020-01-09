@@ -12,6 +12,7 @@ using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
@@ -33,20 +34,25 @@ namespace AltSalt.Maestro
         [OnValueChanged(nameof(UpdateReferenceName))]
         private IntVariable _variable;
 
-        public IntVariable variable
+        public IntVariable GetVariable(Object callingObject)
         {
-            get
-            {
 #if UNITY_EDITOR
-                if (hasSearchedForAsset == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                    hasSearchedForAsset = true;
-                    LogMissingReferenceMessage(GetType().Name);
-                    _variable = Utils.GetScriptableObject(referenceName) as IntVariable;
+            this.parentObject = callingObject;
+            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
+                searchAttempted = true;
+                LogMissingReferenceMessage(GetType().Name);
+                _variable = Utils.GetScriptableObject(referenceName) as IntVariable;
+                if (_variable != null) {
+                    LogFoundReferenceMessage(GetType().Name, _variable);
                 }
-#endif
-                return _variable;
             }
-            set => _variable = value;
+#endif
+            return _variable;
+        }
+        
+        public void SetVariable(IntVariable value)
+        {
+            _variable = value;
         }
 
         public IntReference()
@@ -58,22 +64,21 @@ namespace AltSalt.Maestro
             constantValue = value;
         }
 
-        public int value => useConstant ? constantValue : variable.value;
+        public int GetValue(Object callingObject)
+        {
+            this.parentObject = callingObject;
+            return useConstant ? constantValue : GetVariable(callingObject).value;
+        }
 
         protected override void UpdateReferenceName()
         {
             if (_variable != null) {
-                hasSearchedForAsset = false;
+                searchAttempted = false;
                 referenceName = _variable.name;
             }
 //            else {
 //                referenceName = "";
 //            }
-        }
-
-        public static implicit operator int(IntReference reference)
-        {
-            return reference.value;
         }
     }
 }

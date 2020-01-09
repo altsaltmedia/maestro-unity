@@ -42,7 +42,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public float axisTransitionSpread
         {
-            get => _axisTransitionSpread.value;
+            get => _axisTransitionSpread.GetValue(this.gameObject);
         }
 
         [TitleGroup("Branch Keys")]

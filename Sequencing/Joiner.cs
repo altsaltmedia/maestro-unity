@@ -76,7 +76,7 @@ namespace AltSalt.Maestro.Sequencing
 
         public float forkTransitionSpread
         {
-            get => _forkTransitionSpread.value;
+            get => _forkTransitionSpread.GetValue(this.gameObject);
         }
         
         [ValidateInput(nameof(IsPopulated))]

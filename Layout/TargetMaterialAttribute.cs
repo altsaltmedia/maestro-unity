@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout 
 {
@@ -20,14 +21,21 @@ namespace AltSalt.Maestro.Layout
             {"Float", MaterialAttributeType.Float }
         };
         
+        [FormerlySerializedAs("_Color")]
         [EnableIf("materialType", MaterialAttributeType.Color)]
         [ValidateInput("IsPopulated")]
-        public ColorReference _Color;
-        
+        public ColorReference _colorValue;
+
+        public ColorReference colorValue => _colorValue;
+
+        [FormerlySerializedAs("_Float")]
         [EnableIf("materialType", MaterialAttributeType.Float)]
         [ValidateInput("IsPopulated")]
-        public FloatReference _Float;
-        
+        [SerializeField]
+        private FloatReference _floatValue;
+
+        public FloatReference floatValue => _floatValue;
+
         private bool IsPopulated(ColorReference attribute)
         {
             if (materialType == MaterialAttributeType.Color) {
@@ -35,7 +43,7 @@ namespace AltSalt.Maestro.Layout
                     return true;
                 }
                 else {
-                    return attribute.variable == null ? false : true;
+                    return attribute.GetVariable(attribute.parentObject) == null ? false : true;
                 }
             }
             else {
@@ -50,7 +58,7 @@ namespace AltSalt.Maestro.Layout
                     return true;
                 }
                 else {
-                    return attribute.variable == null ? false : true;
+                    return attribute.GetVariable(attribute.parentObject) == null ? false : true;
                 }
             }
             else {

@@ -21,8 +21,8 @@ namespace AltSalt.Maestro.Sensors {
 
         void Start ()
         {
-            ySensitivity.variable.SetValue(defaultYSensitivity);
-            xSensitivity.variable.SetValue(defaultXSensitivity);
+            ySensitivity.GetVariable(this.gameObject).SetValue(defaultYSensitivity);
+            xSensitivity.GetVariable(this.gameObject).SetValue(defaultXSensitivity);
         }
 
         private static bool IsPopulated(float attribute)

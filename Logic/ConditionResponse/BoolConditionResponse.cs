@@ -13,9 +13,9 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     public class BoolConditionResponse : ConditionResponseBase
     {
         [SerializeField]
-        [Title("$conditionEventTitle")]
+        [Title("$"+nameof(conditionEventTitle))]
         [Title("Bool Reference")]
-        [InfoBox("Bool value that will be compared against condition")]
+//        [InfoBox("Bool value that will be compared against condition")]
         [FormerlySerializedAs("boolReference")]
         private BoolReference _boolReference = new BoolReference();
 
@@ -25,7 +25,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         [SerializeField]
         [Title("Bool Condition")]
-        [InfoBox("Condition the bool value should match in order to execute response")]
+//        [InfoBox("Condition the bool value should match in order to execute response")]
         [FormerlySerializedAs("boolCondition")]
         private BoolReference _boolCondition = new BoolReference();
 
@@ -45,15 +45,17 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
 
             if (boolReference.useConstant == true) {
-                conditionEventTitle = "Trigger Condition : " + boolReference.GetValue(callingObject) + " is " + boolCondition.GetValue(this.callingObject);
+                conditionEventTitle = "Trigger Condition : " + boolReference.GetValue(callingObject) + " is " + boolCondition.GetValue(this.parentObject);
             } else {
-                conditionEventTitle = "Trigger Condition : " + boolReference.GetVariable(callingObject).name + " is " + boolCondition.GetValue(this.callingObject);
+                conditionEventTitle = "Trigger Condition : " + boolReference.GetVariable(callingObject).name + " is " + boolCondition.GetValue(this.parentObject);
             }
         }
 
-        public override bool CheckCondition()
+        public override bool CheckCondition(Object callingObject)
         {
-            if (boolReference.GetValue(this.callingObject) == boolCondition.GetValue(this.callingObject)) {
+            base.CheckCondition(callingObject);
+            
+            if (boolReference.GetValue(callingObject) == boolCondition.GetValue(callingObject)) {
                 return true;
             }
 
@@ -72,8 +74,8 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         
         public override void TriggerResponse(GameObject caller, bool triggerOnStart)
         {
-            boolReference.callingObject = caller;
-            boolCondition.callingObject = caller;
+            boolReference.parentObject = caller;
+            boolCondition.parentObject = caller;
             base.TriggerResponse(caller, triggerOnStart);
         }
     }

@@ -28,13 +28,13 @@ namespace AltSalt.Maestro.Audio
                 inputPlayable = (ScriptPlayable<AudioForwardReverseBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
 
-                if (Mathf.Approximately(swipeValue, input.swipeModifier.value) == false) {
-                    swipeValue = input.swipeModifier.value;
+                if (Mathf.Approximately(swipeValue, input.swipeModifier.GetValue(this.directorObject)) == false) {
+                    swipeValue = input.swipeModifier.GetValue(this.directorObject);
                     modifier = Mathf.Abs(swipeValue);
                 }
                 modifier -= Time.deltaTime;
-                if (modifier > input.frameStepValue.value) {
-                    SetTrackPitch(trackBinding, input.isReversing, (modifier - input.frameStepValue.value) + 1);
+                if (modifier > input.frameStepValue.GetValue(this.directorObject)) {
+                    SetTrackPitch(trackBinding, input.isReversing, (modifier - input.frameStepValue.GetValue(this.directorObject)) + 1);
                 } else {
                     SetTrackPitch(trackBinding, input.isReversing, 1);
                 }

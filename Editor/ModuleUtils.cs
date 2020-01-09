@@ -34,10 +34,10 @@ namespace AltSalt.Maestro
         public static float sceneAspectRatio {
 
             get {
-                if (_sceneAspectRatio.variable == null) {
-                    _sceneAspectRatio.variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneAspectRatio));
+                if (_sceneAspectRatio.GetVariable(_sceneAspectRatio.parentObject) == null) {
+                    _sceneAspectRatio.SetVariable(Utils.GetFloatVariable(nameof(VarDependencies.SceneAspectRatio)));
                 }
-                return _sceneAspectRatio.value;
+                return _sceneAspectRatio.GetValue(_sceneAspectRatio.parentObject);
             }
         }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
@@ -14,8 +15,14 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     {
         [SerializeField]
         [HideInInspector]
-        protected string conditionEventTitle;
-        
+        protected string _conditionEventTitle;
+
+        protected string conditionEventTitle
+        {
+            get => _conditionEventTitle;
+            set => _conditionEventTitle = value;
+        }
+
         [ShowInInspector]
         [ReadOnly]
         private static AppSettings _appSettings;
@@ -35,12 +42,12 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         [SerializeField]
         [ReadOnly]
-        private UnityEngine.Object _callingObject;
+        private UnityEngine.Object _parentObject;
 
-        public Object callingObject
+        public Object parentObject
         {
-            get => _callingObject;
-            set => _callingObject = value;
+            get => _parentObject;
+            set => _parentObject = value;
         }
 
         [PropertySpace]
@@ -51,15 +58,19 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         public virtual void SyncValues(Object callingObject)
         {
-            this.callingObject = callingObject;
+            this.parentObject = callingObject;
         }
 
-        public abstract bool CheckCondition();
+        public virtual bool CheckCondition(Object callingObject)
+        {
+            this.parentObject = callingObject;
+            return true;
+        }
 
         public virtual void TriggerResponse(GameObject callingObject, bool triggerOnStart)
         {
-            this.callingObject = callingObject;
-            if (CheckCondition() == true) {
+            this.parentObject = callingObject;
+            if (CheckCondition(callingObject) == true) {
                 if(appSettings.logConditionResponses == true) {
                     LogConditionResponse(callingObject, triggerOnStart);
                 }
@@ -69,7 +80,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         void LogConditionResponse(GameObject callerObject, bool triggerOnStart)
         {
-            SyncValues(callingObject);
+            SyncValues(parentObject);
             Debug.Log(string.Format("[condition response] [{0}] [{1}] Following condition met on start {2} : ", callerObject.scene.name, callerObject.name, triggerOnStart.ToString().ToUpper()), callerObject);
             Debug.Log(string.Format("[condition response] [{0}] [event] {1} ", callerObject.scene.name, conditionEventTitle), callerObject);
             Debug.Log(string.Format("[condition response] [{0}] {1} triggered the following :", callerObject.scene.name, callerObject.name), callerObject);

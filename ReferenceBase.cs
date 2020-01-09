@@ -8,17 +8,16 @@ namespace AltSalt.Maestro
     public abstract class ReferenceBase
     {
         [ShowInInspector]
-        private bool _hasSearchedForAsset = false;
+        private bool _searchAttempted = false;
 
-        protected bool hasSearchedForAsset
+        protected bool searchAttempted
         {
-            get => _hasSearchedForAsset;
-            set => _hasSearchedForAsset = value;
+            get => _searchAttempted;
+            set => _searchAttempted = value;
         }
 
         [SerializeField]
         [OnInspectorGUI(nameof(UpdateReferenceName), false)]
-        [PropertySpace]
         [ReadOnly]
         protected string _referenceName;
 
@@ -30,17 +29,22 @@ namespace AltSalt.Maestro
         
         [SerializeField]
         [ReadOnly]
-        protected UnityEngine.Object _callingObject;
+        protected UnityEngine.Object _parentObject;
 
-        public UnityEngine.Object callingObject
+        public UnityEngine.Object parentObject
         {
-            get => _callingObject;
-            set => _callingObject = value;
+            get => _parentObject;
+            set => _parentObject = value;
         }
 
         protected void LogMissingReferenceMessage(string typeName)
         {
-            Debug.Log($"Reference not found in {typeName} on {callingObject.name}. Searching assets for {referenceName}.", callingObject);
+            if (parentObject != null) {
+                Debug.Log($"Reference not found in {typeName} on {parentObject.name}. Searching assets for {referenceName}.", parentObject);
+            }
+            else {
+                Debug.Log($"Reference not found in {typeName}. Searching assets for {referenceName}.");
+            }
         }
         
         protected void LogFoundReferenceMessage(string typeName, UnityEngine.Object referenceObject)

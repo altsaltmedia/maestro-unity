@@ -21,29 +21,29 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public Vector2 swipeForce
         {
-            get => _swipeForce.value;
-            set => _swipeForce.variable.SetValue(value);
+            get => _swipeForce.GetValue(this.gameObject);
+            set => _swipeForce.GetVariable(this.gameObject).SetValue(value);
         }
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _ySensitivity;
 
-        public float ySensitivity => _ySensitivity.variable.value;
+        public float ySensitivity => _ySensitivity.GetVariable(this.gameObject).value;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _xSensitivity;
 
-        public float xSensitivity => _xSensitivity.variable.value;
+        public float xSensitivity => _xSensitivity.GetVariable(this.gameObject).value;
 
         [ValidateInput("IsPopulated")]
         private FloatReference _timeModifier;
         
         private float timeModifier
         {
-            get => _timeModifier.value;
-            set => _timeModifier.variable.SetValue(value);
+            get => _timeModifier.GetValue(this.gameObject);
+            set => _timeModifier.GetVariable(this.gameObject).SetValue(value);
         }
         
         [SerializeField]
@@ -83,8 +83,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
         
         public float swipeModifierOutput
         {
-            get => _swipeModifierOutput.value;
-            set => _swipeModifierOutput.variable.SetValue(value);
+            get => _swipeModifierOutput.GetValue(this.gameObject);
+            set => _swipeModifierOutput.GetVariable(this.gameObject).SetValue(value);
         }
 
         [Required]
@@ -114,8 +114,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
         
         public float momentumModifierOutput
         {
-            get => _momentumModifierOutput.value;
-            set => _momentumModifierOutput.variable.SetValue(value);
+            get => _momentumModifierOutput.GetValue(this.gameObject);
+            set => _momentumModifierOutput.GetVariable(this.gameObject).SetValue(value);
         }
 
         [Required]

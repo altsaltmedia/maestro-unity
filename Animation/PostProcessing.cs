@@ -75,9 +75,9 @@ namespace AltSalt.Maestro.Animation
                 timescaleIndex = timescales.Length - 1;
             }
 
-            currentTimescale.variable.SetValue(isReversing == false ? timescales[timescaleIndex] : timescales[timescaleIndex] * -1);
+            currentTimescale.GetVariable(this.gameObject).SetValue(isReversing == false ? timescales[timescaleIndex] : timescales[timescaleIndex] * -1);
 
-            Time.timeScale = Mathf.Abs(currentTimescale.value);
+            Time.timeScale = Mathf.Abs(currentTimescale.GetValue(this.gameObject));
             timescaleChanged.RaiseEvent(this.gameObject);
             ExecuteEffect();
 
@@ -87,8 +87,8 @@ namespace AltSalt.Maestro.Animation
         public void ResetTimescale()
         {
             timescaleIndex = 0;
-            currentTimescale.variable.SetValue(timescales[timescaleIndex]);
-            Time.timeScale = currentTimescale.value;
+            currentTimescale.GetVariable(this.gameObject).SetValue(timescales[timescaleIndex]);
+            Time.timeScale = currentTimescale.GetValue(this.gameObject);
         }
 
         public void ExecuteEffect ()

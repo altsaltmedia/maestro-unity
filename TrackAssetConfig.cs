@@ -48,10 +48,10 @@ namespace AltSalt.Maestro
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _timelineCurrentTime;
 
-        public FloatVariable timelineCurrentTime
+        public FloatVariable timelineCurrentTimeVariable
         {
-            get => _timelineCurrentTime.variable;
-            private set => _timelineCurrentTime.variable = value;
+            get => _timelineCurrentTime.GetVariable(this.gameObject);
+            private set => _timelineCurrentTime.SetVariable(value);
         }
 
         [SerializeField]
@@ -68,20 +68,20 @@ namespace AltSalt.Maestro
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _frameStepValue;
 
-        public FloatVariable frameStepValue
+        public FloatVariable frameStepValueVariable
         {
-            get => _frameStepValue.variable;
-            private set => _frameStepValue.variable = value;
+            get => _frameStepValue.GetVariable(this.gameObject);
+            private set => _frameStepValue.SetVariable(value);
         }
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _swipeModifierOutput;
 
-        public FloatVariable swipeModifierOutput
+        public FloatVariable swipeModifierOutputVariable
         {
-            get => _swipeModifierOutput.variable;
-            private set => _swipeModifierOutput.variable = value;
+            get => _swipeModifierOutput.GetVariable(this.gameObject);
+            private set => _swipeModifierOutput.SetVariable(value);
         }
 
         private void OnEnable()
@@ -99,20 +99,20 @@ namespace AltSalt.Maestro
                     scrubberActiveVariable = Utils.GetBoolVariable(nameof(VarDependencies.ScrubberActive));
                 }
 
-                if (timelineCurrentTime == null) {
-                    timelineCurrentTime = Utils.GetFloatVariable(nameof(VarDependencies.TimelineCurrentTime));
+                if (timelineCurrentTimeVariable == null) {
+                    timelineCurrentTimeVariable = Utils.GetFloatVariable(nameof(VarDependencies.TimelineCurrentTime));
                 }
 
                 if (onGraphStart == null) {
                     onGraphStart = Utils.GetSimpleEvent(nameof(VarDependencies.OnGraphStart));
                 }
 
-                if (frameStepValue == null) {
-                    frameStepValue = Utils.GetFloatVariable(nameof(VarDependencies.FrameStepValue));
+                if (frameStepValueVariable == null) {
+                    frameStepValueVariable = Utils.GetFloatVariable(nameof(VarDependencies.FrameStepValue));
                 }
 
-                if (swipeModifierOutput == null) {
-                    swipeModifierOutput = Utils.GetFloatVariable(nameof(VarDependencies.SwipeModifierOutput));
+                if (swipeModifierOutputVariable == null) {
+                    swipeModifierOutputVariable = Utils.GetFloatVariable(nameof(VarDependencies.SwipeModifierOutput));
                 }
             #endif
         }

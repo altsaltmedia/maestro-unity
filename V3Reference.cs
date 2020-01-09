@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
@@ -24,20 +25,25 @@ namespace AltSalt.Maestro
         [OnValueChanged(nameof(UpdateReferenceName))]
         private V3Variable _variable;
 
-        public V3Variable variable
+        public V3Variable GetVariable(Object callingObject)
         {
-            get
-            {
 #if UNITY_EDITOR
-                if (hasSearchedForAsset == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                    hasSearchedForAsset = true;
-                    LogMissingReferenceMessage(GetType().Name);
-                    _variable = Utils.GetScriptableObject(referenceName) as V3Variable;
+            this.parentObject = callingObject;
+            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
+                searchAttempted = true;
+                LogMissingReferenceMessage(GetType().Name);
+                _variable = Utils.GetScriptableObject(referenceName) as V3Variable;
+                if (_variable != null) {
+                    LogFoundReferenceMessage(GetType().Name, _variable);
                 }
-#endif
-                return _variable;
             }
-            set => _variable = value;
+#endif
+            return _variable;
+        }
+        
+        public void SetVariable(V3Variable value)
+        {
+            _variable = value;
         }
 
         public V3Reference()
@@ -49,22 +55,21 @@ namespace AltSalt.Maestro
             constantValue = value;
         }
 
-        public Vector3 value => useConstant ? constantValue : variable.value;
+        public Vector3 GetValue(Object callingObject)
+        {
+            this.parentObject = callingObject;
+            return useConstant ? constantValue : GetVariable(callingObject).value;
+        }
 
         protected override void UpdateReferenceName()
         {
             if (_variable != null) {
-                hasSearchedForAsset = false;
+                searchAttempted = false;
                 referenceName = _variable.name;
             }
 //            else {
 //                referenceName = "";
 //            }
-        }
-
-        public static implicit operator Vector3(V3Reference reference)
-        {
-            return reference.value;
         }
     }
 }

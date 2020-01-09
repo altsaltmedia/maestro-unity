@@ -56,19 +56,19 @@ namespace AltSalt.Maestro
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _deviceAspectRatio;
 
-        private float deviceAspectRatio => _deviceAspectRatio.value;
+        private float deviceAspectRatio => _deviceAspectRatio.GetValue(this.gameObject);
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _deviceWidth;
 
-        private float deviceWidth => _deviceWidth.value;
+        private float deviceWidth => _deviceWidth.GetValue(this.gameObject);
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _deviceHeight;
 
-        private float deviceHeight => _deviceHeight.value;
+        private float deviceHeight => _deviceHeight.GetValue(this.gameObject);
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
@@ -76,8 +76,8 @@ namespace AltSalt.Maestro
 
         private float sceneAspectRatio
         {
-            get => _sceneAspectRatio.value;
-            set => _sceneAspectRatio.variable.SetValue(value);
+            get => _sceneAspectRatio.GetValue(this.gameObject);
+            set => _sceneAspectRatio.GetVariable(this.gameObject).SetValue(value);
         }
 
         [SerializeField]
@@ -86,8 +86,8 @@ namespace AltSalt.Maestro
 
         private float sceneWidth
         {
-            get => _sceneWidth.value;
-            set => _sceneWidth.variable.SetValue(value);
+            get => _sceneWidth.GetValue(this.gameObject);
+            set => _sceneWidth.GetVariable(this.gameObject).SetValue(value);
         }
 
         [SerializeField]
@@ -96,8 +96,8 @@ namespace AltSalt.Maestro
 
         private float sceneHeight
         {
-            get => _sceneHeight.value;
-            set => _sceneHeight.variable.SetValue(value);
+            get => _sceneHeight.GetValue(this.gameObject);
+            set => _sceneHeight.GetVariable(this.gameObject).SetValue(value);
         }
 
         [SerializeField]
@@ -327,7 +327,7 @@ namespace AltSalt.Maestro
 
                 sceneWidth = deviceWidth;
                 sceneHeight = deviceHeight;
-                sceneAspectRatio = deviceHeight /_deviceWidth;
+                sceneAspectRatio = deviceHeight / deviceWidth;
 
             }
         }

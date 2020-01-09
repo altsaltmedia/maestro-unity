@@ -12,23 +12,23 @@ namespace AltSalt.Maestro
     [TrackClipType(typeof(DebugTimelineClip))]
     public class DebugTimelineTrack : LerpToTargetTrack
     {
-        public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
+        public override Playable CreateTrackMixer(PlayableGraph graph, GameObject gameObject, int inputCount)
         {
-            StoreClipProperties(go);
+            StoreClipProperties(gameObject);
 
             ScriptPlayable<DebugTimelineMixerBehaviour> trackPlayable = ScriptPlayable<DebugTimelineMixerBehaviour>.Create(graph, inputCount);
             DebugTimelineMixerBehaviour behaviour = trackPlayable.GetBehaviour();
-            StoreMixerProperties(go, behaviour);
+            StoreMixerProperties(gameObject, behaviour);
 #if UNITY_EDITOR
-            if(go.TryGetComponent(typeof(TrackAssetConfig), out Component component) == false) {
-                go.AddComponent(typeof(TrackAssetConfig));
+            if(gameObject.TryGetComponent(typeof(TrackAssetConfig), out Component component) == false) {
+                gameObject.AddComponent(typeof(TrackAssetConfig));
             }
             
             TrackAssetConfig trackAssetConfig = component as TrackAssetConfig;
             
-            behaviour.timelineCurrentTime.variable = trackAssetConfig.timelineCurrentTime;
+            behaviour.timelineCurrentTime.SetVariable(trackAssetConfig.timelineCurrentTimeVariable);
             if (Application.isPlaying == false) {
-                TimelineEditor.inspectedDirector.time = behaviour.timelineCurrentTime.value;
+                TimelineEditor.inspectedDirector.time = behaviour.timelineCurrentTime.GetValue(gameObject);
             }
 
             behaviour.onGraphStart.SimpleEventTarget = trackAssetConfig.onGraphStart;

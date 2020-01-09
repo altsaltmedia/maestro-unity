@@ -12,7 +12,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     public class TextFamilyConditionResponse : ConditionResponseBase
     {
         [SerializeField]
-        [Title("$conditionEventTitle")]
+        [Title("$"+nameof(conditionEventTitle))]
         [Title("Text Family Reference")]
         private TextFamily _textFamilyReference;
 
@@ -37,12 +37,14 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                 return;
             }
 
-            conditionEventTitle = "Trigger Condition : Text family " + textFamilyReference.name + " active is " + activeTextFamilyCondition.GetValue(this.callingObject);
+            conditionEventTitle = "Trigger Condition : Text family " + textFamilyReference.name + " active is " + activeTextFamilyCondition.GetValue(this.parentObject);
         }
 
-        public override bool CheckCondition()
+        public override bool CheckCondition(Object callingObject)
         {
-            if (textFamilyReference.active == activeTextFamilyCondition.GetValue(this.callingObject)) {
+            base.CheckCondition(callingObject);
+            
+            if (textFamilyReference.active == activeTextFamilyCondition.GetValue(this.parentObject)) {
                 return true;
             }
 

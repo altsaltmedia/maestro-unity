@@ -32,8 +32,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         private Vector2 swipeMonitorMomentumCache
         {
-            get => _swipeMonitorMomentumCache.value;
-            set => _swipeMonitorMomentumCache.variable.SetValue(value);
+            get => _swipeMonitorMomentumCache.GetValue(this.gameObject);
+            set => _swipeMonitorMomentumCache.GetVariable(this.gameObject).SetValue(value);
         }
         
         [ShowInInspector]
@@ -63,8 +63,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         private float momentumDecay
         {
-            get => _momentumDecay.value;
-            set => _momentumDecay.variable.SetValue(value);
+            get => _momentumDecay.GetValue(this.gameObject);
+            set => _momentumDecay.GetVariable(this.gameObject).SetValue(value);
         }
 
         [SerializeField]

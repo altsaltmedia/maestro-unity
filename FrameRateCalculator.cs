@@ -27,8 +27,8 @@ namespace AltSalt.Maestro
 
         private int framesPerSecond
         {
-            get => _framesPerSecond.value;
-            set => _framesPerSecond.variable.SetValue(value);
+            get => _framesPerSecond.GetValue(this.gameObject);
+            set => _framesPerSecond.GetVariable(this.gameObject).SetValue(value);
         }
 
         [SerializeField]
@@ -37,8 +37,8 @@ namespace AltSalt.Maestro
 
         private float frameStepInterval
         {
-            get => _frameStepInterval.value;
-            set => _frameStepInterval.variable.SetValue(value);
+            get => _frameStepInterval.GetValue(this.gameObject);
+            set => _frameStepInterval.GetVariable(this.gameObject).SetValue(value);
         }
         
         private float[] _frameStepHistory = new float[10];

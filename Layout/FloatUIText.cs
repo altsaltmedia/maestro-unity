@@ -28,7 +28,7 @@ namespace AltSalt.Maestro.Layout
             if(textRenderer == null) {
                 StoreTextRenderer();
             }
-            SetText(floatValue.value);
+            SetText(floatValue.GetValue(this.gameObject));
         }
 
         void SetText(float number)

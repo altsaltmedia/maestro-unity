@@ -23,7 +23,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         
         private float frameStepValue
         {
-            get => _frameStepValue.value;
+            get => _frameStepValue.GetValue(this.gameObject);
         }
 
         [SerializeField]

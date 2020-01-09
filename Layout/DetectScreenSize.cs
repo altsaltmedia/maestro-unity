@@ -55,9 +55,9 @@ namespace AltSalt.Maestro.Layout {
             // we don't use them when they do
             if (Screen.width <= 0 || Screen.height <= 0) return;
             
-            deviceWidth.variable.SetValue(Screen.width);
-            deviceHeight.variable.SetValue(Screen.height);
-            deviceAspectRatio.variable.SetValue((float)Screen.height / Screen.width);
+            deviceWidth.GetVariable(this.gameObject).SetValue(Screen.width);
+            deviceHeight.GetVariable(this.gameObject).SetValue(Screen.height);
+            deviceAspectRatio.GetVariable(this.gameObject).SetValue((float)Screen.height / Screen.width);
         }
 
 #if UNITY_EDITOR
@@ -72,8 +72,8 @@ namespace AltSalt.Maestro.Layout {
 
             public bool ScreenResized()
             {
-                if (Mathf.Approximately(deviceWidth.value, Screen.width) == false ||
-                    Mathf.Approximately(deviceHeight.value, Screen.height) == false) {
+                if (Mathf.Approximately(deviceWidth.GetValue(this.gameObject), Screen.width) == false ||
+                    Mathf.Approximately(deviceHeight.GetValue(this.gameObject), Screen.height) == false) {
                     return true;
                 }
                 else {

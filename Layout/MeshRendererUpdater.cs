@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout
 {
@@ -12,14 +13,23 @@ namespace AltSalt.Maestro.Layout
     public class MeshRendererUpdater : MonoBehaviour
     {
         [SerializeField]
-        protected List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
+        [FormerlySerializedAs("meshRenderers")]
+        protected List<MeshRenderer> _meshRenderers = new List<MeshRenderer>();
+
+        private List<MeshRenderer> meshRenderers => _meshRenderers;
 
         [SerializeField]
         [ReadOnly]
-        protected List<Material> materialInstances =  new List<Material>();
+        [FormerlySerializedAs("materialInstances")]
+        protected List<Material> _materialInstances =  new List<Material>();
+
+        private List<Material> materialInstances => _materialInstances;
 
         [SerializeField]
-        protected List<TargetMaterialAttribute> targetMaterialAttributes = new List<TargetMaterialAttribute>();
+        [FormerlySerializedAs("targetMaterialAttributes")]
+        protected List<TargetMaterialAttribute> _targetMaterialAttributes = new List<TargetMaterialAttribute>();
+
+        private List<TargetMaterialAttribute> targetMaterialAttributes => _targetMaterialAttributes;
 
         protected void Start()
         {
@@ -28,18 +38,18 @@ namespace AltSalt.Maestro.Layout
         }
 
 #if UNITY_EDITOR
-        void OnGUI()
+        private void OnGUI()
         {
             RefreshRenderer();
         }
 #endif
 
-        void Update()
+        private void Update()
         {
             RefreshRenderer();
         }
 
-        void RefreshRenderer()
+        private void RefreshRenderer()
         {
             if(meshRenderers.Count < 1) {
                 return;
@@ -47,12 +57,12 @@ namespace AltSalt.Maestro.Layout
             for (int i = 0; i < targetMaterialAttributes.Count; i++) {
                 if (targetMaterialAttributes[i].materialType == MaterialAttributeType.Color) {
                     for (int q = 0; q < materialInstances.Count; q++){
-                        materialInstances[q].SetColor(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i]._Color.value);
+                        materialInstances[q].SetColor(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i].colorValue.GetValue(this.gameObject));
                     }
                 }
                 else if (targetMaterialAttributes[i].materialType == MaterialAttributeType.Float) {
                     for (int q = 0; q < materialInstances.Count; q++) {
-                        materialInstances[q].SetFloat(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i]._Float.value);
+                        materialInstances[q].SetFloat(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i].floatValue.GetValue(this.gameObject));
                     }
                 }
             }

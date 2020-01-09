@@ -27,8 +27,8 @@ namespace AltSalt.Maestro
         {
             get
             {
-                if (hasSearchedForAsset == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                    hasSearchedForAsset = true;
+                if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
+                    searchAttempted = true;
                     LogMissingReferenceMessage(GetType().Name);
                     _variable = Utils.GetScriptableObject(referenceName) as StringVariable;
                 }

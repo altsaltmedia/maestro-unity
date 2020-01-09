@@ -53,13 +53,13 @@ namespace AltSalt.Maestro.Animation
             if (meshRenderers.Count < 1) {
                 return;
             }
-            if(_Color.variable == null) {
+            if(_Color.GetVariable(this.gameObject) == null) {
                 Debug.Log("Please provide a color variable.", this);
                 return;
             }
 
             if(playableVideoPlayerController.mainVideoInstance.isHidden == false) {
-                UpdateVideoColor(0, _Color.value);
+                UpdateVideoColor(0, _Color.GetValue(this.gameObject));
             } else {
                 UpdateVideoColor(0, Utils.transparent);
             }

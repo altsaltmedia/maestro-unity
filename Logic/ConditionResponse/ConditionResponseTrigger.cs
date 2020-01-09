@@ -21,61 +21,61 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         private enum ConditionResponseTypes { Always, Bool, Float, Int, TextFamily, Layout }
 
         [SerializeField]
-        [OnValueChanged("DisplayClearDialogue")]
+        [OnValueChanged(nameof(DisplayClearDialogue))]
         [FormerlySerializedAs("triggerType")]
         private ConditionResponseTypes _triggerType;
 
         private ConditionResponseTypes triggerType => _triggerType;
 
         [SerializeField]
-        [ShowIf("triggerType", ConditionResponseTypes.Always)]
+        [ShowIf(nameof(triggerType), ConditionResponseTypes.Always)]
         [Title("Always Event List")]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("alwaysEvents")]
         private List<AlwaysConditionResponse> _alwaysEvents = new List<AlwaysConditionResponse>();
 
         private List<AlwaysConditionResponse> alwaysEvents => _alwaysEvents;
 
         [SerializeField]
-        [ShowIf("triggerType", ConditionResponseTypes.Bool)]
+        [ShowIf(nameof(triggerType), ConditionResponseTypes.Bool)]
         [Title("Bool Event List")]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("boolEvents")]
         private List<BoolConditionResponse> _boolEvents = new List<BoolConditionResponse>();
 
         private List<BoolConditionResponse> boolEvents => _boolEvents;
 
         [SerializeField]
-        [ShowIf("triggerType", ConditionResponseTypes.Float)]
+        [ShowIf(nameof(triggerType), ConditionResponseTypes.Float)]
         [Title("Float Event List")]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("floatEvents")]
         private List<FloatConditionResponse> _floatEvents = new List<FloatConditionResponse>();
 
         private List<FloatConditionResponse> floatEvents => _floatEvents;
 
         [SerializeField]
-        [ShowIf("triggerType", ConditionResponseTypes.Int)]
+        [ShowIf(nameof(triggerType), ConditionResponseTypes.Int)]
         [Title("Int Event List")]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("intEvents")]
         private List<IntConditionResponse> _intEvents = new List<IntConditionResponse>();
 
         private List<IntConditionResponse> intEvents => _intEvents;
 
         [SerializeField]
-        [ShowIf("triggerType", ConditionResponseTypes.TextFamily)]
+        [ShowIf(nameof(triggerType), ConditionResponseTypes.TextFamily)]
         [Title("Text Family Event List")]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("textFamilyEvents")]
         private List<TextFamilyConditionResponse> _textFamilyEvents = new List<TextFamilyConditionResponse>();
 
         private List<TextFamilyConditionResponse> textFamilyEvents => _textFamilyEvents;
 
         [SerializeField]
-        [ShowIf("triggerType", ConditionResponseTypes.Layout)]
+        [ShowIf(nameof(triggerType), ConditionResponseTypes.Layout)]
         [Title("Layout Event List")]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("layoutEvents")]
         private List<LayoutConditionResponse> _layoutEvents = new List<LayoutConditionResponse>();
 
@@ -131,7 +131,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
                 case ConditionResponseTypes.Always:
                     for (int i = 0; i < alwaysEvents.Count; i++) {
-                        if (alwaysEvents[i].CheckCondition() == true) {
+                        if (alwaysEvents[i].CheckCondition(caller) == true) {
                             alwaysEvents[i].TriggerResponse(caller, triggerOnStart);
                             return;
                         }
@@ -140,7 +140,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
                 case ConditionResponseTypes.Bool:
                     for (int i = 0; i < boolEvents.Count; i++) {
-                        if (boolEvents[i].CheckCondition() == true) {
+                        if (boolEvents[i].CheckCondition(caller) == true) {
                             boolEvents[i].TriggerResponse(caller, triggerOnStart);
                             return;
                         }
@@ -149,7 +149,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
                 case ConditionResponseTypes.Float:
                     for (int i = 0; i < floatEvents.Count; i++) {
-                        if (floatEvents[i].CheckCondition() == true) {
+                        if (floatEvents[i].CheckCondition(caller) == true) {
                             floatEvents[i].TriggerResponse(caller, triggerOnStart);
                             return;
                         }
@@ -158,7 +158,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
                 case ConditionResponseTypes.Int:
                     for (int i = 0; i < intEvents.Count; i++) {
-                        if (intEvents[i].CheckCondition() == true) {
+                        if (intEvents[i].CheckCondition(caller) == true) {
                             intEvents[i].TriggerResponse(caller, triggerOnStart);
                             return;
                         }
@@ -167,7 +167,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
                 case ConditionResponseTypes.TextFamily:
                     for (int i = 0; i < textFamilyEvents.Count; i++) {
-                        if (textFamilyEvents[i].CheckCondition() == true) {
+                        if (textFamilyEvents[i].CheckCondition(caller) == true) {
                             textFamilyEvents[i].TriggerResponse(caller, triggerOnStart);
                             return;
                         }
@@ -176,7 +176,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
                 case ConditionResponseTypes.Layout:
                     for (int i = 0; i < layoutEvents.Count; i++) {
-                        if (layoutEvents[i].CheckCondition() == true) {
+                        if (layoutEvents[i].CheckCondition(caller) == true) {
                             layoutEvents[i].TriggerResponse(caller, triggerOnStart);
                             return;
                         }
@@ -425,7 +425,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                 }
                 return false;
             }
-
             return true;
         }
 

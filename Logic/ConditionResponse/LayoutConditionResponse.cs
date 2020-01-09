@@ -12,7 +12,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     public class LayoutConditionResponse : ConditionResponseBase
     {
         [SerializeField]
-        [Title("$conditionEventTitle")]
+        [Title("$"+nameof(conditionEventTitle))]
         [Title("Layout Reference")]
         private LayoutConfig _layoutReference;
 
@@ -37,12 +37,14 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                 return;
             }
 
-            conditionEventTitle = "Trigger Condition : Layout " + layoutReference.name + " active is " + activeLayoutCondition.GetValue(this.callingObject);
+            conditionEventTitle = "Trigger Condition : Layout " + layoutReference.name + " active is " + activeLayoutCondition.GetValue(this.parentObject);
         }
 
-        public override bool CheckCondition()
+        public override bool CheckCondition(Object callingObject)
         {
-            if (layoutReference.active == activeLayoutCondition.GetValue(this.callingObject)) {
+            base.CheckCondition(callingObject);
+            
+            if (layoutReference.active == activeLayoutCondition.GetValue(this.parentObject)) {
                 return true;
             }
 

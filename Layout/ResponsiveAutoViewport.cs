@@ -36,12 +36,12 @@ namespace AltSalt.Maestro.Layout
         {
             base.PopulateDependencies();
 
-            if (deviceWidth.variable == null) {
-                deviceWidth.variable = Utils.GetFloatVariable(nameof(VarDependencies.DeviceWidth));
+            if (deviceWidth.GetVariable(this.gameObject) == null) {
+                deviceWidth.SetVariable(Utils.GetFloatVariable(nameof(VarDependencies.DeviceWidth)));
             }
 
-            if (deviceHeight.variable == null) {
-                deviceHeight.variable = Utils.GetFloatVariable(nameof(VarDependencies.DeviceHeight));
+            if (deviceHeight.GetVariable(this.gameObject) == null) {
+                deviceHeight.SetVariable(Utils.GetFloatVariable(nameof(VarDependencies.DeviceHeight)));
             }
         }
 
@@ -65,7 +65,7 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
 #endif
-            Rect originalRect = new Rect((deviceWidth.value - sceneWidth) / 2f, (deviceHeight.value - sceneHeight) / 2f, sceneWidth, sceneHeight);
+            Rect originalRect = new Rect((deviceWidth.GetValue(this.gameObject) - sceneWidth) / 2f, (deviceHeight.GetValue(this.gameObject) - sceneHeight) / 2f, sceneWidth, sceneHeight);
             thisCamera.pixelRect = new Rect(originalRect.x + viewportModifiers[activeIndex].x, originalRect.y + viewportModifiers[activeIndex].y, originalRect.width + viewportModifiers[activeIndex].width, originalRect.height + viewportModifiers[activeIndex].height);
         }
 

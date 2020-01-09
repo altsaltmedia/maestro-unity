@@ -12,16 +12,14 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     public class FloatConditionResponse : ConditionResponseBase
     {
         [SerializeField]
-        [Title("$conditionEventTitle")]
+        [Title("$"+nameof(conditionEventTitle))]
         [Title("Float Reference")]
-        [InfoBox("Float value that will be compared against condition")]
         FloatReference floatReference;
 
         [PropertySpace]
 
         [SerializeField]
         [Title("Float Condition Variable")]
-        [InfoBox("Condition the reference value will be compared to when determining whether to execute response")]
         FloatReference floatConditionVar;
 
         [PropertySpace]
@@ -31,42 +29,44 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         public override void SyncValues(Object callingObject)
         {
             base.SyncValues(callingObject);
-            if (floatReference.variable == null && floatReference.useConstant == false) {
-                conditionEventTitle = "Please populate a bool reference.";
+            if (floatReference.GetVariable(callingObject) == null && floatReference.useConstant == false) {
+                conditionEventTitle = "Please populate a float reference.";
                 return;
             }
 
-            if (floatConditionVar.variable == null && floatConditionVar.useConstant == false) {
+            if (floatConditionVar.GetVariable(callingObject) == null && floatConditionVar.useConstant == false) {
                 conditionEventTitle = "Please populate a comparison condition.";
                 return;
             }
 
             if (floatReference.useConstant == true) {
-                conditionEventTitle = "Trigger Condition : " + floatReference.value + " is " + operation.ToString() + " " + floatConditionVar.value;
+                conditionEventTitle = "Trigger Condition : " + floatReference.GetValue(callingObject) + " is " + operation.ToString() + " " + floatConditionVar.GetValue(callingObject);
             } else {
-                conditionEventTitle = "Trigger Condition : " + floatReference.variable.name + " is " + operation.ToString() + " " + floatConditionVar.value;
+                conditionEventTitle = "Trigger Condition : " + floatReference.GetVariable(callingObject).name + " is " + operation.ToString() + " " + floatConditionVar.GetValue(callingObject);
             }
         }
 
-        public override bool CheckCondition()
+        public override bool CheckCondition(Object callingObject)
         {
+            base.CheckCondition(callingObject);
+            
             switch (operation) {
 
                 case ComparisonValues.EqualTo:
-                    if (Mathf.Approximately(floatReference.value, floatConditionVar.value) == true) {
+                    if (Mathf.Approximately(floatReference.GetValue(this.parentObject), floatConditionVar.GetValue(this.parentObject)) == true) {
                         return true;
                     }
                     break;
 
                 case ComparisonValues.GreaterThan:
-                    if (floatReference.value > floatConditionVar.value) {
+                    if (floatReference.GetValue(this.parentObject) > floatConditionVar.GetValue(this.parentObject)) {
                         return true;
                     }
                     break;
 
                 case ComparisonValues.LessThan:
 
-                    if (floatReference.value < floatConditionVar.value) {
+                    if (floatReference.GetValue(this.parentObject) < floatConditionVar.GetValue(this.parentObject)) {
                         return true;
                     }
                     break;

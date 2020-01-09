@@ -12,6 +12,7 @@ using System;
 using UnityEngine;
 using HedgehogTeam.EasyTouch;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Sensors
 {
@@ -22,21 +23,13 @@ namespace AltSalt.Maestro.Sensors
         [SerializeField]
         private BoolReference _invertYInput = new BoolReference();
 
-        public bool invertYInput
-        {
-            get => _invertYInput.GetValue(this.gameObject);
-            set => _invertYInput.GetVariable(this.gameObject).SetValue(value);
-        }
+        private bool invertYInput => _invertYInput.GetValue(this.gameObject);
 
         [Required]
         [SerializeField]
         private BoolReference _invertXInput = new BoolReference();
 
-        public bool invertXInput
-        {
-            get => _invertXInput.GetValue(this.gameObject);
-            set => _invertXInput.GetVariable(this.gameObject).SetValue(value);
-        }
+        private bool invertXInput => _invertXInput.GetValue(this.gameObject);
 
         // Swipe variables
         [Required]
@@ -72,29 +65,48 @@ namespace AltSalt.Maestro.Sensors
 
         private Vector2 swipeForce
         {
-            get => _swipeForce.value;
-            set => _swipeForce.variable.SetValue(value);
+            set => _swipeForce.GetVariable(this.gameObject).SetValue(value);
         }
 
+        [SerializeField]
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Swipe Variables")]
-        public FloatReference swipeMinMax = new FloatReference(120f);
+        [FormerlySerializedAs("swipeMinMax")]
+        private FloatReference _swipeMinMax = new FloatReference(120f);
 
-        [ValidateInput("IsPopulated")]
-        [FoldoutGroup("Swipe Variables")]
-		public FloatReference xSensitivity = new FloatReference(.0015f);
+        private float swipeMinMax => _swipeMinMax.GetValue(this.gameObject);
 
+        [SerializeField]
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Swipe Variables")]
-        public FloatReference ySensitivity = new FloatReference(.0015f);
+        [FormerlySerializedAs("xSensitivity")]
+		private FloatReference _xSensitivity = new FloatReference(.0015f);
 
-        [ValidateInput("IsPopulated")]
-        [FoldoutGroup("Swipe Variables")]
-        public FloatReference zSensitivity = new FloatReference(.0015f);
+        private float xSensitivity => _xSensitivity.GetValue(this.gameObject);
 
+        [SerializeField]
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Swipe Variables")]
-        public FloatReference flickThreshold = new FloatReference(1000);
+        [FormerlySerializedAs("ySensitivity")]
+        private FloatReference _ySensitivity = new FloatReference(.0015f);
+
+        private float ySensitivity => _ySensitivity.GetValue(this.gameObject);
+
+        [SerializeField]
+        [ValidateInput("IsPopulated")]
+        [FoldoutGroup("Swipe Variables")]
+        [FormerlySerializedAs("zSensitivity")]
+        private FloatReference _zSensitivity = new FloatReference(.0015f);
+
+        private float zSensitivity => _zSensitivity.GetValue(this.gameObject);
+
+        [SerializeField]
+        [ValidateInput("IsPopulated")]
+        [FoldoutGroup("Swipe Variables")]
+        [FormerlySerializedAs("flickThreshold")]
+        private FloatReference _flickThreshold = new FloatReference(1000);
+
+        private float flickThreshold => _flickThreshold.GetValue(this.gameObject);
 
         private bool isSwiping = false;
 
@@ -130,8 +142,8 @@ namespace AltSalt.Maestro.Sensors
 
         private Vector2 swipeMonitorMomentum
         {
-            get => _swipeMonitorMomentum.value;
-            set => _swipeMonitorMomentum.variable.SetValue(value);
+            get => _swipeMonitorMomentum.GetValue(this.gameObject);
+            set => _swipeMonitorMomentum.GetVariable(this.gameObject).SetValue(value);
         }
 
         [ValidateInput("IsPopulated")]
@@ -142,13 +154,17 @@ namespace AltSalt.Maestro.Sensors
 
         private Vector2 swipeMonitorMomentumCache
         {
-            get => _swipeMonitorMomentumCache.value;
-            set => _swipeMonitorMomentumCache.variable.SetValue(value);
+            get => _swipeMonitorMomentumCache.GetValue(this.gameObject);
+            set => _swipeMonitorMomentumCache.GetVariable(this.gameObject).SetValue(value);
         }
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
-        public FloatReference momentumMinMax = new FloatReference();
+        [SerializeField]
+        [FormerlySerializedAs("momentumMinMax")]
+        private FloatReference _momentumMinMax = new FloatReference();
+
+        private float momentumMinMax => _momentumMinMax.GetValue(this.gameObject);
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
@@ -157,29 +173,49 @@ namespace AltSalt.Maestro.Sensors
 
         private float momentumDecay
         {
-            get => _momentumDecay.value;
-            set => _momentumDecay.variable.SetValue(value);
+            get => _momentumDecay.GetValue(this.gameObject);
+            set => _momentumDecay.GetVariable(this.gameObject).SetValue(value);
         }
 
+        [SerializeField]
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
-        public FloatReference momentumSensitivity = new FloatReference();
+        [FormerlySerializedAs("momentumSensitivity")]
+        private FloatReference _momentumSensitivity = new FloatReference();
 
-        [ValidateInput("IsPopulated")]
-        [FoldoutGroup("Momentum Variables")]
-        public FloatReference gestureTimeMultiplier = new FloatReference();
+        private float momentumSensitivity => _momentumSensitivity.GetValue(this.gameObject);
 
+        [SerializeField]
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
-        public FloatReference cancelMomentumTimeThreshold = new FloatReference();
+        [FormerlySerializedAs("gestureTimeMultiplier")]
+        private FloatReference _gestureTimeMultiplier = new FloatReference();
 
-        [ValidateInput("IsPopulated")]
-        [FoldoutGroup("Momentum Variables")]
-        public FloatReference cancelMomentumMagnitudeThreshold = new FloatReference();
+        private float gestureTimeMultiplier => _gestureTimeMultiplier.GetValue(this.gameObject);
 
+        [SerializeField]
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
-        public FloatReference pauseMomentumThreshold = new FloatReference();
+        [FormerlySerializedAs("cancelMomentumTimeThreshold")]
+        private FloatReference _cancelMomentumTimeThreshold = new FloatReference();
+
+        private float cancelMomentumTimeThreshold => _cancelMomentumTimeThreshold.GetValue(this.gameObject);
+
+        [SerializeField]
+        [ValidateInput("IsPopulated")]
+        [FoldoutGroup("Momentum Variables")]
+        [FormerlySerializedAs("cancelMomentumMagnitudeThreshold")]
+        private FloatReference _cancelMomentumMagnitudeThreshold = new FloatReference();
+
+        private float cancelMomentumMagnitudeThreshold => _cancelMomentumMagnitudeThreshold.GetValue(this.gameObject);
+
+        [SerializeField]
+        [ValidateInput("IsPopulated")]
+        [FoldoutGroup("Momentum Variables")]
+        [FormerlySerializedAs("pauseMomentumThreshold")]
+        private FloatReference _pauseMomentumThreshold = new FloatReference();
+
+        private float pauseMomentumThreshold => _pauseMomentumThreshold.GetValue(this.gameObject);
 
         private bool _hasMomentum = false;
 
@@ -265,7 +301,7 @@ namespace AltSalt.Maestro.Sensors
         public void OnTouchStart(Gesture gesture)
         {
             ResetSwipeHistory(this);
-            touchStartPosition.variable.SetValue(gesture.position);
+            touchStartPosition.GetVariable(this.gameObject).SetValue(gesture.position);
             OnTouchStartEvent.RaiseEvent(this.gameObject);
         }
 
@@ -341,17 +377,17 @@ namespace AltSalt.Maestro.Sensors
         public void OnSwipeEnd(Gesture gesture)
         {
             // Raise flick event
-            if (gesture.deltaPosition.sqrMagnitude > flickThreshold.value) {
+            if (gesture.deltaPosition.sqrMagnitude > flickThreshold) {
                 isFlicked.GetVariable(this.gameObject).SetValue(true);
             } else {
                 isFlicked.GetVariable(this.gameObject).SetValue(false);
             }
 
             // Debug
-            /**/ swipeMagnitudeDebug.variable.SetValue(gesture.deltaPosition.sqrMagnitude);
-            /**/ swipeVectorDebug.variable.SetValue(gesture.swipeVector);
-            /**/ swipeDeltaDebug.variable.SetValue(gesture.deltaPosition);
-            /**/ gestureActionTimeDebug.variable.SetValue(gesture.actionTime);
+            /**/ swipeMagnitudeDebug.GetVariable(this.gameObject).SetValue(gesture.deltaPosition.sqrMagnitude);
+            /**/ swipeVectorDebug.GetVariable(this.gameObject).SetValue(gesture.swipeVector);
+            /**/ swipeDeltaDebug.GetVariable(this.gameObject).SetValue(gesture.deltaPosition);
+            /**/ gestureActionTimeDebug.GetVariable(this.gameObject).SetValue(gesture.actionTime);
             /**/ UpdateVarsDebug.RaiseEvent(this.gameObject);
 
 
@@ -421,7 +457,7 @@ namespace AltSalt.Maestro.Sensors
             }
 
             // Normalize information based on sensitivity, otherwise our values come back too high
-            Vector3 v3Force = new Vector3(correctedV3.x * xSensitivity.value, correctedV3.y * ySensitivity.value, correctedV3.z * zSensitivity.value);
+            Vector3 v3Force = new Vector3(correctedV3.x * xSensitivity, correctedV3.y * ySensitivity, correctedV3.z * zSensitivity);
 
             return v3Force;
         }
