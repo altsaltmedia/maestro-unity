@@ -9,12 +9,21 @@ namespace AltSalt.Maestro.Sequencing.Autorun
     public class Autoplayer : Autorun_Module
     {
         [SerializeField]
+        private bool _autoplayEnabled = true;
+
+        public bool autoplayEnabled
+        {
+            get => _autoplayEnabled;
+            set => _autoplayEnabled = value;
+        }
+
+        [SerializeField]
         [ValidateInput("IsPopulated")]
         private FloatReference _frameStepValue;
         
         private float frameStepValue
         {
-            get => _frameStepValue.Value;
+            get => _frameStepValue.value;
         }
 
         [SerializeField]
@@ -28,7 +37,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         protected virtual void Update()
         {
-            if (_isparentModuleNull || autorunController.appSettings.autoplayActive == false) {
+            if (_isparentModuleNull || autoplayEnabled == false || autorunController.appSettings.globalAutoplayEnabled == false) {
                 return;
             }
 

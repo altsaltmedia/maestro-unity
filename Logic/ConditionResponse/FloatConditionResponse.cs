@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
 {
@@ -27,22 +28,23 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [SerializeField]
         ComparisonValues operation;
 
-        public override void SyncValues()
+        public override void SyncValues(Object callingObject)
         {
-            if (floatReference.Variable == null && floatReference.UseConstant == false) {
+            base.SyncValues(callingObject);
+            if (floatReference.variable == null && floatReference.useConstant == false) {
                 conditionEventTitle = "Please populate a bool reference.";
                 return;
             }
 
-            if (floatConditionVar.Variable == null && floatConditionVar.UseConstant == false) {
+            if (floatConditionVar.variable == null && floatConditionVar.useConstant == false) {
                 conditionEventTitle = "Please populate a comparison condition.";
                 return;
             }
 
-            if (floatReference.UseConstant == true) {
-                conditionEventTitle = "Trigger Condition : " + floatReference.Value + " is " + operation.ToString() + " " + floatConditionVar.Value;
+            if (floatReference.useConstant == true) {
+                conditionEventTitle = "Trigger Condition : " + floatReference.value + " is " + operation.ToString() + " " + floatConditionVar.value;
             } else {
-                conditionEventTitle = "Trigger Condition : " + floatReference.Variable.name + " is " + operation.ToString() + " " + floatConditionVar.Value;
+                conditionEventTitle = "Trigger Condition : " + floatReference.variable.name + " is " + operation.ToString() + " " + floatConditionVar.value;
             }
         }
 
@@ -51,20 +53,20 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             switch (operation) {
 
                 case ComparisonValues.EqualTo:
-                    if (Mathf.Approximately(floatReference.Value, floatConditionVar.Value) == true) {
+                    if (Mathf.Approximately(floatReference.value, floatConditionVar.value) == true) {
                         return true;
                     }
                     break;
 
                 case ComparisonValues.GreaterThan:
-                    if (floatReference.Value > floatConditionVar.Value) {
+                    if (floatReference.value > floatConditionVar.value) {
                         return true;
                     }
                     break;
 
                 case ComparisonValues.LessThan:
 
-                    if (floatReference.Value < floatConditionVar.Value) {
+                    if (floatReference.value < floatConditionVar.value) {
                         return true;
                     }
                     break;

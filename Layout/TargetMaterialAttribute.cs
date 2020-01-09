@@ -31,11 +31,11 @@ namespace AltSalt.Maestro.Layout
         private bool IsPopulated(ColorReference attribute)
         {
             if (materialType == MaterialAttributeType.Color) {
-                if (attribute.UseConstant == true) {
+                if (attribute.useConstant == true) {
                     return true;
                 }
                 else {
-                    return attribute.Variable == null ? false : true;
+                    return attribute.variable == null ? false : true;
                 }
             }
             else {
@@ -46,11 +46,11 @@ namespace AltSalt.Maestro.Layout
         private bool IsPopulated(FloatReference attribute)
         {
             if (materialType == MaterialAttributeType.Float) {
-                if (attribute.UseConstant == true) {
+                if (attribute.useConstant == true) {
                     return true;
                 }
                 else {
-                    return attribute.Variable == null ? false : true;
+                    return attribute.variable == null ? false : true;
                 }
             }
             else {

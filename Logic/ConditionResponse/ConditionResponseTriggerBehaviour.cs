@@ -52,7 +52,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 #if UNITY_EDITOR
         void Update()
         {    
-            conditionResponseTrigger.CallSyncValues();
+            conditionResponseTrigger.CallSyncValues(this.gameObject);
         }
 #endif
     }

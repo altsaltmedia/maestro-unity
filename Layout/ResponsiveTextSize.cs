@@ -21,7 +21,7 @@ namespace AltSalt.Maestro.Layout
                 targetBreakpointIndex = 0;
             }
             else {
-                targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
+                targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio, aspectRatioBreakpoints);
             }
 
             Utils.ExpandList(breakpointTextSize, targetBreakpointIndex);

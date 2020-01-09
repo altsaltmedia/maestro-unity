@@ -91,13 +91,13 @@ namespace AltSalt.Maestro
             if (hasBreakpoints == true) {
 
                 int initialCount = breakpointInitialValue.Count;
-                Utils.ExpandList(breakpointInitialValue, _aspectRatioBreakpoints.Count);
+                Utils.ExpandList(breakpointInitialValue, aspectRatioBreakpoints.Count);
                 for(int i = initialCount; i<breakpointInitialValue.Count; i++) {
                     breakpointInitialValue[i] = breakpointInitialValue[initialCount - 1];
                 }
 
                 int targetCount = breakpointTargetValue.Count;
-                Utils.ExpandList(breakpointTargetValue, _aspectRatioBreakpoints.Count);
+                Utils.ExpandList(breakpointTargetValue, aspectRatioBreakpoints.Count);
                 for (int i = targetCount; i < breakpointTargetValue.Count; i++) {
                     breakpointTargetValue[i] = breakpointTargetValue[initialCount - 1];
                 }
@@ -118,7 +118,7 @@ namespace AltSalt.Maestro
         public List<Vector3> SaveNewInitialValue(Vector3 targetValue)
         {
             if (hasBreakpoints == true) {
-                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
+                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio, aspectRatioBreakpoints);
                 breakpointInitialValue[breakpointIndex] = targetValue;
             } else {
                 breakpointInitialValue[0] = targetValue;
@@ -142,7 +142,7 @@ namespace AltSalt.Maestro
         public List<Vector3> SaveNewTargetValue(Vector3 targetValue)
         {
             if (hasBreakpoints == true) {
-                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
+                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio, aspectRatioBreakpoints);
                 breakpointTargetValue[breakpointIndex] = targetValue;
             } else {
                 breakpointTargetValue[0] = targetValue;

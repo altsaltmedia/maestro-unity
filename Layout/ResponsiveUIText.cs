@@ -3,7 +3,7 @@ using TMPro;
 
 namespace AltSalt.Maestro.Layout
 {
-    public class ResponsiveUIText : ResponsiveElement
+    public class ResponsiveUIText : ResponsiveLayoutElement
     {
         bool textStored = false;
         protected TextMeshProUGUI textMeshProUGUI;

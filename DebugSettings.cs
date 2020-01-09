@@ -15,7 +15,7 @@ namespace AltSalt.Maestro
         public bool responsiveLayoutActive
         {
             get => _responsiveLayoutActive;
-            private set => _responsiveLayoutActive = value;
+            set => _responsiveLayoutActive = value;
         }
         
         [SerializeField]
@@ -24,7 +24,7 @@ namespace AltSalt.Maestro
         public bool modifyTextActive
         {
             get => _modifyTextActive;
-            private set => _modifyTextActive = value;
+            set => _modifyTextActive = value;
         }
 
         [SerializeField]
@@ -33,7 +33,7 @@ namespace AltSalt.Maestro
         public bool modifyLayoutActive
         {
             get => _modifyLayoutActive;
-            private set => _modifyLayoutActive = value;
+            set => _modifyLayoutActive = value;
         }
         
         [SerializeField]
@@ -42,7 +42,7 @@ namespace AltSalt.Maestro
         public bool saveDataActive
         {
             get => _saveDataActive;
-            private set => _saveDataActive = value;
+            set => _saveDataActive = value;
         }
         
         [SerializeField]
@@ -51,7 +51,7 @@ namespace AltSalt.Maestro
         public bool useAddressables
         {
             get => _useAddressables;
-            private set => _useAddressables = value;
+            set => _useAddressables = value;
         }
         
         [SerializeField]
@@ -60,7 +60,7 @@ namespace AltSalt.Maestro
         public bool logEventCallersAndListeners
         {
             get => _logEventCallersAndListeners;
-            private set => _logEventCallersAndListeners = value;
+            set => _logEventCallersAndListeners = value;
         }
         
         [SerializeField]
@@ -69,7 +69,7 @@ namespace AltSalt.Maestro
         public bool logResponsiveElementActions
         {
             get => _logResponsiveElementActions;
-            private set => _logResponsiveElementActions = value;
+            set => _logResponsiveElementActions = value;
         }
         
         [SerializeField]
@@ -78,7 +78,20 @@ namespace AltSalt.Maestro
         public bool logConditionResponses
         {
             get => _logConditionResponses;
-            private set => _logConditionResponses = value;
+            set => _logConditionResponses = value;
+        }
+
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void SetDefaults()
+        {
+            responsiveLayoutActive = true;
+            modifyTextActive = true;
+            modifyLayoutActive = true;
+            saveDataActive = true;
+            useAddressables = false;
+            logEventCallersAndListeners = false;
+            logResponsiveElementActions = false;
+            logConditionResponses = false;
         }
     }
 }

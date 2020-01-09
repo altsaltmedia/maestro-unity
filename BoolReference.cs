@@ -10,45 +10,75 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using System;
 using Sirenix.OdinInspector;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {   
 	[Serializable]
-	public class BoolReference : VariableReferenceBase
+	public class BoolReference : VariableReference
     {
-		public bool UseConstant = false;
+		[FormerlySerializedAs("ConstantValue")]
+		[PropertySpace]
+		[SerializeField]
+		[ValueDropdown("boolValueList")]
+		private bool _constantValue;
 
+		private bool constantValue
+		{
+			get => _constantValue;
+			set => _constantValue = value;
+		}
+
+        [FormerlySerializedAs("Variable")]
         [PropertySpace]
+		[SerializeField]
+        [OnValueChanged(nameof(UpdateReferenceName))]
+        private BoolVariable _variable;
 
-        [ValueDropdown("boolValueList")]
-		public bool ConstantValue;
+        public BoolVariable GetVariable(Object callingObject)
+		{
+#if UNITY_EDITOR
+			this.callingObject = callingObject;
+			if (hasSearchedForAsset == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
+				hasSearchedForAsset = true;
+				LogMissingReferenceMessage(GetType().Name);
+				_variable = Utils.GetScriptableObject(referenceName) as BoolVariable;
+				if (_variable != null) {
+					LogFoundReferenceMessage(GetType().Name, _variable);
+				}
+			}
+#endif
+			return _variable;
+		}
+        
+        public void SetVariable(BoolVariable value)
+        {
+	        _variable = value;
+        }
 
-
-        private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
-            {"TRUE", true },
-            {"FALSE", false }
-        };
-
-        [PropertySpace]
-
-		public BoolVariable Variable;
-		
 		public BoolReference()
 		{ }
-		
-		public BoolReference(bool value)
+
+		public bool GetValue(UnityEngine.Object callingObject)
 		{
-			UseConstant = true;
-			ConstantValue = value;
+			this.callingObject = callingObject;
+			return useConstant ? constantValue : GetVariable(callingObject).value;
 		}
-		
-		public bool Value {
-			get { return UseConstant ? ConstantValue : Variable.value; }
-		}
-		
-		public static implicit operator bool(BoolReference reference)
+
+		protected override void UpdateReferenceName()
 		{
-			return reference.Value;
+			if (GetVariable(callingObject) != null) {
+				hasSearchedForAsset = false;
+				referenceName = GetVariable(callingObject).name;
+			}
+//			else {
+//				referenceName = "";
+//			}
 		}
-	}	
+		
+    }	
 }

@@ -33,7 +33,7 @@ namespace AltSalt.Maestro.Layout
 
         void SetValue(int activeIndex)
         {
-            double newDimension = Utils.GetResponsiveWidth(sceneHeight.Value, sceneWidth.Value);
+            double newDimension = Utils.GetResponsiveWidth(sceneHeight, sceneWidth);
 
             rectTransform.anchoredPosition = new Vector2((float)newDimension * multiplier[activeIndex], rectTransform.anchoredPosition.y);
         }

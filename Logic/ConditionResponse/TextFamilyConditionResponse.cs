@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
 {
@@ -28,19 +29,20 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         private BoolReference activeTextFamilyCondition => _activeTextFamilyCondition;
 
-        public override void SyncValues()
+        public override void SyncValues(Object callingObject)
         {
+            base.SyncValues(callingObject);
             if (textFamilyReference == null) {
                 conditionEventTitle = "Please populate a text family as your condition.";
                 return;
             }
 
-            conditionEventTitle = "Trigger Condition : Text family " + textFamilyReference.name + " active is " + activeTextFamilyCondition.Value;
+            conditionEventTitle = "Trigger Condition : Text family " + textFamilyReference.name + " active is " + activeTextFamilyCondition.GetValue(this.callingObject);
         }
 
         public override bool CheckCondition()
         {
-            if (textFamilyReference.active == activeTextFamilyCondition.Value) {
+            if (textFamilyReference.active == activeTextFamilyCondition.GetValue(this.callingObject)) {
                 return true;
             }
 

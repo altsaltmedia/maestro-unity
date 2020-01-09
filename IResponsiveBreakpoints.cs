@@ -13,11 +13,17 @@ using UnityEngine.SceneManagement;
 
 namespace AltSalt.Maestro {
 
-    public interface IResponsive
+    public interface IResponsiveBreakpoints
     {
         string elementName {
             get;
         }
+        
+        float sceneWidth { get; set; }
+
+        float sceneHeight { get; set; }
+
+        float sceneAspectRatio { get; set; }
 
         List<float> aspectRatioBreakpoints {
             get;
@@ -27,20 +33,6 @@ namespace AltSalt.Maestro {
             get;
             set;
         }
-
-        int priority {
-            get;
-        }
-
-        Scene parentScene {
-            get;
-        }
-
-        bool logElementOnLayoutUpdate {
-            get;
-        }
-
-        void CallExecuteLayoutUpdate(UnityEngine.Object callerObject);
 
 #if UNITY_EDITOR
         List<float> AddBreakpoint(float targetBreakpoint);

@@ -76,17 +76,17 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
 
-            if(baseDimensionTypes.Count <= _aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(baseDimensionTypes, _aspectRatioBreakpoints.Count);
+            if(baseDimensionTypes.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(baseDimensionTypes, aspectRatioBreakpoints.Count);
             }
-            if(objectAspectRatios.Count <= _aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(objectAspectRatios, _aspectRatioBreakpoints.Count);
+            if(objectAspectRatios.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(objectAspectRatios, aspectRatioBreakpoints.Count);
             }
-            if (dimensionPercentages.Count <= _aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(dimensionPercentages, _aspectRatioBreakpoints.Count);
+            if (dimensionPercentages.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(dimensionPercentages, aspectRatioBreakpoints.Count);
             }
-            if (maxDimensionValues.Count <= _aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(maxDimensionValues, _aspectRatioBreakpoints.Count);
+            if (maxDimensionValues.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(maxDimensionValues, aspectRatioBreakpoints.Count);
             }
         }
 
@@ -110,7 +110,7 @@ namespace AltSalt.Maestro.Layout
 
         void SetValue(int activeIndex)
         {
-            double baseDimension = Utils.GetResponsiveWidth(sceneHeight.Value, sceneWidth.Value);
+            double baseDimension = Utils.GetResponsiveWidth(sceneHeight, sceneWidth);
 
             baseDimension *= dimensionPercentages[activeIndex];
             if (maxDimensionValues[activeIndex] > 0 && baseDimension > maxDimensionValues[activeIndex]) {

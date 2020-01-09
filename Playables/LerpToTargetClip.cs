@@ -68,15 +68,9 @@ namespace AltSalt.Maestro
             set => _directorObject = value;
         }
 
-        public override double duration {
-            get {
-                return 1d;
-            }
-        }
+        public override double duration => 1d;
 
-        public ClipCaps clipCaps {
-            get { return ClipCaps.None; }
-        }
+        public ClipCaps clipCaps => ClipCaps.None;
 
 //        This is here for reference - it should be overriden in your child class
 //        so that the instance of your behaviour has all the necessary variables.

@@ -11,7 +11,7 @@ https://www.altsalt.com / ricky@altsalt.com
 using UnityEngine;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
-
+using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -23,7 +23,7 @@ namespace AltSalt.Maestro.Sequencing
     [RequireComponent(typeof(Sequence_Config))]
     [RequireComponent(typeof(Sequence_ProcessModify))]
     [RequireComponent(typeof(PlayableDirector))]
-    public class Sequence_SyncTimeline : MonoBehaviour
+    public class Sequence_SyncTimeline : MonoBehaviour, IDynamicLayoutElement
     {
         [SerializeField]
         [ReadOnly]
@@ -53,68 +53,65 @@ namespace AltSalt.Maestro.Sequencing
             }
             set => _appSettings = value;
         }
+        
+        [SerializeField]
+        private bool _logElementOnLayoutUpdate = false;
+
+        public bool logElementOnLayoutUpdate {
+            get {
+                if (appSettings.logResponsiveElementActions == true) {
+                    return true;
+                } else {
+                    return _logElementOnLayoutUpdate;
+                }
+            }
+        }
+        
+        public string elementName => gameObject.name;
+        
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private ComplexEventTrigger _dynamicElementEnable = new ComplexEventTrigger();
+
+        public ComplexEventTrigger dynamicElementEnable => _dynamicElementEnable;
+
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private ComplexEventTrigger _dynamicElementDisable = new ComplexEventTrigger();
+
+        public ComplexEventTrigger dynamicElementDisable => _dynamicElementDisable;
+
+        public Scene parentScene => gameObject.scene;
+
+        public int priority => -10;
 
         [ValidateInput(nameof(IsPopulated))]
-        public BoolReference scrubberActive;
+        [SerializeField]
+        private BoolReference _scrubberActive;
+
+        public BoolReference scrubberActive
+        {
+            get => _scrubberActive;
+            set => _scrubberActive = value;
+        }
+
+        public void CallExecuteLayoutUpdate(Object callingObject)
+        {
+            if (logElementOnLayoutUpdate == true) {
+                Debug.Log("CallExecuteLayoutUpdate triggered!");
+                Debug.Log("Calling object : " + callingObject.name, callingObject);
+                Debug.Log("Triggered object : " + elementName, gameObject);
+                Debug.Log("Component : " + this.GetType().Name, gameObject);
+                Debug.Log("--------------------------");
+            }
+            
+            RefreshPlayableDirector();
+        }
 
         public void RefreshPlayableDirector()
         {
             sequence.sequenceConfig.playableDirector.time = sequence.currentTime;
             sequence.sequenceConfig.playableDirector.Evaluate();
-        }
-
-        // Update is called once per frame
-        public void RefreshSequence()
-        {
-//            if (appSettings.paused == true || sequence.active == false) {
-//                return;
-//            }
-//
-//            // If the stored clip time is longer or short
-//            // than the actual clip, we fix that nonsense
-//            if (sequence.currentTime < playableDirector.initialTime) {
-//                if (previousSequenceGroup.sequence != null) {
-//                    if (previousSequenceGroup.forkOriginActive == true) {
-//                        previousSequenceGroup.sequence.currentTime = previousSequenceGroup.directorObject.GetComponent<PlayableDirector>().playableAsset.duration;
-//                    } else {
-//                        previousSequenceGroup.sequence.currentTime = 0.0000f;
-//                    }
-//                    previousSequenceGroup.sequence.active = true;
-//                    previousSequenceGroup.directorObject.gameObject.SetActive(true);
-//                    previousSequenceGroup.directorObject.GetComponent<SyncTimelineToSequence>().ForceEvaluate();
-//                    this.gameObject.SetActive(false);
-//                    sequence.active = false;
-//                } else {
-//                    boundaryReached.RaiseEvent(this.gameObject);
-//                }
-//                sequence.currentTime = playableDirector.initialTime;
-//                return;
-//            } else if (sequence.currentTime > playableDirector.duration || Mathf.Approximately((float)sequence.currentTime, (float)playableDirector.duration)) {
-//                sequence.currentTime = playableDirector.duration;
-//
-//                // Putting this in for now so we can get to the end of the sequence smoothly, should revise for the future
-//                playableDirector.time = sequence.currentTime;
-//                playableDirector.Evaluate();
-//                //////
-//
-//                if (nextSequenceGroup.sequence != null) {
-//                    nextSequenceGroup.sequence.currentTime = 0.0000f;
-//                    nextSequenceGroup.sequence.active = true;
-//                    nextSequenceGroup.directorObject.gameObject.SetActive(true);
-//                    nextSequenceGroup.directorObject.GetComponent<SyncTimelineToSequence>().ForceEvaluate();
-//                    this.gameObject.SetActive(false);
-//                    sequence.active = false;
-//                } else {
-//                    boundaryReached.RaiseEvent(this.gameObject);
-//                }
-//                return;
-//            }
-//            // Otherwise, update clip time accordingly
-//            else {
-//                playableDirector.time = sequence.currentTime;
-//            }
-//
-//            playableDirector.Evaluate();
         }
 
         public void ForceEvaluate()
@@ -139,61 +136,21 @@ namespace AltSalt.Maestro.Sequencing
 
 
 #if UNITY_EDITOR
-        [Required]
-        public SimpleEvent screenResized;
-
-        protected SimpleEventListener simpleEventListener;
-        protected bool editorListenerCreated = false;
-
-        void Reset()
+        private void OnEnable()
         {
-            string[] guids;
-            string path;
-
-            if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
-
-            if (screenResized == null) {
-                screenResized = Utils.GetSimpleEvent("ScreenResized");
-            }
+            dynamicElementEnable.RaiseEvent(this.gameObject, this);
         }
 
-        void OnEnable()
-        {
-            editorListenerCreated = false;
-        }
-
-        protected virtual void OnRenderObject()
-        {
-//            if (editorListenerCreated == false && appSettings.debugEventsActive.Value == true) {
-//                simpleEventListener = new SimpleEventListener(screenResized, this.gameObject);
-//                simpleEventListener.OnTargetEventExecuted += sequence.sequenceConfig.playableDirector.RebuildGraph;
-//                editorListenerCreated = true;
-//            }
-//
-//            if (editorListenerCreated == true && appSettings.debugEventsActive == false) {
-//                DisableListener();
-//            }
-//            
-        }
-
-        void OnDisable()
-        {
-            if (editorListenerCreated == true) {
-                DisableListener();
-            }
-        }
-
-        void DisableListener()
-        {
-            if (simpleEventListener != null) {
-                simpleEventListener.DestroyListener();
-                simpleEventListener = null;
-                editorListenerCreated = false;
-            }
-        }
+//        private void OnDisable()
+//        {
+//            dynamicElementDisable.RaiseEvent(this.gameObject, this);
+//        }
+    
 #endif
+        private static bool IsPopulated(ComplexEventTrigger attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
 
         private static bool IsPopulated(BoolReference attribute)
         {

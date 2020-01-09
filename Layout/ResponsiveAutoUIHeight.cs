@@ -21,12 +21,12 @@ namespace AltSalt.Maestro.Layout
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SaveValue()
         {
-            if (_aspectRatioBreakpoints.Count < 1) {
+            if (aspectRatioBreakpoints.Count < 1) {
                 Debug.LogError("You must specify at least one breakpoint to save element values.", this);
                 return;
             }
 
-            int targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, _aspectRatioBreakpoints);
+            int targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio, aspectRatioBreakpoints);
 
             Utils.ExpandList(breakpointAnchorMax, targetBreakpointIndex);
             breakpointAnchorMax[targetBreakpointIndex] = rectTransform.anchorMax;

@@ -26,9 +26,9 @@ namespace AltSalt.Maestro
             
             TrackAssetConfig trackAssetConfig = component as TrackAssetConfig;
             
-            behaviour.timelineCurrentTime.Variable = trackAssetConfig.timelineCurrentTime;
+            behaviour.timelineCurrentTime.variable = trackAssetConfig.timelineCurrentTime;
             if (Application.isPlaying == false) {
-                TimelineEditor.inspectedDirector.time = behaviour.timelineCurrentTime.Value;
+                TimelineEditor.inspectedDirector.time = behaviour.timelineCurrentTime.value;
             }
 
             behaviour.onGraphStart.SimpleEventTarget = trackAssetConfig.onGraphStart;

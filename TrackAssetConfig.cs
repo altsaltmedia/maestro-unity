@@ -28,20 +28,20 @@ namespace AltSalt.Maestro
         [ValidateInput(nameof(IsPopulated))]
         private BoolReference _isReversing;
 
-        public BoolVariable isReversing
+        public BoolVariable isReversingVariable
         {
-            get => _isReversing.Variable;
-            private set => _isReversing.Variable = value;
+            get => _isReversing.GetVariable(this.gameObject);
+            private set => _isReversing.SetVariable(value);
         }
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private BoolReference _scrubberActive;
 
-        public BoolVariable scrubberActive
+        public BoolVariable scrubberActiveVariable
         {
-            get => _scrubberActive.Variable;
-            private set => _scrubberActive.Variable = value;
+            get => _scrubberActive.GetVariable(this.gameObject);
+            private set => _scrubberActive.SetVariable(value);
         }
 
         [SerializeField]
@@ -50,8 +50,8 @@ namespace AltSalt.Maestro
 
         public FloatVariable timelineCurrentTime
         {
-            get => _timelineCurrentTime.Variable;
-            private set => _timelineCurrentTime.Variable = value;
+            get => _timelineCurrentTime.variable;
+            private set => _timelineCurrentTime.variable = value;
         }
 
         [SerializeField]
@@ -70,8 +70,8 @@ namespace AltSalt.Maestro
 
         public FloatVariable frameStepValue
         {
-            get => _frameStepValue.Variable;
-            private set => _frameStepValue.Variable = value;
+            get => _frameStepValue.variable;
+            private set => _frameStepValue.variable = value;
         }
         
         [SerializeField]
@@ -80,8 +80,8 @@ namespace AltSalt.Maestro
 
         public FloatVariable swipeModifierOutput
         {
-            get => _swipeModifierOutput.Variable;
-            private set => _swipeModifierOutput.Variable = value;
+            get => _swipeModifierOutput.variable;
+            private set => _swipeModifierOutput.variable = value;
         }
 
         private void OnEnable()
@@ -91,12 +91,12 @@ namespace AltSalt.Maestro
                     appSettings = Utils.GetAppSettings();
                 }
 
-                if (isReversing == null) {
-                    isReversing = Utils.GetBoolVariable(nameof(VarDependencies.IsReversing));
+                if (isReversingVariable == null) {
+                    isReversingVariable = Utils.GetBoolVariable(nameof(VarDependencies.IsReversing));
                 }
 
-                if (scrubberActive == null) {
-                    scrubberActive = Utils.GetBoolVariable(nameof(VarDependencies.ScrubberActive));
+                if (scrubberActiveVariable == null) {
+                    scrubberActiveVariable = Utils.GetBoolVariable(nameof(VarDependencies.ScrubberActive));
                 }
 
                 if (timelineCurrentTime == null) {

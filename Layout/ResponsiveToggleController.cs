@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Maestro.Layout
 {
     [ExecuteInEditMode]
-    public class ResponsiveToggleController : ResponsiveElement
+    public class ResponsiveToggleController : ResponsiveLayoutElement
     {
         [SerializeField]
         List<ToggleTargetList> targetLists = new List<ToggleTargetList>();

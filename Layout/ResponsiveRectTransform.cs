@@ -2,7 +2,7 @@
 
 namespace AltSalt.Maestro.Layout
 {
-    public class ResponsiveRectTransform : ResponsiveElement
+    public class ResponsiveRectTransform : ResponsiveLayoutElement
     {
         protected RectTransform rectTransform;
 

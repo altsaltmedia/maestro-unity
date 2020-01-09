@@ -46,8 +46,8 @@ namespace AltSalt.Maestro.Sequencing
 
         public bool forkTransitionActive
         {
-            get => _forkTransitionActive.Value;
-            private set => _forkTransitionActive.Variable.SetValue(value);
+            get => _forkTransitionActive.GetValue(this.gameObject);
+            private set => _forkTransitionActive.GetVariable(this.gameObject).SetValue(value);
         }
 
         [SerializeField]
@@ -76,7 +76,7 @@ namespace AltSalt.Maestro.Sequencing
 
         public float forkTransitionSpread
         {
-            get => _forkTransitionSpread.Value;
+            get => _forkTransitionSpread.value;
         }
         
         [ValidateInput(nameof(IsPopulated))]

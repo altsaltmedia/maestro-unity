@@ -22,7 +22,7 @@ namespace AltSalt.Maestro.Audio
         
         private BoolReference _isReversing = new BoolReference();
 
-        public BoolReference isReversing
+        public BoolReference isReversingReference
         {
             get => _isReversing;
             set => _isReversing = value;
@@ -48,9 +48,9 @@ namespace AltSalt.Maestro.Audio
         {
             template.startTime = startTime;
             template.endTime = endTime;
-            template.isReversing.Variable = isReversing.Variable;
-            template.frameStepValue.Variable = frameStepValue.Variable;
-            template.swipeModifier.Variable = swipeModifierOutput.Variable;
+            template._isReversing.SetVariable(isReversingReference.GetVariable(this.directorObject));
+            template.frameStepValue.variable = frameStepValue.variable;
+            template.swipeModifier.variable = swipeModifierOutput.variable;
 
             var playable = ScriptPlayable<AudioForwardReverseBehaviour>.Create(graph, template);
             return playable;

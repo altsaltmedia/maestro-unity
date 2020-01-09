@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
 {
@@ -28,19 +29,20 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [Title("Layout Status Condition")]
         private BoolReference activeLayoutCondition => _activeLayoutCondition;
 
-        public override void SyncValues()
+        public override void SyncValues(Object callingObject)
         {
+            base.SyncValues(callingObject);
             if (layoutReference == null) {
                 conditionEventTitle = "Please populate a layout as your condition.";
                 return;
             }
 
-            conditionEventTitle = "Trigger Condition : Layout " + layoutReference.name + " active is " + activeLayoutCondition.Value;
+            conditionEventTitle = "Trigger Condition : Layout " + layoutReference.name + " active is " + activeLayoutCondition.GetValue(this.callingObject);
         }
 
         public override bool CheckCondition()
         {
-            if (layoutReference.active == activeLayoutCondition.Value) {
+            if (layoutReference.active == activeLayoutCondition.GetValue(this.callingObject)) {
                 return true;
             }
 

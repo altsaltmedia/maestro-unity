@@ -14,12 +14,12 @@ namespace AltSalt.Maestro.Layout
         [InfoBox("Saves the position at the current breakpoint index.")]
         public void SaveValue()
         {
-            if (_aspectRatioBreakpoints.Count < 1) {
+            if (aspectRatioBreakpoints.Count < 1) {
                 Debug.LogWarning("You must specify at least one breakpoint to save element values.", this);
                 return;
             }
 
-            int targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, _aspectRatioBreakpoints);
+            int targetBreakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio, aspectRatioBreakpoints);
 
             Utils.ExpandList(breakpointSizeDelta, targetBreakpointIndex);
             breakpointSizeDelta[targetBreakpointIndex] = rectTransform.sizeDelta;

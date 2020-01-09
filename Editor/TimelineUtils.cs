@@ -19,12 +19,12 @@ namespace AltSalt.Maestro
 
             get {
                 PopulateTimeReference();
-                return _currentTime.Value;
+                return _currentTime.value;
             }
 
             set {
                 PopulateTimeReference();
-                _currentTime.Variable.SetValue(value);
+                _currentTime.variable.SetValue(value);
                 TimelineEditor.inspectedDirector.time = value;
             }
 
@@ -105,8 +105,8 @@ namespace AltSalt.Maestro
 
         private static FloatReference PopulateTimeReference()
         {
-            if(_currentTime.Variable == null) {
-                _currentTime.Variable = Utils.GetFloatVariable("TimelineCurrentTime");
+            if(_currentTime.variable == null) {
+                _currentTime.variable = Utils.GetFloatVariable("TimelineCurrentTime");
             }
             return _currentTime;
         }

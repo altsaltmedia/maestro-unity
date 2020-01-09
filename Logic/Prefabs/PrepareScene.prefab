@@ -48,6 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2cd7cd96e9b4cde8a9626ac501ad61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _appSettings: {fileID: 11400000, guid: e30fdc18bff8943429c0104d575ad03a, type: 2}
+  _resetTouchVariables: 0
   defaultX: 0
   defaultY: 1
   defaultZ: 0
@@ -68,35 +70,42 @@ MonoBehaviour:
   prepareSceneCompleted:
     simpleEvent: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c, type: 2}
   removeOverlayImmediately:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 9932254243221466bbcd3a046b5454b2, type: 2}
+    _referenceName: 
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 9932254243221466bbcd3a046b5454b2, type: 2}
   fadeInTriggered:
     simpleEvent: {fileID: 11400000, guid: dfee30ca42be848fab35ac15ceabe65d, type: 2}
   deviceAspectRatio:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: eed209e77ae6042d399c1b12f3094318, type: 2}
+    _referenceName: DeviceAspectRatio
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 4c62a64bceb8c44a29bcfa465569930f, type: 2}
   deviceWidth:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: cd146c9d132d849ec92f5bf824b0a513, type: 2}
+    _referenceName: DeviceWidth
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 10bb2f582f9a548ddb2255f116d3bac9, type: 2}
   deviceHeight:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 0ff1ec96edc7042ffb9bd2297ae07f05, type: 2}
+    _referenceName: DeviceHeight
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 70a2e26166cba4dd2954b2a0b98c221e, type: 2}
   sceneWidth:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: f30a66a737e6648e8b1a96d7d6bb77af, type: 2}
+    _referenceName: SceneWidth
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: b34423e6cdba94c4d9de0260f23b4a42, type: 2}
   sceneHeight:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: b3d3a094f9cae403cb93cba61a05913b, type: 2}
+    _referenceName: SceneHeight
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 8b33a7d0f4f2b4190b9521835b360461, type: 2}
   sceneAspectRatio:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 485c485f334ad43f2b87301367c6b4af, type: 2}
+    _referenceName: SceneAspectRatio
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 783898d68518049ad851616580bb71ae, type: 2}
   deviceBreakpoints:
   - 1.51
   - 1.61
@@ -107,6 +116,9 @@ MonoBehaviour:
     resizeType: 0
   - targetAspectRatio: 1
     resizeType: 0
+  _prepareSceneCompleteEvents:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1002040487642911264
 MonoBehaviour:
   m_ObjectHideFlags: 0

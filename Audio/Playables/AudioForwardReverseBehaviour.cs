@@ -19,16 +19,16 @@ namespace AltSalt.Maestro.Audio
         }
         
         [SerializeField]
-        private BoolReference _isReversing;
+        public BoolReference _isReversing = new BoolReference();
 
-        public BoolReference isReversing
+        public bool isReversing
         {
-            get => _isReversing;
-            set => _isReversing = value;
+            get => _isReversing.GetValue(this.directorObject);
+            set => _isReversing.GetVariable(this.directorObject).SetValue(value);
         }
         
         [SerializeField]
-        private FloatReference _frameStepValue;
+        private FloatReference _frameStepValue = new FloatReference();
 
         public FloatReference frameStepValue
         {
@@ -37,7 +37,7 @@ namespace AltSalt.Maestro.Audio
         }
         
         [SerializeField]
-        private FloatReference _swipeModifier;
+        private FloatReference _swipeModifier = new FloatReference();
 
         public FloatReference swipeModifier
         {

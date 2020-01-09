@@ -1220,6 +1220,10 @@ namespace AltSalt.Maestro
 
         public static ScriptableObject GetScriptableObject(string target)
         {
+            if (string.IsNullOrEmpty(target) == true) {
+                return null;
+            }
+            
             string[] guids;
             string path;
             string typeName = typeof(ScriptableObject).Name;
@@ -1505,62 +1509,62 @@ namespace AltSalt.Maestro
 
         public static bool IsPopulated(ColorReference attribute)
         {
-            if (attribute.UseConstant == true) {
+            if (attribute.useConstant == true) {
                 return true;
             }
             else {
-                return attribute.Variable == null ? false : true;
+                return attribute.variable == null ? false : true;
             }
         }
 
         public static bool IsPopulated(FloatReference attribute)
         {
-            if (attribute.UseConstant == true) {
+            if (attribute.useConstant == true) {
                 return true;
             }
             else {
-                return attribute.Variable == null ? false : true;
+                return attribute.variable == null ? false : true;
             }
         }
 
         public static bool IsPopulated(IntReference attribute)
         {
-            if (attribute.UseConstant == true) {
+            if (attribute.useConstant == true) {
                 return true;
             }
             else {
-                return attribute.Variable == null ? false : true;
+                return attribute.variable == null ? false : true;
             }
         }
 
 
         public static bool IsPopulated(BoolReference attribute)
         {
-            if (attribute.UseConstant == true) {
+            if (attribute.useConstant == true) {
                 return true;
             }
             else {
-                return attribute.Variable == null ? false : true;
+                return attribute.GetVariable(attribute.callingObject) == null ? false : true;
             }
         }
 
         public static bool IsPopulated(V2Reference attribute)
         {
-            if (attribute.UseConstant == true) {
+            if (attribute.useConstant == true) {
                 return true;
             }
             else {
-                return attribute.Variable == null ? false : true;
+                return attribute.variable == null ? false : true;
             }
         }
 
         public static bool IsPopulated(V3Reference attribute)
         {
-            if (attribute.UseConstant == true) {
+            if (attribute.useConstant == true) {
                 return true;
             }
             else {
-                return attribute.Variable == null ? false : true;
+                return attribute.variable == null ? false : true;
             }
         }
 
@@ -1607,11 +1611,11 @@ namespace AltSalt.Maestro
 
         public static bool IsPopulated(StringReference attribute)
         {
-            if (attribute.UseConstant == true) {
+            if (attribute.useConstant == true) {
                 return true;
             }
             else {
-                return attribute.Variable == null ? false : true;
+                return attribute.variable == null ? false : true;
             }
         }
 

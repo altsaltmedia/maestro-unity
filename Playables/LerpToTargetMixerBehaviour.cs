@@ -60,8 +60,8 @@ namespace AltSalt.Maestro
 
         public bool scrubberActive
         {
-            get => _scrubberActive.Value;
-            set => _scrubberActive.Variable.SetValue(value);
+            get => _scrubberActive.GetValue(this.directorObject);
+            set => _scrubberActive.GetVariable(this.directorObject).SetValue(value);
         }
         
         private TrackAsset _parentTrack;

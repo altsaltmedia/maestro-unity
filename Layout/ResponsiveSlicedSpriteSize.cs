@@ -62,7 +62,7 @@ namespace AltSalt.Maestro.Layout
         {
             base.ExecuteResponsiveAction();
             
-            double newDimension = Utils.GetResponsiveWidth(sceneHeight.Value, sceneWidth.Value);
+            double newDimension = Utils.GetResponsiveWidth(sceneHeight, sceneWidth);
 
             float dimensionModifier = Utils.GetValueFromDesiredPercent((float)newDimension, margin);
 

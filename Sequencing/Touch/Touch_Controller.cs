@@ -21,29 +21,29 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public Vector2 swipeForce
         {
-            get => _swipeForce.Value;
-            set => _swipeForce.Variable.SetValue(value);
+            get => _swipeForce.value;
+            set => _swipeForce.variable.SetValue(value);
         }
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _ySensitivity;
 
-        public float ySensitivity => _ySensitivity.Variable.value;
+        public float ySensitivity => _ySensitivity.variable.value;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private FloatReference _xSensitivity;
 
-        public float xSensitivity => _xSensitivity.Variable.value;
+        public float xSensitivity => _xSensitivity.variable.value;
 
         [ValidateInput("IsPopulated")]
         private FloatReference _timeModifier;
         
         private float timeModifier
         {
-            get => _timeModifier.Value;
-            set => _timeModifier.Variable.SetValue(value);
+            get => _timeModifier.value;
+            set => _timeModifier.variable.SetValue(value);
         }
         
         [SerializeField]
@@ -83,8 +83,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
         
         public float swipeModifierOutput
         {
-            get => _swipeModifierOutput.Value;
-            set => _swipeModifierOutput.Variable.SetValue(value);
+            get => _swipeModifierOutput.value;
+            set => _swipeModifierOutput.variable.SetValue(value);
         }
 
         [Required]
@@ -114,8 +114,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
         
         public float momentumModifierOutput
         {
-            get => _momentumModifierOutput.Value;
-            set => _momentumModifierOutput.Variable.SetValue(value);
+            get => _momentumModifierOutput.value;
+            set => _momentumModifierOutput.variable.SetValue(value);
         }
 
         [Required]
@@ -145,8 +145,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public bool isReversing
         {
-            get => _isReversing.Value;
-            set => _isReversing.Variable.SetValue(value);
+            get => _isReversing.GetValue(this.gameObject);
+            set => _isReversing.GetVariable(this.gameObject).SetValue(value);
         }
 
         [SerializeField]
@@ -155,8 +155,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public string swipeDirection
         {
-            get => _swipeDirection.Value;
-            set => _swipeDirection.Variable.SetValue(value);
+            get => _swipeDirection.value;
+            set => _swipeDirection.variable.SetValue(value);
         }
 
         [SerializeField]

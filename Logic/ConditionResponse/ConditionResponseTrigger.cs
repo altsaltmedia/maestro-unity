@@ -5,7 +5,8 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.Events;
 using System.Reflection;
-
+using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -17,47 +18,68 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     public class ConditionResponseTrigger : ConditionResponseTriggerBase, IClearHiddenValues
     {
         [Serializable]
-        enum ConditionResponseTypes { Always, Bool, Float, Int, TextFamily, Layout }
+        private enum ConditionResponseTypes { Always, Bool, Float, Int, TextFamily, Layout }
 
         [SerializeField]
         [OnValueChanged("DisplayClearDialogue")]
-        ConditionResponseTypes triggerType;
+        [FormerlySerializedAs("triggerType")]
+        private ConditionResponseTypes _triggerType;
+
+        private ConditionResponseTypes triggerType => _triggerType;
 
         [SerializeField]
         [ShowIf("triggerType", ConditionResponseTypes.Always)]
         [Title("Always Event List")]
         [ValidateInput("IsPopulated")]
-        List<AlwaysConditionResponse> alwaysEvents = new List<AlwaysConditionResponse>();
+        [FormerlySerializedAs("alwaysEvents")]
+        private List<AlwaysConditionResponse> _alwaysEvents = new List<AlwaysConditionResponse>();
+
+        private List<AlwaysConditionResponse> alwaysEvents => _alwaysEvents;
 
         [SerializeField]
         [ShowIf("triggerType", ConditionResponseTypes.Bool)]
         [Title("Bool Event List")]
         [ValidateInput("IsPopulated")]
-        List<BoolConditionResponse> boolEvents = new List<BoolConditionResponse>();
+        [FormerlySerializedAs("boolEvents")]
+        private List<BoolConditionResponse> _boolEvents = new List<BoolConditionResponse>();
+
+        private List<BoolConditionResponse> boolEvents => _boolEvents;
 
         [SerializeField]
         [ShowIf("triggerType", ConditionResponseTypes.Float)]
         [Title("Float Event List")]
         [ValidateInput("IsPopulated")]
-        List<FloatConditionResponse> floatEvents = new List<FloatConditionResponse>();
+        [FormerlySerializedAs("floatEvents")]
+        private List<FloatConditionResponse> _floatEvents = new List<FloatConditionResponse>();
+
+        private List<FloatConditionResponse> floatEvents => _floatEvents;
 
         [SerializeField]
         [ShowIf("triggerType", ConditionResponseTypes.Int)]
         [Title("Int Event List")]
         [ValidateInput("IsPopulated")]
-        List<IntConditionResponse> intEvents = new List<IntConditionResponse>();
+        [FormerlySerializedAs("intEvents")]
+        private List<IntConditionResponse> _intEvents = new List<IntConditionResponse>();
+
+        private List<IntConditionResponse> intEvents => _intEvents;
 
         [SerializeField]
         [ShowIf("triggerType", ConditionResponseTypes.TextFamily)]
         [Title("Text Family Event List")]
         [ValidateInput("IsPopulated")]
-        List<TextFamilyConditionResponse> textFamilyEvents = new List<TextFamilyConditionResponse>();
+        [FormerlySerializedAs("textFamilyEvents")]
+        private List<TextFamilyConditionResponse> _textFamilyEvents = new List<TextFamilyConditionResponse>();
+
+        private List<TextFamilyConditionResponse> textFamilyEvents => _textFamilyEvents;
 
         [SerializeField]
         [ShowIf("triggerType", ConditionResponseTypes.Layout)]
         [Title("Layout Event List")]
         [ValidateInput("IsPopulated")]
-        List<LayoutConditionResponse> layoutEvents = new List<LayoutConditionResponse>();
+        [FormerlySerializedAs("layoutEvents")]
+        private List<LayoutConditionResponse> _layoutEvents = new List<LayoutConditionResponse>();
+
+        private List<LayoutConditionResponse> layoutEvents => _layoutEvents;
 
         [PropertySpace]
 
@@ -163,43 +185,43 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
         }
 
-        public void CallSyncValues()
+        public void CallSyncValues(UnityEngine.Object callingObject)
         {
             switch (triggerType) {
 
                 case ConditionResponseTypes.Always:
                     for (int i = 0; i < alwaysEvents.Count; i++) {
-                        alwaysEvents[i].SyncValues();
+                        alwaysEvents[i].SyncValues(callingObject);
                     }
                     break;
 
                 case ConditionResponseTypes.Bool:
                     for (int i = 0; i < boolEvents.Count; i++) {
-                        boolEvents[i].SyncValues();
+                        boolEvents[i].SyncValues(callingObject);
                     }
                     break;
 
                 case ConditionResponseTypes.Float:
                     for (int i = 0; i < floatEvents.Count; i++) {
-                        floatEvents[i].SyncValues();
+                        floatEvents[i].SyncValues(callingObject);
                     }
                     break;
 
                 case ConditionResponseTypes.Int:
                     for (int i = 0; i < intEvents.Count; i++) {
-                        intEvents[i].SyncValues();
+                        intEvents[i].SyncValues(callingObject);
                     }
                     break;
 
                 case ConditionResponseTypes.TextFamily:
                     for (int i = 0; i < textFamilyEvents.Count; i++) {
-                        textFamilyEvents[i].SyncValues();
+                        textFamilyEvents[i].SyncValues(callingObject);
                     }
                     break;
 
                 case ConditionResponseTypes.Layout:
                     for (int i = 0; i < layoutEvents.Count; i++) {
-                        layoutEvents[i].SyncValues();
+                        layoutEvents[i].SyncValues(callingObject);
                     }
                     break;
             }

@@ -19,7 +19,7 @@ namespace AltSalt.Maestro.Layout
             GetBreakpointIndex();
 
             if(_hasBreakpoints == true) {
-                if(_aspectRatioBreakpoints.Count < 1) {
+                if(aspectRatioBreakpoints.Count < 1) {
                     Debug.LogWarning("You must specify at least one breakpoint to save element values.", this);
                     return;
                 }

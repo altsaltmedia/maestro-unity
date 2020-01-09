@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
 {
@@ -32,21 +33,35 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             set => _appSettings = value;
         }
 
+        [SerializeField]
+        [ReadOnly]
+        private UnityEngine.Object _callingObject;
+
+        public Object callingObject
+        {
+            get => _callingObject;
+            set => _callingObject = value;
+        }
+
         [PropertySpace]
         [ValidateInput("IsPopulated")]
         [SerializeField]
         [PropertyOrder(8)]
         protected UnityEvent response;
 
-        public abstract void SyncValues();
+        public virtual void SyncValues(Object callingObject)
+        {
+            this.callingObject = callingObject;
+        }
 
         public abstract bool CheckCondition();
 
-        public void TriggerResponse(GameObject caller, bool triggerOnStart)
+        public virtual void TriggerResponse(GameObject callingObject, bool triggerOnStart)
         {
+            this.callingObject = callingObject;
             if (CheckCondition() == true) {
                 if(appSettings.logConditionResponses == true) {
-                    LogConditionResponse(caller, triggerOnStart);
+                    LogConditionResponse(callingObject, triggerOnStart);
                 }
                 response.Invoke();
             }
@@ -54,7 +69,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         void LogConditionResponse(GameObject callerObject, bool triggerOnStart)
         {
-            SyncValues();
+            SyncValues(callingObject);
             Debug.Log(string.Format("[condition response] [{0}] [{1}] Following condition met on start {2} : ", callerObject.scene.name, callerObject.name, triggerOnStart.ToString().ToUpper()), callerObject);
             Debug.Log(string.Format("[condition response] [{0}] [event] {1} ", callerObject.scene.name, conditionEventTitle), callerObject);
             Debug.Log(string.Format("[condition response] [{0}] {1} triggered the following :", callerObject.scene.name, callerObject.name), callerObject);

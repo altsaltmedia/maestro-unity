@@ -6,13 +6,12 @@ using UnityEditor;
 using System.IO;
 using UnityEngine.SceneManagement;
 using SimpleJSON;
-using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout
 {
     [ExecuteInEditMode]
-    public abstract class ResponsiveElement : SerializableElement, IResponsive
+    public abstract class ResponsiveLayoutElement : SerializableElement, IResponsiveBreakpoints, IDynamicLayoutElement
     {
         [Required]
         [SerializeField]
@@ -32,31 +31,49 @@ namespace AltSalt.Maestro.Layout
             set => _appSettings = value;
         }
 
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        protected FloatReference sceneWidth = new FloatReference();
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneWidth;
 
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        protected FloatReference sceneHeight = new FloatReference();
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        protected FloatReference sceneAspectRatio = new FloatReference();
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        ComplexEventTrigger responsiveElementEnable = new ComplexEventTrigger();
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        ComplexEventTrigger responsiveElementDisable = new ComplexEventTrigger();
-
-        public string elementName {
-            get {
-                return this.name;
-            }
+        public float sceneWidth
+        {
+            get => _sceneWidth;
+            set => _sceneWidth = value;
         }
+
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneHeight;
+
+        public float sceneHeight
+        {
+            get => _sceneHeight;
+            set => _sceneHeight = value;
+        }
+
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneAspectRatio;
+
+        public float sceneAspectRatio
+        {
+            get => _sceneAspectRatio;
+            set => _sceneAspectRatio = value;
+        }
+
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private ComplexEventTrigger _dynamicElementEnable = new ComplexEventTrigger();
+
+        public ComplexEventTrigger dynamicElementEnable => _dynamicElementEnable;
+
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private ComplexEventTrigger _dynamicElementDisable = new ComplexEventTrigger();
+
+        public ComplexEventTrigger dynamicElementDisable => _dynamicElementDisable;
+
+        public string elementName => this.name;
 
         [FormerlySerializedAs("hasBreakpoints"),SerializeField]
 #if UNITY_EDITOR
@@ -65,25 +82,17 @@ namespace AltSalt.Maestro.Layout
         protected bool _hasBreakpoints;
         
         public bool hasBreakpoints {
-            get {
-                return _hasBreakpoints;
-            }
-            set {
-                _hasBreakpoints = value;
-            }
+            get => _hasBreakpoints;
+            set => _hasBreakpoints = value;
         }
 
         [FormerlySerializedAs("priority"),SerializeField]
 #if UNITY_EDITOR
         [OnValueChanged(nameof(ResetResponsiveElementData))]
 #endif
-        protected int _priority
-            ;
-        public int priority {
-            get {
-                return _priority;
-            }
-        }
+        protected int _priority;
+        
+        public int priority => _priority;
 
         [SerializeField]
         protected bool _logElementOnLayoutUpdate;
@@ -98,13 +107,15 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        public Scene parentScene {
-            get {
-                return gameObject.scene;
-            }
-        }
+        public Scene parentScene => gameObject.scene;
 
-        protected int breakpointIndex;
+        private int _breakpointIndex;
+
+        protected int breakpointIndex
+        {
+            get => _breakpointIndex;
+            private set => _breakpointIndex = value;
+        }
 
         [FormerlySerializedAs("aspectRatioBreakpoints"),ShowIf(nameof(_hasBreakpoints))]
         [PropertySpace]
@@ -114,12 +125,9 @@ namespace AltSalt.Maestro.Layout
 #if UNITY_EDITOR
         [OnValueChanged(nameof(UpdateBreakpointDependencies))]
 #endif
-        public List<float> _aspectRatioBreakpoints = new List<float>();
-        public List<float> aspectRatioBreakpoints {
-            get {
-                return _aspectRatioBreakpoints;
-            }
-        }
+        private List<float> _aspectRatioBreakpoints = new List<float>();
+        
+        public List<float> aspectRatioBreakpoints => _aspectRatioBreakpoints;
 
         private static bool overwriteAllLayoutFiles = false;
         private static bool cancelSaveData = false;
@@ -131,7 +139,7 @@ namespace AltSalt.Maestro.Layout
             PopulateDependencies();
             PopulateNonSerializedProperties();
 #endif
-            responsiveElementEnable.RaiseEvent(this.gameObject, this);
+            dynamicElementEnable.RaiseEvent(this.gameObject, this);
         }
 
 #if UNITY_EDITOR
@@ -167,7 +175,7 @@ namespace AltSalt.Maestro.Layout
 #endif
                     return;
                 } else {
-                    breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, _aspectRatioBreakpoints);
+                    breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio, aspectRatioBreakpoints);
                 }
             } else {
                 breakpointIndex = 0;
@@ -192,28 +200,28 @@ namespace AltSalt.Maestro.Layout
 
         void ResetResponsiveElementData()
         {
-            responsiveElementDisable.RaiseEvent(this.gameObject, this);
-            responsiveElementEnable.RaiseEvent(this.gameObject, this);
+            dynamicElementDisable.RaiseEvent(this.gameObject, this);
+            dynamicElementEnable.RaiseEvent(this.gameObject, this);
         }
 
-        protected void PopulateDefaultBreakpointValues()
+        private void PopulateDefaultBreakpointValues()
         {
             PopulateDefaultBreakpoint();
             UpdateBreakpointDependencies();
         }
 
-        void PopulateDefaultBreakpoint()
+        private void PopulateDefaultBreakpoint()
         {
-            if(_hasBreakpoints == true && _aspectRatioBreakpoints.Count == 0) {
-                decimal tempVal = Convert.ToDecimal(sceneAspectRatio.Value);
+            if(hasBreakpoints == true && aspectRatioBreakpoints.Count == 0) {
+                decimal tempVal = Convert.ToDecimal(sceneAspectRatio);
                 tempVal = Math.Round(tempVal, 2);
-                _aspectRatioBreakpoints.Add((float)tempVal + .01f);
+                aspectRatioBreakpoints.Add((float)tempVal + .01f);
             }
         }
 
         protected virtual void UpdateBreakpointDependencies() {
-            if(_aspectRatioBreakpoints.Count == 0) {
-                _hasBreakpoints = false;
+            if(aspectRatioBreakpoints.Count == 0) {
+                hasBreakpoints = false;
             }
         }
 
@@ -225,37 +233,22 @@ namespace AltSalt.Maestro.Layout
 
         protected virtual void PopulateDependencies()
         {
-            if (sceneWidth.Variable == null) {
-                sceneWidth.Variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneWidth));
+            if(dynamicElementEnable.ComplexEventTarget == null) {
+                dynamicElementEnable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementEnable));
             }
 
-            if (sceneHeight.Variable == null) {
-                sceneHeight.Variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneHeight));
-            }
-
-            if (sceneAspectRatio.Variable == null) {
-                sceneAspectRatio.Variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneAspectRatio));
-            }
-
-            if(responsiveElementEnable.ComplexEventTarget == null) {
-                responsiveElementEnable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementEnable));
-            }
-
-            if (responsiveElementDisable.ComplexEventTarget == null) {
-                responsiveElementDisable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementDisable));
+            if (dynamicElementDisable.ComplexEventTarget == null) {
+                dynamicElementDisable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementDisable));
             }
         }
 
-        void PopulateNonSerializedProperties()
+        protected override void PopulateNonSerializedProperties()
         {
             base.PopulateNonSerializedProperties();
             nonserializedProperties.Add(nameof(_logElementOnLayoutUpdate));
-            nonserializedProperties.Add(nameof(appSettings));
-            nonserializedProperties.Add(nameof(sceneWidth));
-            nonserializedProperties.Add(nameof(sceneHeight));
-            nonserializedProperties.Add(nameof(sceneAspectRatio));
-            nonserializedProperties.Add(nameof(responsiveElementEnable));
-            nonserializedProperties.Add(nameof(responsiveElementDisable));
+            nonserializedProperties.Add(nameof(_appSettings));
+            nonserializedProperties.Add(nameof(_dynamicElementEnable));
+            nonserializedProperties.Add(nameof(_dynamicElementDisable));
         }
 
         protected virtual void OnRenderObject()

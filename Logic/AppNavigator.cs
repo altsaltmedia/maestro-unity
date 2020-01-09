@@ -79,7 +79,7 @@ namespace AltSalt.Maestro.Logic
         // make a fade out first, so we have a special case for it here
         public void LoadInitialScene(EventPayload eventPayload) {
             sceneName = eventPayload.GetStringValue(DataType.stringType);
-            activeScene.Variable.SetValue(sceneName);
+            activeScene.variable.SetValue(sceneName);
             StartCoroutine(AsyncLoad(sceneName, LoadSceneMode.Single));
         }
         
@@ -89,7 +89,7 @@ namespace AltSalt.Maestro.Logic
         public void TriggerSceneLoad(EventPayload eventPayload) {
             
             sceneName = eventPayload.GetStringValue(DataType.stringType);
-            activeScene.Variable.SetValue(sceneName);
+            activeScene.variable.SetValue(sceneName);
             loadMode = eventPayload.GetBoolValue(DataType.boolType) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
             if(loadMode == LoadSceneMode.Single) {

@@ -18,7 +18,6 @@ namespace AltSalt.Maestro
                 UpdateDependencies();
                 return _debugSettings;
             }
-            set => _debugSettings = value;
         }
         
         [SerializeField, Required]
@@ -31,42 +30,82 @@ namespace AltSalt.Maestro
                 UpdateDependencies();
                 return _productionSettings;
             }
-            set => _productionSettings = value;
         }
 
         // Production settings
         // In production, these values will vary depending on app state
         
-        public bool hasBeenOpened => productionSettings.hasBeenOpened;
-        
-        public bool autoplayActive => productionSettings.autoplayActive;
-        
-        public bool momentumActive => productionSettings.momentumActive;
-        
-        public bool musicActive => productionSettings.musicActive;
-        
-        public bool soundEffectsActive => productionSettings.soundEffectsActive;
-        
-        public float timescale => productionSettings.timescale;
-        
-        
+        public bool hasBeenOpened => productionSettings.hasBeenOpened.value;
+
+        public bool globalAutoplayEnabled => productionSettings.globalAutoplayEnabled.value;
+
+        public bool globalMomentumEnabled => productionSettings.globalMomentumEnabled.value;
+
+        public bool volumeEnabled => productionSettings.volumeEnabled.value;
+
+        public bool musicEnabled => productionSettings.musicEnabled.value;
+
+        public bool soundEffectsEnabled => productionSettings.soundEffectsEnabled.value;
+
+        public float timescale => productionSettings.timescale.value;
+
+
         // Debug settings
         
-        public bool responsiveLayoutActive => debugSettings.responsiveLayoutActive;
-        
-        public bool saveDataActive => debugSettings.saveDataActive;
-        
-        public bool modifyTextActive => debugSettings.modifyTextActive;
-        
-        public bool modifyLayoutActive => debugSettings.modifyLayoutActive;
-        
-        public bool useAddressables => debugSettings.useAddressables;
+        public bool dynamicLayoutActive
+        {
+            get => debugSettings.responsiveLayoutActive;
+            set => debugSettings.responsiveLayoutActive = value;
+        }
 
-        public bool logEventCallersAndListeners => debugSettings.logEventCallersAndListeners;
-        
-        public bool logResponsiveElementActions => debugSettings.logResponsiveElementActions;
-        
-        public bool logConditionResponses => debugSettings.logConditionResponses;
+        public bool saveDataActive
+        {
+            get => debugSettings.saveDataActive;
+            set => debugSettings.saveDataActive = value;
+        }
+
+        public bool modifyTextActive
+        {
+            get => debugSettings.modifyTextActive;
+            set => debugSettings.modifyTextActive = value;
+        }
+
+        public bool modifyLayoutActive
+        {
+            get => debugSettings.modifyLayoutActive;
+            set => debugSettings.modifyLayoutActive = value;
+        }
+
+        public bool useAddressables
+        {
+            get => debugSettings.useAddressables;
+            set => debugSettings.useAddressables = value;
+        }
+
+        public bool logEventCallersAndListeners
+        {
+            get => debugSettings.logEventCallersAndListeners;
+            set => debugSettings.logEventCallersAndListeners = value;
+        }
+
+        public bool logResponsiveElementActions
+        {
+            get => debugSettings.logResponsiveElementActions;
+            set => debugSettings.logResponsiveElementActions = value;
+        }
+
+        public bool logConditionResponses
+        {
+            get => debugSettings.logConditionResponses;
+            set => debugSettings.logConditionResponses = value;
+        }
+
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void SetDefaults()
+        {
+            debugSettings.SetDefaults();
+            productionSettings.SetDefaults();
+        }
 
         [InfoBox("Finds and / or creates settings.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]

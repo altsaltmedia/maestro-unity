@@ -47,12 +47,12 @@ namespace AltSalt.Maestro.Layout
             for (int i = 0; i < targetMaterialAttributes.Count; i++) {
                 if (targetMaterialAttributes[i].materialType == MaterialAttributeType.Color) {
                     for (int q = 0; q < materialInstances.Count; q++){
-                        materialInstances[q].SetColor(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i]._Color.Value);
+                        materialInstances[q].SetColor(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i]._Color.value);
                     }
                 }
                 else if (targetMaterialAttributes[i].materialType == MaterialAttributeType.Float) {
                     for (int q = 0; q < materialInstances.Count; q++) {
-                        materialInstances[q].SetFloat(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i]._Float.Value);
+                        materialInstances[q].SetFloat(targetMaterialAttributes[i].targetAttributeName, targetMaterialAttributes[i]._Float.value);
                     }
                 }
             }

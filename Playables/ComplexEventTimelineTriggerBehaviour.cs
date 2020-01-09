@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public class ComplexEventTimelineTriggerBehaviour : PlayableBehaviourTriggerBase
+    public class ComplexEventTimelineTriggerBehaviour : TimelineTriggerBehaviour
     {
-        [HideInInspector]
-        public BoolReference isReversing;
+        [FormerlySerializedAs("complexEventTriggerPackagers")]
+        [SerializeField]
+        private List<ComplexEventTriggerPackager> _complexEventTriggerPackagers;
 
-        public bool disableOnReverse;
-
-        public List<ComplexEventTriggerPackager> complexEventTriggerPackagers;
+        public List<ComplexEventTriggerPackager> complexEventTriggerPackagers
+        {
+            get => _complexEventTriggerPackagers;
+            set => _complexEventTriggerPackagers = value;
+        }
     }
 }

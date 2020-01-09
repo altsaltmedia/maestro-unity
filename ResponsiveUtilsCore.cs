@@ -9,16 +9,16 @@ namespace AltSalt.Maestro
 {
     public static class ResponsiveUtilsCore
     {
-        public class ResponsiveElementSort : Comparer<IResponsive>
+        public class DynamicElementSort : Comparer<IDynamicLayoutElement>
         {
-            public override int Compare(IResponsive x, IResponsive y)
+            public override int Compare(IDynamicLayoutElement x, IDynamicLayoutElement y)
             {
                 return x.priority.CompareTo(y.priority);
             }
         }
 
 #if UNITY_EDITOR
-        public static List<float> AddBreakpointToResponsiveElement(IResponsive targetElement, float targetBreakpoint)
+        public static List<float> AddBreakpointToResponsiveElement(IResponsiveBreakpoints targetElement, float targetBreakpoint)
         {
             List<float> aspectRatioBreakpoints = targetElement.aspectRatioBreakpoints;
             targetElement.hasBreakpoints = true;
@@ -57,7 +57,7 @@ namespace AltSalt.Maestro
         // to the behaviours in question to get the properties we need. The following functions are an admittedly bloated
         // way to get those values. Time wasted trying to improve this: 5 hours.
 
-        public static IResponsive GetResponsiveElementFromClipAsset(ResponsiveLerpToTargetClip responsiveLerpToTargetClip)
+        public static IResponsiveBreakpoints GetResponsiveElementFromClipAsset(ResponsiveLerpToTargetClip responsiveLerpToTargetClip)
         {
             switch (responsiveLerpToTargetClip.GetType().Name) {
 

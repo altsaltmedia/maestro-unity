@@ -25,7 +25,7 @@ namespace AltSalt.Maestro
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
 #if UNITY_EDITOR
-            timelineCurrentTime.Variable.SetValue((float)base.currentTime);
+            timelineCurrentTime.variable.SetValue((float)base.currentTime);
 #endif
         }
     }   

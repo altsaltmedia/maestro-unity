@@ -9,7 +9,8 @@ namespace AltSalt.Maestro
     {
         [Required]
         [SerializeField]
-        SimpleEvent simpleEvent;
+        private SimpleEvent simpleEvent;
+        
         public SimpleEvent SimpleEventTarget {
             get {
                 return simpleEvent;

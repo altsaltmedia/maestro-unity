@@ -32,8 +32,8 @@ namespace AltSalt.Maestro.Layout
             if (heightMultipliers.Count == 0) {
                 heightMultipliers.Add(1f);
             }
-            if (widthMultipliers.Count <= _aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(widthMultipliers, _aspectRatioBreakpoints.Count);
+            if (widthMultipliers.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(widthMultipliers, aspectRatioBreakpoints.Count);
             }
         }
 #endif
@@ -50,7 +50,7 @@ namespace AltSalt.Maestro.Layout
 
         void SetValue(int activeIndex)
         {
-            double width = Utils.GetResponsiveWidth(sceneHeight.Value, sceneWidth.Value);
+            double width = Utils.GetResponsiveWidth(sceneHeight, sceneWidth);
             float height = Utils.pageHeight * heightMultipliers[activeIndex];
 
             rectTransform.localScale = new Vector2((float)width * widthMultipliers[activeIndex], height);

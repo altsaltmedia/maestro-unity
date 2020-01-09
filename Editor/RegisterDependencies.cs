@@ -279,7 +279,7 @@ namespace AltSalt.Maestro
                 Type fieldType = fieldInfo.GetValue(source).GetType();
 
                 // Event triggers can contain dependencies at the root level or inside a list
-                if (fieldType.IsSubclassOf(typeof(EventTriggerBase)) || fieldType.IsSubclassOf(typeof(PlayableBehaviourTriggerBase))) {
+                if (fieldType.IsSubclassOf(typeof(EventTriggerBase)) || fieldType.IsSubclassOf(typeof(TimelineTriggerBehaviour))) {
 
                     ParseEventTriggerBase(fieldType, fieldValue, rootComponent, sceneName);
 
@@ -294,9 +294,9 @@ namespace AltSalt.Maestro
                     ParseScriptableObjectReference(fieldValue, fieldInfo, rootComponent, sceneName);
 
                 // If we reach a variable references, such as BoolReference, FloatReference, etc., we don't need to drill further
-                } else if (fieldType.IsSubclassOf(typeof(VariableReferenceBase))) {
+                } else if (fieldType.IsSubclassOf(typeof(ReferenceBase))) {
 
-                    ParseVariableReference(fieldType, source, fieldValue, fieldInfo, rootComponent, sceneName);
+                    ParseReference(fieldType, source, fieldValue, fieldInfo, rootComponent, sceneName);
 
                 // If we come to a Unity event, register all relevant event info
                 } else if (fieldType.IsSubclassOf(typeof(UnityEventBase))) {
@@ -361,9 +361,9 @@ namespace AltSalt.Maestro
 
                                 Type conditionResponseFieldType = conditionResponseField.GetValue(conditionResponse).GetType();
 
-                                if (conditionResponseFieldType.IsSubclassOf(typeof(VariableReferenceBase))) {
+                                if (conditionResponseFieldType.IsSubclassOf(typeof(ReferenceBase))) {
 
-                                    ParseVariableReference(conditionResponseFieldType, conditionResponse, conditionResponseFieldValue, conditionResponseField, rootComponent, sceneName);
+                                    ParseReference(conditionResponseFieldType, conditionResponse, conditionResponseFieldValue, conditionResponseField, rootComponent, sceneName);
 
                                 } else if (conditionResponseFieldType.IsSubclassOf(typeof(UnityEventBase))) {
 
@@ -400,7 +400,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        void ParseVariableReference(Type varReferenceType, object parentObject, object variableReferenceObject, FieldInfo parentFieldInfo, Component rootComponent, string sceneName)
+        void ParseReference(Type varReferenceType, object parentObject, object variableReferenceObject, FieldInfo parentFieldInfo, Component rootComponent, string sceneName)
         {
             FieldInfo[] varRefFields = varReferenceType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 

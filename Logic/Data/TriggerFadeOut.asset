@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd6cfefc9189b422d8e558b5019449b3, type: 3}
-  m_Name: FadeInTriggered
+  m_Name: TriggerFadeOut
   m_EditorClassIdentifier: 
   registrationNotice: This object and its dependents will be registered whenever the
     RegisterDependencies tool is used.
-  appSettings: {fileID: 0}
+  _appSettings: {fileID: 0}
   logCallersOnRaise: 0
   logListenersOnRegister: 0
   logListenersOnRaise: 0

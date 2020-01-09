@@ -43,11 +43,11 @@ namespace AltSalt.Maestro.Layout
             if (orientations.Count == 0) {
                 orientations.Add(DimensionType.Vertical);
             }
-            if(multiplier.Count <= _aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(multiplier, _aspectRatioBreakpoints.Count);
+            if(multiplier.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(multiplier, aspectRatioBreakpoints.Count);
             }
-            if(orientations.Count <= _aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(orientations, _aspectRatioBreakpoints.Count);
+            if(orientations.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(orientations, aspectRatioBreakpoints.Count);
             }
         }
 
@@ -95,7 +95,7 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
 #endif
-            double newDimension = Utils.GetResponsiveWidth(sceneHeight.Value, sceneWidth.Value);
+            double newDimension = Utils.GetResponsiveWidth(sceneHeight, sceneWidth);
 
             if (orientations[activeIndex] == DimensionType.Vertical) {
                 rectTransform.sizeDelta = new Vector2((float)newDimension * multiplier[activeIndex], rectTransform.sizeDelta.y);

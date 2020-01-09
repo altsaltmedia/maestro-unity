@@ -2,7 +2,7 @@
 
 namespace AltSalt.Maestro.Layout
 {
-    public class ResponsiveSprite : ResponsiveElement
+    public class ResponsiveSprite : ResponsiveLayoutElement
     {
         protected SpriteRenderer spriteRenderer;
 

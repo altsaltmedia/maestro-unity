@@ -17,9 +17,9 @@ namespace AltSalt.Maestro.Audio
             foreach (var clip in GetClips()) {
                 var myAsset = clip.asset as AudioForwardReverseClip;
                 if (myAsset) {
-                    myAsset.isReversing.Variable = go.GetComponent<TrackAssetConfig>().isReversing;
-                    myAsset.frameStepValue.Variable = go.GetComponent<TrackAssetConfig>().frameStepValue;
-                    myAsset.swipeModifierOutput.Variable = go.GetComponent<TrackAssetConfig>().swipeModifierOutput;;
+                    myAsset.isReversingReference.SetVariable(go.GetComponent<TrackAssetConfig>().isReversingVariable);
+                    myAsset.frameStepValue.variable = go.GetComponent<TrackAssetConfig>().frameStepValue;
+                    myAsset.swipeModifierOutput.variable = go.GetComponent<TrackAssetConfig>().swipeModifierOutput;;
                 }
             }
         }

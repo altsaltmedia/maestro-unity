@@ -13,7 +13,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         
         private float frameStepValue
         {
-            get => _frameStepValue.Value;
+            get => _frameStepValue.value;
         }
 
         [SerializeField]

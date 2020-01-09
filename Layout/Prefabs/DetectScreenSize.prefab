@@ -43,18 +43,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a4a1aec4bb54aca8f35fb94c40746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  _appSettings: {fileID: 0}
   deviceAspectRatio:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: eed209e77ae6042d399c1b12f3094318, type: 2}
+    _referenceName: DeviceAspectRatio
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: eed209e77ae6042d399c1b12f3094318, type: 2}
   deviceWidth:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: cd146c9d132d849ec92f5bf824b0a513, type: 2}
+    _referenceName: DeviceWidth
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: cd146c9d132d849ec92f5bf824b0a513, type: 2}
   deviceHeight:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 0ff1ec96edc7042ffb9bd2297ae07f05, type: 2}
+    _referenceName: DeviceHeight
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 0ff1ec96edc7042ffb9bd2297ae07f05, type: 2}
   screenResized:
     simpleEvent: {fileID: 11400000, guid: 6958e603947ff451aac4f96c5c846b5f, type: 2}

@@ -15,7 +15,7 @@ namespace AltSalt.Maestro
                 if (myAsset) {
                     myAsset.startTime = clip.start;
                     myAsset.endTime = clip.end;
-                    myAsset.isReversing.Variable = go.GetComponent<TrackAssetConfig>().isReversing;
+                    myAsset.isReversingReference.SetVariable(go.GetComponent<TrackAssetConfig>().isReversingVariable);
                 }
             }
         }

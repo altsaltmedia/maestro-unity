@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro.Layout
 {
-    public class ResponsiveTextAlign : ResponsiveElement
+    public class ResponsiveTextAlign : ResponsiveLayoutElement
     {
         public override void ExecuteResponsiveAction () {
             

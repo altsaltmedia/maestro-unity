@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
 {
@@ -27,22 +28,23 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [SerializeField]
         ComparisonValues operation;
 
-        public override void SyncValues()
+        public override void SyncValues(Object callingObject)
         {
-            if (intReference.Variable == null && intReference.UseConstant == false) {
+            base.SyncValues(callingObject);
+            if (intReference.variable == null && intReference.useConstant == false) {
                 conditionEventTitle = "Please populate an int reference.";
                 return;
             }
 
-            if (intConditionVar.Variable == null && intConditionVar.UseConstant == false) {
+            if (intConditionVar.variable == null && intConditionVar.useConstant == false) {
                 conditionEventTitle = "Please populate a comparison condition.";
                 return;
             }
 
-            if (intReference.UseConstant == true) {
-                conditionEventTitle = "Trigger Condition : " + intReference.Value + " is " + operation.ToString() + " " + intConditionVar.Value;
+            if (intReference.useConstant == true) {
+                conditionEventTitle = "Trigger Condition : " + intReference.value + " is " + operation.ToString() + " " + intConditionVar.value;
             } else {
-                conditionEventTitle = "Trigger Condition : " + intReference.Variable.name + " is " + operation.ToString() + " " + intConditionVar.Value;
+                conditionEventTitle = "Trigger Condition : " + intReference.variable.name + " is " + operation.ToString() + " " + intConditionVar.value;
             }
         }
 
@@ -51,20 +53,20 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             switch (operation) {
 
                 case ComparisonValues.EqualTo:
-                    if (intReference.Value == intConditionVar.Value) {
+                    if (intReference.value == intConditionVar.value) {
                         return true;
                     }
                     break;
 
                 case ComparisonValues.GreaterThan:
-                    if (intReference.Value > intConditionVar.Value) {
+                    if (intReference.value > intConditionVar.value) {
                         return true;
                     }
                     break;
 
                 case ComparisonValues.LessThan:
 
-                    if (intReference.Value < intConditionVar.Value) {
+                    if (intReference.value < intConditionVar.value) {
                         return true;
                     }
                     break;

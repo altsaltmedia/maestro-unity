@@ -59,7 +59,7 @@ namespace AltSalt.Maestro
             TextTools,
             ObjectCreation,
             HierarchySelection,
-            ResponsiveUtils,
+            ResponsiveBreakpointUtils,
             RegisterDependencies
         }
 
@@ -107,7 +107,7 @@ namespace AltSalt.Maestro
                 ModuleNames.HierarchySelection,
                 ModuleNames.LayoutTools,
                 ModuleNames.TextTools,
-                ModuleNames.ResponsiveUtils,
+                ModuleNames.ResponsiveBreakpointUtils,
                 ModuleNames.RegisterDependencies
             }},
             {ModuleNamespace.Logic, new List<ModuleNames>

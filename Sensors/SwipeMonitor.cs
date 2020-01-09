@@ -20,22 +20,22 @@ namespace AltSalt.Maestro.Sensors
         // Invert Axis variable
         [Required]
         [SerializeField]
-        private BoolReference _invertYInput;
+        private BoolReference _invertYInput = new BoolReference();
 
         public bool invertYInput
         {
-            get => _invertYInput.Value;
-            set => _invertYInput.Variable.SetValue(value);
+            get => _invertYInput.GetValue(this.gameObject);
+            set => _invertYInput.GetVariable(this.gameObject).SetValue(value);
         }
 
         [Required]
         [SerializeField]
-        private BoolReference _invertXInput;
+        private BoolReference _invertXInput = new BoolReference();
 
         public bool invertXInput
         {
-            get => _invertXInput.Value;
-            set => _invertXInput.Variable.SetValue(value);
+            get => _invertXInput.GetValue(this.gameObject);
+            set => _invertXInput.GetVariable(this.gameObject).SetValue(value);
         }
 
         // Swipe variables
@@ -72,8 +72,8 @@ namespace AltSalt.Maestro.Sensors
 
         private Vector2 swipeForce
         {
-            get => _swipeForce.Value;
-            set => _swipeForce.Variable.SetValue(value);
+            get => _swipeForce.value;
+            set => _swipeForce.variable.SetValue(value);
         }
 
         [ValidateInput("IsPopulated")]
@@ -130,8 +130,8 @@ namespace AltSalt.Maestro.Sensors
 
         private Vector2 swipeMonitorMomentum
         {
-            get => _swipeMonitorMomentum.Value;
-            set => _swipeMonitorMomentum.Variable.SetValue(value);
+            get => _swipeMonitorMomentum.value;
+            set => _swipeMonitorMomentum.variable.SetValue(value);
         }
 
         [ValidateInput("IsPopulated")]
@@ -142,8 +142,8 @@ namespace AltSalt.Maestro.Sensors
 
         private Vector2 swipeMonitorMomentumCache
         {
-            get => _swipeMonitorMomentumCache.Value;
-            set => _swipeMonitorMomentumCache.Variable.SetValue(value);
+            get => _swipeMonitorMomentumCache.value;
+            set => _swipeMonitorMomentumCache.variable.SetValue(value);
         }
 
         [ValidateInput("IsPopulated")]
@@ -157,8 +157,8 @@ namespace AltSalt.Maestro.Sensors
 
         private float momentumDecay
         {
-            get => _momentumDecay.Value;
-            set => _momentumDecay.Variable.SetValue(value);
+            get => _momentumDecay.value;
+            set => _momentumDecay.variable.SetValue(value);
         }
 
         [ValidateInput("IsPopulated")]
@@ -212,8 +212,8 @@ namespace AltSalt.Maestro.Sensors
 
         private string swipeDirection
         {
-            get => _swipeDirection.Value;
-            set => _swipeDirection.Variable.SetValue(value);
+            get => _swipeDirection.value;
+            set => _swipeDirection.variable.SetValue(value);
         }
 
         [ShowInInspector]
@@ -265,7 +265,7 @@ namespace AltSalt.Maestro.Sensors
         public void OnTouchStart(Gesture gesture)
         {
             ResetSwipeHistory(this);
-            touchStartPosition.Variable.SetValue(gesture.position);
+            touchStartPosition.variable.SetValue(gesture.position);
             OnTouchStartEvent.RaiseEvent(this.gameObject);
         }
 
@@ -341,17 +341,17 @@ namespace AltSalt.Maestro.Sensors
         public void OnSwipeEnd(Gesture gesture)
         {
             // Raise flick event
-            if (gesture.deltaPosition.sqrMagnitude > flickThreshold.Value) {
-                isFlicked.Variable.SetValue(true);
+            if (gesture.deltaPosition.sqrMagnitude > flickThreshold.value) {
+                isFlicked.GetVariable(this.gameObject).SetValue(true);
             } else {
-                isFlicked.Variable.SetValue(false);
+                isFlicked.GetVariable(this.gameObject).SetValue(false);
             }
 
             // Debug
-            /**/ swipeMagnitudeDebug.Variable.SetValue(gesture.deltaPosition.sqrMagnitude);
-            /**/ swipeVectorDebug.Variable.SetValue(gesture.swipeVector);
-            /**/ swipeDeltaDebug.Variable.SetValue(gesture.deltaPosition);
-            /**/ gestureActionTimeDebug.Variable.SetValue(gesture.actionTime);
+            /**/ swipeMagnitudeDebug.variable.SetValue(gesture.deltaPosition.sqrMagnitude);
+            /**/ swipeVectorDebug.variable.SetValue(gesture.swipeVector);
+            /**/ swipeDeltaDebug.variable.SetValue(gesture.deltaPosition);
+            /**/ gestureActionTimeDebug.variable.SetValue(gesture.actionTime);
             /**/ UpdateVarsDebug.RaiseEvent(this.gameObject);
 
 
@@ -421,7 +421,7 @@ namespace AltSalt.Maestro.Sensors
             }
 
             // Normalize information based on sensitivity, otherwise our values come back too high
-            Vector3 v3Force = new Vector3(correctedV3.x * xSensitivity.Value, correctedV3.y * ySensitivity.Value, correctedV3.z * zSensitivity.Value);
+            Vector3 v3Force = new Vector3(correctedV3.x * xSensitivity.value, correctedV3.y * ySensitivity.value, correctedV3.z * zSensitivity.value);
 
             return v3Force;
         }

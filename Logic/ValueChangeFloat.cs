@@ -21,14 +21,14 @@ namespace AltSalt.Maestro.Logic {
 
         protected override void InitValue()
         {
-            slider.value = floatValue.Value;
+            slider.value = floatValue.value;
             base.InitValue();
         }
 
         // Update is called once per frame
         public void SetValue (float newValue)
         {
-            floatValue.Variable.SetValue(newValue);
+            floatValue.variable.SetValue(newValue);
             updateVariables.RaiseEvent(this.gameObject);
 		}
 

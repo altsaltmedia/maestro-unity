@@ -2,17 +2,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public class SimpleEventTimelineTriggerBehaviour : PlayableBehaviourTriggerBase
+    public class SimpleEventTimelineTriggerBehaviour : TimelineTriggerBehaviour
     {
-        [HideInInspector]
-        public BoolReference isReversing;
+        [FormerlySerializedAs("simpleEventTriggers")]
+        [SerializeField]
+        private List<SimpleEventTrigger> _simpleEventTriggers;
 
-        public bool disableOnReverse;
-
-        public List<SimpleEventTrigger> simpleEventTriggers;
+        public List<SimpleEventTrigger> simpleEventTriggers
+        {
+            get => _simpleEventTriggers;
+            set => _simpleEventTriggers = value;
+        }
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine.Playables;
 
 namespace AltSalt.Maestro
 {
-    public class ResponsiveUtils : ModuleWindow
+    public class ResponsiveBreakpointUtils : ModuleWindow
     {
         public float breakpoint = 1.78f;
         public bool listViewExpanded = true;
@@ -31,9 +31,9 @@ namespace AltSalt.Maestro
             set => _listView = value;
         }
 
-        private List<IResponsive> _selectedElements = new List<IResponsive>();
+        private List<IResponsiveBreakpoints> _selectedElements = new List<IResponsiveBreakpoints>();
 
-        private List<IResponsive> selectedElements
+        private List<IResponsiveBreakpoints> selectedElements
         {
             get => _selectedElements;
             set => _selectedElements = value;
@@ -50,7 +50,7 @@ namespace AltSalt.Maestro
         [MenuItem("Tools/Maestro/Responsive Utils")]
         public static void ShowWindow()
         {
-            var moduleWindow = CreateInstance<ResponsiveUtils>();
+            var moduleWindow = CreateInstance<ResponsiveBreakpointUtils>();
             moduleWindow.Init();
             moduleWindow.Show();
         }
@@ -58,7 +58,7 @@ namespace AltSalt.Maestro
         private void Init()
         {
             titleContent = new GUIContent("Responsive Utils");
-            ModuleWindow moduleWindow = Configure(null, ProjectNamespaceData.namespaceData[ModuleNamespace.Root].editorPath + nameof(ResponsiveUtils)+"_UXML.uxml");
+            ModuleWindow moduleWindow = Configure(null, ProjectNamespaceData.namespaceData[ModuleNamespace.Root].editorPath + nameof(ResponsiveBreakpointUtils)+"_UXML.uxml");
             
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(Utils.stylesheetPath);
             rootVisualElement.AddToClassList("altsalt");
@@ -151,18 +151,18 @@ namespace AltSalt.Maestro
             UpdateListView(this);
         }
 
-        private static VisualElement UpdateListView(ResponsiveUtils responsiveUtils)
+        private static VisualElement UpdateListView(ResponsiveBreakpointUtils responsiveBreakpointUtils)
         {
-            if (responsiveUtils.listContainer == null) {
-                return responsiveUtils.listContainer;
+            if (responsiveBreakpointUtils.listContainer == null) {
+                return responsiveBreakpointUtils.listContainer;
             }
             
-            responsiveUtils.listContainer.Clear();
+            responsiveBreakpointUtils.listContainer.Clear();
 
-            List<IResponsive> responsiveElements = new List<IResponsive>();
+            List<IResponsiveBreakpoints> responsiveElements = new List<IResponsiveBreakpoints>();
 
             for(int i=0; i<Selection.gameObjects.Length; i++) {
-                responsiveElements.AddRange(Selection.gameObjects[i].GetComponents<IResponsive>());
+                responsiveElements.AddRange(Selection.gameObjects[i].GetComponents<IResponsiveBreakpoints>());
             }
 
             for(int i=0; i<TimelineEditor.selectedClips.Length; i++) {
@@ -175,26 +175,26 @@ namespace AltSalt.Maestro
             if(responsiveElements.Count > 0) {
 
                 Label breakpointLabel = CreateBreakpointLabel(responsiveElements);
-                responsiveUtils.listContainer.Add(breakpointLabel);
+                responsiveBreakpointUtils.listContainer.Add(breakpointLabel);
 
-                responsiveUtils.listView = CreateListView(responsiveUtils, responsiveElements, responsiveUtils.listViewExpanded);
-                responsiveUtils.listContainer.Add(responsiveUtils.listView);
+                responsiveBreakpointUtils.listView = CreateListView(responsiveBreakpointUtils, responsiveElements, responsiveBreakpointUtils.listViewExpanded);
+                responsiveBreakpointUtils.listContainer.Add(responsiveBreakpointUtils.listView);
 
-                responsiveUtils.rootVisualElement.RegisterCallback<MouseCaptureOutEvent>((MouseCaptureOutEvent evt) => {
-                    if (evt.target != responsiveUtils.listView) {
-                        responsiveUtils.selectedElements.Clear();
+                responsiveBreakpointUtils.rootVisualElement.RegisterCallback<MouseCaptureOutEvent>((MouseCaptureOutEvent evt) => {
+                    if (evt.target != responsiveBreakpointUtils.listView) {
+                        responsiveBreakpointUtils.selectedElements.Clear();
                     }
                 });
 
             } else {
                 Label label = new Label("No responsive elements selected");
-                responsiveUtils.listContainer.Add(label);
+                responsiveBreakpointUtils.listContainer.Add(label);
             }
 
-            return responsiveUtils.listContainer;
+            return responsiveBreakpointUtils.listContainer;
         }
 
-        private static Label CreateBreakpointLabel(List<IResponsive> list)
+        private static Label CreateBreakpointLabel(List<IResponsiveBreakpoints> list)
         {
             List<float> breakpointValues = new List<float>();
             for (int q = 0; q < list.Count; q++) {
@@ -219,7 +219,7 @@ namespace AltSalt.Maestro
             return label;
         }
 
-        private static ListView CreateListView(ResponsiveUtils responsiveUtils, List<IResponsive> listElements, bool expandListView)
+        private static ListView CreateListView(ResponsiveBreakpointUtils responsiveBreakpointUtils, List<IResponsiveBreakpoints> listElements, bool expandListView)
         {
             Func<VisualElement> makeItem = () => new Label();
 
@@ -253,7 +253,7 @@ namespace AltSalt.Maestro
                 
             };
             listView.onSelectionChanged += items => {
-                responsiveUtils.selectedElements = items.ConvertAll(item => (IResponsive)item);
+                responsiveBreakpointUtils.selectedElements = items.ConvertAll(item => (IResponsiveBreakpoints)item);
             };
 
             return ModuleUtils.ToggleListView(listView, expandListView);
@@ -290,12 +290,12 @@ namespace AltSalt.Maestro
             return saveableList.ToArray();
         }
 
-        public static IResponsive[] AddBreakpointToSelectedElements(GameObject[] selectedObjects, float targetBreakpoint)
+        public static IResponsiveBreakpoints[] AddBreakpointToSelectedElements(GameObject[] selectedObjects, float targetBreakpoint)
         {
-            List<IResponsive> responsiveComponentList = new List<IResponsive>();
+            List<IResponsiveBreakpoints> responsiveComponentList = new List<IResponsiveBreakpoints>();
 
             for (int i = 0; i < selectedObjects.Length; i++) {
-                IResponsive[] responsiveComponents = selectedObjects[i].GetComponents<IResponsive>();
+                IResponsiveBreakpoints[] responsiveComponents = selectedObjects[i].GetComponents<IResponsiveBreakpoints>();
                 for (int q = 0; q < responsiveComponents.Length; q++) {
                     responsiveComponents[q].AddBreakpoint(targetBreakpoint);
                 }
@@ -304,25 +304,25 @@ namespace AltSalt.Maestro
             return responsiveComponentList.ToArray();
         }
 
-        public static IResponsive[] AddBreakpointToSelectedElements(TimelineClip[] selectedClips, float targetBreakpoint)
+        public static IResponsiveBreakpoints[] AddBreakpointToSelectedElements(TimelineClip[] selectedClips, float targetBreakpoint)
         {
-            List<IResponsive> responsiveClipAssetList = new List<IResponsive>();
+            List<IResponsiveBreakpoints> responsiveClipAssetList = new List<IResponsiveBreakpoints>();
 
             for (int i = 0; i < selectedClips.Length; i++) {
                 if (selectedClips[i].asset is ResponsiveLerpToTargetClip) {
-                    IResponsive responsiveElement = ResponsiveUtilsCore.GetResponsiveElementFromClipAsset(selectedClips[i].asset as ResponsiveLerpToTargetClip);
-                    responsiveElement.AddBreakpoint(targetBreakpoint);
-                    responsiveClipAssetList.Add(responsiveElement);
+                    IResponsiveBreakpoints responsive = ResponsiveUtilsCore.GetResponsiveElementFromClipAsset(selectedClips[i].asset as ResponsiveLerpToTargetClip);
+                    responsive.AddBreakpoint(targetBreakpoint);
+                    responsiveClipAssetList.Add(responsive);
                 }
             }
             TimelineUtils.RefreshTimelineContentsModified();
             return responsiveClipAssetList.ToArray();
         }
 
-        public static IResponsive[] AddBreakpointToSelectedElements(IResponsive[] responsiveElements, float targetBreakpoint)
+        public static IResponsiveBreakpoints[] AddBreakpointToSelectedElements(IResponsiveBreakpoints[] responsiveElements, float targetBreakpoint)
         {            
             for (int q = 0; q < responsiveElements.Length; q++) {
-                if(responsiveElements[q] is IResponsive) {
+                if(responsiveElements[q] is IResponsiveBreakpoints) {
                     responsiveElements[q].AddBreakpoint(targetBreakpoint);
                 } else if(responsiveElements[q] is ResponsiveLerpToTargetBehaviour) {
                     responsiveElements[q].AddBreakpoint(targetBreakpoint);

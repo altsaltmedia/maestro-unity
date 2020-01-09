@@ -32,7 +32,7 @@ namespace AltSalt.Maestro.Layout
             if (textRenderer == null) {
                 StoreTextRenderer();
             }
-            SetText(floatValue.Value);
+            SetText(floatValue.value);
         }
 
         void SetText(float number)

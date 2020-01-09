@@ -57,8 +57,8 @@ namespace AltSalt.Maestro.Animation {
             if(meshRenderer == null) {
                 meshRenderer = GetComponent<MeshRenderer>();
             }
-            meshRenderer.sharedMaterial.SetColor("_Color", _Color.Value);
-            meshRenderer.sharedMaterial.SetColor("_FadeColor", _FadeColor.Value);
+            meshRenderer.sharedMaterial.SetColor("_Color", _Color.value);
+            meshRenderer.sharedMaterial.SetColor("_FadeColor", _FadeColor.value);
             meshRenderer.sharedMaterial.SetFloat("_Subtract", _Subtract);
             meshRenderer.sharedMaterial.SetFloat("_Exponent", _Exponent);
         }

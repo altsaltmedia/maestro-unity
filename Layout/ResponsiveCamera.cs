@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro.Layout
 {
-    public class ResponsiveCamera : ResponsiveElement
+    public class ResponsiveCamera : ResponsiveLayoutElement
     {
         protected Camera thisCamera;
 

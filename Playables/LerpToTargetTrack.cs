@@ -62,7 +62,7 @@ namespace AltSalt.Maestro
         protected LerpToTargetMixerBehaviour StoreMixerProperties(GameObject go, LerpToTargetMixerBehaviour trackMixer)
         {
             trackMixer.directorObject = go;
-            trackMixer._scrubberActive.Variable = go.GetComponent<TrackAssetConfig>().scrubberActive;
+            trackMixer._scrubberActive.SetVariable(go.GetComponent<TrackAssetConfig>().scrubberActiveVariable);
             trackMixer.parentTrack = this;
             return trackMixer;
         }

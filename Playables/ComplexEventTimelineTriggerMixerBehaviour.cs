@@ -32,7 +32,7 @@ namespace AltSalt.Maestro
                 input = inputPlayable.GetBehaviour ();
                 
                 if (inputWeight > 0 && input.triggered == false) {
-                    if (input.isReversing.Value == true && input.disableOnReverse == true) {
+                    if (input.isReversing == true && input.disableOnReverse == true) {
                         continue;
                     }
                     input.triggered = true;

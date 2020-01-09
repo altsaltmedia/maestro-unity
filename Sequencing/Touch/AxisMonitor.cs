@@ -22,8 +22,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public bool axisTransitionActive
         {
-            get => _axisTransitionActive.Value;
-            set => _axisTransitionActive.Variable.SetValue(value);
+            get => _axisTransitionActive.GetValue(this.gameObject);
+            set => _axisTransitionActive.GetVariable(this.gameObject).SetValue(value);
         }
 
         [SerializeField]
@@ -42,7 +42,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public float axisTransitionSpread
         {
-            get => _axisTransitionSpread.Value;
+            get => _axisTransitionSpread.value;
         }
 
         [TitleGroup("Branch Keys")]

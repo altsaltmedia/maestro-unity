@@ -1,31 +1,66 @@
 ﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public class StringReference : VariableReferenceBase
+    public class StringReference : VariableReference
     {
-        public bool UseConstant = false;
-        public string ConstantValue;
-        public StringVariable Variable;
+        [FormerlySerializedAs("ConstantValue")]
+        [SerializeField]
+        private string _constantValue;
+
+        public string constantValue
+        {
+            get => _constantValue;
+            set => _constantValue = value;
+        }
+
+        [FormerlySerializedAs("Variable")]
+        [SerializeField]
+        [OnValueChanged(nameof(UpdateReferenceName))]
+        private StringVariable _variable;
+
+        public StringVariable variable
+        {
+            get
+            {
+                if (hasSearchedForAsset == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
+                    hasSearchedForAsset = true;
+                    LogMissingReferenceMessage(GetType().Name);
+                    _variable = Utils.GetScriptableObject(referenceName) as StringVariable;
+                }
+                return _variable;
+            }
+            set => _variable = value;
+        }
 
         public StringReference()
         { }
 
         public StringReference(string value)
         {
-            UseConstant = true;
-            ConstantValue = value;
+            useConstant = true;
+            constantValue = value;
         }
 
-        public string Value {
-            get { return UseConstant ? ConstantValue : Variable.value; }
+        public string value => useConstant ? constantValue : variable.value;
+
+        protected override void UpdateReferenceName()
+        {
+            if (_variable != null) {
+                referenceName = _variable.name;
+            }
+//            else {
+//                referenceName = "";
+//            }
         }
 
         public static implicit operator string(StringReference reference)
         {
-            return reference.Value;
+            return reference.value;
         }
     }
 }

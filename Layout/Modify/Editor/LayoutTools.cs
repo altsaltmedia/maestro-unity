@@ -122,16 +122,16 @@ namespace AltSalt.Maestro
 
         public static void LayoutUpdate()
         {
-            UnityEngine.Object[] responsiveObjects = Utils.FilterSelection(Utils.GetAllGameObjects(), typeof(ResponsiveElement));
-            List<ResponsiveElement> responsiveElements = new List<ResponsiveElement>();
+            UnityEngine.Object[] responsiveObjects = Utils.FilterSelection(Utils.GetAllGameObjects(), typeof(ResponsiveLayoutElement));
+            List<ResponsiveLayoutElement> responsiveElements = new List<ResponsiveLayoutElement>();
             
             for (int i = 0; i < responsiveObjects.Length; i++) {
                 GameObject gameObject = responsiveObjects[i] as GameObject;
                 if (gameObject.active == true) {
-                    responsiveElements.Add(gameObject.GetComponent<ResponsiveElement>());
+                    responsiveElements.Add(gameObject.GetComponent<ResponsiveLayoutElement>());
                 }
             }
-            responsiveElements.Sort(new ResponsiveUtilsCore.ResponsiveElementSort());
+            responsiveElements.Sort(new ResponsiveUtilsCore.DynamicElementSort());
 
             for (int i = 0; i < responsiveElements.Count; i++) {
                 if (responsiveElements[i].isActiveAndEnabled == true) {

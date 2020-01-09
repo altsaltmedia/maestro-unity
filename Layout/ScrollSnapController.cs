@@ -81,7 +81,7 @@ namespace AltSalt.Maestro.Layout
 
         public void Activate()
         {
-            baseWidth = (float)Utils.GetResponsiveWidth(sceneHeight.Value, sceneWidth.Value);
+            baseWidth = (float)Utils.GetResponsiveWidth(sceneHeight.value, sceneWidth.value);
 
             StartCoroutine(LerpToElement(activeElementID));
 
@@ -101,7 +101,7 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
 
-            Vector2 modifier = GetDragModifier(horizontalDrag, verticalDrag, dragSensitivity.Value, data);
+            Vector2 modifier = GetDragModifier(horizontalDrag, verticalDrag, dragSensitivity.value, data);
             content.anchoredPosition = GetNewPosition(content, modifier);
 
             if (content.anchoredPosition.x > 0) {

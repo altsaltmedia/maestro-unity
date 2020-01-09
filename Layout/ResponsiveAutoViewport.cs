@@ -36,12 +36,12 @@ namespace AltSalt.Maestro.Layout
         {
             base.PopulateDependencies();
 
-            if (deviceWidth.Variable == null) {
-                deviceWidth.Variable = Utils.GetFloatVariable(nameof(VarDependencies.DeviceWidth));
+            if (deviceWidth.variable == null) {
+                deviceWidth.variable = Utils.GetFloatVariable(nameof(VarDependencies.DeviceWidth));
             }
 
-            if (deviceHeight.Variable == null) {
-                deviceHeight.Variable = Utils.GetFloatVariable(nameof(VarDependencies.DeviceHeight));
+            if (deviceHeight.variable == null) {
+                deviceHeight.variable = Utils.GetFloatVariable(nameof(VarDependencies.DeviceHeight));
             }
         }
 
@@ -51,8 +51,8 @@ namespace AltSalt.Maestro.Layout
             if (viewportModifiers.Count == 0) {
                 viewportModifiers.Add(new Rect(0,0,0,0));
             }
-            if (viewportModifiers.Count <= _aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(viewportModifiers, _aspectRatioBreakpoints.Count);
+            if (viewportModifiers.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(viewportModifiers, aspectRatioBreakpoints.Count);
             }
         }
 #endif
@@ -65,7 +65,7 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
 #endif
-            Rect originalRect = new Rect((deviceWidth.Value - sceneWidth.Value) / 2f, (deviceHeight.Value - sceneHeight.Value) / 2f, sceneWidth.Value, sceneHeight.Value);
+            Rect originalRect = new Rect((deviceWidth.value - sceneWidth) / 2f, (deviceHeight.value - sceneHeight) / 2f, sceneWidth, sceneHeight);
             thisCamera.pixelRect = new Rect(originalRect.x + viewportModifiers[activeIndex].x, originalRect.y + viewportModifiers[activeIndex].y, originalRect.width + viewportModifiers[activeIndex].width, originalRect.height + viewportModifiers[activeIndex].height);
         }
 

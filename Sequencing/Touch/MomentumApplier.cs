@@ -7,6 +7,15 @@ namespace AltSalt.Maestro.Sequencing.Touch
 {
     public class MomentumApplier : Touch_Module
     {
+        [SerializeField]
+        private bool _momentumEnabled = true;
+
+        public bool momentumEnabled
+        {
+            get => _momentumEnabled;
+            set => _momentumEnabled = value;
+        }
+
         [Required]
         [SerializeField]
         private SimpleEventTrigger _momentumApplied;
@@ -23,8 +32,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         private Vector2 swipeMonitorMomentumCache
         {
-            get => _swipeMonitorMomentumCache.Value;
-            set => _swipeMonitorMomentumCache.Variable.SetValue(value);
+            get => _swipeMonitorMomentumCache.value;
+            set => _swipeMonitorMomentumCache.variable.SetValue(value);
         }
         
         [ShowInInspector]
@@ -54,8 +63,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         private float momentumDecay
         {
-            get => _momentumDecay.Value;
-            set => _momentumDecay.Variable.SetValue(value);
+            get => _momentumDecay.value;
+            set => _momentumDecay.variable.SetValue(value);
         }
 
         [SerializeField]
@@ -79,7 +88,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         private void Update()
         {
-            if (hasMomentum == false || touchController.appSettings.momentumActive == true) return;
+            if (hasMomentum == false || momentumEnabled == false || touchController.appSettings.globalMomentumEnabled == false) return;
             
             float momentumModifier;
 

@@ -3,7 +3,7 @@ using TMPro;
 
 namespace AltSalt.Maestro.Layout
 {
-    public class ResponsiveText : ResponsiveElement
+    public class ResponsiveText : ResponsiveLayoutElement
     {
         protected TextMeshPro textMeshPro;
 

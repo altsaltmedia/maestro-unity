@@ -28,9 +28,9 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
-        private BoolReference _isReversing;
+        private BoolReference _isReversing = new BoolReference();
 
-        public bool isReversing => _isReversing.Value;
+        public bool isReversing => _isReversing.GetValue(this.gameObject);
 
         [SerializeField]
         [InfoBox("Autorun data is populated dynamically from connected Master Sequences")]

@@ -29,7 +29,7 @@ namespace AltSalt.Maestro.Layout
             if(textRenderer == null) {
                 StoreTextRenderer();
             }
-            SetText(vectorValue.Value);
+            SetText(vectorValue.value);
         }
 
         void SetText(Vector2 v2)

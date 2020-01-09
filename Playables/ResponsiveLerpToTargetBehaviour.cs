@@ -21,17 +21,43 @@ using UnityEditor;
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public abstract class ResponsiveLerpToTargetBehaviour : LerpToTargetBehaviour, IResponsive
+    public abstract class ResponsiveLerpToTargetBehaviour : LerpToTargetBehaviour, IResponsiveBreakpoints, IDynamicLayoutElement
     {
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        public FloatReference sceneAspectRatio = new FloatReference();
+        [ShowInInspector]
+        [ReadOnly]
+        public float _sceneAspectRatio;
+
+        public float sceneAspectRatio
+        {
+            get => _sceneAspectRatio;
+            set => _sceneAspectRatio = value;
+        }
+        
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneWidth;
+
+        public float sceneWidth
+        {
+            get => _sceneWidth;
+            set => _sceneWidth = value;
+        }
+
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneHeight;
+
+        public float sceneHeight
+        {
+            get => _sceneHeight;
+            set => _sceneHeight = value;
+        }
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private ComplexEventTrigger _responsiveElementEnable = new ComplexEventTrigger();
 
-        private ComplexEventTrigger responsiveElementEnable
+        public ComplexEventTrigger dynamicElementEnable
         {
             get => _responsiveElementEnable;
             set => _responsiveElementEnable = value;
@@ -41,7 +67,7 @@ namespace AltSalt.Maestro
         [ValidateInput(nameof(IsPopulated))]
         private ComplexEventTrigger _responsiveElementDisable = new ComplexEventTrigger();
 
-        private ComplexEventTrigger responsiveElementDisable
+        public ComplexEventTrigger dynamicElementDisable
         {
             get => _responsiveElementDisable;
             set => _responsiveElementDisable = value;
@@ -88,7 +114,7 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR
         [OnValueChanged(nameof(UpdateBreakpointDependencies))]
 #endif
-        public List<float> _aspectRatioBreakpoints = new List<float>();
+        private List<float> _aspectRatioBreakpoints = new List<float>();
         
         public List<float> aspectRatioBreakpoints {
             get {
@@ -110,23 +136,19 @@ namespace AltSalt.Maestro
         
         public override void OnPlayableCreate(Playable playable)
         {
-#if UNITY_EDITOR    
-            if (sceneAspectRatio.Variable == null) {
-                sceneAspectRatio.Variable = Utils.GetFloatVariable(nameof(VarDependencies.SceneAspectRatio));
-            }
-            
+#if UNITY_EDITOR
             UpdateBreakpointDependencies();
 
-            if (responsiveElementEnable.ComplexEventTarget == null) {
-                responsiveElementEnable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementEnable));
+            if (dynamicElementEnable.ComplexEventTarget == null) {
+                dynamicElementEnable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementEnable));
             }
 
-            if (responsiveElementDisable.ComplexEventTarget == null) {
-                responsiveElementDisable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementDisable));
+            if (dynamicElementDisable.ComplexEventTarget == null) {
+                dynamicElementDisable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementDisable));
             }
 #endif
             base.OnPlayableCreate(playable);
-            responsiveElementEnable.RaiseEvent(clipAsset, parentScene.name, clipAsset.name, this);
+            dynamicElementEnable.RaiseEvent(clipAsset, parentScene.name, clipAsset.name, this);
 
             easingFunction = EasingFunction.GetEasingFunction(ease);
             CallExecuteLayoutUpdate(directorObject);
@@ -151,7 +173,7 @@ namespace AltSalt.Maestro
             if (aspectRatioBreakpoints.Count == 0 || hasBreakpoints == false) {
                 SetValue(0);
             } else {
-                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio.Value, aspectRatioBreakpoints);
+                int breakpointIndex = Utils.GetValueIndexInList(sceneAspectRatio, aspectRatioBreakpoints);
                 SetValue(breakpointIndex);
             }
         }
@@ -161,8 +183,8 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR
         void ResetResponsiveElementData()
         {
-            responsiveElementDisable.RaiseEvent(clipAsset, parentScene.name, clipAsset.name, this);
-            responsiveElementEnable.RaiseEvent(clipAsset, parentScene.name, clipAsset.name, this);
+            dynamicElementDisable.RaiseEvent(clipAsset, parentScene.name, clipAsset.name, this);
+            dynamicElementEnable.RaiseEvent(clipAsset, parentScene.name, clipAsset.name, this);
         }
 
         protected void PopulateDefaultBreakpointValues()
@@ -173,17 +195,17 @@ namespace AltSalt.Maestro
 
         void PopulateDefaultBreakpoint()
         {
-            if (hasBreakpoints == true && _aspectRatioBreakpoints.Count == 0) {
-                decimal tempVal = Convert.ToDecimal(sceneAspectRatio.Value);
+            if (hasBreakpoints == true && aspectRatioBreakpoints.Count == 0) {
+                decimal tempVal = Convert.ToDecimal(sceneAspectRatio);
                 tempVal = Math.Round(tempVal, 2);
-                _aspectRatioBreakpoints.Add((float)tempVal + .01f);
+                aspectRatioBreakpoints.Add((float)tempVal + .01f);
             }
         }
 
         protected virtual void UpdateBreakpointDependencies()
         {
-            if (_aspectRatioBreakpoints.Count == 0) {
-                _hasBreakpoints = false;
+            if (aspectRatioBreakpoints.Count == 0) {
+                hasBreakpoints = false;
             }
         }
 
