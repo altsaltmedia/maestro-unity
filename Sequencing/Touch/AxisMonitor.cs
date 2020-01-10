@@ -93,8 +93,9 @@ namespace AltSalt.Maestro.Sequencing.Touch
             set => _xWestKey = value;
         }
         
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             axisTransitionActive = false;
         }
 

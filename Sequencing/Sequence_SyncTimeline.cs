@@ -14,6 +14,8 @@ using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.Timeline;
+
 #endif
 
 namespace AltSalt.Maestro.Sequencing
@@ -58,12 +60,13 @@ namespace AltSalt.Maestro.Sequencing
         private bool _logElementOnLayoutUpdate = false;
 
         public bool logElementOnLayoutUpdate {
-            get {
+            get
+            {
                 if (appSettings.logResponsiveElementActions == true) {
                     return true;
-                } else {
-                    return _logElementOnLayoutUpdate;
                 }
+
+                return _logElementOnLayoutUpdate;
             }
         }
         
@@ -71,19 +74,22 @@ namespace AltSalt.Maestro.Sequencing
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _dynamicElementEnable = new ComplexEventTrigger();
+        private ComplexEventTrigger _enableDynamicElement = new ComplexEventTrigger();
 
-        public ComplexEventTrigger dynamicElementEnable => _dynamicElementEnable;
+        public ComplexEventTrigger enableDynamicElement => _enableDynamicElement;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _dynamicElementDisable = new ComplexEventTrigger();
+        private ComplexEventTrigger _disableDynamicElement = new ComplexEventTrigger();
 
-        public ComplexEventTrigger dynamicElementDisable => _dynamicElementDisable;
+        public ComplexEventTrigger disableDynamicElement => _disableDynamicElement;
 
         public Scene parentScene => gameObject.scene;
 
-        public int priority => -10;
+        [SerializeField]
+        private int _priority = -10;
+        
+        public int priority => _priority;
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
@@ -97,6 +103,12 @@ namespace AltSalt.Maestro.Sequencing
 
         public void CallExecuteLayoutUpdate(Object callingObject)
         {
+#if UNITY_EDITOR
+            if (sequence == null || sequence.sequenceConfig == null ||
+                TimelineEditor.inspectedDirector != sequence.sequenceConfig.playableDirector) {
+                return;
+            }
+            
             if (logElementOnLayoutUpdate == true) {
                 Debug.Log("CallExecuteLayoutUpdate triggered!");
                 Debug.Log("Calling object : " + callingObject.name, callingObject);
@@ -105,7 +117,8 @@ namespace AltSalt.Maestro.Sequencing
                 Debug.Log("--------------------------");
             }
             
-            RefreshPlayableDirector();
+            sequence.sequenceConfig.playableDirector.Evaluate();
+#endif
         }
 
         public void RefreshPlayableDirector()
@@ -138,7 +151,7 @@ namespace AltSalt.Maestro.Sequencing
 #if UNITY_EDITOR
         private void OnEnable()
         {
-            dynamicElementEnable.RaiseEvent(this.gameObject, this);
+            enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
 
 //        private void OnDisable()

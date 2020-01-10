@@ -18,7 +18,6 @@ namespace AltSalt.Maestro
 
         [SerializeField]
         [OnInspectorGUI(nameof(UpdateReferenceName), false)]
-        [ReadOnly]
         protected string _referenceName;
 
         protected string referenceName

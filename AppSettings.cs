@@ -46,6 +46,24 @@ namespace AltSalt.Maestro
         public bool musicEnabled => productionSettings.musicEnabled.value;
 
         public bool soundEffectsEnabled => productionSettings.soundEffectsEnabled.value;
+        
+        public float deviceAspectRatio
+        {
+            get => productionSettings.deviceAspectRatio.value;
+            set => productionSettings.deviceAspectRatio.SetValue(value);
+        }
+        
+        public float deviceWidth
+        {
+            get => productionSettings.deviceWidth.value;
+            set => productionSettings.deviceWidth.SetValue(value);
+        }
+        
+        public float deviceHeight
+        {
+            get => productionSettings.deviceHeight.value;
+            set => productionSettings.deviceHeight.SetValue(value);
+        }
 
         public float timescale => productionSettings.timescale.value;
 
@@ -54,8 +72,8 @@ namespace AltSalt.Maestro
         
         public bool dynamicLayoutActive
         {
-            get => debugSettings.responsiveLayoutActive;
-            set => debugSettings.responsiveLayoutActive = value;
+            get => debugSettings.dynamicLayoutActive;
+            set => debugSettings.dynamicLayoutActive = value;
         }
 
         public bool saveDataActive

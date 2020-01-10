@@ -31,10 +31,10 @@ namespace AltSalt.Maestro
             GUILayout.Label("These values are automatically populated via script.");
             EditorGUI.BeginDisabledGroup(true);
 //            modifySettings = EditorGUILayout.ObjectField("Modify Settings", modifySettings, typeof(ModifySettings), false) as ModifySettings;
-            layoutUpdate.SimpleEventTarget = Utils.GetSimpleEvent(nameof(VarDependencies.LayoutUpdate));
-            layoutUpdate.SimpleEventTarget = EditorGUILayout.ObjectField("Layout Update", layoutUpdate.SimpleEventTarget, typeof(SimpleEvent), false) as SimpleEvent;
-            textUpdate.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.TextUpdate));
-            textUpdate.ComplexEventTarget = EditorGUILayout.ObjectField("Text Update", textUpdate.ComplexEventTarget, typeof(ComplexEvent), false) as ComplexEvent;
+            layoutUpdate.simpleEvent = Utils.GetSimpleEvent(nameof(VarDependencies.LayoutUpdate));
+            layoutUpdate.simpleEvent = EditorGUILayout.ObjectField("Layout Update", layoutUpdate.simpleEvent, typeof(SimpleEvent), false) as SimpleEvent;
+            textUpdate.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.TextUpdate));
+            textUpdate.complexEvent = EditorGUILayout.ObjectField("Text Update", textUpdate.complexEvent, typeof(ComplexEvent), false) as ComplexEvent;
             EditorGUI.EndDisabledGroup();
 //
 //            if (modifySettings == null) {

@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 namespace AltSalt.Maestro
 {
-    public class DynamicLayoutController : MonoBehaviour, ISkipRegistration
+    public class DynamicLayoutControllerBackup : MonoBehaviour, ISkipRegistration
     {
         public bool DoNotRecord => true;
         
@@ -30,75 +30,20 @@ namespace AltSalt.Maestro
             set => _appSettings = value;
         }
 
-        [SerializeField]
-        private DimensionType _orientation;
+        private float deviceAspectRatio => appSettings.deviceAspectRatio;
+        
+        private float deviceWidth => appSettings.deviceWidth;
 
-        private DimensionType orientation => _orientation;
+        private float deviceHeight => appSettings.deviceHeight;
 
-        [SerializeField]
-        private bool _delayStart;
+        [field: ShowInInspector, ReadOnly]
+        private float sceneAspectRatio { get; set; }
 
-        private bool delayStart => _delayStart;
+        [field: ShowInInspector, ReadOnly]
+        private float sceneWidth { get; set; }
 
-        [SerializeField]
-        [ShowIf(nameof(delayStart))]
-        private float _delayAmount;
-
-        private float delayAmount => _delayAmount;
-
-        [SerializeField]
-        [Required]
-        private SimpleEventTrigger _fadeInTriggered;
-
-        private SimpleEventTrigger fadeInTriggered => _fadeInTriggered;
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private FloatReference _deviceAspectRatio;
-
-        private float deviceAspectRatio => _deviceAspectRatio.GetValue(this.gameObject);
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private FloatReference _deviceWidth;
-
-        private float deviceWidth => _deviceWidth.GetValue(this.gameObject);
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private FloatReference _deviceHeight;
-
-        private float deviceHeight => _deviceHeight.GetValue(this.gameObject);
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private FloatReference _sceneAspectRatio = new FloatReference();
-
-        private float sceneAspectRatio
-        {
-            get => _sceneAspectRatio.GetValue(this.gameObject);
-            set => _sceneAspectRatio.GetVariable(this.gameObject).SetValue(value);
-        }
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private FloatReference _sceneWidth = new FloatReference();
-
-        private float sceneWidth
-        {
-            get => _sceneWidth.GetValue(this.gameObject);
-            set => _sceneWidth.GetVariable(this.gameObject).SetValue(value);
-        }
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private FloatReference _sceneHeight = new FloatReference();
-
-        private float sceneHeight
-        {
-            get => _sceneHeight.GetValue(this.gameObject);
-            set => _sceneHeight.GetVariable(this.gameObject).SetValue(value);
-        }
+        [field: ShowInInspector, ReadOnly]
+        private float sceneHeight { get; set; }
 
         [SerializeField]
         private List<float> _deviceBreakpoints = new List<float>();
@@ -127,6 +72,23 @@ namespace AltSalt.Maestro
         private SimpleEventTrigger layoutRendered => _layoutRendered;
         
         [SerializeField]
+        private bool _delayStart;
+
+        private bool delayStart => _delayStart;
+
+        [SerializeField]
+        [ShowIf(nameof(delayStart))]
+        private float _delayAmount;
+
+        private float delayAmount => _delayAmount;
+
+        [SerializeField]
+        [Required]
+        private SimpleEventTrigger _fadeInTriggered;
+
+        private SimpleEventTrigger fadeInTriggered => _fadeInTriggered;
+        
+        [SerializeField]
         private UnityEvent _layoutRenderCompleteEvents;
 
         private UnityEvent layoutRenderCompleteEvents => _layoutRenderCompleteEvents;
@@ -138,12 +100,6 @@ namespace AltSalt.Maestro
 
         private void RefreshLayout()
         {
-            if(orientation == DimensionType.Vertical) {
-                Screen.orientation = ScreenOrientation.Portrait;
-            } else {
-                Screen.orientation = ScreenOrientation.LandscapeLeft;
-            }
-
             CallExecuteLayoutUpdate();
 
             if(delayStart == false) {
@@ -153,8 +109,8 @@ namespace AltSalt.Maestro
                 StartCoroutine(LayoutRenderCompleteTimeDelay());
             }
         }
-        
-        void OnDisable()
+
+        private void OnDisable()
         {
             priorityDynamicElements.Clear();
             dynamicElements.Clear();
@@ -209,78 +165,47 @@ namespace AltSalt.Maestro
             priorityDynamicElements.Sort(new ResponsiveUtilsCore.DynamicElementSort());
             List<IDynamicLayoutElement> elementsToRemove = new List<IDynamicLayoutElement>();
 
-            // Start with priorities greater than 0
-            for (int i=0; i<priorityDynamicElements.Count; i++) {
-                
-                if (priorityDynamicElements[i] == null || priorityDynamicElements[i].elementName.Length < 0) {
-                    elementsToRemove.Add(priorityDynamicElements[i]);
-                    continue;
-                }
+            UpdateDynamicElements(priorityDynamicElements, this, 1);
+            UpdateDynamicElements(dynamicElements, this, int.MinValue);
+            UpdateDynamicElements(priorityDynamicElements, this, int.MinValue, 0);
 
-                if (priorityDynamicElements[i].priority > 0) {
-                    if (priorityDynamicElements[i] is IResponsiveBreakpoints responsiveBreakpoints) {
-                        responsiveBreakpoints.sceneAspectRatio = sceneAspectRatio;
-                        responsiveBreakpoints.sceneHeight = sceneHeight;
-                        responsiveBreakpoints.sceneWidth = sceneWidth;
-                    }
-                    priorityDynamicElements[i].CallExecuteLayoutUpdate(this.gameObject);
-                }
-            }
-
-            for (int i = 0; i < elementsToRemove.Count; i++) {
-                priorityDynamicElements.Remove(elementsToRemove[i]);
-            }
-            elementsToRemove.Clear();
-
-            // All other elements with standard priority of 0, executed in any order
-            for (int i=0; i<dynamicElements.Count; i++) {
-                
-                if (dynamicElements[i] == null || dynamicElements[i].elementName.Length > 0) {
-                    elementsToRemove.Add(dynamicElements[i]);
-                    continue;
-                }
-
-                if (dynamicElements[i] is IResponsiveBreakpoints responsiveBreakpoints) {
-                        responsiveBreakpoints.sceneAspectRatio = sceneAspectRatio;
-                        responsiveBreakpoints.sceneHeight = sceneHeight;
-                        responsiveBreakpoints.sceneWidth = sceneWidth;
-                }
-                dynamicElements[i].CallExecuteLayoutUpdate(this.gameObject);
-            }
-            
-            for (int i = 0; i < elementsToRemove.Count; i++) {
-                dynamicElements.Remove(elementsToRemove[i]);
-            }
-            elementsToRemove.Clear();
-            
-            
-            // Lastly, execute priority elements with priorities less than 0
-            for (int i=0; i<priorityDynamicElements.Count; i++) {
-                
-                if (priorityDynamicElements[i] == null || priorityDynamicElements[i].elementName.Length < 0) {
-                    elementsToRemove.Add(priorityDynamicElements[i]);
-                    continue;
-                }
-
-                if (priorityDynamicElements[i].priority <= 0) {
-                    if (priorityDynamicElements[i] is IResponsiveBreakpoints responsiveBreakpoints) {
-                        responsiveBreakpoints.sceneAspectRatio = sceneAspectRatio;
-                        responsiveBreakpoints.sceneHeight = sceneHeight;
-                        responsiveBreakpoints.sceneWidth = sceneWidth;
-                    }
-                    priorityDynamicElements[i].CallExecuteLayoutUpdate(this.gameObject);
-                }
-            }
-            
-            for (int i = 0; i < elementsToRemove.Count; i++) {
-                dynamicElements.Remove(elementsToRemove[i]);
-            }
-            elementsToRemove.Clear();
 #if UNITY_EDITOR
             if(TimelineEditor.inspectedDirector != null) {
                 TimelineEditor.Refresh(RefreshReason.ContentsModified);
             }
 #endif
+        }
+
+        private static List<IDynamicLayoutElement> UpdateDynamicElements(List<IDynamicLayoutElement> dynamicLayoutElements,
+            DynamicLayoutControllerBackup dynamicLayoutController, int minPriority, int maxPriority = int.MaxValue)
+        {
+            // Used to remove any elements that might be null
+            List<IDynamicLayoutElement> elementsToRemove = new List<IDynamicLayoutElement>();
+            
+            for (int i=0; i<dynamicLayoutElements.Count; i++) {
+                
+                if (dynamicLayoutElements[i] == null || dynamicLayoutElements[i].elementName.Length < 0) {
+                    elementsToRemove.Add(dynamicLayoutElements[i]);
+                    continue;
+                }
+
+                if (dynamicLayoutElements[i].priority >= minPriority && dynamicLayoutElements[i].priority <= maxPriority) {
+                    if (dynamicLayoutElements[i] is IResponsiveBreakpoints responsiveBreakpoints) {
+                        responsiveBreakpoints.sceneAspectRatio = dynamicLayoutController.sceneAspectRatio;
+                        responsiveBreakpoints.sceneWidth = dynamicLayoutController.sceneWidth;
+                        responsiveBreakpoints.sceneHeight = dynamicLayoutController.sceneHeight;
+                    }
+                    dynamicLayoutElements[i].CallExecuteLayoutUpdate(dynamicLayoutController.gameObject);
+                }
+            }
+            
+            // Sanitize the list after we have iterated through it
+            // so we don't interfere with the loop during iteration
+            for (int i = 0; i < elementsToRemove.Count; i++) {
+                dynamicLayoutElements.Remove(elementsToRemove[i]);
+            }
+
+            return dynamicLayoutElements;
         }
 
         private void PopulateSceneDimensions()
@@ -347,7 +272,7 @@ namespace AltSalt.Maestro
 
             [ValueDropdown(nameof(resizeTypeValues))]
             [SerializeField]
-            [HideIf(nameof(TargetAspectRatioIsDynamic))]
+            [HideIf(nameof(AspectRatioIsDynamic))]
             public ResizeType resizeType;
 
             private ValueDropdownList<ResizeType> resizeTypeValues = new ValueDropdownList<ResizeType>(){
@@ -357,7 +282,7 @@ namespace AltSalt.Maestro
                 {"Horizontal : Crop or box sides", ResizeType.HorizontalLetterBox  }
             };
 
-            private bool TargetAspectRatioIsDynamic()
+            private bool AspectRatioIsDynamic()
             {
                 if(targetAspectRatio == AspectRatioType.Dynamic) {
                     return true;
@@ -367,17 +292,6 @@ namespace AltSalt.Maestro
         }
 
         public enum ResizeType { VerticalPillarBox, HorizontalLetterBox, VerticalLetterBox, HorizontalPillarBox }
-
-
-        private static bool IsPopulated(FloatReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-
-        private static bool IsPopulated(BoolReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
 
     }
 }

@@ -30,7 +30,7 @@ namespace AltSalt.Maestro
 
 	public enum DimensionType { Vertical, Horizontal }
 
-    public enum AspectRatioType { x16x9, x9x16, x4x3, x3x4, Dynamic }
+    public enum AspectRatioType { x16x9, x9x16, x4x3, x3x4, x1x1, Dynamic }
 
     public enum RatioType { Numerator, Denominator }
 
@@ -59,8 +59,8 @@ namespace AltSalt.Maestro
         FrameStepValue,
         SwipeModifierOutput,
         OnGraphStart,
-        ResponsiveElementEnable,
-        ResponsiveElementDisable,
+        EnableDynamicElement,
+        DisableDynamicElement,
         TextUpdate,
         LayoutUpdate,
         ScreenResized,
@@ -1491,7 +1491,7 @@ namespace AltSalt.Maestro
 
         public static bool IsPopulated(SimpleEventTrigger attribute)
         {
-            if (attribute.SimpleEventTarget != null) {
+            if (attribute.simpleEvent != null) {
                 return true;
             } else {
                 return false;
@@ -1500,7 +1500,7 @@ namespace AltSalt.Maestro
 
         public static bool IsPopulated(ComplexEventTrigger attribute)
         {
-            if (attribute.ComplexEventTarget != null) {
+            if (attribute.complexEvent != null) {
                 return true;
             } else {
                 return false;

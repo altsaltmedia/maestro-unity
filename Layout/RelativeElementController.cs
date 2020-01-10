@@ -62,15 +62,15 @@ namespace AltSalt.Maestro.Layout
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _dynamicElementEnable = new ComplexEventTrigger();
+        private ComplexEventTrigger _enableDynamicElement = new ComplexEventTrigger();
 
-        public ComplexEventTrigger dynamicElementEnable => _dynamicElementEnable;
+        public ComplexEventTrigger enableDynamicElement => _enableDynamicElement;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _dynamicElementDisable = new ComplexEventTrigger();
+        private ComplexEventTrigger _disableDynamicElement = new ComplexEventTrigger();
 
-        public ComplexEventTrigger dynamicElementDisable => _dynamicElementDisable;
+        public ComplexEventTrigger disableDynamicElement => _disableDynamicElement;
 
         public Scene parentScene => gameObject.scene;
         
@@ -83,12 +83,13 @@ namespace AltSalt.Maestro.Layout
         private bool _logElementOnLayoutUpdate = false;
 
         public bool logElementOnLayoutUpdate {
-            get {
+            get
+            {
                 if (appSettings.logResponsiveElementActions == true) {
                     return true;
-                } else {
-                    return _logElementOnLayoutUpdate;
                 }
+
+                return _logElementOnLayoutUpdate;
             }
         }
 
@@ -99,7 +100,15 @@ namespace AltSalt.Maestro.Layout
         
         private void OnEnable()
         {
-            dynamicElementEnable.RaiseEvent(this.gameObject, this);
+            if (enableDynamicElement.complexEvent == null) {
+                enableDynamicElement.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement));
+            }
+            
+            if (disableDynamicElement.complexEvent == null) {
+                disableDynamicElement.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement));
+            }
+            
+            enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
 
 //        private void OnDisable()

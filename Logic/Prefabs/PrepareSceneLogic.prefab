@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 354073691016094632}
   - component: {fileID: 5729742352868547490}
   m_Layer: 0
-  m_Name: PrepareScene
+  m_Name: PrepareSceneLogic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,60 +63,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 307bf3fe2474043068fdd4e250f6a84a, type: 2}
   - {fileID: 11400000, guid: 3e188ea664ddc4003896aefdb9d1fa5f, type: 2}
   - {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
-  orientation: 0
-  resetSequences: 0
-  delayStart: 0
-  delayAmount: 0
-  prepareSceneCompleted:
-    simpleEvent: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c, type: 2}
-  removeOverlayImmediately:
-    _referenceName: 
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: 9932254243221466bbcd3a046b5454b2, type: 2}
-  fadeInTriggered:
-    simpleEvent: {fileID: 11400000, guid: dfee30ca42be848fab35ac15ceabe65d, type: 2}
-  deviceAspectRatio:
-    _referenceName: DeviceAspectRatio
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: 4c62a64bceb8c44a29bcfa465569930f, type: 2}
-  deviceWidth:
-    _referenceName: DeviceWidth
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: 10bb2f582f9a548ddb2255f116d3bac9, type: 2}
-  deviceHeight:
-    _referenceName: DeviceHeight
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: 70a2e26166cba4dd2954b2a0b98c221e, type: 2}
-  sceneWidth:
-    _referenceName: SceneWidth
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: b34423e6cdba94c4d9de0260f23b4a42, type: 2}
-  sceneHeight:
-    _referenceName: SceneHeight
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: 8b33a7d0f4f2b4190b9521835b360461, type: 2}
-  sceneAspectRatio:
-    _referenceName: SceneAspectRatio
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: 783898d68518049ad851616580bb71ae, type: 2}
-  deviceBreakpoints:
-  - 1.51
-  - 1.61
-  sceneDimensions:
-  - targetAspectRatio: 4
-    resizeType: 2
-  - targetAspectRatio: 3
-    resizeType: 0
-  - targetAspectRatio: 1
-    resizeType: 0
-  _prepareSceneCompleteEvents:
+  _prepareSceneEvents:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1002040487642911264

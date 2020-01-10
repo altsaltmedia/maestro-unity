@@ -33,7 +33,7 @@ namespace AltSalt.Maestro.Layout
 
         [ShowInInspector]
         [ReadOnly]
-        private float _sceneWidth;
+        private float _sceneWidth = 4.65f;
 
         public float sceneWidth
         {
@@ -43,7 +43,7 @@ namespace AltSalt.Maestro.Layout
 
         [ShowInInspector]
         [ReadOnly]
-        private float _sceneHeight;
+        private float _sceneHeight = 4.594452f;
 
         public float sceneHeight
         {
@@ -53,7 +53,7 @@ namespace AltSalt.Maestro.Layout
 
         [ShowInInspector]
         [ReadOnly]
-        private float _sceneAspectRatio;
+        private float _sceneAspectRatio = 1.33f;
 
         public float sceneAspectRatio
         {
@@ -63,15 +63,15 @@ namespace AltSalt.Maestro.Layout
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _dynamicElementEnable = new ComplexEventTrigger();
+        private ComplexEventTrigger _enableDynamicElement = new ComplexEventTrigger();
 
-        public ComplexEventTrigger dynamicElementEnable => _dynamicElementEnable;
+        public ComplexEventTrigger enableDynamicElement => _enableDynamicElement;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _dynamicElementDisable = new ComplexEventTrigger();
+        private ComplexEventTrigger _disableDynamicElement = new ComplexEventTrigger();
 
-        public ComplexEventTrigger dynamicElementDisable => _dynamicElementDisable;
+        public ComplexEventTrigger disableDynamicElement => _disableDynamicElement;
 
         public string elementName => this.name;
 
@@ -98,12 +98,13 @@ namespace AltSalt.Maestro.Layout
         protected bool _logElementOnLayoutUpdate;
         
         public bool logElementOnLayoutUpdate {
-            get {
+            get
+            {
                 if (appSettings.logResponsiveElementActions == true) {
                     return true;
-                } else {
-                    return _logElementOnLayoutUpdate;
                 }
+
+                return _logElementOnLayoutUpdate;
             }
         }
 
@@ -125,6 +126,7 @@ namespace AltSalt.Maestro.Layout
 #if UNITY_EDITOR
         [OnValueChanged(nameof(UpdateBreakpointDependencies))]
 #endif
+        [SerializeField]
         private List<float> _aspectRatioBreakpoints = new List<float>();
         
         public List<float> aspectRatioBreakpoints => _aspectRatioBreakpoints;
@@ -139,7 +141,7 @@ namespace AltSalt.Maestro.Layout
             PopulateDependencies();
             PopulateNonSerializedProperties();
 #endif
-            dynamicElementEnable.RaiseEvent(this.gameObject, this);
+            enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
 
 #if UNITY_EDITOR
@@ -200,8 +202,8 @@ namespace AltSalt.Maestro.Layout
 
         void ResetResponsiveElementData()
         {
-            dynamicElementDisable.RaiseEvent(this.gameObject, this);
-            dynamicElementEnable.RaiseEvent(this.gameObject, this);
+            disableDynamicElement.RaiseEvent(this.gameObject, this);
+            enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
 
         private void PopulateDefaultBreakpointValues()
@@ -233,12 +235,12 @@ namespace AltSalt.Maestro.Layout
 
         protected virtual void PopulateDependencies()
         {
-            if(dynamicElementEnable.ComplexEventTarget == null) {
-                dynamicElementEnable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementEnable));
+            if(enableDynamicElement.complexEvent == null) {
+                enableDynamicElement.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement));
             }
 
-            if (dynamicElementDisable.ComplexEventTarget == null) {
-                dynamicElementDisable.ComplexEventTarget = Utils.GetComplexEvent(nameof(VarDependencies.ResponsiveElementDisable));
+            if (disableDynamicElement.complexEvent == null) {
+                disableDynamicElement.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement));
             }
         }
 
@@ -247,8 +249,8 @@ namespace AltSalt.Maestro.Layout
             base.PopulateNonSerializedProperties();
             nonserializedProperties.Add(nameof(_logElementOnLayoutUpdate));
             nonserializedProperties.Add(nameof(_appSettings));
-            nonserializedProperties.Add(nameof(_dynamicElementEnable));
-            nonserializedProperties.Add(nameof(_dynamicElementDisable));
+            nonserializedProperties.Add(nameof(_enableDynamicElement));
+            nonserializedProperties.Add(nameof(_disableDynamicElement));
         }
 
         protected virtual void OnRenderObject()

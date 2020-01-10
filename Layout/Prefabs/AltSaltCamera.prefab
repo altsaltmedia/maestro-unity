@@ -93,50 +93,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9ced0210ec494ceabf10468baa52844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: -1622733632
-  sceneName: 
-  initialized: 0
-  modifySettings: {fileID: 0}
+  id: -708654018
+  sceneName: AltSaltCamera
+  initialized: 1
+  _layouts: []
   nonserializedProperties:
   - id
+  - sceneName
+  - initialized
+  - _layouts
   - nonserializedProperties
-  - modifySettings
-  - appSettings
-  - screenResized
-  - layoutUpdate
-  - screenWidth
-  - screenHeight
-  - aspectRatio
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  sceneWidth:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 0}
-  sceneHeight:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 0}
-  sceneAspectRatio:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 0}
-  responsiveElementEnable:
-    complexEvent: {fileID: 0}
-  responsiveElementDisable:
-    complexEvent: {fileID: 0}
-  hasBreakpoints: 1
-  priority: 0
-  logElementOnLayoutUpdate: 0
-  aspectRatioBreakpoints:
-  - 1.78
+  - _logElementOnLayoutUpdate
+  - _appSettings
+  - _enableDynamicElement
+  - _disableDynamicElement
+  _appSettings: {fileID: 0}
+  _enableDynamicElement:
+    _referenceName: ResponsiveElementEnable
+    _parentObject: {fileID: 0}
+    _complexEvent: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
+  _disableDynamicElement:
+    _referenceName: ResponsiveElementDisable
+    _parentObject: {fileID: 0}
+    _complexEvent: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
+  _hasBreakpoints: 1
+  _priority: 0
+  _logElementOnLayoutUpdate: 0
   deviceWidth:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 0}
+    _referenceName: 
+    _parentObject: {fileID: 1892881052307360}
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 10bb2f582f9a548ddb2255f116d3bac9, type: 2}
   deviceHeight:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 0}
+    _referenceName: 
+    _parentObject: {fileID: 1892881052307360}
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 70a2e26166cba4dd2954b2a0b98c221e, type: 2}
   viewportModifiers: []
 --- !u!114 &6762982322118964362
 MonoBehaviour:

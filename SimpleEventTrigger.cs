@@ -1,22 +1,39 @@
 ﻿using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public class SimpleEventTrigger : EventTriggerBase
+    public class SimpleEventTrigger : ReferenceBase
     {
         [Required]
         [SerializeField]
-        private SimpleEvent simpleEvent;
+        [FormerlySerializedAs("simpleEvent")]
+        [OnValueChanged(nameof(UpdateReferenceName))]
+        private SimpleEvent _simpleEvent;
         
-        public SimpleEvent SimpleEventTarget {
-            get {
-                return simpleEvent;
+        public SimpleEvent simpleEvent {
+            get
+            {
+                if (searchAttempted == false && _simpleEvent == null && string.IsNullOrEmpty(referenceName) == false) {
+                    searchAttempted = true;
+                    LogMissingReferenceMessage(GetType().Name);
+                    _simpleEvent = Utils.GetScriptableObject(referenceName) as SimpleEvent;
+                    if (_simpleEvent != null) {
+                        LogFoundReferenceMessage(GetType().Name, _simpleEvent);
+                    }
+                }
+                return _simpleEvent;
             }
-            set {
-                simpleEvent = value;
+            set => _simpleEvent = value;
+        }
+        
+        protected override void UpdateReferenceName()
+        {
+            if (simpleEvent != null) {
+                referenceName = simpleEvent.name;
             }
         }
 

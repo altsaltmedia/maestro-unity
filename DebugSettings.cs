@@ -10,12 +10,12 @@ namespace AltSalt.Maestro
     {
         
         [SerializeField]
-        private bool _responsiveLayoutActive = true;
+        private bool _dynamicLayoutActive = true;
         
-        public bool responsiveLayoutActive
+        public bool dynamicLayoutActive
         {
-            get => _responsiveLayoutActive;
-            set => _responsiveLayoutActive = value;
+            get => _dynamicLayoutActive;
+            set => _dynamicLayoutActive = value;
         }
         
         [SerializeField]
@@ -84,7 +84,7 @@ namespace AltSalt.Maestro
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SetDefaults()
         {
-            responsiveLayoutActive = true;
+            dynamicLayoutActive = true;
             modifyTextActive = true;
             modifyLayoutActive = true;
             saveDataActive = true;

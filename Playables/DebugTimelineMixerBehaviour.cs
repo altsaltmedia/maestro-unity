@@ -7,10 +7,7 @@ namespace AltSalt.Maestro
     {
         private FloatReference _timelineCurrentTime = new FloatReference();
 
-        public FloatReference timelineCurrentTime
-        {
-            get => _timelineCurrentTime;
-        }
+        public FloatReference timelineCurrentTimeReference => _timelineCurrentTime;
 
         public SimpleEventTrigger onGraphStart = new SimpleEventTrigger();
 
@@ -25,7 +22,7 @@ namespace AltSalt.Maestro
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
 #if UNITY_EDITOR
-            timelineCurrentTime.GetVariable(this.directorObject).SetValue((float)base.currentTime);
+            timelineCurrentTimeReference.GetVariable(this.directorObject).SetValue((float)base.currentTime);
 #endif
         }
     }   

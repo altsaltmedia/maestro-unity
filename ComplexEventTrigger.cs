@@ -3,22 +3,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public class ComplexEventTrigger : EventTriggerBase
+    public class ComplexEventTrigger : ReferenceBase
     {
         [Required]
         [SerializeField]
-        ComplexEvent complexEvent;
+        [FormerlySerializedAs("complexEvent")]
+        [OnValueChanged(nameof(UpdateReferenceName))]
+        private ComplexEvent _complexEvent;
 
-        public ComplexEvent ComplexEventTarget {
-            get {
-                return complexEvent;
+        public ComplexEvent complexEvent {
+            get
+            {
+                if (searchAttempted == false && _complexEvent == null && string.IsNullOrEmpty(referenceName) == false) {
+                    searchAttempted = true;
+                    LogMissingReferenceMessage(GetType().Name);
+                    _complexEvent = Utils.GetScriptableObject(referenceName) as ComplexEvent;
+                    if (_complexEvent != null) {
+                        LogFoundReferenceMessage(GetType().Name, _complexEvent);
+                    }
+                }
+                return _complexEvent;
             }
-            set {
-                complexEvent = value;
+            set => _complexEvent = value;
+        }
+
+        protected override void UpdateReferenceName()
+        {
+            if (complexEvent != null) {
+                referenceName = complexEvent.name;
             }
         }
 

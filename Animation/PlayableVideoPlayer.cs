@@ -62,7 +62,7 @@ namespace AltSalt.Maestro.Animation
 
         void VideoComplete(VideoPlayer src)
         {
-            if(videoCompleteCallback.SimpleEventTarget != null) {
+            if(videoCompleteCallback.simpleEvent != null) {
                 videoCompleteCallback.RaiseEvent(this.gameObject);
             }
         }

@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sequence: {fileID: 0}
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  _appSettings: {fileID: 0}
   _masterSequence: {fileID: 0}
   _playableDirector: {fileID: 320944326161814764}
   _processModify: {fileID: 1384256474148654812}
@@ -67,28 +67,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df6b19ab5020452e82eaad85aff31d92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  _appSettings: {fileID: 0}
   _isReversing:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
+    _referenceName: 
+    _parentObject: {fileID: 0}
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
   _scrubberActive:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 00a2b24214f8a443581542514270dc00, type: 2}
+    _referenceName: 
+    _parentObject: {fileID: 0}
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 00a2b24214f8a443581542514270dc00, type: 2}
   _timelineCurrentTime:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 0fbf8f44e4dad49eb8f9c318eb4667b4, type: 2}
+    _referenceName: 
+    _parentObject: {fileID: 0}
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 0fbf8f44e4dad49eb8f9c318eb4667b4, type: 2}
   _onGraphStart: {fileID: 11400000, guid: 87530e998b45847529374d024ccfda83, type: 2}
   _frameStepValue:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 1e19d88d8db1b4a37b05030830ea63cf, type: 2}
+    _referenceName: 
+    _parentObject: {fileID: 0}
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 1e19d88d8db1b4a37b05030830ea63cf, type: 2}
   _swipeModifierOutput:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 360c5582a8dd14c3681d73b9132dabe5, type: 2}
+    _referenceName: 
+    _parentObject: {fileID: 0}
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 360c5582a8dd14c3681d73b9132dabe5, type: 2}
 --- !u!114 &1384256474148654812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,12 +125,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sequence: {fileID: 0}
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  scrubberActive:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 00a2b24214f8a443581542514270dc00, type: 2}
-  screenResized: {fileID: 11400000, guid: 6958e603947ff451aac4f96c5c846b5f, type: 2}
+  _appSettings: {fileID: 0}
+  _logElementOnLayoutUpdate: 0
+  _enableDynamicElement:
+    _referenceName: EnableDynamicElement
+    _parentObject: {fileID: 0}
+    _complexEvent: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
+  _disableDynamicElement:
+    _referenceName: DisableDynamicElement
+    _parentObject: {fileID: 0}
+    _complexEvent: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
+  _scrubberActive:
+    _referenceName: 
+    _parentObject: {fileID: 0}
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 0}
 --- !u!320 &320944326161814764
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -155,7 +175,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114615924759454770}
-        m_MethodName: RefreshSequence
+        m_MethodName: RefreshPlayableDirector
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -165,8 +185,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   doNotRecord: 0
 --- !u!114 &3825933744865969490
 MonoBehaviour:
@@ -185,7 +203,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114615924759454770}
-        m_MethodName: RefreshSequence
+        m_MethodName: RefreshPlayableDirector
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -195,6 +213,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   doNotRecord: 0

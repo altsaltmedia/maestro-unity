@@ -34,7 +34,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 4.651745, y: 6.3}
+  m_SizeDelta: {x: 4.5944524, y: 6.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &114336812794643902
 MonoBehaviour:
@@ -48,32 +48,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2e76a98ec24c4152981b4b330cbd961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  sceneName: 
-  initialized: 0
-  modifySettings: {fileID: 0}
-  nonserializedProperties: []
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  sceneWidth:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: f30a66a737e6648e8b1a96d7d6bb77af, type: 2}
-  sceneHeight:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: b3d3a094f9cae403cb93cba61a05913b, type: 2}
-  sceneAspectRatio:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 485c485f334ad43f2b87301367c6b4af, type: 2}
-  responsiveElementEnable:
-    complexEvent: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
-  responsiveElementDisable:
-    complexEvent: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
-  hasBreakpoints: 0
-  priority: 0
-  logElementOnLayoutUpdate: 0
-  aspectRatioBreakpoints: []
+  id: 708157452
+  sceneName: ResponsiveContainer
+  initialized: 1
+  _layouts: []
+  nonserializedProperties:
+  - id
+  - sceneName
+  - initialized
+  - _layouts
+  - nonserializedProperties
+  - _logElementOnLayoutUpdate
+  - _appSettings
+  - _enableDynamicElement
+  - _disableDynamicElement
+  _appSettings: {fileID: 0}
+  _enableDynamicElement:
+    _referenceName: ResponsiveElementEnable
+    _parentObject: {fileID: 0}
+    _complexEvent: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
+  _disableDynamicElement:
+    _referenceName: ResponsiveElementDisable
+    _parentObject: {fileID: 0}
+    _complexEvent: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
+  _hasBreakpoints: 0
+  _priority: 0
+  _logElementOnLayoutUpdate: 0
   multiplier:
   - 1
   orientations: 00000000

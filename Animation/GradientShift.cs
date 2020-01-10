@@ -10,7 +10,7 @@ namespace AltSalt.Maestro.Animation {
     public class GradientShift : MonoBehaviour {
 
         [SerializeField]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("_Color")]
         private ColorReference _color = new ColorReference();
 
@@ -21,21 +21,22 @@ namespace AltSalt.Maestro.Animation {
         }
 
         [SerializeField]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("_FadeColor")]
         private ColorReference _fadeColor = new ColorReference();
 
         private Color fadeColor => _fadeColor.GetValue(this.gameObject);
 
         [SerializeField]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("_Exponent")]
         private FloatReference _exponent = new FloatReference();
 
         private float exponent => _exponent.GetValue(this.gameObject);
 
         [SerializeField]
-        [ValidateInput("IsPopulated")]
+        [ValidateInput(nameof(IsPopulated))]
+        [FormerlySerializedAs("_Subtract")]
         private FloatReference _subtract = new FloatReference();
 
         private float subtract => _subtract.GetValue(this.gameObject);

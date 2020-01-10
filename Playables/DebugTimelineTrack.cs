@@ -26,12 +26,12 @@ namespace AltSalt.Maestro
             
             TrackAssetConfig trackAssetConfig = component as TrackAssetConfig;
             
-            behaviour.timelineCurrentTime.SetVariable(trackAssetConfig.timelineCurrentTimeVariable);
-            if (Application.isPlaying == false) {
-                TimelineEditor.inspectedDirector.time = behaviour.timelineCurrentTime.GetValue(gameObject);
+            behaviour.timelineCurrentTimeReference.SetVariable(trackAssetConfig.timelineCurrentTimeVariable);
+            if (Application.isPlaying == false && TimelineEditor.inspectedDirector != null) {
+                TimelineEditor.inspectedDirector.time = behaviour.timelineCurrentTimeReference.GetValue(gameObject);
             }
 
-            behaviour.onGraphStart.SimpleEventTarget = trackAssetConfig.onGraphStart;
+            behaviour.onGraphStart.simpleEvent = trackAssetConfig.onGraphStart;
 #endif
             return trackPlayable;
         }

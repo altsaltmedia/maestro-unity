@@ -24,7 +24,7 @@ namespace AltSalt.Maestro
         public void ActivateTrigger(SimpleEvent targetEvent)
         {
             for (int i = 0; i < simpleEventTriggers.Count; i++) {
-                if(simpleEventTriggers[i].SimpleEventTarget == targetEvent) {
+                if(simpleEventTriggers[i].simpleEvent == targetEvent) {
                     simpleEventTriggers[i].RaiseEvent(this.gameObject);
                     break;
                 }
