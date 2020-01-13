@@ -14,14 +14,10 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Maestro
 {
     [CreateAssetMenu(menuName = "AltSalt/Variables/Long Variable")]
-    public class LongVariable : VariableBase
+    public class LongVariable : ModifiableEditorVariable
     {
-#if UNITY_EDITOR
-        [Multiline]
-        [SerializeField]
-        [Header("Long Variable")]
-        string DeveloperDescription = "";
-#endif
+        protected override string title => nameof(LongVariable);
+
         [SerializeField]
         private long _value;
 
@@ -61,7 +57,7 @@ namespace AltSalt.Maestro
             value += amount.value;
         }
 
-        public override void SetDefaultValue()
+        public override void SetToDefaultValue()
         {
             if (hasDefault) {
                 value = defaultValue;

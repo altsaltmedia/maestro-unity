@@ -20,27 +20,27 @@ namespace AltSalt.Maestro
         bool hasString;
 
         [SerializeField]
-        [ShowIf("ShowCustomStringToggle")]
+        [ShowIf(nameof(ShowCustomStringToggle))]
         [BoxGroup("String Packager", false)]
         bool customStringKey;
 
 #if UNITY_EDITOR
         [SerializeField]
-        [ShowIf("hasString")]
+        [ShowIf(nameof(hasString))]
         [Multiline]
         [BoxGroup("String Packager")]
         string stringDescription = "";
 #endif
 
         [SerializeField]
-        [ShowIf("ShowStringKeys")]
-        [ValidateInput("CheckStringKeys", "Keys and Values must be of equal length")]
+        [ShowIf(nameof(ShowStringKeys))]
+        [ValidateInput(nameof(CheckStringKeys), "Keys and Values must be of equal length")]
         [BoxGroup("String Packager")]
         List<CustomKey> stringKeys = new List<CustomKey>();
 
         [SerializeField]
-        [ShowIf("hasString")]
-        [ValidateInput("CheckStringValues", "Keys and Values must be of equal length")]
+        [ShowIf(nameof(hasString))]
+        [ValidateInput(nameof(CheckStringValues), "Keys and Values must be of equal length")]
         [BoxGroup("String Packager")]
         List<string> stringValues = new List<string>();
 
@@ -51,27 +51,27 @@ namespace AltSalt.Maestro
         bool hasFloat;
 
         [SerializeField]
-        [ShowIf("ShowCustomFloatToggle")]
+        [ShowIf(nameof(ShowCustomFloatToggle))]
         [BoxGroup("Float Packager")]
         bool customFloatKey;
 
 #if UNITY_EDITOR
         [SerializeField]
-        [ShowIf("hasFloat")]
+        [ShowIf(nameof(hasFloat))]
         [Multiline]
         [BoxGroup("Float Packager")]
         string floatDescription = "";
 #endif
 
         [SerializeField]
-        [ShowIf("ShowFloatKeys")]
-        [ValidateInput("CheckFloatKeys", "Keys and Values must be of equal length")]
+        [ShowIf(nameof(ShowFloatKeys))]
+        [ValidateInput(nameof(CheckFloatKeys), "Keys and Values must be of equal length")]
         [BoxGroup("Float Packager")]
         List<CustomKey> floatKeys = new List<CustomKey>();
 
         [SerializeField]
-        [ShowIf("hasFloat")]
-        [ValidateInput("CheckFloatValues", "Keys and Values must be of equal length")]
+        [ShowIf(nameof(hasFloat))]
+        [ValidateInput(nameof(CheckFloatValues), "Keys and Values must be of equal length")]
         [BoxGroup("Float Packager")]
         List<float> floatValues = new List<float>();
 
@@ -82,28 +82,28 @@ namespace AltSalt.Maestro
         bool hasBool;
 
         [SerializeField]
-        [ShowIf("ShowCustomBoolToggle")]
+        [ShowIf(nameof(ShowCustomBoolToggle))]
         [BoxGroup("Bool Packager")]
         bool customBoolKey;
 
 #if UNITY_EDITOR
         [SerializeField]
-        [ShowIf("hasBool")]
+        [ShowIf(nameof(hasBool))]
         [Multiline]
         [BoxGroup("Bool Packager")]
         string boolDescription = "";
 #endif
 
         [SerializeField]
-        [ShowIf("ShowBoolKeys")]
-        [ValidateInput("CheckBoolKeys", "Keys and Values must be of equal length")]
+        [ShowIf(nameof(ShowBoolKeys))]
+        [ValidateInput(nameof(CheckBoolKeys), "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
         List<CustomKey> boolKeys = new List<CustomKey>();
 
         [SerializeField]
-        [ShowIf("hasBool")]
-        [ValueDropdown("boolValueList")]
-        [ValidateInput("CheckBoolValues", "Keys and Values must be of equal length")]
+        [ShowIf(nameof(hasBool))]
+        [ValueDropdown(nameof(boolValueList))]
+        [ValidateInput(nameof(CheckBoolValues), "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
         List<bool> boolValues = new List<bool>();
 
@@ -119,27 +119,27 @@ namespace AltSalt.Maestro
         bool hasScriptableObject;
 
         [SerializeField]
-        [ShowIf("ShowCustomScriptableObjectToggle")]
+        [ShowIf(nameof(ShowCustomScriptableObjectToggle))]
         [BoxGroup("Scriptable Object Packager")]
         bool customScriptableObjectKey;
 
 #if UNITY_EDITOR
         [SerializeField]
-        [ShowIf("hasScriptableObject")]
+        [ShowIf(nameof(hasScriptableObject))]
         [Multiline]
         [BoxGroup("Scriptable Object Packager")]
         string scriptableObjectDescription = "";
 #endif
 
         [SerializeField]
-        [ShowIf("ShowScriptableObjectKeys")]
-        [ValidateInput("CheckScriptableObjectKeys", "Keys and Values must be of equal length")]
+        [ShowIf(nameof(ShowScriptableObjectKeys))]
+        [ValidateInput(nameof(CheckScriptableObjectKeys), "Keys and Values must be of equal length")]
         [BoxGroup("Scriptable Object Packager")]
         List<CustomKey> scriptableObjectKeys = new List<CustomKey>();
 
         [SerializeField]
-        [ShowIf("hasScriptableObject")]
-        [ValidateInput("CheckScriptableObjectValues", "Keys and Values must be of equal length")]
+        [ShowIf(nameof(hasScriptableObject))]
+        [ValidateInput(nameof(CheckScriptableObjectValues), "Keys and Values must be of equal length")]
         [BoxGroup("Scriptable Object Packager")]
         List<ScriptableObject> scriptableObjectValues = new List<ScriptableObject>();
 
@@ -162,7 +162,7 @@ namespace AltSalt.Maestro
             complexEvent.Raise(eventPayload);
         }
 
-        public void RaiseEvent(GameObject caller, string sourceScene, string sourceName)
+        public void RaiseEvent(GameObject caller, string sourceName)
         {
             EventPayload eventPayload = EventPayload.CreateInstance();
             if (hasString) {
@@ -177,16 +177,18 @@ namespace AltSalt.Maestro
             if (hasScriptableObject) {
                 eventPayload = GetScriptableObjectValues(eventPayload);
             }
-            complexEvent.StoreCaller(caller, sourceScene, sourceName);
+            complexEvent.StoreCaller(caller, sourceName);
             complexEvent.Raise(eventPayload);
         }
 
-        EventPayload GetStringValues(EventPayload eventPayload)
+        private EventPayload GetStringValues(EventPayload eventPayload)
         {
             if (stringValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
-            } else if (stringValues.Count == 1) {
+            }
+
+            if (stringValues.Count == 1) {
                 if (customStringKey == true && stringKeys.Count >= 1) {
                     eventPayload.Set(stringKeys[0], stringValues[0]);
                 } else {
@@ -200,12 +202,14 @@ namespace AltSalt.Maestro
             return eventPayload;
         }
 
-        EventPayload GetFloatValues(EventPayload eventPayload)
+        private EventPayload GetFloatValues(EventPayload eventPayload)
         {
             if (floatValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
-            } else if (floatValues.Count == 1) {
+            }
+
+            if (floatValues.Count == 1) {
                 if (customFloatKey == true && floatKeys.Count >= 1) {
                     eventPayload.Set(floatKeys[0], floatValues[0]);
                 } else {
@@ -219,12 +223,14 @@ namespace AltSalt.Maestro
             return eventPayload;
         }
 
-        EventPayload GetBoolValues(EventPayload eventPayload)
+        private EventPayload GetBoolValues(EventPayload eventPayload)
         {
             if (boolValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
-            } else if (boolValues.Count == 1) {
+            }
+
+            if (boolValues.Count == 1) {
                 if (customBoolKey == true && boolKeys.Count >= 1) {
                     eventPayload.Set(boolKeys[0], boolValues[0]);
                 } else {
@@ -238,12 +244,14 @@ namespace AltSalt.Maestro
             return eventPayload;
         }
 
-        EventPayload GetScriptableObjectValues(EventPayload eventPayload)
+        private EventPayload GetScriptableObjectValues(EventPayload eventPayload)
         {
             if (scriptableObjectValues.Count == 0) {
                 LogWarning();
                 throw new Exception("Event payload could not be created");
-            } else if (scriptableObjectValues.Count == 1) {
+            }
+
+            if (scriptableObjectValues.Count == 1) {
                 if (customScriptableObjectKey == true && scriptableObjectKeys.Count >= 1) {
                     eventPayload.Set(scriptableObjectKeys[0], scriptableObjectValues[0]);
                 } else {
@@ -263,7 +271,7 @@ namespace AltSalt.Maestro
         }
 
 #if UNITY_EDITOR
-        bool ShowStringKeys()
+        private bool ShowStringKeys()
         {
             if (hasString && stringValues != null && stringValues.Count > 1) {
                 return true;
@@ -276,7 +284,7 @@ namespace AltSalt.Maestro
             return false;
         }
 
-        bool ShowFloatKeys()
+        private bool ShowFloatKeys()
         {
             if (hasFloat && floatValues != null && floatValues.Count > 1) {
                 return true;
@@ -289,7 +297,7 @@ namespace AltSalt.Maestro
             return false;
         }
 
-        bool ShowBoolKeys()
+        private bool ShowBoolKeys()
         {
             if (hasBool && boolValues != null && boolValues.Count > 1) {
                 return true;
@@ -302,7 +310,7 @@ namespace AltSalt.Maestro
             return false;
         }
 
-        bool ShowScriptableObjectKeys()
+        private bool ShowScriptableObjectKeys()
         {
             if (hasScriptableObject && scriptableObjectValues != null && scriptableObjectValues.Count > 1) {
                 return true;
@@ -315,7 +323,7 @@ namespace AltSalt.Maestro
             return false;
         }
 
-        bool ShowCustomStringToggle()
+        private bool ShowCustomStringToggle()
         {
             if(hasString && stringValues.Count <= 1) {
                 return true;
@@ -324,7 +332,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool ShowCustomFloatToggle()
+        private bool ShowCustomFloatToggle()
         {
             if (hasFloat && floatValues.Count <= 1) {
                 return true;
@@ -333,7 +341,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool ShowCustomBoolToggle()
+        private bool ShowCustomBoolToggle()
         {
             if (hasBool && boolValues.Count <= 1) {
                 return true;
@@ -342,7 +350,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool ShowCustomScriptableObjectToggle()
+        private bool ShowCustomScriptableObjectToggle()
         {
             if (hasScriptableObject && scriptableObjectValues.Count <= 1) {
                 return true;
@@ -351,7 +359,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool CheckStringKeys(List<CustomKey> attribute)
+        private bool CheckStringKeys(List<CustomKey> attribute)
         {
             if(attribute.Count != stringValues.Count) {
                 return false;
@@ -360,7 +368,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool CheckFloatKeys(List<CustomKey> attribute)
+        private bool CheckFloatKeys(List<CustomKey> attribute)
         {
             if (attribute.Count != floatValues.Count) {
                 return false;
@@ -369,7 +377,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool CheckBoolKeys(List<CustomKey> attribute)
+        private bool CheckBoolKeys(List<CustomKey> attribute)
         {
             if (attribute.Count != boolValues.Count) {
                 return false;
@@ -378,7 +386,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool CheckScriptableObjectKeys(List<CustomKey> attribute)
+        private bool CheckScriptableObjectKeys(List<CustomKey> attribute)
         {
             if (attribute.Count != scriptableObjectValues.Count) {
                 return false;
@@ -387,7 +395,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool CheckStringValues(List<string> attribute)
+        private bool CheckStringValues(List<string> attribute)
         {
             if(attribute.Count <= 1 && customStringKey == false) {
                 return true;
@@ -399,7 +407,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool CheckFloatValues(List<float> attribute)
+        private bool CheckFloatValues(List<float> attribute)
         {
             if (attribute.Count <= 1 && customFloatKey == false) {
                 return true;
@@ -411,7 +419,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool CheckBoolValues(List<bool> attribute)
+        private bool CheckBoolValues(List<bool> attribute)
         {
             if (attribute.Count <= 1 && customBoolKey == false) {
                 return true;
@@ -423,7 +431,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        bool CheckScriptableObjectValues(List<ScriptableObject> attribute)
+        private bool CheckScriptableObjectValues(List<ScriptableObject> attribute)
         {
             if (attribute.Count <= 1 && customScriptableObjectKey == false) {
                 return true;

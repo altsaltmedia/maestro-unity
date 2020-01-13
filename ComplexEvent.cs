@@ -7,14 +7,10 @@ using UnityEngine.Serialization;
 namespace AltSalt.Maestro
 {
     [CreateAssetMenu(menuName = "AltSalt/Events/Complex Event")]
-    public class ComplexEvent : EventBase
+    public class ComplexEvent : PersistentDataObject
     {
-
-#if UNITY_EDITOR
-        [Multiline]
-        [Header("Complex Event")]
-        public string DeveloperDescription = "";
-#endif
+        protected override string title => nameof(ComplexEvent);
+        
         [SerializeField]
         List<ComplexEventParameters> requiredParameters = new List<ComplexEventParameters>();
 
@@ -25,51 +21,57 @@ namespace AltSalt.Maestro
 
         public void Raise()
         {
-            if(CallerRegistered() == true) {
-                if(logCallersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
-                    LogCaller();
-                }
-                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
-                    LogListenersHeading(listeners.Count);
-                }
-                for (int i = listeners.Count - 1; i >= 0; i--) {
-                    if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
-                        LogListenerOnRaise(listeners[i]);
-                    }
-                    listeners[i].OnEventRaised(EventPayload.CreateInstance());
-                }
-                if (logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
-                    LogClosingLine();
-                }
-                ClearCaller();
+            if (CallerRegistered() == false) return;
+            
+            if(logCallersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                LogCaller();
             }
+            
+            if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                LogListenersHeading(listeners.Count);
+            }
+            
+            for (int i = listeners.Count - 1; i >= 0; i--) {
+                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                    LogListenerOnRaise(listeners[i]);
+                }
+                listeners[i].OnEventRaised(EventPayload.CreateInstance());
+            }
+            
+            if (logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                LogClosingLine();
+            }
+            ClearCaller();
         }
 
         public void Raise(object value)
         {
-            if (CallerRegistered() == true) {
-                if (logCallersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
-                    LogCaller();
-                }
-                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
-                    LogListenersHeading(listeners.Count);
-                }
-                for (int i = listeners.Count - 1; i >= 0; i--) {
-                    if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
-                        LogListenerOnRaise(listeners[i]);
-                    }
-
-                    if(value is EventPayload) {
-                        listeners[i].OnEventRaised(value as EventPayload);
-                    } else {
-                        listeners[i].OnEventRaised(EventPayload.CreateInstance(value));
-                    }
-                }
-                if (logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
-                    LogClosingLine();
-                }
-                ClearCaller();
+            if (CallerRegistered() == false) return;
+            
+            if (logCallersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                LogCaller();
             }
+            
+            if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                LogListenersHeading(listeners.Count);
+            }
+            
+            for (int i = listeners.Count - 1; i >= 0; i--) {
+                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                    LogListenerOnRaise(listeners[i]);
+                }
+
+                if(value is EventPayload) {
+                    listeners[i].OnEventRaised(value as EventPayload);
+                } else {
+                    listeners[i].OnEventRaised(EventPayload.CreateInstance(value));
+                }
+            }
+            
+            if (logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                LogClosingLine();
+            }
+            ClearCaller();
         }
 
         protected override void LogCaller()
@@ -78,7 +80,7 @@ namespace AltSalt.Maestro
             Debug.Log(string.Format("[event] [{0}] [{1}] {2}", callerScene, this.name, this.name), this);
         }
 
-        void LogListenerOnRaise(ComplexEventListenerBehaviour complexEventListenerBehaviour)
+        private void LogListenerOnRaise(ComplexEventListenerBehaviour complexEventListenerBehaviour)
         {
             Debug.Log(string.Format("[event] [{0}] [{1}] {2}", complexEventListenerBehaviour.gameObject.scene.name, this.name, complexEventListenerBehaviour.name), complexEventListenerBehaviour.gameObject);
         }

@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
@@ -12,8 +15,8 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     public class TextFamilyConditionResponse : ConditionResponseBase
     {
         [SerializeField]
-        [Title("$"+nameof(conditionEventTitle))]
         [Title("Text Family Reference")]
+        [HideReferenceObjectPicker]
         private TextFamily _textFamilyReference;
 
         private TextFamily textFamilyReference
@@ -25,19 +28,21 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         [Title("Text Family Status Condition")]
+        [HideReferenceObjectPicker]
         private BoolReference _activeTextFamilyCondition;
 
         private BoolReference activeTextFamilyCondition => _activeTextFamilyCondition;
+        
 
-        public override void SyncValues(Object callingObject)
+        public override void SyncConditionHeading(Object callingObject)
         {
-            base.SyncValues(callingObject);
+            base.SyncConditionHeading(callingObject);
             if (textFamilyReference == null) {
                 conditionEventTitle = "Please populate a text family as your condition.";
                 return;
             }
 
-            conditionEventTitle = "Trigger Condition : Text family " + textFamilyReference.name + " active is " + activeTextFamilyCondition.GetValue(this.parentObject);
+            conditionEventTitle = "Text family " + textFamilyReference.name + " active is " + activeTextFamilyCondition.GetValue(this.parentObject);
         }
 
         public override bool CheckCondition(Object callingObject)

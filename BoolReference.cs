@@ -59,7 +59,6 @@ namespace AltSalt.Maestro
 		public BoolReference()
 		{ }
 		
-		
 		public BoolReference(bool value)
 		{
 			useConstant = true;
@@ -72,6 +71,45 @@ namespace AltSalt.Maestro
 			return useConstant ? constantValue : GetVariable(callingObject).value;
 		}
 
+		public BoolVariable SetValue(GameObject callingObject, bool targetValue)
+		{
+			if (useConstant == true) {
+				LogDefaultChangeError(callingObject);
+				return null;
+			}
+
+			BoolVariable boolVariable = GetVariable(callingObject);
+			boolVariable.StoreCaller(callingObject);
+			boolVariable.SetValue(targetValue);
+			return boolVariable;
+		}
+		
+		public BoolVariable SetValue(GameObject callingObject, BoolVariable targetValue)
+		{
+			if (useConstant == true) {
+				LogDefaultChangeError(callingObject);
+				return null;
+			}
+
+			BoolVariable boolVariable = GetVariable(callingObject);
+			boolVariable.StoreCaller(callingObject);
+			boolVariable.SetValue(targetValue.value);
+			return boolVariable;
+		}
+
+		public BoolVariable Toggle(GameObject callingObject)
+		{
+			if (useConstant == true) {
+				LogDefaultChangeError(callingObject);
+				return null;
+			}
+
+			BoolVariable boolVariable = GetVariable(callingObject);
+			boolVariable.StoreCaller(callingObject);
+			boolVariable.Toggle();
+			return boolVariable;
+		}
+		
 		protected override void UpdateReferenceName()
 		{
 			if (GetVariable(parentObject) != null) {

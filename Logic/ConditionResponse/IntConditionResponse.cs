@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
@@ -12,9 +15,9 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     public class IntConditionResponse : ConditionResponseBase
     {
         [SerializeField]
-        [Title("$"+nameof(conditionEventTitle))]
         [Title("Int Reference")]
         [InfoBox("Int value that will be compared against condition")]
+        [HideReferenceObjectPicker]
         IntReference intReference;
 
         [PropertySpace]
@@ -22,15 +25,17 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [SerializeField]
         [Title("Int Condition Variable")]
         [InfoBox("Condition the reference value will be compared to when determining whether to execute response")]
+        [HideReferenceObjectPicker]
         IntReference intConditionVar;
 
         [PropertySpace]
         [SerializeField]
         ComparisonValues operation;
 
-        public override void SyncValues(Object callingObject)
+        
+        public override void SyncConditionHeading(Object callingObject)
         {
-            base.SyncValues(callingObject);
+            base.SyncConditionHeading(callingObject);
             if (intReference.GetVariable(callingObject) == null && intReference.useConstant == false) {
                 conditionEventTitle = "Please populate an int reference.";
                 return;
@@ -42,9 +47,9 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
 
             if (intReference.useConstant == true) {
-                conditionEventTitle = "Trigger Condition : " + intReference.GetValue(callingObject) + " is " + operation.ToString() + " " + intConditionVar.GetValue(callingObject);
+                conditionEventTitle = intReference.GetValue(callingObject) + " is " + operation.ToString() + " " + intConditionVar.GetValue(callingObject);
             } else {
-                conditionEventTitle = "Trigger Condition : " + intReference.GetVariable(callingObject).name + " is " + operation.ToString() + " " + intConditionVar.GetValue(callingObject);
+                conditionEventTitle = intReference.GetVariable(callingObject).name + " is " + operation.ToString() + " " + intConditionVar.GetValue(callingObject);
             }
         }
 

@@ -1,15 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEditor;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
 {
+    public enum EventExecutionType { ExecuteAll, CancelAfterFirstSuccess }
+    
     [ExecuteInEditMode]
     public class ConditionResponseTriggerBehaviour : MonoBehaviour
     {
         [ValueDropdown("boolValueList")]
         [SerializeField]
-        bool triggerOnStart = true;
+        [FormerlySerializedAs("triggerOnStart")]
+        [OnValueChanged(nameof(SetTriggerOnStart))]
+        private bool _triggerOnStart = true;
+
+        private bool triggerOnStart
+        {
+            get => _triggerOnStart;
+            set => _triggerOnStart = value;
+        }
 
         private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
             {"YES", true },
@@ -17,19 +29,35 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         };
 
         [SerializeField]
-        enum EventExecutionType { ExecuteAll, CancelAfterFirstSuccess }
+        [FormerlySerializedAs("eventExecutionType")]
+        [OnValueChanged(nameof(SetEventExecutionType))]
+        private EventExecutionType _eventExecutionType;
+
+        private EventExecutionType eventExecutionType => _eventExecutionType;
 
         [SerializeField]
-        EventExecutionType eventExecutionType;
+        [FormerlySerializedAs("conditionResponseTrigger")]
+        private ConditionResponseTrigger _conditionResponseTrigger;
 
-        [SerializeField]
-        ConditionResponseTrigger conditionResponseTrigger;
+        private ConditionResponseTrigger conditionResponseTrigger => _conditionResponseTrigger;
 
-        void Start()
+        private void Start()
         {
             if (triggerOnStart == true) {
                 CallTriggerResponses();
             }
+            SetEventExecutionType();
+            SetTriggerOnStart();
+        }
+
+        private void SetEventExecutionType()
+        {
+            conditionResponseTrigger.eventExecutionType = eventExecutionType;
+        }
+
+        private void SetTriggerOnStart()
+        {
+            conditionResponseTrigger.triggerOnStart = triggerOnStart;
         }
 
         [HorizontalGroup("Split", 1f)]
@@ -50,9 +78,11 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         }
 
 #if UNITY_EDITOR
-        void Update()
-        {    
-            conditionResponseTrigger.CallSyncValues(this.gameObject);
+        private void Update()
+        {   
+            conditionResponseTrigger.SyncEditorActionHeadings();
+            conditionResponseTrigger.CallSyncConditionHeadings(this.gameObject);
+            conditionResponseTrigger.SyncUnityEventHeadings(new SerializedObject(this).FindProperty(nameof(_conditionResponseTrigger)));
         }
 #endif
     }

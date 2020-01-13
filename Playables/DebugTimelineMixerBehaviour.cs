@@ -15,7 +15,7 @@ namespace AltSalt.Maestro
         {
             base.OnGraphStart(playable);
 #if UNITY_EDITOR
-            onGraphStart.RaiseEvent(directorObject, directorObject.scene.name, "debug timeline");
+            onGraphStart.RaiseEvent(directorObject, "debug timeline");
 #endif
         }
 

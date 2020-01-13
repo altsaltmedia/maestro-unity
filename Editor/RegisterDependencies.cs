@@ -253,7 +253,7 @@ namespace AltSalt.Maestro
                 // we don't need to keep track of these defaults.
                 if (componentType.GetInterfaces().Contains(typeof(ISkipRegistration))) {
                     ISkipRegistration skipRegistration = component as ISkipRegistration;
-                    if (skipRegistration.DoNotRecord == true) {
+                    if (skipRegistration.doNotRecord == true) {
                         continue;
                     }
                 }
@@ -662,7 +662,7 @@ namespace AltSalt.Maestro
             string[] directoryPath = new string[3];
             directoryPath[0] = "z_Dependencies";
 
-            if (asset is EventBase) {
+            if (asset is PersistentDataObject) {
                 directoryPath[1] = "Events";
             } else {
                 directoryPath[1] = "Variables";

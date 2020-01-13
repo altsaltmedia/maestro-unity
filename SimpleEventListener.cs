@@ -10,26 +10,43 @@ namespace AltSalt.Maestro
         public delegate void OnTargetEventDelegate();
         public event OnTargetEventDelegate OnTargetEventExecuted = () => { };
 
-        readonly SimpleEvent targetEvent;
-        readonly GameObject parentGameObject;
-        readonly UnityEngine.Object parentObject;
+        private SimpleEvent _targetEvent;
 
-        public UnityEngine.Object ParentObject
+        private SimpleEvent targetEvent
         {
-            get {
-                if(parentGameObject != null) {
-                    return parentGameObject;
-                } else {
-                    return parentObject;
-                }
-            }
+            get => _targetEvent;
+            set => _targetEvent = value;
         }
 
-        string sceneName;
-        public string SceneName {
-            get {
-                return sceneName;
+        private GameObject _parentGameObject;
+
+        private GameObject parentGameObject
+        {
+            get => _parentGameObject;
+            set => _parentGameObject = value;
+        }
+        
+        private UnityEngine.Object _parentObject;
+        
+        public UnityEngine.Object parentObject
+        {
+            get
+            {
+                if(parentGameObject != null) {
+                    return parentGameObject;
+                }
+
+                return parentObject;
             }
+            private set => _parentObject = value;
+        }
+
+        private string _sceneName;
+        
+        public string sceneName
+        {
+            get => _sceneName;
+            set => _sceneName = value;
         }
 
         public SimpleEventListener(SimpleEvent eventToRegister, GameObject parentObject)
@@ -60,7 +77,7 @@ namespace AltSalt.Maestro
 
         public void LogName(string callingInfo)
         {
-            Debug.Log(callingInfo + ParentObject, ParentObject);
+            Debug.Log(callingInfo + parentObject, parentObject);
         }
     }
 }

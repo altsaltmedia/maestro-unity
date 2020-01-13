@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
@@ -17,10 +19,18 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [HideInInspector]
         protected string _conditionEventTitle;
 
-        protected string conditionEventTitle
+        public string conditionEventTitle
         {
-            get => _conditionEventTitle;
+            get => prefix + " (" + _conditionEventTitle + ")";
             set => _conditionEventTitle = value;
+        }
+
+        private string _prefix;
+
+        public string prefix
+        {
+            get => _prefix;
+            set => _prefix = value;
         }
 
         [ShowInInspector]
@@ -42,24 +52,60 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         [SerializeField]
         [ReadOnly]
-        private UnityEngine.Object _parentObject;
+        private Object _parentObject;
 
-        public Object parentObject
+        protected Object parentObject
         {
             get => _parentObject;
             set => _parentObject = value;
         }
-
+        
+        [TitleGroup("$" + nameof(conditionEventTitle))]
+        [ShowInInspector]
+        [HideLabel]
+        [DisplayAsString(false)]
         [PropertySpace]
-        [ValidateInput("IsPopulated")]
+        private string _eventDescription = "No actions defined.";
+        
+        public string eventDescription
+        {
+            get => _eventDescription;
+            set => _eventDescription = value;
+        }
+        
+        [FormerlySerializedAs("response")]
+        [PropertySpace]
+        [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
         [PropertyOrder(8)]
-        protected UnityEvent response;
+        [HideReferenceObjectPicker]
+        protected UnityEvent _response;
 
-        public virtual void SyncValues(Object callingObject)
+        public UnityEvent response => _response;
+
+#if UNITY_EDITOR
+        private List<UnityEventData> _cachedEventData = new List<UnityEventData>();
+
+        private List<UnityEventData> cachedEventData
+        {
+            get => _cachedEventData;
+            set => _cachedEventData = value;
+        }
+
+        public virtual void SyncConditionHeading(Object callingObject)
         {
             this.parentObject = callingObject;
         }
+
+        public void SyncUnityEventHeading(SerializedProperty serializedConditionResponse)
+        {
+            string[] parameterNames = GetParameters(serializedConditionResponse);
+            if (UnityEventValuesChanged(response, parameterNames, cachedEventData, out var eventData)) {
+                eventDescription = GetEventDescription(eventData);
+                cachedEventData = eventData;
+            }
+        }
+#endif
 
         public virtual bool CheckCondition(Object callingObject)
         {
@@ -78,9 +124,8 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
         }
 
-        void LogConditionResponse(GameObject callerObject, bool triggerOnStart)
+        private void LogConditionResponse(GameObject callerObject, bool triggerOnStart)
         {
-            SyncValues(parentObject);
             Debug.Log(string.Format("[condition response] [{0}] [{1}] Following condition met on start {2} : ", callerObject.scene.name, callerObject.name, triggerOnStart.ToString().ToUpper()), callerObject);
             Debug.Log(string.Format("[condition response] [{0}] [event] {1} ", callerObject.scene.name, conditionEventTitle), callerObject);
             Debug.Log(string.Format("[condition response] [{0}] {1} triggered the following :", callerObject.scene.name, callerObject.name), callerObject);
@@ -93,7 +138,77 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             Debug.Log("[condition response] ---------");
         }
 
-        string GetObjectScene(object sourceObject)
+        private static string[] GetParameters(SerializedProperty serializedConditionResponse)
+        {
+            SerializedProperty unityEventCallList = serializedConditionResponse
+                .FindPropertyRelative($"{nameof(_response)}.m_PersistentCalls.m_Calls");
+
+            List<string> parameterNames = new List<string>();
+            
+            for (int i = 0; i < unityEventCallList.arraySize; i++) {
+                int mode = unityEventCallList.GetArrayElementAtIndex(i).FindPropertyRelative("m_Mode").intValue;
+                SerializedProperty argumentList = unityEventCallList.GetArrayElementAtIndex(i).FindPropertyRelative("m_Arguments");
+
+                switch (mode) {
+                    case 2:
+                        parameterNames.Add(argumentList.FindPropertyRelative("m_ObjectArgument").objectReferenceValue.name);
+                        break;
+                    
+                    case 3:
+                        parameterNames.Add(argumentList.FindPropertyRelative("m_IntArgument").intValue.ToString());
+                        break;
+                    
+                    case 4:
+                        parameterNames.Add(argumentList.FindPropertyRelative("m_FloatArgument").floatValue.ToString("F"));
+                        break;
+                    
+                    case 5:
+                        parameterNames.Add(argumentList.FindPropertyRelative("m_StringArgument").stringValue);
+                        break;
+                    
+                    case 6:
+                        parameterNames.Add(argumentList.FindPropertyRelative("m_BoolArgument").boolValue.ToString());
+                        break;
+                    
+                    default:
+                        parameterNames.Add("");
+                        break;
+                }
+            }
+
+            return parameterNames.ToArray();
+        }
+
+        private static bool UnityEventValuesChanged(UnityEvent unityEvent, string[] parameterNames,
+            List<UnityEventData> cachedEventData, out List<UnityEventData> eventData)
+        {
+            
+            eventData = UnityEventData.GetUnityEventData(unityEvent, parameterNames);
+            var addedItems = eventData.Except(cachedEventData);
+
+            return addedItems.Any();
+        }
+
+        private static string GetEventDescription(List<UnityEventData> eventData)
+        {
+            string eventDescription = "";
+
+            for (int i = 0; i < eventData.Count; i++) {
+                eventDescription += eventData[i].targetName;
+                if (string.IsNullOrEmpty(eventData[i].methdodName) == false) {
+                    eventDescription += $" > {eventData[i].methdodName}";
+                    eventDescription += $" ({eventData[i].parameterName})";
+                }
+
+                if (i < eventData.Count - 1) {
+                    eventDescription += "\n";
+                }
+            }
+            
+            return eventDescription;
+        }
+
+        private static string GetObjectScene(object sourceObject)
         {
             if (sourceObject is GameObject) {
                 return ((GameObject)sourceObject).scene.name;
@@ -106,7 +221,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
         }
 
-        string GetObjectName(object sourceObject)
+        private static string GetObjectName(object sourceObject)
         {
             if (sourceObject is GameObject) {
                 return ((GameObject)sourceObject).name;
@@ -119,12 +234,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
         }
 
-        public UnityEvent GetResponse()
-        {
-            return response;
-        }
-
-        private static bool IsPopulated(UnityEvent attribute)
+        protected static bool IsPopulated(UnityEvent attribute)
         {
             return Utils.IsPopulated(attribute);
         }

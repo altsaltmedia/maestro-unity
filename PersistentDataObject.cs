@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
 
-    public abstract class EventBase : RegisterableScriptableObject, IDependable
+    public abstract class PersistentDataObject : RegisterableScriptableObject, IDependable
     {
         [Required]
         [SerializeField]
@@ -36,6 +37,16 @@ namespace AltSalt.Maestro
         [SerializeField]
         protected bool logListenersOnRaise;
 
+#if UNITY_EDITOR
+        [Multiline]
+        [SerializeField]
+        [Header("$"+nameof(title))]
+        [FormerlySerializedAs("DeveloperDescription")]
+        private string _description = "";
+#endif
+
+        protected abstract string title { get; }
+        
         public void StoreCaller(GameObject caller)
         {
             callerObject = caller;
@@ -43,10 +54,10 @@ namespace AltSalt.Maestro
             callerName = caller.name;
         }
 
-        public void StoreCaller(GameObject caller, string sourceScene, string sourceName)
+        public void StoreCaller(GameObject caller, string sourceName)
         {
             callerObject = caller;
-            callerScene = sourceScene;
+            callerScene = caller.scene.name;
             callerName = sourceName;
         }
 
@@ -60,7 +71,7 @@ namespace AltSalt.Maestro
         protected bool CallerRegistered()
         {
             if (callerObject == null && callerName.Length < 1) {
-                Debug.LogError("Caller not registered on " + this.name + ". Are you calling this event directly? Please use an event trigger instead.", this);
+                Debug.LogError("Caller not registered on " + this.name + ". Are you accessing this object directly? Please use an event trigger or variable reference instead.", this);
                 return false;
             }
 
@@ -74,7 +85,7 @@ namespace AltSalt.Maestro
             callerName = "";
         }
 
-        abstract protected void LogCaller();
+        protected abstract void LogCaller();
 
         protected void LogListenersHeading(int listCount)
         {

@@ -15,14 +15,10 @@ using UnityEngine.Serialization;
 namespace AltSalt.Maestro
 {
     [CreateAssetMenu(menuName = "AltSalt/Variables/Float Variable")]
-    public class FloatVariable : VariableBase
+    public class FloatVariable : ModifiableEditorVariable
     {
-#if UNITY_EDITOR
-        [Multiline]
-        [SerializeField]
-        [Header("Float Variable")]
-        string DeveloperDescription = "";
-#endif
+        protected override string title => nameof(FloatVariable);
+        
         [FormerlySerializedAs("Value")]
         [SerializeField]
         private float _value;
@@ -46,89 +42,150 @@ namespace AltSalt.Maestro
 
         public void SetValue(float value)
         {
+            if (CallerRegistered() == false) return;
+
             this.value = value;
+
+            SignalChange();
         }
 
         public void SetValue(FloatVariable value)
         {
+            if (CallerRegistered() == false) return;
+
             this.value = value.value;
+
+            SignalChange();
         }
 
         public void ApplyChange(float amount)
         {
+            if (CallerRegistered() == false) return;
+
             value += amount;
+
+            SignalChange();
         }
 
         public void ApplyChange(FloatVariable amount)
         {
+            if (CallerRegistered() == false) return;
+
             value += amount.value;
+
+            SignalChange();
         }
 
         public void Multiply(float multiplier)
         {
+            if (CallerRegistered() == false) return;
+
             value *= multiplier;
+
+            SignalChange();
         }
         
         public void Multiply(FloatVariable multiplier)
         {
+            if (CallerRegistered() == false) return;
+
             value *= multiplier.value;
+
+            SignalChange();
         }
 
         public void ClampMax(float max)
         {
+            if (CallerRegistered() == false) return;
+
             if (value > max) {
                 value = max;
             }
+
+            SignalChange();
         }
         
         public void ClampMax(FloatVariable max)
         {
+            if (CallerRegistered() == false) return;
+
             if (value > max.value) {
                 value = max.value;
             }
+
+            SignalChange();
         }
         
         public void ClampMin(float max)
         {
+            if (CallerRegistered() == false) return;
+
             if (value < max) {
                 value = max;
             }
+
+            SignalChange();
         }
         
         public void ClampMin(FloatVariable max)
         {
+            if (CallerRegistered() == false) return;
+
             if (value < max.value) {
                 value = max.value;
             }
-        }
 
-        public void SetToSquareMagnitude(V2Variable v2Variable)
-        {
-            value = v2Variable.value.sqrMagnitude;
+            SignalChange();
         }
-
+        
         public void SetToDistance(float value)
         {
+            if (CallerRegistered() == false) return;
+
             this.value = Mathf.Abs(this.value - value);
+
+            SignalChange();
         }
         
         public void SetToDistance(FloatVariable value)
         {
+            if (CallerRegistered() == false) return;
+
             this.value = Mathf.Abs(this.value - value.value);
+
+            SignalChange();
         }
 
         public void SetToRandom()
         {
+            if (CallerRegistered() == false) return;
+
             this.value = Random.value;
+
+            SignalChange();
+        }
+        
+        public void SetToSquareMagnitude(V2Variable v2Variable)
+        {
+            if (CallerRegistered() == false) return;
+
+            value = v2Variable.value.sqrMagnitude;
+
+            SignalChange();
         }
 
-        public override void SetDefaultValue()
+
+        public override void SetToDefaultValue()
         {
+            if (CallerRegistered() == false) return;
+
             if (hasDefault) {
                 value = defaultValue;
             } else {
                 Debug.LogWarning("Method SetDefaultValue() called on " + this.name + ", but var does not have a default value assigned.");
             }
+
+            SignalChange();
         }
     }
 }

@@ -32,6 +32,7 @@ namespace AltSalt.Maestro.Sequencing
         }
 
         [SerializeField]
+        [ListDrawerSettings(Expanded = true)]
         private List<Sequence_Config> _sequenceConfigs = new List<Sequence_Config>();
 
         public List<Sequence_Config> sequenceConfigs

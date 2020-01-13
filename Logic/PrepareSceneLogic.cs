@@ -59,7 +59,7 @@ namespace AltSalt.Maestro.Logic {
         Axis zMomentumAxis;
 
         [SerializeField]
-        private List<VariableBase> _variablesToReset;
+        private List<ModifiableEditorVariable> _variablesToReset;
 
         [FormerlySerializedAs("_prepareSceneCompleteEvents")]
         [SerializeField]

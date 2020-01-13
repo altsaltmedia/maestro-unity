@@ -19,6 +19,11 @@ namespace AltSalt.Maestro
             set => _useConstant = value;
         }
 
+        protected void LogDefaultChangeError(UnityEngine.Object callingObject)
+        {
+            Debug.LogError($"You are attempting to modify a constant reference on {callingObject.name} - this is not allowed", callingObject);
+        }
+
         private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
             {"TRUE", true },
             {"FALSE", false }

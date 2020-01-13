@@ -4,14 +4,10 @@ using UnityEngine;
 namespace AltSalt.Maestro
 {
     [CreateAssetMenu(menuName = "AltSalt/Variables/Vector3 Variable")]
-    public class V3Variable : VariableBase
+    public class V3Variable : ModifiableEditorVariable
     {
-#if UNITY_EDITOR
-        [Multiline]
-        [SerializeField]
-        [Header("Vector3 Variable")]
-        string DeveloperDescription = "";
-#endif
+        protected override string title => nameof(V3Variable);
+        
         [SerializeField]
         public Vector3 _value;
 
@@ -51,7 +47,7 @@ namespace AltSalt.Maestro
             value += amount.value;
         }
         
-        public override void SetDefaultValue()
+        public override void SetToDefaultValue()
         {
             if (hasDefault)  {
                 value = defaultValue;

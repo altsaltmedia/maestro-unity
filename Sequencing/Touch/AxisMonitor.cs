@@ -23,7 +23,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
         public bool axisTransitionActive
         {
             get => _axisTransitionActive.GetValue(this.gameObject);
-            set => _axisTransitionActive.GetVariable(this.gameObject).SetValue(value);
+            set => _axisTransitionActive.SetValue(this.gameObject, value);
         }
 
         [SerializeField]

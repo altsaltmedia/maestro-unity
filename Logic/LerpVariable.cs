@@ -11,7 +11,7 @@ namespace AltSalt.Maestro.Logic
     public class LerpVariable
     {
         [SerializeField]
-        public VariableBase variableTarget;
+        public ModifiableEditorVariable variableTarget;
 
         [SerializeField]
         [ShowIf(nameof(FloatPopulated))]
@@ -35,7 +35,7 @@ namespace AltSalt.Maestro.Logic
         public delegate void VariableCallbackDelegate();
         public static VariableCallbackDelegate variableCallbackDelegate = () => { };
 
-        public LerpVariable(VariableBase variableTarget, object targetValue, float duration)
+        public LerpVariable(ModifiableEditorVariable variableTarget, object targetValue, float duration)
         {
             this.variableTarget = variableTarget;
 

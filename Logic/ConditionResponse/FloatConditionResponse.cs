@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
@@ -12,23 +15,25 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     public class FloatConditionResponse : ConditionResponseBase
     {
         [SerializeField]
-        [Title("$"+nameof(conditionEventTitle))]
         [Title("Float Reference")]
+        [HideReferenceObjectPicker]
         FloatReference floatReference;
 
         [PropertySpace]
 
         [SerializeField]
         [Title("Float Condition Variable")]
+        [HideReferenceObjectPicker]
         FloatReference floatConditionVar;
 
         [PropertySpace]
         [SerializeField]
         ComparisonValues operation;
+        
 
-        public override void SyncValues(Object callingObject)
+        public override void SyncConditionHeading(Object callingObject)
         {
-            base.SyncValues(callingObject);
+            base.SyncConditionHeading(callingObject);
             if (floatReference.GetVariable(callingObject) == null && floatReference.useConstant == false) {
                 conditionEventTitle = "Please populate a float reference.";
                 return;
@@ -40,9 +45,9 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
 
             if (floatReference.useConstant == true) {
-                conditionEventTitle = "Trigger Condition : " + floatReference.GetValue(callingObject) + " is " + operation.ToString() + " " + floatConditionVar.GetValue(callingObject);
+                conditionEventTitle = floatReference.GetValue(callingObject) + " is " + operation + " " + floatConditionVar.GetValue(callingObject);
             } else {
-                conditionEventTitle = "Trigger Condition : " + floatReference.GetVariable(callingObject).name + " is " + operation.ToString() + " " + floatConditionVar.GetValue(callingObject);
+                conditionEventTitle = floatReference.GetVariable(callingObject).name + " is " + operation + " " + floatConditionVar.GetValue(callingObject);
             }
         }
 

@@ -5,10 +5,11 @@ namespace AltSalt.Maestro
     public interface ISimpleEventListener
     {
         void OnEventRaised();
-        UnityEngine.Object ParentObject {
+        
+        UnityEngine.Object parentObject {
             get;
         }
-        string SceneName {
+        string sceneName {
             get;
         }
         void LogName(string callingInfo);

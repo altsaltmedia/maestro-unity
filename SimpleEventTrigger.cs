@@ -40,19 +40,19 @@ namespace AltSalt.Maestro
         public void RaiseEvent(GameObject caller)
         {
             simpleEvent.StoreCaller(caller);
-            simpleEvent.Raise();
+            simpleEvent.SignalChange();
         }
 
-        public void RaiseEvent(GameObject caller, string sourceScene, string sourceName)
+        public void RaiseEvent(GameObject caller, string sourceName)
         {
-            simpleEvent.StoreCaller(caller, sourceScene, sourceName);
-            simpleEvent.Raise();
+            simpleEvent.StoreCaller(caller, sourceName);
+            simpleEvent.SignalChange();
         }
 
         public void RaiseEvent(UnityEngine.Object caller, string sourceScene, string sourceName)
         {
             simpleEvent.StoreCaller(caller, sourceScene, sourceName);
-            simpleEvent.Raise();
+            simpleEvent.SignalChange();
         }
     }
 

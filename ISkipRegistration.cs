@@ -6,7 +6,7 @@ namespace AltSalt.Maestro
 {
     public interface ISkipRegistration
     {
-        bool DoNotRecord {
+        bool doNotRecord {
             get;
         }
     }

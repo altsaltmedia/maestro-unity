@@ -14,14 +14,10 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Maestro
 {
     [CreateAssetMenu(menuName = "AltSalt/Variables/Int Variable")]
-    public class IntVariable : VariableBase
+    public class IntVariable : ModifiableEditorVariable
     {
-#if UNITY_EDITOR
-        [Multiline]
-        [SerializeField]
-        [Header("Int Variable")]
-        string DeveloperDescription = "";
-#endif
+        protected override string title => nameof(IntVariable);
+        
         [SerializeField]
         public int _value;
 
@@ -61,7 +57,7 @@ namespace AltSalt.Maestro
             value += amount.value;
         }
 
-        public override void SetDefaultValue()
+        public override void SetToDefaultValue()
         {
             if (hasDefault) {
                 value = defaultValue;

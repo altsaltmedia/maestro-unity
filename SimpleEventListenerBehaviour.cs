@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
@@ -10,38 +11,35 @@ namespace AltSalt.Maestro
     public class SimpleEventListenerBehaviour : MonoBehaviour, ISimpleEventListener, ISkipRegistration
     {
         [Required]
-        [OnValueChanged("OnEnable")]
-        public SimpleEvent Event;
+        [OnValueChanged(nameof(OnEnable))]
+        [SerializeField]
+        [FormerlySerializedAs("Event")]
+        private SimpleEvent _simpleEvent;
 
-        [ValidateInput("IsPopulated")]
-        public UnityEvent Response;
+        private SimpleEvent simpleEvent => _simpleEvent;
+
+        [ValidateInput(nameof(IsPopulated))]
+        [SerializeField]
+        [FormerlySerializedAs("Response")]
+        private UnityEvent _response;
+
+        private UnityEvent response => _response;
 
         [SerializeField]
         [InfoBox("Specifies whether this dependency should be recorded when the RegisterDependencies tool is used.")]
-        bool doNotRecord;
+        [FormerlySerializedAs("doNotRecord")]
+        private bool _doNotRecord;
 
-        public bool DoNotRecord {
-            get {
-                return doNotRecord;
-            }
-        }
+        public bool doNotRecord => _doNotRecord;
 
-        public UnityEngine.Object ParentObject {
-            get {
-                return gameObject;
-            }
-        }
+        public UnityEngine.Object parentObject => gameObject;
 
-        public string SceneName {
-            get {
-                return gameObject.scene.name;
-            }
-        }
+        public string sceneName => gameObject.scene.name;
 
         private void OnEnable()
         {
-            if(Event != null) {
-                Event.RegisterListener(this);
+            if(simpleEvent != null) {
+                simpleEvent.RegisterListener(this);
             } else {
                 Debug.LogWarning("Please set an event for SimpleEventListenerBehaviour on " + this.name, this.gameObject);
             }
@@ -49,14 +47,14 @@ namespace AltSalt.Maestro
 
 		private void OnDisable()
 		{
-            if (Event != null) {
-                Event.UnregisterListener(this);
+            if (simpleEvent != null) {
+                simpleEvent.UnregisterListener(this);
             }
 		}
 
         public void OnEventRaised()
         {
-            Response.Invoke();
+            response.Invoke();
         }
 
         public void LogName(string callingInfo)

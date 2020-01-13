@@ -16,14 +16,10 @@ namespace AltSalt.Maestro
 {
     [CreateAssetMenu(menuName = "AltSalt/Variables/Color Variable")]
     [ExecuteInEditMode]
-    public class ColorVariable : VariableBase
+    public class ColorVariable : ModifiableEditorVariable
     {
-#if UNITY_EDITOR
-        [Multiline]
-        [SerializeField]
-        [Header("Color Variable")]
-        string DeveloperDescription = "";
-#endif
+        protected override string title => nameof(ColorVariable);
+        
         [FormerlySerializedAs("Value")]
         [SerializeField]
         private Color _value = new Color(1,1,1,1);
@@ -64,7 +60,7 @@ namespace AltSalt.Maestro
             value = new Color(1, 1, 1, 1);
         }
 
-        public override void SetDefaultValue()
+        public override void SetToDefaultValue()
         {
             if(hasDefault) {
                 value = defaultValue;   

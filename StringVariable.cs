@@ -4,14 +4,10 @@ using UnityEngine;
 namespace AltSalt.Maestro
 {
     [CreateAssetMenu(menuName = "AltSalt/Variables/String Variable")]
-    public class StringVariable : VariableBase
+    public class StringVariable : ModifiableEditorVariable
     {
-#if UNITY_EDITOR
-        [Multiline]
-        [SerializeField]
-        [Header("String Variable")]
-        string DeveloperDescription = "";
-#endif
+        protected override string title => nameof(StringVariable);
+        
         [SerializeField]
         private string _value;
 
@@ -41,7 +37,7 @@ namespace AltSalt.Maestro
             this.value = value.value;
         }
 
-        public override void SetDefaultValue()
+        public override void SetToDefaultValue()
         {
             if (hasDefault)  {
                 value = defaultValue;

@@ -11,6 +11,7 @@ https://www.altsalt.com / ricky@altsalt.com
 using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
@@ -20,42 +21,45 @@ namespace AltSalt.Maestro
     [ExecuteInEditMode]
     public class ComplexEventListenerBehaviour : MonoBehaviour, ISkipRegistration
 	{
+		[FormerlySerializedAs("Event")]
 		[Required]
-		public ComplexEvent Event;
+		[SerializeField]
+		private ComplexEvent _complexEvent;
 
-        #if UNITY_EDITOR
+		private ComplexEvent complexEvent => _complexEvent;
+
+#if UNITY_EDITOR
             [Multiline]
             public string DeveloperDescription = "";
-        #endif
+#endif
 		
-		[ValidateInput("IsPopulated")]
-		public ComplexUnityEventHandler Response;
+		[FormerlySerializedAs("Response")]
+		[ValidateInput(nameof(IsPopulated))]
+		[SerializeField]
+		private ComplexUnityEventHandler _response;
 
-        [SerializeField]
+		private ComplexUnityEventHandler response => _response;
+
+		[SerializeField]
         [InfoBox("Specifies whether this dependency should be recorded when the RegisterDependencies tool is used.")]
-        bool doNotRecord;
+        [FormerlySerializedAs("doNotRecord")]
+        private bool _doNotRecord;
 
-        public bool DoNotRecord {
-            get {
-                return doNotRecord;
-            }
-        }
-
-        // Use this for initialization
+        public bool doNotRecord => _doNotRecord;
+        
         private void OnEnable()
 		{
-			Event.RegisterListener(this);
+			complexEvent.RegisterListener(this);
 		}
-		
-		// Update is called once per frame
+        
 		private void OnDisable()
 		{
-			Event.UnregisterListener(this);
+			complexEvent.UnregisterListener(this);
 		}
 
         public void OnEventRaised(EventPayload eventPayload)
 		{
-            Response.Invoke(eventPayload);
+            response.Invoke(eventPayload);
 		}
 		
 		private static bool IsPopulated(ComplexUnityEventHandler attribute)

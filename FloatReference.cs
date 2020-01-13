@@ -70,6 +70,201 @@ namespace AltSalt.Maestro
             this.parentObject = callingObject;
             return useConstant ? constantValue : GetVariable(callingObject).value;
         }
+        
+        public FloatVariable SetValue(GameObject callingObject, float targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.SetValue(targetValue);
+            return floatVariable;
+        }
+		
+        public FloatVariable SetValue(GameObject callingObject, FloatVariable targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.SetValue(targetValue);
+            return floatVariable;
+        }
+        
+        public FloatVariable ApplyChange(GameObject callingObject, float targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.ApplyChange(targetValue);
+            return floatVariable;
+        }
+		
+        public FloatVariable ApplyChange(GameObject callingObject, FloatVariable targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.ApplyChange(targetValue);
+            return floatVariable;
+        }
+        
+        public FloatVariable Multiply(GameObject callingObject, float targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.Multiply(targetValue);
+            return floatVariable;
+        }
+		
+        public FloatVariable Multiply(GameObject callingObject, FloatVariable targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.Multiply(targetValue);
+            return floatVariable;
+        }
+        
+        public FloatVariable ClampMax(GameObject callingObject, float targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.ClampMax(targetValue);
+            return floatVariable;
+        }
+		
+        public FloatVariable ClampMax(GameObject callingObject, FloatVariable targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.ClampMax(targetValue);
+            return floatVariable;
+        }
+        
+        public FloatVariable ClampMin(GameObject callingObject, float targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.ClampMin(targetValue);
+            return floatVariable;
+        }
+		
+        public FloatVariable ClampMin(GameObject callingObject, FloatVariable targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.ClampMin(targetValue);
+            return floatVariable;
+        }
+        
+        public FloatVariable SetToDistance(GameObject callingObject, float targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.SetToDistance(targetValue);
+            return floatVariable;
+        }
+		
+        public FloatVariable SetToDistance(GameObject callingObject, FloatVariable targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.SetToDistance(targetValue);
+            return floatVariable;
+        }
+        
+        public FloatVariable SetToRandom(GameObject callingObject)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.SetToRandom();
+            return floatVariable;
+        }
+
+        public FloatVariable SetToSquareMagnitude(GameObject callingObject, V2Variable sourceValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.SetToSquareMagnitude(sourceValue);
+            return floatVariable;
+        }
+        
+        public FloatVariable SetToDefaultValue(GameObject callingObject, V2Variable sourceValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject);
+            floatVariable.SetToSquareMagnitude(sourceValue);
+            return floatVariable;
+        }
 
         protected override void UpdateReferenceName()
         {

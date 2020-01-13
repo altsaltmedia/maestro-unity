@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
-    public abstract class VariableBase : RegisterableScriptableObject
+    public abstract class ModifiableEditorVariable : SimpleEvent
     {
         [SerializeField]
         private bool _hasDefault;
@@ -15,6 +15,6 @@ namespace AltSalt.Maestro
             get => _hasDefault;
             set => _hasDefault = value;
         }
-        public abstract void SetDefaultValue();
+        public abstract void SetToDefaultValue();
     }
 }

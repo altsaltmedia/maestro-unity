@@ -20,7 +20,7 @@ namespace AltSalt.Maestro
         [OnInspectorGUI(nameof(UpdateReferenceName), false)]
         protected string _referenceName;
 
-        protected string referenceName
+        public string referenceName
         {
             get => _referenceName;
             set => _referenceName = value;

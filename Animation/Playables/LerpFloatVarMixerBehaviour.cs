@@ -57,7 +57,7 @@ namespace AltSalt.Maestro.Animation
 #if UNITY_EDITOR
                 if(Application.isPlaying == false) {
                     if (trackBinding.hasDefault == true) {
-                        trackBinding.SetDefaultValue();
+                        trackBinding.SetToDefaultValue();
                     }
                     else {
                         trackBinding.SetValue(originalValue);

@@ -14,14 +14,10 @@ using UnityEngine;
 namespace AltSalt.Maestro
 {
     [CreateAssetMenu(menuName = "AltSalt/Variables/Bool Variable")]
-    public class BoolVariable : VariableBase
+    public class BoolVariable : ModifiableEditorVariable
     {
-#if UNITY_EDITOR
-        [Multiline]
-        [SerializeField]
-        [Header("Bool Variable")]
-        string DeveloperDescription = "";
-#endif
+        protected override string title => nameof(BoolVariable);
+
         [SerializeField]
         private bool _value;
 
@@ -43,26 +39,42 @@ namespace AltSalt.Maestro
 
         public void SetValue(bool value)
         {
+            if (CallerRegistered() == false) return;
+            
             this.value = value;
+            
+            SignalChange();
         }
 
         public void SetValue(BoolVariable value)
         {
+            if (CallerRegistered() == false) return;
+            
             this.value = value.value;
+            
+            SignalChange();
         }
 
         public void Toggle()
         {
+            if (CallerRegistered() == false) return;
+            
             value = !value;
+            
+            SignalChange();
         }
 
-        public override void SetDefaultValue()
+        public override void SetToDefaultValue()
         {
+            if (CallerRegistered() == false) return;
+            
             if (hasDefault == true)  {
                 value = defaultValue;
             } else {
                 Debug.LogWarning("Method SetDefaultValue() called on " + this.name + ", but var does not have a default value assigned.");
             }
+            
+            SignalChange();
         }
     }
 }

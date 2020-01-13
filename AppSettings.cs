@@ -50,19 +50,31 @@ namespace AltSalt.Maestro
         public float deviceAspectRatio
         {
             get => productionSettings.deviceAspectRatio.value;
-            set => productionSettings.deviceAspectRatio.SetValue(value);
+            set
+            {
+                productionSettings.deviceAspectRatio.StoreCaller(this, "from App Settings", "manual trigger");
+                productionSettings.deviceAspectRatio.SetValue(value);
+            }
         }
-        
+
         public float deviceWidth
         {
             get => productionSettings.deviceWidth.value;
-            set => productionSettings.deviceWidth.SetValue(value);
+            set
+            {
+                productionSettings.deviceWidth.StoreCaller(this, "from App Settings", "manual trigger");
+                productionSettings.deviceWidth.SetValue(value);
+            }
         }
-        
+
         public float deviceHeight
         {
             get => productionSettings.deviceHeight.value;
-            set => productionSettings.deviceHeight.SetValue(value);
+            set
+            {
+                productionSettings.deviceHeight.StoreCaller(this, "from App Settings", "manual trigger");
+                productionSettings.deviceHeight.SetValue(value);
+            }
         }
 
         public float timescale => productionSettings.timescale.value;

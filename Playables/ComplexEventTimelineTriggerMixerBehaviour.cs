@@ -37,9 +37,7 @@ namespace AltSalt.Maestro
                     }
                     input.triggered = true;
                     for(int q=0; q<input.complexEventTriggerPackagers.Count; q++) {
-                        PlayableDirector playableDirector = playable.GetGraph().GetResolver() as PlayableDirector;
-                        input.complexEventTriggerPackagers[q].RaiseEvent(playableDirector.gameObject, playableDirector.gameObject.scene.name, string.Format("{0} director at {1}", playableDirector.gameObject.name, currentTime.ToString("F2")));
-                        //input.complexEventTriggerPackagers[q].RaiseEvent(playable.GetGraph().GetEditorName() + " director at " + currentTime.ToString("F6"));
+                        input.complexEventTriggerPackagers[q].RaiseEvent(input.directorObject, $"{input.directorObject.name} director at {currentTime:F2}");
                     }
                 } else {
                     if (currentTime >= input.endTime || currentTime < input.startTime) {

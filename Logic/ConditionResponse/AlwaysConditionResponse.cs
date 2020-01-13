@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse {
@@ -11,13 +14,13 @@ namespace AltSalt.Maestro.Logic.ConditionResponse {
     [ExecuteInEditMode]
     public class AlwaysConditionResponse : ConditionResponseBase
     {
-        [Title("$"+nameof(conditionEventTitle))]
-        public override void SyncValues(Object callingObject)
+#if UNITY_EDITOR
+        public override void SyncConditionHeading(Object callingObject)
         {
-            base.SyncValues(callingObject);
-            conditionEventTitle = "Has no conditions and will always execute.";
+            base.SyncConditionHeading(callingObject);
+            conditionEventTitle = "ALWAYS";
         }
-        
+#endif        
     }
 
 }
