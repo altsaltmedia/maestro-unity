@@ -8,10 +8,10 @@ namespace AltSalt.Maestro
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class ComplexEventTriggerPackagerBehaviour : MonoBehaviour
+    public class ComplexEventPackagerBehaviour : MonoBehaviour
     {
         [SerializeField]
-        List<ComplexEventTriggerPackager> complexEventTriggerPackagers = new List<ComplexEventTriggerPackager>();
+        List<ComplexEventPackager> complexEventTriggerPackagers = new List<ComplexEventPackager>();
 
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         [InfoBox("Raises event")]

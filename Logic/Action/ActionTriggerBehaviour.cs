@@ -16,8 +16,19 @@ namespace AltSalt.Maestro.Logic.Action
 
         private ActionTrigger actionTrigger => _actionTrigger;
 
-        public void CallPerformActions()
+        private void Start()
         {
+            if (actionTrigger.triggerOnStart == true) {
+                CallPerformActions(this.gameObject);
+            }
+        }
+
+        public void CallPerformActions(GameObject callingObject)
+        {
+            if (callingObject == null) {
+                throw new UnassignedReferenceException("You must specify a calling game object.");
+            }
+            
             actionTrigger.PerformActions(this.gameObject);
         }
 

@@ -30,23 +30,23 @@ namespace AltSalt.Maestro.Audio
             oneShotHandler = GetComponent<AudioSource>();
         }
 
-        public void PlayAudioClip(EventPayload eventPayload)
+        public void PlayAudioClip(ComplexPayload complexPayload)
         {
-            AudioClipBundle audioClipBundle = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
+            AudioClipBundle audioClipBundle = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
             for (int i = 0; i < audioClipBundle.audioClipData.Count; i++) {
 
-                bool loopClip = eventPayload.GetBoolValue(loopAudioKey) == true;
+                bool loopClip = complexPayload.GetBoolValue(loopAudioKey) == true;
 
                 float volume = 1f;
 
-                if (float.IsNaN(eventPayload.GetFloatValue(volumeKey)) == false) {
-                    volume = eventPayload.GetFloatValue(volumeKey);
+                if (float.IsNaN(complexPayload.GetFloatValue(volumeKey)) == false) {
+                    volume = complexPayload.GetFloatValue(volumeKey);
                 }
                 
                 float pitch = 1f;
 
-                if (float.IsNaN(eventPayload.GetFloatValue(pitchKey)) == false) {
-                    volume = eventPayload.GetFloatValue(pitchKey);
+                if (float.IsNaN(complexPayload.GetFloatValue(pitchKey)) == false) {
+                    volume = complexPayload.GetFloatValue(pitchKey);
                 }
 
                 AudioElement audioElement = new AudioElement(audioPrefab, transform, audioClipBundle.audioClipData[i], loopClip, volume, pitch, audioClipBundle);
@@ -54,24 +54,24 @@ namespace AltSalt.Maestro.Audio
             }
         }
 
-        public void PlayOneShot(EventPayload eventPayload)
+        public void PlayOneShot(ComplexPayload complexPayload)
         {
-            AudioClipBundle audioClipBundle = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
+            AudioClipBundle audioClipBundle = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
             for (int i = 0; i < audioClipBundle.audioClipData.Count; i++) {
 
                 float volume = 1f;
 
-                if (float.IsNaN(eventPayload.GetFloatValue(volumeKey)) == false) {
-                    volume = eventPayload.GetFloatValue(volumeKey);
+                if (float.IsNaN(complexPayload.GetFloatValue(volumeKey)) == false) {
+                    volume = complexPayload.GetFloatValue(volumeKey);
                 }
                 
                 oneShotHandler.PlayOneShot(audioClipBundle.audioClipData[i].audioClip, volume);
             }
         }
 
-        public void FadeOutAudioClips(EventPayload eventPayload)
+        public void FadeOutAudioClips(ComplexPayload complexPayload)
         {
-            AudioClipBundle audioClipBundle = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
+            AudioClipBundle audioClipBundle = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
 
             for(int i=0; i<audioElements.Count; i++) {
                 if(audioElements[i].audioClipBundle == audioClipBundle) {

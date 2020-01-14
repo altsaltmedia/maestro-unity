@@ -7,17 +7,21 @@ using UnityEngine.Events;
 namespace AltSalt.Maestro.Logic.Action
 {
     [Serializable]
-    public class EventAction : ActionData
+    public class GenericActionData : ActionData
     {
-        protected override string title => nameof(EventAction);
+        protected override string title => nameof(GenericActionData);
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        private UnityEvent _eventAction;
+        private GameObjectGenericAction _action;
 
-        private UnityEvent eventAction => _eventAction;
-        
-        public EventAction(int priority) : base(priority) {}
+        private GameObjectGenericAction action
+        {
+            get => _action;
+            set => _action = value;
+        }
+
+        public GenericActionData(int priority) : base(priority) {}
 
         public override void SyncEditorActionHeadings()
         {
@@ -37,12 +41,16 @@ namespace AltSalt.Maestro.Logic.Action
 
         public void SyncUnityEventHeading(SerializedProperty unityEventSerializedParent)
         {
-            
+            string[] parameterNames = GetParameters(serializedConditionResponse);
+            if (UnityEventValuesChanged(response, parameterNames, cachedEventData, out var eventData)) {
+                eventDescription = GetEventDescription(eventData);
+                cachedEventData = eventData;
+            }
         }
 
         public override void PerformAction(GameObject callingObject)
         {
-            eventAction.Invoke();
+            action.Invoke(callingObject);
         }
     }
 }

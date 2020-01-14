@@ -176,14 +176,14 @@ namespace AltSalt.Maestro.Sequencing.Touch
         
         private static Sequence ApplyMomentumModifier(ComplexEventTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
         {
-            EventPayload eventPayload = EventPayload.CreateInstance();
+            ComplexPayload complexPayload = ComplexPayload.CreateInstance();
             
-            eventPayload.Set(DataType.scriptableObjectType, targetSequence);
-            eventPayload.Set(DataType.intType, source.priority);
-            eventPayload.Set(DataType.stringType, source.gameObject.name);
-            eventPayload.Set(DataType.floatType, timeModifier);
+            complexPayload.Set(DataType.scriptableObjectType, targetSequence);
+            complexPayload.Set(DataType.intType, source.priority);
+            complexPayload.Set(DataType.stringType, source.gameObject.name);
+            complexPayload.Set(DataType.floatType, timeModifier);
             
-            applyEvent.RaiseEvent(source.gameObject, eventPayload);
+            applyEvent.RaiseEvent(source.gameObject, complexPayload);
 
             return targetSequence;
         }

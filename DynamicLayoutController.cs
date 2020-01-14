@@ -177,9 +177,9 @@ namespace AltSalt.Maestro.Layout {
             layoutRenderCompleteEvents.Invoke();
         }
 
-        public void RegisterDynamicElement(EventPayload eventPayload)
+        public void RegisterDynamicElement(ComplexPayload complexPayload)
         {
-            IDynamicLayoutElement element = eventPayload.objectDictionary[DataType.systemObjectType] as IDynamicLayoutElement;
+            IDynamicLayoutElement element = complexPayload.objectDictionary[DataType.systemObjectType] as IDynamicLayoutElement;
             
             if(element.parentScene == this.gameObject.scene &&
                priorityDynamicElements.Contains(element) == false && dynamicElements.Contains(element) == false) {
@@ -192,9 +192,9 @@ namespace AltSalt.Maestro.Layout {
             }
         }
 
-        public void DeregisterDynamicElement(EventPayload eventPayload)
+        public void DeregisterDynamicElement(ComplexPayload complexPayload)
         {
-            IDynamicLayoutElement element = eventPayload.objectDictionary[DataType.systemObjectType] as IDynamicLayoutElement;
+            IDynamicLayoutElement element = complexPayload.objectDictionary[DataType.systemObjectType] as IDynamicLayoutElement;
             if(priorityDynamicElements.Contains(element) == true) {
                 priorityDynamicElements.Remove(element);
             }

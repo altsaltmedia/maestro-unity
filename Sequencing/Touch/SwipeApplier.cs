@@ -65,18 +65,18 @@ namespace AltSalt.Maestro.Sequencing.Touch
             }
         }
 
-        private static EventPayload ApplySwipeModifier(ComplexEventTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
+        private static ComplexPayload ApplySwipeModifier(ComplexEventTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
         {
-            EventPayload eventPayload = EventPayload.CreateInstance();
+            ComplexPayload complexPayload = ComplexPayload.CreateInstance();
             
-            eventPayload.Set(DataType.scriptableObjectType, targetSequence);
-            eventPayload.Set(DataType.intType, source.priority);
-            eventPayload.Set(DataType.floatType, timeModifier);
-            eventPayload.Set(DataType.stringType, source.name);
+            complexPayload.Set(DataType.scriptableObjectType, targetSequence);
+            complexPayload.Set(DataType.intType, source.priority);
+            complexPayload.Set(DataType.floatType, timeModifier);
+            complexPayload.Set(DataType.stringType, source.name);
             
-            applyEvent.RaiseEvent(source.gameObject, eventPayload);
+            applyEvent.RaiseEvent(source.gameObject, complexPayload);
 
-            return eventPayload;
+            return complexPayload;
         }
 
         private static bool IsPopulated(V3Reference attribute)

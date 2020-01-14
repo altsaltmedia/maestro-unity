@@ -7,9 +7,9 @@ namespace AltSalt.Maestro
 {
     [Serializable]
     [ExecuteInEditMode]
-    // Meant to be used within ComplexEventTriggerPackagerBehaviour or ComplexEventTimelineTrigger.
+    // Meant to be used within ComplexEventPackagerBehaviour or ComplexEventTimelineTrigger.
     // If implementing a custom trigger from within a script, use the basic ComplexEventTrigger instead.
-    public class ComplexEventTriggerPackager : EventTriggerBase
+    public class ComplexEventPackager : EventTriggerBase
     {
         [Required]
         [SerializeField]
@@ -145,43 +145,43 @@ namespace AltSalt.Maestro
 
         public void RaiseEvent(GameObject caller)
         {
-            EventPayload eventPayload = EventPayload.CreateInstance();
+            ComplexPayload complexPayload = ComplexPayload.CreateInstance();
             if (hasString) {
-                eventPayload = GetStringValues(eventPayload);
+                complexPayload = GetStringValues(complexPayload);
             }
             if (hasFloat) {
-                eventPayload = GetFloatValues(eventPayload);
+                complexPayload = GetFloatValues(complexPayload);
             }
             if (hasBool) {
-                eventPayload = GetBoolValues(eventPayload);
+                complexPayload = GetBoolValues(complexPayload);
             }
             if (hasScriptableObject) {
-                eventPayload = GetScriptableObjectValues(eventPayload);
+                complexPayload = GetScriptableObjectValues(complexPayload);
             }
             complexEvent.StoreCaller(caller);
-            complexEvent.Raise(eventPayload);
+            complexEvent.Raise(complexPayload);
         }
 
         public void RaiseEvent(GameObject caller, string sourceName)
         {
-            EventPayload eventPayload = EventPayload.CreateInstance();
+            ComplexPayload complexPayload = ComplexPayload.CreateInstance();
             if (hasString) {
-                eventPayload = GetStringValues(eventPayload);
+                complexPayload = GetStringValues(complexPayload);
             }
             if (hasFloat) {
-                eventPayload = GetFloatValues(eventPayload);
+                complexPayload = GetFloatValues(complexPayload);
             }
             if (hasBool) {
-                eventPayload = GetBoolValues(eventPayload);
+                complexPayload = GetBoolValues(complexPayload);
             }
             if (hasScriptableObject) {
-                eventPayload = GetScriptableObjectValues(eventPayload);
+                complexPayload = GetScriptableObjectValues(complexPayload);
             }
             complexEvent.StoreCaller(caller, sourceName);
-            complexEvent.Raise(eventPayload);
+            complexEvent.Raise(complexPayload);
         }
 
-        private EventPayload GetStringValues(EventPayload eventPayload)
+        private ComplexPayload GetStringValues(ComplexPayload complexPayload)
         {
             if (stringValues.Count == 0) {
                 LogWarning();
@@ -190,19 +190,19 @@ namespace AltSalt.Maestro
 
             if (stringValues.Count == 1) {
                 if (customStringKey == true && stringKeys.Count >= 1) {
-                    eventPayload.Set(stringKeys[0], stringValues[0]);
+                    complexPayload.Set(stringKeys[0], stringValues[0]);
                 } else {
-                    eventPayload.Set(DataType.stringType, stringValues[0]);
+                    complexPayload.Set(DataType.stringType, stringValues[0]);
                 }
             } else {
                 for (int i = 0; i < stringValues.Count; i++) {
-                    eventPayload.Set(stringKeys[i], stringValues[i]);
+                    complexPayload.Set(stringKeys[i], stringValues[i]);
                 }
             }
-            return eventPayload;
+            return complexPayload;
         }
 
-        private EventPayload GetFloatValues(EventPayload eventPayload)
+        private ComplexPayload GetFloatValues(ComplexPayload complexPayload)
         {
             if (floatValues.Count == 0) {
                 LogWarning();
@@ -211,19 +211,19 @@ namespace AltSalt.Maestro
 
             if (floatValues.Count == 1) {
                 if (customFloatKey == true && floatKeys.Count >= 1) {
-                    eventPayload.Set(floatKeys[0], floatValues[0]);
+                    complexPayload.Set(floatKeys[0], floatValues[0]);
                 } else {
-                    eventPayload.Set(DataType.floatType, floatValues[0]);
+                    complexPayload.Set(DataType.floatType, floatValues[0]);
                 }
             } else {
                 for (int i = 0; i < floatValues.Count; i++) {
-                    eventPayload.Set(floatKeys[i], floatValues[i]);
+                    complexPayload.Set(floatKeys[i], floatValues[i]);
                 }
             }
-            return eventPayload;
+            return complexPayload;
         }
 
-        private EventPayload GetBoolValues(EventPayload eventPayload)
+        private ComplexPayload GetBoolValues(ComplexPayload complexPayload)
         {
             if (boolValues.Count == 0) {
                 LogWarning();
@@ -232,19 +232,19 @@ namespace AltSalt.Maestro
 
             if (boolValues.Count == 1) {
                 if (customBoolKey == true && boolKeys.Count >= 1) {
-                    eventPayload.Set(boolKeys[0], boolValues[0]);
+                    complexPayload.Set(boolKeys[0], boolValues[0]);
                 } else {
-                    eventPayload.Set(DataType.boolType, boolValues[0]);
+                    complexPayload.Set(DataType.boolType, boolValues[0]);
                 }
             } else {
                 for (int i = 0; i < boolValues.Count; i++) {
-                    eventPayload.Set(boolKeys[i], boolValues[i]);
+                    complexPayload.Set(boolKeys[i], boolValues[i]);
                 }
             }
-            return eventPayload;
+            return complexPayload;
         }
 
-        private EventPayload GetScriptableObjectValues(EventPayload eventPayload)
+        private ComplexPayload GetScriptableObjectValues(ComplexPayload complexPayload)
         {
             if (scriptableObjectValues.Count == 0) {
                 LogWarning();
@@ -253,16 +253,16 @@ namespace AltSalt.Maestro
 
             if (scriptableObjectValues.Count == 1) {
                 if (customScriptableObjectKey == true && scriptableObjectKeys.Count >= 1) {
-                    eventPayload.Set(scriptableObjectKeys[0], scriptableObjectValues[0]);
+                    complexPayload.Set(scriptableObjectKeys[0], scriptableObjectValues[0]);
                 } else {
-                    eventPayload.Set(DataType.scriptableObjectType, scriptableObjectValues[0]);
+                    complexPayload.Set(DataType.scriptableObjectType, scriptableObjectValues[0]);
                 }
             } else {
                 for (int i = 0; i < scriptableObjectValues.Count; i++) {
-                    eventPayload.Set(scriptableObjectKeys[i], scriptableObjectValues[i]);
+                    complexPayload.Set(scriptableObjectKeys[i], scriptableObjectValues[i]);
                 }
             }
-            return eventPayload;
+            return complexPayload;
         }
 
         protected virtual void LogWarning()

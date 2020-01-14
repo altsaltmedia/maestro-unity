@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
@@ -24,6 +25,16 @@ namespace AltSalt.Maestro
         private UnityEvent _response;
 
         private UnityEvent response => _response;
+        
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        protected GameObjectGenericAction _action;
+
+        public GameObjectGenericAction action
+        {
+            get => _action;
+            set => _action = value;
+        }
 
         [SerializeField]
         [InfoBox("Specifies whether this dependency should be recorded when the RegisterDependencies tool is used.")]
@@ -35,6 +46,15 @@ namespace AltSalt.Maestro
         public UnityEngine.Object parentObject => gameObject;
 
         public string sceneName => gameObject.scene.name;
+        
+        [SerializeField]
+        private bool _migrated = false;
+
+        private bool migrated
+        {
+            get => _migrated;
+            set => _migrated = value;
+        }
 
         private void OnEnable()
         {
@@ -42,6 +62,11 @@ namespace AltSalt.Maestro
                 simpleEvent.RegisterListener(this);
             } else {
                 Debug.LogWarning("Please set an event for SimpleEventListenerBehaviour on " + this.name, this.gameObject);
+            }
+
+            if (migrated == false) {
+                MigrationUtils.MigrateUnityEventList(nameof(_response), nameof(_action), 
+                    new SerializedObject(this));
             }
         }
 
@@ -54,7 +79,7 @@ namespace AltSalt.Maestro
 
         public void OnEventRaised()
         {
-            response.Invoke();
+            action.Invoke(this.gameObject);
         }
 
         public void LogName(string callingInfo)
@@ -63,6 +88,11 @@ namespace AltSalt.Maestro
         }
 
         private static bool IsPopulated(UnityEvent attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+        
+        private static bool IsPopulated(GameObjectGenericAction attribute)
         {
             return Utils.IsPopulated(attribute);
         }

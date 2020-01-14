@@ -71,10 +71,10 @@ namespace AltSalt.Maestro
             }
         }
 
-        public void RaiseEvent(GameObject caller, EventPayload eventPayload)
+        public void RaiseEvent(GameObject caller, ComplexPayload complexPayload)
         {
             complexEvent.StoreCaller(caller);
-            complexEvent.Raise(eventPayload);
+            complexEvent.Raise(complexPayload);
         }
 
         public void RaiseEvent(UnityEngine.Object caller, string sourceScene, string sourceName)

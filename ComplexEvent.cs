@@ -35,7 +35,7 @@ namespace AltSalt.Maestro
                 if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
                     LogListenerOnRaise(listeners[i]);
                 }
-                listeners[i].OnEventRaised(EventPayload.CreateInstance());
+                listeners[i].OnEventRaised(ComplexPayload.CreateInstance());
             }
             
             if (logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
@@ -61,10 +61,10 @@ namespace AltSalt.Maestro
                     LogListenerOnRaise(listeners[i]);
                 }
 
-                if(value is EventPayload) {
-                    listeners[i].OnEventRaised(value as EventPayload);
+                if(value is ComplexPayload) {
+                    listeners[i].OnEventRaised(value as ComplexPayload);
                 } else {
-                    listeners[i].OnEventRaised(EventPayload.CreateInstance(value));
+                    listeners[i].OnEventRaised(ComplexPayload.CreateInstance(value));
                 }
             }
             

@@ -12,9 +12,9 @@ namespace AltSalt.Maestro
     {
         [FormerlySerializedAs("complexEventTriggerPackagers")]
         [SerializeField]
-        private List<ComplexEventTriggerPackager> _complexEventTriggerPackagers;
+        private List<ComplexEventPackager> _complexEventTriggerPackagers;
 
-        public List<ComplexEventTriggerPackager> complexEventTriggerPackagers
+        public List<ComplexEventPackager> complexEventTriggerPackagers
         {
             get => _complexEventTriggerPackagers;
             set => _complexEventTriggerPackagers = value;

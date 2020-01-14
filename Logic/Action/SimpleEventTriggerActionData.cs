@@ -7,9 +7,9 @@ using UnityEngine;
 namespace AltSalt.Maestro.Logic.Action
 {
     [Serializable]
-    public class SimpleEventTriggerAction : ActionData
+    public class SimpleEventTriggerActionData : ActionData
     {
-        protected override string title => nameof(SimpleEventTriggerAction);
+        protected override string title => nameof(SimpleEventTriggerActionData);
 
         [SerializeField]
         [HideReferenceObjectPicker]
@@ -18,7 +18,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         private SimpleEventTrigger simpleEventTrigger => _simpleEventTrigger;
 
-        public SimpleEventTriggerAction(int priority) : base(priority) { }
+        public SimpleEventTriggerActionData(int priority) : base(priority) { }
 
         public override void PerformAction(GameObject callingObject)
         {

@@ -113,21 +113,21 @@ namespace AltSalt.Maestro.Sequencing
             _masterTotalTime = masterTimeDataList[masterTimeDataList.Count - 1].masterTimeEnd + masterTimeDataList[masterTimeDataList.Count - 1].sequence.sourcePlayable.duration;
         }
 
-        public void ProcessModifyRequest(EventPayload eventPayload)
+        public void ProcessModifyRequest(ComplexPayload complexPayload)
         {
-            Sequence targetSequence = eventPayload.GetScriptableObjectValue() as Sequence;
+            Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
             Sequence_Config sequenceConfig = sequenceConfigs.Find(x => x.sequence == targetSequence);
             
             if (sequenceConfig == null || sequenceConfig.DependenciesLoaded() == false) return;
 
-            int requestPriority = eventPayload.GetIntValue();
-            string moduleName = eventPayload.GetStringValue();
+            int requestPriority = complexPayload.GetIntValue();
+            string moduleName = complexPayload.GetStringValue();
                 
             if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
             {
                 activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
                 
-                sequenceConfig.processModify.ModifySequence(eventPayload.GetFloatValue());
+                sequenceConfig.processModify.ModifySequence(complexPayload.GetFloatValue());
             }
         }
 
@@ -139,9 +139,9 @@ namespace AltSalt.Maestro.Sequencing
             return activeInputModule;
         }
 
-        public void UnlockInputeModule(EventPayload eventPayload)
+        public void UnlockInputeModule(ComplexPayload complexPayload)
         {
-            if (activeInputModule.name != eventPayload.GetStringValue()) return;
+            if (activeInputModule.name != complexPayload.GetStringValue()) return;
             
             activeInputModule.name = string.Empty;
             activeInputModule.priority = 0;
@@ -213,12 +213,12 @@ namespace AltSalt.Maestro.Sequencing
             return activeSequence;
         }
 
-        public void RefreshMasterSequence(EventPayload eventPayload)
+        public void RefreshMasterSequence(ComplexPayload complexPayload)
         {
             hasActiveSequence = GetActiveStatusFromSequences(sequenceConfigs);
 
             if (hasActiveSequence == true) {
-               RefreshElapsedTime(this, eventPayload);
+               RefreshElapsedTime(this, complexPayload);
             }
         }
 
@@ -233,9 +233,9 @@ namespace AltSalt.Maestro.Sequencing
             return false;
         }
 
-        private static double RefreshElapsedTime(MasterSequence masterSequence, EventPayload eventPayload)
+        private static double RefreshElapsedTime(MasterSequence masterSequence, ComplexPayload complexPayload)
         {
-            Sequence targetSequence = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as Sequence;
+            Sequence targetSequence = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as Sequence;
             MasterTimeData masterTimeData = masterSequence.masterTimeDataList.Find(x => x.sequence == targetSequence);
                 
             if(masterTimeData != null) {

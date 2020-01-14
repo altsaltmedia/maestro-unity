@@ -29,13 +29,13 @@ namespace AltSalt.Maestro.Logic
         [SerializeField]
         private List<UserDatum> userData = new List<UserDatum>();
 
-        public void CallWriteToStoredData(EventPayload eventPayload)
+        public void CallWriteToStoredData(ComplexPayload complexPayload)
         {
             if(appSettings.saveDataActive == false) {
                 return;
             }
 
-            ScriptableObject receivedObject = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType);
+            ScriptableObject receivedObject = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType);
             bool valueFound = false;
             for (int i = 0; i < userData.Count; i++) {
                 if (receivedObject == userData[i].scriptableObject) {

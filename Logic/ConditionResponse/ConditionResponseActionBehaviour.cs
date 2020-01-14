@@ -9,7 +9,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     public enum EventExecutionType { ExecuteAll, CancelAfterFirstSuccess }
     
     [ExecuteInEditMode]
-    public class ConditionResponseTriggerBehaviour : MonoBehaviour
+    public class ConditionResponseActionBehaviour : MonoBehaviour
     {
         [ValueDropdown("boolValueList")]
         [SerializeField]
@@ -36,10 +36,12 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         private EventExecutionType eventExecutionType => _eventExecutionType;
 
         [SerializeField]
+        [FormerlySerializedAs("_conditionResponseAction")]
         [FormerlySerializedAs("conditionResponseTrigger")]
-        private ConditionResponseTrigger _conditionResponseTrigger;
+        [FormerlySerializedAs("_conditionResponseTrigger")]
+        private ConditionResponseActionData _conditionResponseActionData;
 
-        private ConditionResponseTrigger conditionResponseTrigger => _conditionResponseTrigger;
+        private ConditionResponseActionData conditionResponseActionData => _conditionResponseActionData;
 
         private void Start()
         {
@@ -52,12 +54,12 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         private void SetEventExecutionType()
         {
-            conditionResponseTrigger.eventExecutionType = eventExecutionType;
+            conditionResponseActionData.eventExecutionType = eventExecutionType;
         }
 
         private void SetTriggerOnStart()
         {
-            conditionResponseTrigger.triggerOnStart = triggerOnStart;
+            conditionResponseActionData.triggerOnStart = triggerOnStart;
         }
 
         [HorizontalGroup("Split", 1f)]
@@ -65,24 +67,24 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void CallTriggerResponses()
         {
-            if(conditionResponseTrigger == null) {
+            if(conditionResponseActionData == null) {
                 Debug.Log("Please populate the condition response trigger", this);
                 return;
             }
 
             if(eventExecutionType == EventExecutionType.ExecuteAll) {
-                conditionResponseTrigger.TriggerAllResponses(this.gameObject, triggerOnStart);
+                conditionResponseActionData.TriggerAllResponses(this.gameObject, triggerOnStart);
             } else {
-                conditionResponseTrigger.TriggerUntilFirstSuccess(this.gameObject, triggerOnStart);
+                conditionResponseActionData.TriggerUntilFirstSuccess(this.gameObject, triggerOnStart);
             }
         }
 
 #if UNITY_EDITOR
         private void Update()
         {   
-            conditionResponseTrigger.SyncEditorActionHeadings();
-            conditionResponseTrigger.CallSyncConditionHeadings(this.gameObject);
-            conditionResponseTrigger.SyncUnityEventHeadings(new SerializedObject(this).FindProperty(nameof(_conditionResponseTrigger)));
+            conditionResponseActionData.SyncEditorActionHeadings();
+            conditionResponseActionData.CallSyncConditionHeadings(this.gameObject);
+            conditionResponseActionData.SyncUnityEventHeadings(new SerializedObject(this).FindProperty(nameof(_conditionResponseActionData)));
         }
 #endif
     }

@@ -9,16 +9,12 @@ https://www.altsalt.com / ricky@altsalt.com
 **********************************************/
 
 using UnityEngine;
-using UnityEngine.Events;
 using Sirenix.OdinInspector;
 using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
-    [System.Serializable]
-    public class ComplexUnityEventHandler : UnityEvent<EventPayload> { }
-
-    [ExecuteInEditMode]
+	[ExecuteInEditMode]
     public class ComplexEventListenerBehaviour : MonoBehaviour, ISkipRegistration
 	{
 		[FormerlySerializedAs("Event")]
@@ -36,9 +32,9 @@ namespace AltSalt.Maestro
 		[FormerlySerializedAs("Response")]
 		[ValidateInput(nameof(IsPopulated))]
 		[SerializeField]
-		private ComplexUnityEventHandler _response;
+		private ComplexPayloadGenericAction _response;
 
-		private ComplexUnityEventHandler response => _response;
+		private ComplexPayloadGenericAction response => _response;
 
 		[SerializeField]
         [InfoBox("Specifies whether this dependency should be recorded when the RegisterDependencies tool is used.")]
@@ -57,12 +53,12 @@ namespace AltSalt.Maestro
 			complexEvent.UnregisterListener(this);
 		}
 
-        public void OnEventRaised(EventPayload eventPayload)
+        public void OnEventRaised(ComplexPayload complexPayload)
 		{
-            response.Invoke(eventPayload);
+            response.Invoke(complexPayload);
 		}
 		
-		private static bool IsPopulated(ComplexUnityEventHandler attribute)
+		private static bool IsPopulated(ComplexPayloadGenericAction attribute)
 		{
 			return Utils.IsPopulated(attribute);
 		}

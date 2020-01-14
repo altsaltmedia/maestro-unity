@@ -114,13 +114,13 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             Autorun_Data autorunData, float timeModifier, AutorunExtents currentExtents, CoroutineCallback callback)
         {
             while(true) {
-                EventPayload eventPayload = EventPayload.CreateInstance();
-                eventPayload.Set(DataType.scriptableObjectType, autorunData.sequence);
-                eventPayload.Set(DataType.intType, source.priority);
-                eventPayload.Set(DataType.stringType, source.gameObject.name);
-                eventPayload.Set(DataType.floatType, timeModifier);
+                ComplexPayload complexPayload = ComplexPayload.CreateInstance();
+                complexPayload.Set(DataType.scriptableObjectType, autorunData.sequence);
+                complexPayload.Set(DataType.intType, source.priority);
+                complexPayload.Set(DataType.stringType, source.gameObject.name);
+                complexPayload.Set(DataType.floatType, timeModifier);
                 
-                autorunController.requestModifyToSequence.RaiseEvent(source.gameObject, eventPayload);
+                autorunController.requestModifyToSequence.RaiseEvent(source.gameObject, complexPayload);
                 
                 callback(autorunController, autorunData, currentExtents);
                 yield return new WaitForEndOfFrame();

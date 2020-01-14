@@ -225,11 +225,11 @@ namespace AltSalt.Maestro.Sequencing
 
         }
 
-        public void UpdateFork(EventPayload eventPayload)
+        public void UpdateFork(ComplexPayload complexPayload)
         {
-            Fork targetFork = eventPayload.GetScriptableObjectValue(forkKey) as Fork;
-            BranchKey branchKey = eventPayload.GetScriptableObjectValue(updateForkViaBranchKey) as BranchKey;
-            Sequence sequence = eventPayload.GetScriptableObjectValue(updateForkViaSequence) as Sequence;
+            Fork targetFork = complexPayload.GetScriptableObjectValue(forkKey) as Fork;
+            BranchKey branchKey = complexPayload.GetScriptableObjectValue(updateForkViaBranchKey) as BranchKey;
+            Sequence sequence = complexPayload.GetScriptableObjectValue(updateForkViaSequence) as Sequence;
             
             // Only execute the update if joiner has data for the fork. This is
             // to prevent potential conflicts if we have multiple joiners in one scene

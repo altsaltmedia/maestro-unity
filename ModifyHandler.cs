@@ -20,11 +20,11 @@ namespace AltSalt.Maestro
         [Required]
         public SimpleEventTrigger layoutUpdateTrigger;
         
-        public void TriggerModifyText(EventPayload eventPayload)
+        public void TriggerModifyText(ComplexPayload complexPayload)
         {
-            TextFamily textFamily = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as TextFamily;
-            bool targetStatus = eventPayload.GetBoolValue(DataType.boolType);
-            TextCollectionBank textCollectionBank = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as TextCollectionBank;
+            TextFamily textFamily = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as TextFamily;
+            bool targetStatus = complexPayload.GetBoolValue(DataType.boolType);
+            TextCollectionBank textCollectionBank = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as TextCollectionBank;
 
             bool triggerLayoutChange;
             
@@ -41,10 +41,10 @@ namespace AltSalt.Maestro
                 TriggerLayoutUpdate();
             }
         }
-        public void TriggerModifyLayout(EventPayload eventPayload)
+        public void TriggerModifyLayout(ComplexPayload complexPayload)
         {
-            LayoutConfig layoutConfig = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as LayoutConfig;
-            bool targetStatus = eventPayload.GetBoolValue(DataType.boolType);
+            LayoutConfig layoutConfig = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as LayoutConfig;
+            bool targetStatus = complexPayload.GetBoolValue(DataType.boolType);
 
             bool triggerTextChange;
             

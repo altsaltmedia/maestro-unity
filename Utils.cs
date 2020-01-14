@@ -1066,9 +1066,9 @@ namespace AltSalt.Maestro
             }
         }
 
-        public static EventPayload CreateEventPayload()
+        public static ComplexPayload CreateEventPayload()
         {
-            EventPayload payloadInstance = ScriptableObject.CreateInstance(typeof(EventPayload)) as EventPayload;
+            ComplexPayload payloadInstance = ScriptableObject.CreateInstance(typeof(ComplexPayload)) as ComplexPayload;
             return payloadInstance;
         }
 
@@ -1589,8 +1589,25 @@ namespace AltSalt.Maestro
 
             return true;
         }
+        
+        public static bool IsPopulated(GameObjectGenericAction attribute)
+        {
+            if(attribute == null) {
+                return false;
+            }
 
-        public static bool IsPopulated(ComplexUnityEventHandler attribute)
+            if(attribute.GetPersistentEventCount() < 1) {
+                return false;
+            }
+
+            if(attribute.GetPersistentMethodName(0).Length < 1) {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsPopulated(ComplexPayloadGenericAction attribute)
         {
             return attribute.GetPersistentMethodName(0).Length < 1 ? false : true;
         }

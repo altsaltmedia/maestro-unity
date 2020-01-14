@@ -99,12 +99,12 @@ namespace AltSalt.Maestro
             }
         }
 
-        public void RefreshText(EventPayload eventPayload)
+        public void RefreshText(ComplexPayload complexPayload)
         {
             if(textCollectionBank == null) {
                 return;
             }
-            TextCollectionBank targetTextBank = eventPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as TextCollectionBank;
+            TextCollectionBank targetTextBank = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as TextCollectionBank;
 
             // If the textUpdate event was raised without a text bank, then update the text.
             // Otherwise, check to see if this text's bank matches the one slated for update.

@@ -35,8 +35,8 @@ namespace AltSalt.Maestro.Logic.Action
         {
             this.priority = priority;
         }
-        
-        public abstract void SyncEditorActionHeadings();
+
+        public virtual void SyncEditorActionHeadings() { }
 
         public abstract void PerformAction(GameObject callingObject);
     }

@@ -12,9 +12,9 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class ConditionResponseTrigger : ActionData, IClearHiddenValues, ISyncUnityEventHeadings
+    public class ConditionResponseActionData : ActionData, IClearHiddenValues, ISyncUnityEventHeadings
     {
-        protected override string title => nameof(ConditionResponseTrigger);
+        protected override string title => nameof(ConditionResponseActionData);
 
         private GameObject _parentObject;
 
@@ -121,7 +121,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         [PropertySpace]
         
-        public ConditionResponseTrigger(int priority) : base(priority) { }
+        public ConditionResponseActionData(int priority) : base(priority) { }
 
         public override void SyncEditorActionHeadings()
         {

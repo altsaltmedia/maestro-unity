@@ -5,9 +5,9 @@ using UnityEngine;
 namespace AltSalt.Maestro.Logic.Action
 {
     [Serializable]
-    public class BoolAction : ActionData
+    public class BoolActionData : ActionData
     {
-        protected override string title => nameof(BoolAction);
+        protected override string title => nameof(BoolActionData);
 
         [SerializeField]
         [HideReferenceObjectPicker]
@@ -50,7 +50,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         private BoolVariable targetVariable => _targetVariable;
 
-        public BoolAction(int priority) : base(priority) { }
+        public BoolActionData(int priority) : base(priority) { }
 
         public override void SyncEditorActionHeadings()
         {

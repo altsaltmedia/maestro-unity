@@ -4,21 +4,37 @@ using AltSalt.Maestro.Logic.ConditionResponse;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Logic.Action
 {
     [Serializable]
     public class ActionTrigger : ISerializationCallbackReceiver
     {
+        [Required]
+        [SerializeField]
+        [ReadOnly]
+        private AppSettings _appSettings;
+        
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
+
         [ValueDropdown(nameof(boolValueList))]
         [SerializeField]
-        private bool _triggerOnStart = true;
+        [PropertySpace]
+        private bool _triggerOnStart = false;
 
-        public bool triggerOnStart
-        {
-            get => _triggerOnStart;
-            set => _triggerOnStart = value;
-        }
+        public bool triggerOnStart => _triggerOnStart;
 
         private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
             {"YES", true },
@@ -33,32 +49,34 @@ namespace AltSalt.Maestro.Logic.Action
         private List<ActionData> _actionData = new List<ActionData>();
 
         private List<ActionData> actionData => _actionData;
-
-        [SerializeField]
-        [HideInInspector]
-        private List<BoolAction> _boolActions = new List<BoolAction>();
-
-        private List<BoolAction> boolActions => _boolActions;
         
+        [FormerlySerializedAs("_eventActions")]
         [SerializeField]
         [HideInInspector]
-        private List<EventAction> _eventActions = new List<EventAction>();
+        private List<GenericActionData> _genericActions = new List<GenericActionData>();
 
-        private List<EventAction> eventActions => _eventActions;
+        private List<GenericActionData> genericActions => _genericActions;
+
+        [SerializeField]
+        [HideInInspector]
+        private List<BoolActionData> _boolActions = new List<BoolActionData>();
+
+        private List<BoolActionData> boolActions => _boolActions;
+
+        [SerializeField]
+        [HideInInspector]
+        private List<SimpleEventTriggerActionData> _simpleEventTriggerActions = new List<SimpleEventTriggerActionData>();
+
+        private List<SimpleEventTriggerActionData> simpleEventTriggerActions => _simpleEventTriggerActions;
         
+        [FormerlySerializedAs("_conditionResponseTriggers")]
         [SerializeField]
         [HideInInspector]
-        private List<SimpleEventTriggerAction> _simpleEventTriggerActions = new List<SimpleEventTriggerAction>();
+        private List<ConditionResponseActionData> _conditionResponseActions = new List<ConditionResponseActionData>();
 
-        private List<SimpleEventTriggerAction> simpleEventTriggerActions => _simpleEventTriggerActions;
-        
-        [SerializeField]
-        [HideInInspector]
-        private List<ConditionResponseTrigger> _conditionResponseTriggers = new List<ConditionResponseTrigger>();
+        private List<ConditionResponseActionData> conditionResponseActions => _conditionResponseActions;
 
-        private List<ConditionResponseTrigger> conditionResponseTriggers => _conditionResponseTriggers;
-
-        private enum ActionType { Bool, Float, Int, Event, SimpleEventTrigger, ConditionResponseTrigger }
+        private enum ActionType { Generic, Bool, Float, Int, SimpleEventTrigger, ConditionResponse }
 
         [SerializeField]
         [PropertySpace]
@@ -72,35 +90,35 @@ namespace AltSalt.Maestro.Logic.Action
         {
             switch (actionType) {
 
+                case ActionType.Generic:
+                {
+                    var action = new GenericActionData(actionData.Count + 1);
+                    actionData.Add(action);
+                    genericActions.Add(action);
+                    break;
+                }
+                
                 case ActionType.Bool:
                 {
-                    var action = new BoolAction(actionData.Count + 1);
+                    var action = new BoolActionData(actionData.Count + 1);
                     actionData.Add(action);
                     boolActions.Add(action);
                     break;
                 }
 
-                case ActionType.Event:
-                {
-                    var action = new EventAction(actionData.Count + 1);
-                    actionData.Add(action);
-                    eventActions.Add(action);
-                    break;
-                }
-                
                 case ActionType.SimpleEventTrigger:
                 {
-                    var action = new SimpleEventTriggerAction(actionData.Count + 1);
+                    var action = new SimpleEventTriggerActionData(actionData.Count + 1);
                     actionData.Add(action);
                     simpleEventTriggerActions.Add(action);
                     break;
                 }
                 
-                case ActionType.ConditionResponseTrigger:
+                case ActionType.ConditionResponse:
                 {
-                    var action = new ConditionResponseTrigger(actionData.Count + 1);
+                    var action = new ConditionResponseActionData(actionData.Count + 1);
                     actionData.Add(action);
-                    conditionResponseTriggers.Add(action);
+                    conditionResponseActions.Add(action);
                     break;
                 }
             }
@@ -122,20 +140,20 @@ namespace AltSalt.Maestro.Logic.Action
 
         public void CallSyncComplexSubheadings(UnityEngine.Object parentObject, SerializedProperty serializedActionTrigger)
         {
-            for (int i = 0; i < conditionResponseTriggers.Count; i++) {
-                conditionResponseTriggers[i].CallSyncConditionHeadings(parentObject);
+            for (int i = 0; i < conditionResponseActions.Count; i++) {
+                conditionResponseActions[i].CallSyncConditionHeadings(parentObject);
                 SerializedProperty serializedActionData = serializedActionTrigger
-                    .FindPropertyRelative(nameof(_conditionResponseTriggers))
+                    .FindPropertyRelative(nameof(_conditionResponseActions))
                     .GetArrayElementAtIndex(i);
-                (conditionResponseTriggers[i] as ISyncUnityEventHeadings).SyncUnityEventHeadings(serializedActionData);
+                (conditionResponseActions[i] as ISyncUnityEventHeadings).SyncUnityEventHeadings(serializedActionData);
             }
             
-//            for (int i = 0; i < eventActions.Count; i++) {
-//                SerializedProperty serializedActionData = serializedActionTrigger
-//                    .FindPropertyRelative(nameof(_eventActions))
-//                    .GetArrayElementAtIndex(i);
-//                (eventActions[i] as ISyncUnityEventHeadings).SyncUnityEventHeadings(serializedActionData);
-//            }
+            for (int i = 0; i < genericActions.Count; i++) {
+                SerializedProperty serializedActionData = serializedActionTrigger
+                    .FindPropertyRelative(nameof(_genericActions))
+                    .GetArrayElementAtIndex(i);
+                (genericActions[i] as ISyncUnityEventHeadings).SyncUnityEventHeadings(serializedActionData);
+            }
         }
 
         private List<ActionData> UpdateActionLists()
@@ -152,9 +170,9 @@ namespace AltSalt.Maestro.Logic.Action
             List<ActionData> sortedActionData = new List<ActionData>();
             
             sortedActionData.AddRange(boolActions);
-            sortedActionData.AddRange(eventActions);
+            sortedActionData.AddRange(genericActions);
             sortedActionData.AddRange(simpleEventTriggerActions);
-            sortedActionData.AddRange(conditionResponseTriggers);
+            sortedActionData.AddRange(conditionResponseActions);
             
             sortedActionData.Sort((x, y) => x.priority.CompareTo(y.priority) );
             
@@ -164,9 +182,9 @@ namespace AltSalt.Maestro.Logic.Action
         public void OnBeforeSerialize()
         {
             boolActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            eventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            genericActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             simpleEventTriggerActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            conditionResponseTriggers.Sort((x, y) => x.priority.CompareTo(y.priority));
+            conditionResponseActions.Sort((x, y) => x.priority.CompareTo(y.priority));
         }
     }
 }

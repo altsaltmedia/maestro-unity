@@ -27,9 +27,9 @@ namespace AltSalt.Maestro.Sequencing
 
         public void TriggerInputActionComplete()
         {
-            EventPayload eventPayload = EventPayload.CreateInstance();
-            eventPayload.Set(DataType.stringType, this.gameObject.name);
-            inputActionComplete.RaiseEvent(this.gameObject, eventPayload);
+            ComplexPayload complexPayload = ComplexPayload.CreateInstance();
+            complexPayload.Set(DataType.stringType, this.gameObject.name);
+            inputActionComplete.RaiseEvent(this.gameObject, complexPayload);
         }
 
         private static bool IsPopulated(ComplexEventTrigger attribute)

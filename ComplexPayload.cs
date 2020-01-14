@@ -7,7 +7,7 @@ namespace AltSalt.Maestro
 
     [Serializable]
     [CreateAssetMenu(menuName = "AltSalt/Events/Event Payload")]
-    public class EventPayload : ScriptableObject
+    public class ComplexPayload : ScriptableObject
     {
 #if UNITY_EDITOR
         [SerializeField]
@@ -42,21 +42,21 @@ namespace AltSalt.Maestro
 
         static readonly string arrayExceptionMessage = "Discrepancy between number of keys and values";
 
-        private static EventPayload Init()
+        private static ComplexPayload Init()
         {
-            EventPayload payloadInstance = ScriptableObject.CreateInstance(typeof(EventPayload)) as EventPayload;
+            ComplexPayload payloadInstance = ScriptableObject.CreateInstance(typeof(ComplexPayload)) as ComplexPayload;
             return payloadInstance;
         }
 
-        public static EventPayload CreateInstance()
+        public static ComplexPayload CreateInstance()
         {
-            EventPayload payloadInstance = Init();
+            ComplexPayload payloadInstance = Init();
             return payloadInstance;
         }
 
-        public static EventPayload CreateInstance(object value)
+        public static ComplexPayload CreateInstance(object value)
         {
-            EventPayload payloadInstance = Init();
+            ComplexPayload payloadInstance = Init();
 
             if(value is string) {
                 payloadInstance.stringDictionary[DataType.stringType] = (string)value;
@@ -80,9 +80,9 @@ namespace AltSalt.Maestro
             return payloadInstance;
         }
 
-        public static EventPayload CreateInstance(object key, object value)
+        public static ComplexPayload CreateInstance(object key, object value)
         {
-            EventPayload payloadInstance = Init();
+            ComplexPayload payloadInstance = Init();
 
             if (value is string) {
                 payloadInstance.objectDictionary[key] = (string)value;
@@ -106,9 +106,9 @@ namespace AltSalt.Maestro
             return payloadInstance;
         }
 
-        public static EventPayload CreateInstance(object[] keys, object[] values)
+        public static ComplexPayload CreateInstance(object[] keys, object[] values)
         {
-            EventPayload payloadInstance = Init();
+            ComplexPayload payloadInstance = Init();
             if (keys.Length != values.Length) {
                 throw new Exception(arrayExceptionMessage);
             }

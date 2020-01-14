@@ -77,8 +77,8 @@ namespace AltSalt.Maestro.Logic
 
         // The first scene will always be a single load, done immediately w/o a call to
         // make a fade out first, so we have a special case for it here
-        public void LoadInitialScene(EventPayload eventPayload) {
-            sceneName = eventPayload.GetStringValue(DataType.stringType);
+        public void LoadInitialScene(ComplexPayload complexPayload) {
+            sceneName = complexPayload.GetStringValue(DataType.stringType);
             activeScene.variable.SetValue(sceneName);
             StartCoroutine(AsyncLoad(sceneName, LoadSceneMode.Single));
         }
@@ -86,11 +86,11 @@ namespace AltSalt.Maestro.Logic
 
         // Otherwise, single scene loads necessitate doing a fade out before doing the load,
         // and additive scenes are loaded immediately without a call to the fader
-        public void TriggerSceneLoad(EventPayload eventPayload) {
+        public void TriggerSceneLoad(ComplexPayload complexPayload) {
             
-            sceneName = eventPayload.GetStringValue(DataType.stringType);
+            sceneName = complexPayload.GetStringValue(DataType.stringType);
             activeScene.variable.SetValue(sceneName);
-            loadMode = eventPayload.GetBoolValue(DataType.boolType) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
+            loadMode = complexPayload.GetBoolValue(DataType.boolType) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
             if(loadMode == LoadSceneMode.Single) {
                 if (appSettings.useAddressables == true) {
@@ -144,9 +144,9 @@ namespace AltSalt.Maestro.Logic
             sceneLoadCompleted.RaiseEvent(this.gameObject);
         }
 
-        public void TriggerUnloadScene(EventPayload eventPayload)
+        public void TriggerUnloadScene(ComplexPayload complexPayload)
         {
-            string unloadSceneName = eventPayload.GetStringValue(DataType.stringType);
+            string unloadSceneName = complexPayload.GetStringValue(DataType.stringType);
             StartCoroutine(AsyncUnload(unloadSceneName));
         }
 

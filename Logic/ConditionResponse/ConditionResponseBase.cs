@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
@@ -83,6 +84,27 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         public UnityEvent response => _response;
 
+        [SerializeField]
+        [PropertyOrder(9)]
+        [ValidateInput(nameof(IsPopulated))]
+        [HideReferenceObjectPicker]
+        protected GameObjectGenericAction _action;
+
+        public GameObjectGenericAction action
+        {
+            get => _action;
+            set => _action = value;
+        }
+        
+        [SerializeField]
+        private bool _migrated = false;
+
+        private bool migrated
+        {
+            get => _migrated;
+            set => _migrated = value;
+        }
+
 #if UNITY_EDITOR
         private List<UnityEventData> _cachedEventData = new List<UnityEventData>();
 
@@ -99,7 +121,12 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         public void SyncUnityEventHeading(SerializedProperty serializedConditionResponse)
         {
-            string[] parameterNames = GetParameters(serializedConditionResponse);
+            if (migrated == false) {
+                migrated = true;
+                MigrationUtils.MigrateUnityEventList(nameof(_response), nameof(_action), serializedConditionResponse);
+            }
+            
+            string[] parameterNames = MigrationUtils.GetUnityEventParameters(serializedConditionResponse, nameof(_action));
             if (UnityEventValuesChanged(response, parameterNames, cachedEventData, out var eventData)) {
                 eventDescription = GetEventDescription(eventData);
                 cachedEventData = eventData;
@@ -138,46 +165,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             Debug.Log("[condition response] ---------");
         }
 
-        private static string[] GetParameters(SerializedProperty serializedConditionResponse)
-        {
-            SerializedProperty unityEventCallList = serializedConditionResponse
-                .FindPropertyRelative($"{nameof(_response)}.m_PersistentCalls.m_Calls");
-
-            List<string> parameterNames = new List<string>();
-            
-            for (int i = 0; i < unityEventCallList.arraySize; i++) {
-                int mode = unityEventCallList.GetArrayElementAtIndex(i).FindPropertyRelative("m_Mode").intValue;
-                SerializedProperty argumentList = unityEventCallList.GetArrayElementAtIndex(i).FindPropertyRelative("m_Arguments");
-
-                switch (mode) {
-                    case 2:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_ObjectArgument").objectReferenceValue.name);
-                        break;
-                    
-                    case 3:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_IntArgument").intValue.ToString());
-                        break;
-                    
-                    case 4:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_FloatArgument").floatValue.ToString("F"));
-                        break;
-                    
-                    case 5:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_StringArgument").stringValue);
-                        break;
-                    
-                    case 6:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_BoolArgument").boolValue.ToString());
-                        break;
-                    
-                    default:
-                        parameterNames.Add("");
-                        break;
-                }
-            }
-
-            return parameterNames.ToArray();
-        }
 
         private static bool UnityEventValuesChanged(UnityEvent unityEvent, string[] parameterNames,
             List<UnityEventData> cachedEventData, out List<UnityEventData> eventData)
@@ -235,6 +222,11 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         }
 
         protected static bool IsPopulated(UnityEvent attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+        
+        protected static bool IsPopulated(GameObjectGenericAction attribute)
         {
             return Utils.IsPopulated(attribute);
         }
