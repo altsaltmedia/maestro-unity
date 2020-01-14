@@ -25,27 +25,27 @@ namespace AltSalt.Maestro.Logic.Action
 
         public override void SyncEditorActionHeadings()
         {
-            string targets = "";
-            
-            for (int i = 0; i < eventAction.GetPersistentEventCount(); i++) {
-                if (eventAction.GetPersistentTarget(i) != null) {
-                    targets += eventAction.GetPersistentTarget(i).name;
-                    if (i < eventAction.GetPersistentEventCount() - 1) {
-                        targets += ", ";
-                    }
-                }
-            }
-
-            actionDescription = targets;
+//            string targets = "";
+//            
+//            for (int i = 0; i < eventAction.GetPersistentEventCount(); i++) {
+//                if (eventAction.GetPersistentTarget(i) != null) {
+//                    targets += eventAction.GetPersistentTarget(i).name;
+//                    if (i < eventAction.GetPersistentEventCount() - 1) {
+//                        targets += ", ";
+//                    }
+//                }
+//            }
+//
+//            actionDescription = targets;
         }
 
         public void SyncUnityEventHeading(SerializedProperty unityEventSerializedParent)
         {
-            string[] parameterNames = GetParameters(serializedConditionResponse);
-            if (UnityEventValuesChanged(response, parameterNames, cachedEventData, out var eventData)) {
-                eventDescription = GetEventDescription(eventData);
-                cachedEventData = eventData;
-            }
+//            string[] parameterNames = GetParameters(serializedConditionResponse);
+//            if (UnityEventValuesChanged(response, parameterNames, cachedEventData, out var eventData)) {
+//                eventDescription = GetEventDescription(eventData);
+//                cachedEventData = eventData;
+//            }
         }
 
         public override void PerformAction(GameObject callingObject)
