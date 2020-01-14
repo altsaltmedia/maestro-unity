@@ -2,7 +2,7 @@
 
 namespace AltSalt.Maestro
 {
-    public interface ISimpleEventListener
+    public interface ISimpleSignalListener
     {
         void OnEventRaised();
         

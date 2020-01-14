@@ -38,6 +38,7 @@ namespace AltSalt.Maestro.Logic.Action
             actionTrigger.CallSyncEditorActionHeadings();
             actionTrigger.CallSyncComplexSubheadings(this.gameObject,
                 new SerializedObject(this).FindProperty(nameof(_actionTrigger)));
+            actionTrigger.SyncFullActionDescription();
         }
 #endif
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
-    public abstract class ModifiableEditorVariable : SimpleEvent
+    public abstract class ModifiableEditorVariable : SimpleSignal
     {
         [SerializeField]
         private bool _hasDefault;

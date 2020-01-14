@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
@@ -13,99 +14,207 @@ namespace AltSalt.Maestro
     {
         [Required]
         [SerializeField]
-        ComplexEvent complexEvent;
+        [FormerlySerializedAs("complexEvent")]
+        private ComplexEvent _complexEvent;
+
+        public ComplexEvent complexEvent => _complexEvent;
 
         [SerializeField]
         [BoxGroup("String Packager")]
-        bool hasString;
+        [FormerlySerializedAs("hasString")]
+        private bool _hasString;
+
+        public bool hasString
+        {
+            get => _hasString;
+            set => _hasString = value;
+        }
 
         [SerializeField]
         [ShowIf(nameof(ShowCustomStringToggle))]
         [BoxGroup("String Packager", false)]
-        bool customStringKey;
+        [FormerlySerializedAs("customStringKey")]
+        private bool _customStringKey;
+
+        public bool customStringKey
+        {
+            get => _customStringKey;
+            set => _customStringKey = value;
+        }
 
 #if UNITY_EDITOR
         [SerializeField]
         [ShowIf(nameof(hasString))]
         [Multiline]
         [BoxGroup("String Packager")]
-        string stringDescription = "";
+        [FormerlySerializedAs("stringDescription")]
+        private string _stringDescription = "";
+
+        private string stringDescription
+        {
+            get => _stringDescription;
+            set => _stringDescription = value;
+        }
 #endif
 
         [SerializeField]
         [ShowIf(nameof(ShowStringKeys))]
         [ValidateInput(nameof(CheckStringKeys), "Keys and Values must be of equal length")]
         [BoxGroup("String Packager")]
-        List<CustomKey> stringKeys = new List<CustomKey>();
+        [FormerlySerializedAs("stringKeys")]
+        private List<CustomKey> _stringKeys = new List<CustomKey>();
+
+        public List<CustomKey> stringKeys
+        {
+            get => _stringKeys;
+            set => _stringKeys = value;
+        }
 
         [SerializeField]
         [ShowIf(nameof(hasString))]
         [ValidateInput(nameof(CheckStringValues), "Keys and Values must be of equal length")]
         [BoxGroup("String Packager")]
-        List<string> stringValues = new List<string>();
+        [FormerlySerializedAs("stringValues")]
+        private List<string> _stringValues = new List<string>();
+
+        public List<string> stringValues
+        {
+            get => _stringValues;
+            set => _stringValues = value;
+        }
 
         [PropertySpace]
 
         [SerializeField]
         [BoxGroup("Float Packager", false)]
-        bool hasFloat;
+        [FormerlySerializedAs("hasFloat")]
+        private bool _hasFloat;
+
+        public bool hasFloat
+        {
+            get => _hasFloat;
+            set => _hasFloat = value;
+        }
 
         [SerializeField]
         [ShowIf(nameof(ShowCustomFloatToggle))]
         [BoxGroup("Float Packager")]
-        bool customFloatKey;
+        [FormerlySerializedAs("customFloatKey")]
+        private bool _customFloatKey;
+
+        public bool customFloatKey
+        {
+            get => _customFloatKey;
+            set => _customFloatKey = value;
+        }
 
 #if UNITY_EDITOR
         [SerializeField]
         [ShowIf(nameof(hasFloat))]
         [Multiline]
         [BoxGroup("Float Packager")]
-        string floatDescription = "";
+        [FormerlySerializedAs("floatDescription")]
+        private string _floatDescription = "";
+
+        public string floatDescription
+        {
+            get => _floatDescription;
+            set => _floatDescription = value;
+        }
 #endif
 
         [SerializeField]
         [ShowIf(nameof(ShowFloatKeys))]
         [ValidateInput(nameof(CheckFloatKeys), "Keys and Values must be of equal length")]
         [BoxGroup("Float Packager")]
-        List<CustomKey> floatKeys = new List<CustomKey>();
+        [FormerlySerializedAs("floatKeys")]
+        private List<CustomKey> _floatKeys = new List<CustomKey>();
+
+        public List<CustomKey> floatKeys
+        {
+            get => _floatKeys;
+            set => _floatKeys = value;
+        }
 
         [SerializeField]
         [ShowIf(nameof(hasFloat))]
         [ValidateInput(nameof(CheckFloatValues), "Keys and Values must be of equal length")]
         [BoxGroup("Float Packager")]
-        List<float> floatValues = new List<float>();
+        [FormerlySerializedAs("floatValues")]
+        List<float> _floatValues = new List<float>();
+
+        public List<float> floatValues
+        {
+            get => _floatValues;
+            set => _floatValues = value;
+        }
 
         [PropertySpace]
 
         [SerializeField]
         [BoxGroup("Bool Packager", false)]
-        bool hasBool;
+        [FormerlySerializedAs("hasBool")]
+        private bool _hasBool;
+
+        public bool hasBool
+        {
+            get => _hasBool;
+            set => _hasBool = value;
+        }
 
         [SerializeField]
         [ShowIf(nameof(ShowCustomBoolToggle))]
         [BoxGroup("Bool Packager")]
-        bool customBoolKey;
+        [FormerlySerializedAs("customBoolKey")]
+        private bool _customBoolKey;
+
+        public bool customBoolKey
+        {
+            get => _customBoolKey;
+            set => _customBoolKey = value;
+        }
 
 #if UNITY_EDITOR
         [SerializeField]
         [ShowIf(nameof(hasBool))]
         [Multiline]
         [BoxGroup("Bool Packager")]
-        string boolDescription = "";
+        [FormerlySerializedAs("boolDescription")]
+        private string _boolDescription = "";
+
+        public string boolDescription
+        {
+            get => _boolDescription;
+            set => _boolDescription = value;
+        }
 #endif
 
         [SerializeField]
         [ShowIf(nameof(ShowBoolKeys))]
         [ValidateInput(nameof(CheckBoolKeys), "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
-        List<CustomKey> boolKeys = new List<CustomKey>();
+        [FormerlySerializedAs("boolKeys")]
+        private List<CustomKey> _boolKeys = new List<CustomKey>();
+
+        public List<CustomKey> boolKeys
+        {
+            get => _boolKeys;
+            set => _boolKeys = value;
+        }
 
         [SerializeField]
         [ShowIf(nameof(hasBool))]
         [ValueDropdown(nameof(boolValueList))]
         [ValidateInput(nameof(CheckBoolValues), "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
-        List<bool> boolValues = new List<bool>();
+        [FormerlySerializedAs(nameof(boolValues))]
+        private List<bool> _boolValues = new List<bool>();
+
+        public List<bool> boolValues
+        {
+            get => _boolValues;
+            set => _boolValues = value;
+        }
 
         private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
                 {"FALSE", false },
@@ -116,32 +225,67 @@ namespace AltSalt.Maestro
 
         [SerializeField]
         [BoxGroup("Scriptable Object Packager", false)]
-        bool hasScriptableObject;
+        [FormerlySerializedAs("hasScriptableObject")]
+        private bool _hasScriptableObject;
+
+        public bool hasScriptableObject
+        {
+            get => _hasScriptableObject;
+            set => _hasScriptableObject = value;
+        }
 
         [SerializeField]
         [ShowIf(nameof(ShowCustomScriptableObjectToggle))]
         [BoxGroup("Scriptable Object Packager")]
-        bool customScriptableObjectKey;
+        [FormerlySerializedAs("customScriptableObjectKey")]
+        private bool _customScriptableObjectKey;
+
+        public bool customScriptableObjectKey
+        {
+            get => _customScriptableObjectKey;
+            set => _customScriptableObjectKey = value;
+        }
 
 #if UNITY_EDITOR
         [SerializeField]
         [ShowIf(nameof(hasScriptableObject))]
         [Multiline]
         [BoxGroup("Scriptable Object Packager")]
-        string scriptableObjectDescription = "";
+        [FormerlySerializedAs("scriptableObjectDescription")]
+        private string _scriptableObjectDescription = "";
+
+        public string scriptableObjectDescription
+        {
+            get => _scriptableObjectDescription;
+            set => _scriptableObjectDescription = value;
+        }
 #endif
 
         [SerializeField]
         [ShowIf(nameof(ShowScriptableObjectKeys))]
         [ValidateInput(nameof(CheckScriptableObjectKeys), "Keys and Values must be of equal length")]
         [BoxGroup("Scriptable Object Packager")]
-        List<CustomKey> scriptableObjectKeys = new List<CustomKey>();
+        [FormerlySerializedAs("scriptableObjectKeys")]
+        private List<CustomKey> _scriptableObjectKeys = new List<CustomKey>();
+
+        public List<CustomKey> scriptableObjectKeys
+        {
+            get => _scriptableObjectKeys;
+            set => _scriptableObjectKeys = value;
+        }
 
         [SerializeField]
         [ShowIf(nameof(hasScriptableObject))]
         [ValidateInput(nameof(CheckScriptableObjectValues), "Keys and Values must be of equal length")]
         [BoxGroup("Scriptable Object Packager")]
-        List<ScriptableObject> scriptableObjectValues = new List<ScriptableObject>();
+        [FormerlySerializedAs("scriptableObjectValues")]
+        private List<ScriptableObject> _scriptableObjectValues = new List<ScriptableObject>();
+
+        public List<ScriptableObject> scriptableObjectValues
+        {
+            get => _scriptableObjectValues;
+            set => _scriptableObjectValues = value;
+        }
 
         public void RaiseEvent(GameObject caller)
         {

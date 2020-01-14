@@ -65,7 +65,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [ShowInInspector]
         [HideLabel]
         [DisplayAsString(false)]
-        [PropertySpace]
         private string _eventDescription = "No actions defined.";
         
         public string eventDescription
@@ -80,6 +79,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [SerializeField]
         [PropertyOrder(8)]
         [HideReferenceObjectPicker]
+        [ReadOnly]
         protected UnityEvent _response;
 
         public UnityEvent response => _response;
@@ -123,12 +123,12 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         {
             if (migrated == false) {
                 migrated = true;
-                MigrationUtils.MigrateUnityEventList(nameof(_response), nameof(_action), serializedConditionResponse);
+                UnityEventUtils.MigrateUnityEventList(nameof(_response), nameof(_action), serializedConditionResponse);
             }
             
-            string[] parameterNames = MigrationUtils.GetUnityEventParameters(serializedConditionResponse, nameof(_action));
-            if (UnityEventValuesChanged(response, parameterNames, cachedEventData, out var eventData)) {
-                eventDescription = GetEventDescription(eventData);
+            string[] parameterNames = UnityEventUtils.GetUnityEventParameters(serializedConditionResponse, nameof(_action));
+            if (UnityEventUtils.UnityEventValuesChanged(action, parameterNames, cachedEventData, out var eventData)) {
+                eventDescription = UnityEventUtils.ParseUnityEventDescription(eventData);
                 cachedEventData = eventData;
             }
         }
@@ -165,35 +165,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             Debug.Log("[condition response] ---------");
         }
 
-
-        private static bool UnityEventValuesChanged(UnityEvent unityEvent, string[] parameterNames,
-            List<UnityEventData> cachedEventData, out List<UnityEventData> eventData)
-        {
-            
-            eventData = UnityEventData.GetUnityEventData(unityEvent, parameterNames);
-            var addedItems = eventData.Except(cachedEventData);
-
-            return addedItems.Any();
-        }
-
-        private static string GetEventDescription(List<UnityEventData> eventData)
-        {
-            string eventDescription = "";
-
-            for (int i = 0; i < eventData.Count; i++) {
-                eventDescription += eventData[i].targetName;
-                if (string.IsNullOrEmpty(eventData[i].methdodName) == false) {
-                    eventDescription += $" > {eventData[i].methdodName}";
-                    eventDescription += $" ({eventData[i].parameterName})";
-                }
-
-                if (i < eventData.Count - 1) {
-                    eventDescription += "\n";
-                }
-            }
-            
-            return eventDescription;
-        }
 
         private static string GetObjectScene(object sourceObject)
         {

@@ -253,7 +253,7 @@ namespace AltSalt.Maestro
             return floatVariable;
         }
         
-        public FloatVariable SetToDefaultValue(GameObject callingObject, V2Variable sourceValue)
+        public FloatVariable SetToDefaultValue(GameObject callingObject)
         {
             if (useConstant == true) {
                 LogDefaultChangeError(callingObject);
@@ -262,7 +262,7 @@ namespace AltSalt.Maestro
 
             FloatVariable floatVariable = GetVariable(callingObject);
             floatVariable.StoreCaller(callingObject);
-            floatVariable.SetToSquareMagnitude(sourceValue);
+            floatVariable.SetToDefaultValue();
             return floatVariable;
         }
 

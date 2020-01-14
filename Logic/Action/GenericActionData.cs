@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.Events;
 namespace AltSalt.Maestro.Logic.Action
 {
     [Serializable]
-    public class GenericActionData : ActionData
+    public class GenericActionData : ActionData, ISyncUnityEventHeadings
     {
         protected override string title => nameof(GenericActionData);
 
@@ -22,6 +23,21 @@ namespace AltSalt.Maestro.Logic.Action
         }
 
         public GenericActionData(int priority) : base(priority) {}
+
+        private List<UnityEventData> _cachedEventData = new List<UnityEventData>();
+
+        private List<UnityEventData> cachedEventData
+        {
+            get
+            {
+                if (_cachedEventData == null) {
+                    _cachedEventData = new List<UnityEventData>();
+                }
+
+                return _cachedEventData;
+            }
+            set => _cachedEventData = value;
+        }
 
         public override void SyncEditorActionHeadings()
         {
@@ -39,13 +55,22 @@ namespace AltSalt.Maestro.Logic.Action
 //            actionDescription = targets;
         }
 
-        public void SyncUnityEventHeading(SerializedProperty unityEventSerializedParent)
+        public void SyncUnityEventHeadings(SerializedProperty unityEventSerializedParent)
         {
-//            string[] parameterNames = GetParameters(serializedConditionResponse);
-//            if (UnityEventValuesChanged(response, parameterNames, cachedEventData, out var eventData)) {
-//                eventDescription = GetEventDescription(eventData);
-//                cachedEventData = eventData;
-//            }
+            string newDescription = "";
+            
+            string[] parameterNames = UnityEventUtils.GetUnityEventParameters(unityEventSerializedParent, nameof(_action));
+            if (UnityEventUtils.UnityEventValuesChanged(action, parameterNames, cachedEventData, out var eventData)) {
+                newDescription = UnityEventUtils.ParseUnityEventDescription(eventData);
+                cachedEventData = eventData;
+            }
+
+            if (string.IsNullOrEmpty(newDescription) == true) {
+                actionDescription = "No generic events populated";
+                return;
+            }
+
+            actionDescription = newDescription;
         }
 
         public override void PerformAction(GameObject callingObject)

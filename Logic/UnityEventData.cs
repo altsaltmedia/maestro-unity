@@ -44,14 +44,14 @@ namespace AltSalt.Maestro.Logic
             this.methdodName = methdodName;
         }
 
-        public static List<UnityEventData> GetUnityEventData(UnityEvent unityEvent, string[] parameterNames = null)
+        public static List<UnityEventData> GetUnityEventData(GameObjectGenericAction genericAction, string[] parameterNames = null)
         {
             List<UnityEventData> eventData = new List<UnityEventData>();
             
-            for (int i = 0; i < unityEvent.GetPersistentEventCount(); i++) {
-                if (unityEvent.GetPersistentTarget(i) != null) {
-                    var data = new UnityEventData(unityEvent.GetPersistentTarget(i).GetInstanceID(),
-                        unityEvent.GetPersistentTarget(i).name, unityEvent.GetPersistentMethodName(i));
+            for (int i = 0; i < genericAction.GetPersistentEventCount(); i++) {
+                if (genericAction.GetPersistentTarget(i) != null) {
+                    var data = new UnityEventData(genericAction.GetPersistentTarget(i).GetInstanceID(),
+                        genericAction.GetPersistentTarget(i).name, genericAction.GetPersistentMethodName(i));
                     if (parameterNames != null) {
                         data.parameterName = parameterNames[i];
                     } 

@@ -5,14 +5,14 @@ using UnityEngine.Events;
 namespace AltSalt.Maestro
 {
     [ExecuteInEditMode]
-    public class SimpleEventListener : ISimpleEventListener
+    public class SimpleSignalListener : ISimpleSignalListener
     {
         public delegate void OnTargetEventDelegate();
         public event OnTargetEventDelegate OnTargetEventExecuted = () => { };
 
-        private SimpleEvent _targetEvent;
+        private SimpleSignal _targetEvent;
 
-        private SimpleEvent targetEvent
+        private SimpleSignal targetEvent
         {
             get => _targetEvent;
             set => _targetEvent = value;
@@ -49,7 +49,7 @@ namespace AltSalt.Maestro
             set => _sceneName = value;
         }
 
-        public SimpleEventListener(SimpleEvent eventToRegister, GameObject parentObject)
+        public SimpleSignalListener(SimpleEvent eventToRegister, GameObject parentObject)
         {
             this.targetEvent = eventToRegister;
             this.parentGameObject = parentObject;
@@ -57,7 +57,7 @@ namespace AltSalt.Maestro
             this.targetEvent.RegisterListener(this);
         }
 
-        public SimpleEventListener(SimpleEvent eventToRegister, UnityEngine.Object parentObject, string sceneName)
+        public SimpleSignalListener(SimpleEvent eventToRegister, UnityEngine.Object parentObject, string sceneName)
         {
             this.targetEvent = eventToRegister;
             this.parentObject = parentObject;

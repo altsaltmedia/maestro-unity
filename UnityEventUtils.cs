@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using AltSalt.Maestro.Logic;
 using UnityEditor;
 
 namespace AltSalt.Maestro
 {
-    public static class MigrationUtils
+    public static class UnityEventUtils
     {
         public static string[] GetUnityEventParameters(SerializedObject eventSourceObject, string eventListName)
         {
@@ -134,6 +137,35 @@ namespace AltSalt.Maestro
             }
 
             return newCallList;
+        }
+
+        public static bool UnityEventValuesChanged(GameObjectGenericAction genericAction, string[] parameterNames,
+            List<UnityEventData> cachedEventData, out List<UnityEventData> eventData)
+        {
+            
+            eventData = UnityEventData.GetUnityEventData(genericAction, parameterNames);
+            var addedItems = eventData.Except(cachedEventData);
+
+            return addedItems.Any();
+        }
+
+        public static string ParseUnityEventDescription(List<UnityEventData> eventData)
+        {
+            string eventDescription = "";
+
+            for (int i = 0; i < eventData.Count; i++) {
+                eventDescription += eventData[i].targetName;
+                if (String.IsNullOrEmpty(eventData[i].methdodName) == false) {
+                    eventDescription += $" > {eventData[i].methdodName}";
+                    eventDescription += $" ({eventData[i].parameterName})";
+                }
+
+                if (i < eventData.Count - 1) {
+                    eventDescription += "\n";
+                }
+            }
+            
+            return eventDescription;
         }
     }
 }

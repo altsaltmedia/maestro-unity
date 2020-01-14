@@ -7,8 +7,8 @@ namespace AltSalt.Maestro.Logic.Action
     [Serializable]
     public abstract class ActionData
     {
-        [HideInInspector]
         [SerializeField]
+        [HideInInspector]
         private int _priority;
 
         public int priority
@@ -23,9 +23,10 @@ namespace AltSalt.Maestro.Logic.Action
         [ShowInInspector]
         [HideLabel]
         [DisplayAsString(false)]
+        [PropertySpace(SpaceBefore = 0, SpaceAfter = 10)]
         private string _actionDescription = "";
 
-        protected string actionDescription
+        public string actionDescription
         {
             get => _actionDescription;
             set => _actionDescription = value;

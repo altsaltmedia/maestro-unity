@@ -50,7 +50,7 @@ namespace AltSalt.Maestro.Layout
         private void OnEnable()
         {
             if (migrated == false) {
-                MigrationUtils.MigrateUnityEventList(nameof(unityEvent), 
+                UnityEventUtils.MigrateUnityEventList(nameof(unityEvent), 
                     nameof(_action), new SerializedObject(this));
             }
         }

@@ -31,7 +31,6 @@ namespace AltSalt.Maestro.Logic.Action
 
         [ValueDropdown(nameof(boolValueList))]
         [SerializeField]
-        [PropertySpace]
         private bool _triggerOnStart = false;
 
         public bool triggerOnStart => _triggerOnStart;
@@ -41,11 +40,24 @@ namespace AltSalt.Maestro.Logic.Action
             {"NO", false }
         };
         
+        [HideLabel]
+        [DisplayAsString(false)]
+        [ShowInInspector]
+        [Title("Description")]
+        [PropertySpace(SpaceBefore = 0, SpaceAfter = 15)]
+        private string _fullActionDescription;
+
+        private string fullActionDescription
+        {
+            get => _fullActionDescription;
+            set => _fullActionDescription = value;
+        }
+
         [ShowInInspector]
         [OnValueChanged(nameof(UpdateActionLists))]
         [HideReferenceObjectPicker]
-        [InlineProperty]
         [ListDrawerSettings(HideAddButton = true, Expanded = true)]
+        [HideDuplicateReferenceBox]
         private List<ActionData> _actionData = new List<ActionData>();
 
         private List<ActionData> actionData => _actionData;
@@ -62,12 +74,19 @@ namespace AltSalt.Maestro.Logic.Action
         private List<BoolActionData> _boolActions = new List<BoolActionData>();
 
         private List<BoolActionData> boolActions => _boolActions;
-
+        
         [SerializeField]
         [HideInInspector]
-        private List<SimpleEventTriggerActionData> _simpleEventTriggerActions = new List<SimpleEventTriggerActionData>();
+        private List<FloatActionData> _floatActions = new List<FloatActionData>();
 
-        private List<SimpleEventTriggerActionData> simpleEventTriggerActions => _simpleEventTriggerActions;
+        private List<FloatActionData> floatActions => _floatActions;
+        
+        [SerializeField]
+        [HideInInspector]
+        private List<IntActionData> _intActions = new List<IntActionData>();
+
+        private List<IntActionData> intActions => _intActions;
+
         
         [FormerlySerializedAs("_conditionResponseTriggers")]
         [SerializeField]
@@ -75,8 +94,29 @@ namespace AltSalt.Maestro.Logic.Action
         private List<ConditionResponseActionData> _conditionResponseActions = new List<ConditionResponseActionData>();
 
         private List<ConditionResponseActionData> conditionResponseActions => _conditionResponseActions;
+        
+        [SerializeField]
+        [HideInInspector]
+        private List<SimpleEventTriggerActionData> _simpleEventTriggerActions = new List<SimpleEventTriggerActionData>();
 
-        private enum ActionType { Generic, Bool, Float, Int, SimpleEventTrigger, ConditionResponse }
+        private List<SimpleEventTriggerActionData> simpleEventTriggerActions => _simpleEventTriggerActions;
+        
+        [SerializeField]
+        [HideInInspector]
+        private List<ComplexEventPackagerActionData> _complexEventPackagerActions = new List<ComplexEventPackagerActionData>();
+
+        private List<ComplexEventPackagerActionData> complexEventPackagerActions => _complexEventPackagerActions;
+
+        private enum ActionType
+        {
+            Generic,
+            Bool,
+            Float,
+            Int,
+            ConditionResponse,
+            SimpleEventTrigger,
+            ComplexEventPackager
+        }
 
         [SerializeField]
         [PropertySpace]
@@ -105,7 +145,32 @@ namespace AltSalt.Maestro.Logic.Action
                     boolActions.Add(action);
                     break;
                 }
+                
+                
+                case ActionType.Float:
+                {
+                    var action = new FloatActionData(actionData.Count + 1);
+                    actionData.Add(action);
+                    floatActions.Add(action);
+                    break;
+                }
+                
+                case ActionType.Int:
+                {
+                    var action = new IntActionData(actionData.Count + 1);
+                    actionData.Add(action);
+                    intActions.Add(action);
+                    break;
+                }
 
+                case ActionType.ConditionResponse:
+                {
+                    var action = new ConditionResponseActionData(actionData.Count + 1);
+                    actionData.Add(action);
+                    conditionResponseActions.Add(action);
+                    break;
+                }
+                
                 case ActionType.SimpleEventTrigger:
                 {
                     var action = new SimpleEventTriggerActionData(actionData.Count + 1);
@@ -114,16 +179,17 @@ namespace AltSalt.Maestro.Logic.Action
                     break;
                 }
                 
-                case ActionType.ConditionResponse:
+                case ActionType.ComplexEventPackager:
                 {
-                    var action = new ConditionResponseActionData(actionData.Count + 1);
+                    var action = new ComplexEventPackagerActionData(actionData.Count + 1);
                     actionData.Add(action);
-                    conditionResponseActions.Add(action);
+                    complexEventPackagerActions.Add(action);
                     break;
                 }
             }
         }
 
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         public void PerformActions(GameObject callingObject)
         {
             for (int i = 0; i < actionData.Count; i++) {
@@ -135,6 +201,13 @@ namespace AltSalt.Maestro.Logic.Action
         {
             for (int i = 0; i < actionData.Count; i++) {
                 actionData[i].SyncEditorActionHeadings();
+                
+                if (string.IsNullOrEmpty(actionData[i].actionDescription) == false) {
+                    fullActionDescription += actionData[i].actionDescription;
+                    if (i < actionData.Count - 1) {
+                        fullActionDescription += "\n\n";
+                    }
+                }
             }
         }
 
@@ -156,35 +229,79 @@ namespace AltSalt.Maestro.Logic.Action
             }
         }
 
+        public void SyncFullActionDescription()
+        {
+            fullActionDescription = "";
+            
+            for (int i = 0; i < actionData.Count; i++) {
+                if (string.IsNullOrEmpty(actionData[i].actionDescription) == false) {
+                    fullActionDescription += actionData[i].actionDescription;
+                    if (i < actionData.Count - 1) {
+                        fullActionDescription += "\n\n";
+                    }
+                }
+            }
+        }
+
+        // Called whenever an item as added or removed from our ActionData list
         private List<ActionData> UpdateActionLists()
         {
+            // In the cae of removal, we need to sync our serialized lists with
+            // the ActionData list. Here, we get the priorities, which double
+            // as unique identifiers for this use case
+            List<int> actionDataIds = new List<int>();
+            actionDataIds.AddRange(actionData.ConvertAll(x => x.priority));
+            
+            // Define a predicate to remove any item containing a priority
+            // that is not defined in our actionDataIds list
+            Predicate<ActionData> predicate = FindActionData;
+            bool FindActionData(ActionData actionData)
+            {
+                return actionDataIds.Contains(actionData.priority) == false;
+            }
+
+            // Loop through our serialized lists using the predicate
+            genericActions.RemoveAll(predicate);
+            boolActions.RemoveAll(predicate);
+            floatActions.RemoveAll(predicate);
+            intActions.RemoveAll(predicate);
+            conditionResponseActions.RemoveAll(predicate);
+            simpleEventTriggerActions.RemoveAll(predicate);
+            complexEventPackagerActions.RemoveAll(predicate);
+            
+            // Update priorities for all items based on their order
+            // of appearance in the editor
             for (int i = 0; i < actionData.Count; i++) {
                 actionData[i].priority = i + 1;
             }
-
+            
             return actionData;
         }
 
         public void OnAfterDeserialize()
         {
-            List<ActionData> sortedActionData = new List<ActionData>();
+            actionData.Clear();
             
-            sortedActionData.AddRange(boolActions);
-            sortedActionData.AddRange(genericActions);
-            sortedActionData.AddRange(simpleEventTriggerActions);
-            sortedActionData.AddRange(conditionResponseActions);
+            actionData.AddRange(genericActions);
+            actionData.AddRange(boolActions);
+            actionData.AddRange(floatActions);
+            actionData.AddRange(intActions);
+            actionData.AddRange(conditionResponseActions);
+            actionData.AddRange(simpleEventTriggerActions);
+            actionData.AddRange(complexEventPackagerActions);
             
-            sortedActionData.Sort((x, y) => x.priority.CompareTo(y.priority) );
-            
-            actionData.AddRange(sortedActionData);
+            actionData.Sort((x, y) => x.priority.CompareTo(y.priority) );
         }
 
         public void OnBeforeSerialize()
         {
-            boolActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             genericActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            simpleEventTriggerActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            boolActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            floatActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            intActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             conditionResponseActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            simpleEventTriggerActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            complexEventPackagerActions.Sort((x, y) => x.priority.CompareTo(y.priority));
         }
     }
 }

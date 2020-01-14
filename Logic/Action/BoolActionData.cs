@@ -27,7 +27,6 @@ namespace AltSalt.Maestro.Logic.Action
         }
         
         [SerializeField]
-        [HideIf(nameof(usePersistentVariable))]
         private bool _usePersistentVariable;
 
         protected bool usePersistentVariable
@@ -55,21 +54,42 @@ namespace AltSalt.Maestro.Logic.Action
         public override void SyncEditorActionHeadings()
         {
             if (string.IsNullOrEmpty(boolReference.referenceName) == false) {
-                actionDescription = boolReference.referenceName + " - ";
-                if (boolActionType == BoolActionType.SetValue) {
-                    actionDescription += $"{BoolActionType.SetValue} ({targetValue}) \n";
+                actionDescription = boolReference.referenceName + " > ";
+                if (boolActionType == BoolActionType.Toggle) {
+                    actionDescription += $"{BoolActionType.Toggle} ()";
                 }
                 else {
-                    actionDescription += $"{BoolActionType.Toggle} () \n";
+                    actionDescription += GetSetValueDescription();
                 }
             }
             else {
-                actionDescription = "Inactive - please populate a bool reference. \n";
+                actionDescription = "Inactive - please populate a bool reference.";
             }
+        }
+
+        private string GetSetValueDescription()
+        {
+            string setValueDescription = BoolActionType.SetValue.ToString();
+
+            if (usePersistentVariable == true) {
+
+                if (targetVariable != null) {
+                    return setValueDescription += $" ({targetVariable.name})";
+                }
+
+                return setValueDescription += $" (No bool variable populated)";
+            }
+            
+            return setValueDescription += $" ({targetValue})";
         }
 
         public override void PerformAction(GameObject callingObject)
         {
+            if (CanPerformAction(callingObject) == false) {
+                Debug.Log($"Required variable(s) not specified in {title}, canceling operation", callingObject);
+                return;
+            }
+
             switch (boolActionType) {
                 
                 case BoolActionType.SetValue:
@@ -90,6 +110,19 @@ namespace AltSalt.Maestro.Logic.Action
                     }
                     break;
             }
+        }
+
+        private bool CanPerformAction(GameObject callingObject)
+        {
+            if (boolReference.GetVariable(callingObject) == null) {
+                return false;
+            }
+            
+            if (usePersistentVariable == true && targetVariable == null) {
+                return false;
+            }
+
+            return true;
         }
     }
 }

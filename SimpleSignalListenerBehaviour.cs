@@ -9,19 +9,21 @@ namespace AltSalt.Maestro
     #if UNITY_EDITOR
     [ExecuteInEditMode]
     #endif
-    public class SimpleEventListenerBehaviour : MonoBehaviour, ISimpleEventListener, ISkipRegistration
+    public class SimpleSignalListenerBehaviour : MonoBehaviour, ISimpleSignalListener, ISkipRegistration
     {
         [Required]
-        [OnValueChanged(nameof(OnEnable))]
         [SerializeField]
+        [OnValueChanged(nameof(OnEnable))]
         [FormerlySerializedAs("Event")]
-        private SimpleEvent _simpleEvent;
+        [FormerlySerializedAs("_simpleEvent")]
+        private SimpleSignal _simpleSignal;
 
-        private SimpleEvent simpleEvent => _simpleEvent;
+        private SimpleSignal simpleSignal => _simpleSignal;
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
         [FormerlySerializedAs("Response")]
+        [ReadOnly]
         private UnityEvent _response;
 
         private UnityEvent response => _response;
@@ -30,11 +32,7 @@ namespace AltSalt.Maestro
         [ValidateInput(nameof(IsPopulated))]
         protected GameObjectGenericAction _action;
 
-        public GameObjectGenericAction action
-        {
-            get => _action;
-            set => _action = value;
-        }
+        private GameObjectGenericAction action => _action;
 
         [SerializeField]
         [InfoBox("Specifies whether this dependency should be recorded when the RegisterDependencies tool is used.")]
@@ -58,22 +56,22 @@ namespace AltSalt.Maestro
 
         private void OnEnable()
         {
-            if(simpleEvent != null) {
-                simpleEvent.RegisterListener(this);
+            if(simpleSignal != null) {
+                simpleSignal.RegisterListener(this);
             } else {
                 Debug.LogWarning("Please set an event for SimpleEventListenerBehaviour on " + this.name, this.gameObject);
             }
 
             if (migrated == false) {
-                MigrationUtils.MigrateUnityEventList(nameof(_response), nameof(_action), 
+                UnityEventUtils.MigrateUnityEventList(nameof(_response), nameof(_action), 
                     new SerializedObject(this));
             }
         }
 
 		private void OnDisable()
 		{
-            if (simpleEvent != null) {
-                simpleEvent.UnregisterListener(this);
+            if (simpleSignal != null) {
+                simpleSignal.UnregisterListener(this);
             }
 		}
 

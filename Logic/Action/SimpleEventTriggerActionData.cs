@@ -28,7 +28,7 @@ namespace AltSalt.Maestro.Logic.Action
         public override void SyncEditorActionHeadings()
         {
             if (string.IsNullOrEmpty(simpleEventTrigger.referenceName) == false) {
-                actionDescription = $"Trigger {simpleEventTrigger.referenceName} \n";
+                actionDescription = $"Trigger {simpleEventTrigger.referenceName}";
             }
             else {
                 actionDescription = "Empty simple event trigger";
@@ -38,7 +38,7 @@ namespace AltSalt.Maestro.Logic.Action
         public IEnumerable<Type> GetFilteredTypeList()
         {
             List<Type> typeList = new List<Type>();
-            typeList.Add(typeof(ISimpleEventListener));
+            typeList.Add(typeof(ISimpleSignalListener));
             return typeList;
         }
     }

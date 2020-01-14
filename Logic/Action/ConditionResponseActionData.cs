@@ -154,17 +154,23 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
         }
 
-        private string GetHeaderConditionDescription(List<ConditionResponseBase> conditionResponseList)
+        private static string GetHeaderConditionDescription(List<ConditionResponseBase> conditionResponseList)
         {
-            string headerDescription = "";
+            string actionDescription = "";
             
             for (int i = 0; i < conditionResponseList.Count; i++) {
-                headerDescription += conditionResponseList[i].conditionEventTitle + "\n    ";
-                headerDescription += conditionResponseList[i].eventDescription.Replace("\n", "\n" + "    ");;
-                headerDescription += "\n\n";
+                actionDescription += conditionResponseList[i].conditionEventTitle + "\n    ";
+                actionDescription += conditionResponseList[i].eventDescription.Replace("\n", "\n" + "    ");;
+                if (i < conditionResponseList.Count - 1) {
+                    actionDescription += "\n\n";
+                }
             }
 
-            return headerDescription;
+            if (string.IsNullOrEmpty(actionDescription)) {
+                return "Please populate the condition response.";
+            }
+            
+            return actionDescription;
         }
 
         public override void PerformAction(GameObject callingObject)
