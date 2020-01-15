@@ -27,7 +27,7 @@ namespace AltSalt.Maestro.Logic.Action
             SetToSquareMagnitude,
             SetToDefaultValue
         }
-
+        
         [SerializeField]
         private FloatActionType _floatActionType;
 

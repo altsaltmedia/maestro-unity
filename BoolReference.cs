@@ -33,6 +33,7 @@ namespace AltSalt.Maestro
         [FormerlySerializedAs("Variable")]
         [SerializeField]
         [OnValueChanged(nameof(UpdateReferenceName))]
+        [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private BoolVariable _variable;
 
         public BoolVariable GetVariable(Object callingObject)

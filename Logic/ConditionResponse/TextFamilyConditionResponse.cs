@@ -17,14 +17,10 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [SerializeField]
         [Title("Text Family Reference")]
         [HideReferenceObjectPicker]
-        private TextFamily _textFamilyReference;
+        private TextFamilyReference _textFamilyReference;
 
-        private TextFamily textFamilyReference
-        {
-            get => _textFamilyReference;
-            set => _textFamilyReference = value;
-        }
-        
+        private TextFamily textFamilyReference => _textFamilyReference.GetVariable(this.parentObject);
+
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         [Title("Text Family Status Condition")]

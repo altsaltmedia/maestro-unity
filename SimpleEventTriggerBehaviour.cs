@@ -2,13 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
     public class SimpleEventTriggerBehaviour : MonoBehaviour
     {
         [SerializeField]
-        List<SimpleEventTrigger> simpleEventTriggers = new List<SimpleEventTrigger>();
+        [FormerlySerializedAs("simpleEventTriggers")]
+        private List<SimpleEventTrigger> _simpleEventTriggers = new List<SimpleEventTrigger>();
+
+        private List<SimpleEventTrigger> simpleEventTriggers
+        {
+            get => _simpleEventTriggers;
+            set => _simpleEventTriggers = value;
+        }
 
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         [InfoBox("Raises event")]
@@ -24,7 +32,7 @@ namespace AltSalt.Maestro
         public void ActivateTrigger(SimpleEvent targetEvent)
         {
             for (int i = 0; i < simpleEventTriggers.Count; i++) {
-                if(simpleEventTriggers[i].simpleEvent == targetEvent) {
+                if(simpleEventTriggers[i].GetVariable(this.gameObject) == targetEvent) {
                     simpleEventTriggers[i].RaiseEvent(this.gameObject);
                     break;
                 }

@@ -65,7 +65,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             }
         }
 
-        private static ComplexPayload ApplySwipeModifier(ComplexEventTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
+        private static ComplexPayload ApplySwipeModifier(ComplexEventManualTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
         {
             ComplexPayload complexPayload = ComplexPayload.CreateInstance();
             

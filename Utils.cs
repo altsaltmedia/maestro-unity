@@ -1491,16 +1491,16 @@ namespace AltSalt.Maestro
 
         public static bool IsPopulated(SimpleEventTrigger attribute)
         {
-            if (attribute.simpleEvent != null) {
+            if (attribute.GetVariable(attribute.parentObject) != null) {
                 return true;
             } else {
                 return false;
             }
         }
 
-        public static bool IsPopulated(ComplexEventTrigger attribute)
+        public static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
-            if (attribute.complexEvent != null) {
+            if (attribute.GetVariable(attribute.parentObject) != null) {
                 return true;
             } else {
                 return false;

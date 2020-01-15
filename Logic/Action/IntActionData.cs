@@ -26,7 +26,7 @@ namespace AltSalt.Maestro.Logic.Action
             SetToRandom,
             SetToDefaultValue
         }
-
+        
         [SerializeField]
         private IntActionType _intActionType;
 

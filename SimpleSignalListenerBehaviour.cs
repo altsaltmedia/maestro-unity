@@ -9,16 +9,20 @@ namespace AltSalt.Maestro
     #if UNITY_EDITOR
     [ExecuteInEditMode]
     #endif
-    public class SimpleSignalListenerBehaviour : MonoBehaviour, ISimpleSignalListener, ISkipRegistration
+    public class SimpleSignalListenerBehaviour : MonoBehaviour, ISimpleSignalListener, ISkipRegistration, ISerializationCallbackReceiver
     {
         [Required]
         [SerializeField]
         [OnValueChanged(nameof(OnEnable))]
         [FormerlySerializedAs("Event")]
         [FormerlySerializedAs("_simpleEvent")]
+        [ReadOnly]
         private SimpleSignal _simpleSignal;
 
-        private SimpleSignal simpleSignal => _simpleSignal;
+        [SerializeField]
+        private SimpleSignalReference _simpleSignalReference = new SimpleSignalReference();
+
+        private SimpleSignal simpleSignal => _simpleSignalReference.GetVariable(this.gameObject);
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
@@ -83,6 +87,18 @@ namespace AltSalt.Maestro
         public void LogName(string callingInfo)
         {
             Debug.Log(callingInfo + gameObject, gameObject);
+        }
+
+        public void OnAfterDeserialize()
+        {
+            if (migrated == false) {
+                _simpleSignalReference.SetVariable(_simpleSignal);
+            }
+        }
+
+        public void OnBeforeSerialize()
+        {
+            
         }
 
         private static bool IsPopulated(UnityEvent attribute)

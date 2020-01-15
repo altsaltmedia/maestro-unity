@@ -174,7 +174,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return touchController;
         }
         
-        private static Sequence ApplyMomentumModifier(ComplexEventTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
+        private static Sequence ApplyMomentumModifier(ComplexEventManualTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
         {
             ComplexPayload complexPayload = ComplexPayload.CreateInstance();
             

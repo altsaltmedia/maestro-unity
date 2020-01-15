@@ -15,14 +15,14 @@ namespace AltSalt.Maestro.Sequencing
         
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
-        private ComplexEventTrigger _requestModifyToSequence;
+        private ComplexEventManualTrigger _requestModifyToSequence;
 
-        public ComplexEventTrigger requestModifyToSequence
+        public ComplexEventManualTrigger requestModifyToSequence
         {
             get => _requestModifyToSequence;
         }
 
-        protected static bool IsPopulated(ComplexEventTrigger attribute)
+        protected static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);
         }

@@ -93,7 +93,7 @@ namespace AltSalt.Maestro
                     bool triggerLayoutChange = true;
                     string layoutNames = "";
                     for (int i = 0; i < targetTextFamily.layoutDependencies.Count; i++) {
-                        layoutNames += targetTextFamily.layoutDependencies[i].name;
+                        layoutNames += targetTextFamily.layoutDependencies[i].referenceName;
                         if (i <= targetTextFamily.layoutDependencies.Count - 2) {
                             layoutNames += ", ";
                         }
@@ -370,10 +370,10 @@ namespace AltSalt.Maestro
             bool triggerLayoutChange;
             
             if (targetStatus == true) {
-                ModifyHandler.ActivateOriginTextFamily(targetTextFamily, out triggerLayoutChange);
+                ModifyHandler.ActivateOriginTextFamily(targetTextFamily, this, out triggerLayoutChange);
             }
             else {
-                ModifyHandler.DeactivateOriginTextFamily(targetTextFamily, out triggerLayoutChange);
+                ModifyHandler.DeactivateOriginTextFamily(targetTextFamily, this, out triggerLayoutChange);
             }
 
             if (triggerLayoutChange == true) {

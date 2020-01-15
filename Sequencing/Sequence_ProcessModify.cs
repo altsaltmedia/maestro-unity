@@ -118,7 +118,7 @@ namespace AltSalt.Maestro.Sequencing
             return Utils.IsPopulated(attribute);
         }
         
-        private static bool IsPopulated(ComplexEventTrigger attribute) {
+        private static bool IsPopulated(ComplexEventManualTrigger attribute) {
             return Utils.IsPopulated(attribute);
         }
     }

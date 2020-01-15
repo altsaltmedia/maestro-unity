@@ -56,9 +56,9 @@ namespace AltSalt.Maestro
         [SerializeField]
         [FormerlySerializedAs("_responsiveElementEnable")]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _enableDynamicElement = new ComplexEventTrigger();
+        private ComplexEventManualTrigger _enableDynamicElement = new ComplexEventManualTrigger();
 
-        public ComplexEventTrigger enableDynamicElement
+        public ComplexEventManualTrigger enableDynamicElement
         {
             get => _enableDynamicElement;
             set => _enableDynamicElement = value;
@@ -67,9 +67,9 @@ namespace AltSalt.Maestro
         [SerializeField]
         [FormerlySerializedAs("_responsiveElementDisable")]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _disableDynamicElement = new ComplexEventTrigger();
+        private ComplexEventManualTrigger _disableDynamicElement = new ComplexEventManualTrigger();
 
-        public ComplexEventTrigger disableDynamicElement
+        public ComplexEventManualTrigger disableDynamicElement
         {
             get => _disableDynamicElement;
             set => _disableDynamicElement = value;
@@ -133,12 +133,12 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR
             UpdateBreakpointDependencies();
 
-            if (enableDynamicElement.complexEvent == null) {
-                enableDynamicElement.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement));
+            if (enableDynamicElement.GetVariable(directorObject) == null) {
+                enableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement)));
             }
 
-            if (disableDynamicElement.complexEvent == null) {
-                disableDynamicElement.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement));
+            if (disableDynamicElement.GetVariable(directorObject) == null) {
+                disableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement)));
             }
 #endif
             base.OnPlayableCreate(playable);
@@ -223,7 +223,7 @@ namespace AltSalt.Maestro
         }
 #endif
 
-        private static bool IsPopulated(ComplexEventTrigger attribute)
+        private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);
         }

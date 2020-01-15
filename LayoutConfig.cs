@@ -17,13 +17,9 @@ namespace AltSalt.Maestro
         private string _description;
 #endif
         [SerializeField]
-        private List<LayoutConfig> _layoutsToDisable;
+        private List<LayoutConfigReference> _layoutsToDisable;
 
-        public List<LayoutConfig> layoutsToDisable
-        {
-            get => _layoutsToDisable;
-            set => _layoutsToDisable = value;
-        }
+        public List<LayoutConfigReference> layoutsToDisable => _layoutsToDisable;
 
         [SerializeField]
         private bool _hasTextFamilyDependencies;
@@ -36,14 +32,10 @@ namespace AltSalt.Maestro
 
         [FormerlySerializedAs("supportedTextFamilies"),SerializeField]
         [ShowIf(nameof(hasTextFamilyDependencies))]
-        private List<TextFamily> _textFamilyDependencies = new List<TextFamily>();
+        private List<TextFamilyReference> _textFamilyDependencies = new List<TextFamilyReference>();
 
-        public List<TextFamily> textFamilyDependencies
-        {
-            get => _textFamilyDependencies;
-            set => _textFamilyDependencies = value;
-        }
-        
+        public List<TextFamilyReference> textFamilyDependencies => _textFamilyDependencies;
+
         [SerializeField]
         private bool _active;
 
@@ -61,7 +53,6 @@ namespace AltSalt.Maestro
             get => _priority;
             set => _priority = value;
         }
-        
         
         public IModifyConfig SetActive(bool targetStatus)
         {

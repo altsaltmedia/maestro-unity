@@ -7,18 +7,17 @@ using UnityEngine;
 namespace AltSalt.Maestro.Logic.Action
 {
     [Serializable]
-    public class SimpleEventTriggerActionData : ActionData
+    public class SimpleEventActionData : ActionData
     {
-        protected override string title => nameof(SimpleEventTriggerActionData);
+        protected override string title => nameof(SimpleEventActionData);
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        [TypeFilter(nameof(GetFilteredTypeList))]
         private SimpleEventTrigger _simpleEventTrigger;
 
         private SimpleEventTrigger simpleEventTrigger => _simpleEventTrigger;
 
-        public SimpleEventTriggerActionData(int priority) : base(priority) { }
+        public SimpleEventActionData(int priority) : base(priority) { }
 
         public override void PerformAction(GameObject callingObject)
         {
@@ -33,13 +32,6 @@ namespace AltSalt.Maestro.Logic.Action
             else {
                 actionDescription = "Empty simple event trigger";
             }
-        }
-        
-        public IEnumerable<Type> GetFilteredTypeList()
-        {
-            List<Type> typeList = new List<Type>();
-            typeList.Add(typeof(ISimpleSignalListener));
-            return typeList;
         }
     }
 }

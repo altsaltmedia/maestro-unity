@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
@@ -10,15 +11,8 @@ namespace AltSalt.Maestro
     [ExecuteInEditMode]
     // Meant to be used within ComplexEventPackagerBehaviour or ComplexEventTimelineTrigger.
     // If implementing a custom trigger from within a script, use the basic ComplexEventTrigger instead.
-    public class ComplexEventPackager : EventTriggerBase
+    public class ComplexEventConfigurableTrigger : ComplexEventReference
     {
-        [Required]
-        [SerializeField]
-        [FormerlySerializedAs("complexEvent")]
-        private ComplexEvent _complexEvent;
-
-        public ComplexEvent complexEvent => _complexEvent;
-
         [SerializeField]
         [BoxGroup("String Packager")]
         [FormerlySerializedAs("hasString")]
@@ -302,8 +296,8 @@ namespace AltSalt.Maestro
             if (hasScriptableObject) {
                 complexPayload = GetScriptableObjectValues(complexPayload);
             }
-            complexEvent.StoreCaller(caller);
-            complexEvent.Raise(complexPayload);
+            GetVariable(caller).StoreCaller(caller);
+            GetVariable(caller).Raise(complexPayload);
         }
 
         public void RaiseEvent(GameObject caller, string sourceName)
@@ -321,8 +315,8 @@ namespace AltSalt.Maestro
             if (hasScriptableObject) {
                 complexPayload = GetScriptableObjectValues(complexPayload);
             }
-            complexEvent.StoreCaller(caller, sourceName);
-            complexEvent.Raise(complexPayload);
+            GetVariable(caller).StoreCaller(caller, sourceName);
+            GetVariable(caller).Raise(complexPayload);
         }
 
         private ComplexPayload GetStringValues(ComplexPayload complexPayload)

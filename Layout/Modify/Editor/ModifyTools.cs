@@ -8,7 +8,7 @@ namespace AltSalt.Maestro
     public class ModifyTools : EditorWindow
     {
 //        protected ModifySettings modifySettings;
-        protected static ComplexEventTrigger textUpdate = new ComplexEventTrigger();
+        protected static ComplexEventManualTrigger textUpdate = new ComplexEventManualTrigger();
         protected static SimpleEventTrigger layoutUpdate = new SimpleEventTrigger();
         protected string layoutDependencyNames;
 
@@ -31,10 +31,10 @@ namespace AltSalt.Maestro
             GUILayout.Label("These values are automatically populated via script.");
             EditorGUI.BeginDisabledGroup(true);
 //            modifySettings = EditorGUILayout.ObjectField("Modify Settings", modifySettings, typeof(ModifySettings), false) as ModifySettings;
-            layoutUpdate.simpleEvent = Utils.GetSimpleEvent(nameof(VarDependencies.LayoutUpdate));
-            layoutUpdate.simpleEvent = EditorGUILayout.ObjectField("Layout Update", layoutUpdate.simpleEvent, typeof(SimpleEvent), false) as SimpleEvent;
-            textUpdate.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.TextUpdate));
-            textUpdate.complexEvent = EditorGUILayout.ObjectField("Text Update", textUpdate.complexEvent, typeof(ComplexEvent), false) as ComplexEvent;
+            layoutUpdate.SetVariable(Utils.GetSimpleEvent(nameof(VarDependencies.LayoutUpdate)));
+            layoutUpdate.SetVariable(EditorGUILayout.ObjectField("Layout Update", layoutUpdate.GetVariable(this), typeof(SimpleEvent), false) as SimpleEvent);
+            textUpdate.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.TextUpdate)));
+            textUpdate.SetVariable(EditorGUILayout.ObjectField("Text Update", textUpdate.GetVariable(this), typeof(ComplexEvent), false) as ComplexEvent);
             EditorGUI.EndDisabledGroup();
 //
 //            if (modifySettings == null) {

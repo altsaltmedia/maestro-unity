@@ -17,9 +17,9 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [SerializeField]
         [Title("Layout Reference")]
         [HideReferenceObjectPicker]
-        private LayoutConfig _layoutReference;
+        private LayoutConfigReference _layoutReference;
 
-        private LayoutConfig layoutReference => _layoutReference;
+        private LayoutConfig layoutReference => _layoutReference.GetVariable(this.parentObject);
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]

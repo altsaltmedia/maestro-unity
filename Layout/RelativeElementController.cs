@@ -62,15 +62,15 @@ namespace AltSalt.Maestro.Layout
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _enableDynamicElement = new ComplexEventTrigger();
+        private ComplexEventManualTrigger _enableDynamicElement = new ComplexEventManualTrigger();
 
-        public ComplexEventTrigger enableDynamicElement => _enableDynamicElement;
+        public ComplexEventManualTrigger enableDynamicElement => _enableDynamicElement;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _disableDynamicElement = new ComplexEventTrigger();
+        private ComplexEventManualTrigger _disableDynamicElement = new ComplexEventManualTrigger();
 
-        public ComplexEventTrigger disableDynamicElement => _disableDynamicElement;
+        public ComplexEventManualTrigger disableDynamicElement => _disableDynamicElement;
 
         public Scene parentScene => gameObject.scene;
         
@@ -100,12 +100,12 @@ namespace AltSalt.Maestro.Layout
         
         private void OnEnable()
         {
-            if (enableDynamicElement.complexEvent == null) {
-                enableDynamicElement.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement));
+            if (enableDynamicElement.GetVariable(this.gameObject) == null) {
+                enableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement)));
             }
             
-            if (disableDynamicElement.complexEvent == null) {
-                disableDynamicElement.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement));
+            if (disableDynamicElement.GetVariable(this.gameObject) == null) {
+                disableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement)));
             }
             
             enableDynamicElement.RaiseEvent(this.gameObject, this);
@@ -187,7 +187,7 @@ namespace AltSalt.Maestro.Layout
         }
 #endif
         
-        private static bool IsPopulated(ComplexEventTrigger attribute)
+        private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);
         }

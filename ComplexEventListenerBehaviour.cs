@@ -22,9 +22,13 @@ namespace AltSalt.Maestro
 		[SerializeField]
 		private ComplexEvent _complexEvent;
 
-		private ComplexEvent complexEvent => _complexEvent;
+		[SerializeField]
+		private ComplexEventReference _complexEventReference = new ComplexEventReference();
+		
+		private ComplexEventReference complexEvent => _complexEventReference;
 
 #if UNITY_EDITOR
+			[PropertySpace]
             [Multiline]
             public string DeveloperDescription = "";
 #endif
@@ -42,23 +46,37 @@ namespace AltSalt.Maestro
         private bool _doNotRecord;
 
         public bool doNotRecord => _doNotRecord;
-        
+
+        [SerializeField]
+        private bool _migrated;
+
+        private bool migrated
+        {
+	        get => _migrated;
+	        set => _migrated = value;
+        }
+
         private void OnEnable()
 		{
-			complexEvent.RegisterListener(this);
+			if (migrated == false) {
+				
+				_complexEventReference.SetVariable(_complexEvent);	
+			}
+			
+			complexEvent.GetVariable(this.gameObject).RegisterListener(this);
 		}
         
 		private void OnDisable()
 		{
-			complexEvent.UnregisterListener(this);
+			_complexEvent.UnregisterListener(this);
 		}
 
         public void OnEventRaised(ComplexPayload complexPayload)
 		{
             response.Invoke(complexPayload);
 		}
-		
-		private static bool IsPopulated(ComplexPayloadGenericAction attribute)
+
+        private static bool IsPopulated(ComplexPayloadGenericAction attribute)
 		{
 			return Utils.IsPopulated(attribute);
 		}

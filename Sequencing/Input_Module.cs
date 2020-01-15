@@ -17,9 +17,9 @@ namespace AltSalt.Maestro.Sequencing
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _inputActionComplete;
+        private ComplexEventManualTrigger _inputActionComplete;
 
-        private ComplexEventTrigger inputActionComplete
+        private ComplexEventManualTrigger inputActionComplete
         {
             get => _inputActionComplete;
             set => _inputActionComplete = value;
@@ -32,7 +32,7 @@ namespace AltSalt.Maestro.Sequencing
             inputActionComplete.RaiseEvent(this.gameObject, complexPayload);
         }
 
-        private static bool IsPopulated(ComplexEventTrigger attribute)
+        private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);
         }

@@ -8,9 +8,9 @@ namespace AltSalt.Maestro
             get;
         }
         
-        ComplexEventTrigger enableDynamicElement { get; }
+        ComplexEventManualTrigger enableDynamicElement { get; }
 
-        ComplexEventTrigger disableDynamicElement { get; }
+        ComplexEventManualTrigger disableDynamicElement { get; }
         
         Scene parentScene {
             get;

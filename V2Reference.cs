@@ -22,6 +22,7 @@ namespace AltSalt.Maestro
         [FormerlySerializedAs("Variable")]
         [SerializeField]
         [OnValueChanged(nameof(UpdateReferenceName))]
+        [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private V2Variable _variable;
 
         public V2Variable GetVariable(Object callingObject)

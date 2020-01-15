@@ -63,15 +63,15 @@ namespace AltSalt.Maestro.Layout
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _enableDynamicElement = new ComplexEventTrigger();
+        private ComplexEventManualTrigger _enableDynamicElement = new ComplexEventManualTrigger();
 
-        public ComplexEventTrigger enableDynamicElement => _enableDynamicElement;
+        public ComplexEventManualTrigger enableDynamicElement => _enableDynamicElement;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _disableDynamicElement = new ComplexEventTrigger();
+        private ComplexEventManualTrigger _disableDynamicElement = new ComplexEventManualTrigger();
 
-        public ComplexEventTrigger disableDynamicElement => _disableDynamicElement;
+        public ComplexEventManualTrigger disableDynamicElement => _disableDynamicElement;
 
         public string elementName => this.name;
 
@@ -235,12 +235,12 @@ namespace AltSalt.Maestro.Layout
 
         protected virtual void PopulateDependencies()
         {
-            if(enableDynamicElement.complexEvent == null) {
-                enableDynamicElement.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement));
+            if(enableDynamicElement.GetVariable(this.gameObject) == null) {
+                enableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement)));
             }
 
-            if (disableDynamicElement.complexEvent == null) {
-                disableDynamicElement.complexEvent = Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement));
+            if (disableDynamicElement.GetVariable(this.gameObject) == null) {
+                disableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement)));
             }
         }
 
@@ -368,7 +368,7 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        protected static bool IsPopulated(ComplexEventTrigger attribute)
+        protected static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);
         }

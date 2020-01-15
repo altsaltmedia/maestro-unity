@@ -34,7 +34,7 @@ namespace AltSalt.Maestro.Logic.Action
             get => _usePersistentVariable;
             set => _usePersistentVariable = value;
         }
-
+        
         [HideIf(nameof(usePersistentVariable))]
         [HideIf(nameof(boolActionType), BoolActionType.Toggle)]
         [SerializeField]

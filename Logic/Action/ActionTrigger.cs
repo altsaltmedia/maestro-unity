@@ -97,15 +97,15 @@ namespace AltSalt.Maestro.Logic.Action
         
         [SerializeField]
         [HideInInspector]
-        private List<SimpleEventTriggerActionData> _simpleEventTriggerActions = new List<SimpleEventTriggerActionData>();
+        private List<SimpleEventActionData> _simpleEventActions = new List<SimpleEventActionData>();
 
-        private List<SimpleEventTriggerActionData> simpleEventTriggerActions => _simpleEventTriggerActions;
+        private List<SimpleEventActionData> simpleEventActions => _simpleEventActions;
         
         [SerializeField]
         [HideInInspector]
-        private List<ComplexEventPackagerActionData> _complexEventPackagerActions = new List<ComplexEventPackagerActionData>();
+        private List<ComplexEventActionData> _complexEventActions = new List<ComplexEventActionData>();
 
-        private List<ComplexEventPackagerActionData> complexEventPackagerActions => _complexEventPackagerActions;
+        private List<ComplexEventActionData> complexEventActions => _complexEventActions;
 
         private enum ActionType
         {
@@ -173,17 +173,17 @@ namespace AltSalt.Maestro.Logic.Action
                 
                 case ActionType.SimpleEventTrigger:
                 {
-                    var action = new SimpleEventTriggerActionData(actionData.Count + 1);
+                    var action = new SimpleEventActionData(actionData.Count + 1);
                     actionData.Add(action);
-                    simpleEventTriggerActions.Add(action);
+                    simpleEventActions.Add(action);
                     break;
                 }
                 
                 case ActionType.ComplexEventPackager:
                 {
-                    var action = new ComplexEventPackagerActionData(actionData.Count + 1);
+                    var action = new ComplexEventActionData(actionData.Count + 1);
                     actionData.Add(action);
-                    complexEventPackagerActions.Add(action);
+                    complexEventActions.Add(action);
                     break;
                 }
             }
@@ -266,8 +266,8 @@ namespace AltSalt.Maestro.Logic.Action
             floatActions.RemoveAll(predicate);
             intActions.RemoveAll(predicate);
             conditionResponseActions.RemoveAll(predicate);
-            simpleEventTriggerActions.RemoveAll(predicate);
-            complexEventPackagerActions.RemoveAll(predicate);
+            simpleEventActions.RemoveAll(predicate);
+            complexEventActions.RemoveAll(predicate);
             
             // Update priorities for all items based on their order
             // of appearance in the editor
@@ -287,8 +287,8 @@ namespace AltSalt.Maestro.Logic.Action
             actionData.AddRange(floatActions);
             actionData.AddRange(intActions);
             actionData.AddRange(conditionResponseActions);
-            actionData.AddRange(simpleEventTriggerActions);
-            actionData.AddRange(complexEventPackagerActions);
+            actionData.AddRange(simpleEventActions);
+            actionData.AddRange(complexEventActions);
             
             actionData.Sort((x, y) => x.priority.CompareTo(y.priority) );
         }
@@ -300,8 +300,8 @@ namespace AltSalt.Maestro.Logic.Action
             floatActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             intActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             conditionResponseActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            simpleEventTriggerActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            complexEventPackagerActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            simpleEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            complexEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
         }
     }
 }

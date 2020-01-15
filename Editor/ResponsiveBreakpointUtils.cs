@@ -83,7 +83,7 @@ namespace AltSalt.Maestro
             base.Configure(controlPanel, uxmlPath);
             
             listContainer = moduleWindowUXML.Query("ResponsiveElementListContainer");
-            screenResized.simpleEvent = Utils.GetSimpleEvent(nameof(VarDependencies.ScreenResized));
+            screenResized.SetVariable(Utils.GetSimpleEvent(nameof(VarDependencies.ScreenResized)));
             
             UpdateListView(this);
             

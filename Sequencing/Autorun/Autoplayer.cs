@@ -119,7 +119,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             return false;
         }
 
-        private static Sequence AutoplaySequence(ComplexEventTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
+        private static Sequence AutoplaySequence(ComplexEventManualTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
         {
             ComplexPayload complexPayload = ComplexPayload.CreateInstance();
             complexPayload.Set(DataType.scriptableObjectType, targetSequence);

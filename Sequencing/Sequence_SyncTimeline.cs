@@ -74,15 +74,15 @@ namespace AltSalt.Maestro.Sequencing
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _enableDynamicElement = new ComplexEventTrigger();
+        private ComplexEventManualTrigger _enableDynamicElement = new ComplexEventManualTrigger();
 
-        public ComplexEventTrigger enableDynamicElement => _enableDynamicElement;
+        public ComplexEventManualTrigger enableDynamicElement => _enableDynamicElement;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventTrigger _disableDynamicElement = new ComplexEventTrigger();
+        private ComplexEventManualTrigger _disableDynamicElement = new ComplexEventManualTrigger();
 
-        public ComplexEventTrigger disableDynamicElement => _disableDynamicElement;
+        public ComplexEventManualTrigger disableDynamicElement => _disableDynamicElement;
 
         public Scene parentScene => gameObject.scene;
 
@@ -160,7 +160,7 @@ namespace AltSalt.Maestro.Sequencing
 //        }
     
 #endif
-        private static bool IsPopulated(ComplexEventTrigger attribute)
+        private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);
         }

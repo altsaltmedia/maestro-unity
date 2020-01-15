@@ -48,7 +48,7 @@ namespace AltSalt.Maestro
                     bool triggerTextChange = true;
                     string textFamilyNames = "";
                     for (int i = 0; i < targetLayout.textFamilyDependencies.Count; i++) {
-                        textFamilyNames += targetLayout.textFamilyDependencies[i].name;
+                        textFamilyNames += targetLayout.textFamilyDependencies[i].GetVariable(this).name;
                         if (i <= targetLayout.textFamilyDependencies.Count - 2) {
                             textFamilyNames += ", ";
                         }
@@ -108,10 +108,10 @@ namespace AltSalt.Maestro
             bool triggerTextChange;
             
             if (targetStatus == true) {
-                ModifyHandler.ActivateOriginLayout(targetLayout, out triggerTextChange);
+                ModifyHandler.ActivateOriginLayout(targetLayout, this, out triggerTextChange);
             }
             else {
-                ModifyHandler.DeactivateOriginLayout(targetLayout, out triggerTextChange);
+                ModifyHandler.DeactivateOriginLayout(targetLayout, this, out triggerTextChange);
             }
             LayoutUpdate();
 

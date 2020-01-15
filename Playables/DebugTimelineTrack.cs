@@ -31,7 +31,7 @@ namespace AltSalt.Maestro
                 TimelineEditor.inspectedDirector.time = behaviour.timelineCurrentTimeReference.GetValue(gameObject);
             }
 
-            behaviour.onGraphStart.simpleEvent = trackAssetConfig.onGraphStart;
+            behaviour.onGraphStart.SetVariable(trackAssetConfig.onGraphStart);
 #endif
             return trackPlayable;
         }

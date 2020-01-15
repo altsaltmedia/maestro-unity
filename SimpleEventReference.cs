@@ -1,26 +1,30 @@
 using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public class ScriptableObjectReference : ReferenceBase
+    public class SimpleEventReference : ReferenceBase
     {
+        [Required]
         [SerializeField]
+        [FormerlySerializedAs("_simpleEvent")]
+        [FormerlySerializedAs("simpleEvent")]
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
-        private ScriptableObject _variable;
-
-        public ScriptableObject GetVariable(Object callingObject)
+        private SimpleEvent _variable;
+        
+        public SimpleEvent GetVariable(Object callingObject)
         {
 #if UNITY_EDITOR
             this.parentObject = callingObject;
             if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
                 searchAttempted = true;
                 LogMissingReferenceMessage(GetType().Name);
-                _variable = Utils.GetScriptableObject(referenceName) as V2Variable;
+                _variable = Utils.GetScriptableObject(referenceName) as SimpleEvent;
                 if (_variable != null) {
                     LogFoundReferenceMessage(GetType().Name, _variable);
                 }
@@ -29,29 +33,18 @@ namespace AltSalt.Maestro
             return _variable;
         }
         
-        public void SetVariable(ScriptableObject value)
-        {
-            _variable = value;
-        }
-        
-        
-        public ScriptableObjectReference()
-        { }
-
-        public ScriptableObjectReference(ScriptableObject value)
-        {
-            _variable = value;
-        }
+        public void SetVariable(SimpleEvent value) => _variable = value;
 
         protected override void UpdateReferenceName()
         {
-            if (_variable != null) {
+            if (GetVariable(parentObject) != null) {
                 searchAttempted = false;
-                referenceName = _variable.name;
+                referenceName = GetVariable(parentObject).name;
             }
-//            else {
-//                referenceName = "";
-//            }
+//			else {
+//				referenceName = "";
+//			}
         }
+
     }
 }

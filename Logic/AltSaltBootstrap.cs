@@ -37,7 +37,7 @@ namespace AltSalt.Maestro.Logic
         
         [Required]
         [SerializeField]
-        ComplexEventTrigger initializeAppTrigger;
+        ComplexEventManualTrigger initializeAppTrigger;
 
         [SerializeField]
         [DisableIf("loadDebugMenu")]

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
@@ -43,15 +45,15 @@ namespace AltSalt.Maestro
             set => _activeLayout = value;
         }
 
+        [FormerlySerializedAs("_layouts")]
         [SerializeField]
         [OnValueChanged(nameof(RefreshActiveLayout))]
-        private List<LayoutConfig> _layouts = new List<LayoutConfig>();
+        private List<LayoutConfig> _layoutsLegacy = new List<LayoutConfig>();
 
-        private List<LayoutConfig> layouts
-        {
-            get => _layouts;
-            set => _layouts = value;
-        }
+        [SerializeField]
+        private List<LayoutConfigReference> _layoutReferences = new List<LayoutConfigReference>();
+        
+        private List<LayoutConfigReference> layouts => _layoutReferences;
 
         [SerializeField]
         [ReadOnly]
@@ -62,10 +64,25 @@ namespace AltSalt.Maestro
             return id;
         }
 
+        [SerializeField]
+        private bool _migrated;
+
+        private bool migrated
+        {
+            get => _migrated;
+            set => _migrated = value;
+        }
+
         protected virtual void OnEnable()
         {
 #if UNITY_EDITOR
             Initialize();
+            if (migrated == false) {
+                migrated = true;
+                for (int i = 0; i < _layoutsLegacy.Count; i++) {
+                    layouts.Add(new LayoutConfigReference(_layoutsLegacy[i]));
+                }
+            }
 #endif
             RefreshActiveLayout();
         }
@@ -73,7 +90,7 @@ namespace AltSalt.Maestro
         protected void RefreshActiveLayout()
         {
             if (layouts.Count > 0) {
-                activeLayout = LayoutConfig.GetActiveLayout(layouts);
+                activeLayout = LayoutConfig.GetActiveLayout(layouts.Select(x => x.GetVariable(this.gameObject)).ToList());
             }
         }
 
@@ -122,7 +139,7 @@ namespace AltSalt.Maestro
             nonserializedProperties.Add(nameof(id));
             nonserializedProperties.Add(nameof(sceneName));
             nonserializedProperties.Add(nameof(initialized));
-            nonserializedProperties.Add(nameof(_layouts));
+            nonserializedProperties.Add(nameof(_layoutsLegacy));
             nonserializedProperties.Add(nameof(nonserializedProperties));
         }
 
