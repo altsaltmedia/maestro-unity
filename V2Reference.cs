@@ -59,6 +59,19 @@ namespace AltSalt.Maestro
             this.parentObject = callingObject;
             return useConstant ? constantValue : GetVariable(callingObject).value;
         }
+        
+        public V2Variable SetValue(GameObject callingObject, Vector2 targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            V2Variable v2Variable = GetVariable(callingObject);
+            v2Variable.StoreCaller(callingObject);
+            v2Variable.SetValue(targetValue);
+            return v2Variable;
+        }
 
         protected override void UpdateReferenceName()
         {

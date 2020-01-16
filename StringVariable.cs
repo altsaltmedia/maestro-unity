@@ -29,21 +29,33 @@ namespace AltSalt.Maestro
         
         public void SetValue(string value)
         {
+            if (CallerRegistered() == false) return;
+            
             this.value = value;
+            
+            SignalChange();
         }
 
         public void SetValue(StringVariable value)
         {
+            if (CallerRegistered() == false) return;
+            
             this.value = value.value;
+            
+            SignalChange();
         }
 
         public override void SetToDefaultValue()
         {
-            if (hasDefault)  {
+            if (CallerRegistered() == false) return;
+
+            if (hasDefault == true)  {
                 value = defaultValue;
-            } else  {
+            } else {
                 Debug.LogWarning("Method SetDefaultValue() called on " + this.name + ", but var does not have a default value assigned.");
             }
+            
+            SignalChange();
         }
     }
 }

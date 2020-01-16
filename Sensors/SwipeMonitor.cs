@@ -18,95 +18,86 @@ namespace AltSalt.Maestro.Sensors
 {
     public class SwipeMonitor : MonoBehaviour
     {
-        // Invert Axis variable
-        [Required]
         [SerializeField]
-        private BoolReference _invertYInput = new BoolReference();
+        private AppSettings _appSettings;
 
-        private bool invertYInput => _invertYInput.GetValue(this.gameObject);
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
 
-        [Required]
         [SerializeField]
-        private BoolReference _invertXInput = new BoolReference();
+        private CustomKeyReference _inputGroupKey;
 
-        private bool invertXInput => _invertXInput.GetValue(this.gameObject);
+        private CustomKey inputGroupKey => _inputGroupKey.GetVariable(this.gameObject);
+        
+        
+        // User defined
 
-        // Swipe variables
+        private float ySensitivity => appSettings.GetYSensitivity(this.gameObject, inputGroupKey);
+        
+        private bool invertYInput => appSettings.GetInvertYInput(this.gameObject, inputGroupKey);
+        
+        private float xSensitivity => appSettings.GetXSensitivity(this.gameObject, inputGroupKey);
+        
+        private bool invertXInput => appSettings.GetInvertXInput(this.gameObject, inputGroupKey);
+        
+        
+        // Input Group
+        
+        private Vector2 swipeForce
+        {
+            set => appSettings.SetSwipeForce(this.gameObject, inputGroupKey, value);
+        }
+        
+        private float swipeMinMax => appSettings.GetSwipeMinMax(this.gameObject, inputGroupKey);
+        
+        private float flickThreshold => _flickThreshold.GetValue(this.gameObject);
+        
         [Required]
         [FoldoutGroup("Swipe Variables")]
-        public SimpleEventTrigger OnTouchStartEvent;
+        private SimpleEventTrigger onTouchStart => appSettings.GetOnTouchStart(this.gameObject, inputGroupKey);
 
         [Required]
         [FoldoutGroup("Swipe Variables")]
-        public SimpleEventTrigger OnLongTouchEvent;
+        public SimpleEventTrigger onLongTouch => appSettings.GetOnLongTouch(this.gameObject, inputGroupKey);
 
         [Required]
         [FoldoutGroup("Swipe Variables")]
-        public SimpleEventTrigger OnSwipeEvent;
+        public SimpleEventTrigger onSwipe => appSettings.GetOnSwipe(this.gameObject, inputGroupKey);
 
         [Required]
         [FoldoutGroup("Swipe Variables")]
-        public SimpleEventTrigger OnSwipeEndEvent;
+        public SimpleEventTrigger onSwipeEnd => appSettings.GetOnSwipeEnd(this.gameObject, inputGroupKey);
+        
+        
+        
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Swipe Variables")]
         [InfoBox("SwipeForce is generated and modified dynamically at run time", InfoMessageType.Info)]
-        public V2Reference touchStartPosition;
+        public V2Reference _touchStartPosition;
+
+        public V2Reference touchStartPosition
+        {
+            get => _touchStartPosition;
+            set => _touchStartPosition = value;
+        }
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Swipe Variables")]
         public BoolReference isFlicked;
-
-        [ValidateInput("IsPopulated")]
-        [FoldoutGroup("Swipe Variables")]
-        [InfoBox("SwipeForce is generated and modified dynamically at run time", InfoMessageType.Info)]
-        [SerializeField]
-        private V2Reference _swipeForce;
-
-        private Vector2 swipeForce
-        {
-            set => _swipeForce.GetVariable(this.gameObject).SetValue(value);
-        }
-
-        [SerializeField]
-        [ValidateInput("IsPopulated")]
-        [FoldoutGroup("Swipe Variables")]
-        [FormerlySerializedAs("swipeMinMax")]
-        private FloatReference _swipeMinMax = new FloatReference(120f);
-
-        private float swipeMinMax => _swipeMinMax.GetValue(this.gameObject);
-
-        [SerializeField]
-        [ValidateInput("IsPopulated")]
-        [FoldoutGroup("Swipe Variables")]
-        [FormerlySerializedAs("xSensitivity")]
-		private FloatReference _xSensitivity = new FloatReference(.0015f);
-
-        private float xSensitivity => _xSensitivity.GetValue(this.gameObject);
-
-        [SerializeField]
-        [ValidateInput("IsPopulated")]
-        [FoldoutGroup("Swipe Variables")]
-        [FormerlySerializedAs("ySensitivity")]
-        private FloatReference _ySensitivity = new FloatReference(.0015f);
-
-        private float ySensitivity => _ySensitivity.GetValue(this.gameObject);
-
-        [SerializeField]
-        [ValidateInput("IsPopulated")]
-        [FoldoutGroup("Swipe Variables")]
-        [FormerlySerializedAs("zSensitivity")]
-        private FloatReference _zSensitivity = new FloatReference(.0015f);
-
-        private float zSensitivity => _zSensitivity.GetValue(this.gameObject);
-
-        [SerializeField]
-        [ValidateInput("IsPopulated")]
-        [FoldoutGroup("Swipe Variables")]
-        [FormerlySerializedAs("flickThreshold")]
-        private FloatReference _flickThreshold = new FloatReference(1000);
-
-        private float flickThreshold => _flickThreshold.GetValue(this.gameObject);
+        
+        
+        
+        
 
         private bool isSwiping = false;
 
@@ -122,17 +113,6 @@ namespace AltSalt.Maestro.Sensors
         [FoldoutGroup("Momentum Variables")]
         public SimpleEventTrigger MomentumDepleted;
 
-        [Required]
-        [FoldoutGroup("Momentum Variables")]
-        public Axis xMomentumAxis;
-
-        [Required]
-        [FoldoutGroup("Momentum Variables")]
-        public Axis yMomentumAxis;
-
-        [Required]
-        [FoldoutGroup("Momentum Variables")]
-        public Axis zMomentumAxis;
 
         [ValidateInput("IsPopulated")]
         [FoldoutGroup("Momentum Variables")]
@@ -248,8 +228,8 @@ namespace AltSalt.Maestro.Sensors
 
         private string swipeDirection
         {
-            get => _swipeDirection.value;
-            set => _swipeDirection.variable.SetValue(value);
+            get => _swipeDirection.GetValue(this.gameObject);
+            set => _swipeDirection.GetVariable(this.gameObject).SetValue(value);
         }
 
         [ShowInInspector]
@@ -302,13 +282,13 @@ namespace AltSalt.Maestro.Sensors
         {
             ResetSwipeHistory(this);
             touchStartPosition.GetVariable(this.gameObject).SetValue(gesture.position);
-            OnTouchStartEvent.RaiseEvent(this.gameObject);
+            onTouchStart.RaiseEvent(this.gameObject);
         }
 
         public void OnTouchDown(Gesture gesture)
         {
             if (!isSwiping && gesture.actionTime >= pauseMomentumThreshold) {
-                OnLongTouchEvent.RaiseEvent(this.gameObject);
+                onLongTouch.RaiseEvent(this.gameObject);
                 HaltMomentum();
             }
         }
@@ -341,10 +321,10 @@ namespace AltSalt.Maestro.Sensors
                 }
             }
 
-            Vector3 newSwipeForce = NormalizeVectorInfo(swipeVector, swipeMinMax);
+            Vector2 newSwipeForce = NormalizeVectorInfo(swipeVector, swipeMinMax);
 
             swipeForce = newSwipeForce;
-            OnSwipeEvent.RaiseEvent(this.gameObject);
+            onSwipe.RaiseEvent(this.gameObject);
         }
         
         private static string GetSwipeDirection(SwipeMonitor swipeMonitor, Vector2 deltaPosition)
@@ -394,7 +374,7 @@ namespace AltSalt.Maestro.Sensors
             // Cancel momentum on certain long swipe gestures with low delta at the end of the movement.
             if(gesture.deltaPosition.sqrMagnitude < cancelMomentumMagnitudeThreshold && gesture.actionTime > cancelMomentumTimeThreshold) {
                 MomentumDepleted.RaiseEvent(this.gameObject);
-                OnSwipeEndEvent.RaiseEvent(this.gameObject);
+                onSwipeEnd.RaiseEvent(this.gameObject);
                 return;
             }
 
@@ -403,11 +383,11 @@ namespace AltSalt.Maestro.Sensors
             // We use momentumMinMax to clamp the value, but as of this writing that
             // value is set to 1000, which means that most swipes won't get clamped at all.
             // I leave this functionality here in case we do need to use it at some point.
-            Vector3 swipeEndForce = NormalizeVectorInfo(swipeVector, momentumMinMax);
+            Vector2 swipeEndForce = NormalizeVectorInfo(swipeVector, momentumMinMax);
 
             // Using swipeEndForce, run through a function that
             // allows us to adjust momentum sensitivity, if desired
-            Vector3 swipeMomentum = Utils.ExponentiateV3(swipeEndForce, momentumSensitivity);
+            Vector2 swipeMomentum = Utils.ExponentiateV2(swipeEndForce, momentumSensitivity);
 
             // Our swipe time generally comes back less than 1 - so let's multiply
             // by 100, because dividing by a decimal makes our swipe too intense
@@ -417,55 +397,50 @@ namespace AltSalt.Maestro.Sensors
 
 			isSwiping = false;
             
-            OnSwipeEndEvent.RaiseEvent(this.gameObject);
+            onSwipeEnd.RaiseEvent(this.gameObject);
         }
 
-        public void AddMomentum(Vector3 momentumVector)
+        public void AddMomentum(Vector2 momentumVector)
         {
-            Vector3 momentumAdd = new Vector3(swipeMonitorMomentumCache.x + momentumVector.x, swipeMonitorMomentumCache.y + momentumVector.y);
+            Vector2 momentumAdd = new Vector2(swipeMonitorMomentumCache.x + momentumVector.x, swipeMonitorMomentumCache.y + momentumVector.y);
             swipeMonitorMomentumCache = momentumAdd;
 			hasMomentum = true;
         }
 
-        private Vector3 NormalizeVectorInfo(Vector2 rawVector, float minMax)
+        private Vector2 NormalizeVectorInfo(Vector2 rawVector, float minMax)
         {
             // Clamp swipe values based on max/min threshold
             Vector2 clampedVector = Utils.ClampVectorValue(rawVector, minMax);
 
-            // Our values come back as a Vector2 coordinate value. Our first app
-            // made use of forces on all 3 axes, so let's convert to a V3 - 
-            // we don't currently need the Z, but can refactor at a later date.
-            Vector3 v3Vector = Utils.ConvertV2toV3(clampedVector);
-
             // Due to the peculiarities of working with Unity's timeline system,
             // the X value always comes in opposite of what we need. In some instances,
             // scrolling vertically for example, we also need to inver the Y.
-            Vector3 correctedV3;
+            Vector2 correctedV2;
             
             if(invertYInput == true) {
                 if(invertXInput == true) {
-                    correctedV3 = Utils.InvertV3Values(v3Vector, new string[]{"x", "y"});
+                    correctedV2 = Utils.InvertV2Values(clampedVector, new string[]{"x", "y"});
                 } else {
-                    correctedV3 = Utils.InvertV3Values(v3Vector, new string[]{"y"});
+                    correctedV2 = Utils.InvertV2Values(clampedVector, new string[]{"y"});
                 }
             } else {
                 if (invertXInput == true) {
-                    correctedV3 = Utils.InvertV3Values(v3Vector, new string[]{"x"});
+                    correctedV2 = Utils.InvertV2Values(clampedVector, new string[]{"x"});
                 } else {
-                    correctedV3 = v3Vector;
+                    correctedV2 = clampedVector;
                 }
             }
 
             // Normalize information based on sensitivity, otherwise our values come back too high
-            Vector3 v3Force = new Vector3(correctedV3.x * xSensitivity, correctedV3.y * ySensitivity, correctedV3.z * zSensitivity);
+            Vector2 v2Force = new Vector3(correctedV2.x * xSensitivity, correctedV2.y * ySensitivity);
 
-            return v3Force;
+            return v2Force;
         }
 
         public void HaltMomentum()
         {
             hasMomentum = false;
-            swipeMonitorMomentumCache = new Vector3(0, 0, 0);
+            swipeMonitorMomentumCache = new Vector2(0, 0);
             swipeMonitorMomentum = new Vector2(0, 0);
         }
 

@@ -31,20 +31,20 @@ namespace AltSalt.Maestro.Layout {
         
         private float deviceAspectRatio
         {
-            get => appSettings.deviceAspectRatio;
-            set => appSettings.deviceAspectRatio = value;
+            get => appSettings.GetDeviceAspectRatio(this.gameObject);
+            set => appSettings.SetDeviceAspectRatio(this.gameObject, value);
         }
 
         private float deviceWidth
         {
-            get => appSettings.deviceWidth;
-            set => appSettings.deviceWidth = value;
+            get => appSettings.GetDeviceWidth(this.gameObject);
+            set => appSettings.SetDeviceWidth(this.gameObject, value);
         }
 
         private float deviceHeight
         {
-            get => appSettings.deviceHeight;
-            set => appSettings.deviceHeight = value;
+            get => appSettings.GetDeviceHeight(this.gameObject);
+            set => appSettings.SetDeviceHeight(this.gameObject, value);
         }
 
         [ShowInInspector]

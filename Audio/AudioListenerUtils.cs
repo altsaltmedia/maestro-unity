@@ -38,7 +38,7 @@ namespace AltSalt.Maestro.Audio
 
         public void ToggleVoluem()
         {
-            if (appSettings.volumeEnabled == true) {
+            if (appSettings.GetVolumeEnabled(this.gameObject) == true) {
                DeactivateVolume();
             }
             else {

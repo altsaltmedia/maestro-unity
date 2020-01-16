@@ -1,26 +1,23 @@
-using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
-    [Serializable]
-    public class ScriptableObjectReference : ReferenceBase
+    public class CustomKeyReference : ReferenceBase
     {
         [SerializeField]
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
-        private ScriptableObject _variable;
+        private CustomKey _variable;
 
-        public ScriptableObject GetVariable(Object callingObject)
+        public CustomKey GetVariable(Object callingObject)
         {
 #if UNITY_EDITOR
             this.parentObject = callingObject;
             if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
                 searchAttempted = true;
                 LogMissingReferenceMessage(GetType().Name);
-                _variable = Utils.GetScriptableObject(referenceName);
+                _variable = Utils.GetScriptableObject(referenceName) as CustomKey;
                 if (_variable != null) {
                     LogFoundReferenceMessage(GetType().Name, _variable);
                 }
@@ -29,16 +26,16 @@ namespace AltSalt.Maestro
             return _variable;
         }
         
-        public void SetVariable(ScriptableObject value)
+        public void SetVariable(CustomKey value)
         {
             _variable = value;
         }
         
         
-        public ScriptableObjectReference()
+        public CustomKeyReference()
         { }
 
-        public ScriptableObjectReference(ScriptableObject value)
+        public CustomKeyReference(CustomKey value)
         {
             _variable = value;
         }

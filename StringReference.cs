@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
@@ -12,7 +13,7 @@ namespace AltSalt.Maestro
         [SerializeField]
         private string _constantValue;
 
-        public string constantValue
+        private string constantValue
         {
             get => _constantValue;
             set => _constantValue = value;
@@ -21,22 +22,27 @@ namespace AltSalt.Maestro
         [FormerlySerializedAs("Variable")]
         [SerializeField]
         [OnValueChanged(nameof(UpdateReferenceName))]
+        [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private StringVariable _variable;
 
-        public StringVariable variable
+        public StringVariable GetVariable(Object callingObject)
         {
-            get
-            {
-                if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                    searchAttempted = true;
-                    LogMissingReferenceMessage(GetType().Name);
-                    _variable = Utils.GetScriptableObject(referenceName) as StringVariable;
+#if UNITY_EDITOR
+            this.parentObject = callingObject;
+            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
+                searchAttempted = true;
+                LogMissingReferenceMessage(GetType().Name);
+                _variable = Utils.GetScriptableObject(referenceName) as StringVariable;
+                if (_variable != null) {
+                    LogFoundReferenceMessage(GetType().Name, _variable);
                 }
-                return _variable;
             }
-            set => _variable = value;
+#endif
+            return _variable;
         }
 
+        public void SetVariable(StringVariable value) => _variable = value;
+        
         public StringReference()
         { }
 
@@ -46,7 +52,37 @@ namespace AltSalt.Maestro
             constantValue = value;
         }
 
-        public string value => useConstant ? constantValue : variable.value;
+        public string GetValue(Object callingObject)
+        {
+            this.parentObject = callingObject;
+            return useConstant ? constantValue : GetVariable(callingObject).value;
+        }
+        
+        public StringVariable SetValue(GameObject callingObject, string targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            StringVariable stringVariable = GetVariable(callingObject);
+            stringVariable.StoreCaller(callingObject);
+            stringVariable.SetValue(targetValue);
+            return stringVariable;
+        }
+        
+        public StringVariable SetValue(GameObject callingObject, StringVariable targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            StringVariable stringVariable = GetVariable(callingObject);
+            stringVariable.StoreCaller(callingObject);
+            stringVariable.SetValue(targetValue.value);
+            return stringVariable;
+        }
 
         protected override void UpdateReferenceName()
         {
@@ -57,10 +93,6 @@ namespace AltSalt.Maestro
 //                referenceName = "";
 //            }
         }
-
-        public static implicit operator string(StringReference reference)
-        {
-            return reference.value;
-        }
+        
     }
 }

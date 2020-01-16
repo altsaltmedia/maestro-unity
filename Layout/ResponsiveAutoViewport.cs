@@ -66,7 +66,11 @@ namespace AltSalt.Maestro.Layout
             }
 #endif
             Rect originalRect = new Rect((deviceWidth.GetValue(this.gameObject) - sceneWidth) / 2f, (deviceHeight.GetValue(this.gameObject) - sceneHeight) / 2f, sceneWidth, sceneHeight);
-            thisCamera.pixelRect = new Rect(originalRect.x + viewportModifiers[activeIndex].x, originalRect.y + viewportModifiers[activeIndex].y, originalRect.width + viewportModifiers[activeIndex].width, originalRect.height + viewportModifiers[activeIndex].height);
+            thisCamera.pixelRect = new Rect(originalRect.x, originalRect.y, originalRect.width, originalRect.height);
+            thisCamera.rect = new Rect(thisCamera.rect.x + viewportModifiers[activeIndex].x,
+                thisCamera.rect.y + +viewportModifiers[activeIndex].y,
+                thisCamera.rect.width + viewportModifiers[activeIndex].width,
+                thisCamera.rect.height + viewportModifiers[activeIndex].height);
         }
 
     }   

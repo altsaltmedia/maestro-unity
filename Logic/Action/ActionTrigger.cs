@@ -86,6 +86,12 @@ namespace AltSalt.Maestro.Logic.Action
         private List<IntActionData> _intActions = new List<IntActionData>();
 
         private List<IntActionData> intActions => _intActions;
+        
+        [SerializeField]
+        [HideInInspector]
+        private List<AxisActionData> _axisActions = new List<AxisActionData>();
+
+        private List<AxisActionData> axisActions  => _axisActions;
 
         
         [FormerlySerializedAs("_conditionResponseTriggers")]
@@ -113,6 +119,7 @@ namespace AltSalt.Maestro.Logic.Action
             Bool,
             Float,
             Int,
+            Axis,
             ConditionResponse,
             SimpleEventTrigger,
             ComplexEventPackager
@@ -160,6 +167,14 @@ namespace AltSalt.Maestro.Logic.Action
                     var action = new IntActionData(actionData.Count + 1);
                     actionData.Add(action);
                     intActions.Add(action);
+                    break;
+                }
+                
+                case ActionType.Axis:
+                {
+                    var action = new AxisActionData(actionData.Count + 1);
+                    actionData.Add(action);
+                    axisActions.Add(action);
                     break;
                 }
 
@@ -265,6 +280,7 @@ namespace AltSalt.Maestro.Logic.Action
             boolActions.RemoveAll(predicate);
             floatActions.RemoveAll(predicate);
             intActions.RemoveAll(predicate);
+            axisActions.RemoveAll(predicate);
             conditionResponseActions.RemoveAll(predicate);
             simpleEventActions.RemoveAll(predicate);
             complexEventActions.RemoveAll(predicate);
@@ -286,6 +302,7 @@ namespace AltSalt.Maestro.Logic.Action
             actionData.AddRange(boolActions);
             actionData.AddRange(floatActions);
             actionData.AddRange(intActions);
+            actionData.AddRange(axisActions);
             actionData.AddRange(conditionResponseActions);
             actionData.AddRange(simpleEventActions);
             actionData.AddRange(complexEventActions);
@@ -299,6 +316,7 @@ namespace AltSalt.Maestro.Logic.Action
             boolActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             floatActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             intActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            axisActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             conditionResponseActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             simpleEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             complexEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));

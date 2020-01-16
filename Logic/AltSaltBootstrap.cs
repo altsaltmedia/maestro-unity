@@ -67,7 +67,7 @@ namespace AltSalt.Maestro.Logic
             StartCoroutine(InitializeApp());
         }
 
-        IEnumerator InitializeApp()
+        private IEnumerator InitializeApp()
         {
             Physics.autoSimulation = false;
             Application.targetFrameRate = 60;
@@ -79,7 +79,7 @@ namespace AltSalt.Maestro.Logic
             if(loadDebugMenu == true) {
                 targetScene = debugMenuName;
             } else {
-                if(appSettings.hasBeenOpened == false) {
+                if(appSettings.GetHasBeenOpened(this.gameObject) == false) {
                     targetScene = initialSceneName;
                 } else {
                     targetScene = subsequentSceneName;

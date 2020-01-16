@@ -38,7 +38,7 @@ namespace AltSalt.Maestro
         }
 
         private VisualElementToggleData toggleData = new VisualElementToggleData();
-
+        
         public string objectName = "";
         public bool selectCreatedObject;
 

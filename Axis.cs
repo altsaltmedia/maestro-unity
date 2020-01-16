@@ -4,16 +4,14 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Maestro
 {   
     [CreateAssetMenu(menuName = "AltSalt/Touch/Axis")]
-	public class Axis : ScriptableObject {
+	public class Axis : SimpleSignal
+    {
+        protected override string title => nameof(Axis);
 
         [SerializeField]
         private AxisType _axisType;
 
-        public AxisType axisType
-        {
-            get => _axisType;
-            set => _axisType = value;
-        }
+        public AxisType axisType => _axisType;
 
         [SerializeField]
         private bool _active;
@@ -32,11 +30,25 @@ namespace AltSalt.Maestro
             get => _inverted;
             set => _inverted = value;
         }
-
-        public void SetStatus(bool targetStatus)
+        
+        public void SetStatus(bool targetValue)
         {
-            active = targetStatus;
+            if (CallerRegistered() == false) return;
+
+            active = targetValue;
+            
+            SignalChange();
         }
-	}
+
+        public void SetInverted(bool targetValue)
+        {
+            if (CallerRegistered() == false) return;
+
+            inverted = targetValue;
+            
+            SignalChange();
+        }
+        
+    }
 
 }

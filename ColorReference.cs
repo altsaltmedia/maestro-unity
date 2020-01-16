@@ -67,6 +67,19 @@ namespace AltSalt.Maestro
             this.parentObject = callingObject;
             return useConstant ? constantValue : GetVariable(callingObject).value;
         }
+        
+        public ColorVariable SetValue(GameObject callingObject, ColorVariable targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            ColorVariable colorVariable = GetVariable(callingObject);
+            colorVariable.StoreCaller(callingObject);
+            colorVariable.SetValue(targetValue.value);
+            return colorVariable;
+        }
 
         protected override void UpdateReferenceName()
         {

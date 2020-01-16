@@ -88,7 +88,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         private void Update()
         {
-            if (hasMomentum == false || momentumEnabled == false || touchController.appSettings.globalMomentumEnabled == false) return;
+            if (hasMomentum == false || momentumEnabled == false || touchController.appSettings.GetUserMomentumEnabled(this.gameObject, userKey) == false) return;
             
             float momentumModifier;
 

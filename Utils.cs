@@ -1218,7 +1218,7 @@ namespace AltSalt.Maestro
             return (BoolVariable)AssetDatabase.LoadAssetAtPath(path, typeof(BoolVariable));
         }
 
-        public static ScriptableObject GetScriptableObject(string target)
+        public static dynamic GetScriptableObject(string target)
         {
             if (string.IsNullOrEmpty(target) == true) {
                 return null;
@@ -1404,12 +1404,12 @@ namespace AltSalt.Maestro
             return v3;
         }
 
-        public static Vector3 InvertV3Values(Vector3 vector3, string[] axesToInvert) {
+        public static Vector2 InvertV2Values(Vector2 vector2, string[] axesToInvert) {
             for (int i = 0; i < axesToInvert.Length; i++) {
                 int axisId = Utils.GetAxisId(axesToInvert[i]);
-                vector3[axisId] *= -1;
+                vector2[axisId] *= -1;
             }
-            return vector3;
+            return vector2;
         }
 
         public static int GetV3Sign(Vector3 vector3)
@@ -1424,10 +1424,10 @@ namespace AltSalt.Maestro
 
         // Raises a Vector3 to a power while retaining
         // its original positive or negative values
-        public static Vector3 ExponentiateV3(Vector3 rawVector, float power)
+        public static Vector3 ExponentiateV2(Vector2 rawVector, float power)
         {
             Vector3 exponentV3 = new Vector3();
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
                 exponentV3[i] = ExponentiatePosNegValue(rawVector[i], power);
             }
             return exponentV3;
@@ -1632,7 +1632,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.variable == null ? false : true;
+                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
             }
         }
 

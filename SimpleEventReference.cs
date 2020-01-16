@@ -15,7 +15,7 @@ namespace AltSalt.Maestro
         [FormerlySerializedAs("simpleEvent")]
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
-        private SimpleEvent _variable;
+        protected SimpleEvent _variable;
         
         public SimpleEvent GetVariable(Object callingObject)
         {

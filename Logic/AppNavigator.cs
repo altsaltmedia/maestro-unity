@@ -79,7 +79,7 @@ namespace AltSalt.Maestro.Logic
         // make a fade out first, so we have a special case for it here
         public void LoadInitialScene(ComplexPayload complexPayload) {
             sceneName = complexPayload.GetStringValue(DataType.stringType);
-            activeScene.variable.SetValue(sceneName);
+            activeScene.GetVariable(this.gameObject).SetValue(sceneName);
             StartCoroutine(AsyncLoad(sceneName, LoadSceneMode.Single));
         }
         
@@ -89,7 +89,7 @@ namespace AltSalt.Maestro.Logic
         public void TriggerSceneLoad(ComplexPayload complexPayload) {
             
             sceneName = complexPayload.GetStringValue(DataType.stringType);
-            activeScene.variable.SetValue(sceneName);
+            activeScene.GetVariable(this.gameObject).SetValue(sceneName);
             loadMode = complexPayload.GetBoolValue(DataType.boolType) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
             if(loadMode == LoadSceneMode.Single) {
@@ -180,7 +180,7 @@ namespace AltSalt.Maestro.Logic
 
         public void UpdateTimescale()
         {
-            Time.timeScale = appSettings.timescale;
+            Time.timeScale = appSettings.GetTimescale(this.gameObject);
         }
 
         private static bool IsPopulated(StringReference attribute)

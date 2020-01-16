@@ -37,7 +37,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         protected virtual void Update()
         {
-            if (_isparentModuleNull || autoplayEnabled == false || autorunController.appSettings.globalAutoplayEnabled == false) {
+            if (_isparentModuleNull || autoplayEnabled == false || autorunController.appSettings.GetUserAutoplayEnabled(this.gameObject, userKey) == false) {
                 return;
             }
 

@@ -12,18 +12,14 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Maestro.Sequencing.Touch
 {
     [ExecuteInEditMode]
-    public class Touch_Controller : Input_Controller
+    public class Touch_Controller : Input_Controller, IRequiresInputSettings
     {
         [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        [FoldoutGroup("Swipe Variables")]
-        private V2Reference _swipeForce;
+        private StringReference _inputID;
 
-        public Vector2 swipeForce
-        {
-            get => _swipeForce.GetValue(this.gameObject);
-            set => _swipeForce.GetVariable(this.gameObject).SetValue(value);
-        }
+        public string inputID => _inputID.GetValue(this.gameObject);
+        
+        public Vector2 swipeForce => appSettings.SetSwipeForce(inputID, this.gameObject).GetValue(this.gameObject);
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
@@ -92,11 +88,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
         [FoldoutGroup("Swipe Variables")]
         private Axis _ySwipeAxis;
 
-        public Axis ySwipeAxis
-        {
-            get => _ySwipeAxis;
-        }
-        
+        public Axis ySwipeAxis => _ySwipeAxis;
+
         [Required]
         [SerializeField]
         [FoldoutGroup("Swipe Variables")]
@@ -155,8 +148,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public string swipeDirection
         {
-            get => _swipeDirection.value;
-            set => _swipeDirection.variable.SetValue(value);
+            get => _swipeDirection.GetValue(this.gameObject);
+            set => _swipeDirection.GetVariable(this.gameObject).SetValue(value);
         }
 
         [SerializeField]
