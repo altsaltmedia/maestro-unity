@@ -45,15 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ba7635fbed4f8aac8fb74dc6bdd546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _appSettings: {fileID: 0}
   _rootConfig: {fileID: 0}
   _requestModifyToSequence:
-    complexEvent: {fileID: 11400000, guid: dc6452168b7334181bcaea1a33f8ebe1, type: 2}
+    _referenceName: RequestModifyToSequence
+    _parentObject: {fileID: 0}
+    _variable: {fileID: 11400000, guid: dc6452168b7334181bcaea1a33f8ebe1, type: 2}
   _autoplayer: {fileID: 3719720165695611221}
   _lerper: {fileID: 8343281159360016346}
-  _isReversing:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
   _autorunData: []
 --- !u!1 &8653552950031489400
 GameObject:
@@ -101,12 +100,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _priority: 3
   _inputActionComplete:
-    complexEvent: {fileID: 11400000, guid: 5fc585840da1246b684b0ff3e7040b45, type: 2}
+    _referenceName: InputActionComplete
+    _parentObject: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 5fc585840da1246b684b0ff3e7040b45, type: 2}
   _autorunController: {fileID: 2061094698163370185}
-  _frameStepValue:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 1e19d88d8db1b4a37b05030830ea63cf, type: 2}
+  _lerpThreshold: 0.03
 --- !u!114 &7884193363350299396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,8 +117,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 3d2e067a9dde54b3b904b558a9a88c3b, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 3d2e067a9dde54b3b904b558a9a88c3b, type: 2}
+  _simpleSignalReference:
+    _referenceName: OnSwipe
+    _parentObject: {fileID: 8653552950031489400}
+    _variable: {fileID: 11400000, guid: 3d2e067a9dde54b3b904b558a9a88c3b, type: 2}
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8343281159360016346}
@@ -134,9 +136,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8343281159360016346}
+        m_MethodName: DeactivateLerp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _doNotRecord: 0
+  _migrated: 1
 --- !u!1 &8733841028164870764
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,12 +202,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _priority: 2
   _inputActionComplete:
-    complexEvent: {fileID: 11400000, guid: 5fc585840da1246b684b0ff3e7040b45, type: 2}
+    _referenceName: InputActionComplete
+    _parentObject: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 5fc585840da1246b684b0ff3e7040b45, type: 2}
   _autorunController: {fileID: 2061094698163370185}
-  _frameStepValue:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 1e19d88d8db1b4a37b05030830ea63cf, type: 2}
+  _autoplayEnabled: 1
   _autoplayEaseThreshold: 0.25
 --- !u!114 &4944100776945312249
 MonoBehaviour:
@@ -206,8 +220,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 432c2a70e79604fe4ae9e1a6f20ee25b, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 432c2a70e79604fe4ae9e1a6f20ee25b, type: 2}
+  _simpleSignalReference:
+    _referenceName: AutoplayActivate
+    _parentObject: {fileID: 8733841028164870764}
+    _variable: {fileID: 11400000, guid: 432c2a70e79604fe4ae9e1a6f20ee25b, type: 2}
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3719720165695611221}
@@ -221,9 +239,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3719720165695611221}
+        m_MethodName: ActivateAutoplay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _doNotRecord: 0
+  _migrated: 1
 --- !u!114 &1764233776882483978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,9 +267,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: c1d1f8736e35847b594e918788a62e52, type: 2}
+  _complexEvent: {fileID: 11400000, guid: c1d1f8736e35847b594e918788a62e52, type: 2}
+  _complexEventReference:
+    _referenceName: SequenceModified
+    _parentObject: {fileID: 8733841028164870764}
+    _variable: {fileID: 11400000, guid: c1d1f8736e35847b594e918788a62e52, type: 2}
   DeveloperDescription: 
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3719720165695611221}
@@ -252,9 +287,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.Maestro.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &7211087801763608557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,8 +301,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: bf5075b16b1fc4eddae6ca56d96655e7, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: bf5075b16b1fc4eddae6ca56d96655e7, type: 2}
+  _simpleSignalReference:
+    _referenceName: OnSwipeEnd
+    _parentObject: {fileID: 8733841028164870764}
+    _variable: {fileID: 11400000, guid: bf5075b16b1fc4eddae6ca56d96655e7, type: 2}
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3719720165695611221}
@@ -282,9 +320,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3719720165695611221}
+        m_MethodName: ActivateAutoplay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _doNotRecord: 0
+  _migrated: 1
 --- !u!114 &4465262678314197478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,8 +348,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
+  _simpleSignalReference:
+    _referenceName: PauseSequenceComplete
+    _parentObject: {fileID: 8733841028164870764}
+    _variable: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3719720165695611221}
@@ -312,9 +367,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3719720165695611221}
+        m_MethodName: ActivateAutoplay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _doNotRecord: 0
+  _migrated: 1
 --- !u!114 &1133069145979638054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,8 +395,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
+  _simpleSignalReference:
+    _referenceName: OnTouchStart
+    _parentObject: {fileID: 8733841028164870764}
+    _variable: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3719720165695611221}
@@ -342,6 +414,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3719720165695611221}
+        m_MethodName: DeactivateAutoplay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _doNotRecord: 0
+  _migrated: 1

@@ -27,7 +27,6 @@ namespace AltSalt.Maestro
         }
         
         [SerializeField]
-        [ReadOnly]
         protected UnityEngine.Object _parentObject;
 
         public UnityEngine.Object parentObject

@@ -23,18 +23,18 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
             touchController.swipeModifierOutput = 0;
 
-            if (touchController.ySwipeAxis.active) 
+            if (touchController.ySwipeAxis.IsActive(this.gameObject) == true) 
             {
-                if (touchController.ySwipeAxis.inverted == false) {
+                if (touchController.ySwipeAxis.IsInverted(this.gameObject) == false) {
                     touchController.swipeModifierOutput += swipeForceToApply.y;
                 } else {
                     touchController.swipeModifierOutput += swipeForceToApply.y * -1f;
                 }
             }
             
-            if (touchController.xSwipeAxis.active)
+            if (touchController.xSwipeAxis.IsActive(this.gameObject) == true)
             {
-                if (touchController.xSwipeAxis.inverted == false) {
+                if (touchController.xSwipeAxis.IsInverted(this.gameObject) == false) {
                     touchController.swipeModifierOutput += swipeForceToApply.x;
                 } else {
                     touchController.swipeModifierOutput += swipeForceToApply.x * -1f;

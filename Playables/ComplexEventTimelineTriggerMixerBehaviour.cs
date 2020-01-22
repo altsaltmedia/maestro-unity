@@ -37,7 +37,7 @@ namespace AltSalt.Maestro
                     }
                     input.triggered = true;
                     for(int q=0; q<input.complexEventTriggerPackagers.Count; q++) {
-                        input.complexEventTriggerPackagers[q].RaiseEvent(input.directorObject, $"{input.directorObject.name} director at {currentTime:F2}");
+                        input.complexEventTriggerPackagers[q].RaiseEvent(input.trackAssetConfig.gameObject, $"{input.trackAssetConfig.name} director at {currentTime:F2}");
                     }
                 } else {
                     if (currentTime >= input.endTime || currentTime < input.startTime) {

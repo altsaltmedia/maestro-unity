@@ -14,7 +14,7 @@ namespace AltSalt.Maestro
         public Vector3 value
         {
             get => _value;
-            set => _value = value;
+            private set => _value = value;
         }
         
         [SerializeField]
@@ -26,34 +26,63 @@ namespace AltSalt.Maestro
             get => _defaultValue;
             set => _defaultValue = value;
         }
+        
+        public void SetValue(GameObject callingObject, Vector3 value)
+        {
+            StoreCaller(callingObject);
+
+            this.value = value;
+
+            SignalChange();
+        }
 
         public void SetValue(Vector3 value)
         {
+            if (CallerRegistered() == false) return;
+
             this.value = value;
+
+            SignalChange();
         }
 
         public void SetValue(V3Variable value)
         {
+            if (CallerRegistered() == false) return;
+
             this.value = value.value;
+
+            SignalChange();
         }
 
         public void ApplyChange(Vector3 amount)
         {
+            if (CallerRegistered() == false) return;
+
             value += amount;
+
+            SignalChange();
         }
 
         public void ApplyChange(V3Variable amount)
         {
+            if (CallerRegistered() == false) return;
+
             value += amount.value;
+
+            SignalChange();
         }
         
         public override void SetToDefaultValue()
         {
+            if (CallerRegistered() == false) return;
+
             if (hasDefault)  {
                 value = defaultValue;
             } else  {
                 Debug.LogWarning("Method SetDefaultValue() called on " + this.name + ", but var does not have a default value assigned.");
             }
+
+            SignalChange();
         }
     }
 }

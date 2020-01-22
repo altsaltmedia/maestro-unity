@@ -16,34 +16,20 @@ namespace AltSalt.Maestro.Sequencing.Touch
     [ExecuteInEditMode]
     public class AxisMonitor : Touch_Module
     {
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private BoolReference _axisTransitionActive;
-
+        private InputGroupKey inputGroupKey => touchController.rootConfig.inputGroupKey; 
+        
         public bool axisTransitionActive
         {
-            get => _axisTransitionActive.GetValue(this.gameObject);
-            set => _axisTransitionActive.SetValue(this.gameObject, value);
+            get => touchController.appSettings.GetAxisTransitionActive(this.gameObject, inputGroupKey);
+            private set => touchController.appSettings.SetAxisTransitionActive(this.gameObject, inputGroupKey, value);
         }
+        
+        public float axisTransitionSpread => touchController.appSettings.GetAxisTransitionSpread(this.gameObject, inputGroupKey);
 
         [SerializeField]
         private TouchExtentsCollection _touchExtentsCollection = new TouchExtentsCollection();
 
-        public TouchExtentsCollection touchExtentsCollection
-        {
-            get => _touchExtentsCollection;
-            private set => _touchExtentsCollection = value;
-        }
-        
-        [ValidateInput(nameof(IsPopulated))]
-        [FoldoutGroup("Switch Dependencies")]
-        [SerializeField]
-        private FloatReference _axisTransitionSpread;
-
-        public float axisTransitionSpread
-        {
-            get => _axisTransitionSpread.GetValue(this.gameObject);
-        }
+        private TouchExtentsCollection touchExtentsCollection => _touchExtentsCollection;
 
         [TitleGroup("Branch Keys")]
         [SerializeField]

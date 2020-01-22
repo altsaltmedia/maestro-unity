@@ -40,28 +40,25 @@ namespace AltSalt.Maestro
             set => _inputWeight = value;
         }
 
-        private float _modifier;
+        private float _percentageComplete;
 
-        protected float modifier
+        protected float percentageComplete
         {
-            get => _modifier;
-            set => _modifier = value;
+            get => _percentageComplete;
+            set => _percentageComplete = value;
         }
         
-        private GameObject _directorObject;
+        private TrackAssetConfig _trackAssetConfig;
 
-        public GameObject directorObject
+        public TrackAssetConfig trackAssetConfig
         {
-            get => _directorObject;
-            set => _directorObject = value;
+            get => _trackAssetConfig;
+            set => _trackAssetConfig = value;
         }
-        
-        public BoolReference _scrubberActive = new BoolReference();
 
-        public bool scrubberActive
+        protected bool scrubberActive
         {
-            get => _scrubberActive.GetValue(this.directorObject);
-            set => _scrubberActive.GetVariable(this.directorObject).SetValue(value);
+            get => trackAssetConfig.scrubberActive;
         }
         
         private TrackAsset _parentTrack;

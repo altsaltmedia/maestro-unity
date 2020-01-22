@@ -11,7 +11,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        private FloatReference _floatReference;
+        private FloatReference _floatReference = new FloatReference();
 
         private FloatReference floatReference => _floatReference;
 

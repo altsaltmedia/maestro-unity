@@ -11,7 +11,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        private BoolReference _boolReference;
+        private BoolReference _boolReference = new BoolReference();
 
         private BoolReference boolReference => _boolReference;
 

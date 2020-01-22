@@ -26,7 +26,7 @@ namespace AltSalt.Maestro.Animation
             template.endTime = endTime;
             template.parentTrack = parentTrack;
             template.clipAsset = this;
-            template.directorObject = directorObject;
+            template.trackAssetConfig = trackAssetConfig;
             
             var playable = ScriptPlayable<LerpVideoPlayerTimeBehaviour>.Create(graph, template);
             return playable;

@@ -11,7 +11,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        private IntReference _intReference;
+        private IntReference _intReference = new IntReference();
 
         private IntReference intReference => _intReference;
 

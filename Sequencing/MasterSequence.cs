@@ -98,7 +98,7 @@ namespace AltSalt.Maestro.Sequencing
                 sequenceConfigs[i].sequence.SetDefaults();
             }
         }
-
+        
         public void Init()
         {
             // Generate master times for sequences

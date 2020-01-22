@@ -85,11 +85,11 @@ namespace AltSalt.Maestro.Layout
         public bool logElementOnLayoutUpdate {
             get
             {
-                if (appSettings.logResponsiveElementActions == true) {
+                if (_logElementOnLayoutUpdate == true || appSettings.logGlobalResponsiveElementActions == true) {
                     return true;
                 }
 
-                return _logElementOnLayoutUpdate;
+                return false;
             }
         }
 

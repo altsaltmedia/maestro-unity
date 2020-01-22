@@ -46,119 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c988e76ee47474488013b330da6b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _invertYInput:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 307bf3fe2474043068fdd4e250f6a84a, type: 2}
-  _invertXInput:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 3e188ea664ddc4003896aefdb9d1fa5f, type: 2}
-  OnTouchStartEvent:
-    simpleEvent: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
-  OnLongTouchEvent:
-    simpleEvent: {fileID: 11400000, guid: 70b79ca86b9cd48488582825731bcfac, type: 2}
-  OnSwipeEvent:
-    simpleEvent: {fileID: 11400000, guid: 3d2e067a9dde54b3b904b558a9a88c3b, type: 2}
-  OnSwipeEndEvent:
-    simpleEvent: {fileID: 11400000, guid: bf5075b16b1fc4eddae6ca56d96655e7, type: 2}
-  touchStartPosition:
-    UseConstant: 0
-    ConstantValue: {x: 0, y: 0}
-    Variable: {fileID: 11400000, guid: dc959727c41f448e7862a16e427efe24, type: 2}
-  isFlicked:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 02c56e2aa3ca74ea197b12137c1130e1, type: 2}
-  _swipeForce:
-    UseConstant: 0
-    ConstantValue: {x: 0, y: 0}
-    Variable: {fileID: 11400000, guid: 83dca11092e3c42a3ac39cf5ea347c2f, type: 2}
-  swipeMinMax:
-    UseConstant: 0
-    ConstantValue: 120
-    Variable: {fileID: 11400000, guid: 8e6d661900bf54fe7895de6c6dfdb2d6, type: 2}
-  xSensitivity:
-    UseConstant: 0
-    ConstantValue: 0.0015
-    Variable: {fileID: 11400000, guid: 53fdf26dbeb8e41b9ad89e195014e0fb, type: 2}
-  ySensitivity:
-    UseConstant: 0
-    ConstantValue: 0.0015
-    Variable: {fileID: 11400000, guid: 70b26216ecfb74cba8dd466f31c042dc, type: 2}
-  zSensitivity:
-    UseConstant: 0
-    ConstantValue: 0.0015
-    Variable: {fileID: 11400000, guid: e01951c8e27824a7aa7a3c16b075d908, type: 2}
-  flickThreshold:
-    UseConstant: 0
-    ConstantValue: 1000
-    Variable: {fileID: 11400000, guid: d73a83a0d85e04ca0bbc17e3d696ce42, type: 2}
-  _momentumUpdate:
-    simpleEvent: {fileID: 11400000, guid: a2e4c5a50b2c44620a2c0a046f85ab80, type: 2}
-  MomentumDepleted:
-    simpleEvent: {fileID: 11400000, guid: 327c2d62b621b46d491fb9265f17f6ed, type: 2}
-  xMomentumAxis: {fileID: 11400000, guid: f88bf119e8f2c4cf3877691a94127d64, type: 2}
-  yMomentumAxis: {fileID: 11400000, guid: f42a426f4dfb54a94938a16ec1f3c2e3, type: 2}
-  zMomentumAxis: {fileID: 11400000, guid: 0ff6d39eb4be84e459d1db349ebb85bb, type: 2}
-  _swipeMonitorMomentum:
-    UseConstant: 0
-    ConstantValue: {x: 0, y: 0}
-    Variable: {fileID: 11400000, guid: f622ace9e18b44dddaacabde456d3ef4, type: 2}
-  _swipeMonitorMomentumCache:
-    UseConstant: 0
-    ConstantValue: {x: 0, y: 0}
-    Variable: {fileID: 11400000, guid: 9c73add5e07354026b81333b1eb40cb3, type: 2}
-  momentumMinMax:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 2306cb87b509e4704b699b6f2b21f96c, type: 2}
-  _momentumDecay:
-    UseConstant: 1
-    ConstantValue: 0.935
-    Variable: {fileID: 0}
-  momentumSensitivity:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: d7155d7d1803b4611ad9443a3a5ffdd7, type: 2}
-  gestureTimeMultiplier:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 3dff8691452404594a8a9276cef79eab, type: 2}
-  cancelMomentumTimeThreshold:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: b47b3254c91bc48179b20cfa1466da09, type: 2}
-  cancelMomentumMagnitudeThreshold:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: d8b8478dca810401b9f9e0d5e8207c52, type: 2}
-  pauseMomentumThreshold:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 452a77e0dd49e4619a28eaebfaf142cb, type: 2}
-  UpdateVarsDebug:
-    simpleEvent: {fileID: 11400000, guid: b5db0bb6ad9014cf9ba584a557323906, type: 2}
-  swipeMagnitudeDebug:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: aabf1f51618234aef9ba887ecc9dfaac, type: 2}
-  swipeVectorDebug:
-    UseConstant: 0
-    ConstantValue: {x: 0, y: 0}
-    Variable: {fileID: 11400000, guid: bd322c97c060a4439bf06aa5c7de9159, type: 2}
-  swipeDeltaDebug:
-    UseConstant: 0
-    ConstantValue: {x: 0, y: 0}
-    Variable: {fileID: 11400000, guid: f65eec6165aab4984824456ef9811845, type: 2}
-  gestureActionTimeDebug:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 89226eeb653f84f74be0ec46f6d55269, type: 2}
-  _swipeDirection:
-    UseConstant: 0
-    ConstantValue: 
-    Variable: {fileID: 11400000, guid: 34e308602a6794bd2b6d1fc7948aeb18, type: 2}
+  _appSettings: {fileID: 0}
+  _userDataKey:
+    _referenceName: User1
+    _parentObject: {fileID: 0}
+    _variable: {fileID: 11400000, guid: fb3e0d4ca475e400798c9ffb07637101, type: 2}
+  _inputGroupKey:
+    _referenceName: MainInput
+    _parentObject: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 5291240e14d3a457986c095206701a0c, type: 2}
 --- !u!114 &114697932136561384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,8 +130,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
+  _simpleSignalReference:
+    _referenceName: BoundaryReached
+    _parentObject: {fileID: 1681194368555834}
+    _variable: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114194128393916672}
@@ -249,9 +149,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114194128393916672}
+        m_MethodName: HaltMomentum
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _doNotRecord: 0
+  _migrated: 1
 --- !u!114 &114946770816194122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,10 +177,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
+  _complexEvent: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
+  _complexEventReference:
+    _referenceName: ConvertMomentum
+    _parentObject: {fileID: 1681194368555834}
+    _variable: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
   DeveloperDescription: This event requires that the string dictionary values 'fromAxis'
     and 'toAxis' be passed in an EventPayload instance.
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114194128393916672}
@@ -281,6 +198,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.Maestro.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _doNotRecord: 0
+  _migrated: 0

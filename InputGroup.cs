@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace AltSalt.Maestro
@@ -8,79 +9,104 @@ namespace AltSalt.Maestro
     [Serializable]
     public class InputGroup
     {
-        
-        // Swipe Monitor
 
+    #region Calculated Values
+    
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private BoolReference _isSwiping = new BoolReference();
+        
+        public BoolReference isSwiping => _isSwiping;
+        
+                
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private BoolReference _isFlicked = new BoolReference();
+        
+        public BoolReference isFlicked => _isFlicked;
+        
+        
+        [SerializeField]
+        [FoldoutGroup("Calculations")]
+        private V2Reference _touchStartPosition = new V2Reference();
+
+        public V2Reference touchStartPosition => _touchStartPosition;
+        
+        
         [SerializeField]
         [FoldoutGroup("Calculations")]
         private V2Reference _swipeForce = new V2Reference();
 
-        public V2Reference swipeForce
-        {
-            get => _swipeForce;
-            set => _swipeForce = value;
-        }
+        public V2Reference swipeForce => _swipeForce;
+        
+        
+        [SerializeField]
+        [FoldoutGroup("Calculations")]
+        private V2Reference _swipeMonitorMomentum = new V2Reference();
+
+        public V2Reference swipeMonitorMomentum => _swipeMonitorMomentum;
+        
+        
+        [SerializeField]
+        [FoldoutGroup("Calculations")]
+        private V2Reference _swipeMonitorMomentumCache = new V2Reference();
+
+        public V2Reference swipeMonitorMomentumCache => _swipeMonitorMomentumCache;
+        
         
         [SerializeField]
         [FoldoutGroup("Calculations")]
         private StringReference _swipeDirection = new StringReference();
 
-        public StringReference swipeDirection
-        {
-            get => _swipeDirection;
-            set => _swipeDirection = value;
-        }
-
-        [SerializeField]
-        [FoldoutGroup("Configuration")]
-        private FloatReference _swipeMinMax = new FloatReference();
+        public StringReference swipeDirection => _swipeDirection;
         
-        public FloatReference swipeMinMax
-        {
-            get => _swipeMinMax;
-            set => _swipeMinMax = value;
-        }
         
         [SerializeField]
-        [FoldoutGroup("Configuration")]
-        private FloatReference _gestureTimeMultiplier = new FloatReference();
+        [FoldoutGroup("Calculations")]
+        private BoolReference _isReversing = new BoolReference();
 
-        public FloatReference gestureTimeMultiplier
-        {
-            get => _gestureTimeMultiplier;
-            set => _gestureTimeMultiplier = value;
-        }
+        public BoolReference isReversing => _isReversing;
+
         
         [SerializeField]
-        [FoldoutGroup("Configuration")]
-        private FloatReference _cancelMomentumTimeThreshold = new FloatReference();
+        [FoldoutGroup("Calculations")]
+        private FloatReference _swipeModifierOutput = new FloatReference();
+        
+        public FloatReference swipeModifierOutput => _swipeModifierOutput;
 
-        public FloatReference cancelMomentumTimeThreshold
-        {
-            get => _cancelMomentumTimeThreshold;
-            set => _cancelMomentumTimeThreshold = value;
-        }
         
         [SerializeField]
-        [FoldoutGroup("Configuration")]
-        private FloatReference _cancelMomentumMagnitudeThreshold = new FloatReference();
+        [FoldoutGroup("Calculations")]
+        private FloatReference _momentumModifierOutput = new FloatReference();
 
-        public FloatReference cancelMomentumMagnitudeThreshold
-        {
-            get => _cancelMomentumMagnitudeThreshold;
-            set => _cancelMomentumMagnitudeThreshold = value;
-        }
+        public FloatReference momentumModifierOutput => _momentumModifierOutput;
+        
         
         [SerializeField]
-        [FoldoutGroup("Configuration")]
-        private FloatReference _pauseMomentumTimeThreshold = new FloatReference();
+        [FoldoutGroup("Calculations")]
+        private BoolReference _axisTransitionActive = new BoolReference();
 
-        public FloatReference pauseMomentumTimeThreshold
-        {
-            get => _pauseMomentumTimeThreshold;
-            set => _pauseMomentumTimeThreshold = value;
-        }
+        public BoolReference axisTransitionActive => _axisTransitionActive;
         
+        
+        [SerializeField]
+        [FoldoutGroup("Calculations")]
+        private BoolReference _forkTransitionActive = new BoolReference();
+
+        public BoolReference forkTransitionActive => _forkTransitionActive;
+        
+        
+        [SerializeField]
+        [FoldoutGroup("Calculations")]
+        private BoolReference _scrubberActive = new BoolReference();
+
+        public BoolReference scrubberActive => _scrubberActive;
+
+    #endregion
+
+    
+    #region Events
+    
         [Required]
         [FoldoutGroup("Touch Events")]
         [SerializeField]
@@ -108,112 +134,223 @@ namespace AltSalt.Maestro
         private SimpleEventTrigger _onSwipeEnd = new SimpleEventTrigger();
 
         public SimpleEventTrigger onSwipeEnd => _onSwipeEnd;
+            
+        [Required]
+        [FoldoutGroup("Touch Events")]
+        [SerializeField]
+        private SimpleEventTrigger _momentumUpdate = new SimpleEventTrigger();
+
+        public SimpleEventTrigger momentumUpdate => _momentumUpdate;
+        
+        [Required]
+        [FoldoutGroup("Touch Events")]
+        [SerializeField]
+        private SimpleEventTrigger _momentumAppliedToSequences = new SimpleEventTrigger();
+
+        public SimpleEventTrigger momentumAppliedToSequences => _momentumAppliedToSequences;
+        
+        [Required]
+        [FoldoutGroup("Touch Events")]
+        [SerializeField]
+        private SimpleEventTrigger _momentumDepleted = new SimpleEventTrigger();
+
+        public SimpleEventTrigger momentumDepleted => _momentumDepleted;
+        
+        [Required]
+        [FoldoutGroup("Touch Events")]
+        [SerializeField]
+        private SimpleEventTrigger _boundaryReached = new SimpleEventTrigger();
+
+        public SimpleEventTrigger boundaryReached => _boundaryReached;
+        
+        [Required]
+        [FoldoutGroup("Touch Events")]
+        [SerializeField]
+        private ComplexEventManualTrigger _sequenceModified = new ComplexEventManualTrigger();
+
+        public ComplexEventManualTrigger sequenceModified => _sequenceModified;
+        
+    #endregion
+
+
+    #region Configuration
+
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _swipeMinMax = new FloatReference();
+        
+        public FloatReference swipeMinMax => _swipeMinMax;
         
         
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _momentumMinMax = new FloatReference();
         
-        // Sequencing
+        public FloatReference momentumMinMax => _momentumMinMax;
         
+        
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _momentumDecay = new FloatReference();
+        
+        public FloatReference momentumDecay => _momentumDecay;
+        
+        
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _momentumSensitivity = new FloatReference();
+        
+        public FloatReference momentumSensitivity => _momentumSensitivity;
+
+        
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _gestureTimeMultiplier = new FloatReference();
+
+        public FloatReference gestureTimeMultiplier => _gestureTimeMultiplier;
+        
+
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _cancelMomentumTimeThreshold = new FloatReference();
+
+        public FloatReference cancelMomentumTimeThreshold => _cancelMomentumTimeThreshold;
+        
+        
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _cancelMomentumMagnitudeThreshold = new FloatReference();
+
+        public FloatReference cancelMomentumMagnitudeThreshold => _cancelMomentumMagnitudeThreshold;
+
+        
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _pauseMomentumThreshold = new FloatReference();
+
+        public FloatReference pauseMomentumThreshold => _pauseMomentumThreshold;
+        
+        
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _flickThreshold = new FloatReference();
+        
+        public FloatReference flickThreshold => _flickThreshold;
+        
+        
+        [SerializeField, Required]
+        private FloatReference _axisTransitionSpread = new FloatReference();
+        
+        public FloatReference axisTransitionSpread => _axisTransitionSpread;
+        
+        
+        [SerializeField, Required]
+        private FloatReference _forkTransitionSpread = new FloatReference();
+        
+        public FloatReference forkTransitionSpread => _forkTransitionSpread;
+
+        
+        [SerializeField, Required]
+        private FloatReference _frameStepValue = new FloatReference();
+        
+        public FloatReference frameStepValue => _frameStepValue;
+
+    #endregion
+
+
+    #region Axes
+
         [SerializeField]
         [FoldoutGroup("Axes")]
         private AxisReference _ySwipeAxis = new AxisReference();
 
-        public AxisReference ySwipeAxis
-        {
-            get => _ySwipeAxis;
-            set => _ySwipeAxis = value;
-        }
-        
+        public AxisReference ySwipeAxis => _ySwipeAxis;
+
         [SerializeField]
         [FoldoutGroup("Axes")]
         private AxisReference _yMomentumAxis = new AxisReference();
 
-        public AxisReference yMomentumAxis
-        {
-            get => _yMomentumAxis;
-            set => _yMomentumAxis = value;
-        }
+        public AxisReference yMomentumAxis => _yMomentumAxis;
 
         [SerializeField]
         [FoldoutGroup("Axes")]
         private AxisReference _xSwipeAxis = new AxisReference();
 
-        public AxisReference xSwipeAxis
-        {
-            get => _xSwipeAxis;
-            set => _xSwipeAxis = value;
-        }
+        public AxisReference xSwipeAxis => _xSwipeAxis;
 
         [SerializeField]
         [FoldoutGroup("Axes")]
         private AxisReference _xMomentumAxis = new AxisReference();
 
-        public AxisReference xMomentumAxis
-        {
-            get => _xMomentumAxis;
-            set => _xMomentumAxis = value;
-        }
-        
-        [SerializeField]
-        [FoldoutGroup("Calculations")]
-        private BoolReference _isReversing = new BoolReference();
+        public AxisReference xMomentumAxis => _xMomentumAxis;
 
-        public BoolReference isReversing
-        {
-            get => _isReversing;
-            set => _isReversing = value;
-        }
+    #endregion
         
-        [SerializeField]
-        [FoldoutGroup("Calculations")]
-        private FloatReference _swipeModifierOutput = new FloatReference();
-        
-        public FloatReference swipeModifierOutput
-        {
-            get => _swipeModifierOutput;
-            set => _swipeModifierOutput = value;
-        }
-        
-        [SerializeField]
-        [FoldoutGroup("Calculations")]
-        private FloatReference _momentumModifierOutput = new FloatReference();
 
-        public FloatReference momentumModifierOutput
-        {
-            get => _momentumModifierOutput;
-            set => _momentumModifierOutput = value;
-        }
-
-  
-        
-        [SerializeField, Required]
-        public FloatReference _frameStepValue;
-        
-        public FloatReference frameStepValue
-        {
-            get
-            {
-                UpdateDependencies();
-                return _frameStepValue;
-            }
-        }
-
-        public InputGroup(CustomKey inputGroupKey)
+        public InputGroup(InputData inputData, InputGroupKey inputGroupKey)
         {
 #if UNITY_EDITOR
-            FieldInfo[] fields = typeof(InputGroup).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-
-            for (int i = 0; i < fields.Length; i++) {
-                
-                var varReference = fields[i].GetValue(this);
-                string name = fields[i].Name.Replace("_", "").Capitalize();
-                
-                var variableField = varReference.GetType().GetField("_variable", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-                variableField.SetValue(varReference, CreateInputDependency(variableField.FieldType, $"{inputGroupKey.name}-{name}", inputGroupKey.name));
-                
-            }
+            RefreshDependencies(inputGroupKey);
+            SetDefaults(inputData, inputGroupKey);
 #endif
         }
+
+        public void RefreshDependencies(InputGroupKey inputGroupKey)
+        {
+            FieldInfo[] referenceFields = typeof(InputGroup).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+            for (int i = 0; i < referenceFields.Length; i++) {
+                
+                string name = referenceFields[i].Name.Replace("_", "").Capitalize();
+                var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
+                var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
+
+                if (variableValue == null) {
+                    variableField.SetValue(referenceValue, CreateInputDependency(variableField.FieldType, $"{inputGroupKey.name}-{name}", inputGroupKey.name));
+                }
+            }
+        }
         
+        public InputGroup SetDefaults(InputData inputData, InputGroupKey inputGroupKey)
+        {
+            FieldInfo[] fields = typeof(InputGroup).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            
+            swipeMinMax.GetVariable(inputData).defaultValue = 80f;
+            momentumMinMax.GetVariable(inputData).defaultValue = 2000f;
+            momentumDecay.GetVariable(inputData).defaultValue = .95f;
+            momentumSensitivity.GetVariable(inputData).defaultValue = 1f;
+            gestureTimeMultiplier.GetVariable(inputData).defaultValue = 50f;
+            cancelMomentumTimeThreshold.GetVariable(inputData).defaultValue = .2f;
+            cancelMomentumMagnitudeThreshold.GetVariable(inputData).defaultValue = 815f;
+            pauseMomentumThreshold.GetVariable(inputData).defaultValue = .03f;
+            flickThreshold.GetVariable(inputData).defaultValue = 2500f;
+            axisTransitionSpread.GetVariable(inputData).defaultValue = .5f;
+            frameStepValue.GetVariable(inputData).defaultValue = .02f;
+
+            // With the axes, since every scene should set 
+            ySwipeAxis.GetVariable(inputData).SetAxisType(inputData, AxisType.Y);
+            yMomentumAxis.GetVariable(inputData).SetAxisType(inputData, AxisType.Y);
+            
+            xSwipeAxis.GetVariable(inputData).SetAxisType(inputData, AxisType.X);
+            xMomentumAxis.GetVariable(inputData).SetAxisType(inputData, AxisType.X);
+
+            for (int i = 0; i < fields.Length; i++) {
+
+                var variableField = Utils.GetVariableFieldFromReference(fields[i], this, out var referenceValue);
+                var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
+
+                if (variableValue is ModifiableEditorVariable modifiableEditorVariable) {
+                    //serializedObject.FindProperty("_" + nameof(modifiableEditorVariable.hasDefault)).boolValue = true;
+                    modifiableEditorVariable.StoreCaller(inputData, "setting default from refresh dependencies",
+                        "app settings");
+                    modifiableEditorVariable.hasDefault = true;
+                    modifiableEditorVariable.SetToDefaultValue();
+                }
+            }
+        
+            return this;
+        }
+
 #if UNITY_EDITOR
         private static dynamic CreateInputDependency(Type assetType, string name, string groupName)
         {

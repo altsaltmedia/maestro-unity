@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -8,6 +9,19 @@ namespace AltSalt.Maestro
     [CreateAssetMenu(menuName = "AltSalt/Debug Settings")]
     public class DebugPreferences : ScriptableObject
     {
+        [SerializeField]
+        private float _timelineDebugTime;
+        
+        public float timelineDebugTime
+        {
+            get => _timelineDebugTime;
+            set => _timelineDebugTime = value;
+        }
+        
+        [SerializeField]
+        private SimpleEventTrigger _onEditorGraphStart = new SimpleEventTrigger();
+
+        public SimpleEventTrigger onEditorGraphStart => _onEditorGraphStart;
         
         [SerializeField]
         private bool _dynamicLayoutActive = true;
@@ -80,6 +94,34 @@ namespace AltSalt.Maestro
             get => _logConditionResponses;
             set => _logConditionResponses = value;
         }
+        
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void RefreshDependencies()
+        {
+            FieldInfo[] fields = typeof(DebugPreferences).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+            for (int i = 0; i < fields.Length; i++) {
+                var fieldValue = fields[i].GetValue(this);
+                if (fieldValue.GetType().IsSubclassOf(typeof(ReferenceBase)) == true) {
+                    FieldInfo variableField = Utils.GetVariableFieldFromReference(fields[i], this, out var referenceValue);
+                    
+                    var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
+                    if (variableValue == null) {
+                        
+                        string variableName = fields[i].Name.Replace("_", "").Capitalize();
+                        var searchVariable = Utils.GetScriptableObject(variableName);
+                        
+                        if (searchVariable == null) {
+                            Type type = variableField.FieldType;
+                            variableField.SetValue(referenceValue, CreateDebugPreference(type, variableName));
+                        }
+                        else {
+                            variableField.SetValue(referenceValue, searchVariable);
+                        }
+                    }
+                }
+            }
+        }
 
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SetDefaults()
@@ -93,6 +135,13 @@ namespace AltSalt.Maestro
             logResponsiveElementActions = false;
             logConditionResponses = false;
         }
+
+#if UNITY_EDITOR
+        private static dynamic CreateDebugPreference(Type assetType, string name)
+        {
+            return Utils.CreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/DebugEvents");
+        }
+#endif
 
     }
 }

@@ -7,40 +7,41 @@ namespace AltSalt.Maestro.Sequencing.Touch
 {
     public class MomentumApplier : Touch_Module
     {
+        private UserDataKey userKey => touchController.rootConfig.userKey;
+        
+        private InputGroupKey inputGroupKey => touchController.rootConfig.inputGroupKey;
+
         [SerializeField]
         private bool _momentumEnabled = true;
 
-        public bool momentumEnabled
+        private bool momentumEnabled
         {
-            get => _momentumEnabled;
-            set => _momentumEnabled = value;
-        }
+            get
+            {
+                if (_momentumEnabled == false ||
+                    touchController.appSettings.GetUserMomentumEnabled(this.gameObject, userKey) == false) {
+                    return false;
+                }
 
-        [Required]
-        [SerializeField]
-        private SimpleEventTrigger _momentumApplied;
-
-        private SimpleEventTrigger momentumApplied
-        {
-            get => _momentumApplied;
-            set => _momentumApplied = value;
+                return true;
+            }
         }
         
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private V2Reference _swipeMonitorMomentumCache;
+        private SimpleEventTrigger momentumAppliedToSequences =>
+            touchController.appSettings.GetMomentumAppliedToSequences(this.gameObject, inputGroupKey);
+        
+        private Vector2 swipeMonitorMomentumCache =>
+            touchController.appSettings.GetSwipeMonitorMomentumCache(this.gameObject, inputGroupKey);
+        
+        private float momentumDecay =>
+            touchController.appSettings.GetMomentumDecay(this.gameObject, inputGroupKey);
 
-        private Vector2 swipeMonitorMomentumCache
-        {
-            get => _swipeMonitorMomentumCache.GetValue(this.gameObject);
-            set => _swipeMonitorMomentumCache.GetVariable(this.gameObject).SetValue(value);
-        }
         
         [ShowInInspector]
         [ReadOnly]
         private Vector2 _momentumForceToApply;
 
-        public Vector2 momentumForceToApply
+        private Vector2 momentumForceToApply
         {
             get => _momentumForceToApply;
             set => _momentumForceToApply = value;
@@ -55,18 +56,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             get => _hasMomentum;
             set => _hasMomentum = value;
         }
-
         
-        [ValidateInput(nameof(IsPopulated))]
-        [SerializeField]
-        private FloatReference _momentumDecay = new FloatReference(.935f);
-
-        private float momentumDecay
-        {
-            get => _momentumDecay.GetValue(this.gameObject);
-            set => _momentumDecay.GetVariable(this.gameObject).SetValue(value);
-        }
-
         [SerializeField]
         [Required]
         [BoxGroup("Android dependencies")]
@@ -88,7 +78,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         private void Update()
         {
-            if (hasMomentum == false || momentumEnabled == false || touchController.appSettings.GetUserMomentumEnabled(this.gameObject, userKey) == false) return;
+            if (hasMomentum == false || momentumEnabled == false) return;
             
             float momentumModifier;
 
@@ -134,14 +124,14 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
             // Force the momentum values to correspond to our axis based on whether we are reversing
             // or not (which is determined by the swipe applier)
-            if (touchController.yMomentumAxis.active) {
+            if (touchController.yMomentumAxis.IsActive(touchController.momentumApplier) == true) {
                 momentumModifier += GetAxisMomentum(momentumForce,
-                    touchController.yMomentumAxis, touchController.isReversing);
+                    touchController.yMomentumAxis.GetVariable(touchController.momentumApplier), touchController.isReversing);
             }
 
-            if (touchController.xMomentumAxis.active) {
+            if (touchController.xMomentumAxis.IsActive(touchController.momentumApplier)) {
                 momentumModifier += GetAxisMomentum(momentumForce,
-                    touchController.xMomentumAxis, touchController.isReversing);
+                    touchController.xMomentumAxis.GetVariable(touchController.momentumApplier), touchController.isReversing);
             }
 
             return momentumModifier;
@@ -170,7 +160,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                 ApplyMomentumModifier(touchController.requestModifyToSequence, momentumApplier, touchData.sequence, touchController.momentumModifierOutput);
             }
             
-            momentumApplier.momentumApplied.RaiseEvent(momentumApplier.gameObject);
+            momentumApplier.momentumAppliedToSequences.RaiseEvent(momentumApplier.gameObject);
             return touchController;
         }
         

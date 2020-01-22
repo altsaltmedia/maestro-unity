@@ -23,6 +23,7 @@ namespace AltSalt.Maestro
         bool logElementOnLayoutUpdate {
             get;
         }
+        
         void CallExecuteLayoutUpdate(UnityEngine.Object callingObject);
     }
 }

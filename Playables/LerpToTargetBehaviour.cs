@@ -18,17 +18,6 @@ namespace AltSalt.Maestro
     [Serializable]
     public abstract class LerpToTargetBehaviour : PlayableBehaviour
     {
-        // App Settings is populated dynamically via LerpToTargetTrack at runtime
-        [Required]
-        [ReadOnly]
-        private AppSettings _appSettings;
-
-        public AppSettings appSettings
-        {
-            get => _appSettings;
-            set => _appSettings = value;
-        }
-        
         [SerializeField]
         [FormerlySerializedAs("ease")]
         private EasingFunction.Ease _ease = EasingFunction.Ease.EaseInOutQuad;
@@ -85,12 +74,12 @@ namespace AltSalt.Maestro
         }
 
         [HideInInspector]
-        private GameObject _directorObject;
+        private TrackAssetConfig _trackAssetConfig;
 
-        public GameObject directorObject
+        public TrackAssetConfig trackAssetConfig
         {
-            get => _directorObject;
-            set => _directorObject = value;
+            get => _trackAssetConfig;
+            set => _trackAssetConfig = value;
         }
 
         public bool disableReset;

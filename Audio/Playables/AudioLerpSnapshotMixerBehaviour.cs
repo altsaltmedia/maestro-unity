@@ -24,7 +24,7 @@ namespace AltSalt.Maestro.Audio
                 inputWeight = playable.GetInputWeight(i);
                 inputPlayable = (ScriptPlayable<AudioLerpSnapshotBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour();
-                modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
+                percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
 
                 AudioMixerSnapshot[] audioMixerSnapshots = CreateSnapshotArrayFromInput(input);
 
@@ -38,7 +38,7 @@ namespace AltSalt.Maestro.Audio
                         input.targetEndingWeight = 0.0001f;
                     }
 
-                    float weightModifier = CrossfadeAudio(i, input, inputWeight, modifier, currentTime);
+                    float weightModifier = CrossfadeAudio(i, input, inputWeight, percentageComplete, currentTime);
 
                     if (float.IsNaN(weightModifier) == false) {
                         float[] newWeights = new float[2];
@@ -54,7 +54,7 @@ namespace AltSalt.Maestro.Audio
 
                 } else {
 
-                    float weightModifier = BlendSnapshots(i, input, inputWeight, modifier, currentTime);
+                    float weightModifier = BlendSnapshots(i, input, inputWeight, percentageComplete, currentTime);
 
                     if (float.IsNaN(weightModifier) == false) {
                         float[] newWeights = new float[2];

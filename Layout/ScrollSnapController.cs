@@ -5,7 +5,9 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
-
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -14,42 +16,38 @@ namespace AltSalt.Maestro.Layout
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(ResponsiveAutoWidthHeight))]
-    public class ScrollSnapController : DraggableBase, IDragHandler, IEndDragHandler
+    public class ScrollSnapController : DraggableBase, IDragHandler, IEndDragHandler, IDynamicLayoutElement, ISceneDimensionListener
     {
         [SerializeField]
-        bool readyForUpdate = false;
+        [FormerlySerializedAs("readyForUpdate")]
+        private bool _readyForUpdate = false;
+
+        private bool readyForUpdate
+        {
+            get => _readyForUpdate;
+            set => _readyForUpdate = value;
+        }
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        RectTransform content;
-        public RectTransform Content {
-            get {
-                return content;
-            }
-        }
+        [FormerlySerializedAs("content")]
+        private RectTransform _content;
+        
+        public RectTransform content => _content;
 
         [SerializeField]
-        ScrollSnapUtils snapUtils;
-        public ScrollSnapUtils SnapUtils {
-            get {
-                return snapUtils;
-            }
-        }
+        [FormerlySerializedAs("snapUtils")]
+        private ScrollSnapUtils _snapUtils;
+        
+        public ScrollSnapUtils snapUtils => _snapUtils;
 
         [SerializeField]
         public List<ScrollSnapElement> scrollSnapElements = new List<ScrollSnapElement>();
 
         [SerializeField]
-        EasingFunction.Ease ease = EasingFunction.Ease.EaseInOutQuad;
-        EasingFunction.Function easingFunction;
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        protected FloatReference sceneWidth = new FloatReference();
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        protected FloatReference sceneHeight = new FloatReference();
+        private EasingFunction.Ease ease = EasingFunction.Ease.EaseInOutQuad;
+        
+        private EasingFunction.Function easingFunction;
 
         [SerializeField]
         [Range(.1f, 1f)]
@@ -68,27 +66,87 @@ namespace AltSalt.Maestro.Layout
 
         [ShowInInspector]
         [ReadOnly]
-        float previousPosition;
+        private float previousPosition;
+        
+        public string elementName => this.gameObject.name;
+        
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private ComplexEventManualTrigger _enableDynamicElement = new ComplexEventManualTrigger();
+
+        public ComplexEventManualTrigger enableDynamicElement => _enableDynamicElement;
+
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private ComplexEventManualTrigger _disableDynamicElement = new ComplexEventManualTrigger();
+
+        public ComplexEventManualTrigger disableDynamicElement => _disableDynamicElement;
+
+        public Scene parentScene => this.gameObject.scene;
+
+        [SerializeField]
+        private int _priority;
+
+        public int priority => _priority;
+
+        [SerializeField]
+        private bool _logElementOnLayoutUpdate;
+
+        public bool logElementOnLayoutUpdate => _logElementOnLayoutUpdate;
+        
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneWidth = 4.65f;
+
+        public float sceneWidth
+        {
+            get => _sceneWidth;
+            set => _sceneWidth = value;
+        }
+
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneHeight = 4.594452f;
+
+        public float sceneHeight
+        {
+            get => _sceneHeight;
+            set => _sceneHeight = value;
+        }
+
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneAspectRatio = 1.33f;
+
+        public float sceneAspectRatio
+        {
+            get => _sceneAspectRatio;
+            set => _sceneAspectRatio = value;
+        }
 
         public delegate void AddPanelCallback(ScrollSnapElement scrollSnapElement);
-
 
         protected override void Start()
         {
             base.Start();
             easingFunction = EasingFunction.GetEasingFunction(ease);
         }
+        
+        public void CallExecuteLayoutUpdate(Object callingObject)
+        {
+            Activate();   
+        }
 
         public void Activate()
         {
-            baseWidth = (float)Utils.GetResponsiveWidth(sceneHeight.GetValue(this.gameObject), sceneWidth.GetValue(this.gameObject));
+            baseWidth = (float)Utils.GetResponsiveWidth(sceneHeight, sceneWidth);
 
             StartCoroutine(LerpToElement(activeElementID));
 
             maxPosition = (baseWidth * scrollSnapElements.Count - 1) * -1f;
             readyForUpdate = true;
         }
-
+        
         public void Deactivate()
         {
             readyForUpdate = false;
@@ -102,14 +160,14 @@ namespace AltSalt.Maestro.Layout
             }
 
             Vector2 modifier = GetDragModifier(horizontalDrag, verticalDrag, dragSensitivity.GetValue(this.gameObject), data);
-            content.anchoredPosition = GetNewPosition(content, modifier);
+            _content.anchoredPosition = GetNewPosition(_content, modifier);
 
-            if (content.anchoredPosition.x > 0) {
-                content.anchoredPosition = new Vector2(0, content.anchoredPosition.y);
+            if (_content.anchoredPosition.x > 0) {
+                _content.anchoredPosition = new Vector2(0, _content.anchoredPosition.y);
             }
 
-            if(content.anchoredPosition.x < maxPosition) {
-                content.anchoredPosition = new Vector2(maxPosition, content.anchoredPosition.y);
+            if(_content.anchoredPosition.x < maxPosition) {
+                _content.anchoredPosition = new Vector2(maxPosition, _content.anchoredPosition.y);
             }
         }
 
@@ -120,9 +178,9 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
 
-            if (content.anchoredPosition.x > previousPosition) {
+            if (_content.anchoredPosition.x > previousPosition) {
                 CallLerpToPreviousElement();
-            } else if (content.anchoredPosition.x < previousPosition) {
+            } else if (_content.anchoredPosition.x < previousPosition) {
                 CallLerpToNextElement();
             }
         }
@@ -156,9 +214,9 @@ namespace AltSalt.Maestro.Layout
             StartCoroutine(LerpToElement(activeElementID));
         }
 
-        IEnumerator LerpToElement(int elementID)
+        private IEnumerator LerpToElement(int elementID)
         {
-            float initialPosition = content.anchoredPosition.x;
+            float initialPosition = _content.anchoredPosition.x;
             float targetPosition = baseWidth * elementID * -1f;
 
             isLerping = true;
@@ -168,15 +226,15 @@ namespace AltSalt.Maestro.Layout
                 easingModifier = easingFunction(.2f, 1f, lerpValue);
 
                 // Calculate and set the new position
-                float newX = Mathf.Lerp(content.anchoredPosition.x, targetPosition, easingModifier);
-                Vector2 newPosition = new Vector2(newX, content.anchoredPosition.y);
-                content.anchoredPosition = newPosition;
+                float newX = Mathf.Lerp(_content.anchoredPosition.x, targetPosition, easingModifier);
+                Vector2 newPosition = new Vector2(newX, _content.anchoredPosition.y);
+                _content.anchoredPosition = newPosition;
 
                 // Increment our lerp value for the next loop
                 lerpValue += lerpModifier;
 
-                if (Mathf.Approximately(Mathf.Abs(content.anchoredPosition.x), Mathf.Abs(targetPosition)) == true) {
-                    content.anchoredPosition = new Vector2(targetPosition, content.anchoredPosition.y);
+                if (Mathf.Approximately(Mathf.Abs(_content.anchoredPosition.x), Mathf.Abs(targetPosition)) == true) {
+                    _content.anchoredPosition = new Vector2(targetPosition, _content.anchoredPosition.y);
                     LerpToElementCallback();
                     yield break;
                 }
@@ -185,7 +243,7 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        void LerpToElementCallback()
+        private void LerpToElementCallback()
         {
             for (int i = 0; i < scrollSnapElements.Count; i++) {
                 if (i != activeElementID) {
@@ -193,7 +251,7 @@ namespace AltSalt.Maestro.Layout
                 }
             }
             scrollSnapElements[activeElementID].Activate();
-            previousPosition = content.anchoredPosition.x;
+            previousPosition = _content.anchoredPosition.x;
             lerpValue = 0f;
             isLerping = false;
         }

@@ -105,12 +105,12 @@ namespace AltSalt.Maestro.Layout
                     // Create new element and set transform parent
                     GameObject dependencyGameObject = PrefabUtility.InstantiatePrefab(panelObject) as GameObject;
                     Undo.RegisterCreatedObjectUndo(dependencyGameObject, "create panel");
-                    Undo.SetTransformParent(dependencyGameObject.transform, component.Content, "set new panel parent");
+                    Undo.SetTransformParent(dependencyGameObject.transform, component.content, "set new panel parent");
 
                     // Reset the new element position
                     dependencyGameObject.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 0, 0);
                     RelativePage relativePage = dependencyGameObject.AddComponent<RelativePage>();
-                    relativePage.referenceObject = component.Content.GetChild(dependencyGameObject.transform.GetSiblingIndex() - 1) as RectTransform;
+                    relativePage.referenceObject = component.content.GetChild(dependencyGameObject.transform.GetSiblingIndex() - 1) as RectTransform;
 
                     ScrollSnapController.ScrollSnapElement dependencyData;
                     SpriteExtensions iconSprite = null;
@@ -119,10 +119,10 @@ namespace AltSalt.Maestro.Layout
                         // Create and parent an icon to go with the panel
                         GameObject iconElement = PrefabUtility.InstantiatePrefab(iconObject) as GameObject;
                         Undo.RegisterCreatedObjectUndo(iconElement, "create icon");
-                        Undo.SetTransformParent(iconElement.transform, component.SnapUtils.IconContainer, "set icon parent");
+                        Undo.SetTransformParent(iconElement.transform, component.snapUtils.IconContainer, "set icon parent");
 
                         // Reset icon positions on the component
-                        SetIconInterval(iconInterval, component.SnapUtils);
+                        SetIconInterval(iconInterval, component.snapUtils);
 
                         // Set icon sprite to be saved onto the component
                         iconSprite = iconElement.GetComponentInChildren<SpriteExtensions>();
@@ -156,7 +156,7 @@ namespace AltSalt.Maestro.Layout
             for (int i = 0; i < objectSelection.Length; i++) {
 
                 ScrollSnapController component = objectSelection[i].GetComponent<ScrollSnapController>();
-                ScrollSnapUtils scrollSnapUtils = component.SnapUtils;
+                ScrollSnapUtils scrollSnapUtils = component.snapUtils;
                 componentList.Add(scrollSnapUtils);
 
                 SetIconInterval(iconInterval, scrollSnapUtils);

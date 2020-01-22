@@ -12,36 +12,18 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Maestro.Sequencing.Touch
 {
     [ExecuteInEditMode]
-    public class Touch_Controller : Input_Controller, IRequiresInputSettings
+    public class Touch_Controller : Input_Controller
     {
-        [SerializeField]
-        private StringReference _inputID;
-
-        public string inputID => _inputID.GetValue(this.gameObject);
+        private UserDataKey userKey => rootConfig.userKey;
         
-        public Vector2 swipeForce => appSettings.SetSwipeForce(inputID, this.gameObject).GetValue(this.gameObject);
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private FloatReference _ySensitivity;
-
-        public float ySensitivity => _ySensitivity.GetVariable(this.gameObject).value;
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private FloatReference _xSensitivity;
-
-        public float xSensitivity => _xSensitivity.GetVariable(this.gameObject).value;
-
-        [ValidateInput("IsPopulated")]
-        private FloatReference _timeModifier;
+        private InputGroupKey inputGroupKey => rootConfig.inputGroupKey;
         
-        private float timeModifier
-        {
-            get => _timeModifier.GetValue(this.gameObject);
-            set => _timeModifier.GetVariable(this.gameObject).SetValue(value);
-        }
+        public Vector2 swipeForce => appSettings.GetSwipeForce(this.gameObject, inputGroupKey);
+
+        public float ySensitivity => appSettings.GetYSensitivity(this.gameObject, userKey);
         
+        public float xSensitivity => appSettings.GetXSensitivity(this.gameObject, userKey);
+
         [SerializeField]
         [Required]
         private AxisMonitor _axisMonitor;
@@ -71,94 +53,39 @@ namespace AltSalt.Maestro.Sequencing.Touch
             get => _momentumApplier;
             set => _momentumApplier = value;
         }
-
-        [ValidateInput("IsPopulated")]
-        [SerializeField]
-        [FoldoutGroup("Swipe Variables")]
-        private FloatReference _swipeModifierOutput;
         
         public float swipeModifierOutput
         {
-            get => _swipeModifierOutput.GetValue(this.gameObject);
-            set => _swipeModifierOutput.GetVariable(this.gameObject).SetValue(value);
-        }
-
-        [Required]
-        [SerializeField]
-        [FoldoutGroup("Swipe Variables")]
-        private Axis _ySwipeAxis;
-
-        public Axis ySwipeAxis => _ySwipeAxis;
-
-        [Required]
-        [SerializeField]
-        [FoldoutGroup("Swipe Variables")]
-        private Axis _xSwipeAxis;
-
-        public Axis xSwipeAxis
-        {
-            get => _xSwipeAxis;
+            get => appSettings.GetSwipeModifierOutput(this.gameObject, inputGroupKey);
+            set => appSettings.SetSwipeModifierOutput(this.gameObject, inputGroupKey, value);
         }
         
-        [SerializeField]
-        [FoldoutGroup("Momentum Variables")]
-        [ValidateInput("IsPopulated")]
-        private FloatReference _momentumModifierOutput;
+        public AxisReference ySwipeAxis => appSettings.GetYSwipeAxisReference(this.gameObject, inputGroupKey);
+
+        public AxisReference xSwipeAxis => appSettings.GetXSwipeAxisReference(this.gameObject, inputGroupKey);
         
         public float momentumModifierOutput
         {
-            get => _momentumModifierOutput.GetValue(this.gameObject);
-            set => _momentumModifierOutput.GetVariable(this.gameObject).SetValue(value);
+            get => appSettings.GetMomentumModifierOutput(this.gameObject, inputGroupKey);
+            set => appSettings.SetMomentumModifierOutput(this.gameObject, inputGroupKey, value);
         }
-
-        [Required]
-        [SerializeField]
-        [FoldoutGroup("Momentum Variables")]
-        private Axis _yMomentumAxis;
         
-        public Axis yMomentumAxis
-        {
-            get => _yMomentumAxis;
-        }
-
-        // Momentum variables
-        [Required]
-        [SerializeField]
-        [FoldoutGroup("Momentum Variables")]
-        private Axis _xMomentumAxis;
-
-        public Axis xMomentumAxis
-        {
-            get => _xMomentumAxis;
-        }
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private BoolReference _isReversing;
-
+        public AxisReference yMomentumAxis => appSettings.GetYMomentumAxisReference(this.gameObject, inputGroupKey);
+        
+        public AxisReference xMomentumAxis => appSettings.GetXMomentumAxisReference(this.gameObject, inputGroupKey);
+        
         public bool isReversing
         {
-            get => _isReversing.GetValue(this.gameObject);
-            set => _isReversing.GetVariable(this.gameObject).SetValue(value);
+            get => appSettings.GetIsReversing(this.gameObject, inputGroupKey);
+            set => appSettings.SetIsReversing(this.gameObject, inputGroupKey, value);
         }
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private StringReference _swipeDirection;
-
-        public string swipeDirection
-        {
-            get => _swipeDirection.GetValue(this.gameObject);
-            set => _swipeDirection.GetVariable(this.gameObject).SetValue(value);
-        }
+        
+        public string swipeDirection => appSettings.GetSwipeDirection(this.gameObject, inputGroupKey);
 
         [SerializeField]
         private List<Touch_Data> _touchDataList = new List<Touch_Data>();
 
-        public List<Touch_Data> touchDataList
-        {
-            get => _touchDataList;
-        }
+        public List<Touch_Data> touchDataList => _touchDataList;
 
         public Vector2 GetDominantTouchForce(Vector2 vector2)
         {

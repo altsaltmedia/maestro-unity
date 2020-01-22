@@ -35,14 +35,7 @@ namespace AltSalt.Maestro
             set => _triggered = value;
         }
 
-        [HideInInspector]
-        public BoolReference _isReversing = new BoolReference();
-
-        public bool isReversing
-        {
-            get => _isReversing.GetValue(this.directorObject);
-            set => _isReversing.GetVariable(this.directorObject).SetValue(value);
-        }
+        public bool isReversing => trackAssetConfig.isReversing;
 
         [FormerlySerializedAs("disableOnReverse")]
         [SerializeField]
@@ -55,12 +48,12 @@ namespace AltSalt.Maestro
         }
         
         [HideInInspector]
-        private GameObject _directorObject;
+        private TrackAssetConfig _trackAssetConfig;
 
-        public GameObject directorObject
+        public TrackAssetConfig trackAssetConfig
         {
-            get => _directorObject;
-            set => _directorObject = value;
+            get => _trackAssetConfig;
+            set => _trackAssetConfig = value;
         }
 
     }

@@ -6,53 +6,160 @@ namespace AltSalt.Maestro.Animation
 {
     public class TMProColorMixerBehaviour : LerpToTargetMixerBehaviour
     {
-        TMP_Text trackBinding;
-        ScriptPlayable<ColorBehaviour> inputPlayable;
-        ColorBehaviour input;
-        TMP_Text trackBindingComponent;
-        Color originalValue;
+        private TMP_Text _trackBinding;
+
+        private TMP_Text trackBinding
+        {
+            get => _trackBinding;
+            set => _trackBinding = value;
+        }
+
+        private ScriptPlayable<TMProColorBehaviour> _inputPlayable;
+
+        private ScriptPlayable<TMProColorBehaviour> inputPlayable
+        {
+            get => _inputPlayable;
+            set => _inputPlayable = value;
+        }
+
+        private TMProColorBehaviour _input;
+
+        private TMProColorBehaviour input
+        {
+            get => _input;
+            set => _input = value;
+        }
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
             trackBinding = playerData as TMP_Text;
 
-            if (!trackBinding)
+            if (trackBinding == null)
                 return;
-
-            if (trackBindingComponent == null) {
-                trackBindingComponent = trackBinding.GetComponent<TMP_Text>();
-                originalValue = trackBindingComponent.color;
-            }
-
-            inputCount = playable.GetInputCount ();
             
+            inputCount = playable.GetInputCount();
+            
+            int sanitizedCharacterCount = GetSanitizedCharacterCount(trackBinding);
+
             for (int i = 0; i < inputCount; i++)
             {
                 inputWeight = playable.GetInputWeight(i);
-                inputPlayable = (ScriptPlayable<ColorBehaviour>)playable.GetInput(i);
+                inputPlayable = (ScriptPlayable<TMProColorBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
-                
-                trackBindingComponent = trackBinding.GetComponent<TMP_Text>();
-                
-                if(inputWeight >= 1f) {
-                    modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
-                    trackBindingComponent.color = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, modifier));
-                } else {
+
+                if (inputWeight >= 1f) {
+                    
+                    percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration()); 
+
+                    switch (input.textAnimationStyle) {
+
+                        case TextAnimationStyle.Whole:
+                            trackBinding.color = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
+                            break;
+
+                        case TextAnimationStyle.Character:
+                            AnimateCharacters(trackBinding, sanitizedCharacterCount);
+                            break;
+
+                    }
+                }
+                else {
                     if(currentTime >= input.endTime) {
-                        trackBindingComponent.color = input.targetValue;
+                        trackBinding.color = input.targetValue;
                     } else if (i == 0 && currentTime <= input.startTime) {
-                        trackBindingComponent.color = input.initialValue;
+                        trackBinding.color = input.initialValue;
                     }
                 }
             }
+        }
+        
+        private void AnimateCharacters(TMP_Text textMeshPro, int sanitizedCharacterCount)
+        {
+            TMP_TextInfo textInfo = textMeshPro.textInfo;
+            int characterCount = textMeshPro.textInfo.characterCount;
+            int sanitizedCharacterIndex = 1;
+            
+            float baseAnimationLength = 1f / sanitizedCharacterCount;
+            double intervalLength = 1f / sanitizedCharacterCount + (baseAnimationLength * input.blendValue);
+            
+            
+            for (int j = 0; j < characterCount; j++) {
+                        
+                if (textInfo.characterInfo[j].isVisible == false) {
+                    continue;
+                }
+                        
+                double intervalComplete = percentageComplete - (sanitizedCharacterIndex * baseAnimationLength - (baseAnimationLength * input.blendValue));
+                sanitizedCharacterIndex++;
+
+                if (Mathf.Abs((float)intervalComplete) <= input.blendValue)
+                {
+                    double modifier = intervalComplete / intervalLength;
+
+                    Color targetColor;
+                            
+                    if (modifier >= 1f) {
+                        targetColor = input.targetValue;
+                    } else if (modifier <= 0) {
+                        targetColor = input.initialValue;
+                    }
+                    else {
+                        targetColor = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, (float)modifier));
+                    }
+                            
+                    SetCharacterColor(trackBinding, targetColor, j);
+                } else if (intervalComplete >= 0) {
+                    SetCharacterColor(trackBinding, input.targetValue, j);
+                }
+                else {
+                    SetCharacterColor(trackBinding, input.initialValue, j);
+                }
+            }
+        }
+
+        // Need to set values using a sanitized list to
+        // maximize the smoothness of our animation
+        private static int GetSanitizedCharacterCount(TMP_Text textMeshPro)
+        {
+            int sanitizedCharacterCount = 0;
+            
+            for (int i = 0; i < textMeshPro.textInfo.characterCount; i++) {
+                if (textMeshPro.textInfo.characterInfo[i].isVisible == true) {
+                    sanitizedCharacterCount++;
+                }
+            }
+
+            return sanitizedCharacterCount;
+        }
+        
+        private static TMP_Text SetCharacterColor(TMP_Text textComponent, Color targetColor, int characterIndex)
+        {
+            TMP_TextInfo textInfo = textComponent.textInfo;
+            
+            if (characterIndex == -1 || characterIndex > textInfo.characterCount - 1) return textComponent;
+            
+            Color32 targetColor32 = targetColor;
+            
+            int materialIndex = textInfo.characterInfo[characterIndex].materialReferenceIndex;
+            int vertexIndex = textInfo.characterInfo[characterIndex].vertexIndex;
+                
+            Color32[] characterColors = textInfo.meshInfo[materialIndex].colors32;
+            characterColors[vertexIndex + 0] = targetColor32;
+            characterColors[vertexIndex + 1] = targetColor32;
+            characterColors[vertexIndex + 2] = targetColor32;
+            characterColors[vertexIndex + 3] = targetColor32;
+
+            textComponent.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
+
+            return textComponent;
         }
 
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
             if (Application.isPlaying == true && scrubberActive == true) {
-                if (trackBindingComponent != null) {    
-                    trackBindingComponent.color = Utils.transparent;
+                if (trackBinding != null) {    
+                    trackBinding.color = Utils.transparent;
                 }
             }
         }

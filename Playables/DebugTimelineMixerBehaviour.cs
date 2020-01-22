@@ -5,24 +5,36 @@ namespace AltSalt.Maestro
 {    
     public class DebugTimelineMixerBehaviour : LerpToTargetMixerBehaviour
     {
-        private FloatReference _timelineCurrentTime = new FloatReference();
+        private TrackAssetConfig _trackAssetConfig;
 
-        public FloatReference timelineCurrentTimeReference => _timelineCurrentTime;
+        public TrackAssetConfig trackAssetConfig
+        {
+            get => _trackAssetConfig;
+            set => _trackAssetConfig = value;
+        }
 
-        public SimpleEventTrigger onGraphStart = new SimpleEventTrigger();
+        private float timelineDebugTime
+        {
+            set => trackAssetConfig.timelineDebugTime = value;
+        }
+
+        private SimpleEventTrigger onEditorGraphStart
+        {
+            get => trackAssetConfig.onEditorGraphStart;
+        }
 
         public override void OnGraphStart(Playable playable)
         {
             base.OnGraphStart(playable);
 #if UNITY_EDITOR
-            onGraphStart.RaiseEvent(directorObject, "debug timeline");
+            onEditorGraphStart.RaiseEvent(base.trackAssetConfig.gameObject, "debug timeline");
 #endif
         }
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
 #if UNITY_EDITOR
-            timelineCurrentTimeReference.GetVariable(this.directorObject).SetValue((float)base.currentTime);
+            timelineDebugTime = (float)base.currentTime;
 #endif
         }
     }   

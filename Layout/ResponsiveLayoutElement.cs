@@ -18,7 +18,7 @@ namespace AltSalt.Maestro.Layout
         [ReadOnly]
         private AppSettings _appSettings;
 
-        private AppSettings appSettings
+        protected AppSettings appSettings
         {
             get
             {
@@ -100,11 +100,11 @@ namespace AltSalt.Maestro.Layout
         public bool logElementOnLayoutUpdate {
             get
             {
-                if (appSettings.logResponsiveElementActions == true) {
+                if (_logElementOnLayoutUpdate == true || appSettings.logGlobalResponsiveElementActions == true) {
                     return true;
                 }
 
-                return _logElementOnLayoutUpdate;
+                return false;
             }
         }
 
@@ -235,6 +235,10 @@ namespace AltSalt.Maestro.Layout
 
         protected virtual void PopulateDependencies()
         {
+            if (appSettings == null) {
+                appSettings = Utils.GetAppSettings();
+            }
+            
             if(enableDynamicElement.GetVariable(this.gameObject) == null) {
                 enableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement)));
             }
@@ -357,7 +361,7 @@ namespace AltSalt.Maestro.Layout
             string path = activeLayout.name + "/" + this.name + id.ToString();
             var jsonTextFile = Resources.Load<TextAsset>(path);
             if (jsonTextFile != null) {
-                if (appSettings.logResponsiveElementActions == true) {
+                if (appSettings.logGlobalResponsiveElementActions == true) {
                     Debug.Log("Populating " + this.name + " with stored data for " + activeLayout.name + " layout", this);
                 } 
                 JsonUtility.FromJsonOverwrite(jsonTextFile.ToString(), this);

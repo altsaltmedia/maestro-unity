@@ -6,13 +6,14 @@ using TMPro;
 namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.6981132f, 0f, 0.1065063f)]
-    [TrackClipType(typeof(ColorClip))]
+    [TrackClipType(typeof(TMProColorClip))]
     [TrackBindingType(typeof(TMP_Text))]
     public class TMProColorTrack : LerpToTargetTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipProperties(go);
+
             ScriptPlayable<TMProColorMixerBehaviour> trackPlayable = ScriptPlayable<TMProColorMixerBehaviour>.Create(graph, inputCount);
             TMProColorMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(go, behaviour);
@@ -30,6 +31,31 @@ namespace AltSalt.Maestro.Animation
             driver.AddFromName<TextMeshPro>(trackBinding.gameObject, "m_fontColor");
 #endif
             base.GatherProperties(director, driver);
+        }
+
+        public void MigrateClip(TimelineClip clip, GameObject directorObject)
+        {
+            if (clip.asset is ColorClip colorClip) {
+
+                if (colorClip.migrated == false) {
+                    TimelineClip migratedClip = clip.parentTrack.CreateClip<TMProColorClip>();
+                    TMProColorClip migratedClipAsset = migratedClip.asset as TMProColorClip;
+
+                    migratedClip.duration = clip.duration;
+                    migratedClip.start = clip.start;
+
+                    migratedClipAsset.template.ease = colorClip.template.ease;
+                    migratedClipAsset.template.initialValue = colorClip.template.initialValue;
+                    migratedClipAsset.template.targetValue = colorClip.template.targetValue;
+                            
+                    colorClip.migrated = true;
+                }
+
+                if (colorClip.migrated == true) {
+                    TimelineAsset directorAsset = directorObject.GetComponent<PlayableDirector>().playableAsset as TimelineAsset;
+                    directorAsset.DeleteClip(clip);
+                }
+            }
         }
     }   
 }

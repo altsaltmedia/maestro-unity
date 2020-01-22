@@ -45,12 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rootConfig: {fileID: 0}
-  _onForkUpdate:
-    simpleEvent: {fileID: 11400000, guid: 06d2119b5d4674948b3dafc6d929756c, type: 2}
-  _forkTransitionActive:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 2aff08255bfe44376b24d0ea43897ac1, type: 2}
   _joinerDataCollection:
     reorderableList:
       canAdd: 0
@@ -101,17 +95,18 @@ MonoBehaviour:
     isExpanded: 0
     _keyValues: []
     _keys: []
-  _forkTransitionSpread:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: b3e86449438674ff0ac944ba39781408, type: 2}
-  _boundaryReached:
-    simpleEvent: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
-  _forkKey: {fileID: 11400000, guid: f7fc8865371984745b968895500fffbf, type: 2}
-  _updateForkViaBranchKey: {fileID: 11400000, guid: ae02bea3066cf46bfbe115f66a1826f4,
-    type: 2}
-  _updateForkViaSequence: {fileID: 11400000, guid: ad4b899a49c5e4cde863005462c45926,
-    type: 2}
+  _forkKey:
+    _referenceName: UpdateFork-ForkKey
+    _parentObject: {fileID: 0}
+    _variable: {fileID: 11400000, guid: f7fc8865371984745b968895500fffbf, type: 2}
+  _updateForkViaBranchKey:
+    _referenceName: UpdateFork-ViaBranchKey
+    _parentObject: {fileID: 0}
+    _variable: {fileID: 11400000, guid: ae02bea3066cf46bfbe115f66a1826f4, type: 2}
+  _updateForkViaSequence:
+    _referenceName: UpdateFork-ViaSequence
+    _parentObject: {fileID: 0}
+    _variable: {fileID: 11400000, guid: ad4b899a49c5e4cde863005462c45926, type: 2}
 --- !u!114 &3156366569489139294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,9 +119,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: bfbf28c8db33841d8bce679ac9fb5d0a, type: 2}
+  _complexEvent: {fileID: 11400000, guid: bfbf28c8db33841d8bce679ac9fb5d0a, type: 2}
+  _complexEventReference:
+    _referenceName: UpdateFork
+    _parentObject: {fileID: 57868647988261891}
+    _variable: {fileID: 11400000, guid: bfbf28c8db33841d8bce679ac9fb5d0a, type: 2}
   DeveloperDescription: 
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1495709949950452273}
@@ -140,4 +139,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  doNotRecord: 0
+  _doNotRecord: 0
+  _migrated: 0

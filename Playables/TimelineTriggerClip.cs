@@ -8,6 +8,14 @@ namespace AltSalt.Maestro
         // This is here for implementation reference only. DO NOT attempt to use or access this when
         // creating subclasses; it won't work. Instead, create a new instance of your behaviour in question.
         // private LerpToTargetBehaviour template = new LerpToTargetBehaviour();
+        [HideInInspector]
+        public TrackAssetConfig _trackAssetConfig;
+
+        public TrackAssetConfig trackAssetConfig
+        {
+            get => _trackAssetConfig;
+            set => _trackAssetConfig = value;
+        }
         
         private double _startTime;
 
@@ -23,23 +31,6 @@ namespace AltSalt.Maestro
         {
             get => _endTime;
             set => _endTime = value;
-        }
-
-        public BoolReference _isReversing = new BoolReference();
-
-        public BoolReference isReversingReference
-        {
-            get => _isReversing;
-            set => _isReversing = value;
-        }
-        
-        [HideInInspector]
-        public GameObject _directorObject;
-
-        public GameObject directorObject
-        {
-            get => _directorObject;
-            set => _directorObject = value;
         }
 
         public override double duration => 1d;

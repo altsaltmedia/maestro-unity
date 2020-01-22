@@ -124,7 +124,7 @@ namespace AltSalt.Maestro
                 breakpointInitialValue[0] = targetValue;
             }
             UpdateBreakpointDependencies();
-            CallExecuteLayoutUpdate(directorObject);
+            CallExecuteLayoutUpdate(trackAssetConfig);
             return breakpointInitialValue;
         }
 
@@ -148,7 +148,7 @@ namespace AltSalt.Maestro
                 breakpointTargetValue[0] = targetValue;
             }
             UpdateBreakpointDependencies();
-            CallExecuteLayoutUpdate(directorObject);
+            CallExecuteLayoutUpdate(trackAssetConfig);
             return breakpointTargetValue;
         }
 #endif

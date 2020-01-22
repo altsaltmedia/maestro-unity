@@ -65,6 +65,8 @@ xsi:schemaLocation="
 
                                     <engine:Button text="Extract Text Lines" class="col-full" name="ExtractTextLines" />
 
+                                    <engine:Button text="Slice Text" class="col-full" name="SliceText" />
+
                                     <engine:Button text="Refresh Layout" class="col-full" name="RefreshLayout" />
 
                                 </engine:VisualElement>

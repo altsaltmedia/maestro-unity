@@ -49,6 +49,7 @@ namespace AltSalt.Maestro.Layout
             SelectOnionSkin,
             ExtractText,
             ExtractTextLetters,
+            SliceText,
             ExtractTextLines,
             RefreshLayout,
             AlignLeft,
@@ -166,6 +167,14 @@ namespace AltSalt.Maestro.Layout
                     };
                     break;
                 
+                case nameof(ButtonNames.SliceText):
+                    button.clickable.clicked += () => {
+                        TMP_Text[] textSelection = GetTextComponents(Selection.gameObjects);
+                        Selection.objects = SliceText(textSelection);
+                        Debug.Log("Sliced text");
+                    };
+                    break;
+                
                 case nameof(ButtonNames.ExtractTextLines):
                     button.clickable.clicked += () => {
                         TMP_Text[] textSelection = GetTextComponents(Selection.gameObjects);
@@ -273,6 +282,67 @@ namespace AltSalt.Maestro.Layout
 
             return fullString;
         }
+
+        public static GameObject[] SliceText(TMP_Text[] selection)
+        {
+            List<Vector3> letterPositions = new List<Vector3>();
+            List<GameObject> createdObjects = new List<GameObject>();
+            
+            for(int z=0; z<selection.Length; z++) {
+
+                TMP_Text textRenderer = selection[z];
+
+                List<string> characterList = new List<string>();
+
+                for (int j = 0; j < textRenderer.textInfo.characterCount; j++) {
+
+                    string character = textRenderer.text.Substring(j, 1);
+
+                    if (string.IsNullOrEmpty(character.Trim())) {
+                        continue;
+                    }
+                    
+                    characterList.Add(character);
+                }
+
+                for (int i = textRenderer.textInfo.characterInfo.Length - 1; i >= 0; i--) {
+
+                    if (textRenderer.textInfo.characterInfo[i].isVisible == false) {
+                        continue;
+                    }
+                    
+                    TMP_CharacterInfo characterInfo =  textRenderer.textInfo.characterInfo[i];
+                    letterPositions.Add(characterInfo.bottomLeft);
+
+                    GameObject textElement = Utils.DuplicateGameObject(textRenderer.gameObject);
+                    
+                    EditTMProComponent.SetTextContent(new[] { textElement }, characterInfo.character.ToString());
+                    textElement.GetComponent<TextMeshPro>().ForceMeshUpdate();
+                    EditTMProComponent.TrimTextBox(new[] { textElement });
+                    EditTMProComponent.AlignText(new[] {textElement}, TextAlignmentOptions.Center);
+                    
+                    RectTransform textRect = textElement.GetComponent<RectTransform>();
+                    
+                    Vector3 topLeft = textRenderer.transform.TransformPoint(characterInfo.topLeft);
+                    Vector3 bottomLeft = textRenderer.transform.TransformPoint(characterInfo.bottomLeft);
+                    Vector3 bottomRight = textRenderer.transform.TransformPoint(characterInfo.bottomRight);
+
+                    float xPos = (bottomLeft.x + bottomRight.x) / 2;
+                    float yPos = characterInfo.baseLine;
+
+                    textRect.localPosition = textRect.transform.parent.InverseTransformPoint(new Vector3(xPos, yPos, bottomLeft.z));
+                    
+                    createdObjects.Add(textElement);
+                }
+            }
+
+            for (int i = 0; i < selection.Length; i++) {
+                Undo.DestroyObjectImmediate(selection[i].gameObject);
+            }
+            
+            return createdObjects.ToArray();
+        }
+        
 
         public static string ExtractTextByLines(TMP_Text[] selection, string openingWrapper, string closingWrapper)
         {

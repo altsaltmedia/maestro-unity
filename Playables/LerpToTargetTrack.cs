@@ -50,19 +50,19 @@ namespace AltSalt.Maestro
                 if (myAsset) {
                     myAsset.startTime = clip.start;
                     myAsset.endTime = clip.end;
-                    if (myAsset.appSettings == null) {
-                        myAsset.appSettings = directorObject.GetComponent<TrackAssetConfig>().appSettings;
-                    }
                     myAsset.parentTrack = this;
-                    myAsset.directorObject = directorObject;
+                    myAsset.trackAssetConfig = directorObject.GetComponent<TrackAssetConfig>();
+                    
+                    if (this is TMProColorTrack tmProColorTrack) {
+                        tmProColorTrack.MigrateClip(clip, directorObject);
+                    }
                 }
             }
         }
 
-        protected LerpToTargetMixerBehaviour StoreMixerProperties(GameObject go, LerpToTargetMixerBehaviour trackMixer)
+        protected LerpToTargetMixerBehaviour StoreMixerProperties(GameObject directorObject, LerpToTargetMixerBehaviour trackMixer)
         {
-            trackMixer.directorObject = go;
-            trackMixer._scrubberActive.SetVariable(go.GetComponent<TrackAssetConfig>().scrubberActiveVariable);
+            trackMixer.trackAssetConfig = directorObject.GetComponent<TrackAssetConfig>();
             trackMixer.parentTrack = this;
             return trackMixer;
         }

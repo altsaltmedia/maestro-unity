@@ -63,7 +63,7 @@ namespace AltSalt.Maestro
 				_complexEventReference.SetVariable(_complexEvent);	
 			}
 			
-			complexEvent.GetVariable(this.gameObject).RegisterListener(this);
+			complexEvent.GetVariable(this).RegisterListener(this);
 		}
         
 		private void OnDisable()

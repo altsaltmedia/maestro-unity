@@ -8,36 +8,37 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 {
     public class Autoplayer : Autorun_Module
     {
+        private UserDataKey userKey => autorunController.rootConfig.userKey;
+        private InputGroupKey inputGroupKey => autorunController.rootConfig.inputGroupKey;
+        
         [SerializeField]
         private bool _autoplayEnabled = true;
 
         public bool autoplayEnabled
         {
-            get => _autoplayEnabled;
+            get
+            {
+                if (_autoplayEnabled == false ||
+                    autorunController.appSettings.GetUserAutoplayEnabled(this.gameObject, userKey) == false) {
+                    return false;
+                }
+
+                return true;
+            }
             set => _autoplayEnabled = value;
         }
 
-        [SerializeField]
-        [ValidateInput("IsPopulated")]
-        private FloatReference _frameStepValue;
-        
-        private float frameStepValue
-        {
-            get => _frameStepValue.GetValue(this.gameObject);
-        }
+        private float frameStepValue => autorunController.appSettings.GetFrameStepValue(this.gameObject, inputGroupKey);
 
         [SerializeField]
         [Range(0f, 1f)]
         private float _autoplayEaseThreshold = 0.25f;
 
-        private float autoplayEaseThreshold
-        {
-            get => _autoplayEaseThreshold;
-        }
+        private float autoplayEaseThreshold => _autoplayEaseThreshold;
 
         protected virtual void Update()
         {
-            if (_isparentModuleNull || autoplayEnabled == false || autorunController.appSettings.GetUserAutoplayEnabled(this.gameObject, userKey) == false) {
+            if (_isparentModuleNull || autoplayEnabled == false) {
                 return;
             }
 

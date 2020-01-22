@@ -9,6 +9,7 @@ https://www.altsalt.com / ricky@altsalt.com
 **********************************************/
 
 using System;
+using System.Reflection;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -35,7 +36,8 @@ namespace AltSalt.Maestro
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private FloatVariable _variable;
-
+        
+        
         public FloatVariable GetVariable(Object callingObject)
         {
 #if UNITY_EDITOR
@@ -43,8 +45,23 @@ namespace AltSalt.Maestro
             if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
                 searchAttempted = true;
                 LogMissingReferenceMessage(GetType().Name);
-                _variable = Utils.GetScriptableObject(referenceName) as FloatVariable;
-                if (_variable != null) {
+                var variableSearch = Utils.GetScriptableObject(referenceName) as FloatVariable;
+                if (variableSearch != null) {
+                    
+                    SerializedObject serializedObject = new SerializedObject(callingObject);
+                    string fieldName = "";
+                    FieldInfo[] fields = callingObject.GetType().GetFields();
+                    for (int i = 0; i < fields.Length; i++) {
+                        var fieldValue = fields[i].GetValue(callingObject);
+                        if (fieldValue == this) {
+                            fieldName = fields[i].Name;
+                        }
+                    }
+
+                    SerializedProperty serializedProperty = serializedObject.FindProperty(fieldName);
+                    serializedProperty.FindPropertyRelative(nameof(_variable)).objectReferenceValue = variableSearch;
+                    serializedObject.ApplyModifiedProperties();
+                    
                     LogFoundReferenceMessage(GetType().Name, _variable);
                 }
             }
@@ -254,6 +271,19 @@ namespace AltSalt.Maestro
             return floatVariable;
         }
         
+        public FloatVariable SetToDefaultValue(Object callingObject, string sourceScene, string sourceName)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            FloatVariable floatVariable = GetVariable(callingObject);
+            floatVariable.StoreCaller(callingObject, sourceScene, sourceName);
+            floatVariable.SetToDefaultValue();
+            return floatVariable;
+        }
+        
         public FloatVariable SetToDefaultValue(GameObject callingObject)
         {
             if (useConstant == true) {
@@ -269,7 +299,7 @@ namespace AltSalt.Maestro
 
         protected override void UpdateReferenceName()
         {
-            if (_variable != null) {
+            if (GetVariable(parentObject) != null) {
                 searchAttempted = false;
                 referenceName = _variable.name;
             }

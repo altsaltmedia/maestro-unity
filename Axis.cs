@@ -11,7 +11,11 @@ namespace AltSalt.Maestro
         [SerializeField]
         private AxisType _axisType;
 
-        public AxisType axisType => _axisType;
+        public AxisType axisType
+        {
+            get => _axisType;
+            private set => _axisType = value;
+        }
 
         [SerializeField]
         private bool _active;
@@ -19,7 +23,7 @@ namespace AltSalt.Maestro
         public bool active
         {
             get => _active;
-            set => _active = value;
+            private set => _active = value;
         }
 
         [SerializeField]
@@ -28,9 +32,19 @@ namespace AltSalt.Maestro
         public bool inverted
         {
             get => _inverted;
-            set => _inverted = value;
+            private set => _inverted = value;
         }
-        
+
+        // This should ONLY be called when being created as part of an input group
+        public Axis SetAxisType(InputData inputData, AxisType targetAxisType)
+        {
+            Debug.Log("Setting axis type via call from " + inputData.name);
+            
+            axisType = targetAxisType;
+
+            return this;
+        }
+
         public void SetStatus(bool targetValue)
         {
             if (CallerRegistered() == false) return;

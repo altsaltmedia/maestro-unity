@@ -12,6 +12,7 @@ namespace AltSalt.Maestro.Sequencing
     [RequireComponent(typeof(Sequence_SyncTimeline))]
     [RequireComponent(typeof(Sequence_ProcessModify))]
     [RequireComponent(typeof(PlayableDirector))]
+    [RequireComponent(typeof(TrackAssetConfig))]
     public class Sequence_Config : MonoBehaviour
     {
         [Required]
@@ -82,7 +83,17 @@ namespace AltSalt.Maestro.Sequencing
             get => _syncTimeline;
             private set => _syncTimeline = value;
         }
+        
+        [Required]
+        [SerializeField]
+        private TrackAssetConfig _trackAssetConfig;
 
+        public TrackAssetConfig trackAssetConfig
+        {
+            get => _trackAssetConfig;
+            private set => _trackAssetConfig = value;
+        }
+        
         private void Start()
         {
             Init();
@@ -106,6 +117,9 @@ namespace AltSalt.Maestro.Sequencing
 
             processModify = gameObject.GetComponent<Sequence_ProcessModify>();
             processModify.sequence = sequence;
+            
+            trackAssetConfig = gameObject.GetComponent<TrackAssetConfig>();
+            trackAssetConfig.sequence = sequence;
         }
 
         public bool DependenciesLoaded()
@@ -113,7 +127,7 @@ namespace AltSalt.Maestro.Sequencing
             return playableDirector != null && syncTimeline != null && processModify != null && masterSequence != null;
         }
 
-        void GetPlayableDirector()
+        private void GetPlayableDirector()
         {
             if (playableDirector == null) {
                 playableDirector = gameObject.GetComponent<PlayableDirector>();

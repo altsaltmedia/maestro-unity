@@ -54,11 +54,11 @@ namespace AltSalt.Maestro.Animation
                         trackBindingComponent.maxVisibleCharacters = input.targetMaxVisibleCharacters;
                         trackBindingComponent.maxVisibleWords = input.targetMaxVisibleWords;
                     } else {
-                        modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
-                        rawMaxCharactersVal = Mathf.Lerp(input.initialMaxVisibleCharacters, input.targetMaxVisibleCharacters, input.easingFunction(0f, 1f, modifier));
+                        percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
+                        rawMaxCharactersVal = Mathf.Lerp(input.initialMaxVisibleCharacters, input.targetMaxVisibleCharacters, input.easingFunction(0f, 1f, percentageComplete));
                         trackBindingComponent.maxVisibleCharacters = (int)Mathf.Round(rawMaxCharactersVal);
 
-                        rawMaxWordVal = Mathf.Lerp(input.initialMaxVisibleWords, input.targetMaxVisibleWords, input.easingFunction(0f, 1f, modifier));
+                        rawMaxWordVal = Mathf.Lerp(input.initialMaxVisibleWords, input.targetMaxVisibleWords, input.easingFunction(0f, 1f, percentageComplete));
                         trackBindingComponent.maxVisibleWords = (int)Mathf.Round(rawMaxWordVal);
                     }
                 }

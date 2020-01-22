@@ -8,10 +8,12 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
+using System;
 using UnityEngine;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Timeline;
@@ -62,11 +64,11 @@ namespace AltSalt.Maestro.Sequencing
         public bool logElementOnLayoutUpdate {
             get
             {
-                if (appSettings.logResponsiveElementActions == true) {
+                if (_logElementOnLayoutUpdate == true || appSettings.logGlobalResponsiveElementActions == true) {
                     return true;
                 }
 
-                return _logElementOnLayoutUpdate;
+                return false;
             }
         }
         
@@ -91,14 +93,12 @@ namespace AltSalt.Maestro.Sequencing
         
         public int priority => _priority;
 
-        [ValidateInput(nameof(IsPopulated))]
-        [SerializeField]
-        private BoolReference _scrubberActive;
+        public bool scrubberActive => appSettings.GetScrubberActive(this.gameObject,
+            sequence.sequenceConfig.masterSequence.rootConfig.inputGroupKey);
 
-        public BoolReference scrubberActive
+        private void Start()
         {
-            get => _scrubberActive;
-            set => _scrubberActive = value;
+            
         }
 
         public void CallExecuteLayoutUpdate(Object callingObject)

@@ -16,17 +16,25 @@ namespace AltSalt.Maestro
             get => _template;
             set => _template = value;
         }
-        
+
+        [SerializeField]
+        private bool _migrated;
+
+        public bool migrated
+        {
+            get => _migrated;
+            set => _migrated = value;
+        }
+
         public override LerpToTargetBehaviour templateReference => template;
         
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
             template.startTime = startTime;
             template.endTime = endTime;
-            template.appSettings = appSettings;
             template.parentTrack = parentTrack;
             template.clipAsset = this;
-            template.directorObject = directorObject;
+            template.trackAssetConfig = trackAssetConfig;
             
             var playable = ScriptPlayable<ColorBehaviour>.Create(graph, template);
             return playable;

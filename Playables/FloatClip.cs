@@ -24,10 +24,9 @@ namespace AltSalt.Maestro
         {
             template.startTime = startTime;
             template.endTime = endTime;
-            template.appSettings = appSettings;
             template.parentTrack = parentTrack;
             template.clipAsset = this;
-            template.directorObject = directorObject;
+            template.trackAssetConfig = trackAssetConfig;
             
             var playable = ScriptPlayable<FloatBehaviour>.Create(graph, template);
             return playable;

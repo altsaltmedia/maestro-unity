@@ -63,7 +63,8 @@ namespace AltSalt.Maestro.Animation
             bool dependencySelected = false;
 
             for (int i = 0; i < TimelineEditor.selectedClips.Length; i++) {
-                if (TimelineEditor.selectedClips[i].asset is ColorClip) {
+                if (TimelineEditor.selectedClips[i].asset is LerpToTargetClip lerpToTargetClip &&
+                    lerpToTargetClip.templateReference is ColorBehaviour) {
                     dependencySelected = true;
                     break;
                 }
@@ -186,8 +187,9 @@ namespace AltSalt.Maestro.Animation
             Array.Sort(clipSelection, new Utils.ClipTimeSort());
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ColorClip) {
-                    value = (clipSelection[i].asset as ColorClip).template.initialValue;
+                if (TimelineEditor.selectedClips[i].asset is LerpToTargetClip lerpToTargetClip &&
+                    lerpToTargetClip.templateReference is ColorBehaviour colorBehaviour) {
+                    value = colorBehaviour.initialValue;
                     break;
                 }
             }
@@ -200,12 +202,12 @@ namespace AltSalt.Maestro.Animation
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ColorClip) {
+                if (TimelineEditor.selectedClips[i].asset is LerpToTargetClip lerpToTargetClip &&
+                    lerpToTargetClip.templateReference is ColorBehaviour colorBehaviour) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    ColorClip clipAsset = clipSelection[i].asset as ColorClip;
-                    Undo.RecordObject(clipAsset, "set clip(s) initial color");
-                    clipAsset.template.initialValue = targetValue;
+                    Undo.RecordObject(lerpToTargetClip, "set clip(s) initial color");
+                    colorBehaviour.initialValue = targetValue;
                 }
             }
 
@@ -217,13 +219,13 @@ namespace AltSalt.Maestro.Animation
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ColorClip) {
+                if (clipSelection[i].asset is LerpToTargetClip lerpToTargetClip &&
+                    lerpToTargetClip.templateReference is ColorBehaviour colorBehaviour) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    ColorClip clipAsset = clipSelection[i].asset as ColorClip;
-                    Undo.RecordObject(clipAsset, "set clip(s) initial color");
-                    Color originalColor = clipAsset.template.initialValue;
-                    clipAsset.template.initialValue = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
+                    Undo.RecordObject(lerpToTargetClip, "set clip(s) initial color");
+                    Color originalColor = colorBehaviour.initialValue;
+                    colorBehaviour.initialValue = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
                 }
             }
 
@@ -236,8 +238,9 @@ namespace AltSalt.Maestro.Animation
             Array.Sort(clipSelection, new Utils.ClipTimeSort());
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ColorClip) {
-                    value = (clipSelection[i].asset as ColorClip).template.targetValue;
+                if (clipSelection[i].asset is LerpToTargetClip lerpToTargetClip &&
+                    lerpToTargetClip.templateReference is ColorBehaviour colorBehaviour) {
+                    value = colorBehaviour.targetValue;
                     break;
                 }
             }
@@ -250,12 +253,12 @@ namespace AltSalt.Maestro.Animation
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ColorClip) {
+                if (clipSelection[i].asset is LerpToTargetClip lerpToTargetClip &&
+                    lerpToTargetClip.templateReference is ColorBehaviour colorBehaviour) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    ColorClip clipAsset = clipSelection[i].asset as ColorClip;
-                    Undo.RecordObject(clipAsset, "set clip(s) target color");
-                    clipAsset.template.targetValue = targetValue;
+                    Undo.RecordObject(lerpToTargetClip, "set clip(s) target color");
+                    colorBehaviour.targetValue = targetValue;
                 }
             }
 
@@ -267,17 +270,18 @@ namespace AltSalt.Maestro.Animation
             List<TimelineClip> changedClips = new List<TimelineClip>();
 
             for (int i = 0; i < clipSelection.Length; i++) {
-                if (clipSelection[i].asset is ColorClip) {
+                if (clipSelection[i].asset is LerpToTargetClip lerpToTargetClip &&
+                    lerpToTargetClip.templateReference is ColorBehaviour colorBehaviour) {
                     TimelineClip clip = clipSelection[i];
                     changedClips.Add(clip);
-                    ColorClip clipAsset = clipSelection[i].asset as ColorClip;
-                    Undo.RecordObject(clipAsset, "set clip(s) target color");
-                    Color originalColor = clipAsset.template.targetValue;
-                    clipAsset.template.targetValue = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
+                    Undo.RecordObject(lerpToTargetClip, "set clip(s) target color");
+                    Color originalColor = colorBehaviour.targetValue;
+                    colorBehaviour.targetValue = new Color(originalColor.r, originalColor.g, originalColor.b, targetValue);
                 }
             }
 
             return changedClips.ToArray();
         }
+        
     }
 }

@@ -27,8 +27,8 @@ namespace AltSalt.Maestro.Animation
                 input = inputPlayable.GetBehaviour ();
 
                 if(inputWeight >= 1f) {
-                    modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
-                    trackBinding.color = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, modifier));
+                    percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
+                    trackBinding.color = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
                 } else {
                     if(currentTime >= input.endTime) {
                         trackBinding.color = input.targetValue;

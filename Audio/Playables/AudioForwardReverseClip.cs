@@ -48,9 +48,7 @@ namespace AltSalt.Maestro.Audio
         {
             template.startTime = startTime;
             template.endTime = endTime;
-            template._isReversing.SetVariable(isReversingReference.GetVariable(this.directorObject));
-            template.frameStepValue.SetVariable(frameStepValue.GetVariable(this.directorObject));
-            template.swipeModifier.SetVariable(swipeModifierOutput.GetVariable(this.directorObject));
+            template.trackAssetConfig = trackAssetConfig;
 
             var playable = ScriptPlayable<AudioForwardReverseBehaviour>.Create(graph, template);
             return playable;

@@ -1,4 +1,6 @@
+using System;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace AltSalt.Maestro
@@ -20,10 +22,23 @@ namespace AltSalt.Maestro
 
         public string scriptsPath => _scriptsPath;
 
-        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
-        public void RefreshAppSettings()
+        private void OnEnable()
         {
-            Utils.GetAppSettings();
+            var appSettingsSearch = Utils.GetScriptableObject(nameof(AppSettings));
+            if (appSettingsSearch == null) {
+                AppSettings appSettings = Utils.GetAppSettings();
+                appSettings.RefreshDependencies();
+                appSettings.SetDefaults();
+            }
+        }
+
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        [MenuItem("Tools/Maestro/Reset App Settings", false, 0)]
+        public static void ResetAppSettings()
+        {
+            AppSettings appSettings = Utils.GetAppSettings();
+            appSettings.RefreshDependencies();
+            appSettings.SetDefaults();
         }
     }
 }

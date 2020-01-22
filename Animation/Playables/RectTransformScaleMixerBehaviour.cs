@@ -27,8 +27,8 @@ namespace AltSalt.Maestro.Animation
                 trackBindingComponent = trackBinding.GetComponent<RectTransform>();
                 
                 if(inputWeight >= 1f) {
-                    modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
-                    trackBindingComponent.localScale = Vector3.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, modifier));
+                    percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
+                    trackBindingComponent.localScale = Vector3.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
                 } else {
                     if(currentTime >= input.endTime) {
                         trackBindingComponent.localScale = input.targetValue;

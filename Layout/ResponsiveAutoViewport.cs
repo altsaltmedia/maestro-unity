@@ -7,13 +7,9 @@ namespace AltSalt.Maestro.Layout
 {
     public class ResponsiveAutoViewport : ResponsiveCamera
     {
-        [ValidateInput(nameof(IsPopulated))]
-        [SerializeField]
-        protected FloatReference deviceWidth = new FloatReference();
+        private float deviceWidth => appSettings.GetDeviceWidth(this.gameObject);
 
-        [ValidateInput(nameof(IsPopulated))]
-        [SerializeField]
-        protected FloatReference deviceHeight = new FloatReference();
+        private float deviceHeight => appSettings.GetDeviceHeight(this.gameObject);
 
         [SerializeField]
         public List<Rect> viewportModifiers = new List<Rect>();
@@ -32,19 +28,6 @@ namespace AltSalt.Maestro.Layout
             SetValue(breakpointIndex);
         }
 #if UNITY_EDITOR
-        protected override void PopulateDependencies()
-        {
-            base.PopulateDependencies();
-
-            if (deviceWidth.GetVariable(this.gameObject) == null) {
-                deviceWidth.SetVariable(Utils.GetFloatVariable(nameof(VarDependencies.DeviceWidth)));
-            }
-
-            if (deviceHeight.GetVariable(this.gameObject) == null) {
-                deviceHeight.SetVariable(Utils.GetFloatVariable(nameof(VarDependencies.DeviceHeight)));
-            }
-        }
-
         protected override void UpdateBreakpointDependencies()
         {
             base.UpdateBreakpointDependencies();
@@ -65,10 +48,10 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
 #endif
-            Rect originalRect = new Rect((deviceWidth.GetValue(this.gameObject) - sceneWidth) / 2f, (deviceHeight.GetValue(this.gameObject) - sceneHeight) / 2f, sceneWidth, sceneHeight);
+            Rect originalRect = new Rect((deviceWidth - sceneWidth) / 2f, (deviceHeight - sceneHeight) / 2f, sceneWidth, sceneHeight);
             thisCamera.pixelRect = new Rect(originalRect.x, originalRect.y, originalRect.width, originalRect.height);
             thisCamera.rect = new Rect(thisCamera.rect.x + viewportModifiers[activeIndex].x,
-                thisCamera.rect.y + +viewportModifiers[activeIndex].y,
+                thisCamera.rect.y + viewportModifiers[activeIndex].y,
                 thisCamera.rect.width + viewportModifiers[activeIndex].width,
                 thisCamera.rect.height + viewportModifiers[activeIndex].height);
         }

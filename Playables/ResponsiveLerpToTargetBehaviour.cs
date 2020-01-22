@@ -104,11 +104,11 @@ namespace AltSalt.Maestro
         public bool logElementOnLayoutUpdate {
             get
             {
-                if (appSettings.logResponsiveElementActions == true) {
+                if (_logElementOnLayoutUpdate == true || trackAssetConfig.logGlobalResponsiveElementActions == true) {
                     return true;
                 }
 
-                return _logElementOnLayoutUpdate;
+                return false;
             }
         }
 
@@ -126,18 +126,18 @@ namespace AltSalt.Maestro
 
         public string elementName => this.ToString();
 
-        public Scene parentScene => directorObject.scene;
+        public Scene parentScene => trackAssetConfig.gameObject.scene;
 
         public override void OnPlayableCreate(Playable playable)
         {
 #if UNITY_EDITOR
             UpdateBreakpointDependencies();
 
-            if (enableDynamicElement.GetVariable(directorObject) == null) {
+            if (enableDynamicElement.GetVariable(trackAssetConfig) == null) {
                 enableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement)));
             }
 
-            if (disableDynamicElement.GetVariable(directorObject) == null) {
+            if (disableDynamicElement.GetVariable(trackAssetConfig) == null) {
                 disableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement)));
             }
 #endif
@@ -145,7 +145,7 @@ namespace AltSalt.Maestro
             enableDynamicElement.RaiseEvent(clipAsset, parentScene.name, clipAsset.name, this);
 
             easingFunction = EasingFunction.GetEasingFunction(ease);
-            CallExecuteLayoutUpdate(directorObject);
+            CallExecuteLayoutUpdate(trackAssetConfig);
         }
 
         public void CallExecuteLayoutUpdate(UnityEngine.Object callingObject)

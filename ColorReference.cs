@@ -10,6 +10,7 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using System;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
@@ -42,8 +43,10 @@ namespace AltSalt.Maestro
             if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
                 searchAttempted = true;
                 LogMissingReferenceMessage(GetType().Name);
-                _variable = Utils.GetScriptableObject(referenceName) as ColorVariable;
-                if (_variable != null) {
+                var variableSearch = Utils.GetScriptableObject(referenceName) as ColorVariable;
+                if (variableSearch != null) {
+                    Undo.RecordObject(callingObject, "save variable reference");
+                    _variable = variableSearch;
                     LogFoundReferenceMessage(GetType().Name, _variable);
                 }
             }

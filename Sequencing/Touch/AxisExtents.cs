@@ -10,9 +10,9 @@ namespace AltSalt.Maestro.Sequencing.Touch
     {
         [SerializeField]
         [TitleGroup("$"+nameof(propertiesTitle))]
-        private Axis _swipeAxis;
+        private AxisReference _swipeAxis;
 
-        public Axis swipeAxis
+        public AxisReference swipeAxis
         {
             get => _swipeAxis;
             private set => _swipeAxis = value;
@@ -20,9 +20,9 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         [SerializeField]
         [TitleGroup("$"+nameof(propertiesTitle))]
-        private Axis _momentumAxis;
+        private AxisReference _momentumAxis;
 
-        public Axis momentumAxis
+        public AxisReference momentumAxis
         {
             get => _momentumAxis;
             private set => _momentumAxis = value;
@@ -45,7 +45,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
         public double markerMasterTime
         {
             get => _markerMasterTime;
-            protected set => _markerMasterTime = value;
+            private set => _markerMasterTime = value;
         }
         
         protected override string timeThresholdsTitle => "Axis Transition Thresholds";
@@ -58,13 +58,11 @@ namespace AltSalt.Maestro.Sequencing.Touch
             this.description = axisMarker.description;
             this.markerMasterTime = MasterSequence.LocalToMasterTime(touchData.sequence.sequenceConfig.masterSequence, touchData.sequence, axisMarker.time);
             
-            if (axisMarker.axisType == AxisType.Y)
-            {
+            if (axisMarker.axisType == AxisType.Y) {
                 this.swipeAxis = axisMonitor.touchController.ySwipeAxis;
                 this.momentumAxis = axisMonitor.touchController.yMomentumAxis;
             }
-            else
-            {
+            else {
                 this.swipeAxis = axisMonitor.touchController.xSwipeAxis;
                 this.momentumAxis = axisMonitor.touchController.xMomentumAxis;
             }

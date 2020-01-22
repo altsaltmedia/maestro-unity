@@ -26,11 +26,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         public Lerper lerper => _lerper;
 
-        [ValidateInput(nameof(IsPopulated))]
-        [SerializeField]
-        private BoolReference _isReversing = new BoolReference();
-
-        public bool isReversing => _isReversing.GetValue(this.gameObject);
+        public bool isReversing => appSettings.GetIsReversing(this.gameObject, rootConfig.inputGroupKey);
 
         [SerializeField]
         [InfoBox("Autorun data is populated dynamically from connected Master Sequences")]

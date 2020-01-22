@@ -31,50 +31,47 @@ namespace AltSalt.Maestro.Layout {
         
         private float deviceAspectRatio
         {
-            get => appSettings.GetDeviceAspectRatio(this.gameObject);
+            get => appSettings.GetDeviceAspectRatio(this);
             set => appSettings.SetDeviceAspectRatio(this.gameObject, value);
         }
 
         private float deviceWidth
         {
-            get => appSettings.GetDeviceWidth(this.gameObject);
+            get => appSettings.GetDeviceWidth(this);
             set => appSettings.SetDeviceWidth(this.gameObject, value);
         }
 
         private float deviceHeight
         {
-            get => appSettings.GetDeviceHeight(this.gameObject);
+            get => appSettings.GetDeviceHeight(this);
             set => appSettings.SetDeviceHeight(this.gameObject, value);
         }
-
-        [ShowInInspector]
-        [ReadOnly]
-        private float _sceneAspectRatio;
+        
+        [SerializeField]
+        private FloatReference _sceneAspectRatio = new FloatReference();
 
         private float sceneAspectRatio
         {
-            get => _sceneAspectRatio;
-            set => _sceneAspectRatio = value;
+            get => _sceneAspectRatio.GetValue(this);
+            set => _sceneAspectRatio.SetValue(this.gameObject, value);
         }
-
-        [ShowInInspector]
-        [ReadOnly]
-        private float _sceneWidth;
+        
+        [SerializeField]
+        private FloatReference _sceneWidth = new FloatReference();
 
         private float sceneWidth
         {
-            get => _sceneWidth;
-            set => _sceneWidth = value;
+            get => _sceneWidth.GetValue(this);
+            set => _sceneWidth.SetValue(this.gameObject, value);
         }
-
-        [ShowInInspector]
-        [ReadOnly]
-        private float _sceneHeight;
+        
+        [SerializeField]
+        private FloatReference _sceneHeight = new FloatReference();
 
         private float sceneHeight
         {
-            get => _sceneHeight;
-            set => _sceneHeight = value;
+            get => _sceneHeight.GetValue(this);
+            set => _sceneHeight.SetValue(this.gameObject, value);
         }
 
         [SerializeField]
@@ -120,7 +117,7 @@ namespace AltSalt.Maestro.Layout {
             SaveScreenValues();
             RefreshLayout();   
 		}
-
+        
         private void OnDisable()
         {
             priorityDynamicElements.Clear();
@@ -128,7 +125,14 @@ namespace AltSalt.Maestro.Layout {
         }
 
 #if UNITY_EDITOR
-        private void OnGUI()
+        private void OnEnable()
+        {
+            if (appSettings == null) {
+                appSettings = Utils.GetAppSettings();
+            }
+        }
+
+        private void Update()
         {
             if (ScreenResized() == true) {
                 SaveScreenValues();
@@ -243,10 +247,10 @@ namespace AltSalt.Maestro.Layout {
                 }
 
                 if (dynamicElementsList[i].priority >= minPriority && dynamicElementsList[i].priority <= maxPriority) {
-                    if (dynamicElementsList[i] is IResponsiveBreakpoints responsiveBreakpoints) {
-                        responsiveBreakpoints.sceneAspectRatio = dynamicLayoutController.sceneAspectRatio;
-                        responsiveBreakpoints.sceneWidth = dynamicLayoutController.sceneWidth;
-                        responsiveBreakpoints.sceneHeight = dynamicLayoutController.sceneHeight;
+                    if (dynamicElementsList[i] is ISceneDimensionListener sceneDimensionListener) {
+                        sceneDimensionListener.sceneAspectRatio = dynamicLayoutController.sceneAspectRatio;
+                        sceneDimensionListener.sceneWidth = dynamicLayoutController.sceneWidth;
+                        sceneDimensionListener.sceneHeight = dynamicLayoutController.sceneHeight;
                     }
                     dynamicElementsList[i].CallExecuteLayoutUpdate(dynamicLayoutController.gameObject);
                 }

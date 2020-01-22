@@ -11,6 +11,7 @@ https://www.altsalt.com / ricky@altsalt.com
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
@@ -26,7 +27,7 @@ namespace AltSalt.Maestro
         public float value
         {
             get => _value;
-            set => _value = value;
+            private set => _value = value;
         }
 
         [SerializeField]
@@ -38,6 +39,15 @@ namespace AltSalt.Maestro
         {
             get => _defaultValue;
             set => _defaultValue = value;
+        }
+        
+        public void SetValue(GameObject callingObject, float value)
+        {
+            StoreCaller(callingObject);
+
+            this.value = value;
+
+            SignalChange();
         }
 
         public void SetValue(float value)

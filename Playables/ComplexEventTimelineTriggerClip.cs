@@ -14,8 +14,7 @@ namespace AltSalt.Maestro
         {
             template.startTime = startTime;
             template.endTime = endTime;
-            template._isReversing.SetVariable(isReversingReference.GetVariable(this.directorObject));
-            template.directorObject = directorObject;
+            template.trackAssetConfig = trackAssetConfig;
 
             var playable = ScriptPlayable<ComplexEventTimelineTriggerBehaviour>.Create(graph, template);
             return playable;

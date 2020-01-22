@@ -24,7 +24,7 @@ namespace AltSalt.Maestro
         public int value
         {
             get => _value;
-            set => _value = value;
+            private set => _value = value;
         }
 
         [SerializeField]
@@ -37,6 +37,15 @@ namespace AltSalt.Maestro
             set => _defaultValue = value;
         }
 
+        public void SetValue(GameObject callinObject, int value)
+        {
+            StoreCaller(callinObject);
+
+            this.value = value;
+
+            SignalChange();
+        }
+        
         public void SetValue(int value)
         {
             if (CallerRegistered() == false) return;

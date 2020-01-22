@@ -23,17 +23,10 @@ namespace AltSalt.Maestro.Audio
             set => _appSettings = value;
         }
 
-        private static bool _volumeActive = true;
-
-        private static bool volumeActive
+        private bool volumeActive
         {
-            get => _volumeActive;
-            set => _volumeActive = value;
-        }
-
-        private void Start()
-        {
-            
+            get => appSettings.GetVolumeEnabled(this.gameObject);
+            set => appSettings.SetVolumeEnabled(this.gameObject, value);
         }
 
         public void ToggleVoluem()

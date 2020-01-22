@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace AltSalt.Maestro
@@ -48,52 +49,81 @@ namespace AltSalt.Maestro
             set => _invertXInput = value;
         }
 
-        
         [SerializeField, Required]
-        private BoolReference _userAutoplayEnabled;
+        private BoolReference _userAutoplayEnabled = new BoolReference();
 
         public BoolReference userAutoplayEnabled
         {
-            get
-            {
-                UpdateDependencies();
-                return _userAutoplayEnabled;
-            }
+            get => _userAutoplayEnabled;
+            set => _userAutoplayEnabled = value;
         }
-        
+
         [SerializeField, Required]
-        private BoolReference _userMomentumEnabled;
+        private BoolReference _userMomentumEnabled = new BoolReference();
 
         public BoolReference userMomentumEnabled
         {
-            get
-            {
-                UpdateDependencies();
-                return _userMomentumEnabled;
-            }
+            get => _userMomentumEnabled;
+            set => _userMomentumEnabled = value;
         }
 
-        public UserPreferences(CustomKey userKey)
+        public UserPreferences(UserData userData, UserDataKey userKey)
         {
 #if UNITY_EDITOR
-            FieldInfo[] fields = typeof(InputGroup).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-
-            for (int i = 0; i < fields.Length; i++) {
-                
-                var varReference = fields[i].GetValue(this);
-                string name = fields[i].Name.Replace("_", "").Capitalize();
-                
-                var variableField = varReference.GetType().GetField("_variable", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-                variableField.SetValue(varReference, CreateProfileDependency(variableField.FieldType, $"{userKey.name}-{name}", userKey.name));
-                
-            }
+            RefreshDependencies(userKey);
+            SetDefaults(userData, userKey);
 #endif
         }
         
-#if UNITY_EDITOR
-        private static dynamic CreateProfileDependency(Type assetType, string name, string userName)
+        public void RefreshDependencies(UserDataKey userKey)
         {
-            return Utils.CreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/InputSettings/{userName}");
+            FieldInfo[] referenceFields = typeof(UserPreferences).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+            for (int i = 0; i < referenceFields.Length; i++) {
+                
+                string name = referenceFields[i].Name.Replace("_", "").Capitalize();
+                var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
+                
+                var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
+
+                if (variableValue == null) {
+                    variableField.SetValue(referenceValue,
+                        CreateUserPreference(variableField.FieldType, $"{userKey.name}-{name}", userKey.name));
+                }
+            }
+        }
+
+        public UserPreferences SetDefaults(UserData userData, UserDataKey userKey)
+        {
+            FieldInfo[] referenceFields = typeof(UserPreferences).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+            ySensitivity.GetVariable(userData).defaultValue = 0.0027f;
+            invertYInput.GetVariable(userData).defaultValue = false;
+            xSensitivity.GetVariable(userData).defaultValue = 0.0054f;
+            invertXInput.GetVariable(userData).defaultValue = true;
+            userAutoplayEnabled.GetVariable(userData).defaultValue = true;
+            userMomentumEnabled.GetVariable(userData).defaultValue = true;
+            
+            for (int i = 0; i < referenceFields.Length; i++) {
+                
+                var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
+                var variableValue = variableField.GetValue(referenceValue);
+                
+                if (variableValue is ModifiableEditorVariable modifiableEditorVariable) {
+                    modifiableEditorVariable.StoreCaller(userData, "setting default from refresh dependencies",
+                        "app settings");
+                    modifiableEditorVariable.hasDefault = true;
+                    modifiableEditorVariable.SetToDefaultValue();
+                }
+            }
+
+            return this;
+        }
+        
+#if UNITY_EDITOR
+        private static dynamic CreateUserPreference(Type assetType, string name, string userName)
+        {
+            return Utils.CreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/UsetData/{userName}");
         }
 #endif
     }

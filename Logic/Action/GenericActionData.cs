@@ -14,7 +14,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        private GameObjectGenericAction _action;
+        private GameObjectGenericAction _action = new GameObjectGenericAction();
 
         private GameObjectGenericAction action
         {

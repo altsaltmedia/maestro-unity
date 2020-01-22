@@ -17,7 +17,7 @@ namespace AltSalt.Maestro.Animation
             switch (parentTrack.GetType().Name) {
 
                 case nameof(TMProColorTrack): {
-                        ColorClip asset = timelineClip.asset as ColorClip;
+                        TMProColorClip asset = timelineClip.asset as TMProColorClip;
                         TMP_Text component = sourceObject as TMP_Text;
                         if (component != null) {
                             asset.template.initialValue = component.color;

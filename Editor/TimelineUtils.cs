@@ -14,27 +14,29 @@ namespace AltSalt.Maestro
     public static class TimelineUtils
     {
         private static readonly FloatReference _currentTime = new FloatReference();
-        
+
+        private static AppSettings _appSettings;
+
+        private static AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+        }
+
         public static float currentTime {
 
-            get {
-                PopulateTimeReference();
-                return _currentTime.GetValue(_currentTime.parentObject);
-            }
+            get => appSettings.timelineDebugTime;
 
-            set {
-                PopulateTimeReference();
-                _currentTime.GetVariable(_currentTime.parentObject).SetValue(value);
+            set
+            {
+                appSettings.timelineDebugTime = value;
                 TimelineEditor.inspectedDirector.time = value;
-            }
-
-        }
-        
-        private static FloatReference currentTimeReference {
-
-            get {
-                PopulateTimeReference();
-                return _currentTime;
             }
         }
 
@@ -101,14 +103,6 @@ namespace AltSalt.Maestro
         public static void FocusTimelineWindow()
         {
             EditorApplication.ExecuteMenuItem("Window/Sequencing/Timeline");
-        }
-
-        private static FloatReference PopulateTimeReference()
-        {
-            if(_currentTime.GetVariable(_currentTime.parentObject) == null) {
-                _currentTime.SetVariable(Utils.GetFloatVariable("TimelineCurrentTime"));
-            }
-            return _currentTime;
         }
 
         public static List<TrackAsset> GetAllTracks()

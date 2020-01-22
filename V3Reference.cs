@@ -1,5 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -33,8 +34,10 @@ namespace AltSalt.Maestro
             if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
                 searchAttempted = true;
                 LogMissingReferenceMessage(GetType().Name);
-                _variable = Utils.GetScriptableObject(referenceName) as V3Variable;
-                if (_variable != null) {
+                var variableSearch = Utils.GetScriptableObject(referenceName) as V3Variable;
+                if (variableSearch != null) {
+                    Undo.RecordObject(callingObject, "save variable reference");
+                    _variable = variableSearch;
                     LogFoundReferenceMessage(GetType().Name, _variable);
                 }
             }

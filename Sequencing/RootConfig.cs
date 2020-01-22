@@ -25,52 +25,51 @@ namespace AltSalt.Maestro.Sequencing
             }
             set => _appSettings = value;
         }
-        
-        [ValidateInput(nameof(IsPopulated))]
-        [SerializeField]
-        private ComplexEventManualTrigger _sequenceModified;
 
-        public ComplexEventManualTrigger sequenceModified => _sequenceModified;
+        [SerializeField]
+        private InputGroupKeyReference _inputGroupKey = new InputGroupKeyReference();
+
+        public InputGroupKey inputGroupKey => _inputGroupKey.GetVariable(this.gameObject);
+
+        [SerializeField]
+        private UserDataKeyReference _userKey;
+
+        public UserDataKey userKey => _userKey.GetVariable(this.gameObject);
+        
+        public ComplexEventManualTrigger sequenceModified =>
+            appSettings.GetSequenceModified(this.gameObject, inputGroupKey);
 
         [Required]
         [SerializeField]
         private GameObject _masterSequenceContainer;
 
-        public GameObject masterSequenceContainer
-        {
-            get => _masterSequenceContainer;
-            set => _masterSequenceContainer = value;
-        }
+        public GameObject masterSequenceContainer => _masterSequenceContainer;
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
         [OnValueChanged(nameof(Configure))]
         private List<MasterSequence> _masterSequences = new List<MasterSequence>();
 
-        public List<MasterSequence> masterSequences
-        {
-            get => _masterSequences;
-        }
+        public List<MasterSequence> masterSequences => _masterSequences;
 
         [Required]
         [SerializeField]
         private Joiner _joiner;
 
-        public Joiner joiner
-        {
-            get => _joiner;
-        }
+        public Joiner joiner => _joiner;
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
         [OnValueChanged(nameof(Configure))]
         private List<RootDataCollector> _rootDataCollectors = new List<RootDataCollector>();
 
-        public List<RootDataCollector> rootDataCollectors
+        public List<RootDataCollector> rootDataCollectors => _rootDataCollectors;
+
+        private void OnEnable()
         {
-            get => _rootDataCollectors;
+            Configure();
         }
-        
+
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.4f, 1)]
         public void Configure()
         {

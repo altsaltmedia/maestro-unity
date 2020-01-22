@@ -13,7 +13,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        private SimpleEventTrigger _simpleEventTrigger;
+        private SimpleEventTrigger _simpleEventTrigger = new SimpleEventTrigger();
 
         private SimpleEventTrigger simpleEventTrigger => _simpleEventTrigger;
 

@@ -12,18 +12,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace AltSalt.Maestro {
-
-    public interface IResponsiveBreakpoints
+    public interface IResponsiveBreakpoints : ISceneDimensionListener
     {
         string elementName {
             get;
         }
-        
-        float sceneWidth { get; set; }
-
-        float sceneHeight { get; set; }
-
-        float sceneAspectRatio { get; set; }
 
         List<float> aspectRatioBreakpoints {
             get;

@@ -137,7 +137,7 @@ namespace AltSalt.Maestro.Animation
             }
         }
 
-        Button SetupButton(Button button)
+        private Button SetupButton(Button button)
         {
             switch (button.name) {
                 case nameof(ButtonNames.TMProColorTrack):

@@ -10,6 +10,7 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using System;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
@@ -43,8 +44,10 @@ namespace AltSalt.Maestro
 			if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
 				searchAttempted = true;
 				LogMissingReferenceMessage(GetType().Name);
-				_variable = Utils.GetScriptableObject(referenceName) as BoolVariable;
-				if (_variable != null) {
+				var variableSearch = Utils.GetScriptableObject(referenceName) as BoolVariable;
+				if (variableSearch != null) {
+					_variable = variableSearch;
+					EditorUtility.SetDirty(callingObject);
 					LogFoundReferenceMessage(GetType().Name, _variable);
 				}
 			}
@@ -108,6 +111,19 @@ namespace AltSalt.Maestro
 			BoolVariable boolVariable = GetVariable(callingObject);
 			boolVariable.StoreCaller(callingObject);
 			boolVariable.Toggle();
+			return boolVariable;
+		}
+		
+		public BoolVariable SetToDefaultValue(Object callingObject, string sourceScene, string sourceName)
+		{
+			if (useConstant == true) {
+				LogDefaultChangeError(callingObject);
+				return null;
+			}
+
+			BoolVariable boolVariable = GetVariable(callingObject);
+			boolVariable.StoreCaller(callingObject, sourceScene, sourceName);
+			boolVariable.SetToDefaultValue();
 			return boolVariable;
 		}
 		

@@ -22,15 +22,6 @@ namespace AltSalt.Maestro
         // private LerpToTargetBehaviour template = new LerpToTargetBehaviour();
 
         public abstract LerpToTargetBehaviour templateReference { get; }
-
-        // App Settings is populated dynamically via LerpToTargetTrack at runtime
-        private AppSettings _appSettings;
-
-        public AppSettings appSettings
-        {
-            get => _appSettings;
-            set => _appSettings = value;
-        }
         
         [ShowInInspector]
         private double _startTime;
@@ -60,12 +51,12 @@ namespace AltSalt.Maestro
         }
 
         [HideInInspector]
-        public GameObject _directorObject;
+        public TrackAssetConfig _trackAssetConfig;
 
-        public GameObject directorObject
+        public TrackAssetConfig trackAssetConfig
         {
-            get => _directorObject;
-            set => _directorObject = value;
+            get => _trackAssetConfig;
+            set => _trackAssetConfig = value;
         }
 
         public override double duration => 1d;

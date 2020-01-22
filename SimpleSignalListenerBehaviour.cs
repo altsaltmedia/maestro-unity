@@ -22,7 +22,7 @@ namespace AltSalt.Maestro
         [SerializeField]
         private SimpleSignalReference _simpleSignalReference = new SimpleSignalReference();
 
-        private SimpleSignal simpleSignal => _simpleSignalReference.GetVariable(this.gameObject);
+        private SimpleSignal simpleSignal => _simpleSignalReference.GetVariable(this);
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
@@ -66,10 +66,10 @@ namespace AltSalt.Maestro
                 Debug.LogWarning("Please set an event for SimpleEventListenerBehaviour on " + this.name, this.gameObject);
             }
 
-            if (migrated == false) {
-                UnityEventUtils.MigrateUnityEventList(nameof(_response), nameof(_action), 
-                    new SerializedObject(this));
-            }
+//            if (migrated == false) {
+//                UnityEventUtils.MigrateUnityEventList(nameof(_response), nameof(_action), 
+//                    new SerializedObject(this));
+//            }
         }
 
 		private void OnDisable()

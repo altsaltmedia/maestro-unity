@@ -7,14 +7,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 {
     public class Lerper : Autorun_Module
     {
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private FloatReference _frameStepValue;
+        private UserDataKey userKey => autorunController.rootConfig.userKey;
         
-        private float frameStepValue
-        {
-            get => _frameStepValue.GetValue(this.gameObject);
-        }
+        private InputGroupKey inputGroupKey => autorunController.rootConfig.inputGroupKey;
+        
+        private float frameStepValue => autorunController.appSettings.GetFrameStepValue(this.gameObject, inputGroupKey);
 
         [SerializeField]
         private double _lerpThreshold = .03d;
@@ -135,7 +132,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 }
                 autorunController.autorunData[i].isLerping = false;
             }
-
         }
 
         private static bool IsPopulated(FloatReference attribute)

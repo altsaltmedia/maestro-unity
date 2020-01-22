@@ -1,5 +1,6 @@
 using System;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -20,8 +21,10 @@ namespace AltSalt.Maestro
 			if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
 				searchAttempted = true;
 				LogMissingReferenceMessage(GetType().Name);
-				_variable = Utils.GetScriptableObject(referenceName) as Axis;
-				if (_variable != null) {
+				var variableSearch = Utils.GetScriptableObject(referenceName) as Axis;
+				if (variableSearch != null) {
+					_variable = variableSearch;
+					EditorUtility.SetDirty(callingObject);
 					LogFoundReferenceMessage(GetType().Name, _variable);
 				}
 			}
@@ -34,7 +37,7 @@ namespace AltSalt.Maestro
 	        _variable = value;
         }
         
-		public bool GetStatus(UnityEngine.Object callingObject)
+		public bool IsActive(UnityEngine.Object callingObject)
 		{
 			this.parentObject = callingObject;
 			return GetVariable(callingObject).active;
@@ -56,10 +59,10 @@ namespace AltSalt.Maestro
 			return axis;
 		}
 		
-		public bool GetInverted(UnityEngine.Object callingObject)
+		public bool IsInverted(UnityEngine.Object callingObject)
 		{
 			this.parentObject = callingObject;
-			return GetVariable(callingObject).active;
+			return GetVariable(callingObject).inverted;
 		}
 
 		public Axis SetInverted(GameObject callingObject, bool targetValue)

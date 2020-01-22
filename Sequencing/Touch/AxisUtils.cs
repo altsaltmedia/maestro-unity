@@ -7,11 +7,13 @@ namespace AltSalt.Maestro.Sequencing.Touch
     {
         public static TouchExtents ActivateAxisExtents(double masterTime, AxisExtents activeExtents)
         {
+            GameObject axisMonitorObject = activeExtents.axisMonitor.gameObject; 
+            
             // Since we are currently within the extents, set the swipe to true
-            activeExtents.swipeAxis.inverted = activeExtents.inverted;
-            activeExtents.momentumAxis.inverted = activeExtents.inverted;
-            activeExtents.swipeAxis.active = true;
-            activeExtents.momentumAxis.active = true;
+            activeExtents.swipeAxis.SetInverted(axisMonitorObject, activeExtents.inverted);
+            activeExtents.momentumAxis.SetInverted(axisMonitorObject, activeExtents.inverted);
+            activeExtents.swipeAxis.SetStatus(axisMonitorObject, true);
+            activeExtents.momentumAxis.SetStatus(axisMonitorObject,  true);
             
             // If we are beyond the transition thresholds, that means this switch
             // is fully active; we can just activate the momentum, deactivate the
@@ -62,19 +64,21 @@ namespace AltSalt.Maestro.Sequencing.Touch
         {
             activeExtents.axisMonitor.SetTransitionStatus(false);
             Touch_Controller touchController = activeExtents.axisMonitor.touchController;
+            GameObject axisMonitorObject = activeExtents.axisMonitor.gameObject;
             
             // Deactivate the opposing swipe axis
-            if (activeExtents.swipeAxis == touchController.ySwipeAxis) {
-                touchController.xSwipeAxis.active = false;
-            } else if (activeExtents.swipeAxis == touchController.xSwipeAxis) {
-                touchController.ySwipeAxis.active = false;
+            if (activeExtents.swipeAxis.GetVariable(axisMonitorObject) == touchController.ySwipeAxis.GetVariable(axisMonitorObject)) {
+                touchController.xSwipeAxis.SetStatus(axisMonitorObject, false);
+                
+            } else if (activeExtents.swipeAxis.GetVariable(axisMonitorObject) == touchController.xSwipeAxis.GetVariable(axisMonitorObject)) {
+                touchController.ySwipeAxis.SetStatus(axisMonitorObject, false);
             }
 
-            if (activeExtents.momentumAxis == touchController.yMomentumAxis) {
-                touchController.xMomentumAxis.active = false;
+            if (activeExtents.momentumAxis.GetVariable(axisMonitorObject) == touchController.yMomentumAxis.GetVariable(axisMonitorObject)) {
+                touchController.xMomentumAxis.SetStatus(axisMonitorObject, false);
                 
-            } else if (activeExtents.momentumAxis == touchController.xMomentumAxis) {
-                touchController.yMomentumAxis.active = false;
+            } else if (activeExtents.momentumAxis.GetVariable(axisMonitorObject) == touchController.xMomentumAxis.GetVariable(axisMonitorObject)) {
+                touchController.yMomentumAxis.SetStatus(axisMonitorObject, false);
             }
 
             return activeExtents;
@@ -83,13 +87,12 @@ namespace AltSalt.Maestro.Sequencing.Touch
         public static AxisExtents SetAxisTransitionState(AxisExtents activeExtents, AxisExtents siblingAxisExtents)
         {
             activeExtents.axisMonitor.SetTransitionStatus(true);
+            GameObject axisMonitorObject = activeExtents.axisMonitor.gameObject;
             
-            siblingAxisExtents.swipeAxis.active = true;
-            siblingAxisExtents.momentumAxis.active = true;
-            siblingAxisExtents.swipeAxis.inverted =
-                siblingAxisExtents.inverted;
-            siblingAxisExtents.momentumAxis.inverted =
-                siblingAxisExtents.inverted;
+            siblingAxisExtents.swipeAxis.SetStatus(axisMonitorObject, true);
+            siblingAxisExtents.momentumAxis.SetStatus(axisMonitorObject, true);
+            siblingAxisExtents.swipeAxis.SetInverted(axisMonitorObject, siblingAxisExtents.inverted);
+            siblingAxisExtents.momentumAxis.SetInverted(axisMonitorObject, siblingAxisExtents.inverted);
 
             return activeExtents;
         }
@@ -98,17 +101,18 @@ namespace AltSalt.Maestro.Sequencing.Touch
         {
             touchController.axisMonitor.SetTransitionStatus(true);
             TouchBranchingPathData activeBranch = TouchForkUtils.GetActiveBranch(touchController, touchForkExtents);
+            GameObject axisMonitorObject = touchForkExtents.axisMonitor.gameObject;
             
             if (activeBranch.branchKey == touchForkExtents.axisMonitor.yNorthKey ||
                 activeBranch.branchKey == touchForkExtents.axisMonitor.ySouthKey) {
-                touchController.ySwipeAxis.active = true;
-                touchController.yMomentumAxis.active = true;
+                touchController.ySwipeAxis.SetStatus(axisMonitorObject, true);
+                touchController.yMomentumAxis.SetStatus(axisMonitorObject, true);
             }
             
             else if (activeBranch.branchKey == touchForkExtents.axisMonitor.xEastKey ||
                      activeBranch.branchKey == touchForkExtents.axisMonitor.xWestKey) {
-                touchController.xSwipeAxis.active = true;
-                touchController.xMomentumAxis.active = true;
+                touchController.xSwipeAxis.SetStatus(axisMonitorObject, true);
+                touchController.xMomentumAxis.SetStatus(axisMonitorObject, true);
             }
 
             return touchForkExtents;

@@ -24,31 +24,22 @@ namespace AltSalt.Maestro.Sequencing
             get => _rootConfig;
             set => _rootConfig = value;
         }
+
+        private InputGroupKey inputGroupKey => rootConfig.inputGroupKey;
         
-        public List<MasterSequence> masterSequences
-        {
-            get => rootConfig.masterSequences;
-        } 
-        
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private SimpleEventTrigger _onForkUpdate;
-
-        public SimpleEventTrigger onForkUpdate
-        {
-            get => _onForkUpdate;
-            set => _onForkUpdate = value;
-        }
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private BoolReference _forkTransitionActive;
-
         public bool forkTransitionActive
         {
-            get => _forkTransitionActive.GetValue(this.gameObject);
-            private set => _forkTransitionActive.GetVariable(this.gameObject).SetValue(value);
+            get => rootConfig.appSettings.GetForkTransitionActive(this.gameObject, inputGroupKey);
+            private set => rootConfig.appSettings.SetForkTransitionActive(this.gameObject, inputGroupKey, value);
         }
+        
+        public float forkTransitionSpread =>
+            rootConfig.appSettings.GetForkTransitionSpread(this.gameObject, inputGroupKey);
+
+        private SimpleEventTrigger boundaryReached =>
+            rootConfig.appSettings.GetBoundaryReached(this.gameObject, inputGroupKey);
+
+        private List<MasterSequence> masterSequences => rootConfig.masterSequences;
 
         [SerializeField]
         [ReadOnly]
@@ -70,54 +61,23 @@ namespace AltSalt.Maestro.Sequencing
             private set => _forkDataCollection = value;
         }
 
-        [ValidateInput(nameof(IsPopulated))]
-        [SerializeField]
-        private FloatReference _forkTransitionSpread;
-
-        public float forkTransitionSpread
-        {
-            get => _forkTransitionSpread.GetValue(this.gameObject);
-        }
-        
-        [ValidateInput(nameof(IsPopulated))]
-        [SerializeField]
-        private SimpleEventTrigger _boundaryReached;
-
-        private SimpleEventTrigger boundaryReached
-        {
-            get => _boundaryReached;
-            set => _boundaryReached = value;
-        }
-        
         [SerializeField]
         [Required]
-        private CustomKey _forkKey;
+        private CustomKeyReference _forkKey;
 
-        private CustomKey forkKey
-        {
-            get => _forkKey;
-            set => _forkKey = value;
-        }
+        private CustomKey forkKey => _forkKey.GetVariable(this.gameObject);
 
         [SerializeField]
         [Required]
-        private CustomKey _updateForkViaBranchKey;
+        private CustomKeyReference _updateForkViaBranchKey;
 
-        private CustomKey updateForkViaBranchKey
-        {
-            get => _updateForkViaBranchKey;
-            set => _updateForkViaBranchKey = value;
-        }
+        private CustomKey updateForkViaBranchKey => _updateForkViaBranchKey.GetVariable(this.gameObject);
 
         [SerializeField]
         [Required]
-        private CustomKey _updateForkViaSequence;
+        private CustomKeyReference _updateForkViaSequence;
 
-        private CustomKey updateForkViaSequence
-        {
-            get => _updateForkViaSequence;
-            set => _updateForkViaSequence = value;
-        }
+        private CustomKey updateForkViaSequence => _updateForkViaSequence.GetVariable(this.gameObject);
 
         private void Start()
         {
@@ -127,7 +87,6 @@ namespace AltSalt.Maestro.Sequencing
         public void SetForkStatus(bool targetStatus)
         {
             forkTransitionActive = targetStatus;
-            onForkUpdate.RaiseEvent(this.gameObject);
         }
 
         public Sequence ActivatePreviousSequence(Sequence sourceSequence)

@@ -37,10 +37,12 @@ namespace AltSalt.Maestro.Sequencing.Touch
         {
             touchController.joiner.SetForkStatus(true);
             
-            touchController.ySwipeAxis.active = true;
-            touchController.yMomentumAxis.active = true;
-            touchController.xSwipeAxis.active = true;
-            touchController.xMomentumAxis.active = true;
+            GameObject axisMonitorObject = touchController.axisMonitor.gameObject;
+
+            touchController.ySwipeAxis.SetStatus(axisMonitorObject, true);
+            touchController.yMomentumAxis.SetStatus(axisMonitorObject, true);
+            touchController.xSwipeAxis.SetStatus(axisMonitorObject, true);
+            touchController.xMomentumAxis.SetStatus(axisMonitorObject, true);
                 
             switch (touchController.swipeDirection) {
                     
@@ -76,8 +78,10 @@ namespace AltSalt.Maestro.Sequencing.Touch
         {
             touchController.axisMonitor.SetTransitionStatus(true);
             
-            axisExtents.swipeAxis.active = true;
-            axisExtents.momentumAxis.active = true;
+            GameObject axisMonitorObject = touchController.axisMonitor.gameObject;
+            
+            axisExtents.swipeAxis.SetStatus(axisMonitorObject, true);
+            axisExtents.momentumAxis.SetStatus(axisMonitorObject, true);
 
             return axisExtents;
         }
@@ -87,27 +91,29 @@ namespace AltSalt.Maestro.Sequencing.Touch
             touchController.joiner.SetForkStatus(false);
             touchController.axisMonitor.SetTransitionStatus(false);
 
+            GameObject axisMonitorObject = touchController.axisMonitor.gameObject;
+
             // Flip axes accordingly
             if (activeBranch.branchKey == touchForkExtents.axisMonitor.yNorthKey ||
                 activeBranch.branchKey == touchForkExtents.axisMonitor.ySouthKey) {
 
-                touchController.ySwipeAxis.active = true;
-                touchController.ySwipeAxis.inverted = activeBranch.invert;
-                touchController.yMomentumAxis.active = true;
-                touchController.yMomentumAxis.inverted = activeBranch.invert;
+                touchController.ySwipeAxis.SetStatus(axisMonitorObject, true);
+                touchController.ySwipeAxis.SetInverted(axisMonitorObject, activeBranch.invert);
+                touchController.yMomentumAxis.SetStatus(axisMonitorObject, true);
+                touchController.yMomentumAxis.SetInverted(axisMonitorObject, activeBranch.invert);
                 
-                touchController.xSwipeAxis.active = false;
-                touchController.xMomentumAxis.active = false;
+                touchController.xSwipeAxis.SetStatus(axisMonitorObject, true);
+                touchController.xMomentumAxis.SetStatus(axisMonitorObject, true);
 
             } else {
 
-                touchController.ySwipeAxis.active = false;
-                touchController.yMomentumAxis.active = false;
+                touchController.ySwipeAxis.SetStatus(axisMonitorObject, true);
+                touchController.yMomentumAxis.SetStatus(axisMonitorObject, true);
                 
-                touchController.xSwipeAxis.active = true;
-                touchController.xSwipeAxis.inverted = activeBranch.invert;
-                touchController.xMomentumAxis.active = true;
-                touchController.xMomentumAxis.inverted = activeBranch.invert;
+                touchController.xSwipeAxis.SetStatus(axisMonitorObject, true);
+                touchController.xSwipeAxis.SetInverted(axisMonitorObject, activeBranch.invert);
+                touchController.xMomentumAxis.SetStatus(axisMonitorObject, true);
+                touchController.xMomentumAxis.SetInverted(axisMonitorObject, activeBranch.invert);
             }
 
             return touchForkExtents;
@@ -205,21 +211,22 @@ namespace AltSalt.Maestro.Sequencing.Touch
         private static TouchForkExtents UpdateTouchVariables(SwipeDirection swipeDirection, TouchForkExtents touchForkExtents, TouchBranchingPathData activeBranch)
         {
             Touch_Controller touchController = touchForkExtents.axisMonitor.touchController;
+            GameObject axisMonitorObject = touchController.axisMonitor.gameObject;
             
             if (activeBranch.branchKey == touchForkExtents.axisMonitor.yNorthKey ||
                 activeBranch.branchKey == touchForkExtents.axisMonitor.ySouthKey) {
-                touchController.ySwipeAxis.inverted = activeBranch.invert;
-                touchController.yMomentumAxis.inverted = activeBranch.invert;
+                touchController.ySwipeAxis.SetInverted(axisMonitorObject, activeBranch.invert);
+                touchController.yMomentumAxis.SetInverted(axisMonitorObject, activeBranch.invert);
 
-                Touch_Controller.RefreshIsReversing(touchController, swipeDirection, touchController.yMomentumAxis);
+                Touch_Controller.RefreshIsReversing(touchController, swipeDirection, touchController.yMomentumAxis.GetVariable(axisMonitorObject));
             }
             
             else if (activeBranch.branchKey == touchForkExtents.axisMonitor.xEastKey ||
                 activeBranch.branchKey == touchForkExtents.axisMonitor.xWestKey) {
-                touchController.xSwipeAxis.inverted = activeBranch.invert;
-                touchController.xMomentumAxis.inverted = activeBranch.invert;
+                touchController.xSwipeAxis.SetInverted(axisMonitorObject, activeBranch.invert);
+                touchController.xMomentumAxis.SetInverted(axisMonitorObject, activeBranch.invert);
                 
-                Touch_Controller.RefreshIsReversing(touchController, swipeDirection, touchController.xMomentumAxis);
+                Touch_Controller.RefreshIsReversing(touchController, swipeDirection, touchController.xMomentumAxis.GetVariable(axisMonitorObject));
             }
 
             return touchForkExtents;

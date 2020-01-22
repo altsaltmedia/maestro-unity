@@ -52,13 +52,13 @@ namespace AltSalt.Maestro.Logic
             this.duration = duration;
         }
 
-        public void LerpToTargetValue()
+        public ModifiableEditorVariable LerpToTargetValue(GameObject callingObject)
         {
             switch(variableTarget.GetType().Name) {
 
                 case nameof(FloatVariable): {
                         FloatVariable variable = variableTarget as FloatVariable;
-                        DOTween.To(() => variable.value, x => variable.value = x, targetFloat, duration).OnComplete(() => {
+                        DOTween.To(() => variable.value, x => variable.SetValue(callingObject, x), targetFloat, duration).OnComplete(() => {
                             variableCallbackDelegate.Invoke();
                         });
                         break;
@@ -66,7 +66,7 @@ namespace AltSalt.Maestro.Logic
 
                 case nameof(ColorVariable): {
                         ColorVariable variable = variableTarget as ColorVariable;
-                        DOTween.To(() => variable.value, x => variable.value = x, targetColor, duration).OnComplete(() => {
+                        DOTween.To(() => variable.value, x => variable.SetValue(callingObject, x), targetColor, duration).OnComplete(() => {
                             variableCallbackDelegate.Invoke();
                         });
                         break;
@@ -74,7 +74,7 @@ namespace AltSalt.Maestro.Logic
 
                 case nameof(V3Variable): {
                         V3Variable variable = variableTarget as V3Variable;
-                        DOTween.To(() => variable.value, x => variable.value = x, targetV3, duration).OnComplete(() => {
+                        DOTween.To(() => variable.value, x => variable.SetValue(callingObject, x), targetV3, duration).OnComplete(() => {
                             variableCallbackDelegate.Invoke();
                         });
                         break;
@@ -82,12 +82,14 @@ namespace AltSalt.Maestro.Logic
 
                 case nameof(IntVariable): {
                         IntVariable variable = variableTarget as IntVariable;
-                        DOTween.To(() => variable.value, x => variable.value = x, targetInt, duration).OnComplete(() => {
+                        DOTween.To(() => variable.value, x => variable.SetValue(callingObject, x), targetInt, duration).OnComplete(() => {
                             variableCallbackDelegate.Invoke();
                         });
                         break;
                     }
             }
+
+            return variableTarget;
         }
 
         bool FloatPopulated()

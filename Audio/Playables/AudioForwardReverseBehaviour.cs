@@ -12,39 +12,14 @@ namespace AltSalt.Maestro.Audio
         [FormerlySerializedAs("clipEndTime")]
         private float _clipEndTime;
 
-        public float clipEndTime
-        {
-            get => _clipEndTime;
-            set => _clipEndTime = value;
-        }
-        
-        [SerializeField]
-        public BoolReference _isReversing = new BoolReference();
+        public float clipEndTime => _clipEndTime;
 
-        public bool isReversing
-        {
-            get => _isReversing.GetValue(this.directorObject);
-            set => _isReversing.GetVariable(this.directorObject).SetValue(value);
-        }
-        
-        [SerializeField]
-        private FloatReference _frameStepValue = new FloatReference();
+        public bool isReversing => trackAssetConfig.isReversing;
 
-        public FloatReference frameStepValue
-        {
-            get => _frameStepValue;
-            set => _frameStepValue = value;
-        }
+        public float frameStepValue => trackAssetConfig.frameStepValue;
         
-        [SerializeField]
-        private FloatReference _swipeModifier = new FloatReference();
+        public float swipeModifierOutput => trackAssetConfig.swipeModifierOutput;
 
-        public FloatReference swipeModifier
-        {
-            get => _swipeModifier;
-            set => _swipeModifier = value;
-        }
-        
         private bool _playingTriggered = false;
 
         public bool playingTriggered

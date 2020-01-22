@@ -24,6 +24,8 @@ namespace AltSalt.Maestro
         {
             template.startTime = startTime;
             template.endTime = endTime;
+            template.trackAssetConfig = trackAssetConfig;
+            
             var playable = ScriptPlayable<DebugTimelineBehaviour>.Create(graph, template);
             return playable;
         }

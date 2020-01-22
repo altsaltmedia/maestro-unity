@@ -32,11 +32,11 @@ namespace AltSalt.Maestro.Animation
                 input = inputPlayable.GetBehaviour();
 
                 if (inputWeight >= 1f) {
-                    modifier = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
+                    percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
 #if UNITY_ANDROID
                     trackBinding.SetTime((double)Mathf.Lerp(input.initialValueAndroid, input.targetValueAndroid, input.easingFunction(0f, 1f, modifier)));
 #else
-                    trackBinding.SetTime((double)Mathf.Lerp(input.initialValueIOS, input.targetValueIOS, input.easingFunction(0f, 1f, modifier)));
+                    trackBinding.SetTime((double)Mathf.Lerp(input.initialValueIOS, input.targetValueIOS, input.easingFunction(0f, 1f, percentageComplete)));
 #endif
                 }
                 else {

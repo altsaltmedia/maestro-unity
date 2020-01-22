@@ -14,7 +14,7 @@ namespace AltSalt.Maestro
         public string value
         {
             get => _value;
-            set => _value = value;
+            private set => _value = value;
         }
         
         [SerializeField]

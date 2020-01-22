@@ -14,11 +14,12 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using SimpleJSON;
 using UnityEngine.SceneManagement;
 using UnityEngine.Timeline;
-
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -145,6 +146,13 @@ namespace AltSalt.Maestro
             {
                 return x.priority.CompareTo(y.priority);
             }
+        }
+        
+        public static FieldInfo GetVariableFieldFromReference(FieldInfo referenceField, object referencingObject, out object referenceValue)
+        {
+            referenceValue = referenceField.GetValue(referencingObject);
+            return referenceValue.GetType().GetField(
+                "_variable", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
         }
 
 #if UNITY_EDITOR
@@ -279,13 +287,13 @@ namespace AltSalt.Maestro
             return Application.dataPath + sanitizedPath;
         }
 
-        public static string GetAssetPathFromObject(UnityEngine.Object targetObject)
+        public static string GetAssetPathFromObject(Object targetObject)
         {
             string targetGUID = GetGUIDFromObject(targetObject);
             return AssetDatabase.GUIDToAssetPath(targetGUID);
         }
 
-        public static string GetGUIDFromObject(UnityEngine.Object targetObject)
+        public static string GetGUIDFromObject(Object targetObject)
         {
             string guid;
             long file;
@@ -513,7 +521,7 @@ namespace AltSalt.Maestro
             return false;
         }
 
-        public static bool TargetTypeSelected(UnityEngine.Object currentSelection, Type targetType)
+        public static bool TargetTypeSelected(Object currentSelection, Type targetType)
         {
             Type currentType = currentSelection.GetType();
             if (currentType.IsSubclassOf(targetType) || currentType == targetType) {
@@ -533,7 +541,7 @@ namespace AltSalt.Maestro
             return false;
         }
 
-        public static bool TargetTypeSelected(UnityEngine.Object[] currentSelection, Type targetType)
+        public static bool TargetTypeSelected(Object[] currentSelection, Type targetType)
         {
             for (int i = 0; i < currentSelection.Length; i++) {
                 Type currentType = currentSelection[i].GetType();
@@ -544,7 +552,7 @@ namespace AltSalt.Maestro
             return false;
         }
 
-        public static UnityEngine.Object[] RenameElements(string newName, UnityEngine.Object[] targetObjects)
+        public static Object[] RenameElements(string newName, Object[] targetObjects)
         {
             Array.Sort(targetObjects, new Utils.GameObjectSort());
 
@@ -555,7 +563,7 @@ namespace AltSalt.Maestro
                     if (i == 0) {
                         targetObjects[i].name = newName;
                     } else {
-                        targetObjects[i].name = string.Format("{0} ({1})", newName, i);
+                        targetObjects[i].name = String.Format("{0} ({1})", newName, i);
                     }
                 }
 
@@ -563,7 +571,7 @@ namespace AltSalt.Maestro
 
             return targetObjects;
         }
-        public static UnityEngine.Object[] FilterSelection(GameObject[] currentSelection, Type typeToSelect)
+        public static Object[] FilterSelection(GameObject[] currentSelection, Type typeToSelect)
         {
             List<GameObject> newSelection = new List<GameObject>();
 
@@ -577,7 +585,7 @@ namespace AltSalt.Maestro
             return newSelection.ToArray();
         }
 
-        public static UnityEngine.Object[] FilterSelection(GameObject[] currentSelection, Type[] typeToSelect)
+        public static Object[] FilterSelection(GameObject[] currentSelection, Type[] typeToSelect)
         {
             List<GameObject> newSelection = new List<GameObject>();
 
@@ -593,9 +601,9 @@ namespace AltSalt.Maestro
             return newSelection.ToArray();
         }
 
-        public static UnityEngine.Object[] FilterSelection(UnityEngine.Object[] currentSelection, Type typeToSelect)
+        public static Object[] FilterSelection(Object[] currentSelection, Type typeToSelect)
         {
-            List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
+            List<Object> newSelection = new List<Object>();
 
             for (int i = 0; i < currentSelection.Length; i++) {
                 
@@ -616,9 +624,9 @@ namespace AltSalt.Maestro
         }
 
 
-        public static UnityEngine.Object[] FilterSelection(UnityEngine.Object[] currentSelection, Type[] typeToSelect)
+        public static Object[] FilterSelection(Object[] currentSelection, Type[] typeToSelect)
         {
-            List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
+            List<Object> newSelection = new List<Object>();
 
             for (int i = 0; i < currentSelection.Length; i++) {
                 for (int q = 0; q < typeToSelect.Length; q++) {
@@ -641,9 +649,9 @@ namespace AltSalt.Maestro
         }
 
 
-        public static UnityEngine.Object[] CullSelection(UnityEngine.Object[] currentSelection, Type typeToOmit)
+        public static Object[] CullSelection(Object[] currentSelection, Type typeToOmit)
         {
-            List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
+            List<Object> newSelection = new List<Object>();
 
             for (int i = 0; i < currentSelection.Length; i++) {
                 Type objectType = currentSelection[i].GetType();
@@ -657,9 +665,9 @@ namespace AltSalt.Maestro
             return newSelection.ToArray();
         }
 
-        public static UnityEngine.Object[] CullSelection(UnityEngine.Object[] currentSelection, Type[] typeToOmit)
+        public static Object[] CullSelection(Object[] currentSelection, Type[] typeToOmit)
         {
-            List<UnityEngine.Object> newSelection = new List<UnityEngine.Object>();
+            List<Object> newSelection = new List<Object>();
 
             for(int i=0; i<currentSelection.Length; i++) {
                 for(int q=0; q<typeToOmit.Length; q++) {
@@ -851,7 +859,7 @@ namespace AltSalt.Maestro
             duplicatedObject.transform.SetSiblingIndex(selectedObject.transform.parent.GetSiblingIndex() + 1);
             
             // Finally, delete the leftover hierarchy we don't need
-            UnityEngine.Object.DestroyImmediate(outermostDuplicateInstance);
+            Object.DestroyImmediate(outermostDuplicateInstance);
 
             return duplicatedObject;
         }
@@ -940,7 +948,7 @@ namespace AltSalt.Maestro
 
         private static GameObject DuplicateSimpleGameObject(GameObject sourceObject, bool removeAutoGeneratedChildren)
         {
-            GameObject duplicate = UnityEngine.Object.Instantiate(sourceObject);
+            GameObject duplicate = Object.Instantiate(sourceObject);
             GameObject[] duplicateChildren = Utils.GetChildGameObjects(duplicate);
                 
             // By default, Unity will duplicate all of a game object's children.
@@ -948,7 +956,7 @@ namespace AltSalt.Maestro
             // (or not at all), so this removes those auto-generated objects
             if (removeAutoGeneratedChildren == true) {
                 for (int i = 0; i < duplicateChildren.Length; i++) {
-                    UnityEngine.Object.DestroyImmediate(duplicateChildren[i]);
+                    Object.DestroyImmediate(duplicateChildren[i]);
                 }
             }
                 
@@ -1136,7 +1144,7 @@ namespace AltSalt.Maestro
             string path;
             string typeName = typeof(SimpleEvent).Name;
 
-            guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
+            guids = AssetDatabase.FindAssets(String.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length < 1) {
                 Debug.Log($"Asset {target} of type  {typeName} not found.");
@@ -1158,7 +1166,7 @@ namespace AltSalt.Maestro
             string path;
             string typeName = typeof(ComplexEvent).Name;
 
-            guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
+            guids = AssetDatabase.FindAssets(String.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length < 1) {
                 Debug.Log($"Asset {target} of type  {typeName} not found.");
@@ -1180,7 +1188,7 @@ namespace AltSalt.Maestro
             string path;
             string typeName = typeof(FloatVariable).Name;
 
-            guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
+            guids = AssetDatabase.FindAssets(String.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length < 1) {
                 Debug.Log($"Asset {target} of type  {typeName} not found.");
@@ -1202,7 +1210,7 @@ namespace AltSalt.Maestro
             string path;
             string typeName = typeof(BoolVariable).Name;
 
-            guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
+            guids = AssetDatabase.FindAssets(String.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length < 1) {
                 Debug.Log($"Asset {target} of type  {typeName} not found.");
@@ -1220,7 +1228,7 @@ namespace AltSalt.Maestro
 
         public static dynamic GetScriptableObject(string target)
         {
-            if (string.IsNullOrEmpty(target) == true) {
+            if (String.IsNullOrEmpty(target) == true) {
                 return null;
             }
             
@@ -1228,7 +1236,7 @@ namespace AltSalt.Maestro
             string path;
             string typeName = typeof(ScriptableObject).Name;
 
-            guids = AssetDatabase.FindAssets(string.Format("{0} t:{1}", target, typeName));
+            guids = AssetDatabase.FindAssets(String.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length < 1) {
                 Debug.Log($"Asset {target} of type  {typeName} not found.");
@@ -1244,7 +1252,34 @@ namespace AltSalt.Maestro
             return (ScriptableObject)AssetDatabase.LoadAssetAtPath(path, typeof(ScriptableObject));
         }
 
-        public static void RepaintInspector(System.Type t)
+        
+        public static dynamic GetCustomKey(string target)
+        {
+            if (String.IsNullOrEmpty(target) == true) {
+                return null;
+            }
+            
+            string[] guids;
+            string path;
+            string typeName = typeof(CustomKey).Name;
+
+            guids = AssetDatabase.FindAssets(String.Format("{0} t:{1}", target, typeName));
+
+            if (guids.Length < 1) {
+                Debug.Log($"Asset {target} of type  {typeName} not found.");
+                return null;
+            }
+            
+            if (guids.Length > 1) {
+                LogDuplicateAssetWarning(target);
+            }
+
+            path = AssetDatabase.GUIDToAssetPath(guids[0]);
+
+            return (CustomKey)AssetDatabase.LoadAssetAtPath(path, typeof(CustomKey));
+        }
+
+        public static void RepaintInspector(Type t)
         {
             Editor[] ed = (Editor[])Resources.FindObjectsOfTypeAll<Editor>();
             for (int i = 0; i < ed.Length; i++) {
@@ -1412,14 +1447,14 @@ namespace AltSalt.Maestro
             return vector2;
         }
 
-        public static int GetV3Sign(Vector3 vector3)
+        public static int GetV2Sign(Vector2 vector3)
         {
             float vectorValue = vector3.x + vector3.y;
             if(vectorValue >= 0) {
                 return 1;
-            } else {
-                return -1;
             }
+
+            return -1;
         }
 
         // Raises a Vector3 to a power while retaining

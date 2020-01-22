@@ -11,7 +11,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        private AxisReference _axisReference;
+        private AxisReference _axisReference = new AxisReference();
 
         private AxisReference axisReference => _axisReference;
 
