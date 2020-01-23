@@ -29,12 +29,12 @@ namespace AltSalt.Maestro.Sequencing
         [SerializeField]
         private InputGroupKeyReference _inputGroupKey = new InputGroupKeyReference();
 
-        public InputGroupKey inputGroupKey => _inputGroupKey.GetVariable(this.gameObject);
+        public InputGroupKey inputGroupKey => _inputGroupKey.GetVariable() as InputGroupKey;
 
         [SerializeField]
         private UserDataKeyReference _userKey;
 
-        public UserDataKey userKey => _userKey.GetVariable(this.gameObject);
+        public UserDataKey userKey => _userKey.GetVariable() as UserDataKey;
         
         public ComplexEventManualTrigger sequenceModified =>
             appSettings.GetSequenceModified(this.gameObject, inputGroupKey);
@@ -67,6 +67,9 @@ namespace AltSalt.Maestro.Sequencing
 
         private void OnEnable()
         {
+            _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
+            _userKey.PopulateVariable(this, nameof(_userKey));
+            
             Configure();
         }
 

@@ -35,22 +35,24 @@ namespace AltSalt.Maestro
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private ColorVariable _variable;
-
-        public ColorVariable GetVariable(Object callingObject)
+        
+        public override ScriptableObject GetVariable()
         {
-#if UNITY_EDITOR
-            this.parentObject = callingObject;
-            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                searchAttempted = true;
-                LogMissingReferenceMessage(GetType().Name);
-                var variableSearch = Utils.GetScriptableObject(referenceName) as ColorVariable;
-                if (variableSearch != null) {
-                    Undo.RecordObject(callingObject, "save variable reference");
-                    _variable = variableSearch;
-                    LogFoundReferenceMessage(GetType().Name, _variable);
-                }
+            base.GetVariable();
+            return _variable;
+        }
+
+        protected override bool ShouldPopulateReference()
+        {
+            if (useConstant == false && _variable == null) {
+                return true;
             }
-#endif
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
             return _variable;
         }
         
@@ -65,10 +67,22 @@ namespace AltSalt.Maestro
             constantValue = value;
         }
 
-        public Color GetValue(Object callingObject)
+        public Color GetValue()
         {
-            this.parentObject = callingObject;
-            return useConstant ? constantValue : GetVariable(callingObject).value;
+            return useConstant ? constantValue : (GetVariable() as ColorVariable).value;
+        }
+
+        public ColorVariable SetValue(GameObject callingObject, Color targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            ColorVariable colorVariable = GetVariable() as ColorVariable;
+            colorVariable.StoreCaller(callingObject);
+            colorVariable.SetValue(targetValue);
+            return colorVariable;
         }
         
         public ColorVariable SetValue(GameObject callingObject, ColorVariable targetValue)
@@ -78,21 +92,10 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            ColorVariable colorVariable = GetVariable(callingObject);
+            ColorVariable colorVariable = GetVariable() as ColorVariable;
             colorVariable.StoreCaller(callingObject);
             colorVariable.SetValue(targetValue.value);
             return colorVariable;
-        }
-
-        protected override void UpdateReferenceName()
-        {
-            if (_variable != null) {
-                searchAttempted = false;
-                referenceName = _variable.name;
-            }
-//            else {
-//                referenceName = "";
-//            }
         }
     }
 }

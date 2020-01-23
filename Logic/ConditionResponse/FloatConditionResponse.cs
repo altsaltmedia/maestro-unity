@@ -17,61 +17,98 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [SerializeField]
         [Title("Float Reference")]
         [HideReferenceObjectPicker]
-        FloatReference floatReference;
+        [FormerlySerializedAs("floatReference")]
+        private FloatReference _floatReference;
+
+        private FloatReference floatReference => _floatReference;
 
         [PropertySpace]
 
         [SerializeField]
         [Title("Float Condition Variable")]
         [HideReferenceObjectPicker]
-        FloatReference floatConditionVar;
+        [FormerlySerializedAs("floatConditionVar")]
+        private FloatReference _floatConditionVar;
+
+        private FloatReference floatConditionVar => _floatConditionVar;
 
         [PropertySpace]
         [SerializeField]
-        ComparisonValues operation;
-        
+        [FormerlySerializedAs("operation")]
+        private ComparisonValues _operation;
 
+        public ComparisonValues operation => _operation;
+
+        public FloatConditionResponse(UnityEngine.Object parentObject,
+            string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
+
+        public override ConditionResponseBase PopulateReferences()
+        {
+            string referencePath = serializedPropertyPath + $".{nameof(_floatReference)}";
+            _floatReference.PopulateVariable(parentObject, referencePath.Split('.'));
+            
+            string conditionPath = serializedPropertyPath + $".{nameof(_floatConditionVar)}";
+            _floatConditionVar.PopulateVariable(parentObject, conditionPath.Split('.'));
+            
+            return this;
+        }
+        
         public override void SyncConditionHeading(Object callingObject)
         {
+            CheckPopulateReferences();
+            
             base.SyncConditionHeading(callingObject);
-            if (floatReference.GetVariable(callingObject) == null && floatReference.useConstant == false) {
+            if (floatReference.GetVariable() == null && floatReference.useConstant == false) {
                 conditionEventTitle = "Please populate a float reference.";
                 return;
             }
 
-            if (floatConditionVar.GetVariable(callingObject) == null && floatConditionVar.useConstant == false) {
+            if (floatConditionVar.GetVariable() == null && floatConditionVar.useConstant == false) {
                 conditionEventTitle = "Please populate a comparison condition.";
                 return;
             }
 
+            string newTitle;
+            
             if (floatReference.useConstant == true) {
-                conditionEventTitle = floatReference.GetValue(callingObject) + " is " + operation + " " + floatConditionVar.GetValue(callingObject);
+                newTitle = $"{floatReference.GetValue()}  is {operation} ";
             } else {
-                conditionEventTitle = floatReference.GetVariable(callingObject).name + " is " + operation + " " + floatConditionVar.GetValue(callingObject);
+                newTitle = $"{floatReference.GetVariable().name} is {operation} ";
             }
+
+            if (floatConditionVar.useConstant == true) {
+                newTitle += $"{floatConditionVar.GetValue()}";
+            }
+            else {
+                newTitle += $"{floatConditionVar.GetVariable().name}";
+            }
+
+            conditionEventTitle = newTitle;
         }
 
         public override bool CheckCondition(Object callingObject)
         {
+            CheckPopulateReferences();
+            
             base.CheckCondition(callingObject);
             
             switch (operation) {
 
                 case ComparisonValues.EqualTo:
-                    if (Mathf.Approximately(floatReference.GetValue(this.parentObject), floatConditionVar.GetValue(this.parentObject)) == true) {
+                    if (Mathf.Approximately(floatReference.GetValue(), floatConditionVar.GetValue()) == true) {
                         return true;
                     }
                     break;
 
                 case ComparisonValues.GreaterThan:
-                    if (floatReference.GetValue(this.parentObject) > floatConditionVar.GetValue(this.parentObject)) {
+                    if (floatReference.GetValue() > floatConditionVar.GetValue()) {
                         return true;
                     }
                     break;
 
                 case ComparisonValues.LessThan:
 
-                    if (floatReference.GetValue(this.parentObject) < floatConditionVar.GetValue(this.parentObject)) {
+                    if (floatReference.GetValue() < floatConditionVar.GetValue()) {
                         return true;
                     }
                     break;
@@ -82,11 +119,15 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         public FloatReference GetReference()
         {
+            CheckPopulateReferences();
+            
             return floatReference;
         }
 
         public FloatReference GetCondition()
         {
+            CheckPopulateReferences();
+            
             return floatConditionVar;
         }
     }

@@ -18,7 +18,10 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [Title("Int Reference")]
         [InfoBox("Int value that will be compared against condition")]
         [HideReferenceObjectPicker]
-        IntReference intReference;
+        [FormerlySerializedAs("intReference")]
+        private IntReference _intReference;
+
+        private IntReference intReference => _intReference;
 
         [PropertySpace]
 
@@ -26,54 +29,88 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [Title("Int Condition Variable")]
         [InfoBox("Condition the reference value will be compared to when determining whether to execute response")]
         [HideReferenceObjectPicker]
-        IntReference intConditionVar;
+        [FormerlySerializedAs("intConditionVar")]
+        private IntReference _intConditionVar;
+
+        private IntReference intConditionVar => _intConditionVar;
 
         [PropertySpace]
         [SerializeField]
-        ComparisonValues operation;
+        [FormerlySerializedAs("operation")]
+        private ComparisonValues _operation;
 
-        
+        private ComparisonValues operation => _operation;
+
+        public IntConditionResponse(UnityEngine.Object parentObject,
+            string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
+
         public override void SyncConditionHeading(Object callingObject)
         {
+            CheckPopulateReferences();
+            
             base.SyncConditionHeading(callingObject);
-            if (intReference.GetVariable(callingObject) == null && intReference.useConstant == false) {
+            if (intReference.GetVariable() == null && intReference.useConstant == false) {
                 conditionEventTitle = "Please populate an int reference.";
                 return;
             }
 
-            if (intConditionVar.GetVariable(callingObject) == null && intConditionVar.useConstant == false) {
+            if (intConditionVar.GetVariable() == null && intConditionVar.useConstant == false) {
                 conditionEventTitle = "Please populate a comparison condition.";
                 return;
             }
+            
+            string newTitle;
 
             if (intReference.useConstant == true) {
-                conditionEventTitle = intReference.GetValue(callingObject) + " is " + operation.ToString() + " " + intConditionVar.GetValue(callingObject);
+                newTitle = $"{intReference.GetValue()}  is {operation} ";
             } else {
-                conditionEventTitle = intReference.GetVariable(callingObject).name + " is " + operation.ToString() + " " + intConditionVar.GetValue(callingObject);
+                newTitle = $"{intReference.GetVariable().name} is {operation} ";
             }
+
+            if (intConditionVar.useConstant == true) {
+                newTitle += $"{intConditionVar.GetValue()}";
+            }
+            else {
+                newTitle += $"{intConditionVar.GetVariable().name}";
+            }
+
+            conditionEventTitle = newTitle;
+        }
+        
+        public override ConditionResponseBase PopulateReferences()
+        {
+            string referencePath = serializedPropertyPath + $".{nameof(_intReference)}";
+            _intReference.PopulateVariable(parentObject, referencePath.Split('.'));
+            
+            string conditionPath = serializedPropertyPath + $".{nameof(_intConditionVar)}";
+            _intConditionVar.PopulateVariable(parentObject, conditionPath.Split('.'));
+            
+            return this;
         }
 
         public override bool CheckCondition(Object callingObject)
         {
+            CheckPopulateReferences();
+            
             base.CheckCondition(callingObject);
             
             switch (operation) {
 
                 case ComparisonValues.EqualTo:
-                    if (intReference.GetValue(this.parentObject) == intConditionVar.GetValue(this.parentObject)) {
+                    if (intReference.GetValue() == intConditionVar.GetValue()) {
                         return true;
                     }
                     break;
 
                 case ComparisonValues.GreaterThan:
-                    if (intReference.GetValue(this.parentObject) > intConditionVar.GetValue(this.parentObject)) {
+                    if (intReference.GetValue() > intConditionVar.GetValue()) {
                         return true;
                     }
                     break;
 
                 case ComparisonValues.LessThan:
 
-                    if (intReference.GetValue(this.parentObject) < intConditionVar.GetValue(this.parentObject)) {
+                    if (intReference.GetValue() < intConditionVar.GetValue()) {
                         return true;
                     }
                     break;
@@ -84,11 +121,15 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         public IntReference GetReference()
         {
+            CheckPopulateReferences();
+            
             return intReference;
         }
 
         public IntReference GetCondition()
         {
+            CheckPopulateReferences();
+            
             return intConditionVar;
         }
     }

@@ -43,7 +43,7 @@ namespace AltSalt.Maestro.Layout
                     return true;
                 }
                 else {
-                    return attribute.GetVariable(attribute.parentObject) == null ? false : true;
+                    return attribute.GetVariable() == null ? false : true;
                 }
             }
             else {
@@ -58,7 +58,7 @@ namespace AltSalt.Maestro.Layout
                     return true;
                 }
                 else {
-                    return attribute.GetVariable(attribute.parentObject) == null ? false : true;
+                    return attribute.GetVariable() == null ? false : true;
                 }
             }
             else {

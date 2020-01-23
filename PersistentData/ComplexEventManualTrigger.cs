@@ -8,58 +8,58 @@ namespace AltSalt.Maestro
     {
         public void RaiseEvent(GameObject caller)
         {
-            GetVariable(caller).StoreCaller(caller);
-            GetVariable(caller).Raise();
+            (GetVariable() as ComplexEvent).StoreCaller(caller);
+            (GetVariable() as ComplexEvent).Raise();
         }
 
         public void RaiseEvent(GameObject caller, object value)
         {
-            GetVariable(caller).StoreCaller(caller);
+            (GetVariable() as ComplexEvent).StoreCaller(caller);
 
             if (value is string) {
 
-                GetVariable(caller).Raise((string)value);
+                (GetVariable() as ComplexEvent).Raise((string)value);
 
             } else if (value is float) {
 
-                GetVariable(caller).Raise((float)value);
+                (GetVariable() as ComplexEvent).Raise((float)value);
 
             } else if (value is bool) {
 
-                GetVariable(caller).Raise((bool)value);
+                (GetVariable() as ComplexEvent).Raise((bool)value);
 
             } else if (value is ScriptableObject) {
 
-                GetVariable(caller).Raise((ScriptableObject)value);
+                (GetVariable() as ComplexEvent).Raise((ScriptableObject)value);
 
             } else {
 
-                GetVariable(caller).Raise(value);
+                (GetVariable() as ComplexEvent).Raise(value);
             }
         }
 
         public void RaiseEvent(GameObject caller, ComplexPayload complexPayload)
         {
-            GetVariable(caller).StoreCaller(caller);
-            GetVariable(caller).Raise(complexPayload);
+            (GetVariable() as ComplexEvent).StoreCaller(caller);
+            (GetVariable() as ComplexEvent).Raise(complexPayload);
         }
 
         public void RaiseEvent(UnityEngine.Object caller, string sourceScene, string sourceName)
         {
-            GetVariable(caller).StoreCaller(caller, sourceScene, sourceName);
-            GetVariable(caller).Raise();
+            (GetVariable() as ComplexEvent).StoreCaller(caller, sourceScene, sourceName);
+            (GetVariable() as ComplexEvent).Raise();
         }
 
         public void RaiseEvent(UnityEngine.Object caller, string sourceScene, string sourceName, ScriptableObject value)
         {
-            GetVariable(caller).StoreCaller(caller, sourceScene, sourceName);
-            GetVariable(caller).Raise(value);
+            (GetVariable() as ComplexEvent).StoreCaller(caller, sourceScene, sourceName);
+            (GetVariable() as ComplexEvent).Raise(value);
         }
 
         public void RaiseEvent(UnityEngine.Object caller, string sourceScene, string sourceName, object value)
         {
-            GetVariable(caller).StoreCaller(caller, sourceScene, sourceName);
-            GetVariable(caller).Raise(value);
+            (GetVariable() as ComplexEvent).StoreCaller(caller, sourceScene, sourceName);
+            (GetVariable() as ComplexEvent).Raise(value);
         }
     }
 }

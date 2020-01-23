@@ -5,6 +5,7 @@ using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro.Sequencing
 {
+    [ExecuteInEditMode]
     public abstract class Input_Module : MonoBehaviour
     {
         [SerializeField]
@@ -23,6 +24,11 @@ namespace AltSalt.Maestro.Sequencing
         {
             get => _inputActionComplete;
             set => _inputActionComplete = value;
+        }
+
+        private void OnEnable()
+        {
+            _inputActionComplete.PopulateVariable(this, nameof(_inputActionComplete));
         }
 
         public void TriggerInputActionComplete()

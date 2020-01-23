@@ -14,32 +14,28 @@ namespace AltSalt.Maestro.Animation {
         [FormerlySerializedAs("_Color")]
         private ColorReference _color = new ColorReference();
 
-        private Color color
-        {
-            get => _color.GetValue(this.gameObject);
-            set => _color.GetVariable(this.gameObject).SetValue(value);
-        }
+        private Color color => _color.GetValue();
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("_FadeColor")]
         private ColorReference _fadeColor = new ColorReference();
 
-        private Color fadeColor => _fadeColor.GetValue(this.gameObject);
+        private Color fadeColor => _fadeColor.GetValue();
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("_Exponent")]
         private FloatReference _exponent = new FloatReference();
 
-        private float exponent => _exponent.GetValue(this.gameObject);
+        private float exponent => _exponent.GetValue();
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("_Subtract")]
         private FloatReference _subtract = new FloatReference();
 
-        private float subtract => _subtract.GetValue(this.gameObject);
+        private float subtract => _subtract.GetValue();
 
         [SerializeField]
         [FormerlySerializedAs("sortingLayer")]

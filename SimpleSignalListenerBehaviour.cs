@@ -22,7 +22,7 @@ namespace AltSalt.Maestro
         [SerializeField]
         private SimpleSignalReference _simpleSignalReference = new SimpleSignalReference();
 
-        private SimpleSignal simpleSignal => _simpleSignalReference.GetVariable(this);
+        private SimpleSignal simpleSignal => _simpleSignalReference.GetVariable() as SimpleSignal;
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
@@ -60,6 +60,8 @@ namespace AltSalt.Maestro
 
         private void OnEnable()
         {
+            _simpleSignalReference.PopulateVariable(this, nameof(_simpleSignalReference));
+            
             if(simpleSignal != null) {
                 simpleSignal.RegisterListener(this);
             } else {

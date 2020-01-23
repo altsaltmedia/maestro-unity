@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.Action
 {
@@ -38,6 +41,11 @@ namespace AltSalt.Maestro.Logic.Action
         }
 
         public virtual void SyncEditorActionHeadings() { }
+
+        public virtual ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
+        {
+            return this;
+        }
 
         public abstract void PerformAction(GameObject callingObject);
     }

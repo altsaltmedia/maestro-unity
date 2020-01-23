@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.Action
 {
@@ -80,6 +82,14 @@ namespace AltSalt.Maestro.Logic.Action
             
             return setValueDescription += $" ({targetValue})";
         }
+        
+        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
+        {
+            string referencePath = serializedPropertyPath;
+            referencePath += $".{nameof(_axisReference)}";
+            _axisReference.PopulateVariable(parentObject, referencePath.Split(new[]{'.'}));
+            return this;
+        }
 
         public override void PerformAction(GameObject callingObject)
         {
@@ -112,7 +122,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         private bool CanPerformAction(GameObject callingObject)
         {
-            if (axisReference.GetVariable(callingObject) == null) {
+            if (axisReference.GetVariable() == null) {
                 return false;
             }
             

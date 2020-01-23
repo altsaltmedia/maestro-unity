@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.Action
 {
@@ -20,6 +21,20 @@ namespace AltSalt.Maestro.Logic.Action
 
         public ComplexEventActionData(int priority) : base(priority) { }
 
+        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
+        {
+            string packagersPath = serializedPropertyPath;
+            packagersPath += $".{nameof(_complexEventPayloadPackagers)}";
+            
+            for (int i = 0; i < complexEventPayloadPackagers.Count; i++) {
+                string referencePath = packagersPath;
+                referencePath += $".{i.ToString()}";
+                complexEventPayloadPackagers[i].PopulateVariable(parentObject, referencePath.Split(new[] {'.'}));
+            }
+
+            return this;
+        }
+        
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         [InfoBox("Raises event")]
         public override void PerformAction(GameObject callingObject)
@@ -46,7 +61,7 @@ namespace AltSalt.Maestro.Logic.Action
                 actionDescription = "Trigger " + complexEventNames;
             }
             else {
-                actionDescription = "Please populate a complex event packager";
+                actionDescription = "Please populate your complex event packagers";
             }
         }
     }

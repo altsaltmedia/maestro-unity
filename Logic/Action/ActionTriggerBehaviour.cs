@@ -12,9 +12,20 @@ namespace AltSalt.Maestro.Logic.Action
     public class ActionTriggerBehaviour : MonoBehaviour
     {
         [SerializeField]
-        private ActionTrigger _actionTrigger;
+        [OnValueChanged(nameof(OnEnable))]
+        private ActionTrigger _actionTrigger = new ActionTrigger();
 
-        private ActionTrigger actionTrigger => _actionTrigger;
+        private ActionTrigger actionTrigger
+        {
+            get => _actionTrigger;
+            set => _actionTrigger = value;
+        }
+
+        private void OnEnable()
+        {
+            actionTrigger.Initialize(this, nameof(_actionTrigger));
+            actionTrigger.CallPopulateReferences();
+        }
 
         private void Start()
         {

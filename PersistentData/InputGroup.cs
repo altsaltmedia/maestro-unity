@@ -301,6 +301,9 @@ namespace AltSalt.Maestro
 
             for (int i = 0; i < referenceFields.Length; i++) {
                 
+                var referenceFieldValue = referenceFields[i].GetValue(this) as ReferenceBase;
+                referenceFieldValue.isSystemReference = true;
+                
                 string name = referenceFields[i].Name.Replace("_", "").Capitalize();
                 var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
                 var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
@@ -315,24 +318,29 @@ namespace AltSalt.Maestro
         {
             FieldInfo[] fields = typeof(InputGroup).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
             
-            swipeMinMax.GetVariable(inputData).defaultValue = 80f;
-            momentumMinMax.GetVariable(inputData).defaultValue = 2000f;
-            momentumDecay.GetVariable(inputData).defaultValue = .95f;
-            momentumSensitivity.GetVariable(inputData).defaultValue = 1f;
-            gestureTimeMultiplier.GetVariable(inputData).defaultValue = 50f;
-            cancelMomentumTimeThreshold.GetVariable(inputData).defaultValue = .2f;
-            cancelMomentumMagnitudeThreshold.GetVariable(inputData).defaultValue = 815f;
-            pauseMomentumThreshold.GetVariable(inputData).defaultValue = .03f;
-            flickThreshold.GetVariable(inputData).defaultValue = 2500f;
-            axisTransitionSpread.GetVariable(inputData).defaultValue = .5f;
-            frameStepValue.GetVariable(inputData).defaultValue = .02f;
+            for (int i = 0; i < fields.Length; i++) {
+                var referenceFieldValue = fields[i].GetValue(this) as ReferenceBase;
+                referenceFieldValue.isSystemReference = true;
+            }
+
+            (swipeMinMax.GetVariable() as FloatVariable).defaultValue = 80f;
+            (momentumMinMax.GetVariable() as FloatVariable).defaultValue = 2000f;
+            (momentumDecay.GetVariable() as FloatVariable).defaultValue = .95f;
+            (momentumSensitivity.GetVariable() as FloatVariable).defaultValue = 1f;
+            (gestureTimeMultiplier.GetVariable() as FloatVariable).defaultValue = 50f;
+            (cancelMomentumTimeThreshold.GetVariable() as FloatVariable).defaultValue = .2f;
+            (cancelMomentumMagnitudeThreshold.GetVariable() as FloatVariable).defaultValue = 815f;
+            (pauseMomentumThreshold.GetVariable() as FloatVariable).defaultValue = .03f;
+            (flickThreshold.GetVariable() as FloatVariable).defaultValue = 2500f;
+            (axisTransitionSpread.GetVariable() as FloatVariable).defaultValue = .5f;
+            (frameStepValue.GetVariable() as FloatVariable).defaultValue = .02f;
 
             // With the axes, since every scene should set 
-            ySwipeAxis.GetVariable(inputData).SetAxisType(inputData, AxisType.Y);
-            yMomentumAxis.GetVariable(inputData).SetAxisType(inputData, AxisType.Y);
+            (ySwipeAxis.GetVariable() as Axis).SetAxisType(inputData, AxisType.Y);
+            (yMomentumAxis.GetVariable() as Axis).SetAxisType(inputData, AxisType.Y);
             
-            xSwipeAxis.GetVariable(inputData).SetAxisType(inputData, AxisType.X);
-            xMomentumAxis.GetVariable(inputData).SetAxisType(inputData, AxisType.X);
+            (xSwipeAxis.GetVariable() as Axis).SetAxisType(inputData, AxisType.X);
+            (xMomentumAxis.GetVariable() as Axis).SetAxisType(inputData, AxisType.X);
 
             for (int i = 0; i < fields.Length; i++) {
 

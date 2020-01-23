@@ -21,13 +21,13 @@ namespace AltSalt.Maestro.Layout
             float newYPosition = 0f;
 
             if(horizontalDrag == true) {
-                newXPosition = rectTransform.anchoredPosition.x + (data.delta.x * dragSensitivity.GetValue(this.gameObject));
+                newXPosition = rectTransform.anchoredPosition.x + (data.delta.x * dragSensitivity.GetValue());
             } else {
                 newXPosition = rectTransform.anchoredPosition.x;
             }
 
             if(verticalDrag == true) {
-                newYPosition = rectTransform.anchoredPosition.y + (data.delta.y * dragSensitivity.GetValue(this.gameObject));
+                newYPosition = rectTransform.anchoredPosition.y + (data.delta.y * dragSensitivity.GetValue());
             } else {
                 newYPosition = rectTransform.anchoredPosition.y;
             }

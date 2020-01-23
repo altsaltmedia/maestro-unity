@@ -19,7 +19,7 @@ namespace AltSalt.Maestro.Logic
         [SerializeField]
         private BoolReference _boolValue = new BoolReference();
 
-        private bool boolValue => _boolValue.GetValue(this.gameObject);
+        private bool boolValue => _boolValue.GetValue();
 
         // Use this for initialization
         void Start()

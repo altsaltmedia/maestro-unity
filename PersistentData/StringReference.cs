@@ -26,21 +26,23 @@ namespace AltSalt.Maestro
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private StringVariable _variable;
 
-        public StringVariable GetVariable(Object callingObject)
+        public override ScriptableObject GetVariable()
         {
-#if UNITY_EDITOR
-            this.parentObject = callingObject;
-            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                searchAttempted = true;
-                LogMissingReferenceMessage(GetType().Name);
-                var variableSearch = Utils.GetScriptableObject(referenceName) as StringVariable;
-                if (variableSearch != null) {
-                    Undo.RecordObject(callingObject, "save variable reference");
-                    _variable = variableSearch;
-                    LogFoundReferenceMessage(GetType().Name, _variable);
-                }
+            base.GetVariable();
+            return _variable;
+        }
+
+        protected override bool ShouldPopulateReference()
+        {
+            if (_variable == null) {
+                return true;
             }
-#endif
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
             return _variable;
         }
 
@@ -55,10 +57,9 @@ namespace AltSalt.Maestro
             constantValue = value;
         }
 
-        public string GetValue(Object callingObject)
+        public string GetValue()
         {
-            this.parentObject = callingObject;
-            return useConstant ? constantValue : GetVariable(callingObject).value;
+            return useConstant ? constantValue : (GetVariable() as StringVariable).value;
         }
         
         public StringVariable SetValue(GameObject callingObject, string targetValue)
@@ -68,7 +69,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            StringVariable stringVariable = GetVariable(callingObject);
+            StringVariable stringVariable = GetVariable() as StringVariable;
             stringVariable.StoreCaller(callingObject);
             stringVariable.SetValue(targetValue);
             return stringVariable;
@@ -81,21 +82,10 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            StringVariable stringVariable = GetVariable(callingObject);
+            StringVariable stringVariable = GetVariable() as StringVariable;
             stringVariable.StoreCaller(callingObject);
             stringVariable.SetValue(targetValue.value);
             return stringVariable;
         }
-
-        protected override void UpdateReferenceName()
-        {
-            if (_variable != null) {
-                referenceName = _variable.name;
-            }
-//            else {
-//                referenceName = "";
-//            }
-        }
-        
     }
 }

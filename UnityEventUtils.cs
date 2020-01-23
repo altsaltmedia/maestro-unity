@@ -142,10 +142,8 @@ namespace AltSalt.Maestro
         public static bool UnityEventValuesChanged(GameObjectGenericAction genericAction, string[] parameterNames,
             List<UnityEventData> cachedEventData, out List<UnityEventData> eventData)
         {
-            
             eventData = UnityEventData.GetUnityEventData(genericAction, parameterNames);
             var addedItems = eventData.Except(cachedEventData);
-
             return addedItems.Any();
         }
 

@@ -36,21 +36,23 @@ namespace AltSalt.Maestro
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private IntVariable _variable;
 
-        public IntVariable GetVariable(Object callingObject)
+        public override ScriptableObject GetVariable()
         {
-#if UNITY_EDITOR
-            this.parentObject = callingObject;
-            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                searchAttempted = true;
-                LogMissingReferenceMessage(GetType().Name);
-                var variableSearch = Utils.GetScriptableObject(referenceName) as IntVariable;
-                if (variableSearch != null) {
-                    Undo.RecordObject(callingObject, "save variable reference");
-                    _variable = variableSearch;
-                    LogFoundReferenceMessage(GetType().Name, _variable);
-                }
+            base.GetVariable();
+            return _variable;
+        }
+
+        protected override bool ShouldPopulateReference()
+        {
+            if (useConstant == false && _variable == null) {
+                return true;
             }
-#endif
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
             return _variable;
         }
         
@@ -68,10 +70,9 @@ namespace AltSalt.Maestro
             constantValue = value;
         }
 
-        public int GetValue(Object callingObject)
+        public int GetValue()
         {
-            this.parentObject = callingObject;
-            return useConstant ? constantValue : GetVariable(callingObject).value;
+            return useConstant ? constantValue : (GetVariable() as IntVariable).value;
         }
         
         public IntVariable SetValue(GameObject callingObject, int targetValue)
@@ -81,7 +82,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.SetValue(targetValue);
             return intVariable;
@@ -94,7 +95,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.SetValue(targetValue);
             return intVariable;
@@ -107,7 +108,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.ApplyChange(targetValue);
             return intVariable;
@@ -120,7 +121,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.ApplyChange(targetValue);
             return intVariable;
@@ -133,7 +134,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.Multiply(targetValue);
             return intVariable;
@@ -146,7 +147,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.Multiply(targetValue);
             return intVariable;
@@ -159,7 +160,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.ClampMax(targetValue);
             return intVariable;
@@ -172,7 +173,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.ClampMax(targetValue);
             return intVariable;
@@ -185,7 +186,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.ClampMin(targetValue);
             return intVariable;
@@ -198,7 +199,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.ClampMin(targetValue);
             return intVariable;
@@ -211,7 +212,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.SetToDistance(targetValue);
             return intVariable;
@@ -224,7 +225,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.SetToDistance(targetValue);
             return intVariable;
@@ -237,7 +238,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.SetToRandom();
             return intVariable;
@@ -250,21 +251,10 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            IntVariable intVariable = GetVariable(callingObject);
+            IntVariable intVariable = GetVariable() as IntVariable;
             intVariable.StoreCaller(callingObject);
             intVariable.SetToDefaultValue();
             return intVariable;
-        }
-
-        protected override void UpdateReferenceName()
-        {
-            if (_variable != null) {
-                searchAttempted = false;
-                referenceName = _variable.name;
-            }
-//            else {
-//                referenceName = "";
-//            }
         }
     }
 }

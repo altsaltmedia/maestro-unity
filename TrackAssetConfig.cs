@@ -49,7 +49,7 @@ namespace AltSalt.Maestro
                     return sequence.sequenceConfig.masterSequence.rootConfig.inputGroupKey;
                 }
                 
-                return _inputGroupKey.GetVariable(this.gameObject);
+                return _inputGroupKey.GetVariable() as InputGroupKey;
             }
         }
         
@@ -81,6 +81,8 @@ namespace AltSalt.Maestro
             if (appSettings == null) {
                 appSettings = Utils.GetAppSettings();
             }
+
+            _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
 
             if (inputGroupKey == null) {
                 InputGroupKey mainInputKey = Utils.GetCustomKey(nameof(appSettings.mainInput).Capitalize()) as InputGroupKey;

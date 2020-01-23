@@ -159,7 +159,7 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
 
-            Vector2 modifier = GetDragModifier(horizontalDrag, verticalDrag, dragSensitivity.GetValue(this.gameObject), data);
+            Vector2 modifier = GetDragModifier(horizontalDrag, verticalDrag, dragSensitivity.GetValue(), data);
             _content.anchoredPosition = GetNewPosition(_content, modifier);
 
             if (_content.anchoredPosition.x > 0) {

@@ -69,7 +69,7 @@ namespace AltSalt.Maestro
             targetTextFamily.SetActive(true);
 
             for (int i = 0; i < targetTextFamily.textFamiliesToDisable.Count; i++) {
-                DeactivateLinkedTextFamily(targetTextFamily.textFamiliesToDisable[i].GetVariable(callingObject), targetTextFamily, callingObject);
+                DeactivateLinkedTextFamily(targetTextFamily.textFamiliesToDisable[i].GetVariable() as TextFamily, targetTextFamily, callingObject);
             }
                     
             triggerLayoutChange = false;
@@ -85,7 +85,7 @@ namespace AltSalt.Maestro
         private static TextFamily ActivateOriginTextFamilyDependencies(TextFamily sourceTextFamily, Object callingObject)
         {
             for(int i=0; i<sourceTextFamily.layoutDependencies.Count; i++) {
-                LayoutConfig layoutConfig = sourceTextFamily.layoutDependencies[i].GetVariable(callingObject);
+                LayoutConfig layoutConfig = sourceTextFamily.layoutDependencies[i].GetVariable() as LayoutConfig;
                 ActivateLinkedLayout(layoutConfig, sourceTextFamily, callingObject);
             }
 
@@ -98,7 +98,7 @@ namespace AltSalt.Maestro
             targetLayout.SetActive(true);
             
             for (int i = 0; i < targetLayout.layoutsToDisable.Count; i++) {
-                DeactivateLinkedLayout(targetLayout.layoutsToDisable[i].GetVariable(callingObject), callingConfig, callingObject);
+                DeactivateLinkedLayout(targetLayout.layoutsToDisable[i].GetVariable() as LayoutConfig, callingConfig, callingObject);
             }
 
             if (targetLayout.hasTextFamilyDependencies == true) {
@@ -112,7 +112,7 @@ namespace AltSalt.Maestro
             IModifyConfig callingConfig, Object callingObject)
         {
             for (int i = 0; i < sourceLayout.textFamilyDependencies.Count; i++) {
-                TextFamily textFamilyDependency = sourceLayout.textFamilyDependencies[i].GetVariable(callingObject);
+                TextFamily textFamilyDependency = sourceLayout.textFamilyDependencies[i].GetVariable() as TextFamily;
                 if (textFamilyDependency == callingConfig || textFamilyDependency.hasLayoutDependencies == false) continue;
                 ActivateLinkedTextFamily(textFamilyDependency, sourceLayout, callingObject);
             }
@@ -126,7 +126,7 @@ namespace AltSalt.Maestro
             targetTextFamily.SetActive(true);
 
             for (int i = 0; i < targetTextFamily.textFamiliesToDisable.Count; i++) {
-                DeactivateLinkedTextFamily(targetTextFamily.textFamiliesToDisable[i].GetVariable(callingObject), callingConfig, callingObject);
+                DeactivateLinkedTextFamily(targetTextFamily.textFamiliesToDisable[i].GetVariable() as TextFamily, callingConfig, callingObject);
             }
             
             if(targetTextFamily.hasLayoutDependencies == true && targetTextFamily.layoutDependencies.Count > 0) {
@@ -140,7 +140,7 @@ namespace AltSalt.Maestro
             IModifyConfig callingConfig, Object callingObject)
         {
             for(int i=0; i<sourceTextFamily.layoutDependencies.Count; i++) {
-                LayoutConfig layoutDependency = sourceTextFamily.layoutDependencies[i].GetVariable(callingObject);
+                LayoutConfig layoutDependency = sourceTextFamily.layoutDependencies[i].GetVariable() as LayoutConfig;
                 if (layoutDependency == callingConfig || layoutDependency.hasTextFamilyDependencies == false) continue;
                 ActivateLinkedLayout(layoutDependency, sourceTextFamily, callingObject);
             }
@@ -154,7 +154,7 @@ namespace AltSalt.Maestro
             targetLayout.SetActive(true);
                     
             for (int i = 0; i < targetLayout.layoutsToDisable.Count; i++) {
-                DeactivateLinkedLayout(targetLayout.layoutsToDisable[i].GetVariable(callingObject), targetLayout, callingObject);
+                DeactivateLinkedLayout(targetLayout.layoutsToDisable[i].GetVariable() as LayoutConfig, targetLayout, callingObject);
             }
                     
             triggerTextChange = false;
@@ -171,7 +171,7 @@ namespace AltSalt.Maestro
             Object callingObject)
         {
             for (int i = 0; i < sourceLayout.textFamilyDependencies.Count; i++) {
-                TextFamily textFamily = sourceLayout.textFamilyDependencies[i].GetVariable(callingObject);
+                TextFamily textFamily = sourceLayout.textFamilyDependencies[i].GetVariable() as TextFamily;
                 if (textFamily.hasLayoutDependencies == false) continue;
                 ActivateLinkedTextFamily(textFamily, sourceLayout, callingObject);
             }
@@ -199,12 +199,12 @@ namespace AltSalt.Maestro
         {
             for(int i=0; i<sourceTextFamily.layoutDependencies.Count; i++) {
                 
-                LayoutConfig layoutConfig = sourceTextFamily.layoutDependencies[i].GetVariable(callingObject);
+                LayoutConfig layoutConfig = sourceTextFamily.layoutDependencies[i].GetVariable() as LayoutConfig;
                 if (layoutConfig.hasTextFamilyDependencies == false) continue;
 
                 bool textFamilyDependencyActive = false;
                 for (int j = 0; j < layoutConfig.textFamilyDependencies.Count; j++) {
-                    if (layoutConfig.textFamilyDependencies[i].GetVariable(callingObject).active == true) {
+                    if ((layoutConfig.textFamilyDependencies[i].GetVariable() as TextFamily).active == true) {
                         textFamilyDependencyActive = true;
                         break;
                     }
@@ -235,13 +235,13 @@ namespace AltSalt.Maestro
         {
             for (int i = 0; i < sourceLayout.textFamilyDependencies.Count; i++) {
                 
-                TextFamily textFamilyDependency = sourceLayout.textFamilyDependencies[i].GetVariable(callingObject);
+                TextFamily textFamilyDependency = sourceLayout.textFamilyDependencies[i].GetVariable() as TextFamily;
                 if (textFamilyDependency == callingConfig || textFamilyDependency.hasLayoutDependencies == false) continue;
                 
                 bool subdependencyActive = false;
                 
                 for (int j = 0; j < textFamilyDependency.layoutDependencies.Count; j++) {
-                    if (textFamilyDependency.layoutDependencies[i].GetVariable(callingObject).active == true) {
+                    if ((textFamilyDependency.layoutDependencies[i].GetVariable() as LayoutConfig).active == true) {
                         subdependencyActive = true;
                         break;
                     }
@@ -272,12 +272,12 @@ namespace AltSalt.Maestro
         {
             for(int i=0; i<sourceTextFamily.layoutDependencies.Count; i++) {
                 
-                LayoutConfig layoutDependency = sourceTextFamily.layoutDependencies[i].GetVariable(callingObject);
+                LayoutConfig layoutDependency = sourceTextFamily.layoutDependencies[i].GetVariable() as LayoutConfig;
                 if (layoutDependency == callingConfig || layoutDependency.hasTextFamilyDependencies == false) continue;
 
                 bool subdependencyActive = false;
                 for (int j = 0; j < layoutDependency.textFamilyDependencies.Count; j++) {
-                    if (layoutDependency.textFamilyDependencies[i].GetVariable(callingObject).active == true) {
+                    if ((layoutDependency.textFamilyDependencies[i].GetVariable() as TextFamily).active == true) {
                         subdependencyActive = true;
                         break;
                     }
@@ -310,12 +310,12 @@ namespace AltSalt.Maestro
         {
             for (int i = 0; i < sourceLayout.textFamilyDependencies.Count; i++) {
                 
-                TextFamily textFamilyDependency = sourceLayout.textFamilyDependencies[i].GetVariable(callingObject);
+                TextFamily textFamilyDependency = sourceLayout.textFamilyDependencies[i].GetVariable() as TextFamily;
                 if (textFamilyDependency.hasLayoutDependencies == false) continue;
                 bool subdependencyActive = false;
                 
                 for (int j = 0; j < textFamilyDependency.layoutDependencies.Count; j++) {
-                    if (textFamilyDependency.layoutDependencies[i].GetVariable(callingObject).active == true) {
+                    if ((textFamilyDependency.layoutDependencies[i].GetVariable() as LayoutConfig).active == true) {
                         subdependencyActive = true;
                         break;
                     }

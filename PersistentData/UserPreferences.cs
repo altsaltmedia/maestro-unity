@@ -95,18 +95,23 @@ namespace AltSalt.Maestro
 
         public UserPreferences SetDefaults(UserData userData, UserDataKey userKey)
         {
-            FieldInfo[] referenceFields = typeof(UserPreferences).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo[] fields = typeof(UserPreferences).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
 
-            ySensitivity.GetVariable(userData).defaultValue = 0.0027f;
-            invertYInput.GetVariable(userData).defaultValue = false;
-            xSensitivity.GetVariable(userData).defaultValue = 0.0054f;
-            invertXInput.GetVariable(userData).defaultValue = true;
-            userAutoplayEnabled.GetVariable(userData).defaultValue = true;
-            userMomentumEnabled.GetVariable(userData).defaultValue = true;
+            for (int i = 0; i < fields.Length; i++) {
+                var referenceFieldValue = fields[i].GetValue(this) as ReferenceBase;
+                referenceFieldValue.isSystemReference = true;
+            }
+
+            (ySensitivity.GetVariable() as FloatVariable).defaultValue = 0.0027f;
+            (invertYInput.GetVariable() as BoolVariable).defaultValue = false;
+            (xSensitivity.GetVariable() as FloatVariable).defaultValue = 0.0054f;
+            (invertXInput.GetVariable() as BoolVariable).defaultValue = true;
+            (userAutoplayEnabled.GetVariable() as BoolVariable).defaultValue = true;
+            (userMomentumEnabled.GetVariable() as BoolVariable).defaultValue = true;
             
-            for (int i = 0; i < referenceFields.Length; i++) {
+            for (int i = 0; i < fields.Length; i++) {
                 
-                var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
+                var variableField = Utils.GetVariableFieldFromReference(fields[i], this, out var referenceValue);
                 var variableValue = variableField.GetValue(referenceValue);
                 
                 if (variableValue is ModifiableEditorVariable modifiableEditorVariable) {

@@ -61,6 +61,16 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             set => _parentObject = value;
         }
         
+        [SerializeField]
+        [ReadOnly]
+        private string _serializedPropertyPath;
+
+        protected string serializedPropertyPath
+        {
+            get => _serializedPropertyPath;
+            set => _serializedPropertyPath = value;
+        }
+        
         [TitleGroup("$" + nameof(conditionEventTitle))]
         [ShowInInspector]
         [HideLabel]
@@ -69,8 +79,14 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         
         public string eventDescription
         {
-            get => _eventDescription;
-            set => _eventDescription = value;
+            get
+            {
+                if (_eventDescription == null) {
+                    _eventDescription = "No actions defined.";
+                }
+                return _eventDescription;
+            }
+            private set => _eventDescription = value;
         }
         
         [FormerlySerializedAs("response")]
@@ -88,7 +104,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [PropertyOrder(9)]
         [ValidateInput(nameof(IsPopulated))]
         [HideReferenceObjectPicker]
-        protected GameObjectGenericAction _action;
+        protected GameObjectGenericAction _action = new GameObjectGenericAction();
 
         public GameObjectGenericAction action
         {
@@ -105,18 +121,32 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             set => _migrated = value;
         }
 
+        private bool _initialized;
+
+        public bool initialized
+        {
+            get => _initialized;
+            set => _initialized = value;
+        }
+
 #if UNITY_EDITOR
         private List<UnityEventData> _cachedEventData = new List<UnityEventData>();
 
         private List<UnityEventData> cachedEventData
         {
-            get => _cachedEventData;
+            get
+            {
+                if (_cachedEventData == null) {
+                    _cachedEventData = new List<UnityEventData>();
+                }
+                return _cachedEventData;
+            }
             set => _cachedEventData = value;
         }
 
         public virtual void SyncConditionHeading(Object callingObject)
         {
-            this.parentObject = callingObject;
+            
         }
 
         public void SyncUnityEventHeading(SerializedProperty serializedConditionResponse)
@@ -128,21 +158,42 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             
             string[] parameterNames = UnityEventUtils.GetUnityEventParameters(serializedConditionResponse, nameof(_action));
             if (UnityEventUtils.UnityEventValuesChanged(action, parameterNames, cachedEventData, out var eventData)) {
-                eventDescription = UnityEventUtils.ParseUnityEventDescription(eventData);
-                cachedEventData = eventData;
+                if (eventData.Count > 0) {
+                    eventDescription = UnityEventUtils.ParseUnityEventDescription(eventData);
+                    cachedEventData = eventData;
+                }
             }
         }
 #endif
+        public ConditionResponseBase(UnityEngine.Object parentObject,
+            string serializedPropertyPath)
+        {
+            this.parentObject = parentObject;
+            this.serializedPropertyPath = serializedPropertyPath;
+        }
+
+        protected ConditionResponseBase CheckPopulateReferences()
+        {
+            if (initialized == false) {
+                initialized = true;
+                PopulateReferences();
+            }
+
+            return this;
+        }
+
+        public virtual ConditionResponseBase PopulateReferences()
+        {
+            return this;
+        }
 
         public virtual bool CheckCondition(Object callingObject)
         {
-            this.parentObject = callingObject;
             return true;
         }
 
         public virtual void TriggerResponse(GameObject callingObject, bool triggerOnStart)
         {
-            this.parentObject = callingObject;
             if (CheckCondition(callingObject) == true) {
                 if(appSettings.logConditionResponses == true) {
                     LogConditionResponse(callingObject, triggerOnStart);

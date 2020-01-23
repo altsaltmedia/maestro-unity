@@ -17,9 +17,9 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [SerializeField]
         [Title("Layout Reference")]
         [HideReferenceObjectPicker]
-        private LayoutConfigReference _layoutReference;
+        private LayoutConfigReference _layoutReference = new LayoutConfigReference();
 
-        private LayoutConfig layoutReference => _layoutReference.GetVariable(this.parentObject);
+        private LayoutConfig layoutReference => _layoutReference.GetVariable() as LayoutConfig;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
@@ -29,23 +29,55 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [Title("Layout Status Condition")]
         private BoolReference activeLayoutCondition => _activeLayoutCondition;
         
-
+        public LayoutConditionResponse(UnityEngine.Object parentObject,
+            string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
+        
         public override void SyncConditionHeading(Object callingObject)
         {
+            CheckPopulateReferences();
+            
             base.SyncConditionHeading(callingObject);
+            
             if (layoutReference == null) {
                 conditionEventTitle = "Please populate a layout as your condition.";
                 return;
             }
+            
+            if (activeLayoutCondition.GetVariable() == null && activeLayoutCondition.useConstant == false) {
+                conditionEventTitle = "Please populate a condition for your layout.";
+                return;
+            }
 
-            conditionEventTitle = "Layout " + layoutReference.name + " active is " + activeLayoutCondition.GetValue(this.parentObject);
+            string newTitle = $"Layout {layoutReference.name} active is ";
+
+            if (activeLayoutCondition.useConstant == true) {
+                newTitle += activeLayoutCondition.GetValue();
+            }
+            else {
+                newTitle += $"equal to {activeLayoutCondition.GetVariable().name}";
+            }
+
+            conditionEventTitle = newTitle;
+        }
+        
+        public override ConditionResponseBase PopulateReferences()
+        {
+            string referencePath = serializedPropertyPath + $".{nameof(_layoutReference)}";
+            _layoutReference.PopulateVariable(parentObject, referencePath.Split('.'));
+            
+            string conditionPath = serializedPropertyPath + $".{nameof(_activeLayoutCondition)}";
+            _activeLayoutCondition.PopulateVariable(parentObject, conditionPath.Split('.'));
+            
+            return this;
         }
 
         public override bool CheckCondition(Object callingObject)
         {
+            CheckPopulateReferences();
+            
             base.CheckCondition(callingObject);
             
-            if (layoutReference.active == activeLayoutCondition.GetValue(this.parentObject)) {
+            if (layoutReference.active == activeLayoutCondition.GetValue()) {
                 return true;
             }
 
@@ -54,11 +86,15 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         
         public LayoutConfig GetReference()
         {
+            CheckPopulateReferences();
+            
             return layoutReference;
         }
 
         public BoolReference GetCondition()
         {
+            CheckPopulateReferences();
+            
             return activeLayoutCondition;
         }
 

@@ -39,7 +39,7 @@ namespace AltSalt.Maestro.Sensors
         [SerializeField]
         private UserDataKeyReference _userDataKey = new UserDataKeyReference();
 
-        private UserDataKey userDataKey => _userDataKey.GetVariable(this.gameObject);
+        private UserDataKey userDataKey => _userDataKey.GetVariable() as UserDataKey;
         
 
         // User defined
@@ -58,7 +58,7 @@ namespace AltSalt.Maestro.Sensors
         [SerializeField]
         private InputGroupKeyReference _inputGroupKey = new InputGroupKeyReference();
 
-        private InputGroupKey inputGroupKey => _inputGroupKey.GetVariable(this.gameObject);
+        private InputGroupKey inputGroupKey => _inputGroupKey.GetVariable() as InputGroupKey;
         
         private bool isSwiping
         {

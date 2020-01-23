@@ -14,21 +14,23 @@ namespace AltSalt.Maestro
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private LayoutConfig _variable;
 
-        public LayoutConfig GetVariable(Object callingObject)
+        public override ScriptableObject GetVariable()
         {
-#if UNITY_EDITOR
-            this.parentObject = callingObject;
-            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                searchAttempted = true;
-                LogMissingReferenceMessage(GetType().Name);
-                var variableSearch = Utils.GetScriptableObject(referenceName) as LayoutConfig;
-                if (variableSearch != null) {
-                    Undo.RecordObject(callingObject, "save variable reference");
-                    _variable = variableSearch;
-                    LogFoundReferenceMessage(GetType().Name, _variable);
-                }
+            base.GetVariable();
+            return _variable;
+        }
+
+        protected override bool ShouldPopulateReference()
+        {
+            if (_variable == null) {
+                return true;
             }
-#endif
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
             return _variable;
         }
         
@@ -43,17 +45,6 @@ namespace AltSalt.Maestro
         public LayoutConfigReference(LayoutConfig value)
         {
             _variable = value;
-        }
-
-        protected override void UpdateReferenceName()
-        {
-            if (GetVariable(parentObject) != null) {
-                searchAttempted = false;
-                referenceName = GetVariable(parentObject).name;
-            }
-//			else {
-//				referenceName = "";
-//			}
         }
     }
 }

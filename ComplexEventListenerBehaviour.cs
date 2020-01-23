@@ -57,13 +57,15 @@ namespace AltSalt.Maestro
         }
 
         private void OnEnable()
-		{
-			if (migrated == false) {
+        {
+	        _complexEventReference.PopulateVariable(this, nameof(_complexEventReference));
+	        
+	        if (migrated == false) {
 				
 				_complexEventReference.SetVariable(_complexEvent);	
 			}
 			
-			complexEvent.GetVariable(this).RegisterListener(this);
+			(complexEvent.GetVariable() as ComplexEvent).RegisterListener(this);
 		}
         
 		private void OnDisable()

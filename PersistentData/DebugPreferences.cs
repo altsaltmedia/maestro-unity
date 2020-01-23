@@ -94,15 +94,18 @@ namespace AltSalt.Maestro
             get => _logConditionResponses;
             set => _logConditionResponses = value;
         }
-        
+
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void RefreshDependencies()
         {
-            FieldInfo[] fields = typeof(DebugPreferences).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo[] fields = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
 
             for (int i = 0; i < fields.Length; i++) {
                 var fieldValue = fields[i].GetValue(this);
                 if (fieldValue.GetType().IsSubclassOf(typeof(ReferenceBase)) == true) {
+                    
+                    (fieldValue as ReferenceBase).isSystemReference = true;
+                    
                     FieldInfo variableField = Utils.GetVariableFieldFromReference(fields[i], this, out var referenceValue);
                     
                     var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;

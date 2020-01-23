@@ -41,8 +41,11 @@ namespace AltSalt.Maestro.Logic
             set => _appSettings = value;
         }
         
-        [ValidateInput("IsPopulated")]
-        public StringReference activeScene;
+        public string activeScene
+        {
+            get => appSettings.GetActiveScene(this);
+            set => appSettings.SetActiveScene(this.gameObject, value);
+        }
 
         [SerializeField]
         [Required]
@@ -79,7 +82,7 @@ namespace AltSalt.Maestro.Logic
         // make a fade out first, so we have a special case for it here
         public void LoadInitialScene(ComplexPayload complexPayload) {
             sceneName = complexPayload.GetStringValue(DataType.stringType);
-            activeScene.GetVariable(this.gameObject).SetValue(sceneName);
+            activeScene = sceneName;
             StartCoroutine(AsyncLoad(sceneName, LoadSceneMode.Single));
         }
         
@@ -89,7 +92,7 @@ namespace AltSalt.Maestro.Logic
         public void TriggerSceneLoad(ComplexPayload complexPayload) {
             
             sceneName = complexPayload.GetStringValue(DataType.stringType);
-            activeScene.GetVariable(this.gameObject).SetValue(sceneName);
+            activeScene = sceneName;
             loadMode = complexPayload.GetBoolValue(DataType.boolType) == true ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
             if(loadMode == LoadSceneMode.Single) {

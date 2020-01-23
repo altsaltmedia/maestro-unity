@@ -100,11 +100,11 @@ namespace AltSalt.Maestro.Layout
         
         private void OnEnable()
         {
-            if (enableDynamicElement.GetVariable(this.gameObject) == null) {
+            if (enableDynamicElement.GetVariable() == null) {
                 enableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement)));
             }
             
-            if (disableDynamicElement.GetVariable(this.gameObject) == null) {
+            if (disableDynamicElement.GetVariable() == null) {
                 disableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement)));
             }
             

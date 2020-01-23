@@ -32,6 +32,11 @@ namespace AltSalt.Maestro
         public FloatReference deviceWidth => _deviceWidth;
 
         [SerializeField, Required]
+        private StringReference _activeScene = new StringReference();
+        
+        public StringReference activeScene => _activeScene;
+        
+        [SerializeField, Required]
         private FloatReference _currentSceneAspectRatio = new FloatReference();
         
         public FloatReference currentSceneAspectRatio => _currentSceneAspectRatio;
@@ -66,9 +71,8 @@ namespace AltSalt.Maestro
 
         public BoolReference paused => _paused;
 
-
         [SerializeField, Required]
-        public FloatReference _timescale = new FloatReference();
+        private FloatReference _timescale = new FloatReference();
         
         public FloatReference timescale => _timescale;
 
@@ -76,10 +80,12 @@ namespace AltSalt.Maestro
         public void RefreshDependencies()
         {
 #if UNITY_EDITOR
-            FieldInfo[] referenceFields = typeof(SystemSettings).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo[] referenceFields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
             for (int i = 0; i < referenceFields.Length; i++) {
                 
+                var referenceFieldValue = referenceFields[i].GetValue(this) as ReferenceBase;
+
                 string name = referenceFields[i].Name.Replace("_", "").Capitalize();
                 var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
 
@@ -91,23 +97,29 @@ namespace AltSalt.Maestro
             }
 #endif
         }
-        
+
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SetDefaults()
         {
-            hasBeenOpened.GetVariable(this).defaultValue = false;
-            volumeEnabled.GetVariable(this).defaultValue = true;
-            musicEnabled.GetVariable(this).defaultValue = true;
-            soundEffectsEnabled.GetVariable(this).defaultValue = true;
-            paused.GetVariable(this).defaultValue = false;
-            timescale.GetVariable(this).defaultValue = 1;
+            FieldInfo[] fields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            
+            for (int i = 0; i < fields.Length; i++) {
+                var referenceFieldValue = fields[i].GetValue(this) as ReferenceBase;
+                referenceFieldValue.isSystemReference = true;
+            }
+            
+            (hasBeenOpened.GetVariable() as BoolVariable).defaultValue = false;
+            (volumeEnabled.GetVariable() as BoolVariable).defaultValue = true;
+            (musicEnabled.GetVariable() as BoolVariable).defaultValue = true;
+            (soundEffectsEnabled.GetVariable() as BoolVariable).defaultValue = true;
+            (paused.GetVariable() as BoolVariable).defaultValue = false;
+            (timescale.GetVariable() as FloatVariable).defaultValue = 1;
 
-            FieldInfo[] referenceFields = typeof(SystemSettings).GetFields();
-            for (int i = 0; i < referenceFields.Length; i++) {
-                var variableReference = referenceFields[i].GetValue(this);
-
+            for (int i = 0; i < fields.Length; i++) {
+                var variableReference = fields[i].GetValue(this);
+                
                 var variableField =
-                    Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
+                    Utils.GetVariableFieldFromReference(fields[i], this, out var referenceValue);
                 var variableValue = variableField.GetValue(referenceValue);
 
                 if (variableValue is ModifiableEditorVariable modifiableEditorVariable) {

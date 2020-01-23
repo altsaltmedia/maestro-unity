@@ -151,6 +151,9 @@ namespace AltSalt.Maestro.Sequencing
 #if UNITY_EDITOR
         private void OnEnable()
         {
+            _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
+            _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
+            
             enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
 

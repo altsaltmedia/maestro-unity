@@ -36,43 +36,44 @@ namespace AltSalt.Maestro
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private BoolVariable _variable;
+        
+        public BoolReference()
+        { }
+		
+        public BoolReference(bool value)
+        {
+	        useConstant = true;
+	        constantValue = value;
+        }
 
-        public BoolVariable GetVariable(Object callingObject)
-		{
-#if UNITY_EDITOR
-			this.parentObject = callingObject;
-			if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-				searchAttempted = true;
-				LogMissingReferenceMessage(GetType().Name);
-				var variableSearch = Utils.GetScriptableObject(referenceName) as BoolVariable;
-				if (variableSearch != null) {
-					_variable = variableSearch;
-					EditorUtility.SetDirty(callingObject);
-					LogFoundReferenceMessage(GetType().Name, _variable);
-				}
-			}
-#endif
-			return _variable;
+        public override ScriptableObject GetVariable()
+        {
+	        base.GetVariable();
+	        return _variable;
 		}
+
+        protected override bool ShouldPopulateReference()
+        {
+	        if (useConstant == false && _variable == null) {
+		        return true;
+	        }
+
+	        return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
+	        return _variable;
+        }
         
         public void SetVariable(BoolVariable value)
         {
 	        _variable = value;
         }
 
-		public BoolReference()
-		{ }
-		
-		public BoolReference(bool value)
+        public bool GetValue()
 		{
-			useConstant = true;
-			constantValue = value;
-		}
-		
-		public bool GetValue(UnityEngine.Object callingObject)
-		{
-			this.parentObject = callingObject;
-			return useConstant ? constantValue : GetVariable(callingObject).value;
+			return useConstant ? constantValue : (GetVariable() as BoolVariable).value;
 		}
 
 		public BoolVariable SetValue(GameObject callingObject, bool targetValue)
@@ -82,7 +83,7 @@ namespace AltSalt.Maestro
 				return null;
 			}
 
-			BoolVariable boolVariable = GetVariable(callingObject);
+			BoolVariable boolVariable = GetVariable() as BoolVariable;
 			boolVariable.StoreCaller(callingObject);
 			boolVariable.SetValue(targetValue);
 			return boolVariable;
@@ -95,7 +96,7 @@ namespace AltSalt.Maestro
 				return null;
 			}
 
-			BoolVariable boolVariable = GetVariable(callingObject);
+			BoolVariable boolVariable = GetVariable() as BoolVariable;
 			boolVariable.StoreCaller(callingObject);
 			boolVariable.SetValue(targetValue.value);
 			return boolVariable;
@@ -108,7 +109,7 @@ namespace AltSalt.Maestro
 				return null;
 			}
 
-			BoolVariable boolVariable = GetVariable(callingObject);
+			BoolVariable boolVariable = GetVariable() as BoolVariable;
 			boolVariable.StoreCaller(callingObject);
 			boolVariable.Toggle();
 			return boolVariable;
@@ -121,22 +122,10 @@ namespace AltSalt.Maestro
 				return null;
 			}
 
-			BoolVariable boolVariable = GetVariable(callingObject);
+			BoolVariable boolVariable = GetVariable() as BoolVariable;
 			boolVariable.StoreCaller(callingObject, sourceScene, sourceName);
 			boolVariable.SetToDefaultValue();
 			return boolVariable;
 		}
-		
-		protected override void UpdateReferenceName()
-		{
-			if (GetVariable(parentObject) != null) {
-				searchAttempted = false;
-				referenceName = GetVariable(parentObject).name;
-			}
-//			else {
-//				referenceName = "";
-//			}
-		}
-		
     }	
 }

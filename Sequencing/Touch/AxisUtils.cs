@@ -67,17 +67,17 @@ namespace AltSalt.Maestro.Sequencing.Touch
             GameObject axisMonitorObject = activeExtents.axisMonitor.gameObject;
             
             // Deactivate the opposing swipe axis
-            if (activeExtents.swipeAxis.GetVariable(axisMonitorObject) == touchController.ySwipeAxis.GetVariable(axisMonitorObject)) {
+            if (activeExtents.swipeAxis.GetVariable() == touchController.ySwipeAxis.GetVariable()) {
                 touchController.xSwipeAxis.SetStatus(axisMonitorObject, false);
                 
-            } else if (activeExtents.swipeAxis.GetVariable(axisMonitorObject) == touchController.xSwipeAxis.GetVariable(axisMonitorObject)) {
+            } else if (activeExtents.swipeAxis.GetVariable() == touchController.xSwipeAxis.GetVariable()) {
                 touchController.ySwipeAxis.SetStatus(axisMonitorObject, false);
             }
 
-            if (activeExtents.momentumAxis.GetVariable(axisMonitorObject) == touchController.yMomentumAxis.GetVariable(axisMonitorObject)) {
+            if (activeExtents.momentumAxis.GetVariable() == touchController.yMomentumAxis.GetVariable()) {
                 touchController.xMomentumAxis.SetStatus(axisMonitorObject, false);
                 
-            } else if (activeExtents.momentumAxis.GetVariable(axisMonitorObject) == touchController.xMomentumAxis.GetVariable(axisMonitorObject)) {
+            } else if (activeExtents.momentumAxis.GetVariable() == touchController.xMomentumAxis.GetVariable()) {
                 touchController.yMomentumAxis.SetStatus(axisMonitorObject, false);
             }
 

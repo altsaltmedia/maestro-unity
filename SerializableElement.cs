@@ -76,6 +76,11 @@ namespace AltSalt.Maestro
         protected virtual void OnEnable()
         {
 #if UNITY_EDITOR
+            for (int i = 0; i < _layoutReferences.Count; i++) {
+                _layoutReferences[i].PopulateVariable(this,
+                    new[] {nameof(_layoutReferences), i.ToString()});
+            }
+            
             Initialize();
             if (migrated == false) {
                 migrated = true;
@@ -90,7 +95,7 @@ namespace AltSalt.Maestro
         protected void RefreshActiveLayout()
         {
             if (layouts.Count > 0) {
-                activeLayout = LayoutConfig.GetActiveLayout(layouts.Select(x => x.GetVariable(this.gameObject)).ToList());
+                activeLayout = LayoutConfig.GetActiveLayout(layouts.Select(x => x.GetVariable() as LayoutConfig).ToList());
             }
         }
 

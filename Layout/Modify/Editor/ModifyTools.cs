@@ -32,9 +32,9 @@ namespace AltSalt.Maestro
             EditorGUI.BeginDisabledGroup(true);
 //            modifySettings = EditorGUILayout.ObjectField("Modify Settings", modifySettings, typeof(ModifySettings), false) as ModifySettings;
             layoutUpdate.SetVariable(Utils.GetSimpleEvent(nameof(VarDependencies.LayoutUpdate)));
-            layoutUpdate.SetVariable(EditorGUILayout.ObjectField("Layout Update", layoutUpdate.GetVariable(this), typeof(SimpleEvent), false) as SimpleEvent);
+            layoutUpdate.SetVariable(EditorGUILayout.ObjectField("Layout Update", layoutUpdate.GetVariable(), typeof(SimpleEvent), false) as SimpleEvent);
             textUpdate.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.TextUpdate)));
-            textUpdate.SetVariable(EditorGUILayout.ObjectField("Text Update", textUpdate.GetVariable(this), typeof(ComplexEvent), false) as ComplexEvent);
+            textUpdate.SetVariable(EditorGUILayout.ObjectField("Text Update", textUpdate.GetVariable(), typeof(ComplexEvent), false) as ComplexEvent);
             EditorGUI.EndDisabledGroup();
 //
 //            if (modifySettings == null) {

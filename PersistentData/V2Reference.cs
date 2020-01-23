@@ -26,23 +26,25 @@ namespace AltSalt.Maestro
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private V2Variable _variable;
 
-        public V2Variable GetVariable(Object callingObject)
-        {
-#if UNITY_EDITOR
-            this.parentObject = callingObject;
-            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                searchAttempted = true;
-                LogMissingReferenceMessage(GetType().Name);
-                var variableSearch = Utils.GetScriptableObject(referenceName) as V2Variable;
-                if (variableSearch != null) {
-                    Undo.RecordObject(callingObject, "save variable reference");
-                    _variable = variableSearch;
-                    LogFoundReferenceMessage(GetType().Name, _variable);
-                }
-            }
-#endif
+        public override ScriptableObject GetVariable() {
+            base.GetVariable();
             return _variable;
         }
+
+        protected override bool ShouldPopulateReference()
+        {
+            if (useConstant == false && _variable == null) {
+                return true;
+            }
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
+            return _variable;
+        }
+        
         public void SetVariable(V2Variable value)
         {
             _variable = value;
@@ -57,10 +59,9 @@ namespace AltSalt.Maestro
             constantValue = value;
         }
 
-        public Vector2 GetValue(Object callingObject)
+        public Vector2 GetValue()
         {
-            this.parentObject = callingObject;
-            return useConstant ? constantValue : GetVariable(callingObject).value;
+            return useConstant ? constantValue : (GetVariable() as V2Variable).value;
         }
         
         public V2Variable SetValue(GameObject callingObject, Vector2 targetValue)
@@ -70,21 +71,11 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            V2Variable v2Variable = GetVariable(callingObject);
+            V2Variable v2Variable = GetVariable() as V2Variable;;
             v2Variable.StoreCaller(callingObject);
             v2Variable.SetValue(targetValue);
             return v2Variable;
         }
 
-        protected override void UpdateReferenceName()
-        {
-            if (_variable != null) {
-                searchAttempted = false;
-                referenceName = _variable.name;
-            }
-//            else {
-//                referenceName = "";
-//            }
-        }
     }
 }

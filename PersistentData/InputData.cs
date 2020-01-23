@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using RotaryHeart.Lib.SerializableDictionary;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace AltSalt.Maestro
@@ -23,6 +25,19 @@ namespace AltSalt.Maestro
             }
         }
 
+        private void OnEnable()
+        {
+//            foreach (KeyValuePair<InputGroupKey,InputGroup> inputGroup in inputGroupCollection) {
+//                FieldInfo[] fields = typeof(InputGroup).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+//                for (int i = 0; i < fields.Length; i++) {
+//                    var fieldValue = fields[i].GetValue(inputGroup.Value);
+//                    if (fieldValue is ReferenceBase variableReference) {
+//                        variableReference.isSystemReference = true;
+//                    }
+//                }
+//            }
+        }
+
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void RefreshDependencies()
         {
@@ -38,6 +53,7 @@ namespace AltSalt.Maestro
             }
 
             inputGroupCollection.Add(inputGroupKey, new InputGroup(this, inputGroupKey));
+            EditorUtility.SetDirty(this);
             return inputGroupCollection[inputGroupKey];
         }
 

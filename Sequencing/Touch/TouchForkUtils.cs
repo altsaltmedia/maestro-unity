@@ -218,7 +218,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                 touchController.ySwipeAxis.SetInverted(axisMonitorObject, activeBranch.invert);
                 touchController.yMomentumAxis.SetInverted(axisMonitorObject, activeBranch.invert);
 
-                Touch_Controller.RefreshIsReversing(touchController, swipeDirection, touchController.yMomentumAxis.GetVariable(axisMonitorObject));
+                Touch_Controller.RefreshIsReversing(touchController, swipeDirection, touchController.yMomentumAxis.GetVariable() as Axis);
             }
             
             else if (activeBranch.branchKey == touchForkExtents.axisMonitor.xEastKey ||
@@ -226,7 +226,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                 touchController.xSwipeAxis.SetInverted(axisMonitorObject, activeBranch.invert);
                 touchController.xMomentumAxis.SetInverted(axisMonitorObject, activeBranch.invert);
                 
-                Touch_Controller.RefreshIsReversing(touchController, swipeDirection, touchController.xMomentumAxis.GetVariable(axisMonitorObject));
+                Touch_Controller.RefreshIsReversing(touchController, swipeDirection, touchController.xMomentumAxis.GetVariable() as Axis);
             }
 
             return touchForkExtents;

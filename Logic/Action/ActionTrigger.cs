@@ -1,10 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using AltSalt.Maestro.Logic.ConditionResponse;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic.Action
 {
@@ -27,6 +30,24 @@ namespace AltSalt.Maestro.Logic.Action
                 return _appSettings;
             }
             set => _appSettings = value;
+        }
+
+        [SerializeField]
+        private Object _parentObject;
+
+        private Object parentObject
+        {
+            get => _parentObject;
+            set => _parentObject = value;
+        }
+
+        [SerializeField]
+        private string _serializedPropertyPath;
+
+        private string serializedPropertyPath
+        {
+            get => _serializedPropertyPath;
+            set => _serializedPropertyPath = value;
         }
 
         [ValueDropdown(nameof(boolValueList))]
@@ -74,7 +95,7 @@ namespace AltSalt.Maestro.Logic.Action
         private List<BoolActionData> _boolActions = new List<BoolActionData>();
 
         private List<BoolActionData> boolActions => _boolActions;
-        
+
         [SerializeField]
         [HideInInspector]
         private List<FloatActionData> _floatActions = new List<FloatActionData>();
@@ -92,6 +113,12 @@ namespace AltSalt.Maestro.Logic.Action
         private List<AxisActionData> _axisActions = new List<AxisActionData>();
 
         private List<AxisActionData> axisActions  => _axisActions;
+        
+        [SerializeField]
+        [HideInInspector]
+        private List<ColorActionData> _colorActions = new List<ColorActionData>();
+
+        private List<ColorActionData> colorActions => _colorActions;
 
         
         [FormerlySerializedAs("_conditionResponseTriggers")]
@@ -120,6 +147,7 @@ namespace AltSalt.Maestro.Logic.Action
             Float,
             Int,
             Axis,
+            Color,
             ConditionResponse,
             SimpleEventTrigger,
             ComplexEventPackager
@@ -130,6 +158,13 @@ namespace AltSalt.Maestro.Logic.Action
         private ActionType _actionType;
 
         private ActionType actionType => _actionType;
+
+        public ActionTrigger Initialize(Object parentObject, string serializedPropertyPath)
+        {
+            this.parentObject = parentObject;
+            this.serializedPropertyPath = serializedPropertyPath;
+            return this;
+        }
 
         [PropertySpace]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
@@ -177,10 +212,21 @@ namespace AltSalt.Maestro.Logic.Action
                     axisActions.Add(action);
                     break;
                 }
+                
+                case ActionType.Color:
+                {
+                    var action = new ColorActionData(actionData.Count + 1);
+                    actionData.Add(action);
+                    colorActions.Add(action);
+                    break;
+                }
 
                 case ActionType.ConditionResponse:
                 {
-                    var action = new ConditionResponseActionData(actionData.Count + 1);
+                    string conditionResponsePath = serializedPropertyPath;
+                    conditionResponsePath += $".{nameof(_conditionResponseActions)}";
+                    conditionResponsePath += $".{conditionResponseActions.Count}";
+                    var action = new ConditionResponseActionData(parentObject, conditionResponsePath, actionData.Count + 1);
                     actionData.Add(action);
                     conditionResponseActions.Add(action);
                     break;
@@ -281,6 +327,7 @@ namespace AltSalt.Maestro.Logic.Action
             floatActions.RemoveAll(predicate);
             intActions.RemoveAll(predicate);
             axisActions.RemoveAll(predicate);
+            colorActions.RemoveAll(predicate);
             conditionResponseActions.RemoveAll(predicate);
             simpleEventActions.RemoveAll(predicate);
             complexEventActions.RemoveAll(predicate);
@@ -294,6 +341,43 @@ namespace AltSalt.Maestro.Logic.Action
             return actionData;
         }
 
+        public ActionTrigger CallPopulateReferences()
+        {
+            FieldInfo[] fields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            for (int i = 0; i < fields.Length; i++) {
+                if (fields[i].IsNotSerialized == true) {
+                    continue;
+                }
+
+                var fieldValue = fields[i].GetValue(this);
+                if (fieldValue is IList == false) {
+                    continue;
+                }
+
+                var actionList = fieldValue as IList;
+                var listType = actionList.GetType().GetGenericArguments()[0];
+
+                if (listType.IsSubclassOf(typeof(ActionData)) == false) {
+                    continue;
+                }
+
+                string actionListPath = serializedPropertyPath;
+                actionListPath += $".{fields[i].Name}";
+
+                MethodInfo methodInfo = listType.GetMethod(nameof(ActionData.PopulateReferences));
+
+                for (int j = 0; j < actionList.Count; j++) {
+                    string actionPath = actionListPath;
+                    actionPath += $".{j.ToString()}";
+                    methodInfo.Invoke(actionList[j], BindingFlags.Public | BindingFlags.Instance, null,
+                        new object[] {parentObject, actionPath}, null);
+                }
+            }
+
+            return this;
+        }
+
         public void OnAfterDeserialize()
         {
             actionData.Clear();
@@ -303,6 +387,7 @@ namespace AltSalt.Maestro.Logic.Action
             actionData.AddRange(floatActions);
             actionData.AddRange(intActions);
             actionData.AddRange(axisActions);
+            actionData.AddRange(colorActions);
             actionData.AddRange(conditionResponseActions);
             actionData.AddRange(simpleEventActions);
             actionData.AddRange(complexEventActions);
@@ -317,6 +402,7 @@ namespace AltSalt.Maestro.Logic.Action
             floatActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             intActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             axisActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            colorActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             conditionResponseActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             simpleEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             complexEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));

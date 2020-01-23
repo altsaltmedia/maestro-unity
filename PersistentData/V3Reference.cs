@@ -27,21 +27,23 @@ namespace AltSalt.Maestro
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private V3Variable _variable;
 
-        public V3Variable GetVariable(Object callingObject)
+        public override ScriptableObject GetVariable()
         {
-#if UNITY_EDITOR
-            this.parentObject = callingObject;
-            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                searchAttempted = true;
-                LogMissingReferenceMessage(GetType().Name);
-                var variableSearch = Utils.GetScriptableObject(referenceName) as V3Variable;
-                if (variableSearch != null) {
-                    Undo.RecordObject(callingObject, "save variable reference");
-                    _variable = variableSearch;
-                    LogFoundReferenceMessage(GetType().Name, _variable);
-                }
+            base.GetVariable();
+            return _variable;
+        }
+
+        protected override bool ShouldPopulateReference()
+        {
+            if (useConstant == false && _variable == null) {
+                return true;
             }
-#endif
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
             return _variable;
         }
         
@@ -59,21 +61,9 @@ namespace AltSalt.Maestro
             constantValue = value;
         }
 
-        public Vector3 GetValue(Object callingObject)
+        public Vector3 GetValue()
         {
-            this.parentObject = callingObject;
-            return useConstant ? constantValue : GetVariable(callingObject).value;
-        }
-
-        protected override void UpdateReferenceName()
-        {
-            if (_variable != null) {
-                searchAttempted = false;
-                referenceName = _variable.name;
-            }
-//            else {
-//                referenceName = "";
-//            }
+            return useConstant ? constantValue : (GetVariable() as V3Variable).value;
         }
     }
 }

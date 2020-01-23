@@ -124,14 +124,14 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
             // Force the momentum values to correspond to our axis based on whether we are reversing
             // or not (which is determined by the swipe applier)
-            if (touchController.yMomentumAxis.IsActive(touchController.momentumApplier) == true) {
+            if (touchController.yMomentumAxis.IsActive() == true) {
                 momentumModifier += GetAxisMomentum(momentumForce,
-                    touchController.yMomentumAxis.GetVariable(touchController.momentumApplier), touchController.isReversing);
+                    touchController.yMomentumAxis.GetVariable() as Axis, touchController.isReversing);
             }
 
-            if (touchController.xMomentumAxis.IsActive(touchController.momentumApplier)) {
+            if (touchController.xMomentumAxis.IsActive()) {
                 momentumModifier += GetAxisMomentum(momentumForce,
-                    touchController.xMomentumAxis.GetVariable(touchController.momentumApplier), touchController.isReversing);
+                    touchController.xMomentumAxis.GetVariable() as Axis, touchController.isReversing);
             }
 
             return momentumModifier;

@@ -138,6 +138,9 @@ namespace AltSalt.Maestro.Layout
         {
             base.OnEnable();
 #if UNITY_EDITOR
+            _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
+            _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
+            
             PopulateDependencies();
             PopulateNonSerializedProperties();
 #endif
@@ -239,11 +242,11 @@ namespace AltSalt.Maestro.Layout
                 appSettings = Utils.GetAppSettings();
             }
             
-            if(enableDynamicElement.GetVariable(this.gameObject) == null) {
+            if(enableDynamicElement.GetVariable() == null) {
                 enableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement)));
             }
 
-            if (disableDynamicElement.GetVariable(this.gameObject) == null) {
+            if (disableDynamicElement.GetVariable() == null) {
                 disableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement)));
             }
         }

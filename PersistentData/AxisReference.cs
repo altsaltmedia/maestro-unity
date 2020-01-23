@@ -13,39 +13,40 @@ namespace AltSalt.Maestro
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         private Axis _variable;
-
-        public Axis GetVariable(Object callingObject)
-		{
-#if UNITY_EDITOR
-			this.parentObject = callingObject;
-			if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-				searchAttempted = true;
-				LogMissingReferenceMessage(GetType().Name);
-				var variableSearch = Utils.GetScriptableObject(referenceName) as Axis;
-				if (variableSearch != null) {
-					_variable = variableSearch;
-					EditorUtility.SetDirty(callingObject);
-					LogFoundReferenceMessage(GetType().Name, _variable);
-				}
-			}
-#endif
-			return _variable;
-		}
         
+        public override ScriptableObject GetVariable()
+        {
+	        base.GetVariable();
+	        return _variable;
+        }
+
+        protected override bool ShouldPopulateReference()
+        {
+	        if (_variable == null) {
+		        return true;
+	        }
+
+	        return false;
+        }
+        
+        protected override ScriptableObject ReadVariable()
+        {
+	        return _variable;
+        }
+
         public void SetVariable(Axis value)
         {
 	        _variable = value;
         }
         
-		public bool IsActive(UnityEngine.Object callingObject)
+		public bool IsActive()
 		{
-			this.parentObject = callingObject;
-			return GetVariable(callingObject).active;
+			return (GetVariable() as Axis).active;
 		}
 
 		public Axis SetStatus(GameObject callingObject, bool targetValue)
 		{
-			Axis axis = GetVariable(callingObject);
+			Axis axis = (GetVariable() as Axis);
 			axis.StoreCaller(callingObject);
 			axis.SetStatus(targetValue);
 			return axis;
@@ -53,21 +54,20 @@ namespace AltSalt.Maestro
 		
 		public Axis SetStatus(GameObject callingObject, BoolVariable targetValue)
 		{
-			Axis axis = GetVariable(callingObject);
+			Axis axis = (GetVariable() as Axis);
 			axis.StoreCaller(callingObject);
 			axis.SetStatus(targetValue.value);
 			return axis;
 		}
 		
-		public bool IsInverted(UnityEngine.Object callingObject)
+		public bool IsInverted()
 		{
-			this.parentObject = callingObject;
-			return GetVariable(callingObject).inverted;
+			return (GetVariable() as Axis).inverted;
 		}
 
 		public Axis SetInverted(GameObject callingObject, bool targetValue)
 		{
-			Axis axis = GetVariable(callingObject);
+			Axis axis = (GetVariable() as Axis);
 			axis.StoreCaller(callingObject);
 			axis.SetInverted(targetValue);
 			return axis;
@@ -75,21 +75,10 @@ namespace AltSalt.Maestro
 		
 		public Axis SetInverted(GameObject callingObject, BoolVariable targetValue)
 		{
-			Axis axis = GetVariable(callingObject);
+			Axis axis = (GetVariable() as Axis);
 			axis.StoreCaller(callingObject);
 			axis.SetInverted(targetValue.value);
 			return axis;
-		}
-		
-		protected override void UpdateReferenceName()
-		{
-			if (GetVariable(parentObject) != null) {
-				searchAttempted = false;
-				referenceName = GetVariable(parentObject).name;
-			}
-//			else {
-//				referenceName = "";
-//			}
 		}
     }
 }

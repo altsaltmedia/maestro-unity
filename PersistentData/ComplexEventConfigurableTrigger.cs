@@ -296,8 +296,8 @@ namespace AltSalt.Maestro
             if (hasScriptableObject) {
                 complexPayload = GetScriptableObjectValues(complexPayload);
             }
-            GetVariable(caller).StoreCaller(caller);
-            GetVariable(caller).Raise(complexPayload);
+            (GetVariable() as ComplexEvent).StoreCaller(caller);
+            (GetVariable() as ComplexEvent).Raise(complexPayload);
         }
 
         public void RaiseEvent(GameObject caller, string sourceName)
@@ -315,8 +315,8 @@ namespace AltSalt.Maestro
             if (hasScriptableObject) {
                 complexPayload = GetScriptableObjectValues(complexPayload);
             }
-            GetVariable(caller).StoreCaller(caller, sourceName);
-            GetVariable(caller).Raise(complexPayload);
+            (GetVariable() as ComplexEvent).StoreCaller(caller, sourceName);
+            (GetVariable() as ComplexEvent).Raise(complexPayload);
         }
 
         private ComplexPayload GetStringValues(ComplexPayload complexPayload)

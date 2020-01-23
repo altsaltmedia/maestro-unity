@@ -33,33 +33,65 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         private BoolReference _boolCondition = new BoolReference();
 
         private BoolReference boolCondition => _boolCondition;
+
+        public BoolConditionResponse(UnityEngine.Object parentObject,
+            string serializedPropertyPath) : base(parentObject, serializedPropertyPath)
+        {
+            
+        }
+
+        public override ConditionResponseBase PopulateReferences()
+        {
+            string referencePath = serializedPropertyPath + $".{nameof(_boolReference)}";
+            _boolReference.PopulateVariable(parentObject, referencePath.Split('.'));
+            
+            string conditionPath = serializedPropertyPath + $".{nameof(_boolCondition)}";
+            _boolCondition.PopulateVariable(parentObject, conditionPath.Split('.'));
+            
+            return this;
+        }
         
         public override void SyncConditionHeading(Object callingObject)
         {
+            CheckPopulateReferences();
+            
             base.SyncConditionHeading(callingObject);
             
-            if(boolReference.GetVariable(callingObject) == null && boolReference.useConstant == false) {
+            if(boolReference.GetVariable() == null && boolReference.useConstant == false) {
                 conditionEventTitle = "Please populate a bool reference.";
                 return;
             }
 
-            if (boolCondition.GetVariable(callingObject) == null && boolCondition.useConstant == false) {
+            if (boolCondition.GetVariable() == null && boolCondition.useConstant == false) {
                 conditionEventTitle = "Please populate a comparison condition.";
                 return;
             }
 
+            string newTitle;
+            
             if (boolReference.useConstant == true) {
-                conditionEventTitle = boolReference.GetValue(callingObject) + " is " + boolCondition.GetValue(this.parentObject);
+                newTitle = $"{boolReference.GetValue()} is ";
             } else {
-                conditionEventTitle = boolReference.GetVariable(callingObject).name + " is " + boolCondition.GetValue(this.parentObject);
+                newTitle = $"{boolReference.GetVariable().name} is ";
             }
+
+            if (boolCondition.useConstant == true) {
+                newTitle += boolCondition.GetValue();
+            }
+            else {
+                newTitle +=  $"equal to {boolCondition.GetVariable().name}";
+            }
+
+            conditionEventTitle = newTitle;
         }
 
         public override bool CheckCondition(Object callingObject)
         {
+            CheckPopulateReferences();
+            
             base.CheckCondition(callingObject);
             
-            if (boolReference.GetValue(callingObject) == boolCondition.GetValue(callingObject)) {
+            if (boolReference.GetValue() == boolCondition.GetValue()) {
                 return true;
             }
 
@@ -68,18 +100,20 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         public BoolReference GetReference()
         {
+            CheckPopulateReferences();
+            
             return boolReference;
         }
 
         public BoolReference GetCondition()
         {
+            CheckPopulateReferences();
+            
             return boolCondition;
         }
         
         public override void TriggerResponse(GameObject caller, bool triggerOnStart)
         {
-            boolReference.parentObject = caller;
-            boolCondition.parentObject = caller;
             base.TriggerResponse(caller, triggerOnStart);
         }
     }

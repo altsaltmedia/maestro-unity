@@ -48,23 +48,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _appSettings: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
   _sceneAspectRatio:
+    _isSystemReference: 0
     _referenceName: CurrentSceneAspectRatio
-    _parentObject: {fileID: 114017477341823712}
     _useConstant: 0
     _constantValue: 0
-    _variable: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 14d1ccc2b421d441f9e8780be5009528, type: 2}
   _sceneWidth:
+    _isSystemReference: 0
     _referenceName: CurrentSceneHeight
-    _parentObject: {fileID: 114017477341823712}
     _useConstant: 0
     _constantValue: 0
-    _variable: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 71ec187545d774365b64cd8020e2ea2b, type: 2}
   _sceneHeight:
+    _isSystemReference: 0
     _referenceName: CurrentSceneWidth
-    _parentObject: {fileID: 114017477341823712}
     _useConstant: 0
     _constantValue: 0
-    _variable: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 7409962026f3b4ee08d6b2f6a8ff576d, type: 2}
   _deviceBreakpoints:
   - 1.77
   _sceneDimensions:
@@ -91,8 +91,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _complexEvent: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
   _complexEventReference:
+    _isSystemReference: 0
     _referenceName: EnableDynamicElement
-    _parentObject: {fileID: 5206624469968826649}
     _variable: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
   DeveloperDescription: 
   _response:
@@ -125,8 +125,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _complexEvent: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
   _complexEventReference:
+    _isSystemReference: 0
     _referenceName: DisableDynamicElement
-    _parentObject: {fileID: 9077634932118632401}
     _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
   DeveloperDescription: 
   _response:
@@ -159,8 +159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _simpleSignal: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
   _simpleSignalReference:
+    _isSystemReference: 0
     _referenceName: LayoutUpdate
-    _parentObject: {fileID: 6154787528140349724}
     _variable: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
   _response:
     m_PersistentCalls:

@@ -159,7 +159,7 @@ namespace AltSalt.Maestro.Sequencing
 
         public bool isReversing
         {
-            get => _isReversing.GetValue(sequenceConfig.gameObject);
+            get => _isReversing.GetValue();
         }
 
         [Required]

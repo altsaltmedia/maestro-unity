@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using AltSalt.Maestro.Logic.Action;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -16,12 +20,22 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     {
         protected override string title => nameof(ConditionResponseActionData);
 
-        private GameObject _parentObject;
+        [SerializeField]
+        private Object _parentObject;
 
-        private GameObject parentObject
+        private Object parentObject
         {
             get => _parentObject;
             set => _parentObject = value;
+        }
+
+        [SerializeField]
+        private string _serializedPropertyPath;
+
+        private string serializedPropertyPath
+        {
+            get => _serializedPropertyPath;
+            set => _serializedPropertyPath = value;
         }
 
         [Serializable]
@@ -65,6 +79,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("alwaysEvents")]
         [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
         private List<AlwaysConditionResponse> _alwaysEvents = new List<AlwaysConditionResponse>();
 
         private List<AlwaysConditionResponse> alwaysEvents => _alwaysEvents;
@@ -75,6 +90,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("boolEvents")]
         [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true, CustomAddFunction = nameof(AddBoolConditionResponse))]
         private List<BoolConditionResponse> _boolEvents = new List<BoolConditionResponse>();
 
         private List<BoolConditionResponse> boolEvents => _boolEvents;
@@ -85,6 +101,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("floatEvents")]
         [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true, CustomAddFunction = nameof(AddFloatConditionResponse))]
         private List<FloatConditionResponse> _floatEvents = new List<FloatConditionResponse>();
 
         private List<FloatConditionResponse> floatEvents => _floatEvents;
@@ -95,6 +112,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("intEvents")]
         [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true, CustomAddFunction = nameof(AddIntConditionResponse))]
         private List<IntConditionResponse> _intEvents = new List<IntConditionResponse>();
 
         private List<IntConditionResponse> intEvents => _intEvents;
@@ -105,6 +123,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("textFamilyEvents")]
         [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true, CustomAddFunction = nameof(AddTextFamilyConditionResponse))]
         private List<TextFamilyConditionResponse> _textFamilyEvents = new List<TextFamilyConditionResponse>();
 
         private List<TextFamilyConditionResponse> textFamilyEvents => _textFamilyEvents;
@@ -115,14 +134,64 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("layoutEvents")]
         [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true, CustomAddFunction = nameof(AddLayoutConditionResponse))]
         private List<LayoutConditionResponse> _layoutEvents = new List<LayoutConditionResponse>();
 
         private List<LayoutConditionResponse> layoutEvents => _layoutEvents;
 
         [PropertySpace]
-        
-        public ConditionResponseActionData(int priority) : base(priority) { }
 
+        public ConditionResponseActionData(Object parentObject, string serializedPropertyPath, int priority) : base(priority)
+        {
+            this.parentObject = parentObject;
+            this.serializedPropertyPath = serializedPropertyPath;
+        }
+
+        private BoolConditionResponse AddBoolConditionResponse()
+        {
+            string conditionResponsePath = serializedPropertyPath;
+            conditionResponsePath += $".{nameof(_boolEvents)}";
+            conditionResponsePath += $".{_boolEvents.Count}";
+            var conditionResponse = new BoolConditionResponse(parentObject, conditionResponsePath);
+            return conditionResponse;
+        }
+        
+        private FloatConditionResponse AddFloatConditionResponse()
+        {
+            string conditionResponsePath = serializedPropertyPath;
+            conditionResponsePath += $".{nameof(_floatEvents)}";
+            conditionResponsePath += $".{_floatEvents.Count}";
+            var conditionResponse = new FloatConditionResponse(parentObject, conditionResponsePath);
+            return conditionResponse;
+        }
+
+        private IntConditionResponse AddIntConditionResponse()
+        {
+            string conditionResponsePath = serializedPropertyPath;
+            conditionResponsePath += $".{nameof(_intEvents)}";
+            conditionResponsePath += $".{_intEvents.Count}";
+            var conditionResponse = new IntConditionResponse(parentObject, conditionResponsePath);
+            return conditionResponse;
+        }
+        
+        private TextFamilyConditionResponse AddTextFamilyConditionResponse()
+        {
+            string conditionResponsePath = serializedPropertyPath;
+            conditionResponsePath += $".{nameof(_textFamilyEvents)}";
+            conditionResponsePath += $".{_textFamilyEvents.Count}";
+            var conditionResponse = new TextFamilyConditionResponse(parentObject, conditionResponsePath);
+            return conditionResponse;
+        }
+
+        private LayoutConditionResponse AddLayoutConditionResponse()
+        {
+            string conditionResponsePath = serializedPropertyPath;
+            conditionResponsePath += $".{nameof(_layoutEvents)}";
+            conditionResponsePath += $".{_layoutEvents.Count}";
+            var conditionResponse = new LayoutConditionResponse(parentObject, conditionResponsePath);
+            return conditionResponse;
+        }
+        
         public override void SyncEditorActionHeadings()
         {
             switch (triggerType) {
@@ -171,6 +240,49 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
             
             return actionDescription;
+        }
+        
+        
+        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
+        {
+            FieldInfo[] fields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            for (int i = 0; i < fields.Length; i++) {
+                if (fields[i].IsNotSerialized == true) {
+                    continue;
+                }
+
+                var fieldValue = fields[i].GetValue(this);
+                if (fieldValue is IList == false) {
+                    continue;
+                }
+
+                var actionList = fieldValue as IList;
+                var listType = actionList.GetType().GetGenericArguments()[0];
+
+                if (listType.IsSubclassOf(typeof(ConditionResponseBase)) == false) {
+                    continue;
+                }
+
+                string conditionResponseListPath = serializedPropertyPath;
+                conditionResponseListPath += $".{fields[i].Name}";
+
+                MethodInfo methodInfo = typeof(ConditionResponseBase).GetMethod(
+                    nameof(ConditionResponseBase.PopulateReferences), BindingFlags.Public | BindingFlags.Instance);
+
+                if (methodInfo == null) {
+                    continue;
+                }
+                
+                for (int j = 0; j < actionList.Count; j++) {
+                    string actionPath = conditionResponseListPath;
+                    actionPath += $".{j.ToString()}";
+                    methodInfo.Invoke(actionList[j],
+                        new object[] {});
+                }
+            }
+
+            return this;
         }
 
         public override void PerformAction(GameObject callingObject)

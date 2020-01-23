@@ -65,19 +65,19 @@ namespace AltSalt.Maestro.Sequencing
         [Required]
         private CustomKeyReference _forkKey;
 
-        private CustomKey forkKey => _forkKey.GetVariable(this.gameObject);
+        private CustomKey forkKey => _forkKey.GetVariable() as CustomKey;
 
         [SerializeField]
         [Required]
         private CustomKeyReference _updateForkViaBranchKey;
 
-        private CustomKey updateForkViaBranchKey => _updateForkViaBranchKey.GetVariable(this.gameObject);
+        private CustomKey updateForkViaBranchKey => _updateForkViaBranchKey.GetVariable() as CustomKey;
 
         [SerializeField]
         [Required]
         private CustomKeyReference _updateForkViaSequence;
 
-        private CustomKey updateForkViaSequence => _updateForkViaSequence.GetVariable(this.gameObject);
+        private CustomKey updateForkViaSequence => _updateForkViaSequence.GetVariable() as CustomKey;
 
         private void Start()
         {

@@ -52,7 +52,7 @@ namespace AltSalt.Maestro.Layout {
 
         private float sceneAspectRatio
         {
-            get => _sceneAspectRatio.GetValue(this);
+            get => _sceneAspectRatio.GetValue();
             set => _sceneAspectRatio.SetValue(this.gameObject, value);
         }
         
@@ -61,7 +61,7 @@ namespace AltSalt.Maestro.Layout {
 
         private float sceneWidth
         {
-            get => _sceneWidth.GetValue(this);
+            get => _sceneWidth.GetValue();
             set => _sceneWidth.SetValue(this.gameObject, value);
         }
         
@@ -70,7 +70,7 @@ namespace AltSalt.Maestro.Layout {
 
         private float sceneHeight
         {
-            get => _sceneHeight.GetValue(this);
+            get => _sceneHeight.GetValue();
             set => _sceneHeight.SetValue(this.gameObject, value);
         }
 
@@ -127,6 +127,10 @@ namespace AltSalt.Maestro.Layout {
 #if UNITY_EDITOR
         private void OnEnable()
         {
+            _sceneAspectRatio.PopulateVariable(this, nameof(_sceneAspectRatio));
+            _sceneWidth.PopulateVariable(this, nameof(_sceneWidth));
+            _sceneHeight.PopulateVariable(this, nameof(_sceneHeight));
+            
             if (appSettings == null) {
                 appSettings = Utils.GetAppSettings();
             }

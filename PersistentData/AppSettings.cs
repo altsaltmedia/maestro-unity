@@ -78,7 +78,7 @@ namespace AltSalt.Maestro
                 if(_mainInput == null) {
                     RefreshDependencies();             
                 }
-                return _mainInput.GetVariable(this);
+                return _mainInput.GetVariable() as InputGroupKey;
             }
             
         }
@@ -93,7 +93,7 @@ namespace AltSalt.Maestro
                 if(_user1 == null) {
                     RefreshDependencies();
                 }
-                return _user1.GetVariable(this);                    
+                return _user1.GetVariable() as UserDataKey;                    
             }
             
         }
@@ -106,7 +106,7 @@ namespace AltSalt.Maestro
     
         public bool GetHasBeenOpened(Object callingObject)
         {
-            return systemSettings.hasBeenOpened.GetValue(callingObject);
+            return systemSettings.hasBeenOpened.GetValue();
         }
         
         
@@ -114,7 +114,7 @@ namespace AltSalt.Maestro
         
         public float GetDeviceAspectRatio(Object callingObject)
         {
-            return systemSettings.deviceAspectRatio.GetValue(callingObject);
+            return systemSettings.deviceAspectRatio.GetValue();
         }
         
         public FloatVariable SetDeviceAspectRatio(GameObject callingObject, float value)
@@ -124,7 +124,7 @@ namespace AltSalt.Maestro
         
         public float GetDeviceWidth(Object callingObject)
         {
-            return systemSettings.deviceWidth.GetValue(callingObject);
+            return systemSettings.deviceWidth.GetValue();
         }
         
         public FloatVariable SetDeviceWidth(GameObject callingObject, float value)
@@ -134,7 +134,7 @@ namespace AltSalt.Maestro
         
         public float GetDeviceHeight(Object callingObject)
         {
-            return systemSettings.deviceHeight.GetValue(callingObject);
+            return systemSettings.deviceHeight.GetValue();
         }
 
         public FloatVariable SetDeviceHeight(GameObject callingObject, float value)
@@ -145,10 +145,20 @@ namespace AltSalt.Maestro
         
         
         // Scene Settings
+
+        public string GetActiveScene(Object callingObject)
+        {
+            return systemSettings.activeScene.GetValue();
+        }
+        
+        public StringVariable SetActiveScene(GameObject callingObject, string targetValue)
+        {
+            return systemSettings.activeScene.SetValue(callingObject, targetValue);
+        }
         
         public float GetCurrentSceneAspectRatio(Object callingObject)
         {
-            return systemSettings.currentSceneAspectRatio.GetValue(callingObject);
+            return systemSettings.currentSceneAspectRatio.GetValue();
         }
         
         public FloatVariable SetCurrentSceneAspectRatio(GameObject callingObject, float value)
@@ -158,7 +168,7 @@ namespace AltSalt.Maestro
         
         public float GetCurrentSceneWidth(Object callingObject)
         {
-            return systemSettings.currentSceneWidth.GetValue(callingObject);
+            return systemSettings.currentSceneWidth.GetValue();
         }
         
         public FloatVariable SetCurrentSceneWidth(GameObject callingObject, float value)
@@ -168,7 +178,7 @@ namespace AltSalt.Maestro
         
         public float GetCurrentSceneHeight(Object callingObject)
         {
-            return systemSettings.currentSceneHeight.GetValue(callingObject);
+            return systemSettings.currentSceneHeight.GetValue();
         }
 
         public FloatVariable SetCurrentSceneHeight(GameObject callingObject, float value)
@@ -181,7 +191,7 @@ namespace AltSalt.Maestro
 
         public bool GetVolumeEnabled(Object callingObject)
         {
-            return systemSettings.volumeEnabled.GetValue(callingObject);
+            return systemSettings.volumeEnabled.GetValue();
         }
         
         public bool SetVolumeEnabled(GameObject callingObject, bool targetValue)
@@ -191,12 +201,12 @@ namespace AltSalt.Maestro
 
         public bool GetMusicEnabled(Object callingObject)
         {
-            return systemSettings.musicEnabled.GetValue(callingObject);
+            return systemSettings.musicEnabled.GetValue();
         }
 
         public bool GetSoundEffectsEnabled(Object callingObject)
         {
-            return systemSettings.soundEffectsEnabled.GetValue(callingObject);
+            return systemSettings.soundEffectsEnabled.GetValue();
         }
         
         
@@ -204,7 +214,7 @@ namespace AltSalt.Maestro
         
         public bool GetIsPaused(Object callingObject)
         {
-            return systemSettings.paused.GetValue(callingObject);
+            return systemSettings.paused.GetValue();
         }
         
         
@@ -212,7 +222,7 @@ namespace AltSalt.Maestro
         
         public float GetTimescale(Object callingObject)
         {
-            return systemSettings.timescale.GetValue(callingObject);
+            return systemSettings.timescale.GetValue();
         }
 
         
@@ -226,7 +236,7 @@ namespace AltSalt.Maestro
     
         public float GetYSensitivity(Object callingObject, UserDataKey userKey)
         {
-            return userData.GetUserPreferences(userKey).ySensitivity.GetValue(callingObject);
+            return userData.GetUserPreferences(userKey).ySensitivity.GetValue();
         }
         
         
@@ -234,7 +244,7 @@ namespace AltSalt.Maestro
         
         public bool GetInvertYInput(Object callingObject, UserDataKey userKey)
         {
-            return userData.GetUserPreferences(userKey).invertYInput.GetValue(callingObject);
+            return userData.GetUserPreferences(userKey).invertYInput.GetValue();
         }
         
         
@@ -242,7 +252,7 @@ namespace AltSalt.Maestro
 
         public float GetXSensitivity(Object callingObject, UserDataKey userKey)
         {
-            return userData.GetUserPreferences(userKey).xSensitivity.GetValue(callingObject);
+            return userData.GetUserPreferences(userKey).xSensitivity.GetValue();
         }
         
         
@@ -250,7 +260,7 @@ namespace AltSalt.Maestro
         
         public bool GetInvertXInput(Object callingObject, UserDataKey userKey)
         {
-            return userData.GetUserPreferences(userKey).invertXInput.GetValue(callingObject);
+            return userData.GetUserPreferences(userKey).invertXInput.GetValue();
         }
         
         
@@ -258,7 +268,7 @@ namespace AltSalt.Maestro
         
         public bool GetUserAutoplayEnabled(Object callingObject, UserDataKey userKey)
         {
-            return userData.GetUserPreferences(userKey).userAutoplayEnabled.GetValue(callingObject);
+            return userData.GetUserPreferences(userKey).userAutoplayEnabled.GetValue();
         }
         
         
@@ -266,7 +276,7 @@ namespace AltSalt.Maestro
 
         public bool GetUserMomentumEnabled(Object callingObject, UserDataKey userKey)
         {
-            return userData.GetUserPreferences(userKey).userMomentumEnabled.GetValue(callingObject);
+            return userData.GetUserPreferences(userKey).userMomentumEnabled.GetValue();
         }
 
         
@@ -280,7 +290,7 @@ namespace AltSalt.Maestro
         
         public bool GetIsSwiping(GameObject callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).isSwiping.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).isSwiping.GetValue();
         }
         
         public BoolVariable SetIsSwiping(GameObject callingObject, InputGroupKey inputGroupKey, bool targetValue)
@@ -293,7 +303,7 @@ namespace AltSalt.Maestro
     
         public Vector2 GetSwipeForce(GameObject callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).swipeForce.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).swipeForce.GetValue();
         }
         
         public V2Variable SetSwipeForce(GameObject callingObject, InputGroupKey inputGroupKey, Vector2 targetValue)
@@ -306,7 +316,7 @@ namespace AltSalt.Maestro
         
         public Vector2 GetSwipeMonitorMomentum(GameObject callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).swipeMonitorMomentum.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).swipeMonitorMomentum.GetValue();
         }
         
         public V2Variable SetSwipeMonitorMomentum(GameObject callingObject, InputGroupKey inputGroupKey, Vector2 targetValue)
@@ -319,7 +329,7 @@ namespace AltSalt.Maestro
         
         public Vector2 GetSwipeMonitorMomentumCache(GameObject callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).swipeMonitorMomentumCache.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).swipeMonitorMomentumCache.GetValue();
         }
         
         public V2Variable SetSwipeMonitorMomentumCache(GameObject callingObject, InputGroupKey inputGroupKey, Vector2 targetValue)
@@ -332,7 +342,7 @@ namespace AltSalt.Maestro
 
         public bool GetAxisTransitionActive(GameObject callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).axisTransitionActive.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).axisTransitionActive.GetValue();
         }
         
         public BoolVariable SetAxisTransitionActive(GameObject callingObject, InputGroupKey inputGroupKey, bool targetValue)
@@ -345,7 +355,7 @@ namespace AltSalt.Maestro
 
         public bool GetForkTransitionActive(GameObject callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).forkTransitionActive.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).forkTransitionActive.GetValue();
         }
         
         public BoolVariable SetForkTransitionActive(GameObject callingObject, InputGroupKey inputGroupKey, bool targetValue)
@@ -358,7 +368,7 @@ namespace AltSalt.Maestro
 
         public bool GetScrubberActive(GameObject callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).scrubberActive.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).scrubberActive.GetValue();
         }
         
         public BoolVariable SetScrubberActive(GameObject callingObject, InputGroupKey inputGroupKey, bool targetValue)
@@ -371,7 +381,7 @@ namespace AltSalt.Maestro
 
         public float GetAxisTransitionSpread(GameObject callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).axisTransitionSpread.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).axisTransitionSpread.GetValue();
         }
         
         
@@ -379,7 +389,7 @@ namespace AltSalt.Maestro
 
         public float GetForkTransitionSpread(GameObject callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).forkTransitionSpread.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).forkTransitionSpread.GetValue();
         }
 
 
@@ -387,7 +397,7 @@ namespace AltSalt.Maestro
         
         public float GetSwipeMinMax(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).swipeMinMax.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).swipeMinMax.GetValue();
         }
         
         
@@ -395,7 +405,7 @@ namespace AltSalt.Maestro
         
         public float GetMomentumMinMax(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).momentumMinMax.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).momentumMinMax.GetValue();
         }
         
         
@@ -403,7 +413,7 @@ namespace AltSalt.Maestro
         
         public float GetMomentumDecay(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).momentumDecay.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).momentumDecay.GetValue();
         }
         
         
@@ -411,7 +421,7 @@ namespace AltSalt.Maestro
 
         public float GetMomentumSensitivity(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).momentumSensitivity.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).momentumSensitivity.GetValue();
         }
         
         
@@ -419,7 +429,7 @@ namespace AltSalt.Maestro
 
         public float GetGestureTimeMultiplier(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).gestureTimeMultiplier.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).gestureTimeMultiplier.GetValue();
         }
 
         
@@ -427,7 +437,7 @@ namespace AltSalt.Maestro
 
         public float GetCancelMomentumTimeThreshold(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).cancelMomentumTimeThreshold.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).cancelMomentumTimeThreshold.GetValue();
         }
         
         
@@ -435,7 +445,7 @@ namespace AltSalt.Maestro
 
         public float GetPauseMomentumTimeThreshold(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).pauseMomentumThreshold.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).pauseMomentumThreshold.GetValue();
         }
         
         
@@ -443,7 +453,7 @@ namespace AltSalt.Maestro
 
         public float GetCancelMomentumMagnitudeThreshold(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).cancelMomentumMagnitudeThreshold.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).cancelMomentumMagnitudeThreshold.GetValue();
         }
         
         
@@ -451,7 +461,7 @@ namespace AltSalt.Maestro
         
         public float GetFlickThreshold(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).flickThreshold.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).flickThreshold.GetValue();
         }
         
         
@@ -475,7 +485,7 @@ namespace AltSalt.Maestro
 
         public string GetSwipeDirection(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).swipeDirection.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).swipeDirection.GetValue();
         }
         
         public StringVariable SetSwipeDirection(GameObject callingObject, InputGroupKey inputGroupKey, string targetValue)
@@ -562,7 +572,7 @@ namespace AltSalt.Maestro
         
         public bool GetIsReversing(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).isReversing.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).isReversing.GetValue();
         }
         
         public BoolVariable SetIsReversing(GameObject callingObject, InputGroupKey inputGroupKey, bool targetValue)
@@ -575,7 +585,7 @@ namespace AltSalt.Maestro
         
         public float GetSwipeModifierOutput(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).swipeModifierOutput.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).swipeModifierOutput.GetValue();
         }
         
         public FloatVariable SetSwipeModifierOutput(GameObject callingObject, InputGroupKey inputGroupKey, float targetValue)
@@ -588,7 +598,7 @@ namespace AltSalt.Maestro
         
         public float GetMomentumModifierOutput(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).momentumModifierOutput.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).momentumModifierOutput.GetValue();
         }
         
         public FloatVariable SetMomentumModifierOutput(GameObject callingObject, InputGroupKey inputGroupKey, float targetValue)
@@ -601,7 +611,7 @@ namespace AltSalt.Maestro
         
         public float GetFrameStepValue(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).frameStepValue.GetValue(callingObject);
+            return inputData.GetInputGroup(inputGroupKey).frameStepValue.GetValue();
         }
         
     #endregion
@@ -637,6 +647,12 @@ namespace AltSalt.Maestro
         
         
 #if UNITY_EDITOR
+
+        private void OnEnable()
+        {
+            _mainInput.PopulateVariable(this, nameof(_mainInput));
+            _user1.PopulateVariable(this, nameof(_user1));
+        }
 
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SetDefaults()
@@ -701,8 +717,9 @@ namespace AltSalt.Maestro
                     _debugPreferences = assetSearch;
                 }
             }
-            
-            if (_mainInput.GetVariable(this) == null) {
+
+            _mainInput.isSystemReference = true;
+            if (_mainInput.GetVariable() == null) {
                 string variableName = nameof(mainInput).Capitalize();
                 var assetSearch = Utils.GetScriptableObject(nameof(mainInput).Capitalize()) as InputGroupKey;
                 if (assetSearch == null) {
@@ -713,8 +730,9 @@ namespace AltSalt.Maestro
                     _mainInput.SetVariable(assetSearch);
                 }
             }
-            
-            if (_user1.GetVariable(this) == null) {
+
+            _user1.isSystemReference = true;
+            if (_user1.GetVariable() == null) {
                 string variableName = nameof(user1).Capitalize();
                 var assetSearch = Utils.GetScriptableObject(nameof(user1).Capitalize()) as UserDataKey;
                 if (assetSearch == null) {

@@ -38,34 +38,23 @@ namespace AltSalt.Maestro
         private FloatVariable _variable;
         
         
-        public FloatVariable GetVariable(Object callingObject)
+        public override ScriptableObject GetVariable()
         {
-#if UNITY_EDITOR
-            this.parentObject = callingObject;
-            if (searchAttempted == false && _variable == null && string.IsNullOrEmpty(referenceName) == false) {
-                searchAttempted = true;
-                LogMissingReferenceMessage(GetType().Name);
-                var variableSearch = Utils.GetScriptableObject(referenceName) as FloatVariable;
-                if (variableSearch != null) {
-                    
-                    SerializedObject serializedObject = new SerializedObject(callingObject);
-                    string fieldName = "";
-                    FieldInfo[] fields = callingObject.GetType().GetFields();
-                    for (int i = 0; i < fields.Length; i++) {
-                        var fieldValue = fields[i].GetValue(callingObject);
-                        if (fieldValue == this) {
-                            fieldName = fields[i].Name;
-                        }
-                    }
+            base.GetVariable();
+            return _variable;
+        }
 
-                    SerializedProperty serializedProperty = serializedObject.FindProperty(fieldName);
-                    serializedProperty.FindPropertyRelative(nameof(_variable)).objectReferenceValue = variableSearch;
-                    serializedObject.ApplyModifiedProperties();
-                    
-                    LogFoundReferenceMessage(GetType().Name, _variable);
-                }
+        protected override bool ShouldPopulateReference()
+        {
+            if (useConstant == false && _variable == null) {
+                return true;
             }
-#endif
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
             return _variable;
         }
         
@@ -83,10 +72,9 @@ namespace AltSalt.Maestro
             constantValue = value;
         }
 
-        public float GetValue(Object callingObject)
+        public float GetValue()
         {
-            this.parentObject = callingObject;
-            return useConstant ? constantValue : GetVariable(callingObject).value;
+            return useConstant ? constantValue : (GetVariable() as FloatVariable).value;
         }
         
         public FloatVariable SetValue(GameObject callingObject, float targetValue)
@@ -96,7 +84,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.SetValue(targetValue);
             return floatVariable;
@@ -109,7 +97,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.SetValue(targetValue);
             return floatVariable;
@@ -122,7 +110,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.ApplyChange(targetValue);
             return floatVariable;
@@ -135,7 +123,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.ApplyChange(targetValue);
             return floatVariable;
@@ -148,7 +136,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.Multiply(targetValue);
             return floatVariable;
@@ -161,7 +149,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.Multiply(targetValue);
             return floatVariable;
@@ -174,7 +162,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.ClampMax(targetValue);
             return floatVariable;
@@ -187,7 +175,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.ClampMax(targetValue);
             return floatVariable;
@@ -200,7 +188,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.ClampMin(targetValue);
             return floatVariable;
@@ -213,7 +201,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.ClampMin(targetValue);
             return floatVariable;
@@ -226,7 +214,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.SetToDistance(targetValue);
             return floatVariable;
@@ -239,7 +227,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.SetToDistance(targetValue);
             return floatVariable;
@@ -252,7 +240,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.SetToRandom();
             return floatVariable;
@@ -265,7 +253,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.SetToSquareMagnitude(sourceValue);
             return floatVariable;
@@ -278,7 +266,7 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject, sourceScene, sourceName);
             floatVariable.SetToDefaultValue();
             return floatVariable;
@@ -291,22 +279,11 @@ namespace AltSalt.Maestro
                 return null;
             }
 
-            FloatVariable floatVariable = GetVariable(callingObject);
+            FloatVariable floatVariable = GetVariable() as FloatVariable;
             floatVariable.StoreCaller(callingObject);
             floatVariable.SetToDefaultValue();
             return floatVariable;
         }
 
-        protected override void UpdateReferenceName()
-        {
-            if (GetVariable(parentObject) != null) {
-                searchAttempted = false;
-                referenceName = _variable.name;
-            }
-//            else {
-//                referenceName = "";
-//            }
-        }
-        
     }
 }

@@ -133,11 +133,11 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR
             UpdateBreakpointDependencies();
 
-            if (enableDynamicElement.GetVariable(trackAssetConfig) == null) {
+            if (enableDynamicElement.GetVariable() == null) {
                 enableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement)));
             }
 
-            if (disableDynamicElement.GetVariable(trackAssetConfig) == null) {
+            if (disableDynamicElement.GetVariable() == null) {
                 disableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement)));
             }
 #endif

@@ -14,6 +14,9 @@ namespace AltSalt.Maestro.Logic.ConditionResponse {
     [ExecuteInEditMode]
     public class AlwaysConditionResponse : ConditionResponseBase
     {
+        public AlwaysConditionResponse(UnityEngine.Object parentObject,
+            string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
+        
 #if UNITY_EDITOR
         public override void SyncConditionHeading(Object callingObject)
         {

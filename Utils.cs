@@ -1232,24 +1232,30 @@ namespace AltSalt.Maestro
                 return null;
             }
             
-            string[] guids;
-            string path;
             string typeName = typeof(ScriptableObject).Name;
-
-            guids = AssetDatabase.FindAssets(String.Format("{0} t:{1}", target, typeName));
+            string[] guids = AssetDatabase.FindAssets(String.Format("{0} t:{1}", target, typeName));
 
             if (guids.Length < 1) {
                 Debug.Log($"Asset {target} of type  {typeName} not found.");
                 return null;
             }
+
+            // Get the file paths and filter for exact matches.
+            List<string> filePaths = new List<string>();
             
-            if (guids.Length > 1) {
+            for (int i = 0; i < guids.Length; i++) {
+                string filePath = AssetDatabase.GUIDToAssetPath(guids[i]);
+                string fileName = Path.GetFileNameWithoutExtension(filePath); 
+                if (fileName == target) {
+                    filePaths.Add(filePath);
+                }
+            }
+
+            if (filePaths.Count > 1) {
                 LogDuplicateAssetWarning(target);
             }
 
-            path = AssetDatabase.GUIDToAssetPath(guids[0]);
-
-            return (ScriptableObject)AssetDatabase.LoadAssetAtPath(path, typeof(ScriptableObject));
+            return (ScriptableObject)AssetDatabase.LoadAssetAtPath(filePaths[0], typeof(ScriptableObject));
         }
 
         
@@ -1526,7 +1532,7 @@ namespace AltSalt.Maestro
 
         public static bool IsPopulated(SimpleEventTrigger attribute)
         {
-            if (attribute.GetVariable(attribute.parentObject) != null) {
+            if (attribute.GetVariable() != null) {
                 return true;
             } else {
                 return false;
@@ -1535,7 +1541,7 @@ namespace AltSalt.Maestro
 
         public static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
-            if (attribute.GetVariable(attribute.parentObject) != null) {
+            if (attribute.GetVariable() != null) {
                 return true;
             } else {
                 return false;
@@ -1548,7 +1554,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
+                return attribute.GetVariable() == null ? false : true;
             }
         }
 
@@ -1558,7 +1564,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
+                return attribute.GetVariable() == null ? false : true;
             }
         }
 
@@ -1568,7 +1574,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
+                return attribute.GetVariable() == null ? false : true;
             }
         }
 
@@ -1579,7 +1585,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
+                return attribute.GetVariable() == null ? false : true;
             }
         }
 
@@ -1589,7 +1595,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
+                return attribute.GetVariable() == null ? false : true;
             }
         }
 
@@ -1599,7 +1605,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
+                return attribute.GetVariable() == null ? false : true;
             }
         }
 
@@ -1667,7 +1673,7 @@ namespace AltSalt.Maestro
                 return true;
             }
             else {
-                return attribute.GetVariable(attribute.parentObject) == null ? false : true;
+                return attribute.GetVariable() == null ? false : true;
             }
         }
 

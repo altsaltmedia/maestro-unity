@@ -9,13 +9,13 @@ namespace AltSalt.Maestro.Animation
         [ValidateInput(nameof(IsPopulated))]
         private BoolReference _isFlicked = new BoolReference();
 
-        private bool isFlicked => _isFlicked.GetValue(this.gameObject);
+        private bool isFlicked => _isFlicked.GetValue();
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
         private BoolReference _isReversing = new BoolReference();
 
-        private bool isReversing => _isReversing.GetValue(this.gameObject);
+        private bool isReversing => _isReversing.GetValue();
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
@@ -75,9 +75,9 @@ namespace AltSalt.Maestro.Animation
                 timescaleIndex = timescales.Length - 1;
             }
 
-            currentTimescale.GetVariable(this.gameObject).SetValue(isReversing == false ? timescales[timescaleIndex] : timescales[timescaleIndex] * -1);
+            (currentTimescale.GetVariable() as FloatVariable).SetValue(isReversing == false ? timescales[timescaleIndex] : timescales[timescaleIndex] * -1);
 
-            Time.timeScale = Mathf.Abs(currentTimescale.GetValue(this.gameObject));
+            Time.timeScale = Mathf.Abs(currentTimescale.GetValue());
             timescaleChanged.RaiseEvent(this.gameObject);
             ExecuteEffect();
 
@@ -87,8 +87,8 @@ namespace AltSalt.Maestro.Animation
         public void ResetTimescale()
         {
             timescaleIndex = 0;
-            currentTimescale.GetVariable(this.gameObject).SetValue(timescales[timescaleIndex]);
-            Time.timeScale = currentTimescale.GetValue(this.gameObject);
+            (currentTimescale.GetVariable() as FloatVariable).SetValue(timescales[timescaleIndex]);
+            Time.timeScale = currentTimescale.GetValue();
         }
 
         public void ExecuteEffect ()

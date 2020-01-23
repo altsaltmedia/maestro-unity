@@ -48,7 +48,7 @@ namespace AltSalt.Maestro
                     bool triggerTextChange = true;
                     string textFamilyNames = "";
                     for (int i = 0; i < targetLayout.textFamilyDependencies.Count; i++) {
-                        textFamilyNames += targetLayout.textFamilyDependencies[i].GetVariable(this).name;
+                        textFamilyNames += targetLayout.textFamilyDependencies[i].GetVariable().name;
                         if (i <= targetLayout.textFamilyDependencies.Count - 2) {
                             textFamilyNames += ", ";
                         }
