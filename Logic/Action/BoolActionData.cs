@@ -15,8 +15,10 @@ namespace AltSalt.Maestro.Logic.Action
         [SerializeField]
         [HideReferenceObjectPicker]
         private BoolReference _boolReference = new BoolReference();
-
+        
         private BoolReference boolReference => _boolReference;
+        
+        [PropertySpace]
 
         private enum BoolActionType { SetValue, Toggle }
 
@@ -29,33 +31,21 @@ namespace AltSalt.Maestro.Logic.Action
             set => _boolActionType = value;
         }
         
-        [SerializeField]
-        private bool _usePersistentVariable;
+        [PropertySpace]
 
-        protected bool usePersistentVariable
-        {
-            get => _usePersistentVariable;
-            set => _usePersistentVariable = value;
-        }
-        
-        [HideIf(nameof(usePersistentVariable))]
+        [SerializeField]
+        [HideReferenceObjectPicker]
         [HideIf(nameof(boolActionType), BoolActionType.Toggle)]
-        [SerializeField]
-        private bool _targetValue;
+        private BoolReference _targetValue;
 
-        private bool targetValue => _targetValue;
-
-        [SerializeField]
-        [ShowIf(nameof(usePersistentVariable))]
-        [HideIf(nameof(boolActionType), BoolActionType.Toggle)]
-        private BoolVariable _targetVariable;
-
-        private BoolVariable targetVariable => _targetVariable;
+        private BoolReference targetValue => _targetValue;
 
         public BoolActionData(int priority) : base(priority) { }
 
         public override void SyncEditorActionHeadings()
         {
+            boolReference.hideConstantOptions = true;
+            
             if (string.IsNullOrEmpty(boolReference.referenceName) == false) {
                 actionDescription = boolReference.referenceName + " > ";
                 if (boolActionType == BoolActionType.Toggle) {
@@ -74,23 +64,27 @@ namespace AltSalt.Maestro.Logic.Action
         {
             string setValueDescription = BoolActionType.SetValue.ToString();
 
-            if (usePersistentVariable == true) {
+            if (targetValue.GetVariable() == null && targetValue.useConstant == false) {
+                return setValueDescription += $" (No target value specified)";
+            }
 
-                if (targetVariable != null) {
-                    return setValueDescription += $" ({targetVariable.name})";
-                }
-
-                return setValueDescription += $" (No bool variable populated)";
+            if (targetValue.useConstant == true) {
+                return setValueDescription += $" ({targetValue.GetValue()})";
             }
             
-            return setValueDescription += $" ({targetValue})";
+            return setValueDescription += $" ({targetValue.GetVariable().name})";
         }
 
         public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
         {
             string referencePath = serializedPropertyPath;
             referencePath += $".{nameof(_boolReference)}";
-            _boolReference.PopulateVariable(parentObject, referencePath.Split(new[]{'.'}));
+            _boolReference.PopulateVariable(parentObject, referencePath.Split('.'));
+
+            string valuePath = serializedPropertyPath;
+            valuePath += $".{nameof(_targetValue)}";
+            _targetValue.PopulateVariable(parentObject, valuePath.Split('.'));
+            
             return this;
         }
 
@@ -104,21 +98,11 @@ namespace AltSalt.Maestro.Logic.Action
             switch (boolActionType) {
                 
                 case BoolActionType.SetValue:
-                    if (usePersistentVariable == false) {
-                        boolReference.SetValue(callingObject, targetValue);
-                    }
-                    else {
-                        boolReference.SetValue(callingObject, targetVariable);
-                    }
+                    boolReference.SetValue(callingObject, targetValue.GetValue());
                     break;
                 
                 case BoolActionType.Toggle:
-                    if (usePersistentVariable == false) {
-                        boolReference.Toggle(callingObject);
-                    }
-                    else {
-                        boolReference.Toggle(callingObject);
-                    }
+                    boolReference.Toggle(callingObject);
                     break;
             }
         }
@@ -129,7 +113,7 @@ namespace AltSalt.Maestro.Logic.Action
                 return false;
             }
             
-            if (usePersistentVariable == true && targetVariable == null) {
+            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
                 return false;
             }
 

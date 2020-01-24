@@ -13,6 +13,7 @@ namespace AltSalt.Maestro
         private const string variablePropertyPath = "_variable";
 
         [SerializeField]
+        [HideInInspector]
         private bool _isSystemReference;
 
         public bool isSystemReference

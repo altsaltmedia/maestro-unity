@@ -74,6 +74,7 @@ namespace AltSalt.Maestro
             CopyEventProperties(originalCallList, newCallList);
             
             sourceObject.ApplyModifiedProperties();
+            sourceObject.Update();
         }
 
         public static void MigrateUnityEventList(string originalCallListName, string targetCallListName,

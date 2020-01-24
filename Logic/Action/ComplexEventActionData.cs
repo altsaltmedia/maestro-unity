@@ -14,7 +14,7 @@ namespace AltSalt.Maestro.Logic.Action
         
         [SerializeField]
         [HideReferenceObjectPicker]
-        [ListDrawerSettings(Expanded = true)]
+        [ListDrawerSettings(Expanded = true, AlwaysAddDefaultValue = true)]
         private List<ComplexEventConfigurableTrigger> _complexEventPayloadPackagers = new List<ComplexEventConfigurableTrigger> { new ComplexEventConfigurableTrigger() };
 
         private List<ComplexEventConfigurableTrigger> complexEventPayloadPackagers => _complexEventPayloadPackagers;

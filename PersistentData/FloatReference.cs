@@ -23,6 +23,8 @@ namespace AltSalt.Maestro
     {
         [FormerlySerializedAs("ConstantValue")]
         [SerializeField]
+        [ShowIf(nameof(useConstant))]
+        [HideIf(nameof(hideConstantOptions))]
         private float _constantValue;
 
         public float constantValue
@@ -35,6 +37,7 @@ namespace AltSalt.Maestro
         [SerializeField]
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
+        [HideIf(nameof(useConstant))]
         private FloatVariable _variable;
         
         

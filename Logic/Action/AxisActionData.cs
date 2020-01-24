@@ -17,6 +17,8 @@ namespace AltSalt.Maestro.Logic.Action
 
         private AxisReference axisReference => _axisReference;
 
+        [PropertySpace]
+
         private enum AxisActionType { SetStatus, SetInverted }
 
         [SerializeField]
@@ -28,39 +30,20 @@ namespace AltSalt.Maestro.Logic.Action
             set => _axisActionType = value;
         }
         
-        [SerializeField]
-        private bool _usePersistentVariable;
-
-        private bool usePersistentVariable
-        {
-            get => _usePersistentVariable;
-            set => _usePersistentVariable = value;
-        }
-        
-        [HideIf(nameof(usePersistentVariable))]
-        [SerializeField]
-        private bool _targetValue;
-
-        private bool targetValue => _targetValue;
+        [PropertySpace]
 
         [SerializeField]
-        [ShowIf(nameof(usePersistentVariable))]
-        private BoolVariable _targetVariable;
+        [HideReferenceObjectPicker]
+        private BoolReference _targetValue;
 
-        private BoolVariable targetVariable => _targetVariable;
+        private BoolReference targetValue => _targetValue;
 
         public AxisActionData(int priority) : base(priority) { }
 
         public override void SyncEditorActionHeadings()
         {
             if (string.IsNullOrEmpty(axisReference.referenceName) == false) {
-                actionDescription = axisReference.referenceName + " > ";
-                if (axisActionType == AxisActionType.SetInverted) {
-                    actionDescription += $"{AxisActionType.SetInverted} ()";
-                }
-                else {
-                    actionDescription += GetSetValueDescription();
-                }
+                actionDescription = axisReference.referenceName + $" > {GetSetValueDescription()}";
             }
             else {
                 actionDescription = "Inactive - please populate a axis reference.";
@@ -69,25 +52,29 @@ namespace AltSalt.Maestro.Logic.Action
 
         private string GetSetValueDescription()
         {
-            string setValueDescription = AxisActionType.SetStatus.ToString();
+            string setValueDescription = $"{axisActionType}";
 
-            if (usePersistentVariable == true) {
+            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
+                return setValueDescription += $" (No target value populated)";
+            }
 
-                if (targetVariable != null) {
-                    return setValueDescription += $" ({targetVariable.name})";
-                }
-
-                return setValueDescription += $" (No axis variable populated)";
+            if (targetValue.useConstant == true) {
+                return setValueDescription += $" ({targetValue.GetValue()})";
             }
             
-            return setValueDescription += $" ({targetValue})";
+            return setValueDescription += $" ({targetValue.GetVariable().name})";
         }
         
         public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
         {
             string referencePath = serializedPropertyPath;
             referencePath += $".{nameof(_axisReference)}";
-            _axisReference.PopulateVariable(parentObject, referencePath.Split(new[]{'.'}));
+            _axisReference.PopulateVariable(parentObject, referencePath.Split('.'));
+
+            string valuePath = serializedPropertyPath;
+            valuePath += $".{nameof(_targetValue)}";
+            _targetValue.PopulateVariable(parentObject, valuePath.Split('.'));
+            
             return this;
         }
 
@@ -101,21 +88,11 @@ namespace AltSalt.Maestro.Logic.Action
             switch (axisActionType) {
                 
                 case AxisActionType.SetStatus:
-                    if (usePersistentVariable == false) {
-                        axisReference.SetStatus(callingObject, targetValue);
-                    }
-                    else {
-                        axisReference.SetStatus(callingObject, targetVariable);
-                    }
+                    axisReference.SetStatus(callingObject, targetValue.GetValue());
                     break;
                 
                 case AxisActionType.SetInverted:
-                    if (usePersistentVariable == false) {
-                        axisReference.SetInverted(callingObject, targetValue);
-                    }
-                    else {
-                        axisReference.SetInverted(callingObject, targetVariable);
-                    }
+                    axisReference.SetInverted(callingObject, targetValue.GetValue());
                     break;
             }
         }
@@ -126,7 +103,7 @@ namespace AltSalt.Maestro.Logic.Action
                 return false;
             }
             
-            if (usePersistentVariable == true && targetVariable == null) {
+            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
                 return false;
             }
 

@@ -81,16 +81,16 @@ namespace AltSalt.Maestro.Animation {
         {
             if(Application.isPlaying == false) {
                 SetSortingOrder();
-                RefreshRenderer();
+                //RefreshRenderer();
             }
         }
 
-        private void Update ()
-        {
-            RefreshRenderer();
-        }
+//        private void Update ()
+//        {
+//            RefreshRenderer();
+//        }
 
-        private void RefreshRenderer()
+        public void RefreshRenderer()
         {
             meshRenderer.sharedMaterial.SetColor("_Color", color);
             meshRenderer.sharedMaterial.SetColor("_FadeColor", fadeColor);

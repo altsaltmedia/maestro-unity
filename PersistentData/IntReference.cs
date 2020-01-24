@@ -22,6 +22,8 @@ namespace AltSalt.Maestro
     {
         [FormerlySerializedAs("ConstantValue")]
         [SerializeField]
+        [ShowIf(nameof(useConstant))]
+        [HideIf(nameof(hideConstantOptions))]
         private int _constantValue;
 
         public int constantValue
@@ -34,6 +36,7 @@ namespace AltSalt.Maestro
         [SerializeField]
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
+        [HideIf(nameof(useConstant))]
         private IntVariable _variable;
 
         public override ScriptableObject GetVariable()

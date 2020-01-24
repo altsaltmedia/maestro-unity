@@ -16,6 +16,8 @@ namespace AltSalt.Maestro.Logic.Action
         private IntReference _intReference = new IntReference();
 
         private IntReference intReference => _intReference;
+        
+        [PropertySpace]
 
         private enum IntActionType
         {
@@ -38,63 +40,58 @@ namespace AltSalt.Maestro.Logic.Action
             set => _intActionType = value;
         }
         
-        [SerializeField]
-        private bool _usePersistentVariable;
-
-        protected bool usePersistentVariable
-        {
-            get => _usePersistentVariable;
-            set => _usePersistentVariable = value;
-        }
-
-        [HideIf(nameof(usePersistentVariable))]
-        [SerializeField]
-        private int _operatorValue;
-
-        private int operatorValue => _operatorValue;
+        [PropertySpace]
 
         [SerializeField]
-        [ShowIf(nameof(usePersistentVariable))]
-        private IntVariable _operatorIntVariable;
+        [HideReferenceObjectPicker]
+        private IntReference _operatorValue;
 
-        private IntVariable operatorIntVariable => _operatorIntVariable;
+        private IntReference operatorValue => _operatorValue;
 
         public IntActionData(int priority) : base(priority) { }
 
         public override void SyncEditorActionHeadings()
         {
+            intReference.hideConstantOptions = true;
+            
             if (string.IsNullOrEmpty(intReference.referenceName) == false) {
-                actionDescription = intReference.referenceName + " > ";
-                if (usePersistentVariable == false) {
-                    actionDescription += $"{intActionType} ({operatorValue})";
-                }
-                else {
-                    actionDescription += GetPersistentOperationDescription();
-                }
+                actionDescription = intReference.referenceName + $" > {GetOperationDescription()}";
             }
             else {
                 actionDescription = "Inactive - please populate a int reference.";
             }
         }
         
-        private string GetPersistentOperationDescription()
+        private string GetOperationDescription()
         {
             string operationDescription = $"{intActionType}";
 
-            if (operatorIntVariable != null) {
-                
-                return operationDescription += $" ({operatorIntVariable.name})";
-                
+            if (intActionType == IntActionType.SetToDefaultValue ||
+                intActionType == IntActionType.SetToRandom) {
+                return operationDescription += "()";
             }
 
-            return operationDescription += $" (No int variable populated)";
+            if (operatorValue.useConstant == false && operatorValue.GetVariable() == null) {
+                return operationDescription += $" (No int variable populated)";
+            }
+
+            if (operatorValue.useConstant == true) {
+                return operationDescription += $" ({operatorValue.GetValue()})";
+            }
+
+            return operationDescription += $" ({operatorValue.GetVariable().name})";
         }
         
         public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
         {
             string referencePath = serializedPropertyPath;
             referencePath += $".{nameof(_intReference)}";
-            _intReference.PopulateVariable(parentObject, referencePath.Split(new[]{'.'}));
+            _intReference.PopulateVariable(parentObject, referencePath.Split('.'));
+
+            string valuePath = serializedPropertyPath;
+            valuePath += $".{nameof(_operatorValue)}";
+            _operatorValue.PopulateVariable(parentObject, valuePath.Split('.'));
+            
             return this;
         }
 
@@ -108,75 +105,35 @@ namespace AltSalt.Maestro.Logic.Action
             switch (intActionType) {
                 
                 case IntActionType.SetValue:
-                    if (usePersistentVariable == false) {
-                        intReference.SetValue(callingObject, operatorValue);
-                    }
-                    else {
-                        intReference.SetValue(callingObject, operatorIntVariable);
-                    }
+                    intReference.SetValue(callingObject, operatorValue.GetValue());
                     break;
                 
                 case IntActionType.ApplyChange:
-                    if (usePersistentVariable == false) {
-                        intReference.ApplyChange(callingObject, operatorValue);
-                    }
-                    else {
-                        intReference.ApplyChange(callingObject, operatorIntVariable);
-                    }
+                    intReference.ApplyChange(callingObject, operatorValue.GetValue());
                     break;
                 
                 case IntActionType.Multiply:
-                    if (usePersistentVariable == false) {
-                        intReference.Multiply(callingObject, operatorValue);
-                    }
-                    else {
-                        intReference.Multiply(callingObject, operatorIntVariable);
-                    }
+                    intReference.Multiply(callingObject, operatorValue.GetValue());
                     break;
                 
                 case IntActionType.ClampMax:
-                    if (usePersistentVariable == false) {
-                        intReference.ClampMax(callingObject, operatorValue);
-                    }
-                    else {
-                        intReference.ClampMax(callingObject, operatorIntVariable);
-                    }
+                    intReference.ClampMax(callingObject, operatorValue.GetValue());
                     break;
                 
                 case IntActionType.ClampMin:
-                    if (usePersistentVariable == false) {
-                        intReference.ClampMin(callingObject, operatorValue);
-                    }
-                    else {
-                        intReference.ClampMin(callingObject, operatorIntVariable);
-                    }
+                    intReference.ClampMin(callingObject, operatorValue.GetValue());
                     break;
                 
                 case IntActionType.SetToDistance:
-                    if (usePersistentVariable == false) {
-                        intReference.SetToDistance(callingObject, operatorValue);
-                    }
-                    else {
-                        intReference.SetToDistance(callingObject, operatorIntVariable);
-                    }
+                    intReference.SetToDistance(callingObject, operatorValue.GetValue());
                     break;
                 
                 case IntActionType.SetToRandom:
-                    if (usePersistentVariable == false) {
-                        intReference.SetToRandom(callingObject);
-                    }
-                    else {
-                        intReference.SetToRandom(callingObject);
-                    }
+                    intReference.SetToRandom(callingObject);
                     break;
 
                 case IntActionType.SetToDefaultValue:
-                    if (usePersistentVariable == false) {
-                        intReference.SetToDefaultValue(callingObject);
-                    }
-                    else {
-                        intReference.SetToDefaultValue(callingObject);
-                    }
+                    intReference.SetToDefaultValue(callingObject);
                     break;
             }
         }
@@ -187,7 +144,7 @@ namespace AltSalt.Maestro.Logic.Action
                 return false;
             }
             
-            if (usePersistentVariable == true && operatorIntVariable == null) {
+            if (operatorValue.useConstant == false && operatorValue.GetVariable() == null) {
                 return false;
             }
 

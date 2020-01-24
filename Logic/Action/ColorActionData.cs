@@ -18,6 +18,8 @@ namespace AltSalt.Maestro.Logic.Action
 
         private ColorReference colorReference => _colorReference;
 
+        [PropertySpace]
+        
         private enum ColorActionType { SetValue }
 
         [SerializeField]
@@ -29,79 +31,55 @@ namespace AltSalt.Maestro.Logic.Action
             set => _colorActionType = value;
         }
         
-        [SerializeField]
-        private bool _usePersistentVariable;
-
-        protected bool usePersistentVariable
-        {
-            get => _usePersistentVariable;
-            set => _usePersistentVariable = value;
-        }
-        
-        [HideIf(nameof(usePersistentVariable))]
-        [SerializeField]
-        private Color _targetValue;
-
-        private Color targetValue => _targetValue;
+        [PropertySpace]
 
         [SerializeField]
-        [ShowIf(nameof(usePersistentVariable))]
-        private ColorVariable _targetVariable;
+        [HideReferenceObjectPicker]
+        private ColorReference _targetValue;
 
-        private ColorVariable targetVariable => _targetVariable;
+        private ColorReference targetValue => _targetValue;
 
         public ColorActionData(int priority) : base(priority) { }
 
         public override void SyncEditorActionHeadings()
         {
+            colorReference.hideConstantOptions = true;
+            
             if (string.IsNullOrEmpty(colorReference.referenceName) == false) {
-                actionDescription = colorReference.referenceName + " > ";
-                if (usePersistentVariable == false) {
-                    actionDescription += $"{colorActionType} ({targetValue})";
-                }
-                else {
-                    actionDescription += GetPersistentOperationDescription();
-                }
+                actionDescription = colorReference.referenceName + $" > {GetOperationDescription()} ";
             }
             else {
                 actionDescription = "Inactive - please populate a color reference.";
             }
         }
         
-        private string GetPersistentOperationDescription()
+        private string GetOperationDescription()
         {
             string operationDescription = $"{colorActionType}";
-
-            if (targetVariable != null) {
-                
-                return operationDescription += $" ({targetVariable.name})";
-                
+            
+            
+            if (targetValue.GetVariable() == null && targetValue.useConstant == false) {
+                return operationDescription += $" (No target value specified)";
             }
 
-            return operationDescription += $" (No int variable populated)";
-        }
 
-        private string GetSetValueDescription()
-        {
-            string setValueDescription = ColorActionType.SetValue.ToString();
-
-            if (usePersistentVariable == true) {
-
-                if (targetVariable != null) {
-                    return setValueDescription += $" ({targetVariable.name})";
-                }
-
-                return setValueDescription += $" (No color variable populated)";
+            if (targetValue.useConstant == true) {
+                return operationDescription += $" ({targetValue.GetValue()})";
             }
             
-            return setValueDescription += $" ({targetValue})";
+            return operationDescription += $" ({targetValue.GetVariable().name})";
         }
-
+        
         public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
         {
             string referencePath = serializedPropertyPath;
             referencePath += $".{nameof(_colorReference)}";
-            _colorReference.PopulateVariable(parentObject, referencePath.Split(new[]{'.'}));
+            _colorReference.PopulateVariable(parentObject, referencePath.Split('.'));
+
+            string valuePath = serializedPropertyPath;
+            valuePath += $".{nameof(_targetValue)}";
+            _targetValue.PopulateVariable(parentObject, valuePath.Split('.'));
+            
             return this;
         }
 
@@ -115,12 +93,7 @@ namespace AltSalt.Maestro.Logic.Action
             switch (colorActionType) {
                 
                 case ColorActionType.SetValue:
-                    if (usePersistentVariable == false) {
-                        colorReference.SetValue(callingObject, targetValue);
-                    }
-                    else {
-                        colorReference.SetValue(callingObject, targetVariable);
-                    }
+                    colorReference.SetValue(callingObject, targetValue.GetValue());
                     break;
             }
         }
@@ -131,7 +104,7 @@ namespace AltSalt.Maestro.Logic.Action
                 return false;
             }
             
-            if (usePersistentVariable == true && targetVariable == null) {
+            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
                 return false;
             }
 

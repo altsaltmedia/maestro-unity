@@ -30,6 +30,7 @@ namespace AltSalt.Maestro.Animation
                 inputWeight = playable.GetInputWeight(i);
                 inputPlayable = (ScriptPlayable<ColorBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
+                trackBinding.StoreCaller(trackAssetConfig.gameObject, trackAssetConfig.gameObject.scene.name, parentTrack.name);
                 
                 if (inputWeight >= 1f) {
                     percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
@@ -50,6 +51,9 @@ namespace AltSalt.Maestro.Animation
             base.OnPlayableDestroy(playable);
 
             if (trackBinding != null) {
+                
+                trackBinding.StoreCaller(trackAssetConfig.gameObject, trackAssetConfig.gameObject.scene.name, parentTrack.name);
+                
                 if (Application.isPlaying == true && scrubberActive == true) {
                     trackBinding.SetValue(Utils.transparent);
                 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -9,7 +10,7 @@ namespace AltSalt.Maestro
     #if UNITY_EDITOR
     [ExecuteInEditMode]
     #endif
-    public class SimpleSignalListenerBehaviour : MonoBehaviour, ISimpleSignalListener, ISkipRegistration, ISerializationCallbackReceiver
+    public class SimpleSignalListenerBehaviour : MonoBehaviour, ISimpleSignalListener, ISkipRegistration
     {
         [Required]
         [SerializeField]
@@ -20,9 +21,10 @@ namespace AltSalt.Maestro
         private SimpleSignal _simpleSignal;
 
         [SerializeField]
-        private SimpleSignalReference _simpleSignalReference = new SimpleSignalReference();
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
+        private List<SimpleSignalReference> _simpleSignalReferences = new List<SimpleSignalReference>();
 
-        private SimpleSignal simpleSignal => _simpleSignalReference.GetVariable() as SimpleSignal;
+        private List<SimpleSignalReference> simpleSignalReferences => _simpleSignalReferences;
 
         [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
@@ -60,26 +62,52 @@ namespace AltSalt.Maestro
 
         private void OnEnable()
         {
-            _simpleSignalReference.PopulateVariable(this, nameof(_simpleSignalReference));
+            MigrateSimpleSignal();
             
-            if(simpleSignal != null) {
-                simpleSignal.RegisterListener(this);
-            } else {
-                Debug.LogWarning("Please set an event for SimpleEventListenerBehaviour on " + this.name, this.gameObject);
+            string simpleSignalsListPath = nameof(_simpleSignalReferences);
+            for (int i = 0; i < simpleSignalReferences.Count; i++) {
+                simpleSignalReferences[i].PopulateVariable(this, 
+                    new []{ simpleSignalsListPath, i.ToString() });
+
+                var simpleSignal = simpleSignalReferences[i].GetVariable() as SimpleSignal;
+                
+                if(simpleSignal != null) {
+                    simpleSignal.RegisterListener(this);
+                } else {
+                    Debug.LogWarning("Please set an event for SimpleEventListenerBehaviour on " + this.name, this.gameObject);
+                }
             }
 
-//            if (migrated == false) {
-//                UnityEventUtils.MigrateUnityEventList(nameof(_response), nameof(_action), 
-//                    new SerializedObject(this));
-//            }
+            if (migrated == false) {
+                UnityEventUtils.MigrateUnityEventList(nameof(_response), nameof(_action), 
+                    new SerializedObject(this));
+            }
+        }
+
+        private void MigrateSimpleSignal()
+        {
+            if (migrated == false && simpleSignalReferences.Count < 1) {
+                var serializedObject = new SerializedObject(this);
+                var serializedProperty = serializedObject.FindProperty(nameof(_simpleSignalReferences));
+                serializedProperty.arraySize++;
+                serializedProperty.GetArrayElementAtIndex(0).FindPropertyRelative("_variable").objectReferenceValue =
+                    _simpleSignal;
+                serializedObject.ApplyModifiedProperties();
+                serializedObject.Update();
+            }
         }
 
 		private void OnDisable()
 		{
-            if (simpleSignal != null) {
-                simpleSignal.UnregisterListener(this);
+            for (int i = 0; i < simpleSignalReferences.Count; i++) {
+                
+                var simpleSignal = simpleSignalReferences[i].GetVariable() as SimpleSignal;
+                
+                if(simpleSignal != null) {
+                    simpleSignal.UnregisterListener(this);
+                }
             }
-		}
+        }
 
         public void OnEventRaised()
         {
@@ -89,18 +117,6 @@ namespace AltSalt.Maestro
         public void LogName(string callingInfo)
         {
             Debug.Log(callingInfo + gameObject, gameObject);
-        }
-
-        public void OnAfterDeserialize()
-        {
-            if (migrated == false) {
-                _simpleSignalReference.SetVariable(_simpleSignal);
-            }
-        }
-
-        public void OnBeforeSerialize()
-        {
-            
         }
 
         private static bool IsPopulated(UnityEvent attribute)

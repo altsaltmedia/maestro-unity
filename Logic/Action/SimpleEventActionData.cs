@@ -14,6 +14,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         [SerializeField]
         [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
         private List<SimpleEventTrigger> _simpleEventTriggers = new List<SimpleEventTrigger>();
 
         private List<SimpleEventTrigger> simpleEventTriggers => _simpleEventTriggers;

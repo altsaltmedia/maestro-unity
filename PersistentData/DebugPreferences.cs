@@ -124,6 +124,8 @@ namespace AltSalt.Maestro
                     }
                 }
             }
+            
+            EditorUtility.SetDirty(this);
         }
 
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]

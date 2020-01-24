@@ -119,6 +119,9 @@ namespace AltSalt.Maestro
                         "app settings");
                     modifiableEditorVariable.hasDefault = true;
                     modifiableEditorVariable.SetToDefaultValue();
+#if UNITY_EDITOR
+                    EditorUtility.SetDirty(modifiableEditorVariable);                    
+#endif
                 }
             }
 

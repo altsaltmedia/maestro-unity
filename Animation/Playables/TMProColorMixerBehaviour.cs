@@ -34,7 +34,7 @@ namespace AltSalt.Maestro.Animation
         {
             trackBinding = playerData as TMP_Text;
 
-            if (trackBinding == null)
+            if (trackBinding == null || trackBinding.gameObject.active == false)
                 return;
             
             inputCount = playable.GetInputCount();

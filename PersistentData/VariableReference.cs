@@ -11,12 +11,21 @@ namespace AltSalt.Maestro
     {
         [FormerlySerializedAs("UseConstant")]
         [SerializeField]
+        [HideIf(nameof(hideConstantOptions))]
         private bool _useConstant = false;
 
         public bool useConstant
         {
             get => _useConstant;
             set => _useConstant = value;
+        }
+
+        private bool _hideConstantOptions = false;
+
+        public bool hideConstantOptions
+        {
+            get => _hideConstantOptions;
+            set => _hideConstantOptions = value;
         }
 
         protected void LogDefaultChangeError(UnityEngine.Object callingObject)
