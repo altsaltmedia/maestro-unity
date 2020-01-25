@@ -41,7 +41,6 @@ GameObject:
   - component: {fileID: 2293772597486834398}
   - component: {fileID: 6155791989548499805}
   - component: {fileID: 2171707605095255979}
-  - component: {fileID: 2381286035154014093}
   m_Layer: 12
   m_Name: '--- Root Config ---'
   m_TagString: Untagged
@@ -78,14 +77,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929d37e19ba34a21a3b6ca7396c28202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 0}
+  _appSettings: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
   _inputGroupKey:
+    _isSystemReference: 0
     _referenceName: MainInput
-    _parentObject: {fileID: 2293772597486834399}
     _variable: {fileID: 11400000, guid: 5291240e14d3a457986c095206701a0c, type: 2}
   _userKey:
+    _isSystemReference: 0
     _referenceName: User1
-    _parentObject: {fileID: 0}
     _variable: {fileID: 11400000, guid: fb3e0d4ca475e400798c9ffb07637101, type: 2}
   _masterSequenceContainer: {fileID: 1228805381023720773}
   _masterSequences: []
@@ -105,11 +104,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 87530e998b45847529374d024ccfda83, type: 2}
-  _simpleSignalReference:
-    _referenceName: OnGraphStart
-    _parentObject: {fileID: 2293772597486834399}
-    _variable: {fileID: 11400000, guid: 87530e998b45847529374d024ccfda83, type: 2}
+  _simpleSignal: {fileID: 11400000, guid: 6c122900c4c7b49faa1648313732936e, type: 2}
+  _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: OnEditorGraphStart
+    _variable: {fileID: 11400000, guid: 6c122900c4c7b49faa1648313732936e, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -138,53 +137,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  _doNotRecord: 0
-  _migrated: 1
---- !u!114 &2381286035154014093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2293772597486834399}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c, type: 2}
-  _simpleSignalReference:
-    _referenceName: PrepareSceneCompleted
-    _parentObject: {fileID: 2293772597486834399}
-    _variable: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6155791989548499805}
-        m_MethodName: Configure
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _action:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6155791989548499805}
-        m_MethodName: Configure
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _doNotRecord: 0
   _migrated: 1
 --- !u!1 &2389698243648997670
@@ -438,6 +390,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2364722153129588570, guid: 105b53ea87dd04ce095228865dda57bc,
+        type: 3}
+      propertyPath: m_Name
+      value: AxisMonitor
+      objectReference: {fileID: 0}
     - target: {fileID: 6351633449510160952, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _touchDataList.Array.size
@@ -653,13 +610,33 @@ PrefabInstance:
         type: 3}
       propertyPath: _appSettings
       value: 
-      objectReference: {fileID: 11400000, guid: e30fdc18bff8943429c0104d575ad03a,
-        type: 2}
-    - target: {fileID: 2364722153129588570, guid: 105b53ea87dd04ce095228865dda57bc,
+      objectReference: {fileID: 0}
+    - target: {fileID: 8771448038486601892, guid: 105b53ea87dd04ce095228865dda57bc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8771448038486601892, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: m_Name
-      value: AxisMonitor
+      value: MomentumApplier
       objectReference: {fileID: 0}
+    - target: {fileID: 8857081004071828522, guid: 105b53ea87dd04ce095228865dda57bc,
+        type: 3}
+      propertyPath: m_Name
+      value: SwipeApplier
+      objectReference: {fileID: 0}
+    - target: {fileID: 3318923730177639291, guid: 105b53ea87dd04ce095228865dda57bc,
+        type: 3}
+      propertyPath: _complexEventReference._parentObject
+      value: 
+      objectReference: {fileID: 2670429561480060543}
+    - target: {fileID: 3318923730177639291, guid: 105b53ea87dd04ce095228865dda57bc,
+        type: 3}
+      propertyPath: _complexEventReference._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5,
+        type: 2}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _touchExtentsCollection._keyValues.Array.size
@@ -993,32 +970,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 7322b8d1a88fd472fa09103b293091c5,
         type: 2}
-    - target: {fileID: 8771448038486601892, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8771448038486601892, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: m_Name
-      value: MomentumApplier
-      objectReference: {fileID: 0}
-    - target: {fileID: 8857081004071828522, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: m_Name
-      value: SwipeApplier
-      objectReference: {fileID: 0}
-    - target: {fileID: 3318923730177639291, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _complexEventReference._parentObject
-      value: 
-      objectReference: {fileID: 2670429561480060543}
-    - target: {fileID: 3318923730177639291, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _complexEventReference._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: c1d1f8736e35847b594e918788a62e52,
-        type: 2}
     - target: {fileID: 4592680014928591579, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _simpleSignalReference._parentObject
@@ -1338,7 +1289,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _complexEventReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: c1d1f8736e35847b594e918788a62e52,
+      objectReference: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5,
         type: 2}
     - target: {fileID: 1133069145979638054, guid: 97feac8a06fe740d99eeffdc9dd3352e,
         type: 3}

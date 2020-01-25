@@ -535,13 +535,29 @@ namespace AltSalt.Maestro
         {
             return inputData.GetInputGroup(inputGroupKey).boundaryReached;
         }
-        
+
+        public ComplexEventManualTrigger GetRequestModifyToSequence(GameObject callingObject,
+            InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).requestModifyToSequence;
+        }
+
         public ComplexEventManualTrigger GetSequenceModified(GameObject callingObject, InputGroupKey inputGroupKey)
         {
             return inputData.GetInputGroup(inputGroupKey).sequenceModified;
         }
+        
+        public ComplexEventManualTrigger GetInputActionComplete(GameObject callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).inputActionComplete;
+        }
 
+        public SimpleEventTrigger GetAutoplayActivate(GameObject callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).autoplayActivate;
+        }
 
+        
         // Y Axes
 
         public AxisReference GetYSwipeAxisReference(Object callingObject, InputGroupKey inputGroupKey)

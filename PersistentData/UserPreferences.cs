@@ -114,7 +114,7 @@ namespace AltSalt.Maestro
                 var variableField = Utils.GetVariableFieldFromReference(fields[i], this, out var referenceValue);
                 var variableValue = variableField.GetValue(referenceValue);
                 
-                if (variableValue is ModifiableEditorVariable modifiableEditorVariable) {
+                if (variableValue is ModifiableEditorVariable modifiableEditorVariable && variableValue != null) {
                     modifiableEditorVariable.StoreCaller(userData, "setting default from refresh dependencies",
                         "app settings");
                     modifiableEditorVariable.hasDefault = true;

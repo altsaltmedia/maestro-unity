@@ -7,28 +7,8 @@ namespace AltSalt.Maestro.Sequencing
 {
     public abstract class RootDataCollector : MonoBehaviour
     {
-        [SerializeField]
-        [FormerlySerializedAs("appSettings")]
-        private AppSettings _appSettings;
+        protected List<MasterSequence> masterSequences => rootConfig.masterSequences;
 
-        public AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
-        
-        public List<MasterSequence> masterSequences
-        {
-            get => rootConfig.masterSequences;
-        } 
-        
         [ReadOnly]
         [SerializeField]
         [Required]

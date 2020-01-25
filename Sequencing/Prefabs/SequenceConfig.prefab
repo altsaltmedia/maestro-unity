@@ -55,6 +55,7 @@ MonoBehaviour:
   _playableDirector: {fileID: 320944326161814764}
   _processModify: {fileID: 1384256474148654812}
   _syncTimeline: {fileID: 114615924759454770}
+  _trackAssetConfig: {fileID: 0}
 --- !u!114 &8562162275732644144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,10 +68,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df6b19ab5020452e82eaad85aff31d92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 0}
+  _appSettings: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
+  _sequence: {fileID: 0}
   _inputGroupKey:
+    _isSystemReference: 0
     _referenceName: MainInput
-    _parentObject: {fileID: 0}
     _variable: {fileID: 11400000, guid: 5291240e14d3a457986c095206701a0c, type: 2}
 --- !u!114 &1384256474148654812
 MonoBehaviour:
@@ -101,12 +103,12 @@ MonoBehaviour:
   _appSettings: {fileID: 0}
   _logElementOnLayoutUpdate: 0
   _enableDynamicElement:
+    _isSystemReference: 0
     _referenceName: EnableDynamicElement
-    _parentObject: {fileID: 1651845744537938}
     _variable: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
   _disableDynamicElement:
+    _isSystemReference: 0
     _referenceName: DisableDynamicElement
-    _parentObject: {fileID: 0}
     _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
   _priority: -10
 --- !u!320 &320944326161814764
@@ -139,10 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _simpleSignal: {fileID: 11400000, guid: 9ff5b71473dbd4bacac724317cf05171, type: 2}
-  _simpleSignalReference:
-    _referenceName: SequenceScrubbed
-    _parentObject: {fileID: 1651845744537938}
-    _variable: {fileID: 11400000, guid: 9ff5b71473dbd4bacac724317cf05171, type: 2}
+  _simpleSignalReferences: []
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -186,9 +185,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _simpleSignal: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c, type: 2}
-  _simpleSignalReference:
+  _simpleSignalReferences:
+  - _isSystemReference: 0
     _referenceName: PrepareSceneCompleted
-    _parentObject: {fileID: 1651845744537938}
     _variable: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c, type: 2}
   _response:
     m_PersistentCalls:

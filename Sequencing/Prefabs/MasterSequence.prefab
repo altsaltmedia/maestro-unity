@@ -64,11 +64,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: dc6452168b7334181bcaea1a33f8ebe1, type: 2}
+  _complexEvent: {fileID: 11400000, guid: 129daaedd3fbe49d69a4b497f4f5147e, type: 2}
   _complexEventReference:
-    _referenceName: RequestModifyToSequence
-    _parentObject: {fileID: 1993091226287097154}
-    _variable: {fileID: 11400000, guid: dc6452168b7334181bcaea1a33f8ebe1, type: 2}
+    _isSystemReference: 0
+    _referenceName: MainInput-RequestModifyToSequence
+    _variable: {fileID: 11400000, guid: 129daaedd3fbe49d69a4b497f4f5147e, type: 2}
   DeveloperDescription: 
   _response:
     m_PersistentCalls:
@@ -98,11 +98,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 5fc585840da1246b684b0ff3e7040b45, type: 2}
+  _complexEvent: {fileID: 11400000, guid: f87a6af6f475344d4ab531f116006f79, type: 2}
   _complexEventReference:
-    _referenceName: InputActionComplete
-    _parentObject: {fileID: 1993091226287097154}
-    _variable: {fileID: 11400000, guid: 5fc585840da1246b684b0ff3e7040b45, type: 2}
+    _isSystemReference: 0
+    _referenceName: MainInput-InputActionComplete
+    _variable: {fileID: 11400000, guid: f87a6af6f475344d4ab531f116006f79, type: 2}
   DeveloperDescription: 
   _response:
     m_PersistentCalls:
@@ -132,11 +132,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: c1d1f8736e35847b594e918788a62e52, type: 2}
+  _complexEvent: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5, type: 2}
   _complexEventReference:
-    _referenceName: SequenceModified
-    _parentObject: {fileID: 1993091226287097154}
-    _variable: {fileID: 11400000, guid: c1d1f8736e35847b594e918788a62e52, type: 2}
+    _isSystemReference: 0
+    _referenceName: MainInput-SequenceModified
+    _variable: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5, type: 2}
   DeveloperDescription: 
   _response:
     m_PersistentCalls:

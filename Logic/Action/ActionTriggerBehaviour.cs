@@ -11,6 +11,9 @@ namespace AltSalt.Maestro.Logic.Action
     [ExecuteInEditMode]
     public class ActionTriggerBehaviour : MonoBehaviour
     {
+        [ShowInInspector]
+        private static bool syncEditorActionHeadings = true;
+        
         [SerializeField]
         [OnValueChanged(nameof(OnEnable))]
         private ActionTrigger _actionTrigger = new ActionTrigger();
@@ -46,10 +49,12 @@ namespace AltSalt.Maestro.Logic.Action
 #if UNITY_EDITOR
         private void Update()
         {
-            actionTrigger.CallSyncEditorActionHeadings();
-            actionTrigger.CallSyncComplexSubheadings(this.gameObject,
-                new SerializedObject(this).FindProperty(nameof(_actionTrigger)));
-            actionTrigger.SyncFullActionDescription();
+            if (syncEditorActionHeadings == true) {
+                actionTrigger.CallSyncEditorActionHeadings();
+                actionTrigger.CallSyncComplexSubheadings(this.gameObject,
+                    new SerializedObject(this).FindProperty(nameof(_actionTrigger)));
+                actionTrigger.SyncFullActionDescription();
+            }
         }
 #endif
     }

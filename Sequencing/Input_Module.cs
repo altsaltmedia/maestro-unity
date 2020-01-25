@@ -5,32 +5,20 @@ using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro.Sequencing
 {
+    [Serializable]
     [ExecuteInEditMode]
     public abstract class Input_Module : MonoBehaviour
     {
-        [SerializeField]
+        protected abstract Input_Controller inputController { get; }
+
+            [SerializeField]
         private int _priority;
 
-        public int priority
-        {
-            get => _priority;
-        }
+        public int priority => _priority;
 
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventManualTrigger _inputActionComplete;
-
-        private ComplexEventManualTrigger inputActionComplete
-        {
-            get => _inputActionComplete;
-            set => _inputActionComplete = value;
-        }
-
-        private void OnEnable()
-        {
-            _inputActionComplete.PopulateVariable(this, nameof(_inputActionComplete));
-        }
-
+        private ComplexEventManualTrigger inputActionComplete =>
+            inputController.appSettings.GetInputActionComplete(this.gameObject, inputController.inputGroupKey);
+        
         public void TriggerInputActionComplete()
         {
             ComplexPayload complexPayload = ComplexPayload.CreateInstance();

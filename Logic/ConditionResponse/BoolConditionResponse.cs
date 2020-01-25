@@ -88,9 +88,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         public override bool CheckCondition(Object callingObject)
         {
             CheckPopulateReferences();
-            
-            base.CheckCondition(callingObject);
-            
             if (boolReference.GetValue() == boolCondition.GetValue()) {
                 return true;
             }
@@ -110,11 +107,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             CheckPopulateReferences();
             
             return boolCondition;
-        }
-        
-        public override void TriggerResponse(GameObject caller, bool triggerOnStart)
-        {
-            base.TriggerResponse(caller, triggerOnStart);
         }
     }
 }

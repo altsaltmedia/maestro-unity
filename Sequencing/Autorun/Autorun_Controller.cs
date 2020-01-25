@@ -16,6 +16,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
     [Serializable]
     public class Autorun_Controller : Input_Controller
     {
+        private InputGroupKey inputGroupKey => rootConfig.inputGroupKey; 
+        
         [SerializeField]
         private Autoplayer _autoplayer;
 
@@ -26,13 +28,14 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         public Lerper lerper => _lerper;
 
-        public bool isReversing => appSettings.GetIsReversing(this.gameObject, rootConfig.inputGroupKey);
+        public bool isReversing => appSettings.GetIsReversing(this.gameObject, inputGroupKey);
 
         [SerializeField]
         [InfoBox("Autorun data is populated dynamically from connected Master Sequences")]
         private List<Autorun_Data> _autorunData = new List<Autorun_Data>();
 
         public List<Autorun_Data> autorunData => _autorunData;
+
 
 //#if UNITY_EDITOR
 

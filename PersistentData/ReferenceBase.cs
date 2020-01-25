@@ -41,7 +41,6 @@ namespace AltSalt.Maestro
             set => _referenceName = value;
         }
 
-        [ShowInInspector]
         private UnityEngine.Object _parentObject;
 
         public UnityEngine.Object parentObject
@@ -49,8 +48,7 @@ namespace AltSalt.Maestro
             get => _parentObject;
             set => _parentObject = value;
         }
-
-        [ShowInInspector]
+        
         private List<string> _serializedPropertyPath = new List<string>();
 
         private List<string> serializedPropertyPath

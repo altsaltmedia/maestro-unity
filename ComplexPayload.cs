@@ -17,28 +17,32 @@ namespace AltSalt.Maestro
 #endif
 
         [SerializeField]
-        public StringDictionary stringDictionary = new StringDictionary();
+        private StringDictionary _stringDictionary = new StringDictionary();
+
+        private StringDictionary stringDictionary => _stringDictionary;
 
         [SerializeField]
-        public FloatDictionary floatDictionary = new FloatDictionary();
-        
+        private FloatDictionary _floatDictionary = new FloatDictionary();
+
+        private FloatDictionary floatDictionary => _floatDictionary;
+
         [SerializeField]
         private IntDictionary _intDictionary = new IntDictionary();
 
-        public IntDictionary intDictionary
-        {
-            get => _intDictionary;
-            private set => _intDictionary = value;
-        }
+        private IntDictionary intDictionary => _intDictionary;
 
         [SerializeField]
         public BoolDictionary boolDictionary = new BoolDictionary();
 
         [SerializeField]
-        public ScriptableObjectDictionary scriptableObjectDictionary = new ScriptableObjectDictionary();
+        private ScriptableObjectDictionary _scriptableObjectDictionary = new ScriptableObjectDictionary();
+
+        private ScriptableObjectDictionary scriptableObjectDictionary => _scriptableObjectDictionary;
 
         [SerializeField]
-        public ObjectDictionary objectDictionary = new ObjectDictionary();
+        private ObjectDictionary _objectDictionary = new ObjectDictionary();
+
+        private ObjectDictionary objectDictionary => _objectDictionary;
 
         static readonly string arrayExceptionMessage = "Discrepancy between number of keys and values";
 
@@ -294,6 +298,16 @@ namespace AltSalt.Maestro
             }
         }
 
+        public object GetObjectValue()
+        {
+            if (objectDictionary.ContainsKey(DataType.systemObjectType)) {
+                return objectDictionary[DataType.systemObjectType];
+            } else {
+                //                Debug.Log("Key for scriptable object value not found in EventPayload");
+                return null;
+            }
+        }
+        
         public object GetObjectValue(object key)
         {
             if (objectDictionary.ContainsKey(key)) {

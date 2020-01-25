@@ -1,26 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro.Sequencing
 {
+    [Serializable]
     [ExecuteInEditMode]
     public abstract class Input_Controller : RootDataCollector
     {
-        public Joiner joiner
-        {
-            get => rootConfig.joiner;
-        }
+        public InputGroupKey inputGroupKey => rootConfig.inputGroupKey; 
         
-        [ValidateInput(nameof(IsPopulated))]
-        [SerializeField]
-        private ComplexEventManualTrigger _requestModifyToSequence;
+        public AppSettings appSettings => rootConfig.appSettings;
+        
+        public Joiner joiner => rootConfig.joiner;
 
-        public ComplexEventManualTrigger requestModifyToSequence
-        {
-            get => _requestModifyToSequence;
-        }
+        public ComplexEventManualTrigger requestModifyToSequence =>
+            appSettings.GetRequestModifyToSequence(this.gameObject, inputGroupKey);
 
         protected static bool IsPopulated(ComplexEventManualTrigger attribute)
         {

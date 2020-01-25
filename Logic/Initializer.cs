@@ -35,6 +35,9 @@ namespace AltSalt.Maestro.Logic
         // Start is called before the first frame update
         private IEnumerator Start()
         {
+            Physics.autoSimulation = false;
+            Application.targetFrameRate = 60;
+            
             if (appSettings.useAddressables == true) {
                 yield return new WaitForSeconds(1);
                 Addressables.LoadSceneAsync(bootstrapScene, LoadSceneMode.Single);

@@ -108,67 +108,88 @@ namespace AltSalt.Maestro
     #region Events
     
         [Required]
-        [FoldoutGroup("Touch Events")]
+        [FoldoutGroup("Events")]
         [SerializeField]
         private SimpleEventTrigger _onTouchStart = new SimpleEventTrigger();
 
         public SimpleEventTrigger onTouchStart => _onTouchStart;
 
         [Required]
-        [FoldoutGroup("Touch Events")]
+        [FoldoutGroup("Events")]
         [SerializeField]
         private SimpleEventTrigger _onLongTouch = new SimpleEventTrigger();
 
         public SimpleEventTrigger onLongTouch => _onLongTouch;
 
         [Required]
-        [FoldoutGroup("Touch Events")]
+        [FoldoutGroup("Events")]
         [SerializeField]
         private SimpleEventTrigger _onSwipe = new SimpleEventTrigger();
 
         public SimpleEventTrigger onSwipe => _onSwipe;
 
         [Required]
-        [FoldoutGroup("Touch Events")]
+        [FoldoutGroup("Events")]
         [SerializeField]
         private SimpleEventTrigger _onSwipeEnd = new SimpleEventTrigger();
 
         public SimpleEventTrigger onSwipeEnd => _onSwipeEnd;
             
         [Required]
-        [FoldoutGroup("Touch Events")]
+        [FoldoutGroup("Events")]
         [SerializeField]
         private SimpleEventTrigger _momentumUpdate = new SimpleEventTrigger();
 
         public SimpleEventTrigger momentumUpdate => _momentumUpdate;
         
         [Required]
-        [FoldoutGroup("Touch Events")]
+        [FoldoutGroup("Events")]
         [SerializeField]
         private SimpleEventTrigger _momentumAppliedToSequences = new SimpleEventTrigger();
 
         public SimpleEventTrigger momentumAppliedToSequences => _momentumAppliedToSequences;
         
         [Required]
-        [FoldoutGroup("Touch Events")]
+        [FoldoutGroup("Events")]
         [SerializeField]
         private SimpleEventTrigger _momentumDepleted = new SimpleEventTrigger();
 
         public SimpleEventTrigger momentumDepleted => _momentumDepleted;
         
         [Required]
-        [FoldoutGroup("Touch Events")]
+        [FoldoutGroup("Events")]
         [SerializeField]
         private SimpleEventTrigger _boundaryReached = new SimpleEventTrigger();
 
         public SimpleEventTrigger boundaryReached => _boundaryReached;
         
         [Required]
-        [FoldoutGroup("Touch Events")]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private ComplexEventManualTrigger _requestModifyToSequence = new ComplexEventManualTrigger();
+
+        public ComplexEventManualTrigger requestModifyToSequence => _requestModifyToSequence;
+        
+        [Required]
+        [FoldoutGroup("Events")]
         [SerializeField]
         private ComplexEventManualTrigger _sequenceModified = new ComplexEventManualTrigger();
 
         public ComplexEventManualTrigger sequenceModified => _sequenceModified;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private ComplexEventManualTrigger _inputActionComplete = new ComplexEventManualTrigger();
+
+        public ComplexEventManualTrigger inputActionComplete => _inputActionComplete;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private SimpleEventTrigger _autoplayActivate = new SimpleEventTrigger();
+
+        public SimpleEventTrigger autoplayActivate => _autoplayActivate;
         
     #endregion
 

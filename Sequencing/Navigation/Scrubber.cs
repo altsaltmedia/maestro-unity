@@ -11,6 +11,13 @@ namespace AltSalt.Maestro.Sequencing.Navigate
 
     public class Scrubber : Input_Module
     {
+        [Required]
+        [SerializeField]
+        private NavigationController _navigationController;
+
+        protected NavigationController navigationController => _navigationController;
+
+        protected override Input_Controller inputController => navigationController;
 
         [SerializeField]
         SimpleEventTrigger sequenceScrubbed;

@@ -10,24 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df7551c54cc6d4969a45a8d769935a8e, type: 3}
-  m_Name: SceneLoadTriggered
+  m_Name: TriggerFadeIn
   m_EditorClassIdentifier: 
   registrationNotice: This object and its dependents will be registered whenever the
     RegisterDependencies tool is used.
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  _appSettings: {fileID: 0}
   logCallersOnRaise: 0
   logListenersOnRegister: 0
   logListenersOnRaise: 0
-  DeveloperDescription: Called to trigger a scene change, listened to by AppNavigator.
-    Should contain  EventPayload w/ string for scene name and bool to specify whether
-    to load additivtely.
-  requiredParameters:
-  - description: Scene name to load
-    dataType: 0
+  _description: 
+  requiredParameters: []
+  optionalParameters:
+  - description: Fade In Speed
+    dataType: 1
     customKey: 0
     _customKey: {fileID: 0}
-  optionalParameters:
-  - description: Should the scene load additively?
+  - description: Color variable - initial fade color
+    dataType: 4
+    customKey: 0
+    _customKey: {fileID: 0}
+  - description: Show loading spinner
     dataType: 2
+    customKey: 0
+    _customKey: {fileID: 0}
+  - description: Simple event - callback
+    dataType: 4
     customKey: 0
     _customKey: {fileID: 0}

@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3724877325734310083
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4814058668971968668, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_Name
+      value: ActionTrigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._triggerOnStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._actionType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[0]._priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[0]._axisReference._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 3c23fc3047524465f85ebe33e9152c55,
+        type: 2}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[0]._axisReference._referenceName
+      value: MainInput-YSwipeAxis
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[0]._targetValue._useConstant
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[0]._targetValue._constantValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[1]._priority
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[1]._axisReference._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 926193b3c2b744184bdb7b79c29afc40,
+        type: 2}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[1]._axisReference._referenceName
+      value: MainInput-YMomentumAxis
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[1]._targetValue._useConstant
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[1]._targetValue._constantValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[2]._priority
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[2]._axisReference._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 4f918b54369b147a99359a2a9059f972,
+        type: 2}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[2]._axisReference._referenceName
+      value: MainInput-XSwipeAxis
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[2]._targetValue._useConstant
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[2]._targetValue._constantValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[3]._priority
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[3]._axisReference._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 36c6870632eed4068a6d9adc77ce4a15,
+        type: 2}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[3]._axisReference._referenceName
+      value: MainInput-XMomentumAxis
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._axisActions.Array.data[3]._targetValue._useConstant
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8da0bd6e170714552929b26bf7311610, type: 3}

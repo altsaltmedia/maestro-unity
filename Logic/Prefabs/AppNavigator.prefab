@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7973420083374359237}
   - component: {fileID: 7973420083374359235}
-  - component: {fileID: 7973420083374359236}
   - component: {fileID: 7973420083374359233}
   - component: {fileID: 7973420083374359232}
-  - component: {fileID: 7973420083374359234}
+  - component: {fileID: 3517205928990522322}
   m_Layer: 0
   m_Name: AppNavigator
   m_TagString: Untagged
@@ -52,47 +51,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 292b12df71c484cf797c0707e025fad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  activeScene:
-    UseConstant: 0
-    ConstantValue: 
-    Variable: {fileID: 11400000, guid: f316a334119564e789e89e3f4ee095da, type: 2}
-  fadeOutTriggered:
-    simpleEvent: {fileID: 11400000, guid: 107c34a9a99b24bb889c52dc22dab5c1, type: 2}
-  sceneLoadCompleted:
-    simpleEvent: {fileID: 11400000, guid: a3f57b945ac64452ba073911e9ed6db5, type: 2}
-  timescaleChanged:
-    simpleEvent: {fileID: 11400000, guid: d92d8301aea8f4df5b499bdc5ed4eb22, type: 2}
---- !u!114 &7973420083374359236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7973420083374359238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 4b7e2330935e64c51a4fd2eb1240e7d8, type: 2}
-  DeveloperDescription: Receives a string containing the first scene name to load
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7973420083374359235}
-        m_MethodName: LoadInitialScene
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _appSettings: {fileID: 0}
+  _loadSceneImmediatelyKey:
+    _isSystemReference: 0
+    _referenceName: LoadSceneImmediatelyKey
+    _variable: {fileID: 11400000, guid: c6eb9d864b841401da7b7a973432b6af, type: 2}
+  _loadSceneAdditiveKey:
+    _isSystemReference: 0
+    _referenceName: LoadSceneAdditiveKey
+    _variable: {fileID: 11400000, guid: 2c55716c41b2a436586a35ca910ff9bc, type: 2}
+  _triggerFadeToBlack:
+    _isSystemReference: 0
+    _referenceName: TriggerFadeToBlack
+    _variable: {fileID: 11400000, guid: 107c34a9a99b24bb889c52dc22dab5c1, type: 2}
+  _fadeToBlackCompleted:
+    _isSystemReference: 0
+    _referenceName: FadeToBlackCompleted
+    _variable: {fileID: 11400000, guid: 4024297f7cf5b4ac18af9d9bda3557ec, type: 2}
+  _updateProgress:
+    _isSystemReference: 0
+    _referenceName: UpdateProgress
+    _variable: {fileID: 11400000, guid: 940a0f59179da48b7b3311de30d13a61, type: 2}
+  _triggerFadeIn:
+    _isSystemReference: 0
+    _referenceName: TriggerFadeIn
+    _variable: {fileID: 11400000, guid: dfee30ca42be848fab35ac15ceabe65d, type: 2}
+  _singleSceneLoadCompleted:
+    _isSystemReference: 0
+    _referenceName: SingleSceneLoadCompleted
+    _variable: {fileID: 11400000, guid: a3f57b945ac64452ba073911e9ed6db5, type: 2}
+  _additiveSceneLoadCompleted:
+    _isSystemReference: 0
+    _referenceName: AdditiveSceneLoadCompleted
+    _variable: {fileID: 11400000, guid: 410477222a60a45a79c098e5ad34c2b3, type: 2}
+  _eventCallbackKey:
+    _isSystemReference: 0
+    _referenceName: EventCallbackKey
+    _variable: {fileID: 11400000, guid: 420ddf56ca3e24f8bbd4453eb1c66057, type: 2}
 --- !u!114 &7973420083374359233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,10 +100,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: be8a28980d8f0432191e478ff82225b4, type: 2}
+  _complexEvent: {fileID: 11400000, guid: be8a28980d8f0432191e478ff82225b4, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 11400000, guid: be8a28980d8f0432191e478ff82225b4, type: 2}
   DeveloperDescription: Receives a string containing scene name, as well as a bool
     containing whether the scene load should be single or additive
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7973420083374359235}
@@ -122,8 +121,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &7973420083374359232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,9 +135,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 78ed74bcb687e42448ff50814110f2f2, type: 2}
+  _complexEvent: {fileID: 11400000, guid: 78ed74bcb687e42448ff50814110f2f2, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 11400000, guid: 78ed74bcb687e42448ff50814110f2f2, type: 2}
   DeveloperDescription: Receives a string containing scene name to unload
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7973420083374359235}
@@ -152,9 +155,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
---- !u!114 &7973420083374359234
+  _doNotRecord: 0
+  _migrated: 0
+--- !u!114 &3517205928990522322
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,12 +169,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 44e1333af10b64946a1691b3426c0221, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 4024297f7cf5b4ac18af9d9bda3557ec, type: 2}
+  _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: FadeToBlackCompleted
+    _variable: {fileID: 11400000, guid: 4024297f7cf5b4ac18af9d9bda3557ec, type: 2}
+  _response:
+    m_PersistentCalls:
+      m_Calls: []
+  _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7973420083374359235}
-        m_MethodName: FadeOutSceneLoadCallback
+        m_MethodName: FadeToBlackCompletedCallback
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -181,5 +191,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _doNotRecord: 0
+  _migrated: 1

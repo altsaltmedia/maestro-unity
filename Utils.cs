@@ -1530,6 +1530,15 @@ namespace AltSalt.Maestro
             }
         }
 
+        public static bool IsPopulated(SimpleEventReference attribute)
+        {
+            if (attribute.GetVariable() != null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
         public static bool IsPopulated(SimpleEventTrigger attribute)
         {
             if (attribute.GetVariable() != null) {
@@ -1540,6 +1549,15 @@ namespace AltSalt.Maestro
         }
 
         public static bool IsPopulated(ComplexEventManualTrigger attribute)
+        {
+            if (attribute.GetVariable() != null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        public static bool IsPopulated(ReferenceBase attribute)
         {
             if (attribute.GetVariable() != null) {
                 return true;

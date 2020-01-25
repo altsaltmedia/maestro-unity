@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df7551c54cc6d4969a45a8d769935a8e, type: 3}
+  m_Name: TriggerSceneLoad
+  m_EditorClassIdentifier: 
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
+  _appSettings: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
+  logCallersOnRaise: 0
+  logListenersOnRegister: 0
+  logListenersOnRaise: 0
+  _description: Called to trigger a scene change, listened to by AppNavigator. Should
+    contain  EventPayload w/ string for scene name and bool to specify whether to
+    load additivtely.
+  requiredParameters:
+  - description: Scene name to load
+    dataType: 0
+    customKey: 0
+    _customKey: {fileID: 0}
+  optionalParameters:
+  - description: Should the scene load immediately?
+    dataType: 2
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: c6eb9d864b841401da7b7a973432b6af, type: 2}
+  - description: Should the scene load additively?
+    dataType: 2
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 2c55716c41b2a436586a35ca910ff9bc, type: 2}
+  - description: Fade to black speed
+    dataType: 1
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 0fe2559813b3b44729bbac89e8e0af81, type: 2}
+  - description: Fade in speed
+    dataType: 1
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 31a945c04c97f484a95c644f5de325c9, type: 2}
+  - description: Show loading spinner
+    dataType: 2
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 1594fc9b034664f2ead00079b1eb3272, type: 2}
+  - description: Simple event - callback
+    dataType: 4
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 420ddf56ca3e24f8bbd4453eb1c66057, type: 2}
+  - description: Color variable - target fade color
+    dataType: 4
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 47aaf992e82704916b530bc78671ba01, type: 2}
+  - description: Show progress bar
+    dataType: 2
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 14c3c0555ecf44e82a85491873cf054e, type: 2}

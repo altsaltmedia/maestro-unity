@@ -9,6 +9,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
     public class Autoplayer : Autorun_Module
     {
         private UserDataKey userKey => autorunController.rootConfig.userKey;
+        
         private InputGroupKey inputGroupKey => autorunController.rootConfig.inputGroupKey;
         
         [SerializeField]

@@ -52,7 +52,7 @@ namespace AltSalt.Maestro.Animation
 
             if (trackBinding != null) {
                 
-                trackBinding.StoreCaller(trackAssetConfig.gameObject, trackAssetConfig.gameObject.scene.name, parentTrack.name);
+                trackBinding.StoreCaller(trackBinding, input.parentTrack.name, input.parentTrack.name);
                 
                 if (Application.isPlaying == true && scrubberActive == true) {
                     trackBinding.SetValue(Utils.transparent);

@@ -192,13 +192,13 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             return true;
         }
 
-        public virtual void TriggerResponse(GameObject callingObject, bool triggerOnStart)
+        public void TriggerResponse(GameObject callingObject, bool triggerOnStart)
         {
             if (CheckCondition(callingObject) == true) {
                 if(appSettings.logConditionResponses == true) {
                     LogConditionResponse(callingObject, triggerOnStart);
                 }
-                response.Invoke();
+                action.Invoke(callingObject);
             }
         }
 

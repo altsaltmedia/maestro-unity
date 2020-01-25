@@ -187,7 +187,7 @@ namespace AltSalt.Maestro.Layout {
 
         public void RegisterDynamicElement(ComplexPayload complexPayload)
         {
-            IDynamicLayoutElement element = complexPayload.objectDictionary[DataType.systemObjectType] as IDynamicLayoutElement;
+            IDynamicLayoutElement element = complexPayload.GetObjectValue() as IDynamicLayoutElement;
             
             if(element.parentScene == this.gameObject.scene &&
                priorityDynamicElements.Contains(element) == false && dynamicElements.Contains(element) == false) {
@@ -202,7 +202,7 @@ namespace AltSalt.Maestro.Layout {
 
         public void DeregisterDynamicElement(ComplexPayload complexPayload)
         {
-            IDynamicLayoutElement element = complexPayload.objectDictionary[DataType.systemObjectType] as IDynamicLayoutElement;
+            IDynamicLayoutElement element = complexPayload.GetObjectValue() as IDynamicLayoutElement;
             if(priorityDynamicElements.Contains(element) == true) {
                 priorityDynamicElements.Remove(element);
             }

@@ -17,7 +17,7 @@ namespace AltSalt.Maestro
         [OnValueChanged(nameof(OnEnable))]
         [FormerlySerializedAs("Event")]
         [FormerlySerializedAs("_simpleEvent")]
-        [ReadOnly]
+        //[ReadOnly]
         private SimpleSignal _simpleSignal;
 
         [SerializeField]

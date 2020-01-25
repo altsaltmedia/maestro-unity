@@ -136,6 +136,7 @@ namespace AltSalt.Maestro.Logic
                 case DataType.boolType:
                     BoolVariable boolVariable = userDatum.scriptableObject as BoolVariable;
                     int boolIntValue = PlayerPrefs.GetInt(boolVariable.name);
+                    boolVariable.StoreCaller(this.gameObject);
                     if(boolIntValue == 1) {
                         boolVariable.SetValue(true);
                     } else if (boolIntValue == 0) {
@@ -146,6 +147,7 @@ namespace AltSalt.Maestro.Logic
                 case DataType.floatType:
                     FloatVariable floatVariable = userDatum.scriptableObject as FloatVariable;
                     float floatValue = PlayerPrefs.GetFloat(floatVariable.name);
+                    floatVariable.StoreCaller(this.gameObject);
                     floatVariable.SetValue(floatValue);
                     break;
 
@@ -153,12 +155,14 @@ namespace AltSalt.Maestro.Logic
                 case DataType.stringType:
                     StringVariable stringVariable = userDatum.scriptableObject as StringVariable;
                     string stringValue = PlayerPrefs.GetString(stringVariable.name);
+                    stringVariable.StoreCaller(this.gameObject);
                     stringVariable.SetValue(stringValue);
                     break;
 
                 case DataType.intType:
                     IntVariable intVariable = userDatum.scriptableObject as IntVariable;
                     int intValue = PlayerPrefs.GetInt(intVariable.name);
+                    intVariable.StoreCaller(this.gameObject);
                     intVariable.SetValue(intValue);
                     break;
             }

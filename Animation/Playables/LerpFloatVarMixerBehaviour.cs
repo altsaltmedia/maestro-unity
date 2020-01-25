@@ -53,7 +53,7 @@ namespace AltSalt.Maestro.Animation
             // Reset color if we're working in edit mode
             if (trackBinding != null) {
                 
-                trackBinding.StoreCaller(trackAssetConfig.gameObject, trackAssetConfig.gameObject.scene.name, parentTrack.name);
+                trackBinding.StoreCaller(trackBinding, input.parentTrack.name, input.parentTrack.name);
                 
                 if (Application.isPlaying == true && scrubberActive == true) {
                     trackBinding.SetValue(originalValue);

@@ -9,10 +9,9 @@ namespace AltSalt.Maestro.Sequencing.Touch
         [SerializeField]
         private Touch_Controller _touchController;
 
-        public Touch_Controller touchController
-        {
-            get => _touchController;
-        }
+        public Touch_Controller touchController => _touchController;
+
+        protected override Input_Controller inputController => touchController;
 
         protected bool _isparentModuleNull;
         
