@@ -10,15 +10,32 @@ namespace AltSalt.Maestro.Sequencing
     public abstract class Input_Module : MonoBehaviour
     {
         protected abstract Input_Controller inputController { get; }
+        
+        protected UserDataKey userKey => inputController.rootConfig.userKey;
+        
+        protected InputGroupKey inputGroupKey => inputController.rootConfig.inputGroupKey;
 
-            [SerializeField]
+        [SerializeField]
         private int _priority;
 
         public int priority => _priority;
 
         private ComplexEventManualTrigger inputActionComplete =>
             inputController.appSettings.GetInputActionComplete(this.gameObject, inputController.inputGroupKey);
-        
+
+        private bool _isParenControllerNull;
+
+        protected bool isParentControllerNull
+        {
+            get => _isParenControllerNull;
+            set => _isParenControllerNull = value;
+        }
+
+        protected virtual void Start()
+        {
+            isParentControllerNull = inputController == null;
+        }
+
         public void TriggerInputActionComplete()
         {
             ComplexPayload complexPayload = ComplexPayload.CreateInstance();

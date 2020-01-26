@@ -7,9 +7,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 {
     public class Lerper : Autorun_Module
     {
-        private UserDataKey userKey => autorunController.rootConfig.userKey;
-        
-        private InputGroupKey inputGroupKey => autorunController.rootConfig.inputGroupKey;
         
         private float frameStepValue => autorunController.appSettings.GetFrameStepValue(this.gameObject, inputGroupKey);
 

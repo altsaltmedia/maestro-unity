@@ -62,28 +62,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df6b19ab5020452e82eaad85aff31d92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  _isReversing:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
-  _scrubberActive:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 00a2b24214f8a443581542514270dc00, type: 2}
-  _timelineCurrentTime:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 0fbf8f44e4dad49eb8f9c318eb4667b4, type: 2}
-  _onGraphStart: {fileID: 11400000, guid: 87530e998b45847529374d024ccfda83, type: 2}
-  _frameStepValue:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 1e19d88d8db1b4a37b05030830ea63cf, type: 2}
-  _swipeModifierOutput:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 360c5582a8dd14c3681d73b9132dabe5, type: 2}
+  _appSettings: {fileID: 0}
+  _sequence: {fileID: 0}
+  _inputGroupKey:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
 --- !u!114 &6416722693999385806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,3 +80,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0357559043efc4433a896d19b3bf8d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _endEvent:
+    m_PersistentCalls:
+      m_Calls: []

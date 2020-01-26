@@ -56,30 +56,25 @@ namespace AltSalt.Maestro.Sequencing
         public double elapsedTime
         {
             get => _elapsedTime;
-            private set => _elapsedTime = value;
-        }
-
-        public double masterTime {
-            get {
-                return elapsedTime;
-            }
-            set {
+            set
+            {
                 if (masterTimeDataList.Count < 1) {
                     Init();
                 }
-                SetMasterTime(value, masterTimeDataList);
+                SetElapsedTime(value, masterTimeDataList);
             }
         }
 
-        private double _masterTotalTime;
+        private double _duration;
         
-        public double masterTotalTime {
+        public double duration {
             get {
                 if (masterTimeDataList.Count < 1) {
                     Init();
                 }
-                return _masterTotalTime;
+                return _duration;
             }
+            private set => _duration = value;
         }
 
         [ShowInInspector]
@@ -110,7 +105,7 @@ namespace AltSalt.Maestro.Sequencing
             }
 
             // Get total time by adding last sequences master time end threshold with its duration
-            _masterTotalTime = masterTimeDataList[masterTimeDataList.Count - 1].masterTimeEnd + masterTimeDataList[masterTimeDataList.Count - 1].sequence.sourcePlayable.duration;
+            duration = masterTimeDataList[masterTimeDataList.Count - 1].masterTimeEnd + masterTimeDataList[masterTimeDataList.Count - 1].sequence.sourcePlayable.duration;
         }
 
         public void ProcessModifyRequest(ComplexPayload complexPayload)
@@ -147,32 +142,44 @@ namespace AltSalt.Maestro.Sequencing
             activeInputModule.priority = 0;
         }
 
-        static List<Sequence> RefreshSequences(List<Sequence> sequences, List<Sequence_Config> sequenceConfigs)
+        public void RefreshMasterSequence(ComplexPayload complexPayload)
         {
-            sequences.Clear();
-
-            for (int i = 0; i < sequenceConfigs.Count; i++)
-            {
-                sequences.Add(sequenceConfigs[i].sequence);
+            if (SequenceActive(sequenceConfigs) == true) {
+                
+                hasActiveSequence = true;
+                
+                Sequence modifiedSequence = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as Sequence;
+                MasterTimeData sequenceTimeData = this.masterTimeDataList.Find(x => x.sequence == modifiedSequence);
+                
+                if(sequenceTimeData != null) {
+                    this.elapsedTime = sequenceTimeData.masterTimeStart + modifiedSequence.currentTime;
+                }
             }
-
-            return sequences;
+            else {
+                hasActiveSequence = false;
+            }
         }
 
-        public Sequence UpdateMasterTime(double targetTime)
+        private static bool SequenceActive(List<Sequence_Config> sequenceConfigs)
         {
-            if (masterTimeDataList.Count < 1) {
-                Init();
+            for (int i = 0; i < sequenceConfigs.Count; i++) {
+                if (sequenceConfigs[i].sequence.active == true) {
+                    return true;
+                }
             }
-            return SetMasterTime(targetTime, masterTimeDataList);
-        }
 
-        public static Sequence SetMasterTime(double targetTime, List<MasterTimeData> sequenceData)
+            return false;
+        }
+        
+        private static Sequence SetElapsedTime(double targetTime, List<MasterTimeData> sequenceData)
         {
             Sequence activeSequence = null;
-
+            
             for (int i = 0; i < sequenceData.Count; i++) {
-
+                
+                // Since we're going through the sequences in order,
+                // as soon as our target time does not exceed the end time,
+                // that means we've found the sequence we'll want to target
                 if (targetTime < sequenceData[i].masterTimeEnd) {
 
                     activeSequence = sequenceData[i].sequence;
@@ -185,17 +192,20 @@ namespace AltSalt.Maestro.Sequencing
                     } else {
                         activeSequence.currentTime = targetTime - sequenceData[i - 1].masterTimeEnd;
                     }
+                    
+                    activeSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
 
-                    // Prep adjacent sequences
+                    // Prep preceding sequence, if applicable
                     if (i > 0) {
                         sequenceData[i - 1].sequence.currentTime = sequenceData[i - 1].sequence.sourcePlayable.duration;
                     }
 
+                    // Prep following sequence, if applicable
                     if (sequenceData.Count - 1 > i) {
                         sequenceData[i + 1].sequence.currentTime = 0;
                     }
 
-                    // Deactivate other sequences
+                    // Deactivate the other sequences
                     for (int z = 0; z < sequenceData.Count; z++) {
 
                         if (z == i) {
@@ -211,38 +221,6 @@ namespace AltSalt.Maestro.Sequencing
             }
 
             return activeSequence;
-        }
-
-        public void RefreshMasterSequence(ComplexPayload complexPayload)
-        {
-            hasActiveSequence = GetActiveStatusFromSequences(sequenceConfigs);
-
-            if (hasActiveSequence == true) {
-               RefreshElapsedTime(this, complexPayload);
-            }
-        }
-
-        private static bool GetActiveStatusFromSequences(List<Sequence_Config> sequenceConfigs)
-        {
-            for (int i = 0; i < sequenceConfigs.Count; i++) {
-                if (sequenceConfigs[i].sequence.active == true) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static double RefreshElapsedTime(MasterSequence masterSequence, ComplexPayload complexPayload)
-        {
-            Sequence targetSequence = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as Sequence;
-            MasterTimeData masterTimeData = masterSequence.masterTimeDataList.Find(x => x.sequence == targetSequence);
-                
-            if(masterTimeData != null) {
-                masterSequence.elapsedTime = masterTimeData.masterTimeStart + targetSequence.currentTime;
-            }
-
-            return masterSequence.elapsedTime;
         }
 
         private static List<MasterTimeData> GenerateSequenceData(List<Sequence_Config> sourceSequenceConfigs)

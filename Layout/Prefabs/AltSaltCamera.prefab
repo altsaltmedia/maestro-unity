@@ -96,7 +96,8 @@ MonoBehaviour:
   id: -708654018
   sceneName: AltSaltCamera
   initialized: 1
-  _layouts: []
+  _layoutsLegacy: []
+  _layoutReferences: []
   nonserializedProperties:
   - id
   - sceneName
@@ -107,30 +108,20 @@ MonoBehaviour:
   - _appSettings
   - _enableDynamicElement
   - _disableDynamicElement
+  _migrated: 0
   _appSettings: {fileID: 0}
   _enableDynamicElement:
+    _isSystemReference: 0
     _referenceName: ResponsiveElementEnable
-    _parentObject: {fileID: 0}
-    _complexEvent: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
+    _variable: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
   _disableDynamicElement:
+    _isSystemReference: 0
     _referenceName: ResponsiveElementDisable
-    _parentObject: {fileID: 0}
-    _complexEvent: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
+    _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
   _hasBreakpoints: 1
   _priority: 0
   _logElementOnLayoutUpdate: 0
-  deviceWidth:
-    _referenceName: 
-    _parentObject: {fileID: 1892881052307360}
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: 10bb2f582f9a548ddb2255f116d3bac9, type: 2}
-  deviceHeight:
-    _referenceName: 
-    _parentObject: {fileID: 1892881052307360}
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: 70a2e26166cba4dd2954b2a0b98c221e, type: 2}
+  _aspectRatioBreakpoints: []
   viewportModifiers: []
 --- !u!114 &6762982322118964362
 MonoBehaviour:

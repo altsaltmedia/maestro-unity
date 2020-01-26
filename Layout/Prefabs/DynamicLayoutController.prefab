@@ -158,10 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _simpleSignal: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
-  _simpleSignalReference:
-    _isSystemReference: 0
-    _referenceName: LayoutUpdate
-    _variable: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
+  _simpleSignalReferences: []
   _response:
     m_PersistentCalls:
       m_Calls:

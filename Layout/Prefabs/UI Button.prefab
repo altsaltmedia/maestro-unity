@@ -54,7 +54,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5654437756121407353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -63,8 +63,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -74,6 +72,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5654437756898629190
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +121,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5654437756898629190}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -156,8 +155,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &5654437756898629188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,8 +180,6 @@ MonoBehaviour:
   OnPointerEnter:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   onPointerEnterAnimationType: 0
   onPointerEnterPunchPresetCategory: Uncategorized
   onPointerEnterPunchPresetName: DefaultPreset
@@ -314,8 +309,6 @@ MonoBehaviour:
   OnPointerExit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   onPointerExitAnimationType: 0
   onPointerExitPunchPresetCategory: Uncategorized
   onPointerExitPunchPresetName: DefaultPreset
@@ -444,8 +437,6 @@ MonoBehaviour:
   OnPointerDown:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   onPointerDownAnimationType: 0
   onPointerDownPunchPresetCategory: Uncategorized
   onPointerDownPunchPresetName: DefaultPreset
@@ -574,8 +565,6 @@ MonoBehaviour:
   OnPointerUp:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   onPointerUpAnimationType: 0
   onPointerUpPunchPresetCategory: Uncategorized
   onPointerUpPunchPresetName: DefaultPreset
@@ -706,8 +695,6 @@ MonoBehaviour:
   OnClick:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   onClickAnimationType: 0
   onClickPunchPresetCategory: Uncategorized
   onClickPunchPresetName: DefaultPreset
@@ -838,8 +825,6 @@ MonoBehaviour:
   OnDoubleClick:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   onDoubleClickAnimationType: 0
   onDoubleClickPunchPresetCategory: Uncategorized
   onDoubleClickPunchPresetName: DefaultPreset
@@ -970,8 +955,6 @@ MonoBehaviour:
   OnLongClick:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   onLongClickAnimationType: 0
   onLongClickPunchPresetCategory: Uncategorized
   onLongClickPunchPresetName: DefaultPreset
@@ -1333,8 +1316,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Ui Button
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1439,10 +1420,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77b51fba603cb4c90930ab6e20a7f652, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  modifySettings: {fileID: 11400000, guid: 09fba8b7455af408cb2e663bc6591f01, type: 2}
+  _appSettings: {fileID: 0}
   key: 
-  localizationCorpus: {fileID: 0}
+  _textCollectionBank: {fileID: 0}
 --- !u!114 &2177946895856080138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1455,10 +1435,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
+  _complexEvent: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   DeveloperDescription: Should receive an event payload with a scriptable object containing
     the target corpus that's being updated
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3254900194168183401}
@@ -1472,5 +1456,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _doNotRecord: 0
+  _migrated: 0

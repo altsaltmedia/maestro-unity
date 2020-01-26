@@ -12,17 +12,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         protected Autorun_Controller autorunController => _autorunController;
 
         protected override Input_Controller inputController => autorunController;
-
-        protected bool _isparentModuleNull;
         
-        protected virtual void Start()
-        {
-            _isparentModuleNull = autorunController == null;
-        }
-
-        private static bool IsPopulated(BoolReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
     }
 }

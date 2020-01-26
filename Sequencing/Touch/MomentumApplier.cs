@@ -7,10 +7,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 {
     public class MomentumApplier : Touch_Module
     {
-        private UserDataKey userKey => touchController.rootConfig.userKey;
         
-        private InputGroupKey inputGroupKey => touchController.rootConfig.inputGroupKey;
-
         [SerializeField]
         private bool _momentumEnabled = true;
 

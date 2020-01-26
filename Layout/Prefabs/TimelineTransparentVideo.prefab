@@ -146,9 +146,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialTime: 0
-  playOnPrepareComplete: 1
   videoCompleteCallback:
-    simpleEvent: {fileID: 0}
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
 --- !u!114 &114632566213413860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,17 +162,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49cb2841b4d754f0fb172debd39466ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderers:
+  _meshRenderers:
   - {fileID: 23555264733359084}
-  materialInstances: []
-  targetMaterialAttributes:
+  _materialInstances: []
+  _targetMaterialAttributes:
   - targetAttributeName: _Color
     materialType: 0
-    _Color:
-      UseConstant: 0
-      ConstantValue: {r: 0, g: 0, b: 0, a: 0}
-      Variable: {fileID: 0}
-    _Float:
-      UseConstant: 0
-      ConstantValue: 0
-      Variable: {fileID: 0}
+    _colorValue:
+      _isSystemReference: 0
+      _referenceName: 
+      _useConstant: 0
+      _constantValue: {r: 0, g: 0, b: 0, a: 0}
+      _variable: {fileID: 0}
+    _floatValue:
+      _isSystemReference: 0
+      _referenceName: 
+      _useConstant: 0
+      _constantValue: 0
+      _variable: {fileID: 0}

@@ -47,30 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3464dfd47d2b5466e8e0e341523c7d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SequenceModified: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  sequenceList: {fileID: 0}
-  isReversing:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
-  triggerSpinnerShow: {fileID: 11400000, guid: 0b8292f66ecb34b8fa9c17637a06c468, type: 2}
-  triggerSpinnerHide: {fileID: 11400000, guid: 98ca9687c33fe4a69983e6cded0a3598, type: 2}
-  frameStepValue:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 1e19d88d8db1b4a37b05030830ea63cf, type: 2}
-  ease: 10
-  easeThreshold: 0.25
-  lerpModifier: 0.01
-  isFlicked:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 02c56e2aa3ca74ea197b12137c1130e1, type: 2}
-  currentTimescale:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: beef097a332dc486da519b47115b1e7d, type: 2}
+  _priority: 0
+  _autorunController: {fileID: 0}
+  _autoplayEnabled: 1
+  _autoplayEaseThreshold: 0.25
 --- !u!114 &114414322395002242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,8 +63,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 327c2d62b621b46d491fb9265f17f6ed, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 327c2d62b621b46d491fb9265f17f6ed, type: 2}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114154755877555306}
@@ -98,8 +79,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &114879130755877010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,8 +96,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: bf5075b16b1fc4eddae6ca56d96655e7, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: bf5075b16b1fc4eddae6ca56d96655e7, type: 2}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114154755877555306}
@@ -127,8 +112,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &114621735655159038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,8 +129,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 5d2e39e0dde6d4a07a757b7c25df22fb, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 5d2e39e0dde6d4a07a757b7c25df22fb, type: 2}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114154755877555306}
@@ -156,8 +145,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &114805817043653968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,8 +162,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114154755877555306}
@@ -185,5 +178,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0

@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6cfefc9189b422d8e558b5019449b3, type: 3}
   m_Name: DisableHamburger
   m_EditorClassIdentifier: 
-  DeveloperDescription: 
-  LogListenersOnRegister: 0
-  LogListenersOnRaise: 0
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
+  _appSettings: {fileID: 0}
+  logCallersOnRaise: 0
+  logListenersOnRegister: 0
+  logListenersOnRaise: 0
+  _description: 
+  _associatedVariables: []

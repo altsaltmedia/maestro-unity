@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 4814058668971968668, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: m_Name
-      value: ActionTrigger
+      value: PrepareSceneActionTrigger
       objectReference: {fileID: 0}
     - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}

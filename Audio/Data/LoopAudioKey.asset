@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c87e4c46b97b4c6381805d9215c2bcd, type: 3}
   m_Name: LoopAudioKey
   m_EditorClassIdentifier: 
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
   description: 

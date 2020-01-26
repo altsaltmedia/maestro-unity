@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2cd7cd96e9b4cde8a9626ac501ad61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 11400000, guid: e30fdc18bff8943429c0104d575ad03a, type: 2}
+  _appSettings: {fileID: 0}
   _resetTouchVariables: 0
   defaultX: 0
   defaultY: 1
@@ -78,8 +78,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6d2b89522824b40388975ab5f52b182b, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 6d2b89522824b40388975ab5f52b182b, type: 2}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114161003571339804}
@@ -93,7 +94,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &5233585317237087667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,9 +111,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
+  _complexEvent: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   DeveloperDescription: 
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114161003571339804}
@@ -122,7 +131,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  doNotRecord: 0
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &6017730626510382830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,9 +145,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
+  _complexEvent: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   DeveloperDescription: 
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114161003571339804}
@@ -151,7 +165,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  doNotRecord: 0
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &354073691016094632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,8 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6958e603947ff451aac4f96c5c846b5f, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 6958e603947ff451aac4f96c5c846b5f, type: 2}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114161003571339804}
@@ -179,7 +195,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &5729742352868547490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,8 +212,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114161003571339804}
@@ -207,4 +228,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0

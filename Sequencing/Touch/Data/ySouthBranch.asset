@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a36c8365f9234ca78a5096d0cdc24eb2, type: 3}
   m_Name: ySouthBranch
   m_EditorClassIdentifier: 
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
   description: 

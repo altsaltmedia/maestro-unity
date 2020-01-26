@@ -54,13 +54,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _framesPerSecond:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 235458754b7664cc6b7efa40458f5c38, type: 2}
+    _isSystemReference: 0
+    _referenceName: 
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 235458754b7664cc6b7efa40458f5c38, type: 2}
   _frameStepInterval:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 1e19d88d8db1b4a37b05030830ea63cf, type: 2}
+    _isSystemReference: 0
+    _referenceName: 
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: 1e19d88d8db1b4a37b05030830ea63cf, type: 2}
 --- !u!23 &2282219428453987539
 MeshRenderer:
   m_ObjectHideFlags: 0

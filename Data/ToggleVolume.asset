@@ -18,5 +18,5 @@ MonoBehaviour:
   logCallersOnRaise: 0
   logListenersOnRegister: 0
   logListenersOnRaise: 0
-  DeveloperDescription: 
-  associatedVariables: []
+  _description: 
+  _associatedVariables: []

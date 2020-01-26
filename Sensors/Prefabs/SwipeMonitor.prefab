@@ -48,12 +48,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _appSettings: {fileID: 0}
   _userDataKey:
+    _isSystemReference: 0
     _referenceName: User1
-    _parentObject: {fileID: 0}
     _variable: {fileID: 11400000, guid: fb3e0d4ca475e400798c9ffb07637101, type: 2}
   _inputGroupKey:
+    _isSystemReference: 0
     _referenceName: MainInput
-    _parentObject: {fileID: 0}
     _variable: {fileID: 11400000, guid: 5291240e14d3a457986c095206701a0c, type: 2}
 --- !u!114 &114697932136561384
 MonoBehaviour:
@@ -131,10 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _simpleSignal: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
-  _simpleSignalReference:
-    _referenceName: BoundaryReached
-    _parentObject: {fileID: 1681194368555834}
-    _variable: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
+  _simpleSignalReferences: []
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -179,8 +176,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _complexEvent: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
   _complexEventReference:
+    _isSystemReference: 0
     _referenceName: ConvertMomentum
-    _parentObject: {fileID: 1681194368555834}
     _variable: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
   DeveloperDescription: This event requires that the string dictionary values 'fromAxis'
     and 'toAxis' be passed in an EventPayload instance.

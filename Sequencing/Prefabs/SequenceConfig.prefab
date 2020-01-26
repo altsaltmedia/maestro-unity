@@ -184,11 +184,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: PrepareSceneCompleted
-    _variable: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:

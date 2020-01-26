@@ -52,6 +52,7 @@ MonoBehaviour:
   audioElements: []
   loopAudioKey: {fileID: 11400000, guid: 1ebc7f3fa274d463a8256066c48e2089, type: 2}
   volumeKey: {fileID: 11400000, guid: 8b9af6247445a4d8d89fb45f6fa8e470, type: 2}
+  pitchKey: {fileID: 0}
 --- !u!114 &1665444724315265665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,9 +65,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 149e99f5110164b58a5eedc546849b72, type: 2}
+  _complexEvent: {fileID: 11400000, guid: 149e99f5110164b58a5eedc546849b72, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   DeveloperDescription: 
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1665444724315265664}
@@ -80,9 +85,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &-6483300248613923237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,9 +99,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: d131a8a07250a4b9c8f5e808b6860e32, type: 2}
+  _complexEvent: {fileID: 11400000, guid: d131a8a07250a4b9c8f5e808b6860e32, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   DeveloperDescription: 
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1665444724315265664}
@@ -111,9 +119,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &1665444724871226524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,9 +133,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: cac00581d12b345fea4dbf502eed37ef, type: 2}
+  _complexEvent: {fileID: 11400000, guid: cac00581d12b345fea4dbf502eed37ef, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   DeveloperDescription: 
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1665444724315265664}
@@ -142,9 +153,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!82 &-5602970116745558848
 AudioSource:
   m_ObjectHideFlags: 0

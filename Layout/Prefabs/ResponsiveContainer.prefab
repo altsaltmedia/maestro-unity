@@ -51,7 +51,8 @@ MonoBehaviour:
   id: 708157452
   sceneName: ResponsiveContainer
   initialized: 1
-  _layouts: []
+  _layoutsLegacy: []
+  _layoutReferences: []
   nonserializedProperties:
   - id
   - sceneName
@@ -62,18 +63,20 @@ MonoBehaviour:
   - _appSettings
   - _enableDynamicElement
   - _disableDynamicElement
+  _migrated: 0
   _appSettings: {fileID: 0}
   _enableDynamicElement:
+    _isSystemReference: 0
     _referenceName: ResponsiveElementEnable
-    _parentObject: {fileID: 0}
-    _complexEvent: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
+    _variable: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
   _disableDynamicElement:
+    _isSystemReference: 0
     _referenceName: ResponsiveElementDisable
-    _parentObject: {fileID: 0}
-    _complexEvent: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
+    _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
   _hasBreakpoints: 0
   _priority: 0
   _logElementOnLayoutUpdate: 0
+  _aspectRatioBreakpoints: []
   multiplier:
   - 1
   orientations: 00000000

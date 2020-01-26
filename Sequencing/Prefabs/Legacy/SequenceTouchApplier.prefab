@@ -47,49 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47978c90b8202407a9d5991ec1134586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sequenceModified:
-    simpleEvent: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  sequenceLists: []
-  isReversing:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
-  triggerSpinnerShow:
-    simpleEvent: {fileID: 11400000, guid: 1bcec563fe01642e2887c4d0b3d7e637, type: 2}
-  triggerSpinnerHide:
-    simpleEvent: {fileID: 11400000, guid: 314d1b056af624771922e79c1e70422c, type: 2}
-  momentumApplied:
-    simpleEvent: {fileID: 11400000, guid: 5d2e39e0dde6d4a07a757b7c25df22fb, type: 2}
-  swipeModifier:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: d8f4b6364c76d41bbac908431ff942bc, type: 2}
-  momentumModifier:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 85f0b43954f014116ac2bc831ac930a4, type: 2}
-  forkActive:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: 2aff08255bfe44376b24d0ea43897ac1, type: 2}
-  xSwipeAxis: {fileID: 11400000, guid: 78821859800bc4f338b0683018b859c0, type: 2}
-  ySwipeAxis: {fileID: 11400000, guid: 04fddbb3e8a0245bbaf7eb7ac8c54c1a, type: 2}
-  zSwipeAxis: {fileID: 11400000, guid: f545d3f97388040cebfc721fb6b4ff3a, type: 2}
-  transitionAxis: {fileID: 11400000, guid: 70664f08f97744f2bb2fb6f42fbd31d7, type: 2}
-  swipeForce:
-    UseConstant: 0
-    ConstantValue: {x: 0, y: 0, z: 0}
-    Variable: {fileID: 11400000, guid: 83dca11092e3c42a3ac39cf5ea347c2f, type: 2}
-  xMomentumAxis: {fileID: 11400000, guid: f88bf119e8f2c4cf3877691a94127d64, type: 2}
-  yMomentumAxis: {fileID: 11400000, guid: f42a426f4dfb54a94938a16ec1f3c2e3, type: 2}
-  zMomentumAxis: {fileID: 11400000, guid: 0ff6d39eb4be84e459d1db349ebb85bb, type: 2}
-  momentumForce:
-    UseConstant: 0
-    ConstantValue: {x: 0, y: 0, z: 0}
-    Variable: {fileID: 11400000, guid: f622ace9e18b44dddaacabde456d3ef4, type: 2}
+  _priority: 0
+  _touchController: {fileID: 0}
   pauseSequenceComplete:
-    simpleEvent: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
 --- !u!114 &-6050846550928524056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,8 +65,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 53e143c13a90e4feb9eec549f44a0545, type: 2}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114975682343234766}
@@ -117,9 +81,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &114834371844494940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,8 +98,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 3d2e067a9dde54b3b904b558a9a88c3b, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: 3d2e067a9dde54b3b904b558a9a88c3b, type: 2}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114975682343234766}
@@ -147,9 +114,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &114104263229337992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,8 +131,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: a2e4c5a50b2c44620a2c0a046f85ab80, type: 2}
-  Response:
+  _simpleSignal: {fileID: 11400000, guid: a2e4c5a50b2c44620a2c0a046f85ab80, type: 2}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114975682343234766}
@@ -177,9 +147,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &114736413140752494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,8 +164,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6fce73e1d24b74ec6a5493e0d19ed0ac, type: 2}
-  Response:
+  _simpleSignal: {fileID: 0}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114975682343234766}
@@ -207,6 +180,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0

@@ -18,7 +18,7 @@ MonoBehaviour:
   logCallersOnRaise: 0
   logListenersOnRegister: 0
   logListenersOnRaise: 0
-  DeveloperDescription: 
+  _description: 
   requiredParameters:
   - description: Responsive Element
     dataType: 5

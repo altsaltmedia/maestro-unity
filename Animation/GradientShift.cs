@@ -70,7 +70,7 @@ namespace AltSalt.Maestro.Animation {
             }
         }
 
-        private void Start()
+        private void OnEnable()
         {
             SetSortingOrder();
             GetMeshRenderer();
@@ -90,6 +90,7 @@ namespace AltSalt.Maestro.Animation {
 //            RefreshRenderer();
 //        }
 
+        [Button(ButtonSizes.Large)]
         public void RefreshRenderer()
         {
             meshRenderer.sharedMaterial.SetColor("_Color", color);

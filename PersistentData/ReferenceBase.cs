@@ -41,6 +41,7 @@ namespace AltSalt.Maestro
             set => _referenceName = value;
         }
 
+        [ShowInInspector]
         private UnityEngine.Object _parentObject;
 
         public UnityEngine.Object parentObject
@@ -49,11 +50,18 @@ namespace AltSalt.Maestro
             set => _parentObject = value;
         }
         
+        [ShowInInspector]
         private List<string> _serializedPropertyPath = new List<string>();
 
         private List<string> serializedPropertyPath
         {
-            get => _serializedPropertyPath;
+            get
+            {
+                if (_serializedPropertyPath == null) {
+                    _serializedPropertyPath = new List<string>();
+                }
+                return _serializedPropertyPath;
+            }
             set => _serializedPropertyPath = value;
         }
 #endif
@@ -122,10 +130,13 @@ namespace AltSalt.Maestro
                     
                     serializedObject.ApplyModifiedProperties();
                     serializedObject.Update();
-                    EditorApplication.update.Invoke();
+                    //EditorApplication.update.Invoke();
                     //StoreVariable(variableSearch);
                     
                     LogFoundReferenceMessage(GetType().Name, variableSearch);
+                }
+                else {
+                    LogNotFoundError(GetType().Name);
                 }
             }
 
@@ -134,7 +145,7 @@ namespace AltSalt.Maestro
 
         protected abstract bool ShouldPopulateReference();
         
-        private static SerializedProperty FindReferenceProperty(SerializedObject sourceObject, string[] referencePropertyPath, string targetProperty)
+        public static SerializedProperty FindReferenceProperty(SerializedObject sourceObject, string[] referencePropertyPath, string targetProperty)
         {
             var variableReferencePath = sourceObject.FindProperty(referencePropertyPath[0]);
             
@@ -155,6 +166,12 @@ namespace AltSalt.Maestro
             }
 
             return variableReferencePath.FindPropertyRelative(targetProperty);
+        }
+
+        public ReferenceBase ResetSearchAttempted()
+        {
+            searchAttempted = false;
+            return this;
         }
 
         private ReferenceBase StoreVariable(ScriptableObject variable)
@@ -206,6 +223,12 @@ namespace AltSalt.Maestro
         protected void LogFoundReferenceMessage(string typeName, UnityEngine.Object referenceObject)
         {
             Debug.Log($"Found reference {referenceObject.name}. Setting to {typeName}.", referenceObject);
+        }
+        
+        protected void LogNotFoundError(string typeName)
+        {
+            Debug.LogError($"Unable to find reference {referenceName} for {typeName} on {parentObject.name}. " +
+                      $"Please repopulate the variable, ensure all assets have been imported, or remove this reference.", parentObject);
         }
 #endif
     }

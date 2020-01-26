@@ -114,8 +114,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: '[INSERT TEXT HERE]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -220,10 +218,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77b51fba603cb4c90930ab6e20a7f652, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-  modifySettings: {fileID: 0}
+  _appSettings: {fileID: 0}
   key: 
-  textCollectionBank: {fileID: 0}
+  _textCollectionBank: {fileID: 0}
 --- !u!114 &6162087246834992834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,10 +233,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
+  _complexEvent: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   DeveloperDescription: Should receive an event payload with a scriptable object containing
     the target corpus that's being updated
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114860081495304408}
@@ -253,9 +254,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 1
+  _doNotRecord: 1
+  _migrated: 0
 --- !u!114 &-2335259992271015214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,3 +271,4 @@ MonoBehaviour:
   drawWhenNotSelected: 0
   transformBoxColor: {r: 0.13216448, g: 0.8490566, b: 0.79440635, a: 1}
   textBoxColor: {r: 1, g: 0.67534244, b: 0, a: 1}
+  drawTextBox: 0

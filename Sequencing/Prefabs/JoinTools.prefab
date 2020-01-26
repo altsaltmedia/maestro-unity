@@ -96,16 +96,16 @@ MonoBehaviour:
     _keyValues: []
     _keys: []
   _forkKey:
+    _isSystemReference: 0
     _referenceName: UpdateFork-ForkKey
-    _parentObject: {fileID: 0}
     _variable: {fileID: 11400000, guid: f7fc8865371984745b968895500fffbf, type: 2}
   _updateForkViaBranchKey:
+    _isSystemReference: 0
     _referenceName: UpdateFork-ViaBranchKey
-    _parentObject: {fileID: 0}
     _variable: {fileID: 11400000, guid: ae02bea3066cf46bfbe115f66a1826f4, type: 2}
   _updateForkViaSequence:
+    _isSystemReference: 0
     _referenceName: UpdateFork-ViaSequence
-    _parentObject: {fileID: 0}
     _variable: {fileID: 11400000, guid: ad4b899a49c5e4cde863005462c45926, type: 2}
 --- !u!114 &3156366569489139294
 MonoBehaviour:
@@ -121,8 +121,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _complexEvent: {fileID: 11400000, guid: bfbf28c8db33841d8bce679ac9fb5d0a, type: 2}
   _complexEventReference:
+    _isSystemReference: 0
     _referenceName: UpdateFork
-    _parentObject: {fileID: 57868647988261891}
     _variable: {fileID: 11400000, guid: bfbf28c8db33841d8bce679ac9fb5d0a, type: 2}
   DeveloperDescription: 
   _response:

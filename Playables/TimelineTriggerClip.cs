@@ -9,7 +9,8 @@ namespace AltSalt.Maestro
         // creating subclasses; it won't work. Instead, create a new instance of your behaviour in question.
         // private LerpToTargetBehaviour template = new LerpToTargetBehaviour();
         [HideInInspector]
-        public TrackAssetConfig _trackAssetConfig;
+        [SerializeField]
+        private TrackAssetConfig _trackAssetConfig;
 
         public TrackAssetConfig trackAssetConfig
         {
@@ -17,6 +18,15 @@ namespace AltSalt.Maestro
             set => _trackAssetConfig = value;
         }
         
+        [SerializeField]
+        private TrackAsset _parentTrack;
+
+        public TrackAsset parentTrack
+        {
+            get => _parentTrack;
+            set => _parentTrack = value;
+        }
+
         private double _startTime;
 
         public double startTime

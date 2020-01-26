@@ -18,6 +18,16 @@ namespace AltSalt.Maestro
 
         private List<ComplexEventConfigurableTrigger> complexEventConfigurableTriggers => _complexEventConfigurableTriggers;
 
+        private void OnEnable()
+        {
+            string complexEventTriggersListPath = nameof(_complexEventConfigurableTriggers);
+            for (int i = 0; i < complexEventConfigurableTriggers.Count; i++) {
+                string complexTriggerPath = complexEventTriggersListPath;
+                complexTriggerPath += $".{i.ToString()}";
+                complexEventConfigurableTriggers[i].PopulateReferences(this, complexTriggerPath);
+            }
+        }
+
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         [InfoBox("Raises event")]
         public void ActivateTriggers()

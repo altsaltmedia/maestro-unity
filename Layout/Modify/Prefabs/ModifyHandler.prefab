@@ -45,13 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c9c86b28b58e44b4855765a99addf77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modifySettings: {fileID: 11400000, guid: 09fba8b7455af408cb2e663bc6591f01, type: 2}
-  textFamilyKey: {fileID: 11400000, guid: 50e1418fc483249d28ec61e99441c85d, type: 2}
-  layoutKey: {fileID: 11400000, guid: ff48fb0942cb04a22898ba9c73b13cb7, type: 2}
   textUpdateTrigger:
-    complexEvent: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
   layoutUpdateTrigger:
-    simpleEvent: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
 --- !u!114 &7484667428570030171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,10 +65,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: fcc69e883fe2d4abc99c6bd9d9c8d0b2, type: 2}
+  _complexEvent: {fileID: 11400000, guid: fcc69e883fe2d4abc99c6bd9d9c8d0b2, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   DeveloperDescription: Accepts a text family and optional text bank, which it uses
     to update text accordingly and activate a corresponding layout.
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2256552466306782063}
@@ -81,8 +86,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &-41844560338000109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,10 +100,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: e5bb46fd1b7f64d5085d0d405f73e93f, type: 2}
+  _complexEvent: {fileID: 11400000, guid: e5bb46fd1b7f64d5085d0d405f73e93f, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   DeveloperDescription: Accepts a layout, which it uses to fire a layout update while
     changing to a corresponding language.
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2256552466306782063}
@@ -112,5 +121,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _doNotRecord: 0
+  _migrated: 0

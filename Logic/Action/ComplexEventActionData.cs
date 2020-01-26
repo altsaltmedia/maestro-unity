@@ -29,7 +29,8 @@ namespace AltSalt.Maestro.Logic.Action
             for (int i = 0; i < complexEventPayloadPackagers.Count; i++) {
                 string referencePath = packagersPath;
                 referencePath += $".{i.ToString()}";
-                complexEventPayloadPackagers[i].PopulateVariable(parentObject, referencePath.Split(new[] {'.'}));
+                complexEventPayloadPackagers[i].PopulateVariable(parentObject, referencePath.Split('.'));
+                complexEventPayloadPackagers[i].PopulateReferences(parentObject, referencePath);
             }
 
             return this;

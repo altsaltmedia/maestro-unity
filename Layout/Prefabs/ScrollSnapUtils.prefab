@@ -52,12 +52,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fab715e736bcf4d5ea1394efdb92d1e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
+  _active: 1
   unityEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _migrated: 0
 --- !u!61 &6407006941043392521
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -110,12 +112,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fab715e736bcf4d5ea1394efdb92d1e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
+  _active: 1
   unityEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _migrated: 0
 --- !u!1 &7371673942170494644
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67fecd3cedc9041ba9f73c108667c1aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rectTransform: {fileID: 4630074141027989658}
   prevBtn: {fileID: 5060280391439657106}
   nextBtn: {fileID: 8478013640649439241}
   closeBtn: {fileID: 2380563596985724553}
@@ -211,12 +214,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fab715e736bcf4d5ea1394efdb92d1e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
+  _active: 1
   unityEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _migrated: 0
 --- !u!114 &6429215536699806057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,6 +352,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 33369595642141476, guid: 3debdbfe67bf74f7d80607d7136b89a9,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 114831698138452250, guid: 3debdbfe67bf74f7d80607d7136b89a9,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -397,17 +407,11 @@ PrefabInstance:
       propertyPath: m_textAlignment
       value: 513
       objectReference: {fileID: 0}
-    - target: {fileID: 33369595642141476, guid: 3debdbfe67bf74f7d80607d7136b89a9,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 114860081495304408, guid: 3debdbfe67bf74f7d80607d7136b89a9,
         type: 3}
       propertyPath: modifySettings
       value: 
-      objectReference: {fileID: 11400000, guid: 0accd5ddcc2c2471693b36d58403e35a,
-        type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3debdbfe67bf74f7d80607d7136b89a9, type: 3}
 --- !u!1 &306038105707882264 stripped
@@ -672,6 +676,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 33369595642141476, guid: 3debdbfe67bf74f7d80607d7136b89a9,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 114831698138452250, guid: 3debdbfe67bf74f7d80607d7136b89a9,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -722,17 +731,11 @@ PrefabInstance:
       propertyPath: m_textAlignment
       value: 513
       objectReference: {fileID: 0}
-    - target: {fileID: 33369595642141476, guid: 3debdbfe67bf74f7d80607d7136b89a9,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 114860081495304408, guid: 3debdbfe67bf74f7d80607d7136b89a9,
         type: 3}
       propertyPath: modifySettings
       value: 
-      objectReference: {fileID: 11400000, guid: 0accd5ddcc2c2471693b36d58403e35a,
-        type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3debdbfe67bf74f7d80607d7136b89a9, type: 3}
 --- !u!1 &3139824689574341381 stripped
@@ -863,6 +866,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 33369595642141476, guid: 3debdbfe67bf74f7d80607d7136b89a9,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 114831698138452250, guid: 3debdbfe67bf74f7d80607d7136b89a9,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -910,17 +918,11 @@ PrefabInstance:
       propertyPath: m_fontStyle
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 33369595642141476, guid: 3debdbfe67bf74f7d80607d7136b89a9,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 114860081495304408, guid: 3debdbfe67bf74f7d80607d7136b89a9,
         type: 3}
       propertyPath: modifySettings
       value: 
-      objectReference: {fileID: 11400000, guid: 0accd5ddcc2c2471693b36d58403e35a,
-        type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3debdbfe67bf74f7d80607d7136b89a9, type: 3}
 --- !u!1 &8296539947654168201 stripped

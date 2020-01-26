@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   registrationNotice: This object and its dependents will be registered whenever the
     RegisterDependencies tool is used.
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  _appSettings: {fileID: 0}
   logCallersOnRaise: 0
   logListenersOnRegister: 0
   logListenersOnRaise: 0
-  DeveloperDescription: Called whenever the end of a timeline has been reached, generally
+  _description: Called whenever the end of a timeline has been reached, generally
     via the DirectorUpdater
-  associatedVariables: []
+  _associatedVariables: []

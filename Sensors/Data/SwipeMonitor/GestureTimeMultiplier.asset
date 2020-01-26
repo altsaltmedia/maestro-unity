@@ -12,7 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48e52ce51209d4a699338a25976e8e00, type: 3}
   m_Name: GestureTimeMultiplier
   m_EditorClassIdentifier: 
-  DeveloperDescription: 
-  Value: 50
-  hasDefault: 1
-  DefaultValue: 50
+  registrationNotice: This object and its dependents will be registered whenever the
+    RegisterDependencies tool is used.
+  _appSettings: {fileID: 0}
+  logCallersOnRaise: 0
+  logListenersOnRegister: 0
+  logListenersOnRaise: 0
+  _description: 
+  _hasDefault: 0
+  _value: 50
+  _defaultValue: 0

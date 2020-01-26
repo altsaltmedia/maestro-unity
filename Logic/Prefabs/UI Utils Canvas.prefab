@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6704497036362696466}
   - component: {fileID: 7226308504936093372}
   m_Layer: 5
-  m_Name: UI Utils Canvas 1
+  m_Name: UI Utils Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -231,15 +231,15 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 4052495118720884074, guid: e48f2921793074c39aef932eb1796b2c,
-        type: 3}
-      propertyPath: m_HandleRect
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4052495117813072560, guid: e48f2921793074c39aef932eb1796b2c,
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052495118720884074, guid: e48f2921793074c39aef932eb1796b2c,
+        type: 3}
+      propertyPath: m_HandleRect
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e48f2921793074c39aef932eb1796b2c, type: 3}

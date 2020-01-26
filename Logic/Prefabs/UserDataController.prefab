@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92fc5b8f2b65a4ecdb030d56a24f704a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appSettings: {fileID: 0}
+  _appSettings: {fileID: 0}
   userData:
-  - scriptableObject: {fileID: 11400000, guid: 642bc1a393bae4e1c8825c3c45eecd79, type: 2}
+  - scriptableObject: {fileID: 0}
     dataType: 2
 --- !u!114 &3144316825054138897
 MonoBehaviour:
@@ -61,10 +61,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: db7806a5976574da4ad42f2d8b4b17ae, type: 2}
+  _complexEvent: {fileID: 11400000, guid: db7806a5976574da4ad42f2d8b4b17ae, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   DeveloperDescription: Takes in a scriptable object, compares it to the data stored
     on this object, and saves into PlayerPrefs if there's a match.
-  Response:
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3144316825054138898}
@@ -78,9 +82,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: AltSalt.ComplexUnityEventHandler, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _doNotRecord: 0
+  _migrated: 0
 --- !u!114 &97697348217540041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,14 +96,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a83e3ba43e2a84fbda5921021a7bab72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerOnStart: 1
-  eventExecutionType: 0
-  conditionResponseTrigger:
-    triggerType: 0
-    alwaysEvents:
-    - conditionEventTitle: 
-      appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
-      response:
+  _triggerOnStart: 1
+  _eventExecutionType: 0
+  _conditionResponseActionData:
+    _priority: 0
+    _parentObject: {fileID: 0}
+    _serializedPropertyPath: 
+    _triggerType: 0
+    _triggerOnStart: 0
+    _eventExecutionType: 0
+    _alwaysEvents:
+    - _conditionEventTitle: 
+      _parentObject: {fileID: 0}
+      _serializedPropertyPath: 
+      _response:
         m_PersistentCalls:
           m_Calls:
           - m_Target: {fileID: 3144316825054138898}
@@ -114,9 +123,12 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-    boolEvents: []
-    floatEvents: []
-    textFamilyEvents: []
-    layoutEvents: []
+      _action:
+        m_PersistentCalls:
+          m_Calls: []
+      _migrated: 0
+    _boolEvents: []
+    _floatEvents: []
+    _intEvents: []
+    _textFamilyEvents: []
+    _layoutEvents: []

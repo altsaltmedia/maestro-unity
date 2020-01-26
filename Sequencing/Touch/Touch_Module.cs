@@ -12,12 +12,6 @@ namespace AltSalt.Maestro.Sequencing.Touch
         public Touch_Controller touchController => _touchController;
 
         protected override Input_Controller inputController => touchController;
-
-        protected bool _isparentModuleNull;
         
-        protected virtual void Start()
-        {
-            _isparentModuleNull = touchController == null;
-        }
     }
 }

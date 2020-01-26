@@ -43,12 +43,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a83e3ba43e2a84fbda5921021a7bab72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerOnStart: 1
-  eventExecutionType: 0
-  conditionResponseTrigger:
-    triggerType: 0
-    alwaysEvents: []
-    boolEvents: []
-    floatEvents: []
-    textFamilyEvents: []
-    layoutEvents: []
+  _triggerOnStart: 1
+  _eventExecutionType: 0
+  _conditionResponseActionData:
+    _priority: 0
+    _parentObject: {fileID: 0}
+    _serializedPropertyPath: 
+    _triggerType: 0
+    _triggerOnStart: 0
+    _eventExecutionType: 0
+    _alwaysEvents: []
+    _boolEvents: []
+    _floatEvents: []
+    _intEvents: []
+    _textFamilyEvents: []
+    _layoutEvents: []

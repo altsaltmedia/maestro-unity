@@ -19,5 +19,6 @@ namespace AltSalt.Maestro
             get => _complexEventTriggerPackagers;
             set => _complexEventTriggerPackagers = value;
         }
+        
     }
 }

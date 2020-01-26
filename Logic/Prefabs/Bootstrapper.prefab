@@ -44,9 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9359daf87ff004982be07fd7f85b7010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appSettings: {fileID: 11400000, guid: 6db94d212c9ff43f1a397031198eef2f, type: 2}
+  _appSettings: {fileID: 0}
   initializeAppTrigger:
-    complexEvent: {fileID: 11400000, guid: 4b7e2330935e64c51a4fd2eb1240e7d8, type: 2}
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
   initialSceneName: Splash
   subsequentSceneName: TitlePage
   loadDebugMenu: 0
@@ -63,8 +65,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 515f9aaff455a4dbcabb74e4b0a3599c, type: 2}
-  Response:
+  _simpleSignal: {fileID: 0}
+  _simpleSignalReferences: []
+  _response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7261739760533291211}
@@ -78,6 +81,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  doNotRecord: 0
+  _action:
+    m_PersistentCalls:
+      m_Calls: []
+  _doNotRecord: 0
+  _migrated: 0

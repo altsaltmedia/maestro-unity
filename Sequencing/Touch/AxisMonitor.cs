@@ -12,12 +12,9 @@ using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro.Sequencing.Touch
 {
-
     [ExecuteInEditMode]
     public class AxisMonitor : Touch_Module
     {
-        private InputGroupKey inputGroupKey => touchController.rootConfig.inputGroupKey; 
-        
         public bool axisTransitionActive
         {
             get => touchController.appSettings.GetAxisTransitionActive(this.gameObject, inputGroupKey);

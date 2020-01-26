@@ -64,9 +64,11 @@ MonoBehaviour:
     vpRenderer: {fileID: 0}
     isHidden: 0
   isReversing:
-    UseConstant: 0
-    ConstantValue: 0
-    Variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
+    _isSystemReference: 0
+    _referenceName: 
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
 --- !u!114 &7697093155523303832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,9 +83,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetAttributeName: _Color
   _Color:
-    UseConstant: 0
-    ConstantValue: {r: 0, g: 0, b: 0, a: 0}
-    Variable: {fileID: 0}
+    _isSystemReference: 0
+    _referenceName: 
+    _useConstant: 0
+    _constantValue: {r: 0, g: 0, b: 0, a: 0}
+    _variable: {fileID: 0}
   meshRenderers:
   - {fileID: 7765384545820753366}
   - {fileID: 351002992639903556}
@@ -162,6 +166,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -233,6 +238,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialTime: 0
+  videoCompleteCallback:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
 --- !u!1 &8611712818853803513
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,6 +315,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -377,3 +387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialTime: 0
+  videoCompleteCallback:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}

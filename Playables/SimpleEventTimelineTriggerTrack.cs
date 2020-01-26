@@ -8,7 +8,7 @@ namespace AltSalt.Maestro
     [TrackClipType(typeof(SimpleEventTimelineTriggerClip))]
     public class SimpleEventTimelineTriggerTrack : TrackAsset
     {
-        public void StoreClipStartEndTime(GameObject go)
+        public void StoreClipProperties(GameObject go)
         {
             foreach (var clip in GetClips()) {
                 var myAsset = clip.asset as SimpleEventTimelineTriggerClip;
@@ -16,13 +16,14 @@ namespace AltSalt.Maestro
                     myAsset.startTime = clip.start;
                     myAsset.endTime = clip.end;
                     myAsset.trackAssetConfig = go.GetComponent<TrackAssetConfig>();
+                    myAsset.parentTrack = this;
                 }
             }
         }
 
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-            StoreClipStartEndTime(go);
+            StoreClipProperties(go);
             return ScriptPlayable<SimpleEventTimelineTriggerMixerBehaviour>.Create (graph, inputCount);
         }
         

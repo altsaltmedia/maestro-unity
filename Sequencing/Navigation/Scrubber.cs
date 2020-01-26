@@ -1,50 +1,45 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
 
-namespace AltSalt.Maestro.Sequencing.Navigate
+namespace AltSalt.Maestro.Sequencing.Navigation
 {
 
-    public class Scrubber : Input_Module
+    [RequireComponent(typeof(Slider))]
+    public class Scrubber : NavigationModule
     {
-        [Required]
-        [SerializeField]
-        private NavigationController _navigationController;
-
-        protected NavigationController navigationController => _navigationController;
-
-        protected override Input_Controller inputController => navigationController;
-
         [SerializeField]
         SimpleEventTrigger sequenceScrubbed;
 
-        Slider slider;
-
-        [SerializeField]
-        MasterSequence _masterSequence;
-
-        public List<Sequence_SyncTimeline> sequenceDirectors = new List<Sequence_SyncTimeline>();
-
-        [ReadOnly]
-        public List<double> sequenceThresholds = new List<double>();
-
-        double maxTime;
-        float previousValue;
-
-        // Use this for initialization
-        void Start()
+        private bool scubberActive
         {
-            slider = GetComponent<Slider>();
-            slider.maxValue = (float)_masterSequence.masterTotalTime;
+            get => navigationController.appSettings.GetScrubberActive(this.gameObject, inputGroupKey);
+            set => navigationController.appSettings.SetScrubberActive(this.gameObject, inputGroupKey, value);
+        }
+        
+        private Slider _slider;
+
+        private Slider slider
+        {
+            get => _slider;
+            set => _slider = value;
         }
 
-        public void SetScrubberTime()
+        // Use this for initialization
+        private void OnEnable()
         {
-            slider.value = (float)_masterSequence.elapsedTime;
+            slider = GetComponent<Slider>();
+        }
+
+        public void RefreshScrubber(float totalTime, float targetTime)
+        {
+            slider.maxValue = totalTime;
+            slider.value = targetTime;
         }
 
         private void OnMouseUpAsButton()
@@ -52,65 +47,64 @@ namespace AltSalt.Maestro.Sequencing.Navigate
             TriggerInputActionComplete();
         }
 
-        // TO DO - Clean this up.
         public void ScrubSequence(float newValue)
         {
-            _masterSequence.masterTime = newValue;
-            sequenceScrubbed.RaiseEvent(this.gameObject);
+            scubberActive = true;
+            navigationController.activeMasterSequence.elapsedTime = newValue;
             return;
 
-            Sequence activeSequence = _masterSequence.UpdateMasterTime(newValue);
-            for (int i = 0; i < _masterSequence.sequenceConfigs.Count; i++) {
-
-                int activeSequenceIndex = 0;
-
-                if (_masterSequence.sequenceConfigs[i] == activeSequence) {
-                    activeSequenceIndex = i;
-                }
-
-                if (newValue > previousValue) {
-                    for (int z = 0; z < sequenceDirectors.Count; z++) {
-                        if (z < activeSequenceIndex) {
-                            //sequenceDirectors[z].SetToEnd();
-                            sequenceDirectors[z].gameObject.SetActive(false);
-                            //if (sequenceDirectors[z].playableDirector.playableGraph.IsValid()) {
-                            //    sequenceDirectors[z].playableDirector.playableGraph.Destroy();
-                            //}
-                        } else if (z == activeSequenceIndex) {
-                            sequenceDirectors[z].gameObject.SetActive(true);
-                            sequenceDirectors[z].ForceEvaluate();
-                            //sequenceDirectors[z].gameObject.GetComponent<PlayableDirector>().enabled = true;
-                        } else if (z > activeSequenceIndex) {
-                            sequenceDirectors[z].gameObject.SetActive(false);
-                            //if (sequenceDirectors[z].playableDirector.playableGraph.IsValid()) {
-                            //    sequenceDirectors[z].playableDirector.playableGraph.Destroy();
-                            //}
-                            //sequenceDirectors[z].gameObject.GetComponent<PlayableDirector>().enabled = false;
-                        }
-                    }
-                } else if (newValue < previousValue) {
-                    for (int z = sequenceDirectors.Count - 1; z >= 0; z--) {
-                        if (z < activeSequenceIndex) {
-                            sequenceDirectors[z].gameObject.SetActive(false);
-                            //sequenceDirectors[z].gameObject.GetComponent<PlayableDirector>().enabled = false;
-                        } else if (z == activeSequenceIndex) {
-                            sequenceDirectors[z].gameObject.SetActive(true);
-                            sequenceDirectors[z].ForceEvaluate();
-                            //sequenceDirectors[z].gameObject.GetComponent<PlayableDirector>().enabled = true;
-                        } else if (z > activeSequenceIndex) {
-                            sequenceDirectors[z].gameObject.SetActive(false);
-                            //if (sequenceDirectors[z].playableDirector.playableGraph.IsValid()) {
-                            //    sequenceDirectors[z].playableDirector.playableGraph.Destroy();
-                            //}
-                            //sequenceDirectors[z].ForceEvaluate();
-                            //sequenceDirectors[z].SetToBeginning();
-                            //sequenceDirectors[z].gameObject.GetComponent<PlayableDirector>().enabled = false;
-                        }
-                    }
-                }
-            }
-
-            previousValue = newValue;
+//            Sequence activeSequence = _masterSequence.UpdateMasterTime(newValue);
+//            for (int i = 0; i < _masterSequence.sequenceConfigs.Count; i++) {
+//
+//                int activeSequenceIndex = 0;
+//
+//                if (_masterSequence.sequenceConfigs[i] == activeSequence) {
+//                    activeSequenceIndex = i;
+//                }
+//
+//                if (newValue > previousValue) {
+//                    for (int z = 0; z < sequenceDirectors.Count; z++) {
+//                        if (z < activeSequenceIndex) {
+//                            //sequenceDirectors[z].SetToEnd();
+//                            sequenceDirectors[z].gameObject.SetActive(false);
+//                            //if (sequenceDirectors[z].playableDirector.playableGraph.IsValid()) {
+//                            //    sequenceDirectors[z].playableDirector.playableGraph.Destroy();
+//                            //}
+//                        } else if (z == activeSequenceIndex) {
+//                            sequenceDirectors[z].gameObject.SetActive(true);
+//                            sequenceDirectors[z].ForceEvaluate();
+//                            //sequenceDirectors[z].gameObject.GetComponent<PlayableDirector>().enabled = true;
+//                        } else if (z > activeSequenceIndex) {
+//                            sequenceDirectors[z].gameObject.SetActive(false);
+//                            //if (sequenceDirectors[z].playableDirector.playableGraph.IsValid()) {
+//                            //    sequenceDirectors[z].playableDirector.playableGraph.Destroy();
+//                            //}
+//                            //sequenceDirectors[z].gameObject.GetComponent<PlayableDirector>().enabled = false;
+//                        }
+//                    }
+//                } else if (newValue < previousValue) {
+//                    for (int z = sequenceDirectors.Count - 1; z >= 0; z--) {
+//                        if (z < activeSequenceIndex) {
+//                            sequenceDirectors[z].gameObject.SetActive(false);
+//                            //sequenceDirectors[z].gameObject.GetComponent<PlayableDirector>().enabled = false;
+//                        } else if (z == activeSequenceIndex) {
+//                            sequenceDirectors[z].gameObject.SetActive(true);
+//                            sequenceDirectors[z].ForceEvaluate();
+//                            //sequenceDirectors[z].gameObject.GetComponent<PlayableDirector>().enabled = true;
+//                        } else if (z > activeSequenceIndex) {
+//                            sequenceDirectors[z].gameObject.SetActive(false);
+//                            //if (sequenceDirectors[z].playableDirector.playableGraph.IsValid()) {
+//                            //    sequenceDirectors[z].playableDirector.playableGraph.Destroy();
+//                            //}
+//                            //sequenceDirectors[z].ForceEvaluate();
+//                            //sequenceDirectors[z].SetToBeginning();
+//                            //sequenceDirectors[z].gameObject.GetComponent<PlayableDirector>().enabled = false;
+//                        }
+//                    }
+//                }
+//            }
+//
+//            previousValue = newValue;
 
             //sequenceList.MasterTime = newValue;
             //sequenceScrubbed.RaiseEvent(this.gameObject);

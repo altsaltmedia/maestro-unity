@@ -8,10 +8,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 {
     public class Autoplayer : Autorun_Module
     {
-        private UserDataKey userKey => autorunController.rootConfig.userKey;
-        
-        private InputGroupKey inputGroupKey => autorunController.rootConfig.inputGroupKey;
-        
         [SerializeField]
         private bool _autoplayEnabled = true;
 
@@ -39,7 +35,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         protected virtual void Update()
         {
-            if (_isparentModuleNull || autoplayEnabled == false) {
+            if (isParentControllerNull || autoplayEnabled == false) {
                 return;
             }
 
