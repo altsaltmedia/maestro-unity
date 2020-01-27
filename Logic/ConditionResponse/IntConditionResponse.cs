@@ -48,7 +48,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         {
             CheckPopulateReferences();
             
-            base.SyncConditionHeading(callingObject);
             if (intReference.GetVariable() == null && intReference.useConstant == false) {
                 conditionEventTitle = "Please populate an int reference.";
                 return;

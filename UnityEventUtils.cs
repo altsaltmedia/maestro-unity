@@ -8,6 +8,14 @@ namespace AltSalt.Maestro
 {
     public static class UnityEventUtils
     {
+        public static string[] GetUnityEventParameters(SerializedProperty eventList)
+        {
+            SerializedProperty unityEventCallList = eventList
+                .FindPropertyRelative($"m_PersistentCalls.m_Calls");
+
+            return ParseUnityEventParameters(unityEventCallList);
+        }
+        
         public static string[] GetUnityEventParameters(SerializedObject eventSourceObject, string eventListName)
         {
             SerializedProperty unityEventCallList = eventSourceObject

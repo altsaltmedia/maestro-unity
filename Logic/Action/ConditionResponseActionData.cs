@@ -10,6 +10,8 @@ using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine.Events;
+
 #endif
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
@@ -39,11 +41,12 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         }
 
         [Serializable]
-        private enum ConditionResponseTypes { Always, Bool, Float, Int, TextFamily, Layout }
+        private enum ConditionResponseTypes { Bool, Float, Int, TextFamily, Layout }
 
         [SerializeField]
         [OnValueChanged(nameof(DisplayClearDialogue))]
         [FormerlySerializedAs("triggerType")]
+        [HideIf(nameof(eventExecutionType), EventExecutionType.CheckAllConditionsValid)]
         private ConditionResponseTypes _triggerType;
 
         private ConditionResponseTypes triggerType => _triggerType;
@@ -74,9 +77,8 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         }
 
         [SerializeField]
-        [ShowIf(nameof(triggerType), ConditionResponseTypes.Always)]
+        [InfoBox("Get rid of this list; no longer needed", InfoMessageType.Warning)]
         [Title("Always Event List")]
-        [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("alwaysEvents")]
         [HideReferenceObjectPicker]
         [ListDrawerSettings(AlwaysAddDefaultValue = true)]
@@ -85,7 +87,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         private List<AlwaysConditionResponse> alwaysEvents => _alwaysEvents;
 
         [SerializeField]
-        [ShowIf(nameof(triggerType), ConditionResponseTypes.Bool)]
+        [ShowIf(nameof(ShowBoolEvents))]
         [Title("Bool Event List")]
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("boolEvents")]
@@ -96,7 +98,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         private List<BoolConditionResponse> boolEvents => _boolEvents;
 
         [SerializeField]
-        [ShowIf(nameof(triggerType), ConditionResponseTypes.Float)]
+        [ShowIf(nameof(ShowFloatEvents))]
         [Title("Float Event List")]
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("floatEvents")]
@@ -107,7 +109,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         private List<FloatConditionResponse> floatEvents => _floatEvents;
 
         [SerializeField]
-        [ShowIf(nameof(triggerType), ConditionResponseTypes.Int)]
+        [ShowIf(nameof(ShowIntEvents))]
         [Title("Int Event List")]
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("intEvents")]
@@ -118,7 +120,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         private List<IntConditionResponse> intEvents => _intEvents;
 
         [SerializeField]
-        [ShowIf(nameof(triggerType), ConditionResponseTypes.TextFamily)]
+        [ShowIf(nameof(ShowTextFamilyEvents))]
         [Title("Text Family Event List")]
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("textFamilyEvents")]
@@ -129,7 +131,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         private List<TextFamilyConditionResponse> textFamilyEvents => _textFamilyEvents;
 
         [SerializeField]
-        [ShowIf(nameof(triggerType), ConditionResponseTypes.Layout)]
+        [ShowIf(nameof(ShowLayoutEvents))]
         [Title("Layout Event List")]
         [ValidateInput(nameof(IsPopulated))]
         [FormerlySerializedAs("layoutEvents")]
@@ -139,7 +141,44 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         private List<LayoutConditionResponse> layoutEvents => _layoutEvents;
 
+        [SerializeField]
+        [PropertyOrder(9)]
+        [ValidateInput(nameof(IsPopulated))]
+        [HideReferenceObjectPicker]
+        [ShowIf(nameof(eventExecutionType), EventExecutionType.CheckAllConditionsValid)]
+        protected GameObjectGenericAction _action = new GameObjectGenericAction();
+
+        public GameObjectGenericAction action
+        {
+            get => _action;
+            set => _action = value;
+        }
+#if UNITY_EDITOR        
+        private string _genericActionDescription;
+
+        private string genericActionDescription
+        {
+            get => _genericActionDescription;
+            set => _genericActionDescription = value;
+        }
+
+        
+        private List<UnityEventData> _cachedEventData = new List<UnityEventData>();
+
+        private List<UnityEventData> cachedEventData
+        {
+            get
+            {
+                if (_cachedEventData == null) {
+                    _cachedEventData = new List<UnityEventData>();
+                }
+                return _cachedEventData;
+            }
+            set => _cachedEventData = value;
+        }
+
         [PropertySpace]
+#endif
 
         public ConditionResponseActionData(Object parentObject, string serializedPropertyPath, int priority) : base(priority)
         {
@@ -194,30 +233,41 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         
         public override void SyncEditorActionHeadings()
         {
+            if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+
+                actionDescription = "";
+                actionDescription += GetHeaderConditionDescription(boolEvents.ConvertAll(x => (ConditionResponseBase)x));
+                actionDescription += GetHeaderConditionDescription(floatEvents.ConvertAll(x => (ConditionResponseBase)x));
+                actionDescription += GetHeaderConditionDescription(intEvents.ConvertAll(x => (ConditionResponseBase)x));
+                actionDescription += GetHeaderConditionDescription(textFamilyEvents.ConvertAll(x => (ConditionResponseBase)x));
+                actionDescription += GetHeaderConditionDescription(layoutEvents.ConvertAll(x => (ConditionResponseBase)x));
+                RefreshGenericActionDescription();
+                actionDescription += "    ";
+                actionDescription += genericActionDescription.Replace("\n", "\n    ");
+                
+                return;
+            }
+            
             switch (triggerType) {
-                
-                case ConditionResponseTypes.Always :
-                    actionDescription = GetHeaderConditionDescription(alwaysEvents.ConvertAll(x => (ConditionResponseBase)x));
-                    break;
-                
+
                 case ConditionResponseTypes.Bool :
-                    actionDescription = GetHeaderConditionDescription(boolEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    actionDescription = GetHeaderConditionDescriptionWithActions(boolEvents.ConvertAll(x => (ConditionResponseBase)x));
                     break;
                 
                 case ConditionResponseTypes.Float :
-                    actionDescription = GetHeaderConditionDescription(floatEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    actionDescription = GetHeaderConditionDescriptionWithActions(floatEvents.ConvertAll(x => (ConditionResponseBase)x));
                     break;
                 
                 case ConditionResponseTypes.Int :
-                    actionDescription = GetHeaderConditionDescription(intEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    actionDescription = GetHeaderConditionDescriptionWithActions(intEvents.ConvertAll(x => (ConditionResponseBase)x));
                     break;
                 
                 case ConditionResponseTypes.TextFamily :
-                    actionDescription = GetHeaderConditionDescription(textFamilyEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    actionDescription = GetHeaderConditionDescriptionWithActions(textFamilyEvents.ConvertAll(x => (ConditionResponseBase)x));
                     break;
                 
                 case ConditionResponseTypes.Layout :
-                    actionDescription = GetHeaderConditionDescription(layoutEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    actionDescription = GetHeaderConditionDescriptionWithActions(layoutEvents.ConvertAll(x => (ConditionResponseBase)x));
                     break;
                 
             }
@@ -228,8 +278,37 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             string actionDescription = "";
             
             for (int i = 0; i < conditionResponseList.Count; i++) {
+                actionDescription += conditionResponseList[i].conditionEventTitle + "\n";
+            }
+
+            return actionDescription;
+        }
+
+        private void RefreshGenericActionDescription()
+        {
+            var serializedObject = new SerializedObject(parentObject);
+            SerializedProperty eventList =
+                ReferenceBase.FindReferenceProperty(serializedObject, serializedPropertyPath.Split('.'), nameof(_action));
+            string[] parameterNames = UnityEventUtils.GetUnityEventParameters(eventList);
+            if (UnityEventUtils.UnityEventValuesChanged(action, parameterNames, cachedEventData, out var eventData)) {
+                if (eventData.Count > 0) {
+                    cachedEventData = eventData;
+                    genericActionDescription = UnityEventUtils.ParseUnityEventDescription(eventData);
+                }
+            }
+
+            if (action.GetPersistentEventCount() < 1) {
+                genericActionDescription = "No actions defined";
+            }
+        }
+        
+        private static string GetHeaderConditionDescriptionWithActions(List<ConditionResponseBase> conditionResponseList)
+        {
+            string actionDescription = "";
+            
+            for (int i = 0; i < conditionResponseList.Count; i++) {
                 actionDescription += conditionResponseList[i].conditionEventTitle + "\n    ";
-                actionDescription += conditionResponseList[i].eventDescription.Replace("\n", "\n" + "    ");;
+                actionDescription += conditionResponseList[i].eventDescription.Replace("\n", "\n    ");;
                 if (i < conditionResponseList.Count - 1) {
                     actionDescription += "\n\n";
                 }
@@ -290,20 +369,19 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             if (eventExecutionType == EventExecutionType.ExecuteAll) {
                 TriggerAllResponses(callingObject, triggerOnStart);
             }
-            else {
+            else if(eventExecutionType == EventExecutionType.CancelAfterFirstSuccess) {
                 TriggerUntilFirstSuccess(callingObject, triggerOnStart);
+            }
+            else {
+                if (AllConditionsValid(callingObject, triggerOnStart) == true) {
+                    action.Invoke(callingObject);
+                }
             }
         }
 
         public void TriggerAllResponses(GameObject caller, bool triggerOnStart)
         {
             switch (triggerType) {
-
-                case ConditionResponseTypes.Always:
-                    for (int i = 0; i < alwaysEvents.Count; i++) {
-                        alwaysEvents[i].TriggerResponse(caller, triggerOnStart);
-                    }
-                    break;
 
                 case ConditionResponseTypes.Bool:
                     for (int i = 0; i < boolEvents.Count; i++) {
@@ -340,15 +418,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         public void TriggerUntilFirstSuccess(GameObject caller, bool triggerOnStart)
         {
             switch (triggerType) {
-
-                case ConditionResponseTypes.Always:
-                    for (int i = 0; i < alwaysEvents.Count; i++) {
-                        if (alwaysEvents[i].CheckCondition(caller) == true) {
-                            alwaysEvents[i].TriggerResponse(caller, triggerOnStart);
-                            return;
-                        }
-                    }
-                    break;
 
                 case ConditionResponseTypes.Bool:
                     for (int i = 0; i < boolEvents.Count; i++) {
@@ -396,17 +465,92 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                     break;
             }
         }
+        
+        public bool AllConditionsValid(GameObject caller, bool triggerOnStart)
+        {
+
+            for (int i = 0; i < alwaysEvents.Count; i++) {
+                if (alwaysEvents[i].CheckCondition(caller) == false) {
+                    return false;
+                }
+            }
+
+            for (int i = 0; i < boolEvents.Count; i++) {
+                if (boolEvents[i].CheckCondition(caller) == false) {
+                    boolEvents[i].TriggerResponse(caller, triggerOnStart);
+                    return false;
+                }
+            }
+
+
+            for (int i = 0; i < floatEvents.Count; i++) {
+                if (floatEvents[i].CheckCondition(caller) == false) {
+                    floatEvents[i].TriggerResponse(caller, triggerOnStart);
+                    return false;
+                }
+            }
+
+
+            for (int i = 0; i < intEvents.Count; i++) {
+                if (intEvents[i].CheckCondition(caller) == false) {
+                    intEvents[i].TriggerResponse(caller, triggerOnStart);
+                    return false;
+                }
+            }
+
+
+            for (int i = 0; i < textFamilyEvents.Count; i++) {
+                if (textFamilyEvents[i].CheckCondition(caller) == false) {
+                    textFamilyEvents[i].TriggerResponse(caller, triggerOnStart);
+                    return false;
+                }
+            }
+
+
+            for (int i = 0; i < layoutEvents.Count; i++) {
+                if (layoutEvents[i].CheckCondition(caller) == false) {
+                    layoutEvents[i].TriggerResponse(caller, triggerOnStart);
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         public void CallSyncConditionHeadings(UnityEngine.Object parentObject)
         {
+            if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                int currentIndex = 0;
+                for (int i = 0; i < boolEvents.Count; i++) {
+                    boolEvents[i].prefix = GetPrefix(eventExecutionType, currentIndex, boolEvents.Count);
+                    boolEvents[i].SyncConditionHeading(parentObject);
+                    currentIndex++;
+                }
+                for (int i = 0; i < floatEvents.Count; i++) {
+                    floatEvents[i].prefix = GetPrefix(eventExecutionType, currentIndex, floatEvents.Count);
+                    floatEvents[i].SyncConditionHeading(parentObject);
+                    currentIndex++;
+                }
+                for (int i = 0; i < intEvents.Count; i++) {
+                    intEvents[i].prefix = GetPrefix(eventExecutionType, currentIndex, intEvents.Count);
+                    intEvents[i].SyncConditionHeading(parentObject);
+                    currentIndex++;
+                }
+                for (int i = 0; i < textFamilyEvents.Count; i++) {
+                    textFamilyEvents[i].prefix = GetPrefix(eventExecutionType, currentIndex, textFamilyEvents.Count);
+                    textFamilyEvents[i].SyncConditionHeading(parentObject);
+                    currentIndex++;
+                }
+                for (int i = 0; i < layoutEvents.Count; i++) {
+                    layoutEvents[i].prefix = GetPrefix(eventExecutionType, currentIndex, layoutEvents.Count);
+                    layoutEvents[i].SyncConditionHeading(parentObject);
+                    currentIndex++;
+                }
+                
+                return;
+            }
+            
             switch (triggerType) {
-
-                case ConditionResponseTypes.Always:
-                    for (int i = 0; i < alwaysEvents.Count; i++) {
-                        alwaysEvents[i].prefix = GetPrefix(eventExecutionType, i, alwaysEvents.Count);
-                        alwaysEvents[i].SyncConditionHeading(parentObject);
-                    }
-                    break;
 
                 case ConditionResponseTypes.Bool:
                     for (int i = 0; i < boolEvents.Count; i++) {
@@ -442,25 +586,40 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                         layoutEvents[i].SyncConditionHeading(parentObject);
                     }
                     break;
+
             }
         }
         
         public void SyncUnityEventHeadings(SerializedProperty unityEventParentProperty)
         {
-            switch (triggerType) {
+            if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                
+                for (int i = 0; i < boolEvents.Count; i++) {
+                    boolEvents[i].hideGenericAction = true;
+                }
+                for (int i = 0; i < floatEvents.Count; i++) {
+                    floatEvents[i].hideGenericAction = true;
+                }
+                for (int i = 0; i < intEvents.Count; i++) {
+                    intEvents[i].hideGenericAction = true;
+                }
+                for (int i = 0; i < textFamilyEvents.Count; i++) {
+                    textFamilyEvents[i].hideGenericAction = true;
+                }
+                for (int i = 0; i < layoutEvents.Count; i++) {
+                    layoutEvents[i].hideGenericAction = true;
+                }
 
-                case ConditionResponseTypes.Always:
-                    for (int i = 0; i < alwaysEvents.Count; i++) {
-                        SerializedProperty serializedConditionResponse = unityEventParentProperty
-                            .FindPropertyRelative(nameof(_alwaysEvents)).GetArrayElementAtIndex(i);
-                        alwaysEvents[i].SyncUnityEventHeading(serializedConditionResponse);
-                    }
-                    break;
+                return;
+            }
+            
+            switch (triggerType) {
 
                 case ConditionResponseTypes.Bool:
                     for (int i = 0; i < boolEvents.Count; i++) {
                         SerializedProperty serializedConditionResponse = unityEventParentProperty
                             .FindPropertyRelative(nameof(_boolEvents)).GetArrayElementAtIndex(i);
+                        boolEvents[i].hideGenericAction = false;
                         boolEvents[i].SyncUnityEventHeading(serializedConditionResponse);
                     }
                     break;
@@ -469,6 +628,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                     for (int i = 0; i < floatEvents.Count; i++) {
                         SerializedProperty serializedConditionResponse = unityEventParentProperty
                             .FindPropertyRelative(nameof(_floatEvents)).GetArrayElementAtIndex(i);
+                        floatEvents[i].hideGenericAction = false;
                         floatEvents[i].SyncUnityEventHeading(serializedConditionResponse);
                     }
                     break;
@@ -477,6 +637,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                     for (int i = 0; i < intEvents.Count; i++) {
                         SerializedProperty serializedConditionResponse = unityEventParentProperty
                             .FindPropertyRelative(nameof(_intEvents)).GetArrayElementAtIndex(i);
+                        intEvents[i].hideGenericAction = false;
                         intEvents[i].SyncUnityEventHeading(serializedConditionResponse);
                     }
                     break;
@@ -485,6 +646,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                     for (int i = 0; i < textFamilyEvents.Count; i++) {
                         SerializedProperty serializedConditionResponse = unityEventParentProperty
                             .FindPropertyRelative(nameof(_textFamilyEvents)).GetArrayElementAtIndex(i);
+                        textFamilyEvents[i].hideGenericAction = false;
                         textFamilyEvents[i].SyncUnityEventHeading(serializedConditionResponse);
                     }
                     break;
@@ -493,6 +655,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                     for (int i = 0; i < layoutEvents.Count; i++) {
                         SerializedProperty serializedConditionResponse = unityEventParentProperty
                             .FindPropertyRelative(nameof(_layoutEvents)).GetArrayElementAtIndex(i);
+                        layoutEvents[i].hideGenericAction = false;
                         layoutEvents[i].SyncUnityEventHeading(serializedConditionResponse);
                     }
                     break;
@@ -508,12 +671,17 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             if (currentIndex == 0) {
                 return "IF";
             }
-            
-            if (currentIndex > 0 && currentIndex < listCount - 1) {
-                return "ELSE IF";
+
+            if (eventExecutionType == EventExecutionType.CancelAfterFirstSuccess) {
+                
+                if (currentIndex > 0 && currentIndex < listCount - 1) {
+                    return "ELSE IF";
+                }
+                
+                return "ELSE";
             }
 
-            return "ELSE";
+            return "AND";
         }
 
 #if UNITY_EDITOR
@@ -529,10 +697,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void ClearHiddenValues()
         {
-            if(triggerType != ConditionResponseTypes.Always) {
-                alwaysEvents.Clear();
-            }
-
             if (triggerType != ConditionResponseTypes.Bool) {
                 boolEvents.Clear();
             }
@@ -554,27 +718,12 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
         }
 
-        private bool IsPopulated(List<AlwaysConditionResponse> attribute)
-        {
-            if(triggerType == ConditionResponseTypes.Always) {
-                if(attribute.Count > 0) {
-                    bool isValid = true;
-                    for(int i=0; i<attribute.Count; i++) {
-                        if (Utils.IsPopulated(attribute[i].response) == false) {
-                            isValid = false;
-                            break;
-                        }
-                    }
-                    return isValid;
-                }
-                return false;
-            }
-
-            return true;
-        }
-
         private bool IsPopulated(List<BoolConditionResponse> attribute)
         {
+            if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                return true;
+            }
+            
             if (triggerType == ConditionResponseTypes.Bool) {
                 if (attribute.Count > 0) {
                     bool isValid = true;
@@ -604,6 +753,10 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         private bool IsPopulated(List<FloatConditionResponse> attribute)
         {
+            if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                return true;
+            }
+            
             if (triggerType == ConditionResponseTypes.Float) {
                 if (attribute.Count > 0) {
                     bool isValid = true;
@@ -633,7 +786,11 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         private bool IsPopulated(List<IntConditionResponse> attribute)
         {
-            if (triggerType == ConditionResponseTypes.Float) {
+            if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                return true;
+            }
+            
+            if (triggerType == ConditionResponseTypes.Int) {
                 if (attribute.Count > 0) {
                     bool isValid = true;
                     for (int i = 0; i < attribute.Count; i++) {
@@ -662,6 +819,10 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         private bool IsPopulated(List<TextFamilyConditionResponse> attribute)
         {
+            if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                return true;
+            }
+            
             if (triggerType == ConditionResponseTypes.TextFamily) {
                 if (attribute.Count > 0) {
                     bool isValid = true;
@@ -691,6 +852,10 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         private bool IsPopulated(List<LayoutConditionResponse> attribute)
         {
+            if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                return true;
+            }
+            
             if (triggerType == ConditionResponseTypes.Layout) {
                 if (attribute.Count > 0) {
                     bool isValid = true;
@@ -715,6 +880,61 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                 return false;
             }
             return true;
+        }
+
+        private bool ShowBoolEvents()
+        {
+            if (triggerType == ConditionResponseTypes.Bool ||
+                eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                return true;
+            }
+
+            return false;
+        }
+        
+        private bool ShowFloatEvents()
+        {
+            if (triggerType == ConditionResponseTypes.Float ||
+                eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                return true;
+            }
+
+            return false;
+        }
+        
+        private bool ShowIntEvents()
+        {
+            if (triggerType == ConditionResponseTypes.Int ||
+                eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                return true;
+            }
+
+            return false;
+        }
+        
+        private bool ShowTextFamilyEvents()
+        {
+            if (triggerType == ConditionResponseTypes.TextFamily ||
+                eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                return true;
+            }
+
+            return false;
+        }
+        
+        private bool ShowLayoutEvents()
+        {
+            if (triggerType == ConditionResponseTypes.Layout ||
+                eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+                return true;
+            }
+
+            return false;
+        }
+        
+        protected static bool IsPopulated(GameObjectGenericAction attribute)
+        {
+            return Utils.IsPopulated(attribute);
         }
 
 #endif

@@ -6,8 +6,6 @@ using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
 {
-    public enum EventExecutionType { ExecuteAll, CancelAfterFirstSuccess }
-    
     [ExecuteInEditMode]
     public class ConditionResponseActionBehaviour : MonoBehaviour
     {

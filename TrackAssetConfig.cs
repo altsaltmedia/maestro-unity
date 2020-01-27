@@ -2,6 +2,7 @@ using System;
 using AltSalt.Maestro.Sequencing;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor;
 
 namespace AltSalt.Maestro
 {
@@ -82,16 +83,29 @@ namespace AltSalt.Maestro
                 appSettings = Utils.GetAppSettings();
             }
 
-            _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
-
-            if (inputGroupKey == null) {
-                InputGroupKey mainInputKey = Utils.GetCustomKey(nameof(appSettings.mainInput).Capitalize()) as InputGroupKey;
-                if (mainInputKey != null) {
-                    _inputGroupKey.SetVariable(mainInputKey);
-                }
+            // If part of a sequence config, we'll get the group key from there.
+            // Otherwise, we need to look for one.
+            if (sequence == null) {
+                PopulateGroupKey();
             }
         }
 
+        private void PopulateGroupKey()
+        {
+            // First, check to see if we can populate the variable already using an already existing reference name
+            _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
+            
+            // If not, that means the reference name hasn't been populated,
+            // so we'll set a default and attempt to repopulate again
+            if (inputGroupKey == null) {
+                InputGroupKey mainInputKey = Utils.GetCustomKey(nameof(appSettings.mainInput).Capitalize()) as InputGroupKey;
+                if (mainInputKey != null) {
+                    _inputGroupKey.referenceName = appSettings.mainInput.name; 
+                    _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
+                }
+            }
+        }
+        
         private bool SequencePopulated()
         {
             if (sequence != null) {

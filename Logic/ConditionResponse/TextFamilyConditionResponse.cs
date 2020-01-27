@@ -47,7 +47,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         {
             CheckPopulateReferences();
             
-            base.SyncConditionHeading(callingObject);
             if (textFamilyReference == null) {
                 conditionEventTitle = "Please populate a text family as your condition.";
                 return;

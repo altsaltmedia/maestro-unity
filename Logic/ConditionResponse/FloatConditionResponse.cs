@@ -57,7 +57,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         {
             CheckPopulateReferences();
             
-            base.SyncConditionHeading(callingObject);
             if (floatReference.GetVariable() == null && floatReference.useConstant == false) {
                 conditionEventTitle = "Please populate a float reference.";
                 return;

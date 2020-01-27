@@ -20,7 +20,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse {
 #if UNITY_EDITOR
         public override void SyncConditionHeading(Object callingObject)
         {
-            base.SyncConditionHeading(callingObject);
             conditionEventTitle = "ALWAYS";
         }
 #endif        

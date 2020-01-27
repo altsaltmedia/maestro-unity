@@ -54,9 +54,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         public override void SyncConditionHeading(Object callingObject)
         {
             CheckPopulateReferences();
-            
-            base.SyncConditionHeading(callingObject);
-            
+
             if(boolReference.GetVariable() == null && boolReference.useConstant == false) {
                 conditionEventTitle = "Please populate a bool reference.";
                 return;

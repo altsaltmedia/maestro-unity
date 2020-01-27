@@ -277,10 +277,10 @@ namespace AltSalt.Maestro
         [BoxGroup("Scriptable Object Packager")]
         private List<ScriptableObjectReference> _scriptableObjectValueReferences = new List<ScriptableObjectReference>();
 
-        public List<ScriptableObject> scriptableObjectValues
+        public List<ScriptableObjectReference> scriptableObjectValues
         {
-            get => _scriptableObjectValuesOld;
-            set => _scriptableObjectValuesOld = value;
+            get => _scriptableObjectValueReferences;
+            set => _scriptableObjectValueReferences = value;
         }
 
         public void PopulateReferences(UnityEngine.Object parentObject, string serializedPropertyPath)
@@ -482,13 +482,13 @@ namespace AltSalt.Maestro
 
             if (stringValues.Count == 1) {
                 if (customStringKey == true && stringKeys.Count >= 1) {
-                    complexPayload.Set(stringKeys[0], stringValues[0]);
+                    complexPayload.Set(stringKeys[0].GetVariable(), stringValues[0].GetValue());
                 } else {
-                    complexPayload.Set(DataType.stringType, stringValues[0]);
+                    complexPayload.Set(DataType.stringType, stringValues[0].GetValue());
                 }
             } else {
                 for (int i = 0; i < stringValues.Count; i++) {
-                    complexPayload.Set(stringKeys[i], stringValues[i]);
+                    complexPayload.Set(stringKeys[i].GetVariable(), stringValues[i].GetValue());
                 }
             }
             return complexPayload;
@@ -503,13 +503,13 @@ namespace AltSalt.Maestro
 
             if (floatValues.Count == 1) {
                 if (customFloatKey == true && floatKeys.Count >= 1) {
-                    complexPayload.Set(floatKeys[0], floatValues[0]);
+                    complexPayload.Set(floatKeys[0].GetVariable(), floatValues[0].GetValue());
                 } else {
-                    complexPayload.Set(DataType.floatType, floatValues[0]);
+                    complexPayload.Set(DataType.floatType, floatValues[0].GetValue());
                 }
             } else {
                 for (int i = 0; i < floatValues.Count; i++) {
-                    complexPayload.Set(floatKeys[i], floatValues[i]);
+                    complexPayload.Set(floatKeys[i].GetVariable(), floatValues[i].GetValue());
                 }
             }
             return complexPayload;
@@ -524,13 +524,13 @@ namespace AltSalt.Maestro
 
             if (boolValues.Count == 1) {
                 if (customBoolKey == true && boolKeys.Count >= 1) {
-                    complexPayload.Set(boolKeys[0], boolValues[0]);
+                    complexPayload.Set(boolKeys[0].GetVariable(), boolValues[0].GetValue());
                 } else {
-                    complexPayload.Set(DataType.boolType, boolValues[0]);
+                    complexPayload.Set(DataType.boolType, boolValues[0].GetValue());
                 }
             } else {
                 for (int i = 0; i < boolValues.Count; i++) {
-                    complexPayload.Set(boolKeys[i], boolValues[i]);
+                    complexPayload.Set(boolKeys[i].GetVariable(), boolValues[i].GetValue());
                 }
             }
             return complexPayload;
@@ -545,13 +545,13 @@ namespace AltSalt.Maestro
 
             if (scriptableObjectValues.Count == 1) {
                 if (customScriptableObjectKey == true && scriptableObjectKeys.Count >= 1) {
-                    complexPayload.Set(scriptableObjectKeys[0], scriptableObjectValues[0]);
+                    complexPayload.Set(scriptableObjectKeys[0].GetVariable(), scriptableObjectValues[0].GetVariable());
                 } else {
-                    complexPayload.Set(DataType.scriptableObjectType, scriptableObjectValues[0]);
+                    complexPayload.Set(DataType.scriptableObjectType, scriptableObjectValues[0].GetVariable());
                 }
             } else {
                 for (int i = 0; i < scriptableObjectValues.Count; i++) {
-                    complexPayload.Set(scriptableObjectKeys[i], scriptableObjectValues[i]);
+                    complexPayload.Set(scriptableObjectKeys[i].GetVariable(), scriptableObjectValues[i].GetVariable());
                 }
             }
             return complexPayload;

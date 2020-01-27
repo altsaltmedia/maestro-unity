@@ -36,8 +36,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         {
             CheckPopulateReferences();
             
-            base.SyncConditionHeading(callingObject);
-            
             if (layoutReference == null) {
                 conditionEventTitle = "Please populate a layout as your condition.";
                 return;

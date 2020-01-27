@@ -13,6 +13,7 @@ namespace AltSalt.Maestro
 
         public override Playable CreatePlayable (PlayableGraph graph, GameObject owner)
         {
+
 #if UNITY_EDITOR
             string simpleEventTriggersListPath = $"{nameof(template)}._{nameof(template.simpleEventTriggers)}";
             

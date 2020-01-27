@@ -104,6 +104,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [PropertyOrder(9)]
         [ValidateInput(nameof(IsPopulated))]
         [HideReferenceObjectPicker]
+        [HideIf(nameof(hideGenericAction))]
         protected GameObjectGenericAction _action = new GameObjectGenericAction();
 
         public GameObjectGenericAction action
@@ -111,7 +112,15 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             get => _action;
             set => _action = value;
         }
-        
+
+        private bool _hideGenericAction;
+
+        public bool hideGenericAction
+        {
+            get => _hideGenericAction;
+            set => _hideGenericAction = value;
+        }
+
         [SerializeField]
         private bool _migrated = false;
 
@@ -144,10 +153,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             set => _cachedEventData = value;
         }
 
-        public virtual void SyncConditionHeading(Object callingObject)
-        {
-            
-        }
+        public abstract void SyncConditionHeading(Object callingObject);
 
         public void SyncUnityEventHeading(SerializedProperty serializedConditionResponse)
         {
