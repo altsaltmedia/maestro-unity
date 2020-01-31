@@ -40,44 +40,6 @@ namespace AltSalt.Maestro.Logic.Action
 
         public AxisActionData(int priority) : base(priority) { }
 
-        public override void SyncEditorActionHeadings()
-        {
-            if (string.IsNullOrEmpty(axisReference.referenceName) == false) {
-                actionDescription = axisReference.referenceName + $" > {GetSetValueDescription()}";
-            }
-            else {
-                actionDescription = "Inactive - please populate a axis reference.";
-            }
-        }
-
-        private string GetSetValueDescription()
-        {
-            string setValueDescription = $"{axisActionType}";
-
-            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
-                return setValueDescription += $" (No target value populated)";
-            }
-
-            if (targetValue.useConstant == true) {
-                return setValueDescription += $" ({targetValue.GetValue()})";
-            }
-            
-            return setValueDescription += $" ({targetValue.GetVariable().name})";
-        }
-        
-        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
-        {
-            string referencePath = serializedPropertyPath;
-            referencePath += $".{nameof(_axisReference)}";
-            _axisReference.PopulateVariable(parentObject, referencePath.Split('.'));
-
-            string valuePath = serializedPropertyPath;
-            valuePath += $".{nameof(_targetValue)}";
-            _targetValue.PopulateVariable(parentObject, valuePath.Split('.'));
-            
-            return this;
-        }
-
         public override void PerformAction(GameObject callingObject)
         {
             if (CanPerformAction(callingObject) == false) {
@@ -109,5 +71,46 @@ namespace AltSalt.Maestro.Logic.Action
 
             return true;
         }
+        
+#if UNITY_EDITOR
+        public override void SyncEditorActionHeadings()
+        {
+            if (string.IsNullOrEmpty(axisReference.referenceName) == false) {
+                actionDescription = axisReference.referenceName + $" > {GetSetValueDescription()}";
+            }
+            else {
+                actionDescription = "Inactive - please populate a axis reference.";
+            }
+        }
+
+        private string GetSetValueDescription()
+        {
+            string setValueDescription = $"{axisActionType}";
+
+            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
+                return setValueDescription += $" (No target value populated)";
+            }
+
+            if (targetValue.useConstant == true) {
+                return setValueDescription += $" ({targetValue.GetValue()})";
+            }
+            
+            return setValueDescription += $" ({targetValue.GetVariable().name})";
+        }
+        
+        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
+        {
+            string referencePath = serializedPropertyPath;
+            referencePath += $".{nameof(_axisReference)}";
+            _axisReference.PopulateVariable(parentObject, referencePath);
+
+            string valuePath = serializedPropertyPath;
+            valuePath += $".{nameof(_targetValue)}";
+            _targetValue.PopulateVariable(parentObject, valuePath);
+            
+            return this;
+        }        
+#endif
+        
     }
 }

@@ -1,18 +1,18 @@
 using System;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public class ScriptableObjectReference : ReferenceBase
+    public class AppSettingsReference : ReferenceBase
     {
         [SerializeField]
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
-        private ScriptableObject _variable;
+        private AppSettings _variable;
 
         public override ScriptableObject GetVariable()
         {
@@ -20,21 +20,25 @@ namespace AltSalt.Maestro
             return _variable;
         }
         
-        public void SetVariable(ScriptableObject value)
-        {
-            _variable = value;
-        }
-        
-        
-        public ScriptableObjectReference()
-        { }
-
-        public ScriptableObjectReference(ScriptableObject value)
+        public void SetVariable(AppSettings value)
         {
             _variable = value;
         }
         
 #if UNITY_EDITOR
+        
+        public override ReferenceBase PopulateVariable(UnityEngine.Object parentObject, string serializedPropertyPath)
+        {
+            var serializedObject = new SerializedObject(parentObject);
+            var referenceNameProperty =
+                Utils.FindReferenceProperty(serializedObject, $"{serializedPropertyPath}.{nameof(_referenceName)}");
+            referenceNameProperty.stringValue = nameof(AppSettings);
+            serializedObject.ApplyModifiedProperties();
+            serializedObject.Update();
+            
+            return base.PopulateVariable(parentObject, serializedPropertyPath);
+        }
+        
         protected override bool ShouldPopulateReference()
         {
             if (_variable == null) {

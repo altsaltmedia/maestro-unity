@@ -42,49 +42,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         public FloatConditionResponse(UnityEngine.Object parentObject,
             string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
 
-        public override ConditionResponseBase PopulateReferences()
-        {
-            string referencePath = serializedPropertyPath + $".{nameof(_floatReference)}";
-            _floatReference.PopulateVariable(parentObject, referencePath.Split('.'));
-            
-            string conditionPath = serializedPropertyPath + $".{nameof(_floatConditionVar)}";
-            _floatConditionVar.PopulateVariable(parentObject, conditionPath.Split('.'));
-            
-            return this;
-        }
-        
-        public override void SyncConditionHeading(Object callingObject)
-        {
-            CheckPopulateReferences();
-            
-            if (floatReference.GetVariable() == null && floatReference.useConstant == false) {
-                conditionEventTitle = "Please populate a float reference.";
-                return;
-            }
-
-            if (floatConditionVar.GetVariable() == null && floatConditionVar.useConstant == false) {
-                conditionEventTitle = "Please populate a comparison condition.";
-                return;
-            }
-
-            string newTitle;
-            
-            if (floatReference.useConstant == true) {
-                newTitle = $"{floatReference.GetValue()}  is {operation} ";
-            } else {
-                newTitle = $"{floatReference.GetVariable().name} is {operation} ";
-            }
-
-            if (floatConditionVar.useConstant == true) {
-                newTitle += $"{floatConditionVar.GetValue()}";
-            }
-            else {
-                newTitle += $"{floatConditionVar.GetVariable().name}";
-            }
-
-            conditionEventTitle = newTitle;
-        }
-
         public override bool CheckCondition(Object callingObject)
         {
             CheckPopulateReferences();
@@ -129,5 +86,52 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             
             return floatConditionVar;
         }
+        
+#if UNITY_EDITOR        
+        public override ConditionResponseBase PopulateReferences()
+        {
+            base.PopulateReferences();
+            
+            string referencePath = serializedPropertyPath + $".{nameof(_floatReference)}";
+            _floatReference.PopulateVariable(parentObject, referencePath);
+            
+            string conditionPath = serializedPropertyPath + $".{nameof(_floatConditionVar)}";
+            _floatConditionVar.PopulateVariable(parentObject, conditionPath);
+            
+            return this;
+        }
+        
+        public override void SyncConditionHeading(Object callingObject)
+        {
+            CheckPopulateReferences();
+            
+            if (floatReference.GetVariable() == null && floatReference.useConstant == false) {
+                conditionEventTitle = "Please populate a float reference.";
+                return;
+            }
+
+            if (floatConditionVar.GetVariable() == null && floatConditionVar.useConstant == false) {
+                conditionEventTitle = "Please populate a comparison condition.";
+                return;
+            }
+
+            string newTitle;
+            
+            if (floatReference.useConstant == true) {
+                newTitle = $"{floatReference.GetValue()}  is {operation} ";
+            } else {
+                newTitle = $"{floatReference.GetVariable().name} is {operation} ";
+            }
+
+            if (floatConditionVar.useConstant == true) {
+                newTitle += $"{floatConditionVar.GetValue()}";
+            }
+            else {
+                newTitle += $"{floatConditionVar.GetVariable().name}";
+            }
+
+            conditionEventTitle = newTitle;
+        }
+#endif
     }
 }

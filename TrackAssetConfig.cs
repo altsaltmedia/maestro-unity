@@ -12,20 +12,9 @@ namespace AltSalt.Maestro
         [Required]
         [SerializeField]
         [ReadOnly]
-        private AppSettings _appSettings;
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        public AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-
-                return _appSettings;
-            }
-            private set => _appSettings = value;
-        }
+        public AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
         
         [SerializeField]
         [ReadOnly]
@@ -39,7 +28,9 @@ namespace AltSalt.Maestro
         }
 
         [SerializeField]
+#if UNITY_EDITOR        
         [HideIf(nameof(SequencePopulated))]
+#endif        
         private InputGroupKeyReference _inputGroupKey = new InputGroupKeyReference();
 
         public InputGroupKey inputGroupKey
@@ -77,9 +68,7 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR
         private void OnEnable()
         {
-            if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
 
             // If part of a sequence config, we'll get the group key from there.
             // Otherwise, we need to look for one.

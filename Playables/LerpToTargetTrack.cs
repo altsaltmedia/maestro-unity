@@ -7,15 +7,10 @@ https://www.altsalt.com / ricky@altsalt.com
 **********************************************/
 
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Timeline;
 using UnityEngine.Playables;
-using System.Linq;
-using System.Reflection;
 using AltSalt.Maestro.Animation;
-using AltSalt.Maestro.Audio;
-using UnityEditor.Timeline;
 
 namespace AltSalt.Maestro
 {

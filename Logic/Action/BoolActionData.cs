@@ -42,6 +42,40 @@ namespace AltSalt.Maestro.Logic.Action
 
         public BoolActionData(int priority) : base(priority) { }
 
+        public override void PerformAction(GameObject callingObject)
+        {
+            if (CanPerformAction(callingObject) == false) {
+                Debug.Log($"Required variable(s) not specified in {title}, canceling operation", callingObject);
+                return;
+            }
+
+            switch (boolActionType) {
+                
+                case BoolActionType.SetValue:
+                    boolReference.SetValue(callingObject, targetValue.GetValue());
+                    break;
+                
+                case BoolActionType.Toggle:
+                    boolReference.Toggle(callingObject);
+                    break;
+            }
+        }
+
+        private bool CanPerformAction(GameObject callingObject)
+        {
+            if (boolReference.GetVariable() == null) {
+                return false;
+            }
+            
+            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
+                return false;
+            }
+
+            return true;
+        }
+    
+    #if UNITY_EDITOR
+        
         public override void SyncEditorActionHeadings()
         {
             boolReference.hideConstantOptions = true;
@@ -79,45 +113,15 @@ namespace AltSalt.Maestro.Logic.Action
         {
             string referencePath = serializedPropertyPath;
             referencePath += $".{nameof(_boolReference)}";
-            _boolReference.PopulateVariable(parentObject, referencePath.Split('.'));
+            _boolReference.PopulateVariable(parentObject, referencePath);
 
             string valuePath = serializedPropertyPath;
             valuePath += $".{nameof(_targetValue)}";
-            _targetValue.PopulateVariable(parentObject, valuePath.Split('.'));
+            _targetValue.PopulateVariable(parentObject, valuePath);
             
             return this;
         }
-
-        public override void PerformAction(GameObject callingObject)
-        {
-            if (CanPerformAction(callingObject) == false) {
-                Debug.Log($"Required variable(s) not specified in {title}, canceling operation", callingObject);
-                return;
-            }
-
-            switch (boolActionType) {
-                
-                case BoolActionType.SetValue:
-                    boolReference.SetValue(callingObject, targetValue.GetValue());
-                    break;
-                
-                case BoolActionType.Toggle:
-                    boolReference.Toggle(callingObject);
-                    break;
-            }
-        }
-
-        private bool CanPerformAction(GameObject callingObject)
-        {
-            if (boolReference.GetVariable() == null) {
-                return false;
-            }
-            
-            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
-                return false;
-            }
-
-            return true;
-        }
+    #endif
+        
     }
 }

@@ -17,24 +17,15 @@ using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Sensors
 {
-    
+    [ExecuteInEditMode]
     public class SwipeMonitor : MonoBehaviour
     {
-        
+        [Required]
         [SerializeField]
-        private AppSettings _appSettings;
+        [ReadOnly]
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         [SerializeField]
         private UserDataKeyReference _userDataKey = new UserDataKeyReference();
@@ -165,11 +156,10 @@ namespace AltSalt.Maestro.Sensors
 #if UNITY_EDITOR
         private void OnEnable()
         {
-            if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
         }
-#endif
+#endif        
+
 
         // Update is called once per frame
         private void Update()

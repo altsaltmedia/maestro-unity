@@ -33,23 +33,13 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             get => _prefix;
             set => _prefix = value;
         }
-
-        [ShowInInspector]
+        
+        [SerializeField]
         [ReadOnly]
-        private static AppSettings _appSettings;
+        [Required]
+        protected AppSettingsReference _appSettings = new AppSettingsReference();
 
-        private static AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         [SerializeField]
         [ReadOnly]
@@ -133,12 +123,32 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         private bool _initialized;
 
-        public bool initialized
+        private bool initialized
         {
             get => _initialized;
             set => _initialized = value;
         }
 
+        protected ConditionResponseBase CheckPopulateReferences()
+        {
+#if UNITY_EDITOR
+            if (initialized == false) {
+                initialized = true;
+                PopulateReferences();
+            }
+#endif
+            return this;
+        }
+
+        public virtual ConditionResponseBase PopulateReferences()
+        {
+#if UNITY_EDITOR
+            _appSettings.PopulateVariable(parentObject, $"{serializedPropertyPath}.{nameof(_appSettings)}");
+#endif
+            return this;
+        }
+        
+        
 #if UNITY_EDITOR
         private List<UnityEventData> _cachedEventData = new List<UnityEventData>();
 
@@ -152,21 +162,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                 return _cachedEventData;
             }
             set => _cachedEventData = value;
-        }
-        
-        protected ConditionResponseBase CheckPopulateReferences()
-        {
-            if (initialized == false) {
-                initialized = true;
-                PopulateReferences();
-            }
-
-            return this;
-        }
-
-        public virtual ConditionResponseBase PopulateReferences()
-        {
-            return this;
         }
 
         public abstract void SyncConditionHeading(Object callingObject);

@@ -40,13 +40,41 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             
         }
 
+        public override bool CheckCondition(Object callingObject)
+        {
+            CheckPopulateReferences();
+            
+            if (boolReference.GetValue() == boolCondition.GetValue()) {
+                return true;
+            }
+
+            return false;
+        }
+
+        public BoolReference GetReference()
+        {
+            CheckPopulateReferences();
+
+            return boolReference;
+        }
+
+        public BoolReference GetCondition()
+        {
+            CheckPopulateReferences();
+            
+            return boolCondition;
+        }
+        
+#if UNITY_EDITOR
         public override ConditionResponseBase PopulateReferences()
         {
+            base.PopulateReferences();
+            
             string referencePath = serializedPropertyPath + $".{nameof(_boolReference)}";
-            _boolReference.PopulateVariable(parentObject, referencePath.Split('.'));
+            _boolReference.PopulateVariable(parentObject, referencePath);
             
             string conditionPath = serializedPropertyPath + $".{nameof(_boolCondition)}";
-            _boolCondition.PopulateVariable(parentObject, conditionPath.Split('.'));
+            _boolCondition.PopulateVariable(parentObject, conditionPath);
             
             return this;
         }
@@ -82,29 +110,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
             conditionEventTitle = newTitle;
         }
-
-        public override bool CheckCondition(Object callingObject)
-        {
-            CheckPopulateReferences();
-            if (boolReference.GetValue() == boolCondition.GetValue()) {
-                return true;
-            }
-
-            return false;
-        }
-
-        public BoolReference GetReference()
-        {
-            CheckPopulateReferences();
-            
-            return boolReference;
-        }
-
-        public BoolReference GetCondition()
-        {
-            CheckPopulateReferences();
-            
-            return boolCondition;
-        }
+#endif
     }
 }

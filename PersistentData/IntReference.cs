@@ -45,20 +45,6 @@ namespace AltSalt.Maestro
             return _variable;
         }
 
-        protected override bool ShouldPopulateReference()
-        {
-            if (useConstant == false && _variable == null) {
-                return true;
-            }
-
-            return false;
-        }
-
-        protected override ScriptableObject ReadVariable()
-        {
-            return _variable;
-        }
-        
         public void SetVariable(IntVariable value)
         {
             _variable = value;
@@ -259,5 +245,22 @@ namespace AltSalt.Maestro
             intVariable.SetToDefaultValue();
             return intVariable;
         }
+        
+#if UNITY_EDITOR
+        protected override bool ShouldPopulateReference()
+        {
+            if (useConstant == false && _variable == null) {
+                return true;
+            }
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
+            return _variable;
+        }  
+#endif
+        
     }
 }

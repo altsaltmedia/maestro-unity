@@ -8,23 +8,12 @@ namespace AltSalt.Maestro.Logic
     [ExecuteInEditMode]
     public class UserDataController : MonoBehaviour
     {
-        [Required]
         [SerializeField]
+        [Required]
         [ReadOnly]
-        private AppSettings _appSettings;
-        
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         [SerializeField]
         private List<UserDatum> userData = new List<UserDatum>();
@@ -169,6 +158,11 @@ namespace AltSalt.Maestro.Logic
         }
 
 #if UNITY_EDITOR
+        private void OnEnable()
+        {
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+        }
+        
         [InfoBox("Print values of user data stored in Player Prefs.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void PrintPlayerPrefs()

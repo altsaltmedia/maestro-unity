@@ -29,7 +29,7 @@ namespace AltSalt.Maestro
                 /// variable is reimported / recreated with the same GUID.  Workaround: just close and open the project.
                 ///
                 /// Hours spent trying to fix this: 3 hours
-                template.simpleEventTriggers[i].PopulateVariable(this, simpleEventPath.Split('.'));
+                template.simpleEventTriggers[i].PopulateVariable(this, simpleEventPath);
             }
 #endif
 

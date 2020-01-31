@@ -9,7 +9,7 @@ namespace AltSalt.Maestro
     [Serializable]
     public abstract class ReferenceBase
     {
-#if UNITY_EDITOR
+        
         private const string variablePropertyPath = "_variable";
 
         [SerializeField]
@@ -23,7 +23,9 @@ namespace AltSalt.Maestro
         }
 
         [ShowInInspector]
+#if UNITY_EDITOR        
         [OnValueChanged(nameof(CallPopulateVariable))]
+#endif        
         [ShowIf(nameof(searchAttempted))]
         private bool _searchAttempted = false;
 
@@ -42,7 +44,7 @@ namespace AltSalt.Maestro
             get => _referenceName;
             set => _referenceName = value;
         }
-        
+
         private UnityEngine.Object _parentObject;
 
         public UnityEngine.Object parentObject
@@ -64,34 +66,41 @@ namespace AltSalt.Maestro
             }
             set => _serializedPropertyPath = value;
         }
-#endif
 
         public virtual ScriptableObject GetVariable()
         {
-#if UNITY_EDITOR
-//            if (isSystemReference == true) {
-//                return null;
-//            } 
-//            
-//            if (parentObject == null || serializedPropertyPath.Count < 1) {
-//                throw new System.NullReferenceException($"You must specify a parent object and serialized property path on {this.GetType().Name}");
-//            }
-#endif
             return null;
+        }
+        
+        protected ReferenceBase UpdateReferenceName()
+        {
+#if UNITY_EDITOR
+            var serializedObject = new SerializedObject(parentObject);
+            var referenceNameProperty = Utils.FindReferenceProperty(serializedObject, serializedPropertyPath.ToArray(),
+                nameof(_referenceName));
+            referenceNameProperty.stringValue = ReadVariable().name;
+            serializedObject.ApplyModifiedProperties();
+            serializedObject.Update();
+#endif            
+            return this;
         }
 
 #if UNITY_EDITOR
+        protected abstract bool ShouldPopulateReference();
+
+        protected abstract ScriptableObject ReadVariable();
+        
         private ReferenceBase CallPopulateVariable()
         {
             return PopulateVariable(parentObject, serializedPropertyPath.ToArray());
         }
         
-        public ReferenceBase PopulateVariable(UnityEngine.Object parentObject, string serializedPropertyPath)
+        public virtual ReferenceBase PopulateVariable(UnityEngine.Object parentObject, string serializedPropertyPath)
         {
-            return PopulateVariable(parentObject, new[] {serializedPropertyPath});
+            return PopulateVariable(parentObject, serializedPropertyPath.Split('.'));
         }
         
-        public ReferenceBase PopulateVariable(UnityEngine.Object parentObject, string[] serializedPropertyPath)
+        private ReferenceBase PopulateVariable(UnityEngine.Object parentObject, string[] serializedPropertyPath)
         {
 //            
 //            SerializedProperty parentObjectProperty =
@@ -124,8 +133,7 @@ namespace AltSalt.Maestro
                 
                 if (variableSearch != null) {
                     
-                    SerializedProperty variableProperty =
-                        FindReferenceProperty(serializedObject, serializedPropertyPath, variablePropertyPath);
+                    SerializedProperty variableProperty = Utils.FindReferenceProperty(serializedObject, serializedPropertyPath, variablePropertyPath);
                     variableProperty.objectReferenceValue = variableSearch;
                     
                     serializedObject.ApplyModifiedProperties();
@@ -140,36 +148,11 @@ namespace AltSalt.Maestro
                 }
             }
 
-            if (ReadVariable() != null) {
+            if (ReadVariable() != null && string.IsNullOrEmpty(referenceName) == true) {
                 UpdateReferenceName();
             }
 
             return this;
-        }
-
-        protected abstract bool ShouldPopulateReference();
-        
-        public static SerializedProperty FindReferenceProperty(SerializedObject sourceObject, string[] referencePropertyPath, string targetProperty)
-        {
-            var variableReferencePath = sourceObject.FindProperty(referencePropertyPath[0]);
-            
-            // If our serialized property path is only one item long, that means the variable reference
-            // exists at the root of our serialized object, so we can just look for the _variable field right away
-            if (referencePropertyPath.Length == 1) {
-                return variableReferencePath.FindPropertyRelative(targetProperty);
-            }
-            
-            // Otherwise, drill down through the defined path
-            for (int i = 1; i < referencePropertyPath.Length; i++) {
-                if (int.TryParse(referencePropertyPath[i], out var arrayIndex) == false) {
-                    variableReferencePath = variableReferencePath.FindPropertyRelative(referencePropertyPath[i]);
-                }
-                else {
-                    variableReferencePath = variableReferencePath.GetArrayElementAtIndex(arrayIndex);
-                }
-            }
-
-            return variableReferencePath.FindPropertyRelative(targetProperty);
         }
 
         public ReferenceBase ResetSearchAttempted()
@@ -206,14 +189,6 @@ namespace AltSalt.Maestro
             return this;
         }
 
-        protected abstract ScriptableObject ReadVariable();
-
-        protected ReferenceBase UpdateReferenceName()
-        {
-            referenceName = ReadVariable().name;
-            return this;
-        }
-
         protected void LogMissingReferenceMessage(string typeName)
         {
             if (parentObject != null) {
@@ -235,5 +210,6 @@ namespace AltSalt.Maestro
                       $"Please repopulate the variable, ensure all assets have been imported, or remove this reference.", parentObject);
         }
 #endif
+        
     }
 }

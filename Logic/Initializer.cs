@@ -1,27 +1,20 @@
 ﻿using System.Collections;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 namespace AltSalt.Maestro.Logic
 {
+    [ExecuteInEditMode]
     public class Initializer : MonoBehaviour
     {
         [SerializeField]
-        private AppSettings _appSettings;
+        [Required]
+        [ReadOnly]
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         [SerializeField]
         private string _bootstrapScene;
@@ -31,10 +24,19 @@ namespace AltSalt.Maestro.Logic
             get => _bootstrapScene;
             set => _bootstrapScene = value;
         }
+        
+#if UNITY_EDITOR
+        private void OnEnable()
+        {
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+        }
+#endif
 
         // Start is called before the first frame update
         private IEnumerator Start()
         {
+            if (Application.isPlaying == false) yield break;
+            
             Physics.autoSimulation = false;
             Application.targetFrameRate = 60;
             

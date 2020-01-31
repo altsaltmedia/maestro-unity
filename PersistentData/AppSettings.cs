@@ -15,12 +15,13 @@ namespace AltSalt.Maestro
 
         private SystemSettings systemSettings
         {
-            get {
-                
+            get
+            {
+#if UNITY_EDITOR
                 if(_systemSettings == null) {
                    RefreshDependencies();
                 }
-
+#endif
                 return _systemSettings;
             }
         }
@@ -30,11 +31,13 @@ namespace AltSalt.Maestro
 
         private UserData userData
         {
-            get {
-                
+            get
+            {
+#if UNITY_EDITOR                
                 if(_userData == null) {
                    RefreshDependencies();
                 }
+#endif                
 
                 return _userData;
             }
@@ -47,9 +50,11 @@ namespace AltSalt.Maestro
         {
             get
             {
+#if UNITY_EDITOR                
                 if(_inputData == null) {
                    RefreshDependencies();
                 }
+#endif                
                 return _inputData;
             }
         }
@@ -61,9 +66,11 @@ namespace AltSalt.Maestro
         {
             get
             {
+#if UNITY_EDITOR                
                 if(_debugPreferences == null) {
                    RefreshDependencies();
                 }
+#endif                
                 return _debugPreferences;
             }
         }
@@ -75,9 +82,11 @@ namespace AltSalt.Maestro
 
             get
             {
+#if UNITY_EDITOR                
                 if(_mainInput == null) {
                     RefreshDependencies();             
                 }
+#endif                
                 return _mainInput.GetVariable() as InputGroupKey;
             }
             
@@ -90,9 +99,11 @@ namespace AltSalt.Maestro
 
             get
             {
+#if UNITY_EDITOR                
                 if(_user1 == null) {
                     RefreshDependencies();
                 }
+#endif                
                 return _user1.GetVariable() as UserDataKey;                    
             }
             
@@ -789,9 +800,13 @@ namespace AltSalt.Maestro
             userData.RefreshDependencies();
             inputData.RefreshDependencies();
             debugPreferences.RefreshDependencies(); 
-#endif
         }
-
+        
+        private static dynamic CreateAppSetting(Type assetType, string name)
+        {
+            return Utils.CreateScriptableObjectAsset(assetType, name, Utils.settingsPath);
+        }
+        
         private static object PopulateScriptableObjectField(object parentObject, FieldInfo scriptableObjectField)
         {
             string variableName = scriptableObjectField.Name.Replace("_", "").Capitalize();
@@ -820,12 +835,7 @@ namespace AltSalt.Maestro
             variableField.SetValue(referenceObject, variableSearch);
             return variableSearch;
         }
-        
-#if UNITY_EDITOR
-        private static dynamic CreateAppSetting(Type assetType, string name)
-        {
-            return Utils.CreateScriptableObjectAsset(assetType, name, Utils.settingsPath);
-        }
+
 #endif
 
     }

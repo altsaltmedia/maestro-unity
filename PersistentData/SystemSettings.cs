@@ -75,38 +75,18 @@ namespace AltSalt.Maestro
         private FloatReference _timescale = new FloatReference();
         
         public FloatReference timescale => _timescale;
-
-        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
-        public void RefreshDependencies()
-        {
-#if UNITY_EDITOR
-            FieldInfo[] referenceFields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-            for (int i = 0; i < referenceFields.Length; i++) {
-                
-                var referenceFieldValue = referenceFields[i].GetValue(this) as ReferenceBase;
-
-                string name = referenceFields[i].Name.Replace("_", "").Capitalize();
-                var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
-
-                var variable = variableField.GetValue(referenceValue) as ScriptableObject;
-
-                if (variable == null) {
-                    variableField.SetValue(referenceValue, CreateSystemSetting(variableField.FieldType, $"{name}"));
-                }
-            }
-#endif
-        }
-
+        
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SetDefaults()
         {
             FieldInfo[] fields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            
+
+#if UNITY_EDITOR            
             for (int i = 0; i < fields.Length; i++) {
                 var referenceFieldValue = fields[i].GetValue(this) as ReferenceBase;
                 referenceFieldValue.isSystemReference = true;
             }
+#endif            
             
             (hasBeenOpened.GetVariable() as BoolVariable).defaultValue = false;
             (volumeEnabled.GetVariable() as BoolVariable).defaultValue = true;
@@ -135,6 +115,27 @@ namespace AltSalt.Maestro
         
 
 #if UNITY_EDITOR
+        
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void RefreshDependencies()
+        {
+            FieldInfo[] referenceFields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            for (int i = 0; i < referenceFields.Length; i++) {
+                
+                var referenceFieldValue = referenceFields[i].GetValue(this) as ReferenceBase;
+
+                string name = referenceFields[i].Name.Replace("_", "").Capitalize();
+                var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
+
+                var variable = variableField.GetValue(referenceValue) as ScriptableObject;
+
+                if (variable == null) {
+                    variableField.SetValue(referenceValue, CreateSystemSetting(variableField.FieldType, $"{name}"));
+                }
+            }
+        }
+        
         private static dynamic CreateSystemSetting(Type assetType, string name)
         {
             return Utils.CreateScriptableObjectAsset(assetType, name, Utils.settingsPath + "/SystemSettings");

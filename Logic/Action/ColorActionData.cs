@@ -40,7 +40,39 @@ namespace AltSalt.Maestro.Logic.Action
         private ColorReference targetValue => _targetValue;
 
         public ColorActionData(int priority) : base(priority) { }
+        
 
+        public override void PerformAction(GameObject callingObject)
+        {
+            if (CanPerformAction(callingObject) == false) {
+                Debug.Log($"Required variable(s) not specified in {title}, canceling operation", callingObject);
+                return;
+            }
+
+            switch (colorActionType) {
+                
+                case ColorActionType.SetValue:
+                    colorReference.SetValue(callingObject, targetValue.GetValue());
+                    break;
+            }
+        }
+
+        private bool CanPerformAction(GameObject callingObject)
+        {
+            if (colorReference.GetVariable() == null) {
+                return false;
+            }
+            
+            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
+                return false;
+            }
+
+            return true;
+        }
+        
+        
+#if UNITY_EDITOR
+        
         public override void SyncEditorActionHeadings()
         {
             colorReference.hideConstantOptions = true;
@@ -74,41 +106,15 @@ namespace AltSalt.Maestro.Logic.Action
         {
             string referencePath = serializedPropertyPath;
             referencePath += $".{nameof(_colorReference)}";
-            _colorReference.PopulateVariable(parentObject, referencePath.Split('.'));
+            _colorReference.PopulateVariable(parentObject, referencePath);
 
             string valuePath = serializedPropertyPath;
             valuePath += $".{nameof(_targetValue)}";
-            _targetValue.PopulateVariable(parentObject, valuePath.Split('.'));
+            _targetValue.PopulateVariable(parentObject, valuePath);
             
             return this;
         }
-
-        public override void PerformAction(GameObject callingObject)
-        {
-            if (CanPerformAction(callingObject) == false) {
-                Debug.Log($"Required variable(s) not specified in {title}, canceling operation", callingObject);
-                return;
-            }
-
-            switch (colorActionType) {
-                
-                case ColorActionType.SetValue:
-                    colorReference.SetValue(callingObject, targetValue.GetValue());
-                    break;
-            }
-        }
-
-        private bool CanPerformAction(GameObject callingObject)
-        {
-            if (colorReference.GetVariable() == null) {
-                return false;
-            }
-            
-            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
-                return false;
-            }
-
-            return true;
-        }
+#endif
+        
     }
 }

@@ -1,10 +1,7 @@
 ﻿using System;
 using Sirenix.OdinInspector;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
@@ -33,20 +30,6 @@ namespace AltSalt.Maestro
             return _variable;
         }
 
-        protected override bool ShouldPopulateReference()
-        {
-            if (useConstant == false && _variable == null) {
-                return true;
-            }
-
-            return false;
-        }
-
-        protected override ScriptableObject ReadVariable()
-        {
-            return _variable;
-        }
-        
         public void SetVariable(V3Variable value)
         {
             _variable = value;
@@ -65,5 +48,22 @@ namespace AltSalt.Maestro
         {
             return useConstant ? constantValue : (GetVariable() as V3Variable).value;
         }
+        
+#if UNITY_EDITOR
+        protected override bool ShouldPopulateReference()
+        {
+            if (useConstant == false && _variable == null) {
+                return true;
+            }
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
+            return _variable;
+        }
+#endif
+        
     }
 }

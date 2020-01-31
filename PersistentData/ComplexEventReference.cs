@@ -23,6 +23,9 @@ namespace AltSalt.Maestro
             return _variable;
         }
 
+        public void SetVariable(ComplexEvent value) => _variable = value;
+        
+#if UNITY_EDITOR
         protected override bool ShouldPopulateReference()
         {
             if (_variable == null) {
@@ -36,7 +39,7 @@ namespace AltSalt.Maestro
         {
             return _variable;
         }
+#endif        
         
-        public void SetVariable(ComplexEvent value) => _variable = value;
     }
 }

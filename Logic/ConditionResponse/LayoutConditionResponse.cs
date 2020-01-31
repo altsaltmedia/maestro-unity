@@ -31,47 +31,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         
         public LayoutConditionResponse(UnityEngine.Object parentObject,
             string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
-    
-                
-        public override ConditionResponseBase PopulateReferences()
-        {
-#if UNITY_EDITOR
-            string referencePath = serializedPropertyPath + $".{nameof(_layoutReference)}";
-            _layoutReference.PopulateVariable(parentObject, referencePath.Split('.'));
-            
-            string conditionPath = serializedPropertyPath + $".{nameof(_activeLayoutCondition)}";
-            _activeLayoutCondition.PopulateVariable(parentObject, conditionPath.Split('.'));
-#endif            
-            return this;
-        }
-        
-#if UNITY_EDITOR
-        public override void SyncConditionHeading(Object callingObject)
-        {
-            CheckPopulateReferences();
-            
-            if (layoutReference == null) {
-                conditionEventTitle = "Please populate a layout as your condition.";
-                return;
-            }
-            
-            if (activeLayoutCondition.GetVariable() == null && activeLayoutCondition.useConstant == false) {
-                conditionEventTitle = "Please populate a condition for your layout.";
-                return;
-            }
-
-            string newTitle = $"Layout {layoutReference.name} active is ";
-
-            if (activeLayoutCondition.useConstant == true) {
-                newTitle += activeLayoutCondition.GetValue();
-            }
-            else {
-                newTitle += $"equal to {activeLayoutCondition.GetVariable().name}";
-            }
-
-            conditionEventTitle = newTitle;
-        }
-#endif
 
         public override bool CheckCondition(Object callingObject)
         {
@@ -99,6 +58,47 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             
             return activeLayoutCondition;
         }
+        
+#if UNITY_EDITOR
+        public override ConditionResponseBase PopulateReferences()
+        {
+            base.PopulateReferences();
+            
+            string referencePath = serializedPropertyPath + $".{nameof(_layoutReference)}";
+            _layoutReference.PopulateVariable(parentObject, referencePath);
+            
+            string conditionPath = serializedPropertyPath + $".{nameof(_activeLayoutCondition)}";
+            _activeLayoutCondition.PopulateVariable(parentObject, conditionPath);
+   
+            return this;
+        }
+        
+        public override void SyncConditionHeading(Object callingObject)
+        {
+            CheckPopulateReferences();
+            
+            if (layoutReference == null) {
+                conditionEventTitle = "Please populate a layout as your condition.";
+                return;
+            }
+            
+            if (activeLayoutCondition.GetVariable() == null && activeLayoutCondition.useConstant == false) {
+                conditionEventTitle = "Please populate a condition for your layout.";
+                return;
+            }
+
+            string newTitle = $"Layout {layoutReference.name} active is ";
+
+            if (activeLayoutCondition.useConstant == true) {
+                newTitle += activeLayoutCondition.GetValue();
+            }
+            else {
+                newTitle += $"equal to {activeLayoutCondition.GetVariable().name}";
+            }
+
+            conditionEventTitle = newTitle;
+        }
+#endif
 
         private static bool IsPopulated(BoolReference attribute)
         {

@@ -21,6 +21,14 @@ namespace AltSalt.Maestro.Logic.Action
 
         public SimpleEventActionData(int priority) : base(priority) { }
         
+        public override void PerformAction(GameObject callingObject)
+        {
+            for (int i = 0; i < simpleEventTriggers.Count; i++) {
+                simpleEventTriggers[i].RaiseEvent(callingObject);
+            }
+        }
+
+#if UNITY_EDITOR
         public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
         {
             string packagersPath = serializedPropertyPath;
@@ -29,20 +37,12 @@ namespace AltSalt.Maestro.Logic.Action
             for (int i = 0; i < simpleEventTriggers.Count; i++) {
                 string referencePath = packagersPath;
                 referencePath += $".{i.ToString()}";
-                simpleEventTriggers[i].PopulateVariable(parentObject, referencePath.Split(new[] {'.'}));
+                simpleEventTriggers[i].PopulateVariable(parentObject, referencePath);
             }
 
             return this;
         }
 
-        public override void PerformAction(GameObject callingObject)
-        {
-            for (int i = 0; i < simpleEventTriggers.Count; i++) {
-                simpleEventTriggers[i].RaiseEvent(callingObject);
-            }
-        }
-        
-        
         public override void SyncEditorActionHeadings()
         {
             string simpleEventNames = "";
@@ -63,5 +63,7 @@ namespace AltSalt.Maestro.Logic.Action
                 actionDescription = "Please populate your simple event triggers";
             }
         }
+#endif
+        
     }
 }

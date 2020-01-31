@@ -1,5 +1,14 @@
+/***********************************************
+
+Copyright © AltSalt Media, LLC.
+
+All rights reserved.
+
+https://www.altsalt.com / artemio@altsalt.com
+        
+**********************************************/
+
 using System;
-using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -18,19 +27,28 @@ namespace AltSalt.Maestro.Logic.Action
         [Required]
         [SerializeField]
         [ReadOnly]
-        private AppSettings _appSettings;
-        
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-                return _appSettings;
-            }
-            set => _appSettings = value;
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
+        
+        [SerializeField]
+        [ReadOnly]
+        private Object _parentObject;
+
+        private Object parentObject
+        {
+            get => _parentObject;
+            set => _parentObject = value;
+        }
+
+        [SerializeField]
+        [ReadOnly]
+        private string _serializedPropertyPath;
+
+        private string serializedPropertyPath
+        {
+            get => _serializedPropertyPath;
+            set => _serializedPropertyPath = value;
         }
 
         [ValueDropdown(nameof(boolValueList))]
@@ -58,7 +76,9 @@ namespace AltSalt.Maestro.Logic.Action
         }
 
         [ShowInInspector]
+#if UNITY_EDITOR        
         [OnValueChanged(nameof(UpdateActionLists))]
+#endif        
         [HideReferenceObjectPicker]
         [ListDrawerSettings(HideAddButton = true, Expanded = true)]
         [HideDuplicateReferenceBox]
@@ -141,38 +161,57 @@ namespace AltSalt.Maestro.Logic.Action
         private ActionType _actionType;
 
         private ActionType actionType => _actionType;
-        
-#if UNITY_EDITOR
-
-        [SerializeField]
-        private Object _parentObject;
-
-        private Object parentObject
-        {
-            get => _parentObject;
-            set => _parentObject = value;
-        }
-
-        [SerializeField]
-        private string _serializedPropertyPath;
-
-        private string serializedPropertyPath
-        {
-            get => _serializedPropertyPath;
-            set => _serializedPropertyPath = value;
-        }
-        
-#endif
 
         public ActionTrigger Initialize(Object parentObject, string serializedPropertyPath)
         {
+#if UNITY_EDITOR
             this.parentObject = parentObject;
             this.serializedPropertyPath = serializedPropertyPath;
+            _appSettings.PopulateVariable(parentObject, $"{serializedPropertyPath}.{nameof(_appSettings)}");
+#endif            
             return this;
         }
         
-#if UNITY_EDITOR
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
+        public void PerformActions(GameObject callingObject)
+        {
+            for (int i = 0; i < actionData.Count; i++) {
+                actionData[i].PerformAction(callingObject);
+            }
+        }
 
+        public void OnAfterDeserialize()
+        {
+            actionData.Clear();
+            
+            actionData.AddRange(genericActions);
+            actionData.AddRange(boolActions);
+            actionData.AddRange(floatActions);
+            actionData.AddRange(intActions);
+            actionData.AddRange(axisActions);
+            actionData.AddRange(colorActions);
+            actionData.AddRange(conditionResponseActions);
+            actionData.AddRange(simpleEventActions);
+            actionData.AddRange(complexEventActions);
+            
+            actionData.Sort((x, y) => x.priority.CompareTo(y.priority) );
+        }
+
+        public void OnBeforeSerialize()
+        {
+            genericActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            boolActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            floatActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            intActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            axisActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            colorActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            conditionResponseActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            simpleEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            complexEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+        }
+        
+#if UNITY_EDITOR
+        
         [PropertySpace]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void AddActionType()
@@ -257,17 +296,7 @@ namespace AltSalt.Maestro.Logic.Action
             }
         }
         
-#endif
-
-        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
-        public void PerformActions(GameObject callingObject)
-        {
-            for (int i = 0; i < actionData.Count; i++) {
-                actionData[i].PerformAction(callingObject);
-            }
-        }
-
-        public void CallSyncEditorActionHeadings()
+          public void CallSyncEditorActionHeadings()
         {
             for (int i = 0; i < actionData.Count; i++) {
                 actionData[i].SyncEditorActionHeadings();
@@ -467,35 +496,7 @@ namespace AltSalt.Maestro.Logic.Action
 
             return this;
         }
-
-        public void OnAfterDeserialize()
-        {
-            actionData.Clear();
-            
-            actionData.AddRange(genericActions);
-            actionData.AddRange(boolActions);
-            actionData.AddRange(floatActions);
-            actionData.AddRange(intActions);
-            actionData.AddRange(axisActions);
-            actionData.AddRange(colorActions);
-            actionData.AddRange(conditionResponseActions);
-            actionData.AddRange(simpleEventActions);
-            actionData.AddRange(complexEventActions);
-            
-            actionData.Sort((x, y) => x.priority.CompareTo(y.priority) );
-        }
-
-        public void OnBeforeSerialize()
-        {
-            genericActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            boolActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            floatActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            intActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            axisActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            colorActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            conditionResponseActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            simpleEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-            complexEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
-        }
+#endif
+        
     }
 }

@@ -74,33 +74,17 @@ namespace AltSalt.Maestro
             SetDefaults(userData, userKey);
 #endif
         }
-        
-        public void RefreshDependencies(UserDataKey userKey)
-        {
-            FieldInfo[] referenceFields = typeof(UserPreferences).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-
-            for (int i = 0; i < referenceFields.Length; i++) {
-                
-                string name = referenceFields[i].Name.Replace("_", "").Capitalize();
-                var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
-                
-                var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
-
-                if (variableValue == null) {
-                    variableField.SetValue(referenceValue,
-                        CreateUserPreference(variableField.FieldType, $"{userKey.name}-{name}", userKey.name));
-                }
-            }
-        }
 
         public UserPreferences SetDefaults(UserData userData, UserDataKey userKey)
         {
             FieldInfo[] fields = typeof(UserPreferences).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
 
+#if UNITY_EDITOR            
             for (int i = 0; i < fields.Length; i++) {
                 var referenceFieldValue = fields[i].GetValue(this) as ReferenceBase;
                 referenceFieldValue.isSystemReference = true;
             }
+#endif            
 
             (ySensitivity.GetVariable() as FloatVariable).defaultValue = 0.0027f;
             (invertYInput.GetVariable() as BoolVariable).defaultValue = false;
@@ -129,6 +113,24 @@ namespace AltSalt.Maestro
         }
         
 #if UNITY_EDITOR
+        public void RefreshDependencies(UserDataKey userKey)
+        {
+            FieldInfo[] referenceFields = typeof(UserPreferences).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+            for (int i = 0; i < referenceFields.Length; i++) {
+                
+                string name = referenceFields[i].Name.Replace("_", "").Capitalize();
+                var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
+                
+                var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
+
+                if (variableValue == null) {
+                    variableField.SetValue(referenceValue,
+                        CreateUserPreference(variableField.FieldType, $"{userKey.name}-{name}", userKey.name));
+                }
+            }
+        }
+        
         private static dynamic CreateUserPreference(Type assetType, string name, string userName)
         {
             return Utils.CreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/UsetData/{userName}");

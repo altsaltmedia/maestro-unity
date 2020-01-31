@@ -1,4 +1,3 @@
-using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -27,7 +26,9 @@ namespace AltSalt.Maestro.Logic.Action
         private void OnEnable()
         {
             actionTrigger.Initialize(this, nameof(_actionTrigger));
+#if UNITY_EDITOR
             actionTrigger.CallPopulateReferences();
+#endif
         }
 
         private void Start()
@@ -45,12 +46,11 @@ namespace AltSalt.Maestro.Logic.Action
             
             actionTrigger.PerformActions(this.gameObject);
         }
-        
 
 #if UNITY_EDITOR
         [Button]
         [ShowInInspector]
-        public void CallPerformActions()
+        private void CallPerformActions()
         {
             actionTrigger.PerformActions(this.gameObject);
         }

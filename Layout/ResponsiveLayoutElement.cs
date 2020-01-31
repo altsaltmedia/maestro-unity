@@ -16,20 +16,9 @@ namespace AltSalt.Maestro.Layout
         [Required]
         [SerializeField]
         [ReadOnly]
-        private AppSettings _appSettings;
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        protected AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        protected AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         [ShowInInspector]
         [ReadOnly]
@@ -138,10 +127,10 @@ namespace AltSalt.Maestro.Layout
         {
             base.OnEnable();
 #if UNITY_EDITOR
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
             _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
             _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
             
-            PopulateDependencies();
             PopulateNonSerializedProperties();
 #endif
             enableDynamicElement.RaiseEvent(this.gameObject, this);
@@ -232,23 +221,7 @@ namespace AltSalt.Maestro.Layout
 
         public virtual void Reset()
         {
-            PopulateDependencies();
             PopulateNonSerializedProperties();
-        }
-
-        protected virtual void PopulateDependencies()
-        {
-            if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
-            
-            if(enableDynamicElement.GetVariable() == null) {
-                enableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement)));
-            }
-
-            if (disableDynamicElement.GetVariable() == null) {
-                disableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement)));
-            }
         }
 
         protected override void PopulateNonSerializedProperties()

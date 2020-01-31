@@ -333,33 +333,16 @@ namespace AltSalt.Maestro
 #endif
         }
 
-        public void RefreshDependencies(InputGroupKey inputGroupKey)
-        {
-            FieldInfo[] referenceFields = typeof(InputGroup).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-
-            for (int i = 0; i < referenceFields.Length; i++) {
-                
-                var referenceFieldValue = referenceFields[i].GetValue(this) as ReferenceBase;
-                referenceFieldValue.isSystemReference = true;
-                
-                string name = referenceFields[i].Name.Replace("_", "").Capitalize();
-                var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
-                var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
-
-                if (variableValue == null) {
-                    variableField.SetValue(referenceValue, CreateInputDependency(variableField.FieldType, $"{inputGroupKey.name}-{name}", inputGroupKey.name));
-                }
-            }
-        }
-        
         public InputGroup SetDefaults(InputData inputData, InputGroupKey inputGroupKey)
         {
             FieldInfo[] fields = typeof(InputGroup).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-            
+
+#if UNITY_EDITOR            
             for (int i = 0; i < fields.Length; i++) {
                 var referenceFieldValue = fields[i].GetValue(this) as ReferenceBase;
                 referenceFieldValue.isSystemReference = true;
             }
+#endif            
 
             (swipeMinMax.GetVariable() as FloatVariable).defaultValue = 80f;
             (momentumMinMax.GetVariable() as FloatVariable).defaultValue = 2000f;
@@ -401,10 +384,29 @@ namespace AltSalt.Maestro
         }
 
 #if UNITY_EDITOR
+        public void RefreshDependencies(InputGroupKey inputGroupKey)
+        {
+            FieldInfo[] referenceFields = typeof(InputGroup).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+            for (int i = 0; i < referenceFields.Length; i++) {
+                
+                var referenceFieldValue = referenceFields[i].GetValue(this) as ReferenceBase;
+                referenceFieldValue.isSystemReference = true;
+                
+                string name = referenceFields[i].Name.Replace("_", "").Capitalize();
+                var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
+                var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
+
+                if (variableValue == null) {
+                    variableField.SetValue(referenceValue, CreateInputDependency(variableField.FieldType, $"{inputGroupKey.name}-{name}", inputGroupKey.name));
+                }
+            }
+        }
         private static dynamic CreateInputDependency(Type assetType, string name, string groupName)
         {
             return Utils.CreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/InputSettings/{groupName}");
         }
 #endif
+        
     }
 }

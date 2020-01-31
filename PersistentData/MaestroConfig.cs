@@ -22,6 +22,7 @@ namespace AltSalt.Maestro
 
         public string scriptsPath => _scriptsPath;
 
+#if UNITY_EDITOR 
         private void OnEnable()
         {
             var appSettingsSearch = Utils.GetScriptableObject(nameof(AppSettings));
@@ -40,5 +41,7 @@ namespace AltSalt.Maestro
             appSettings.RefreshDependencies();
             appSettings.SetDefaults();
         }
+#endif   
+        
     }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7973420083374359233}
   - component: {fileID: 7973420083374359232}
   - component: {fileID: 3517205928990522322}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Scene Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7973420083374359238}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 292b12df71c484cf797c0707e025fad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 0}
+  _appSettings: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
   _loadSceneImmediatelyKey:
     _isSystemReference: 0
     _referenceName: LoadSceneImmediatelyKey

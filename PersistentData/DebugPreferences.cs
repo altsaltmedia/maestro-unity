@@ -96,6 +96,20 @@ namespace AltSalt.Maestro
         }
 
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void SetDefaults()
+        {
+            dynamicLayoutActive = true;
+            modifyTextActive = true;
+            modifyLayoutActive = true;
+            saveDataActive = true;
+            useAddressables = false;
+            logEventCallersAndListeners = false;
+            logResponsiveElementActions = false;
+            logConditionResponses = false;
+        }
+
+#if UNITY_EDITOR
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void RefreshDependencies()
         {
             FieldInfo[] fields = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
@@ -127,21 +141,7 @@ namespace AltSalt.Maestro
             
             EditorUtility.SetDirty(this);
         }
-
-        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
-        public void SetDefaults()
-        {
-            dynamicLayoutActive = true;
-            modifyTextActive = true;
-            modifyLayoutActive = true;
-            saveDataActive = true;
-            useAddressables = false;
-            logEventCallersAndListeners = false;
-            logResponsiveElementActions = false;
-            logConditionResponses = false;
-        }
-
-#if UNITY_EDITOR
+        
         private static dynamic CreateDebugPreference(Type assetType, string name)
         {
             return Utils.CreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/DebugEvents");

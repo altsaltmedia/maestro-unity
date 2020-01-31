@@ -60,70 +60,6 @@ namespace AltSalt.Maestro.Logic.Action
 
         public FloatActionData(int priority) : base(priority) { }
 
-        public override void SyncEditorActionHeadings()
-        {
-            floatReference.hideConstantOptions = true;
-            
-            if (string.IsNullOrEmpty(floatReference.referenceName) == false) {
-                actionDescription = floatReference.referenceName+ $" > {GetOperationDescription()}";
-            }
-            else {
-                actionDescription = "Inactive - please populate a float reference.";
-            }
-        }
-
-        private string GetOperationDescription()
-        {
-            string operationDescription = $"{floatActionType}";
-
-            if (floatActionType == FloatActionType.SetToDefaultValue ||
-                floatActionType == FloatActionType.SetToRandom) {
-                return operationDescription += "()";
-            }
-
-            // Special case for square magnitude
-            if (floatActionType == FloatActionType.SetToSquareMagnitude) {
-                
-                if (operatorV2Value.useConstant == false && operatorV2Value.GetVariable() == null) {
-                    return operationDescription += $" (V2 variable required)";
-                }
-
-                if (operatorV2Value.useConstant == true) {
-                    return operationDescription += $" ({operatorV2Value.GetValue()})";
-                }
-                
-                return operationDescription += $" ({operatorV2Value.GetVariable().name})";
-            }
-
-            // All normal cases
-            if (operatorFloatValue.useConstant == false && operatorFloatValue.GetVariable() == null) {
-                return operationDescription += $" (No float variable populated)";
-            }
-            
-            if (operatorFloatValue.useConstant == true) {
-                return operationDescription += $" ({operatorFloatValue.GetValue()})";
-            }
-            
-            return operationDescription += $" ({operatorFloatValue.GetVariable().name})";
-        }
-        
-        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
-        {
-            string referencePath = serializedPropertyPath;
-            referencePath += $".{nameof(_floatReference)}";
-            _floatReference.PopulateVariable(parentObject, referencePath.Split('.'));
-
-            string floatValuePath = serializedPropertyPath;
-            floatValuePath += $".{nameof(_operatorFloatValue)}";
-            _operatorFloatValue.PopulateVariable(parentObject, floatValuePath.Split('.'));
-            
-            string v2ValuePath = serializedPropertyPath;
-            v2ValuePath += $".{nameof(_operatorV2Value)}";
-            _operatorV2Value.PopulateVariable(parentObject, v2ValuePath.Split('.'));
-            
-            return this;
-        }
-        
         public override void PerformAction(GameObject callingObject)
         {
             if (CanPerformAction(callingObject) == false) {
@@ -197,5 +133,71 @@ namespace AltSalt.Maestro.Logic.Action
 
             return true;
         }
+        
+#if UNITY_EDITOR        
+        public override void SyncEditorActionHeadings()
+        {
+            floatReference.hideConstantOptions = true;
+            
+            if (string.IsNullOrEmpty(floatReference.referenceName) == false) {
+                actionDescription = floatReference.referenceName+ $" > {GetOperationDescription()}";
+            }
+            else {
+                actionDescription = "Inactive - please populate a float reference.";
+            }
+        }
+
+        private string GetOperationDescription()
+        {
+            string operationDescription = $"{floatActionType}";
+
+            if (floatActionType == FloatActionType.SetToDefaultValue ||
+                floatActionType == FloatActionType.SetToRandom) {
+                return operationDescription += "()";
+            }
+
+            // Special case for square magnitude
+            if (floatActionType == FloatActionType.SetToSquareMagnitude) {
+                
+                if (operatorV2Value.useConstant == false && operatorV2Value.GetVariable() == null) {
+                    return operationDescription += $" (V2 variable required)";
+                }
+
+                if (operatorV2Value.useConstant == true) {
+                    return operationDescription += $" ({operatorV2Value.GetValue()})";
+                }
+                
+                return operationDescription += $" ({operatorV2Value.GetVariable().name})";
+            }
+
+            // All normal cases
+            if (operatorFloatValue.useConstant == false && operatorFloatValue.GetVariable() == null) {
+                return operationDescription += $" (No float variable populated)";
+            }
+            
+            if (operatorFloatValue.useConstant == true) {
+                return operationDescription += $" ({operatorFloatValue.GetValue()})";
+            }
+            
+            return operationDescription += $" ({operatorFloatValue.GetVariable().name})";
+        }
+        
+        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
+        {
+            string referencePath = serializedPropertyPath;
+            referencePath += $".{nameof(_floatReference)}";
+            _floatReference.PopulateVariable(parentObject, referencePath);
+
+            string floatValuePath = serializedPropertyPath;
+            floatValuePath += $".{nameof(_operatorFloatValue)}";
+            _operatorFloatValue.PopulateVariable(parentObject, floatValuePath);
+            
+            string v2ValuePath = serializedPropertyPath;
+            v2ValuePath += $".{nameof(_operatorV2Value)}";
+            _operatorV2Value.PopulateVariable(parentObject, v2ValuePath);
+            
+            return this;
+        }
+#endif  
     }
 }

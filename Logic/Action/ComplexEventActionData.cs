@@ -20,7 +20,18 @@ namespace AltSalt.Maestro.Logic.Action
         private List<ComplexEventConfigurableTrigger> complexEventPayloadPackagers => _complexEventPayloadPackagers;
 
         public ComplexEventActionData(int priority) : base(priority) { }
+        
 
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
+        [InfoBox("Raises event")]
+        public override void PerformAction(GameObject callingObject)
+        {
+            for (int i=0; i<complexEventPayloadPackagers.Count; i++) {
+                complexEventPayloadPackagers[i].RaiseEvent(callingObject);
+            }
+        }
+
+#if UNITY_EDITOR        
         public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
         {
             string packagersPath = serializedPropertyPath;
@@ -29,20 +40,11 @@ namespace AltSalt.Maestro.Logic.Action
             for (int i = 0; i < complexEventPayloadPackagers.Count; i++) {
                 string referencePath = packagersPath;
                 referencePath += $".{i.ToString()}";
-                complexEventPayloadPackagers[i].PopulateVariable(parentObject, referencePath.Split('.'));
+                complexEventPayloadPackagers[i].PopulateVariable(parentObject, referencePath);
                 complexEventPayloadPackagers[i].PopulateReferences(parentObject, referencePath);
             }
 
             return this;
-        }
-        
-        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
-        [InfoBox("Raises event")]
-        public override void PerformAction(GameObject callingObject)
-        {
-            for (int i=0; i<complexEventPayloadPackagers.Count; i++) {
-                complexEventPayloadPackagers[i].RaiseEvent(callingObject);
-            }
         }
 
         public override void SyncEditorActionHeadings()
@@ -65,5 +67,7 @@ namespace AltSalt.Maestro.Logic.Action
                 actionDescription = "Please populate your complex event packagers";
             }
         }
+#endif
+        
     }
 }

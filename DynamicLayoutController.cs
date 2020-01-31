@@ -3,32 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using UnityEditor.SceneManagement;
-using UnityEditor.Timeline;
 using UnityEngine.Events;
+
+#if UNITY_EDITOR
+using UnityEditor.Timeline;
+using UnityEditor.SceneManagement;
+#endif
 
 namespace AltSalt.Maestro.Layout {
     
-	#if UNITY_EDITOR
 	[ExecuteInEditMode]
-	#endif
     public class DynamicLayoutController : MonoBehaviour {
 
         [Required]
         [SerializeField]
-        private AppSettings _appSettings;
+        [ReadOnly]
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
         
         private float deviceAspectRatio
         {
@@ -128,14 +120,12 @@ namespace AltSalt.Maestro.Layout {
 #if UNITY_EDITOR
         private void OnEnable()
         {
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
             _sceneAspectRatio.PopulateVariable(this, nameof(_sceneAspectRatio));
             _sceneWidth.PopulateVariable(this, nameof(_sceneWidth));
             _sceneHeight.PopulateVariable(this, nameof(_sceneHeight));
-            
-            if (appSettings == null) {
-                appSettings = Utils.GetAppSettings();
-            }
 
+            
             EditorSceneManager.sceneSaved += scene =>
             {
                 if (TimelineEditor.inspectedDirector != null) {

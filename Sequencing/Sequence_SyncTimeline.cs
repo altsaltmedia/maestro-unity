@@ -30,6 +30,13 @@ namespace AltSalt.Maestro.Sequencing
     public class Sequence_SyncTimeline : MonoBehaviour, IDynamicLayoutElement
     {
         [SerializeField]
+        [Required]
+        [ReadOnly]
+        private AppSettingsReference _appSettings = new AppSettingsReference();
+
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
+        
+        [SerializeField]
         [ReadOnly]
         [InfoBox("This value must be set at runtime by a SequenceConfig component.")]
         private Sequence _sequence;
@@ -40,24 +47,6 @@ namespace AltSalt.Maestro.Sequencing
             set => _sequence = value;
         }
 
-        [Required]
-        [SerializeField]
-        [ReadOnly]
-        private AppSettings _appSettings;
-        
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
-        
         [SerializeField]
         private bool _logElementOnLayoutUpdate = false;
 
@@ -143,6 +132,7 @@ namespace AltSalt.Maestro.Sequencing
 #if UNITY_EDITOR
         private void OnEnable()
         {
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
             _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
             _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
             

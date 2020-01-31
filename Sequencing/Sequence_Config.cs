@@ -30,14 +30,15 @@ namespace AltSalt.Maestro.Sequencing
         [ReadOnly]
         private AppSettings _appSettings;
         
-        private AppSettings appSettings
+        protected AppSettings appSettings
         {
             get
             {
+#if UNITY_EDITOR
                 if (_appSettings == null) {
                     _appSettings = Utils.GetAppSettings();
                 }
-
+#endif
                 return _appSettings;
             }
             set => _appSettings = value;

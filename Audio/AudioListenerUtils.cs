@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Audio;
 
 namespace AltSalt.Maestro.Audio
 {
     public class AudioListenerUtils : MonoBehaviour
     {
         [SerializeField]
-        private AppSettings _appSettings;
+        [Required]
+        [ReadOnly]
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         private bool volumeActive
         {
             get => appSettings.GetVolumeEnabled(this.gameObject);
             set => appSettings.SetVolumeEnabled(this.gameObject, value);
         }
+        
+#if UNITY_EDITOR
+        private void OnEnable()
+        {
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+        }
+#endif
 
         public void ToggleVoluem()
         {

@@ -10,23 +10,12 @@ namespace AltSalt.Maestro.Layout
     [ExecuteInEditMode]
     public class RelativeElementController : MonoBehaviour, IDynamicLayoutElement
     {
-        [Required]
         [SerializeField]
+        [Required]
         [ReadOnly]
-        private AppSettings _appSettings;
-        
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         private RelativeElement[] _relativeElements;
 
@@ -100,14 +89,11 @@ namespace AltSalt.Maestro.Layout
         
         private void OnEnable()
         {
-            if (enableDynamicElement.GetVariable() == null) {
-                enableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.EnableDynamicElement)));
-            }
-            
-            if (disableDynamicElement.GetVariable() == null) {
-                disableDynamicElement.SetVariable(Utils.GetComplexEvent(nameof(VarDependencies.DisableDynamicElement)));
-            }
-            
+#if UNITY_EDITOR
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+            _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
+            _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
+#endif
             enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
 

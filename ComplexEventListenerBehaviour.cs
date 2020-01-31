@@ -58,12 +58,13 @@ namespace AltSalt.Maestro
 
         private void OnEnable()
         {
+#if UNITY_EDITOR	        
 	        _complexEventReference.PopulateVariable(this, nameof(_complexEventReference));
 	        
 	        if (migrated == false) {
-				
-				_complexEventReference.SetVariable(_complexEvent);	
-			}
+		        _complexEventReference.SetVariable(_complexEvent);
+	        }
+#endif	        
 			
 			(complexEvent.GetVariable() as ComplexEvent).RegisterListener(this);
 		}

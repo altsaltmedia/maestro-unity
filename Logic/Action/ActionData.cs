@@ -1,7 +1,15 @@
+/***********************************************
+
+Copyright © AltSalt Media, LLC.
+
+All rights reserved.
+
+https://www.altsalt.com / artemio@altsalt.com
+        
+**********************************************/
+
 using System;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

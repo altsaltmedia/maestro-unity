@@ -9,22 +9,12 @@ namespace AltSalt.Maestro.Sequencing
     [ExecuteInEditMode]
     public class RootConfig : MonoBehaviour
     {
-        [Required]
         [SerializeField]
-        private AppSettings _appSettings;
+        [Required]
+        [ReadOnly]
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        public AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        public AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         [SerializeField]
         private InputGroupKeyReference _inputGroupKey = new InputGroupKeyReference();
@@ -69,9 +59,11 @@ namespace AltSalt.Maestro.Sequencing
 
         private void OnEnable()
         {
+#if UNITY_EDITOR
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
             _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
             _userKey.PopulateVariable(this, nameof(_userKey));
-            
+#endif
             Configure();
         }
 

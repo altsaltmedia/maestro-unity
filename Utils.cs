@@ -1,10 +1,10 @@
 ﻿/***********************************************
 
-Copyright © 2018 AltSalt Media, LLC.
+Copyright © AltSalt Media, LLC.
 
 All rights reserved.
 
-https://www.altsalt.com / ricky@altsalt.com
+https://www.altsalt.com / artemio@altsalt.com
         
 **********************************************/
 
@@ -1284,6 +1284,57 @@ namespace AltSalt.Maestro
                 return;
             }
         }
+        
+                public static SerializedProperty FindReferenceProperty(SerializedObject sourceObject, string referencePropertyPath)
+        {
+            return FindReferenceProperty(sourceObject, referencePropertyPath.Split('.'));
+        }
+
+        public static SerializedProperty FindReferenceProperty(SerializedObject sourceObject, string[] referencePropertyPath)
+        {
+            var variableReferencePath = sourceObject.FindProperty(referencePropertyPath[0]);
+            
+            // If our serialized property path is only one item long, that means the variable reference
+            // exists at the root of our serialized object, so we can just look for the _variable field right away
+            if (referencePropertyPath.Length == 1) {
+                return variableReferencePath;
+            }
+            
+            // Otherwise, drill down through the defined path
+            for (int i = 1; i < referencePropertyPath.Length; i++) {
+                if (Int32.TryParse(referencePropertyPath[i], out var arrayIndex) == false) {
+                    variableReferencePath = variableReferencePath.FindPropertyRelative(referencePropertyPath[i]);
+                }
+                else {
+                    variableReferencePath = variableReferencePath.GetArrayElementAtIndex(arrayIndex);
+                }
+            }
+
+            return variableReferencePath;
+        }
+        
+        public static SerializedProperty FindReferenceProperty(SerializedObject sourceObject, string[] referencePropertyPath, string targetProperty)
+        {
+            var variableReferencePath = sourceObject.FindProperty(referencePropertyPath[0]);
+            
+            // If our serialized property path is only one item long, that means the variable reference
+            // exists at the root of our serialized object, so we can just look for the _variable field right away
+            if (referencePropertyPath.Length == 1) {
+                return variableReferencePath.FindPropertyRelative(targetProperty);
+            }
+            
+            // Otherwise, drill down through the defined path
+            for (int i = 1; i < referencePropertyPath.Length; i++) {
+                if (Int32.TryParse(referencePropertyPath[i], out var arrayIndex) == false) {
+                    variableReferencePath = variableReferencePath.FindPropertyRelative(referencePropertyPath[i]);
+                }
+                else {
+                    variableReferencePath = variableReferencePath.GetArrayElementAtIndex(arrayIndex);
+                }
+            }
+
+            return variableReferencePath.FindPropertyRelative(targetProperty);
+        }
 #endif
 
         // Given a value and a list of other values to compare against, will check if
@@ -1728,5 +1779,6 @@ namespace AltSalt.Maestro
             return (e * Mathf.Pow(2f, -10f * k) * Mathf.Sin((k - f / 4f) * (2f * Mathf.PI) / f) + 1f);
 
         }
+        
     }
 }

@@ -49,10 +49,12 @@ namespace AltSalt.Maestro.Layout
 
         private void OnEnable()
         {
+#if UNITY_EDITOR            
             if (migrated == false) {
                 UnityEventUtils.MigrateUnityEventList(nameof(unityEvent), 
                     nameof(_action), new SerializedObject(this));
             }
+#endif            
         }
 
         private void Start()

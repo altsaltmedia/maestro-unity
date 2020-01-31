@@ -38,14 +38,6 @@ namespace AltSalt.Maestro
 //            }
         }
 
-        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
-        public void RefreshDependencies()
-        {
-            foreach (KeyValuePair<InputGroupKey, InputGroup> inputGroupItem in inputGroupCollection) {
-                inputGroupItem.Value.RefreshDependencies(inputGroupItem.Key);
-            }
-        }
-
         public InputGroup GetInputGroup(InputGroupKey inputGroupKey)
         {
             if (inputGroupCollection.ContainsKey(inputGroupKey)) {
@@ -53,7 +45,9 @@ namespace AltSalt.Maestro
             }
 
             inputGroupCollection.Add(inputGroupKey, new InputGroup(this, inputGroupKey));
+#if UNITY_EDITOR            
             EditorUtility.SetDirty(this);
+#endif            
             return inputGroupCollection[inputGroupKey];
         }
 
@@ -69,5 +63,16 @@ namespace AltSalt.Maestro
 
         [Serializable]
         public class InputGroupCollection : SerializableDictionaryBase<InputGroupKey, InputGroup> { }
+        
+#if UNITY_EDITOR
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        public void RefreshDependencies()
+        {
+            foreach (KeyValuePair<InputGroupKey, InputGroup> inputGroupItem in inputGroupCollection) {
+                inputGroupItem.Value.RefreshDependencies(inputGroupItem.Key);
+            }
+        }
+#endif        
+        
     }
 }

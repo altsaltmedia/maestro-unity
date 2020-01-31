@@ -67,8 +67,10 @@ namespace AltSalt.Maestro
             
             string simpleSignalsListPath = nameof(_simpleSignalReferences);
             for (int i = 0; i < simpleSignalReferences.Count; i++) {
+#if UNITY_EDITOR                
                 simpleSignalReferences[i].PopulateVariable(this, 
-                    new []{ simpleSignalsListPath, i.ToString() });
+                    $"{simpleSignalsListPath}.{i.ToString()}");
+#endif                
 
                 var simpleSignal = simpleSignalReferences[i].GetVariable() as SimpleSignal;
                 
@@ -79,14 +81,17 @@ namespace AltSalt.Maestro
                 }
             }
 
+#if UNITY_EDITOR            
             if (migrated == false) {
                 UnityEventUtils.MigrateUnityEventList(nameof(_response), nameof(_action), 
                     new SerializedObject(this));
             }
+#endif            
         }
 
         private void MigrateSimpleSignal()
         {
+#if UNITY_EDITOR            
             if (migrated == false && simpleSignalReferences.Count < 1) {
                 var serializedObject = new SerializedObject(this);
                 var serializedProperty = serializedObject.FindProperty(nameof(_simpleSignalReferences));
@@ -96,6 +101,7 @@ namespace AltSalt.Maestro
                 serializedObject.ApplyModifiedProperties();
                 serializedObject.Update();
             }
+#endif            
         }
 
 		private void OnDisable()

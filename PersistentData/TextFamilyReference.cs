@@ -20,6 +20,20 @@ namespace AltSalt.Maestro
             return _variable;
         }
 
+        public void SetVariable(TextFamily value)
+        {
+            _variable = value;
+        }
+        
+        public TextFamilyReference()
+        { }
+
+        public TextFamilyReference(TextFamily value)
+        {
+            _variable = value;
+        }
+        
+#if UNITY_EDITOR
         protected override bool ShouldPopulateReference()
         {
             if (_variable == null) {
@@ -33,18 +47,7 @@ namespace AltSalt.Maestro
         {
             return _variable;
         }
+#endif
         
-        public void SetVariable(TextFamily value)
-        {
-            _variable = value;
-        }
-        
-        public TextFamilyReference()
-        { }
-
-        public TextFamilyReference(TextFamily value)
-        {
-            _variable = value;
-        }
     }
 }

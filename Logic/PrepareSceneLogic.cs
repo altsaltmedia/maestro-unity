@@ -23,10 +23,11 @@ namespace AltSalt.Maestro.Logic {
         {
             get
             {
+#if UNITY_EDITOR                
                 if (_appSettings == null) {
                     _appSettings = Utils.GetAppSettings();
                 }
-
+#endif
                 return _appSettings;
             }
             set => _appSettings = value;

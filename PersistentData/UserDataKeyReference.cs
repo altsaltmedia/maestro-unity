@@ -1,8 +1,6 @@
 using System;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
@@ -20,20 +18,6 @@ namespace AltSalt.Maestro
             return _variable;
         }
 
-        protected override bool ShouldPopulateReference()
-        {
-            if (_variable == null) {
-                return true;
-            }
-
-            return false;
-        }
-
-        protected override ScriptableObject ReadVariable()
-        {
-            return _variable;
-        }
-        
         public void SetVariable(UserDataKey value)
         {
             _variable = value;
@@ -47,5 +31,22 @@ namespace AltSalt.Maestro
         {
             _variable = value;
         }
+        
+#if UNITY_EDITOR
+        protected override bool ShouldPopulateReference()
+        {
+            if (_variable == null) {
+                return true;
+            }
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
+            return _variable;
+        }
+#endif
+        
     }
 }

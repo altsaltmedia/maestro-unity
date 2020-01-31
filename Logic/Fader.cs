@@ -103,12 +103,14 @@ namespace AltSalt.Maestro.Logic
         {
             canvasGroup = GetComponent<CanvasGroup>();
             image = GetComponentInChildren<Image>();
-            
+
+#if UNITY_EDITOR            
             _fadeToBlackSpeedKey.PopulateVariable(this, nameof(_fadeToBlackSpeedKey));
             _fadeInSpeedKey.PopulateVariable(this, nameof(_fadeInSpeedKey));
             _fadeColorKey.PopulateVariable(this, nameof(_fadeColorKey));
             _enableSpinnerKey.PopulateVariable(this, nameof(_enableSpinnerKey));
             _eventCallbackKey.PopulateVariable(this, nameof(_eventCallbackKey));
+#endif            
         }
 
         public void FadeToBlack(ComplexPayload complexPayload)

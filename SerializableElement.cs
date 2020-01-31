@@ -78,7 +78,7 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR
             for (int i = 0; i < _layoutReferences.Count; i++) {
                 _layoutReferences[i].PopulateVariable(this,
-                    new[] {nameof(_layoutReferences), i.ToString()});
+                    $"{nameof(_layoutReferences)}.{i.ToString()}");
             }
             
             Initialize();

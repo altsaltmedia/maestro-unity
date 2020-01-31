@@ -1,6 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.Serialization;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace AltSalt.Maestro
 {
@@ -10,19 +15,9 @@ namespace AltSalt.Maestro
         [Required]
         [SerializeField]
         [ReadOnly]
-        private AppSettings _appSettings;
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        protected AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-
-                return _appSettings;
-            }
-        }
+        protected AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         protected UnityEngine.Object callerObject;
         protected string callerScene = "";
@@ -43,6 +38,11 @@ namespace AltSalt.Maestro
         [Header("$"+nameof(title))]
         [FormerlySerializedAs("DeveloperDescription")]
         private string _description = "";
+
+        protected void OnEnable()
+        {
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+        }
 #endif
 
         protected abstract string title { get; }

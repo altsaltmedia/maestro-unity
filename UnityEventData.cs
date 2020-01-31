@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine.Events;
 
-namespace AltSalt.Maestro.Logic
+namespace AltSalt.Maestro
 {
     public class UnityEventData
     {

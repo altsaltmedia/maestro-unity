@@ -6,26 +6,15 @@ using UnityEngine;
 
 namespace AltSalt.Maestro.Logic
 {
-    
+    [ExecuteInEditMode]
     public class AppUtils : MonoBehaviour
     {
         [Required]
         [SerializeField]
         [ReadOnly]
-        private AppSettings _appSettings;
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
         
         [SerializeField]
         private InputGroupKeyReference _inputGroupKey = new InputGroupKeyReference();
@@ -92,6 +81,7 @@ namespace AltSalt.Maestro.Logic
 #if UNITY_EDITOR
         private void OnEnable()
         {
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
             _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
             _triggerUnloadScene.PopulateVariable(this, nameof(_triggerUnloadScene));
         }
@@ -104,6 +94,8 @@ namespace AltSalt.Maestro.Logic
 
         private void Start()
         {
+            if (Application.isPlaying == false) return;
+            
             headerShowPosition = header.anchoredPosition;
             footerShowPosition = footer.anchoredPosition;
 

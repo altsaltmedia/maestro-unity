@@ -50,51 +50,6 @@ namespace AltSalt.Maestro.Logic.Action
 
         public IntActionData(int priority) : base(priority) { }
 
-        public override void SyncEditorActionHeadings()
-        {
-            intReference.hideConstantOptions = true;
-            
-            if (string.IsNullOrEmpty(intReference.referenceName) == false) {
-                actionDescription = intReference.referenceName + $" > {GetOperationDescription()}";
-            }
-            else {
-                actionDescription = "Inactive - please populate a int reference.";
-            }
-        }
-        
-        private string GetOperationDescription()
-        {
-            string operationDescription = $"{intActionType}";
-
-            if (intActionType == IntActionType.SetToDefaultValue ||
-                intActionType == IntActionType.SetToRandom) {
-                return operationDescription += "()";
-            }
-
-            if (operatorValue.useConstant == false && operatorValue.GetVariable() == null) {
-                return operationDescription += $" (No int variable populated)";
-            }
-
-            if (operatorValue.useConstant == true) {
-                return operationDescription += $" ({operatorValue.GetValue()})";
-            }
-
-            return operationDescription += $" ({operatorValue.GetVariable().name})";
-        }
-        
-        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
-        {
-            string referencePath = serializedPropertyPath;
-            referencePath += $".{nameof(_intReference)}";
-            _intReference.PopulateVariable(parentObject, referencePath.Split('.'));
-
-            string valuePath = serializedPropertyPath;
-            valuePath += $".{nameof(_operatorValue)}";
-            _operatorValue.PopulateVariable(parentObject, valuePath.Split('.'));
-            
-            return this;
-        }
-
         public override void PerformAction(GameObject callingObject)
         {
             if (CanPerformAction(callingObject) == false) {
@@ -150,5 +105,53 @@ namespace AltSalt.Maestro.Logic.Action
 
             return true;
         }
+        
+#if UNITY_EDITOR        
+        public override void SyncEditorActionHeadings()
+        {
+            intReference.hideConstantOptions = true;
+            
+            if (string.IsNullOrEmpty(intReference.referenceName) == false) {
+                actionDescription = intReference.referenceName + $" > {GetOperationDescription()}";
+            }
+            else {
+                actionDescription = "Inactive - please populate a int reference.";
+            }
+        }
+        
+        private string GetOperationDescription()
+        {
+            string operationDescription = $"{intActionType}";
+
+            if (intActionType == IntActionType.SetToDefaultValue ||
+                intActionType == IntActionType.SetToRandom) {
+                return operationDescription += "()";
+            }
+
+            if (operatorValue.useConstant == false && operatorValue.GetVariable() == null) {
+                return operationDescription += $" (No int variable populated)";
+            }
+
+            if (operatorValue.useConstant == true) {
+                return operationDescription += $" ({operatorValue.GetValue()})";
+            }
+
+            return operationDescription += $" ({operatorValue.GetVariable().name})";
+        }
+        
+        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
+        {
+            string referencePath = serializedPropertyPath;
+            referencePath += $".{nameof(_intReference)}";
+            _intReference.PopulateVariable(parentObject, referencePath);
+
+            string valuePath = serializedPropertyPath;
+            valuePath += $".{nameof(_operatorValue)}";
+            _operatorValue.PopulateVariable(parentObject, valuePath);
+            
+            return this;
+        }
+#endif
+  
     }
 }

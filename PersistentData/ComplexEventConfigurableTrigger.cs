@@ -292,6 +292,7 @@ namespace AltSalt.Maestro
             set => _scriptableObjectValueReferences = value;
         }
 
+#if UNITY_EDITOR        
         public void PopulateReferences(UnityEngine.Object parentObject, string serializedPropertyPath)
         {
             if (migrated == false) {
@@ -309,13 +310,13 @@ namespace AltSalt.Maestro
                 referenceListPath += $".{fields[i].Name}";
                 
                 MethodInfo methodInfo = typeof(ReferenceBase).GetMethod(
-                    nameof(PopulateVariable), BindingFlags.Public | BindingFlags.Instance, null, new[] {typeof(UnityEngine.Object), typeof(string[])}, null );
+                    nameof(PopulateVariable), BindingFlags.Public | BindingFlags.Instance, null, new[] {typeof(UnityEngine.Object), typeof(string)}, null );
 
                 for (int j = 0; j < referenceList.Count; j++) {
                     string referencePath = referenceListPath;
                     referencePath += $".{j.ToString()}";
                     methodInfo.Invoke(referenceList[j],
-                        new object[] { parentObject, referencePath.Split('.') });
+                        new object[] { parentObject, referencePath });
                 }
             }
 
@@ -380,13 +381,13 @@ namespace AltSalt.Maestro
             // Strings
             
             for (int i = 0; i < _stringKeysOld.Count; i++) {
-                var serializedProperty = ReferenceBase.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_stringKeyReferences));
+                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_stringKeyReferences));
                 serializedProperty.arraySize++;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_variable").objectReferenceValue = _stringKeysOld[i];
             }
             
             for (int i = 0; i < _stringValuesOld.Count; i++) {
-                var serializedProperty = ReferenceBase.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_stringValueReferences));
+                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_stringValueReferences));
                 serializedProperty.arraySize++;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_useConstant").boolValue = true;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_constantValue").stringValue = _stringValuesOld[i];
@@ -395,13 +396,13 @@ namespace AltSalt.Maestro
             // Floats
             
             for (int i = 0; i < _floatKeysOld.Count; i++) {
-                var serializedProperty = ReferenceBase.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_floatKeyReferences));
+                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_floatKeyReferences));
                 serializedProperty.arraySize++;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_variable").objectReferenceValue = _floatKeysOld[i];
             }
             
             for (int i = 0; i < _floatValuesOld.Count; i++) {
-                var serializedProperty = ReferenceBase.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_floatValueReferences));
+                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_floatValueReferences));
                 serializedProperty.arraySize++;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_useConstant").boolValue = true;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_constantValue").floatValue = _floatValuesOld[i];
@@ -411,13 +412,13 @@ namespace AltSalt.Maestro
             // Bools
 
             for (int i = 0; i < _boolKeysOld.Count; i++) {
-                var serializedProperty = ReferenceBase.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_boolKeyReferences));
+                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_boolKeyReferences));
                 serializedProperty.arraySize++;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_variable").objectReferenceValue = _boolKeysOld[i];
             }
             
             for (int i = 0; i < _boolValuesOld.Count; i++) {
-                var serializedProperty = ReferenceBase.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_boolValueReferences));
+                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_boolValueReferences));
                 serializedProperty.arraySize++;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_useConstant").boolValue = true;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_constantValue").boolValue = _boolValuesOld[i];
@@ -426,23 +427,24 @@ namespace AltSalt.Maestro
             // Scriptable Object
 
             for (int i = 0; i < _scriptableObjectKeysOld.Count; i++) {
-                var serializedProperty = ReferenceBase.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_scriptableObjectKeyReferences));
+                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_scriptableObjectKeyReferences));
                 serializedProperty.arraySize++;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_variable").objectReferenceValue = _scriptableObjectKeysOld[i];
             }
             
             for (int i = 0; i < _scriptableObjectValuesOld.Count; i++) {
-                var serializedProperty = ReferenceBase.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_scriptableObjectValueReferences));
+                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_scriptableObjectValueReferences));
                 serializedProperty.arraySize++;
                 serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_variable").objectReferenceValue = _scriptableObjectValuesOld[i];
             }
 
-            var migratedProperty = ReferenceBase.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_migrated));
+            var migratedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_migrated));
             migratedProperty.boolValue = true;
 
             serializedObject.ApplyModifiedProperties();
             serializedObject.Update();
         }
+#endif        
 
         public void RaiseEvent(GameObject caller)
         {
@@ -570,8 +572,7 @@ namespace AltSalt.Maestro
         {
             Debug.LogWarning("Failed to create event payload");
         }
-
-#if UNITY_EDITOR
+        
         private bool ShowStringKeys()
         {
             if (hasString && stringValues != null && stringValues.Count > 1) {
@@ -827,6 +828,6 @@ namespace AltSalt.Maestro
                 return true;
             }
         }
-#endif
+
     }
 }

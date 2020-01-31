@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -20,26 +21,16 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 
 namespace AltSalt.Maestro.Logic
 {
+    [ExecuteInEditMode]
     public class SceneController : MonoBehaviour {
         
         // Scene transition variables
         [Required]
         [SerializeField]
         [ReadOnly]
-        private AppSettings _appSettings;
-        
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
@@ -122,17 +113,23 @@ namespace AltSalt.Maestro.Logic
 
         private void OnEnable()
         {
+#if UNITY_EDITOR
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
             _triggerFadeToBlack.PopulateVariable(this, nameof(_triggerFadeToBlack));
             _fadeToBlackCompleted.PopulateVariable(this, nameof(_fadeToBlackCompleted));
             _loadSceneAdditiveKey.PopulateVariable(this, nameof(_loadSceneAdditiveKey));
             _singleSceneLoadCompleted.PopulateVariable(this, nameof(_singleSceneLoadCompleted));
             _additiveSceneLoadCompleted.PopulateVariable(this, nameof(_additiveSceneLoadCompleted));
             _eventCallbackKey.PopulateVariable(this, nameof(_eventCallbackKey));
+#endif            
         }
 
         // Otherwise, single scene loads necessitate doing a fade out before doing the load,
         // and additive scenes are loaded immediately without a call to the fader
-        public void TriggerSceneLoad(ComplexPayload complexPayload) {
+        public void TriggerSceneLoad(ComplexPayload complexPayload)
+        {
+
+            if (Application.isPlaying == false) return;
             
             this.targetScene = complexPayload.GetStringValue(DataType.stringType);;
             this.appSettings.SetActiveScene(this.gameObject,this.targetScene);
@@ -273,8 +270,10 @@ namespace AltSalt.Maestro.Logic
         {
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(xSceneName, xLoadMode);
             asyncLoad.completed += callback;
+            Debug.Log(asyncLoad);
 
             while (!asyncLoad.isDone) {
+                Debug.Log(asyncLoad.progress);
                 updateProgress.RaiseEvent(this.gameObject, asyncLoad.progress);
                 yield return null;
             }

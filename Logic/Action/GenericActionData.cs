@@ -39,6 +39,12 @@ namespace AltSalt.Maestro.Logic.Action
             set => _cachedEventData = value;
         }
 
+        public override void PerformAction(GameObject callingObject)
+        {
+            action.Invoke(callingObject);
+        }
+
+#if UNITY_EDITOR        
         public override void SyncEditorActionHeadings()
         {
 //            string targets = "";
@@ -72,10 +78,7 @@ namespace AltSalt.Maestro.Logic.Action
 
             actionDescription = newDescription;
         }
+#endif
 
-        public override void PerformAction(GameObject callingObject)
-        {
-            action.Invoke(callingObject);
-        }
     }
 }

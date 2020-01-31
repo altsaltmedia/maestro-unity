@@ -20,6 +20,20 @@ namespace AltSalt.Maestro
             return _variable;
         }
 
+        public void SetVariable(CustomKey value)
+        {
+            _variable = value;
+        }
+
+        public CustomKeyReference()
+        { }
+
+        public CustomKeyReference(CustomKey value)
+        {
+            _variable = value;
+        }
+        
+#if UNITY_EDITOR
         protected override bool ShouldPopulateReference()
         {
             if (_variable == null) {
@@ -33,18 +47,7 @@ namespace AltSalt.Maestro
         {
             return _variable;
         }
+#endif        
         
-        public void SetVariable(CustomKey value)
-        {
-            _variable = value;
-        }
-
-        public CustomKeyReference()
-        { }
-
-        public CustomKeyReference(CustomKey value)
-        {
-            _variable = value;
-        }
     }
 }

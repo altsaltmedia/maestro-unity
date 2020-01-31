@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AltSalt.Maestro.Logic;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 namespace AltSalt.Maestro
 {
     public static class UnityEventUtils
     {
+        
+#if UNITY_EDITOR        
         public static string[] GetUnityEventParameters(SerializedProperty eventList)
         {
             SerializedProperty unityEventCallList = eventList
@@ -174,5 +178,7 @@ namespace AltSalt.Maestro
             
             return eventDescription;
         }
+#endif
+        
     }
 }

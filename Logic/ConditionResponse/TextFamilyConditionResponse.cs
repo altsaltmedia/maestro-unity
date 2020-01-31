@@ -31,14 +31,44 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         
         public TextFamilyConditionResponse(UnityEngine.Object parentObject,
             string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
+
+        public override bool CheckCondition(Object callingObject)
+        {
+            CheckPopulateReferences();
+            
+            base.CheckCondition(callingObject);
+            
+            if (textFamilyReference.active == activeTextFamilyCondition.GetValue()) {
+                return true;
+            }
+
+            return false;
+        }
+
+        public TextFamily GetReference()
+        {
+            CheckPopulateReferences();
+            
+            return textFamilyReference;
+        }
         
+        public BoolReference GetCondition()
+        {
+            CheckPopulateReferences();
+            
+            return activeTextFamilyCondition;
+        }
+        
+#if UNITY_EDITOR        
         public override ConditionResponseBase PopulateReferences()
         {
+            base.PopulateReferences();
+            
             string referencePath = serializedPropertyPath + $".{nameof(_textFamilyReference)}";
-            _textFamilyReference.PopulateVariable(parentObject, referencePath.Split('.'));
+            _textFamilyReference.PopulateVariable(parentObject, referencePath);
             
             string conditionPath = serializedPropertyPath + $".{nameof(_activeTextFamilyCondition)}";
-            _activeTextFamilyCondition.PopulateVariable(parentObject, conditionPath.Split('.'));
+            _activeTextFamilyCondition.PopulateVariable(parentObject, conditionPath);
             
             return this;
         }
@@ -68,45 +98,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
             conditionEventTitle = newTitle;
         }
-        
-        public virtual ConditionResponseBase PopulateReferences(UnityEngine.Object parentObject,
-            string serializedPropertyPath)
-        {
-            string referencePath = serializedPropertyPath + $".{nameof(_textFamilyReference)}";
-            _textFamilyReference.PopulateVariable(parentObject, referencePath.Split('.'));
-            
-            string conditionPath = serializedPropertyPath + $".{nameof(_activeTextFamilyCondition)}";
-            _activeTextFamilyCondition.PopulateVariable(parentObject, conditionPath.Split('.'));
-            
-            return this;
-        }
-
-        public override bool CheckCondition(Object callingObject)
-        {
-            CheckPopulateReferences();
-            
-            base.CheckCondition(callingObject);
-            
-            if (textFamilyReference.active == activeTextFamilyCondition.GetValue()) {
-                return true;
-            }
-
-            return false;
-        }
-
-        public TextFamily GetReference()
-        {
-            CheckPopulateReferences();
-            
-            return textFamilyReference;
-        }
-        
-        public BoolReference GetCondition()
-        {
-            CheckPopulateReferences();
-            
-            return activeTextFamilyCondition;
-        }
+#endif       
         
         private static bool IsPopulated(BoolReference attribute)
         {

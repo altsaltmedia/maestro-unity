@@ -20,20 +20,6 @@ namespace AltSalt.Maestro
 	        return _variable;
         }
 
-        protected override bool ShouldPopulateReference()
-        {
-	        if (_variable == null) {
-		        return true;
-	        }
-
-	        return false;
-        }
-        
-        protected override ScriptableObject ReadVariable()
-        {
-	        return _variable;
-        }
-
         public void SetVariable(Axis value)
         {
 	        _variable = value;
@@ -80,5 +66,21 @@ namespace AltSalt.Maestro
 			axis.SetInverted(targetValue.value);
 			return axis;
 		}
+		
+#if UNITY_EDITOR
+	    protected override bool ShouldPopulateReference()
+	    {
+		    if (_variable == null) {
+			    return true;
+		    }
+
+		    return false;
+	    }
+        
+	    protected override ScriptableObject ReadVariable()
+	    {
+		    return _variable;
+	    }
+#endif
     }
 }

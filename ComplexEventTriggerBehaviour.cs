@@ -18,6 +18,7 @@ namespace AltSalt.Maestro
 
         private List<ComplexEventConfigurableTrigger> complexEventConfigurableTriggers => _complexEventConfigurableTriggers;
 
+#if UNITY_EDITOR        
         private void OnEnable()
         {
             string complexEventTriggersListPath = nameof(_complexEventConfigurableTriggers);
@@ -27,6 +28,7 @@ namespace AltSalt.Maestro
                 complexEventConfigurableTriggers[i].PopulateReferences(this, complexTriggerPath);
             }
         }
+#endif        
 
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         [InfoBox("Raises event")]

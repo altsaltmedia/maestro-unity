@@ -23,23 +23,12 @@ namespace AltSalt.Maestro
     [ExecuteInEditMode]
     public class TextLoader : MonoBehaviour
     {
-        [Required]
         [SerializeField]
+        [Required]
         [ReadOnly]
-        private AppSettings _appSettings;
+        private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        private AppSettings appSettings
-        {
-            get
-            {
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         [Required]
         [SerializeField]
@@ -64,6 +53,11 @@ namespace AltSalt.Maestro
         }
 
 #if UNITY_EDITOR
+        private void OnEnable()
+        {
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+        }
+        
         private string GetActiveTextFamilyName()
         {
             if (textCollectionBank != null) {

@@ -45,20 +45,6 @@ namespace AltSalt.Maestro
             return _variable;
         }
 
-        protected override bool ShouldPopulateReference()
-        {
-            if (useConstant == false && _variable == null) {
-                return true;
-            }
-
-            return false;
-        }
-
-        protected override ScriptableObject ReadVariable()
-        {
-            return _variable;
-        }
-        
         public void SetVariable(ColorVariable value) => _variable = value;
 
         public ColorReference()
@@ -100,5 +86,22 @@ namespace AltSalt.Maestro
             colorVariable.SetValue(targetValue.value);
             return colorVariable;
         }
+        
+#if UNITY_EDITOR        
+        protected override bool ShouldPopulateReference()
+        {
+            if (useConstant == false && _variable == null) {
+                return true;
+            }
+
+            return false;
+        }
+
+        protected override ScriptableObject ReadVariable()
+        {
+            return _variable;
+        }
+#endif
+        
     }
 }

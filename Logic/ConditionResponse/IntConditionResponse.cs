@@ -44,49 +44,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         public IntConditionResponse(UnityEngine.Object parentObject,
             string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
 
-        public override void SyncConditionHeading(Object callingObject)
-        {
-            CheckPopulateReferences();
-            
-            if (intReference.GetVariable() == null && intReference.useConstant == false) {
-                conditionEventTitle = "Please populate an int reference.";
-                return;
-            }
-
-            if (intConditionVar.GetVariable() == null && intConditionVar.useConstant == false) {
-                conditionEventTitle = "Please populate a comparison condition.";
-                return;
-            }
-            
-            string newTitle;
-
-            if (intReference.useConstant == true) {
-                newTitle = $"{intReference.GetValue()}  is {operation} ";
-            } else {
-                newTitle = $"{intReference.GetVariable().name} is {operation} ";
-            }
-
-            if (intConditionVar.useConstant == true) {
-                newTitle += $"{intConditionVar.GetValue()}";
-            }
-            else {
-                newTitle += $"{intConditionVar.GetVariable().name}";
-            }
-
-            conditionEventTitle = newTitle;
-        }
-        
-        public override ConditionResponseBase PopulateReferences()
-        {
-            string referencePath = serializedPropertyPath + $".{nameof(_intReference)}";
-            _intReference.PopulateVariable(parentObject, referencePath.Split('.'));
-            
-            string conditionPath = serializedPropertyPath + $".{nameof(_intConditionVar)}";
-            _intConditionVar.PopulateVariable(parentObject, conditionPath.Split('.'));
-            
-            return this;
-        }
-
         public override bool CheckCondition(Object callingObject)
         {
             CheckPopulateReferences();
@@ -131,5 +88,53 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             
             return intConditionVar;
         }
+        
+#if UNITY_EDITOR        
+        public override void SyncConditionHeading(Object callingObject)
+        {
+            CheckPopulateReferences();
+            
+            if (intReference.GetVariable() == null && intReference.useConstant == false) {
+                conditionEventTitle = "Please populate an int reference.";
+                return;
+            }
+
+            if (intConditionVar.GetVariable() == null && intConditionVar.useConstant == false) {
+                conditionEventTitle = "Please populate a comparison condition.";
+                return;
+            }
+            
+            string newTitle;
+
+            if (intReference.useConstant == true) {
+                newTitle = $"{intReference.GetValue()}  is {operation} ";
+            } else {
+                newTitle = $"{intReference.GetVariable().name} is {operation} ";
+            }
+
+            if (intConditionVar.useConstant == true) {
+                newTitle += $"{intConditionVar.GetValue()}";
+            }
+            else {
+                newTitle += $"{intConditionVar.GetVariable().name}";
+            }
+
+            conditionEventTitle = newTitle;
+        }
+        
+        public override ConditionResponseBase PopulateReferences()
+        {
+            base.PopulateReferences();
+            
+            string referencePath = serializedPropertyPath + $".{nameof(_intReference)}";
+            _intReference.PopulateVariable(parentObject, referencePath);
+            
+            string conditionPath = serializedPropertyPath + $".{nameof(_intConditionVar)}";
+            _intConditionVar.PopulateVariable(parentObject, conditionPath);
+            
+            return this;
+        }
+#endif   
+        
     }
 }
