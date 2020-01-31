@@ -40,12 +40,14 @@ namespace AltSalt.Maestro.Logic.Action
             this.priority = priority;
         }
 
+#if UNITY_EDITOR
         public virtual void SyncEditorActionHeadings() { }
 
         public virtual ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
         {
             return this;
         }
+#endif
 
         public abstract void PerformAction(GameObject callingObject);
     }

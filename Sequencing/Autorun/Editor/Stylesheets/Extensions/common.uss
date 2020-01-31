@@ -3,19 +3,19 @@ AutorunMarker_Start
 {
     width: 18px;
     height: 18px;
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-start.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-start.png");
 }
 
 /* Active Marker State -> Corresponds to GUIStyle.onNormal */
 AutorunMarker_Start:checked
 {
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-start.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-start.png");
 }
 
 /* Selected Marker State -> Corresponds to GUIStyle.onFocused */
 AutorunMarker_Start:hover:focus:checked
 {
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-start-selected.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-start-selected.png");
 }
 
 /* Collapsed Marker State -> Corresponds to GUIStyle.normal */
@@ -23,74 +23,74 @@ AutorunMarker_End
 {
     width: 18px;
     height: 18px;
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-end.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-end.png");
 }
 
 /* Active Marker State -> Corresponds to GUIStyle.onNormal */
 AutorunMarker_End:checked
 {
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-end.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-end.png");
 }
 
 /* Selected Marker State -> Corresponds to GUIStyle.onFocused */
 AutorunMarker_End:hover:focus:checked
 {
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-end-selected.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-end-selected.png");
 }
 
 AutorunMarker_Pause
 {
     width: 18px;
     height: 18px;
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-pause.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-pause.png");
 }
 
 /* Active Marker State -> Corresponds to GUIStyle.onNormal */
 AutorunMarker_Pause:checked
 {
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-pause.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-pause.png");
 }
 
 /* Selected Marker State -> Corresponds to GUIStyle.onFocused */
 AutorunMarker_Pause:hover:focus:checked
 {
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-pause-selected.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Autorun/Editor/Stylesheets/imgs/autoplay-pause-selected.png");
 }
 
 PauseMomentumStart
 {
     width: 18px;
     height: 18px;
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-start.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-start.png");
 }
 
 /* Active Marker State -> Corresponds to GUIStyle.onNormal */
 PauseMomentumStart:checked
 {
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-start.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-start.png");
 }
 
 /* Selected Marker State -> Corresponds to GUIStyle.onFocused */
 PauseMomentumStart:hover:focus:checked
 {
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-start-selected.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-start-selected.png");
 }
 
 PauseMomentumEnd
 {
     width: 18px;
     height: 18px;
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-end.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-end.png");
 }
 
 /* Active Marker State -> Corresponds to GUIStyle.onNormal */
 PauseMomentumEnd:checked
 {
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-end.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-end.png");
 }
 
 /* Selected Marker State -> Corresponds to GUIStyle.onFocused */
 PauseMomentumEnd:hover:focus:checked
 {
-    background-image: resource("Assets/_AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-end-selected.png");
+    background-image: resource("Assets/AltSalt/Maestro/Sequencing/Touch/Editor/Stylesheets/imgs/pause-momentum-end-selected.png");
 }

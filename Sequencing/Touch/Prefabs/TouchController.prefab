@@ -445,6 +445,9 @@ MonoBehaviour:
   - _isSystemReference: 0
     _referenceName: MainInput-MomentumDepleted
     _variable: {fileID: 11400000, guid: 01d2619b53ba447848652dbf080cf0d2, type: 2}
+  - _isSystemReference: 0
+    _referenceName: MainInput-AppUtilsRequested
+    _variable: {fileID: 11400000, guid: fcac5bcce6c604d7694038b5a3d5bfd0, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:

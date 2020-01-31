@@ -25,11 +25,18 @@ namespace AltSalt.Maestro
     {
         [ShowInInspector]
         [ReadOnly]
-        public float _sceneAspectRatio;
+        private float _sceneAspectRatio;
 
         public float sceneAspectRatio
         {
-            get => _sceneAspectRatio;
+            get
+            {
+                if (_sceneAspectRatio == 0) {
+                    _sceneAspectRatio = trackAssetConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
+                }
+
+                return _sceneAspectRatio;
+            }
             set => _sceneAspectRatio = value;
         }
         
@@ -39,7 +46,14 @@ namespace AltSalt.Maestro
 
         public float sceneWidth
         {
-            get => _sceneWidth;
+            get
+            {
+                if (_sceneWidth == 0) {
+                    _sceneWidth = trackAssetConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
+                }
+
+                return _sceneWidth;
+            }
             set => _sceneWidth = value;
         }
 
@@ -49,7 +63,14 @@ namespace AltSalt.Maestro
 
         public float sceneHeight
         {
-            get => _sceneHeight;
+            get
+            {
+                if (_sceneHeight == 0) {
+                    _sceneHeight = trackAssetConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
+                }
+
+                return _sceneHeight;
+            }
             set => _sceneHeight = value;
         }
 

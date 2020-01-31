@@ -93,14 +93,6 @@ namespace AltSalt.Maestro.Sequencing
         
         public int priority => _priority;
 
-        public bool scrubberActive => appSettings.GetScrubberActive(this.gameObject,
-            sequence.sequenceConfig.masterSequence.rootConfig.inputGroupKey);
-
-        private void Start()
-        {
-            
-        }
-
         public void CallExecuteLayoutUpdate(Object callingObject)
         {
 #if UNITY_EDITOR

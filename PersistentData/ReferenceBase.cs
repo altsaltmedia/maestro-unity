@@ -24,6 +24,7 @@ namespace AltSalt.Maestro
 
         [ShowInInspector]
         [OnValueChanged(nameof(CallPopulateVariable))]
+        [ShowIf(nameof(searchAttempted))]
         private bool _searchAttempted = false;
 
         private bool searchAttempted
@@ -33,6 +34,7 @@ namespace AltSalt.Maestro
         }
 
         [SerializeField]
+        [ShowIf(nameof(searchAttempted))]
         protected string _referenceName;
 
         public string referenceName
@@ -40,8 +42,7 @@ namespace AltSalt.Maestro
             get => _referenceName;
             set => _referenceName = value;
         }
-
-        [ShowInInspector]
+        
         private UnityEngine.Object _parentObject;
 
         public UnityEngine.Object parentObject
@@ -50,7 +51,6 @@ namespace AltSalt.Maestro
             set => _parentObject = value;
         }
         
-        [ShowInInspector]
         private List<string> _serializedPropertyPath = new List<string>();
 
         private List<string> serializedPropertyPath
@@ -138,6 +138,10 @@ namespace AltSalt.Maestro
                 else {
                     LogNotFoundError(GetType().Name);
                 }
+            }
+
+            if (ReadVariable() != null) {
+                UpdateReferenceName();
             }
 
             return this;

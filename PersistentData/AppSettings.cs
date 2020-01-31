@@ -362,20 +362,7 @@ namespace AltSalt.Maestro
         {
             return inputData.GetInputGroup(inputGroupKey).forkTransitionActive.SetValue(callingObject, targetValue);
         }
-        
-        
-        // Scrubber Active
 
-        public bool GetScrubberActive(GameObject callingObject, InputGroupKey inputGroupKey)
-        {
-            return inputData.GetInputGroup(inputGroupKey).scrubberActive.GetValue();
-        }
-        
-        public BoolVariable SetScrubberActive(GameObject callingObject, InputGroupKey inputGroupKey, bool targetValue)
-        {
-            return inputData.GetInputGroup(inputGroupKey).scrubberActive.SetValue(callingObject, targetValue);
-        }
-        
 
         // Axis Transition Spread
 
@@ -556,8 +543,28 @@ namespace AltSalt.Maestro
         {
             return inputData.GetInputGroup(inputGroupKey).autoplayActivate;
         }
-
         
+        public ComplexEventManualTrigger GetUpdateFork(GameObject callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).updateFork;
+        }
+        
+        public ComplexEventManualTrigger GetRefreshScrubber(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).refreshScrubber;
+        }
+
+        public bool GetAppUtilsRequested(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).appUtilsRequested.GetValue();
+        }
+        
+        public BoolVariable SetAppUtilsRequested(GameObject callingObject, InputGroupKey inputGroupKey, bool targetValue)
+        {
+            return inputData.GetInputGroup(inputGroupKey).appUtilsRequested.SetValue(callingObject, targetValue);
+        }
+
+
         // Y Axes
 
         public AxisReference GetYSwipeAxisReference(Object callingObject, InputGroupKey inputGroupKey)

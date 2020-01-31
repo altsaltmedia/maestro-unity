@@ -62,7 +62,10 @@ namespace AltSalt.Maestro
 
         protected LerpToTargetMixerBehaviour StoreMixerProperties(GameObject directorObject, LerpToTargetMixerBehaviour trackMixer)
         {
-            trackMixer.trackAssetConfig = directorObject.GetComponent<TrackAssetConfig>();
+            var trackAssetConfig = directorObject.GetComponent<TrackAssetConfig>();
+            trackMixer.trackAssetConfig = trackAssetConfig;
+            trackMixer.appSettings = trackAssetConfig.appSettings;
+            trackMixer.inputGroupKey = trackAssetConfig.inputGroupKey;
             trackMixer.parentTrack = this;
             return trackMixer;
         }

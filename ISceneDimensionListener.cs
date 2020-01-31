@@ -4,7 +4,7 @@ namespace AltSalt.Maestro
     {
         float sceneAspectRatio { get; set; }
         
-        float sceneWidth { get; set; }
+        float sceneWidth { get; set;}
         
         float sceneHeight { get; set; }
     }

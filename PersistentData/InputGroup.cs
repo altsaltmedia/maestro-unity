@@ -3,6 +3,7 @@ using System.Reflection;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
@@ -94,13 +95,7 @@ namespace AltSalt.Maestro
         private BoolReference _forkTransitionActive = new BoolReference();
 
         public BoolReference forkTransitionActive => _forkTransitionActive;
-        
-        
-        [SerializeField]
-        [FoldoutGroup("Calculations")]
-        private BoolReference _scrubberActive = new BoolReference();
 
-        public BoolReference scrubberActive => _scrubberActive;
 
     #endregion
 
@@ -191,6 +186,28 @@ namespace AltSalt.Maestro
 
         public SimpleEventTrigger autoplayActivate => _autoplayActivate;
         
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private ComplexEventManualTrigger _updateFork = new ComplexEventManualTrigger();
+
+        public ComplexEventManualTrigger updateFork => _updateFork;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private ComplexEventManualTrigger _refreshScrubber = new ComplexEventManualTrigger();
+
+        public ComplexEventManualTrigger refreshScrubber => _refreshScrubber;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private BoolReference _appUtilsRequested = new BoolReference();
+
+        public BoolReference appUtilsRequested => _appUtilsRequested;
+        
+
     #endregion
 
 

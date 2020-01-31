@@ -9,8 +9,6 @@ namespace AltSalt.Maestro.Animation
         SpriteRenderer trackBinding;
         ScriptPlayable<ColorBehaviour> inputPlayable;
         ColorBehaviour input;
-        SpriteRenderer trackBindingComponent;
-        Color originalValue;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
@@ -18,11 +16,6 @@ namespace AltSalt.Maestro.Animation
             
             if (!trackBinding)
                 return;
-
-            if(trackBindingComponent == null) {
-                trackBindingComponent = trackBinding.GetComponent<SpriteRenderer>();
-                originalValue = trackBindingComponent.color;
-            }
 
             inputCount = playable.GetInputCount ();
             
@@ -34,12 +27,12 @@ namespace AltSalt.Maestro.Animation
                 
                 if(inputWeight >= 1f) {
                     percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
-                    trackBindingComponent.color = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
+                    trackBinding.color = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
                 } else {
                     if(currentTime >= input.endTime) {
-                        trackBindingComponent.color = input.targetValue;
+                        trackBinding.color = input.targetValue;
                     } else if (i == 0 && currentTime <= input.startTime) {
-                        trackBindingComponent.color = input.initialValue;
+                        trackBinding.color = input.initialValue;
                     }
                 }
             }
@@ -48,8 +41,10 @@ namespace AltSalt.Maestro.Animation
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            if (Application.isPlaying == true && scrubberActive == true) {
-                trackBindingComponent.color = Utils.transparent;
+            if (Application.isPlaying == true && appUtilsRequested == true) {
+                if (trackBinding != null) {
+                    trackBinding.color = Utils.transparent;
+                }
             }
         }
     }   

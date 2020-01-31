@@ -35,7 +35,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         protected virtual void Update()
         {
-            if (isParentControllerNull || autoplayEnabled == false) {
+            if (autoplayEnabled == false || appUtilsRequested == true) {
                 return;
             }
 

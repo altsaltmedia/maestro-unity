@@ -31,7 +31,21 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         
         public LayoutConditionResponse(UnityEngine.Object parentObject,
             string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
+    
+                
+        public override ConditionResponseBase PopulateReferences()
+        {
+#if UNITY_EDITOR
+            string referencePath = serializedPropertyPath + $".{nameof(_layoutReference)}";
+            _layoutReference.PopulateVariable(parentObject, referencePath.Split('.'));
+            
+            string conditionPath = serializedPropertyPath + $".{nameof(_activeLayoutCondition)}";
+            _activeLayoutCondition.PopulateVariable(parentObject, conditionPath.Split('.'));
+#endif            
+            return this;
+        }
         
+#if UNITY_EDITOR
         public override void SyncConditionHeading(Object callingObject)
         {
             CheckPopulateReferences();
@@ -57,17 +71,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
             conditionEventTitle = newTitle;
         }
-        
-        public override ConditionResponseBase PopulateReferences()
-        {
-            string referencePath = serializedPropertyPath + $".{nameof(_layoutReference)}";
-            _layoutReference.PopulateVariable(parentObject, referencePath.Split('.'));
-            
-            string conditionPath = serializedPropertyPath + $".{nameof(_activeLayoutCondition)}";
-            _activeLayoutCondition.PopulateVariable(parentObject, conditionPath.Split('.'));
-            
-            return this;
-        }
+#endif
 
         public override bool CheckCondition(Object callingObject)
         {

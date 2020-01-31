@@ -30,6 +30,7 @@ namespace AltSalt.Maestro
         [SerializeField]
         [FormerlySerializedAs("Response")]
         [ReadOnly]
+        [HideInInspector]
         private UnityEvent _response;
 
         private UnityEvent response => _response;

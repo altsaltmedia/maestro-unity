@@ -99,14 +99,11 @@ namespace AltSalt.Maestro.Logic
 
         private SimpleEventReference fadeInCompleted => _fadeInCompleted;
 
-        private void Start()
+        private void OnEnable()
         {
             canvasGroup = GetComponent<CanvasGroup>();
             image = GetComponentInChildren<Image>();
-        }
-
-        private void OnEnable()
-        {
+            
             _fadeToBlackSpeedKey.PopulateVariable(this, nameof(_fadeToBlackSpeedKey));
             _fadeInSpeedKey.PopulateVariable(this, nameof(_fadeInSpeedKey));
             _fadeColorKey.PopulateVariable(this, nameof(_fadeColorKey));

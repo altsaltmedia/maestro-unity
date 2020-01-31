@@ -108,10 +108,10 @@ namespace AltSalt.Maestro
             bool triggerTextChange;
             
             if (targetStatus == true) {
-                ModifyHandler.ActivateOriginLayout(targetLayout, this, out triggerTextChange);
+                ContentExtensionController.ActivateOriginLayout(targetLayout, this, out triggerTextChange);
             }
             else {
-                ModifyHandler.DeactivateOriginLayout(targetLayout, this, out triggerTextChange);
+                ContentExtensionController.DeactivateOriginLayout(targetLayout, this, out triggerTextChange);
             }
             LayoutUpdate();
 

@@ -50,7 +50,7 @@ namespace AltSalt.Maestro.Animation
         {
             base.OnGraphStop(playable);
             if (trackBindingComponent != null) {
-                if (Application.isPlaying == true && scrubberActive == true) {
+                if (Application.isPlaying == true && appUtilsRequested == true) {
                     trackBindingComponent.anchoredPosition3D = new Vector3(1000, 1000);;
                 }
             }

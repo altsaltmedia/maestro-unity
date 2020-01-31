@@ -14,6 +14,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public void UpdateSequenceWithSwipe()
         {
+            if (appUtilsRequested == true) return; 
+            
             Vector2 swipeForceToApply = touchController.swipeForce;
 
             // If we're in a fork, only apply force from the axis currently receiving greatest input

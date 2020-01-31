@@ -45,8 +45,16 @@ namespace AltSalt.Maestro.Logic.Action
             
             actionTrigger.PerformActions(this.gameObject);
         }
+        
 
 #if UNITY_EDITOR
+        [Button]
+        [ShowInInspector]
+        public void CallPerformActions()
+        {
+            actionTrigger.PerformActions(this.gameObject);
+        }
+        
         private void Update()
         {
             if (syncEditorActionHeadings == true) {

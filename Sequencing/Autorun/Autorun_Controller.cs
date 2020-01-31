@@ -41,7 +41,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         public override void ConfigureData()
         {
-            if (Application.isPlaying == true) return;
+            //if (Application.isPlaying == true) return;
             
             autorunData.Clear();
 

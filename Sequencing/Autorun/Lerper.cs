@@ -21,6 +21,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         public void TriggerLerpSequences()
         {
+            if (appUtilsRequested == true) return;
+            
             for (int i = 0; i < autorunController.autorunData.Count; i++) {
                 AttemptLerpSequence(autorunController.autorunData[i]);
             }
@@ -28,6 +30,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         public void TriggerLerpSequence(Sequence targetSequence)
         {
+            if (appUtilsRequested == true) return;
+            
             if (HasLerpData(targetSequence, autorunController, out var autorunData) == false) return;
 
             AttemptLerpSequence(autorunData);

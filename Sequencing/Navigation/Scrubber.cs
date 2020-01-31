@@ -15,12 +15,6 @@ namespace AltSalt.Maestro.Sequencing.Navigation
     {
         [SerializeField]
         SimpleEventTrigger sequenceScrubbed;
-
-        private bool scubberActive
-        {
-            get => navigationController.appSettings.GetScrubberActive(this.gameObject, inputGroupKey);
-            set => navigationController.appSettings.SetScrubberActive(this.gameObject, inputGroupKey, value);
-        }
         
         private Slider _slider;
 
@@ -29,6 +23,16 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             get => _slider;
             set => _slider = value;
         }
+        
+        [ShowInInspector]
+        [ReadOnly]
+        private MasterSequence _activeMasterSequence;
+
+        private MasterSequence activeMasterSequence
+        {
+            get => _activeMasterSequence;
+            set => _activeMasterSequence = value;
+        }
 
         // Use this for initialization
         private void OnEnable()
@@ -36,10 +40,13 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             slider = GetComponent<Slider>();
         }
 
-        public void RefreshScrubber(float totalTime, float targetTime)
+        public void RefreshScrubber(ComplexPayload complexPayload)
         {
-            slider.maxValue = totalTime;
-            slider.value = targetTime;
+            navigationController = complexPayload.GetObjectValue(DataType.systemObjectType) as NavigationController;
+            activeMasterSequence = navigationController.activeMasterSequence;
+            
+            slider.maxValue = (float)activeMasterSequence.duration;
+            slider.value = (float)activeMasterSequence.elapsedTime;
         }
 
         private void OnMouseUpAsButton()
@@ -49,8 +56,7 @@ namespace AltSalt.Maestro.Sequencing.Navigation
 
         public void ScrubSequence(float newValue)
         {
-            scubberActive = true;
-            navigationController.activeMasterSequence.elapsedTime = newValue;
+            activeMasterSequence.SetElapsedTime(newValue);
             return;
 
 //            Sequence activeSequence = _masterSequence.UpdateMasterTime(newValue);

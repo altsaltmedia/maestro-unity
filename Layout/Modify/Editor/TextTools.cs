@@ -370,10 +370,10 @@ namespace AltSalt.Maestro
             bool triggerLayoutChange;
             
             if (targetStatus == true) {
-                ModifyHandler.ActivateOriginTextFamily(targetTextFamily, this, out triggerLayoutChange);
+                ContentExtensionController.ActivateOriginTextFamily(targetTextFamily, this, out triggerLayoutChange);
             }
             else {
-                ModifyHandler.DeactivateOriginTextFamily(targetTextFamily, this, out triggerLayoutChange);
+                ContentExtensionController.DeactivateOriginTextFamily(targetTextFamily, this, out triggerLayoutChange);
             }
 
             if (triggerLayoutChange == true) {

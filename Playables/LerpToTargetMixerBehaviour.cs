@@ -15,6 +15,22 @@ namespace AltSalt.Maestro
 {
     public abstract class LerpToTargetMixerBehaviour : PlayableBehaviour
     {
+        private AppSettings _appSettings;
+
+        public AppSettings appSettings
+        {
+            get => _appSettings;
+            set => _appSettings = value;
+        }
+
+        private InputGroupKey _inputGroupKey;
+
+        public InputGroupKey inputGroupKey
+        {
+            get => _inputGroupKey;
+            set => _inputGroupKey = value;
+        }
+
         private double _currentTime;
 
         protected double currentTime
@@ -56,11 +72,8 @@ namespace AltSalt.Maestro
             set => _trackAssetConfig = value;
         }
 
-        protected bool scrubberActive
-        {
-            get => trackAssetConfig.scrubberActive;
-        }
-        
+        protected bool appUtilsRequested => appSettings.GetAppUtilsRequested(parentTrack, inputGroupKey);
+
         private TrackAsset _parentTrack;
 
         public TrackAsset parentTrack

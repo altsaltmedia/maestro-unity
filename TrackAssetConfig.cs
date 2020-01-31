@@ -42,7 +42,7 @@ namespace AltSalt.Maestro
         [HideIf(nameof(SequencePopulated))]
         private InputGroupKeyReference _inputGroupKey = new InputGroupKeyReference();
 
-        private InputGroupKey inputGroupKey
+        public InputGroupKey inputGroupKey
         {
             get
             {
@@ -59,9 +59,7 @@ namespace AltSalt.Maestro
             get => appSettings.GetIsReversing(this.gameObject, inputGroupKey);
             private set => appSettings.SetIsReversing(this.gameObject, inputGroupKey, value);
         }
-        
-        public bool scrubberActive => appSettings.GetScrubberActive(this.gameObject, inputGroupKey);
-        
+
         public float timelineDebugTime
         {
             get => appSettings.timelineDebugTime;

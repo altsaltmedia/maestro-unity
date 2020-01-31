@@ -8,10 +8,10 @@ using Sirenix.OdinInspector;
 using AltSalt.Maestro.Logic.Action;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
+
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine.Events;
-
 #endif
 
 namespace AltSalt.Maestro.Logic.ConditionResponse
@@ -21,24 +21,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     public class ConditionResponseActionData : ActionData, IClearHiddenValues, ISyncUnityEventHeadings
     {
         protected override string title => nameof(ConditionResponseActionData);
-
-        [SerializeField]
-        private Object _parentObject;
-
-        private Object parentObject
-        {
-            get => _parentObject;
-            set => _parentObject = value;
-        }
-
-        [SerializeField]
-        private string _serializedPropertyPath;
-
-        private string serializedPropertyPath
-        {
-            get => _serializedPropertyPath;
-            set => _serializedPropertyPath = value;
-        }
 
         [Serializable]
         private enum ConditionResponseTypes { Bool, Float, Int, TextFamily, Layout }
@@ -153,7 +135,27 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             get => _action;
             set => _action = value;
         }
-#if UNITY_EDITOR        
+        
+#if UNITY_EDITOR
+        
+        [SerializeField]
+        private Object _parentObject;
+
+        private Object parentObject
+        {
+            get => _parentObject;
+            set => _parentObject = value;
+        }
+
+        [SerializeField]
+        private string _serializedPropertyPath;
+
+        private string serializedPropertyPath
+        {
+            get => _serializedPropertyPath;
+            set => _serializedPropertyPath = value;
+        }
+        
         private string _genericActionDescription;
 
         private string genericActionDescription
@@ -161,7 +163,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             get => _genericActionDescription;
             set => _genericActionDescription = value;
         }
-
         
         private List<UnityEventData> _cachedEventData = new List<UnityEventData>();
 
@@ -229,139 +230,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             conditionResponsePath += $".{_layoutEvents.Count}";
             var conditionResponse = new LayoutConditionResponse(parentObject, conditionResponsePath);
             return conditionResponse;
-        }
-        
-        public override void SyncEditorActionHeadings()
-        {
-            if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
-
-                actionDescription = "";
-                actionDescription += GetHeaderConditionDescription(boolEvents.ConvertAll(x => (ConditionResponseBase)x));
-                actionDescription += GetHeaderConditionDescription(floatEvents.ConvertAll(x => (ConditionResponseBase)x));
-                actionDescription += GetHeaderConditionDescription(intEvents.ConvertAll(x => (ConditionResponseBase)x));
-                actionDescription += GetHeaderConditionDescription(textFamilyEvents.ConvertAll(x => (ConditionResponseBase)x));
-                actionDescription += GetHeaderConditionDescription(layoutEvents.ConvertAll(x => (ConditionResponseBase)x));
-                RefreshGenericActionDescription();
-                actionDescription += "    ";
-                actionDescription += genericActionDescription.Replace("\n", "\n    ");
-                
-                return;
-            }
-            
-            switch (triggerType) {
-
-                case ConditionResponseTypes.Bool :
-                    actionDescription = GetHeaderConditionDescriptionWithActions(boolEvents.ConvertAll(x => (ConditionResponseBase)x));
-                    break;
-                
-                case ConditionResponseTypes.Float :
-                    actionDescription = GetHeaderConditionDescriptionWithActions(floatEvents.ConvertAll(x => (ConditionResponseBase)x));
-                    break;
-                
-                case ConditionResponseTypes.Int :
-                    actionDescription = GetHeaderConditionDescriptionWithActions(intEvents.ConvertAll(x => (ConditionResponseBase)x));
-                    break;
-                
-                case ConditionResponseTypes.TextFamily :
-                    actionDescription = GetHeaderConditionDescriptionWithActions(textFamilyEvents.ConvertAll(x => (ConditionResponseBase)x));
-                    break;
-                
-                case ConditionResponseTypes.Layout :
-                    actionDescription = GetHeaderConditionDescriptionWithActions(layoutEvents.ConvertAll(x => (ConditionResponseBase)x));
-                    break;
-                
-            }
-        }
-
-        private static string GetHeaderConditionDescription(List<ConditionResponseBase> conditionResponseList)
-        {
-            string actionDescription = "";
-            
-            for (int i = 0; i < conditionResponseList.Count; i++) {
-                actionDescription += conditionResponseList[i].conditionEventTitle + "\n";
-            }
-
-            return actionDescription;
-        }
-
-        private void RefreshGenericActionDescription()
-        {
-            var serializedObject = new SerializedObject(parentObject);
-            SerializedProperty eventList =
-                ReferenceBase.FindReferenceProperty(serializedObject, serializedPropertyPath.Split('.'), nameof(_action));
-            string[] parameterNames = UnityEventUtils.GetUnityEventParameters(eventList);
-            if (UnityEventUtils.UnityEventValuesChanged(action, parameterNames, cachedEventData, out var eventData)) {
-                if (eventData.Count > 0) {
-                    cachedEventData = eventData;
-                    genericActionDescription = UnityEventUtils.ParseUnityEventDescription(eventData);
-                }
-            }
-
-            if (action.GetPersistentEventCount() < 1) {
-                genericActionDescription = "No actions defined";
-            }
-        }
-        
-        private static string GetHeaderConditionDescriptionWithActions(List<ConditionResponseBase> conditionResponseList)
-        {
-            string actionDescription = "";
-            
-            for (int i = 0; i < conditionResponseList.Count; i++) {
-                actionDescription += conditionResponseList[i].conditionEventTitle + "\n    ";
-                actionDescription += conditionResponseList[i].eventDescription.Replace("\n", "\n    ");;
-                if (i < conditionResponseList.Count - 1) {
-                    actionDescription += "\n\n";
-                }
-            }
-
-            if (string.IsNullOrEmpty(actionDescription)) {
-                return "Please populate the condition response.";
-            }
-            
-            return actionDescription;
-        }
-        
-        
-        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
-        {
-            FieldInfo[] fields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-            for (int i = 0; i < fields.Length; i++) {
-                if (fields[i].IsNotSerialized == true) {
-                    continue;
-                }
-
-                var fieldValue = fields[i].GetValue(this);
-                if (fieldValue is IList == false) {
-                    continue;
-                }
-
-                var actionList = fieldValue as IList;
-                var listType = actionList.GetType().GetGenericArguments()[0];
-
-                if (listType.IsSubclassOf(typeof(ConditionResponseBase)) == false) {
-                    continue;
-                }
-
-                string conditionResponseListPath = serializedPropertyPath;
-                conditionResponseListPath += $".{fields[i].Name}";
-
-                MethodInfo methodInfo = typeof(ConditionResponseBase).GetMethod(
-                    nameof(ConditionResponseBase.PopulateReferences), BindingFlags.Public | BindingFlags.Instance);
-
-                if (methodInfo == null) {
-                    continue;
-                }
-                
-                for (int j = 0; j < actionList.Count; j++) {
-                    string actionPath = conditionResponseListPath;
-                    actionPath += $".{j.ToString()}";
-                    methodInfo.Invoke(actionList[j],
-                        new object[] {});
-                }
-            }
-
-            return this;
         }
 
         public override void PerformAction(GameObject callingObject)
@@ -517,7 +385,143 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             return true;
         }
 
-        public void CallSyncConditionHeadings(UnityEngine.Object parentObject)
+        
+#if UNITY_EDITOR
+        
+        public override void SyncEditorActionHeadings()
+        {
+            if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
+
+                actionDescription = "";
+                actionDescription += GetHeaderConditionDescription(boolEvents.ConvertAll(x => (ConditionResponseBase)x));
+                actionDescription += GetHeaderConditionDescription(floatEvents.ConvertAll(x => (ConditionResponseBase)x));
+                actionDescription += GetHeaderConditionDescription(intEvents.ConvertAll(x => (ConditionResponseBase)x));
+                actionDescription += GetHeaderConditionDescription(textFamilyEvents.ConvertAll(x => (ConditionResponseBase)x));
+                actionDescription += GetHeaderConditionDescription(layoutEvents.ConvertAll(x => (ConditionResponseBase)x));
+                RefreshGenericActionDescription();
+                actionDescription += "    ";
+                actionDescription += genericActionDescription.Replace("\n", "\n    ");
+                
+                return;
+            }
+            
+            switch (triggerType) {
+
+                case ConditionResponseTypes.Bool :
+                    actionDescription = GetHeaderConditionDescriptionWithActions(boolEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    break;
+                
+                case ConditionResponseTypes.Float :
+                    actionDescription = GetHeaderConditionDescriptionWithActions(floatEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    break;
+                
+                case ConditionResponseTypes.Int :
+                    actionDescription = GetHeaderConditionDescriptionWithActions(intEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    break;
+                
+                case ConditionResponseTypes.TextFamily :
+                    actionDescription = GetHeaderConditionDescriptionWithActions(textFamilyEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    break;
+                
+                case ConditionResponseTypes.Layout :
+                    actionDescription = GetHeaderConditionDescriptionWithActions(layoutEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    break;
+                
+            }
+        }
+
+        private static string GetHeaderConditionDescription(List<ConditionResponseBase> conditionResponseList)
+        {
+            string actionDescription = "";
+            
+            for (int i = 0; i < conditionResponseList.Count; i++) {
+                actionDescription += conditionResponseList[i].conditionEventTitle + "\n";
+            }
+
+            return actionDescription;
+        }
+
+        private void RefreshGenericActionDescription()
+        {
+            var serializedObject = new SerializedObject(parentObject);
+            SerializedProperty eventList =
+                ReferenceBase.FindReferenceProperty(serializedObject, serializedPropertyPath.Split('.'), nameof(_action));
+            string[] parameterNames = UnityEventUtils.GetUnityEventParameters(eventList);
+            if (UnityEventUtils.UnityEventValuesChanged(action, parameterNames, cachedEventData, out var eventData)) {
+                if (eventData.Count > 0) {
+                    cachedEventData = eventData;
+                    genericActionDescription = UnityEventUtils.ParseUnityEventDescription(eventData);
+                }
+            }
+
+            if (action.GetPersistentEventCount() < 1) {
+                genericActionDescription = "No actions defined";
+            }
+        }
+        
+        private static string GetHeaderConditionDescriptionWithActions(List<ConditionResponseBase> conditionResponseList)
+        {
+            string actionDescription = "";
+            
+            for (int i = 0; i < conditionResponseList.Count; i++) {
+                actionDescription += conditionResponseList[i].conditionEventTitle + "\n    ";
+                actionDescription += conditionResponseList[i].eventDescription.Replace("\n", "\n    ");;
+                if (i < conditionResponseList.Count - 1) {
+                    actionDescription += "\n\n";
+                }
+            }
+
+            if (string.IsNullOrEmpty(actionDescription)) {
+                return "Please populate the condition response.";
+            }
+            
+            return actionDescription;
+        }
+        
+        
+        public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
+        {
+            FieldInfo[] fields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            for (int i = 0; i < fields.Length; i++) {
+                if (fields[i].IsNotSerialized == true) {
+                    continue;
+                }
+
+                var fieldValue = fields[i].GetValue(this);
+                if (fieldValue is IList == false) {
+                    continue;
+                }
+
+                var actionList = fieldValue as IList;
+                var listType = actionList.GetType().GetGenericArguments()[0];
+
+                if (listType.IsSubclassOf(typeof(ConditionResponseBase)) == false) {
+                    continue;
+                }
+
+                string conditionResponseListPath = serializedPropertyPath;
+                conditionResponseListPath += $".{fields[i].Name}";
+
+                MethodInfo methodInfo = typeof(ConditionResponseBase).GetMethod(
+                    nameof(ConditionResponseBase.PopulateReferences), BindingFlags.Public | BindingFlags.Instance);
+
+                if (methodInfo == null) {
+                    continue;
+                }
+                
+                for (int j = 0; j < actionList.Count; j++) {
+                    string actionPath = conditionResponseListPath;
+                    actionPath += $".{j.ToString()}";
+                    methodInfo.Invoke(actionList[j],
+                        new object[] {});
+                }
+            }
+
+            return this;
+        }
+        
+         public void CallSyncConditionHeadings(UnityEngine.Object parentObject)
         {
             if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
                 int currentIndex = 0;
@@ -683,8 +687,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
             return "AND";
         }
-
-#if UNITY_EDITOR
+        
         void DisplayClearDialogue()
         {
             if (EditorUtility.DisplayDialog("Clear unused values?", "You just changed the condition response type. Would you like to erase unused, hidden values?", "Yes", "No")) {

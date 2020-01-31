@@ -21,6 +21,15 @@ namespace AltSalt.Maestro.Sequencing
         
         [SerializeField]
         [TitleGroup("$"+nameof(propertiesTitle))]
+        private bool _canBeScrubbed = true;
+        
+        public bool canBeScrubbed {
+            get => _canBeScrubbed;
+            set => _canBeScrubbed = value;
+        }
+        
+        [SerializeField]
+        [TitleGroup("$"+nameof(propertiesTitle))]
         private double _currentTime;
 
         public double currentTime

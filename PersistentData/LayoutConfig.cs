@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 namespace AltSalt.Maestro
 {
     [CreateAssetMenu(menuName = "AltSalt/Modify/Layout")]
-    public class LayoutConfig : RegisterableScriptableObject, IModifyConfig
+    public class LayoutConfig : RegisterableScriptableObject, IContentExtensionConfig
     {
         
 #if UNITY_EDITOR
@@ -54,7 +54,7 @@ namespace AltSalt.Maestro
             set => _priority = value;
         }
         
-        public IModifyConfig SetActive(bool targetStatus)
+        public IContentExtensionConfig SetActive(bool targetStatus)
         {
             active = targetStatus;
             return this;
@@ -62,8 +62,8 @@ namespace AltSalt.Maestro
 
         public static LayoutConfig GetActiveLayout(List<LayoutConfig> layoutConfigs)
         {
-            var convertedConfigs = layoutConfigs.ConvertAll(x => (IModifyConfig) x);
-            if (Utils.ContainsActiveModifyConfig(convertedConfigs, out IModifyConfig modifyConfig)) {
+            var convertedConfigs = layoutConfigs.ConvertAll(x => (IContentExtensionConfig) x);
+            if (Utils.ContainsActiveContentExtensionConfig(convertedConfigs, out IContentExtensionConfig modifyConfig)) {
                 return modifyConfig as LayoutConfig;;
             }
 

@@ -113,6 +113,9 @@ MonoBehaviour:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipe
     _variable: {fileID: 11400000, guid: a18e207534e2542579281880a9c729e0, type: 2}
+  - _isSystemReference: 0
+    _referenceName: MainInput-AppUtilsRequested
+    _variable: {fileID: 11400000, guid: fcac5bcce6c604d7694038b5a3d5bfd0, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -153,10 +156,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7493842464391128962}
   - component: {fileID: 3719720165695611221}
-  - component: {fileID: 4944100776945312249}
   - component: {fileID: 1764233776882483978}
-  - component: {fileID: 7211087801763608557}
-  - component: {fileID: 4465262678314197478}
+  - component: {fileID: 4944100776945312249}
   - component: {fileID: 1133069145979638054}
   m_Layer: 12
   m_Name: Autoplayer
@@ -195,53 +196,6 @@ MonoBehaviour:
   _autorunController: {fileID: 2061094698163370185}
   _autoplayEnabled: 1
   _autoplayEaseThreshold: 0.25
---- !u!114 &4944100776945312249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8733841028164870764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 07d850dd449ac4c73977c95628984ed5, type: 2}
-  _simpleSignalReferences:
-  - _isSystemReference: 0
-    _referenceName: MainInput-AutoplayActivate
-    _variable: {fileID: 11400000, guid: 07d850dd449ac4c73977c95628984ed5, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3719720165695611221}
-        m_MethodName: ActivateAutoplay
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _action:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3719720165695611221}
-        m_MethodName: ActivateAutoplay
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
 --- !u!114 &1764233776882483978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,7 +230,7 @@ MonoBehaviour:
         m_CallState: 2
   _doNotRecord: 0
   _migrated: 0
---- !u!114 &7211087801763608557
+--- !u!114 &4944100776945312249
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -288,55 +242,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: bdf914328d0d1408a94041dc8986f7f5, type: 2}
+  _simpleSignal: {fileID: 11400000, guid: 07d850dd449ac4c73977c95628984ed5, type: 2}
   _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: MainInput-AutoplayActivate
+    _variable: {fileID: 11400000, guid: 07d850dd449ac4c73977c95628984ed5, type: 2}
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipeEnd
     _variable: {fileID: 11400000, guid: bdf914328d0d1408a94041dc8986f7f5, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3719720165695611221}
-        m_MethodName: ActivateAutoplay
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _action:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3719720165695611221}
-        m_MethodName: ActivateAutoplay
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
---- !u!114 &4465262678314197478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8733841028164870764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
-  _simpleSignalReferences: []
+  - _isSystemReference: 0
+    _referenceName: PauseSequenceComplete
+    _variable: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -384,6 +300,9 @@ MonoBehaviour:
   - _isSystemReference: 0
     _referenceName: MainInput-OnTouchStart
     _variable: {fileID: 11400000, guid: 21ec05b2ee83f400c8a84a5bb6447b60, type: 2}
+  - _isSystemReference: 0
+    _referenceName: MainInput-AppUtilsRequested
+    _variable: {fileID: 11400000, guid: fcac5bcce6c604d7694038b5a3d5bfd0, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:

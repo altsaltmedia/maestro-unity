@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Serialization;
+using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro.Audio
 {

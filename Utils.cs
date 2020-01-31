@@ -120,29 +120,29 @@ namespace AltSalt.Maestro
             return source.Substring(0, maxLength);
         }
         
-        public static bool ContainsActiveModifyConfig(List<IModifyConfig> modifyConfigs, out IModifyConfig modifyConfig)
+        public static bool ContainsActiveContentExtensionConfig(List<IContentExtensionConfig> extensionConfigs, out IContentExtensionConfig contentExtensionConfig)
         {
-            List<IModifyConfig> activeModifyConfigs = new List<IModifyConfig>();
-            for (int i = 0; i < modifyConfigs.Count; i++) {
-                if (modifyConfigs[i].active == true) {
-                    activeModifyConfigs.Add(modifyConfigs[i]);
+            List<IContentExtensionConfig> activeModifyConfigs = new List<IContentExtensionConfig>();
+            for (int i = 0; i < extensionConfigs.Count; i++) {
+                if (extensionConfigs[i].active == true) {
+                    activeModifyConfigs.Add(extensionConfigs[i]);
                 }
             }
 
             if (activeModifyConfigs.Count > 0) {
                 // Set to the one with highest priority
-                activeModifyConfigs.Sort(new Utils.ModifyConfigSort());
-                modifyConfig = activeModifyConfigs[activeModifyConfigs.Count - 1];
+                activeModifyConfigs.Sort(new Utils.ContentExtensionConfigSort());
+                contentExtensionConfig = activeModifyConfigs[activeModifyConfigs.Count - 1];
                 return true;
             }
 
-            modifyConfig = null;
+            contentExtensionConfig = null;
             return false;
         }
         
-        public class ModifyConfigSort : Comparer<IModifyConfig>
+        public class ContentExtensionConfigSort : Comparer<IContentExtensionConfig>
         {
-            public override int Compare(IModifyConfig x, IModifyConfig y)
+            public override int Compare(IContentExtensionConfig x, IContentExtensionConfig y)
             {
                 return x.priority.CompareTo(y.priority);
             }
@@ -1116,26 +1116,6 @@ namespace AltSalt.Maestro
             path = AssetDatabase.GUIDToAssetPath(guids[0]);
 
             return (AppSettings)AssetDatabase.LoadAssetAtPath(path, typeof(AppSettings));
-        }
-
-        public static ModifySettings GetModifySettings()
-        {
-            string[] guids;
-            string path;
-
-            guids = AssetDatabase.FindAssets("t:" + nameof(VarDependencies.ModifySettings));
-
-            if(guids.Length == 0) {
-                throw new Exception("Modify Settings not found! You must create an instance of Modify Settings.");
-            }
-
-            if (guids.Length > 1) {
-                Debug.LogWarning("More than one matching Modify Settings asset found. Please check to see if this is intentional.");
-            }
-
-            path = AssetDatabase.GUIDToAssetPath(guids[0]);
-
-            return (ModifySettings)AssetDatabase.LoadAssetAtPath(path, typeof(ModifySettings));
         }
 
         public static SimpleEvent GetSimpleEvent(string target)

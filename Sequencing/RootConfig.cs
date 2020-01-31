@@ -65,6 +65,8 @@ namespace AltSalt.Maestro.Sequencing
 
         public List<RootDataCollector> rootDataCollectors => _rootDataCollectors;
 
+        public bool appUtilsRequested => appSettings.GetAppUtilsRequested(this.gameObject, inputGroupKey);
+
         private void OnEnable()
         {
             _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));

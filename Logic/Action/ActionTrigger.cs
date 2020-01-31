@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -32,24 +33,6 @@ namespace AltSalt.Maestro.Logic.Action
             set => _appSettings = value;
         }
 
-        [SerializeField]
-        private Object _parentObject;
-
-        private Object parentObject
-        {
-            get => _parentObject;
-            set => _parentObject = value;
-        }
-
-        [SerializeField]
-        private string _serializedPropertyPath;
-
-        private string serializedPropertyPath
-        {
-            get => _serializedPropertyPath;
-            set => _serializedPropertyPath = value;
-        }
-
         [ValueDropdown(nameof(boolValueList))]
         [SerializeField]
         private bool _triggerOnStart = false;
@@ -60,7 +43,7 @@ namespace AltSalt.Maestro.Logic.Action
             {"YES", true },
             {"NO", false }
         };
-        
+
         [HideLabel]
         [DisplayAsString(false)]
         [ShowInInspector]
@@ -158,6 +141,28 @@ namespace AltSalt.Maestro.Logic.Action
         private ActionType _actionType;
 
         private ActionType actionType => _actionType;
+        
+#if UNITY_EDITOR
+
+        [SerializeField]
+        private Object _parentObject;
+
+        private Object parentObject
+        {
+            get => _parentObject;
+            set => _parentObject = value;
+        }
+
+        [SerializeField]
+        private string _serializedPropertyPath;
+
+        private string serializedPropertyPath
+        {
+            get => _serializedPropertyPath;
+            set => _serializedPropertyPath = value;
+        }
+        
+#endif
 
         public ActionTrigger Initialize(Object parentObject, string serializedPropertyPath)
         {
@@ -165,6 +170,8 @@ namespace AltSalt.Maestro.Logic.Action
             this.serializedPropertyPath = serializedPropertyPath;
             return this;
         }
+        
+#if UNITY_EDITOR
 
         [PropertySpace]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
@@ -249,6 +256,8 @@ namespace AltSalt.Maestro.Logic.Action
                 }
             }
         }
+        
+#endif
 
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         public void PerformActions(GameObject callingObject)
@@ -307,6 +316,87 @@ namespace AltSalt.Maestro.Logic.Action
         // Called whenever an item as added or removed from our ActionData list
         private List<ActionData> UpdateActionLists()
         {
+            CallPopulateReferences();
+            
+            // Make sure that we add any pasted items to our serialized lists
+            for (int i = 0; i < actionData.Count; i++) {
+                switch (actionData[i])
+                {
+                    case GenericActionData actionData:
+                    {
+                        if (genericActions.Contains(actionData) == false) {
+                            genericActions.Add(actionData);
+                        }
+                        break;
+                    }
+                    
+                    case BoolActionData actionData:
+                    {
+                        if (boolActions.Contains(actionData) == false) {
+                            boolActions.Add(actionData);
+                        }
+                        break;
+                    }
+                    
+                    case FloatActionData actionData:
+                    {
+                        if (floatActions.Contains(actionData) == false) {
+                            floatActions.Add(actionData);
+                        }
+                        break;
+                    }
+                    
+                    case IntActionData actionData:
+                    {
+                        if (intActions.Contains(actionData) == false) {
+                            intActions.Add(actionData);
+                        }
+                        break;
+                    }
+                    
+                    case AxisActionData actionData:
+                    {
+                        if (axisActions.Contains(actionData) == false) {
+                            axisActions.Add(actionData);
+                        }
+                        break;
+                    }
+                    
+                    case ColorActionData actionData:
+                    {
+                        if (colorActions.Contains(actionData) == false) {
+                            colorActions.Add(actionData);
+                        }
+                        break;
+                    }
+                    
+                    case ConditionResponseActionData actionData:
+                    {
+                        if (conditionResponseActions.Contains(actionData) == false) {
+                            conditionResponseActions.Add(actionData);
+                        }
+                        break;
+                    }
+                    
+                    case SimpleEventActionData actionData:
+                    {
+                        if (simpleEventActions.Contains(actionData) == false) {
+                            simpleEventActions.Add(actionData);
+                        }
+                        break;
+                    }
+                    
+                    case ComplexEventActionData actionData:
+                    {
+                        if (complexEventActions.Contains(actionData) == false) {
+                            complexEventActions.Add(actionData);
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            
             // In the cae of removal, we need to sync our serialized lists with
             // the ActionData list. Here, we get the priorities, which double
             // as unique identifiers for this use case

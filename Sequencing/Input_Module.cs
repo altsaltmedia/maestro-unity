@@ -20,20 +20,14 @@ namespace AltSalt.Maestro.Sequencing
 
         public int priority => _priority;
 
+        public bool appUtilsRequested => inputController.appUtilsRequested;
+
         private ComplexEventManualTrigger inputActionComplete =>
             inputController.appSettings.GetInputActionComplete(this.gameObject, inputController.inputGroupKey);
-
-        private bool _isParenControllerNull;
-
-        protected bool isParentControllerNull
-        {
-            get => _isParenControllerNull;
-            set => _isParenControllerNull = value;
-        }
+        
 
         protected virtual void Start()
         {
-            isParentControllerNull = inputController == null;
         }
 
         public void TriggerInputActionComplete()

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor.SceneManagement;
 using UnityEditor.Timeline;
 using UnityEngine.Events;
 
@@ -134,6 +135,15 @@ namespace AltSalt.Maestro.Layout {
             if (appSettings == null) {
                 appSettings = Utils.GetAppSettings();
             }
+
+            EditorSceneManager.sceneSaved += scene =>
+            {
+                if (TimelineEditor.inspectedDirector != null) {
+                    TimelineEditor.Refresh(RefreshReason.ContentsModified);
+                    TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
+                    TimelineEditor.Refresh(RefreshReason.WindowNeedsRedraw);
+                }
+            };
         }
 
         private void Update()
@@ -229,12 +239,6 @@ namespace AltSalt.Maestro.Layout {
             UpdateDynamicElements(priorityDynamicElements, this, 1);
             UpdateDynamicElements(dynamicElements, this, int.MinValue);
             UpdateDynamicElements(priorityDynamicElements, this, int.MinValue, 0);
-
-#if UNITY_EDITOR
-            if(TimelineEditor.inspectedDirector != null) {
-                TimelineEditor.Refresh(RefreshReason.ContentsModified);
-            }
-#endif
         }
 
         private static List<IDynamicLayoutElement> UpdateDynamicElements(List<IDynamicLayoutElement> dynamicElementsList,

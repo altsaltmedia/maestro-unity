@@ -70,6 +70,7 @@ namespace AltSalt.Maestro.Animation
                         trackBinding.color = input.initialValue;
                     }
                 }
+                trackBinding.UpdateVertexData();
             }
         }
         
@@ -157,7 +158,7 @@ namespace AltSalt.Maestro.Animation
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            if (Application.isPlaying == true && scrubberActive == true) {
+            if (Application.isPlaying == true && appUtilsRequested == true) {
                 if (trackBinding != null) {    
                     trackBinding.color = Utils.transparent;
                 }

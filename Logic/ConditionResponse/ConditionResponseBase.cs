@@ -96,6 +96,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [PropertyOrder(8)]
         [HideReferenceObjectPicker]
         [ReadOnly]
+        [HideInInspector]
         protected UnityEvent _response;
 
         public UnityEvent response => _response;
@@ -152,6 +153,21 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             }
             set => _cachedEventData = value;
         }
+        
+        protected ConditionResponseBase CheckPopulateReferences()
+        {
+            if (initialized == false) {
+                initialized = true;
+                PopulateReferences();
+            }
+
+            return this;
+        }
+
+        public virtual ConditionResponseBase PopulateReferences()
+        {
+            return this;
+        }
 
         public abstract void SyncConditionHeading(Object callingObject);
 
@@ -177,22 +193,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             this.parentObject = parentObject;
             this.serializedPropertyPath = serializedPropertyPath;
         }
-
-        protected ConditionResponseBase CheckPopulateReferences()
-        {
-            if (initialized == false) {
-                initialized = true;
-                PopulateReferences();
-            }
-
-            return this;
-        }
-
-        public virtual ConditionResponseBase PopulateReferences()
-        {
-            return this;
-        }
-
+        
         public virtual bool CheckCondition(Object callingObject)
         {
             return true;

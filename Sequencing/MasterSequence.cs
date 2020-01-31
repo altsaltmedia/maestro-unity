@@ -56,15 +56,17 @@ namespace AltSalt.Maestro.Sequencing
         public double elapsedTime
         {
             get => _elapsedTime;
-            set
+            private set
             {
                 if (masterTimeDataList.Count < 1) {
                     Init();
                 }
-                SetElapsedTime(value, masterTimeDataList);
+                _elapsedTime = value;
             }
         }
 
+        [ShowInInspector]
+        [ReadOnly]
         private double _duration;
         
         public double duration {
@@ -103,13 +105,17 @@ namespace AltSalt.Maestro.Sequencing
                 sequenceConfigs[i].SetMasterSequence(this);
                 sequenceConfigs[i].Init();
             }
-
-            // Get total time by adding last sequences master time end threshold with its duration
-            duration = masterTimeDataList[masterTimeDataList.Count - 1].masterTimeEnd + masterTimeDataList[masterTimeDataList.Count - 1].sequence.sourcePlayable.duration;
+            
+            // Get total time from master time of last sequence
+            duration = masterTimeDataList[masterTimeDataList.Count - 1].masterTimeEnd;
         }
 
         public void ProcessModifyRequest(ComplexPayload complexPayload)
         {
+            if (rootConfig.appUtilsRequested == true) {
+                return;
+            }
+            
             Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
             Sequence_Config sequenceConfig = sequenceConfigs.Find(x => x.sequence == targetSequence);
             
@@ -170,8 +176,14 @@ namespace AltSalt.Maestro.Sequencing
 
             return false;
         }
+
+        public void SetElapsedTime(double targetTime)
+        {
+            _elapsedTime = targetTime;
+            ApplyElapsedTimeToSequences(targetTime, masterTimeDataList);
+        }
         
-        private static Sequence SetElapsedTime(double targetTime, List<MasterTimeData> sequenceData)
+        private static Sequence ApplyElapsedTimeToSequences(double targetTime, List<MasterTimeData> sequenceData)
         {
             Sequence activeSequence = null;
             
@@ -193,18 +205,22 @@ namespace AltSalt.Maestro.Sequencing
                         activeSequence.currentTime = targetTime - sequenceData[i - 1].masterTimeEnd;
                     }
                     
-                    activeSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                    //activeSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
 
                     // Prep preceding sequence, if applicable
                     if (i > 0) {
                         sequenceData[i - 1].sequence.currentTime = sequenceData[i - 1].sequence.sourcePlayable.duration;
+                        sequenceData[i - 1].sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
                     }
 
                     // Prep following sequence, if applicable
                     if (sequenceData.Count - 1 > i) {
                         sequenceData[i + 1].sequence.currentTime = 0;
+                        sequenceData[i + 1].sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
                     }
 
+                    activeSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                    
                     // Deactivate the other sequences
                     for (int z = 0; z < sequenceData.Count; z++) {
 

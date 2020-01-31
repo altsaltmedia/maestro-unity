@@ -1,6 +1,6 @@
 namespace AltSalt.Maestro.Sequencing.Navigation
 {
-    public class NavigationData
+    public class NavigationData : Input_Data
     {
         
     }

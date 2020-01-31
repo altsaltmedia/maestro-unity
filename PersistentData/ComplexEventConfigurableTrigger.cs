@@ -59,6 +59,8 @@ namespace AltSalt.Maestro
         [ShowIf(nameof(ShowStringKeys))]
         [ValidateInput(nameof(CheckStringKeys), "Keys and Values must be of equal length")]
         [BoxGroup("String Packager")]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
         private List<CustomKeyReference> _stringKeyReferences = new List<CustomKeyReference>();
         
         public List<CustomKeyReference> stringKeys
@@ -78,6 +80,8 @@ namespace AltSalt.Maestro
         [ShowIf(nameof(hasString))]
         [ValidateInput(nameof(CheckStringValues), "Keys and Values must be of equal length")]
         [BoxGroup("String Packager")]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
         private List<StringReference> _stringValueReferences = new List<StringReference>();
 
         public List<StringReference> stringValues
@@ -122,6 +126,8 @@ namespace AltSalt.Maestro
         [ShowIf(nameof(ShowFloatKeys))]
         [ValidateInput(nameof(CheckFloatKeys), "Keys and Values must be of equal length")]
         [BoxGroup("Float Packager")]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
         private List<CustomKeyReference> _floatKeyReferences = new List<CustomKeyReference>();
 
         public List<CustomKeyReference> floatKeys
@@ -141,6 +147,8 @@ namespace AltSalt.Maestro
         [ShowIf(nameof(hasFloat))]
         [ValidateInput(nameof(CheckFloatValues), "Keys and Values must be of equal length")]
         [BoxGroup("Float Packager")]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
         List<FloatReference> _floatValueReferences = new List<FloatReference>();
 
         public List<FloatReference> floatValues
@@ -185,6 +193,8 @@ namespace AltSalt.Maestro
         [ShowIf(nameof(ShowBoolKeys))]
         [ValidateInput(nameof(CheckBoolKeys), "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
         private List<CustomKeyReference> _boolKeyReferences = new List<CustomKeyReference>();
 
         public List<CustomKeyReference> boolKeys
@@ -195,7 +205,6 @@ namespace AltSalt.Maestro
 
         [FormerlySerializedAs("_boolValues"),SerializeField]
         [ShowIf(nameof(hasBool))]
-        [ValueDropdown(nameof(boolValueList))]
         [ValidateInput(nameof(CheckBoolValues), "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
         [FormerlySerializedAs(nameof(boolValues))]
@@ -204,9 +213,10 @@ namespace AltSalt.Maestro
         
         [SerializeField]
         [ShowIf(nameof(hasBool))]
-        [ValueDropdown(nameof(boolValueList))]
         [ValidateInput(nameof(CheckBoolValues), "Keys and Values must be of equal length")]
         [BoxGroup("Bool Packager")]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
         private List<BoolReference> _boolValueReferences = new List<BoolReference>();
 
         public List<BoolReference> boolValues
@@ -214,11 +224,6 @@ namespace AltSalt.Maestro
             get => _boolValueReferences;
             set => _boolValueReferences = value;
         }
-
-        private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
-                {"FALSE", false },
-                {"TRUE", true }
-            };
 
         [PropertySpace]
 
@@ -256,6 +261,8 @@ namespace AltSalt.Maestro
         [ShowIf(nameof(ShowScriptableObjectKeys))]
         [ValidateInput(nameof(CheckScriptableObjectKeys), "Keys and Values must be of equal length")]
         [BoxGroup("Scriptable Object Packager")]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
         private List<CustomKeyReference> _scriptableObjectKeyReferences = new List<CustomKeyReference>();
 
         public List<CustomKeyReference> scriptableObjectKeys
@@ -275,6 +282,8 @@ namespace AltSalt.Maestro
         [ShowIf(nameof(hasScriptableObject))]
         [ValidateInput(nameof(CheckScriptableObjectValues), "Keys and Values must be of equal length")]
         [BoxGroup("Scriptable Object Packager")]
+        [HideReferenceObjectPicker]
+        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
         private List<ScriptableObjectReference> _scriptableObjectValueReferences = new List<ScriptableObjectReference>();
 
         public List<ScriptableObjectReference> scriptableObjectValues
