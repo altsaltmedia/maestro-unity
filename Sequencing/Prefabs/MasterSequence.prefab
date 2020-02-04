@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5474572852560099215}
   - component: {fileID: 2390398158691485511}
-  - component: {fileID: 7443057932300084648}
   - component: {fileID: -4565310156302280025}
   m_Layer: 0
   m_Name: MasterSequence
@@ -51,40 +50,6 @@ MonoBehaviour:
     _priority: 0
   _sequenceConfigs: []
   _masterTimeDataList: []
---- !u!114 &7443057932300084648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1993091226287097154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 129daaedd3fbe49d69a4b497f4f5147e, type: 2}
-  _complexEventReference:
-    _isSystemReference: 0
-    _referenceName: MainInput-RequestModifyToSequence
-    _variable: {fileID: 11400000, guid: 129daaedd3fbe49d69a4b497f4f5147e, type: 2}
-  DeveloperDescription: 
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2390398158691485511}
-        m_MethodName: TriggerModifyRequest
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 0
 --- !u!114 &-4565310156302280025
 MonoBehaviour:
   m_ObjectHideFlags: 0

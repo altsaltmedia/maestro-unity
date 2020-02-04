@@ -15,9 +15,6 @@ namespace AltSalt.Maestro.Sequencing
         public Joiner joiner => rootConfig.joiner;
 
         public bool appUtilsRequested => appSettings.GetAppUtilsRequested(this.gameObject, inputGroupKey);
-        
-        public ComplexEventManualTrigger requestModifyToSequence =>
-            appSettings.GetRequestModifyToSequence(this.gameObject, inputGroupKey);
 
         protected static bool IsPopulated(ComplexEventManualTrigger attribute)
         {

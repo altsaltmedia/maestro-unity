@@ -157,14 +157,7 @@ namespace AltSalt.Maestro
         private SimpleEventTrigger _boundaryReached = new SimpleEventTrigger();
 
         public SimpleEventTrigger boundaryReached => _boundaryReached;
-        
-        [Required]
-        [FoldoutGroup("Events")]
-        [SerializeField]
-        private ComplexEventManualTrigger _requestModifyToSequence = new ComplexEventManualTrigger();
 
-        public ComplexEventManualTrigger requestModifyToSequence => _requestModifyToSequence;
-        
         [Required]
         [FoldoutGroup("Events")]
         [SerializeField]

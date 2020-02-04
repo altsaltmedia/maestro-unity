@@ -534,12 +534,6 @@ namespace AltSalt.Maestro
             return inputData.GetInputGroup(inputGroupKey).boundaryReached;
         }
 
-        public ComplexEventManualTrigger GetRequestModifyToSequence(GameObject callingObject,
-            InputGroupKey inputGroupKey)
-        {
-            return inputData.GetInputGroup(inputGroupKey).requestModifyToSequence;
-        }
-
         public SimpleEventTrigger GetSequenceModified(GameObject callingObject, InputGroupKey inputGroupKey)
         {
             return inputData.GetInputGroup(inputGroupKey).sequenceModified;
