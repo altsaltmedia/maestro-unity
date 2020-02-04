@@ -142,7 +142,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _actionTrigger:
-    _appSettings: {fileID: 0}
+    _appSettings:
+      _isSystemReference: 0
+      _referenceName: AppSettings
+      _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
     _parentObject: {fileID: 5008149826027979688}
     _serializedPropertyPath: _actionTrigger
     _triggerOnStart: 0
@@ -277,7 +280,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _actionTrigger:
-    _appSettings: {fileID: 0}
+    _appSettings:
+      _isSystemReference: 0
+      _referenceName: AppSettings
+      _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
     _parentObject: {fileID: 4240208615557826613}
     _serializedPropertyPath: _actionTrigger
     _triggerOnStart: 0
@@ -453,7 +459,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9894c27df0b8462392356469530e294c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 0}
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
   _inputGroupKey:
     _isSystemReference: 0
     _referenceName: MainInput
@@ -644,8 +653,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _appSettings
       value: 
-      objectReference: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
         type: 3}
       propertyPath: _enableDynamicElement._referenceName
@@ -656,6 +664,17 @@ PrefabInstance:
       propertyPath: _disableDynamicElement._referenceName
       value: DisableDynamicElement
       objectReference: {fileID: 0}
+    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: _appSettings._referenceName
+      value: AppSettings
+      objectReference: {fileID: 0}
+    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: _appSettings._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb,
+        type: 2}
     - target: {fileID: 6762982322118964362, guid: 42935d41d9ee547bd8168a010681781a,
         type: 3}
       propertyPath: m_EventMask.m_Bits
@@ -1267,8 +1286,7 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4040516108589118132, guid: 0d33f0f33305b493db37a5dc9304d159, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d33f0f33305b493db37a5dc9304d159, type: 3}
 --- !u!224 &5284636022148352206 stripped
 RectTransform:
