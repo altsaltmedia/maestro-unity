@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DoozyUI.Gestures;
 using UnityEngine;
 using Sirenix.OdinInspector;
@@ -154,23 +155,17 @@ namespace AltSalt.Maestro.Sequencing.Touch
                     touchController.momentumModifierOutput = Mathf.Abs(momentumModifier) * -1f;
                 }
 
-                ApplyMomentumModifier(touchController.requestModifyToSequence, momentumApplier, touchData.sequence, touchController.momentumModifierOutput);
+                ApplyMomentumModifier(touchController.rootConfig.masterSequences, momentumApplier, touchData.sequence, touchController.momentumModifierOutput);
             }
             
             momentumApplier.momentumAppliedToSequences.RaiseEvent(momentumApplier.gameObject);
             return touchController;
         }
         
-        private static Sequence ApplyMomentumModifier(ComplexEventManualTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
+        private static Sequence ApplyMomentumModifier(List<MasterSequence> masterSequences, Input_Module source, Sequence targetSequence, float timeModifier)
         {
-            ComplexPayload complexPayload = ComplexPayload.CreateInstance();
-            
-            complexPayload.Set(DataType.scriptableObjectType, targetSequence);
-            complexPayload.Set(DataType.intType, source.priority);
-            complexPayload.Set(DataType.stringType, source.gameObject.name);
-            complexPayload.Set(DataType.floatType, timeModifier);
-            
-            applyEvent.RaiseEvent(source.gameObject, complexPayload);
+            MasterSequence masterSequence = masterSequences.Find(x => x.sequenceConfigs.Find(y => y.sequence == targetSequence));
+            masterSequence.TriggerModifyRequest(targetSequence, source.priority, source.gameObject.name, timeModifier);
 
             return targetSequence;
         }

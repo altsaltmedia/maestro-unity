@@ -26,7 +26,7 @@ namespace AltSalt.Maestro.Sequencing
 
         public UserDataKey userKey => _userKey.GetVariable() as UserDataKey;
         
-        public ComplexEventManualTrigger sequenceModified =>
+        public SimpleEventTrigger sequenceModified =>
             appSettings.GetSequenceModified(this.gameObject, inputGroupKey);
 
         [Required]

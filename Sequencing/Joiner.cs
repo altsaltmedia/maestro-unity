@@ -104,7 +104,8 @@ namespace AltSalt.Maestro.Sequencing
                     previousSequence.active = true;
                     previousSequence.sequenceConfig.gameObject.SetActive(true);
                     previousSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                    rootConfig.sequenceModified.RaiseEvent(this.gameObject, previousSequence);
+                    previousSequence.sequenceConfig.masterSequence.RefreshMasterSequence(previousSequence);
+                    rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                     sourceSequence.sequenceConfig.gameObject.SetActive(false);
                 }
                 else if (sequenceSettings.previousDestination is Fork fork) {
@@ -122,7 +123,8 @@ namespace AltSalt.Maestro.Sequencing
                             previousSequence.active = true;
                             previousSequence.sequenceConfig.gameObject.SetActive(true);
                             previousSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                            rootConfig.sequenceModified.RaiseEvent(this.gameObject, previousSequence);
+                            previousSequence.sequenceConfig.masterSequence.RefreshMasterSequence(previousSequence);
+                            rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                             sourceSequence.sequenceConfig.gameObject.SetActive(false);
                         }
                     }
@@ -151,7 +153,8 @@ namespace AltSalt.Maestro.Sequencing
                     nextSequence.active = true;
                     nextSequence.sequenceConfig.gameObject.SetActive(true);
                     nextSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                    rootConfig.sequenceModified.RaiseEvent(this.gameObject, nextSequence);
+                    nextSequence.sequenceConfig.masterSequence.RefreshMasterSequence(nextSequence);
+                    rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                     sourceSequence.sequenceConfig.gameObject.SetActive(false);
                 }
                 else if (sequenceSettings.nextDestination is Fork fork) {
@@ -169,7 +172,8 @@ namespace AltSalt.Maestro.Sequencing
                             nextSequence.active = true;
                             nextSequence.sequenceConfig.gameObject.SetActive(true);
                             nextSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                            rootConfig.sequenceModified.RaiseEvent(this.gameObject, nextSequence);
+                            nextSequence.sequenceConfig.masterSequence.RefreshMasterSequence(nextSequence);
+                            rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                             sourceSequence.sequenceConfig.gameObject.SetActive(false);
                         }    
                     }

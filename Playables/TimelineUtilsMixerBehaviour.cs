@@ -3,11 +3,19 @@ using UnityEngine.Playables;
 
 namespace AltSalt.Maestro
 {    
-    public class DebugTimelineMixerBehaviour : LerpToTargetMixerBehaviour
+    public class TimelineUtilsMixerBehaviour : LerpToTargetMixerBehaviour
     {
         private float timelineDebugTime
         {
             set => trackAssetConfig.timelineDebugTime = value;
+        }
+        
+        private static double _currentTime;
+
+        public static double currentTime
+        {
+            get => _currentTime;
+            set => _currentTime = value;
         }
 
         private SimpleEventTrigger onEditorGraphStart => trackAssetConfig.onEditorGraphStart;
@@ -19,12 +27,14 @@ namespace AltSalt.Maestro
             onEditorGraphStart.RaiseEvent(trackAssetConfig.gameObject, "debug timeline");
 #endif
         }
-
-        public override void ProcessFrame(Playable playable, FrameData info, object playerData)
+        
+        public override void PrepareFrame(Playable playable, FrameData info)
         {
+            currentTime = playable.GetGraph().GetRootPlayable(0).GetTime();
 #if UNITY_EDITOR
-            timelineDebugTime = (float)base.currentTime;
+            timelineDebugTime = (float)currentTime;
 #endif
         }
+
     }   
 }

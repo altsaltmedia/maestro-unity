@@ -31,14 +31,6 @@ namespace AltSalt.Maestro
             set => _inputGroupKey = value;
         }
 
-        private double _currentTime;
-
-        protected double currentTime
-        {
-            get => _currentTime;
-            set => _currentTime = value;
-        }
-
         // Utility vars - specified here to prevent garbage collection
         private int _inputCount;
 
@@ -84,12 +76,6 @@ namespace AltSalt.Maestro
 
         //public IEnumerable<IMarker> markers;
         //public List<IMarker> markers;
-
-        public override void PrepareFrame(Playable playable, FrameData info)
-        {
-            base.PrepareFrame(playable, info);
-            currentTime = playable.GetGraph().GetRootPlayable(0).GetTime();
-        }
 
 //        This ProcessFrame() method should be implemented and overridden in inheriting mixer behaviours
 //

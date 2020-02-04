@@ -168,9 +168,9 @@ namespace AltSalt.Maestro
         [Required]
         [FoldoutGroup("Events")]
         [SerializeField]
-        private ComplexEventManualTrigger _sequenceModified = new ComplexEventManualTrigger();
+        private SimpleEventTrigger _sequenceModified = new SimpleEventTrigger();
 
-        public ComplexEventManualTrigger sequenceModified => _sequenceModified;
+        public SimpleEventTrigger sequenceModified => _sequenceModified;
         
         [Required]
         [FoldoutGroup("Events")]

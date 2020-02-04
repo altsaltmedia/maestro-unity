@@ -62,7 +62,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 
                 autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, autorunData.loop, autorunController.isReversing, autoplayEaseThreshold, autorunData.easingUtility);
 
-                AutoplaySequence(autorunController.requestModifyToSequence, this, autorunData.sequence, autoplayModifer);
+                AutoplaySequence(autorunController.rootConfig.masterSequences, this, autorunData.sequence, autoplayModifer);
                 
                 if(autorunData.loop == true) continue;
 
@@ -117,15 +117,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             return false;
         }
 
-        private static Sequence AutoplaySequence(ComplexEventManualTrigger applyEvent, Input_Module source, Sequence targetSequence, float timeModifier)
+        private static Sequence AutoplaySequence(List<MasterSequence> masterSequences, Input_Module source, Sequence targetSequence, float timeModifier)
         {
-            ComplexPayload complexPayload = ComplexPayload.CreateInstance();
-            complexPayload.Set(DataType.scriptableObjectType, targetSequence);
-            complexPayload.Set(DataType.intType, source.priority);
-            complexPayload.Set(DataType.stringType, source.gameObject.name);
-            complexPayload.Set(DataType.floatType, timeModifier);
-
-            applyEvent.RaiseEvent(source.gameObject, complexPayload);
+            MasterSequence masterSequence = masterSequences.Find(x => x.sequenceConfigs.Find(y => y.sequence == targetSequence));
+            masterSequence.TriggerModifyRequest(targetSequence, source.priority, source.gameObject.name, timeModifier);
+            
             return targetSequence;
         }
 

@@ -21,7 +21,7 @@ GameObject:
   m_TagString: textObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 105
+  m_StaticEditorFlags: 104
   m_IsActive: 1
 --- !u!224 &224540287842941266
 RectTransform:
@@ -172,8 +172,8 @@ MonoBehaviour:
   m_isCullingEnabled: 0
   m_ignoreRectMaskCulling: 0
   m_ignoreCulling: 1
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
+  m_horizontalMapping: 2
+  m_verticalMapping: 2
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
   m_VertexBufferAutoSizeReduction: 1
@@ -218,7 +218,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77b51fba603cb4c90930ab6e20a7f652, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 0}
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
   key: 
   _textCollectionBank: {fileID: 0}
 --- !u!114 &6162087246834992834
@@ -236,8 +239,8 @@ MonoBehaviour:
   _complexEvent: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
   _complexEventReference:
     _isSystemReference: 0
-    _referenceName: 
-    _variable: {fileID: 0}
+    _referenceName: TextUpdate
+    _variable: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
   DeveloperDescription: Should receive an event payload with a scriptable object containing
     the target corpus that's being updated
   _response:

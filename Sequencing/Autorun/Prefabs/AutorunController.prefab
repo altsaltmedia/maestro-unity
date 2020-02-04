@@ -156,7 +156,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7493842464391128962}
   - component: {fileID: 3719720165695611221}
-  - component: {fileID: 1764233776882483978}
   - component: {fileID: 4944100776945312249}
   - component: {fileID: 1133069145979638054}
   m_Layer: 12
@@ -196,40 +195,6 @@ MonoBehaviour:
   _autorunController: {fileID: 2061094698163370185}
   _autoplayEnabled: 1
   _autoplayEaseThreshold: 0.25
---- !u!114 &1764233776882483978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8733841028164870764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5, type: 2}
-  _complexEventReference:
-    _isSystemReference: 0
-    _referenceName: MainInput-SequenceModified
-    _variable: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5, type: 2}
-  DeveloperDescription: 
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3719720165695611221}
-        m_MethodName: ActivateAutoplay
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 0
 --- !u!114 &4944100776945312249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,6 +218,9 @@ MonoBehaviour:
   - _isSystemReference: 0
     _referenceName: PauseSequenceComplete
     _variable: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
+  - _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:

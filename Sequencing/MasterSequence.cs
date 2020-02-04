@@ -110,25 +110,19 @@ namespace AltSalt.Maestro.Sequencing
             duration = masterTimeDataList[masterTimeDataList.Count - 1].masterTimeEnd;
         }
 
-        public void ProcessModifyRequest(ComplexPayload complexPayload)
+        public void TriggerModifyRequest(Sequence targetSequence, int requestPriority, string moduleName, float timeModifier)
         {
             if (rootConfig.appUtilsRequested == true) {
                 return;
             }
             
-            Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
             Sequence_Config sequenceConfig = sequenceConfigs.Find(x => x.sequence == targetSequence);
-            
-            if (sequenceConfig == null || sequenceConfig.DependenciesLoaded() == false) return;
 
-            int requestPriority = complexPayload.GetIntValue();
-            string moduleName = complexPayload.GetStringValue();
-                
             if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
             {
                 activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
                 
-                sequenceConfig.processModify.ModifySequence(complexPayload.GetFloatValue());
+                sequenceConfig.processModify.ModifySequence(timeModifier);
             }
         }
 
@@ -148,13 +142,12 @@ namespace AltSalt.Maestro.Sequencing
             activeInputModule.priority = 0;
         }
 
-        public void RefreshMasterSequence(ComplexPayload complexPayload)
+        public void RefreshMasterSequence(Sequence modifiedSequence)
         {
             if (SequenceActive(sequenceConfigs) == true) {
                 
                 hasActiveSequence = true;
                 
-                Sequence modifiedSequence = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as Sequence;
                 MasterTimeData sequenceTimeData = this.masterTimeDataList.Find(x => x.sequence == modifiedSequence);
                 
                 if(sequenceTimeData != null) {

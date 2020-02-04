@@ -35,10 +35,10 @@ namespace AltSalt.Maestro.Audio
                     doubleModifier = inputPlayable.GetTime() / inputPlayable.GetDuration();
                     trackBinding.volume = Mathf.Lerp(input.initialValue, input.targetValue, (float)DoubleEasingFunction(0f, 1f, doubleModifier));
                 } else {
-                    if (currentTime >= input.endTime) {
+                    if (TimelineUtilsMixerBehaviour.currentTime >= input.endTime) {
                         trackBinding.volume = input.targetValue;
                     }
-                    else if (i == 0 && currentTime <= input.startTime && input.disableReset == false) {
+                    else if (i == 0 && TimelineUtilsMixerBehaviour.currentTime <= input.startTime && input.disableReset == false) {
                         trackBinding.volume = input.initialValue;
                     }
                 }

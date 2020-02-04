@@ -123,10 +123,10 @@ namespace AltSalt.Maestro.Sequencing
             trackAssetConfig.sequence = sequence;
         }
 
-        public bool DependenciesLoaded()
-        {
-            return playableDirector != null && syncTimeline != null && processModify != null && masterSequence != null;
-        }
+        // public bool DependenciesLoaded()
+        // {
+        //     return playableDirector != null && syncTimeline != null && processModify != null && masterSequence != null;
+        // }
 
         private void GetPlayableDirector()
         {

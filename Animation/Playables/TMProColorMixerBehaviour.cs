@@ -30,6 +30,14 @@ namespace AltSalt.Maestro.Animation
             set => _input = value;
         }
 
+        private int _sanitizedCharacterCount = 0;
+
+        private int sanitizedCharacterCount
+        {
+            get => _sanitizedCharacterCount;
+            set => _sanitizedCharacterCount = value;
+        }
+
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
             trackBinding = playerData as TMP_Text;
@@ -38,8 +46,6 @@ namespace AltSalt.Maestro.Animation
                 return;
             
             inputCount = playable.GetInputCount();
-            
-            int sanitizedCharacterCount = GetSanitizedCharacterCount(trackBinding);
 
             for (int i = 0; i < inputCount; i++)
             {
@@ -54,23 +60,27 @@ namespace AltSalt.Maestro.Animation
                     switch (input.textAnimationStyle) {
 
                         case TextAnimationStyle.Whole:
+                            // Color newColor = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
+                            // trackBinding.alpha = newColor.a; 
                             trackBinding.color = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
                             break;
 
                         case TextAnimationStyle.Character:
+                            if (sanitizedCharacterCount == 0) {
+                                sanitizedCharacterCount = GetSanitizedCharacterCount(trackBinding);
+                            }
                             AnimateCharacters(trackBinding, sanitizedCharacterCount);
                             break;
 
                     }
                 }
                 else {
-                    if(currentTime >= input.endTime) {
+                    if(TimelineUtilsMixerBehaviour.currentTime >= input.endTime) {
                         trackBinding.color = input.targetValue;
-                    } else if (i == 0 && currentTime <= input.startTime) {
+                    } else if (i == 0 && TimelineUtilsMixerBehaviour.currentTime <= input.startTime) {
                         trackBinding.color = input.initialValue;
                     }
                 }
-                trackBinding.UpdateVertexData();
             }
         }
         

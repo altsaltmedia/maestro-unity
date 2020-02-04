@@ -12,6 +12,7 @@ namespace AltSalt.Maestro.Layout
         [SerializeField]
         bool drawTextBox;
 
+#if UNITY_EDITOR
         protected override void OnDrawGizmos() {
             base.OnDrawGizmos();
 
@@ -35,6 +36,7 @@ namespace AltSalt.Maestro.Layout
 		        Gizmos.DrawWireCube (Vector3.zero, new Vector3 (textBounds.size.x, textBounds.size.y));
             }
 	    }
-
+#endif
+        
     }
 }

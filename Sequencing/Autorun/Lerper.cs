@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -111,15 +112,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         private static IEnumerator LerpSequence(Autorun_Controller autorunController, Input_Module source,
             Autorun_Data autorunData, float timeModifier, AutorunExtents currentExtents, CoroutineCallback callback)
         {
+            MasterSequence masterSequence = autorunController.rootConfig.masterSequences.
+                Find(x => x.sequenceConfigs.Find(y => y.sequence == autorunData.sequence));
+            
             while(true) {
-                ComplexPayload complexPayload = ComplexPayload.CreateInstance();
-                complexPayload.Set(DataType.scriptableObjectType, autorunData.sequence);
-                complexPayload.Set(DataType.intType, source.priority);
-                complexPayload.Set(DataType.stringType, source.gameObject.name);
-                complexPayload.Set(DataType.floatType, timeModifier);
-                
-                autorunController.requestModifyToSequence.RaiseEvent(source.gameObject, complexPayload);
-                
+                masterSequence.TriggerModifyRequest(autorunData.sequence, source.priority, source.gameObject.name, timeModifier);
                 callback(autorunController, autorunData, currentExtents);
                 yield return new WaitForEndOfFrame();
             }

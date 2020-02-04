@@ -9,15 +9,15 @@ using UnityEditor.Timeline;
 namespace AltSalt.Maestro
 {
     [TrackColor(0.245149f, 0.895372f, 0.5679245f)]
-    [TrackClipType(typeof(DebugTimelineClip))]
-    public class DebugTimelineTrack : LerpToTargetTrack
+    [TrackClipType(typeof(TimelineUtilsClip))]
+    public class TimelineUtilsTrack : LerpToTargetTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject gameObject, int inputCount)
         {
             StoreClipProperties(gameObject);
 
-            ScriptPlayable<DebugTimelineMixerBehaviour> trackPlayable = ScriptPlayable<DebugTimelineMixerBehaviour>.Create(graph, inputCount);
-            DebugTimelineMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            ScriptPlayable<TimelineUtilsMixerBehaviour> trackPlayable = ScriptPlayable<TimelineUtilsMixerBehaviour>.Create(graph, inputCount);
+            TimelineUtilsMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(gameObject, behaviour);
 #if UNITY_EDITOR
             if(gameObject.TryGetComponent(typeof(TrackAssetConfig), out Component component) == false) {

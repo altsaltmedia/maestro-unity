@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2390398158691485511}
   - component: {fileID: 7443057932300084648}
   - component: {fileID: -4565310156302280025}
-  - component: {fileID: 3751399025017232430}
   m_Layer: 0
   m_Name: MasterSequence
   m_TagString: Untagged
@@ -74,7 +73,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2390398158691485511}
-        m_MethodName: ProcessModifyRequest
+        m_MethodName: TriggerModifyRequest
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -109,40 +108,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2390398158691485511}
         m_MethodName: UnlockInputeModule
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 0
---- !u!114 &3751399025017232430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1993091226287097154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5, type: 2}
-  _complexEventReference:
-    _isSystemReference: 0
-    _referenceName: MainInput-SequenceModified
-    _variable: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5, type: 2}
-  DeveloperDescription: 
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2390398158691485511}
-        m_MethodName: RefreshMasterSequence
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

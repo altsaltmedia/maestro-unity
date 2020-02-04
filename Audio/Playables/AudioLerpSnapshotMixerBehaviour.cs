@@ -38,7 +38,7 @@ namespace AltSalt.Maestro.Audio
                         input.targetEndingWeight = 0.0001f;
                     }
 
-                    float weightModifier = CrossfadeAudio(i, input, inputWeight, percentageComplete, currentTime);
+                    float weightModifier = CrossfadeAudio(i, input, inputWeight, percentageComplete, TimelineUtilsMixerBehaviour.currentTime);
 
                     if (float.IsNaN(weightModifier) == false) {
                         float[] newWeights = new float[2];
@@ -54,7 +54,7 @@ namespace AltSalt.Maestro.Audio
 
                 } else {
 
-                    float weightModifier = BlendSnapshots(i, input, inputWeight, percentageComplete, currentTime);
+                    float weightModifier = BlendSnapshots(i, input, inputWeight, percentageComplete, TimelineUtilsMixerBehaviour.currentTime);
 
                     if (float.IsNaN(weightModifier) == false) {
                         float[] newWeights = new float[2];

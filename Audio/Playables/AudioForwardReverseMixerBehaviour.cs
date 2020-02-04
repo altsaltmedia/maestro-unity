@@ -44,12 +44,12 @@ namespace AltSalt.Maestro.Audio
                         input.playingTriggered = true;
                         trackBinding.Play();
                     }
-                } else if(currentTime > input.endTime || currentTime < input.startTime) {
+                } else if(TimelineUtilsMixerBehaviour.currentTime > input.endTime || TimelineUtilsMixerBehaviour.currentTime < input.startTime) {
                     input.playingTriggered = false;
                     trackBinding.Stop();
-                    if(currentTime > input.endTime) {
+                    if(TimelineUtilsMixerBehaviour.currentTime > input.endTime) {
                         trackBinding.time = input.clipEndTime;
-                    } else if(currentTime < input.startTime) {
+                    } else if(TimelineUtilsMixerBehaviour.currentTime < input.startTime) {
                         trackBinding.time = 0;
                     }
                 }

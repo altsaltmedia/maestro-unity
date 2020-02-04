@@ -200,7 +200,7 @@ namespace AltSalt.Maestro
                 TrackAsset trackAsset = playableBinding.sourceObject as TrackAsset;
 
                 // Skip playable bindings that don't contain track assets (e.g. markers)
-                if (trackAsset is DebugTimelineTrack) {
+                if (trackAsset is TimelineUtilsTrack) {
                     foreach (TimelineClip debugClip in trackAsset.GetClips()) {
                         debugTrackFound = true;
                         break;
@@ -212,7 +212,7 @@ namespace AltSalt.Maestro
 
         public static void CreateDebugTrack(TimelineAsset targetAsset)
         {
-            TrackAsset debugTrack = targetAsset.CreateTrack(typeof(DebugTimelineTrack), null, "Debug Track");
+            TrackAsset debugTrack = targetAsset.CreateTrack(typeof(TimelineUtilsTrack), null, "Debug Track");
             debugTrack.CreateDefaultClip();
             RefreshTimelineContentsAddedOrRemoved();
             createDebugTrackCalled = true;
@@ -419,7 +419,7 @@ namespace AltSalt.Maestro
                 TrackAsset trackAsset = playableBinding.sourceObject as TrackAsset;
 
                 // Skip playable bindings that don't contain track assets (e.g. markers)
-                if (trackAsset == null || trackAsset.hasClips == false || trackAsset is DebugTimelineTrack) {
+                if (trackAsset == null || trackAsset.hasClips == false || trackAsset is TimelineUtilsTrack) {
                     continue;
                 }
 

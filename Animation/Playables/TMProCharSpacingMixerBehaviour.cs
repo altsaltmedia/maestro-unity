@@ -32,9 +32,9 @@ namespace AltSalt.Maestro.Animation
                     percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
                     trackBindingComponent.characterSpacing = Mathf.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
                 } else {
-                    if(currentTime >= input.endTime) {
+                    if(TimelineUtilsMixerBehaviour.currentTime >= input.endTime) {
                         trackBindingComponent.characterSpacing = input.targetValue;
-                    } else if (i == 0 && currentTime <= input.startTime) {
+                    } else if (i == 0 && TimelineUtilsMixerBehaviour.currentTime <= input.startTime) {
                         trackBindingComponent.characterSpacing = input.initialValue;
                     }
                 }

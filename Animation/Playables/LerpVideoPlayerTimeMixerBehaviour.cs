@@ -40,14 +40,14 @@ namespace AltSalt.Maestro.Animation
 #endif
                 }
                 else {
-                    if (currentTime >= input.endTime) {
+                    if (TimelineUtilsMixerBehaviour.currentTime >= input.endTime) {
 #if UNITY_ANDROID
                         trackBinding.SetTime(input.targetValueAndroid);
 #else
                         trackBinding.SetTime(input.targetValueIOS);
 #endif
                     }
-                    else if (i == 0 && currentTime <= input.startTime) {
+                    else if (i == 0 && TimelineUtilsMixerBehaviour.currentTime <= input.startTime) {
 #if UNITY_ANDROID
                         trackBinding.SetTime(input.initialValueAndroid);
 #else

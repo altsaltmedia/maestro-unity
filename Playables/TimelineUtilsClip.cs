@@ -6,13 +6,13 @@ using UnityEngine.Serialization;
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public class DebugTimelineClip : LerpToTargetClip
+    public class TimelineUtilsClip : LerpToTargetClip
     {
         [FormerlySerializedAs("template")]
         [SerializeField]
-        private DebugTimelineBehaviour _template = new DebugTimelineBehaviour ();
+        private TimelineUtilsBehaviour _template = new TimelineUtilsBehaviour ();
 
-        private DebugTimelineBehaviour template
+        private TimelineUtilsBehaviour template
         {
             get => _template;
             set => _template = value;
@@ -26,7 +26,7 @@ namespace AltSalt.Maestro
             template.endTime = endTime;
             template.trackAssetConfig = trackAssetConfig;
             
-            var playable = ScriptPlayable<DebugTimelineBehaviour>.Create(graph, template);
+            var playable = ScriptPlayable<TimelineUtilsBehaviour>.Create(graph, template);
             return playable;
         }
     }

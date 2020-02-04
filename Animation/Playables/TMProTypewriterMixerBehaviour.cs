@@ -63,11 +63,11 @@ namespace AltSalt.Maestro.Animation
                     }
                 }
                 else {
-                    if (currentTime >= input.endTime) {
+                    if (TimelineUtilsMixerBehaviour.currentTime >= input.endTime) {
                         trackBindingComponent.maxVisibleCharacters = input.targetMaxVisibleCharacters;
                         trackBindingComponent.maxVisibleWords = input.targetMaxVisibleWords;
                     }
-                    else if (i == 0 && currentTime <= input.startTime) {
+                    else if (i == 0 && TimelineUtilsMixerBehaviour.currentTime <= input.startTime) {
                         trackBindingComponent.maxVisibleCharacters = input.initialMaxVisibleCharacters;
                         trackBindingComponent.maxVisibleWords = input.initialMaxVisibleWords;
                     }
