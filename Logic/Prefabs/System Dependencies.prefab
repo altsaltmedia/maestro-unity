@@ -34,7 +34,6 @@ Transform:
   - {fileID: 8336306860471321291}
   - {fileID: 3652710856423284706}
   - {fileID: 6347441701796333975}
-  - {fileID: 4918761141199281888}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,98 +50,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   persist: 1
---- !u!1 &4918761141199281892
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4918761141199281888}
-  - component: {fileID: 4918761141199281891}
-  - component: {fileID: 4918761141199281890}
-  - component: {fileID: 4918761141199281893}
-  m_Layer: 8
-  m_Name: UIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4918761141199281888
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4918761141199281892}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4918761140529344198}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4918761141199281891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4918761141199281892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96124914bff0e8c4a860edd2b48124e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NotificationItems: []
---- !u!114 &4918761141199281890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4918761141199281892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 490c78ed3279eba42a5f8a5fe316e81a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioMixerGroup: {fileID: 0}
-  masterVolume: 1
-  masterPitch: 1
-  numberOfChannels: 20
---- !u!114 &4918761141199281893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4918761141199281892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 416d1b88f605d1346b10fa8fc191de1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debugGameEvents: 0
-  debugUIButtons: 0
-  debugUIElements: 0
-  debugUINotifications: 0
-  debugUICanvases: 0
-  autoDisableButtonClicks: 1
-  gamePaused: 0
-  currentGameTimeScale: 1
-  isSoundOn: 1
-  isMusicOn: 1
-  backButtonInputMode: 2
-  enableBackButtonAlternateInputs: 0
-  backButtonKeyCode: 27
-  backButtonKeyCodeAlt: 8
-  backButtonVirtualButtonName: Cancel
-  backButtonVirtualButtonNameAlt: Cancel
-  currentOrientation: 2
-  useTextMeshPro: 0
 --- !u!1 &6376672255302291171
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,6 +193,17 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -761829783
       objectReference: {fileID: 0}
+    - target: {fileID: 3194247117588569635, guid: b5d71a3fd5bd14265b5a0c50a7499014,
+        type: 3}
+      propertyPath: _actionTrigger._appSettings._referenceName
+      value: AppSettings
+      objectReference: {fileID: 0}
+    - target: {fileID: 3194247117588569635, guid: b5d71a3fd5bd14265b5a0c50a7499014,
+        type: 3}
+      propertyPath: _actionTrigger._appSettings._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5d71a3fd5bd14265b5a0c50a7499014, type: 3}
 --- !u!4 &8336306860471321291 stripped
@@ -411,6 +329,17 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7973420083374359235, guid: 47c6be533951343a6a941d7929b5dd9b,
+        type: 3}
+      propertyPath: _appSettings._referenceName
+      value: AppSettings
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973420083374359235, guid: 47c6be533951343a6a941d7929b5dd9b,
+        type: 3}
+      propertyPath: _appSettings._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47c6be533951343a6a941d7929b5dd9b, type: 3}
 --- !u!224 &4918761140602381964 stripped
@@ -830,6 +759,41 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: viewportModifiers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: nonserializedProperties.Array.data[3]
+      value: _layoutsLegacy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: _migrated
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: _appSettings
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: _enableDynamicElement._referenceName
+      value: EnableDynamicElement
+      objectReference: {fileID: 0}
+    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: _disableDynamicElement._referenceName
+      value: DisableDynamicElement
+      objectReference: {fileID: 0}
+    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: _hasBreakpoints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 20290996921888062, guid: 42935d41d9ee547bd8168a010681781a,
         type: 3}
       propertyPath: m_BackGroundColor.r
@@ -863,42 +827,6 @@ PrefabInstance:
     - target: {fileID: 20290996921888062, guid: 42935d41d9ee547bd8168a010681781a,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: viewportModifiers.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: nonserializedProperties.Array.data[3]
-      value: _layoutsLegacy
-      objectReference: {fileID: 0}
-    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: _migrated
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: _appSettings
-      value: 
-      objectReference: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb,
-        type: 2}
-    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: _enableDynamicElement._referenceName
-      value: EnableDynamicElement
-      objectReference: {fileID: 0}
-    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: _disableDynamicElement._referenceName
-      value: DisableDynamicElement
-      objectReference: {fileID: 0}
-    - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: _hasBreakpoints
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1098,6 +1026,17 @@ PrefabInstance:
       propertyPath: userData.Array.data[1].dataType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3144316825054138898, guid: a0a7ea057e4b245c7861ca939848b432,
+        type: 3}
+      propertyPath: _appSettings._referenceName
+      value: AppSettings
+      objectReference: {fileID: 0}
+    - target: {fileID: 3144316825054138898, guid: a0a7ea057e4b245c7861ca939848b432,
+        type: 3}
+      propertyPath: _appSettings._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb,
+        type: 2}
     - target: {fileID: 3144316825054138897, guid: a0a7ea057e4b245c7861ca939848b432,
         type: 3}
       propertyPath: _complexEventReference._referenceName
@@ -1462,6 +1401,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 94d09fd5965ac4d63b71f9f464b3f268, type: 3}
+--- !u!4 &4918761141262663786 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4170645452252380700, guid: 94d09fd5965ac4d63b71f9f464b3f268,
+    type: 3}
+  m_PrefabInstance: {fileID: 9053335601879531126}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4918761141262663785 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4170645452252380703, guid: 94d09fd5965ac4d63b71f9f464b3f268,
@@ -1474,9 +1419,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b726e75763a3145b5a2ef3bf6aef7ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &4918761141262663786 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4170645452252380700, guid: 94d09fd5965ac4d63b71f9f464b3f268,
-    type: 3}
-  m_PrefabInstance: {fileID: 9053335601879531126}
-  m_PrefabAsset: {fileID: 0}

@@ -102,14 +102,17 @@ MonoBehaviour:
   - id
   - sceneName
   - initialized
-  - _layouts
+  - _layoutsLegacy
   - nonserializedProperties
   - _logElementOnLayoutUpdate
   - _appSettings
   - _enableDynamicElement
   - _disableDynamicElement
-  _migrated: 0
-  _appSettings: {fileID: 0}
+  _migrated: 1
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
   _enableDynamicElement:
     _isSystemReference: 0
     _referenceName: ResponsiveElementEnable
@@ -118,11 +121,16 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: ResponsiveElementDisable
     _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
-  _hasBreakpoints: 1
+  _hasBreakpoints: 0
   _priority: 0
   _logElementOnLayoutUpdate: 0
   _aspectRatioBreakpoints: []
-  viewportModifiers: []
+  viewportModifiers:
+  - serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
 --- !u!114 &6762982322118964362
 MonoBehaviour:
   m_ObjectHideFlags: 0

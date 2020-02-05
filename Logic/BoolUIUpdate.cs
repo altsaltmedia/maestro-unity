@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using DoozyUI;
+﻿using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.Serialization;
 
@@ -24,8 +20,8 @@ namespace AltSalt.Maestro.Logic
         // Use this for initialization
         void Start()
         {
-            UIToggle toggle = GetComponent<UIToggle>();
-            toggle.IsOn = boolValue;
+            // UIToggle toggle = GetComponent<UIToggle>();
+            // toggle.IsOn = boolValue;
         }
 
         private static bool IsPopulated(BoolReference attribute)

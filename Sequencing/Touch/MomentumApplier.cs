@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using DoozyUI.Gestures;
 using UnityEngine;
 using Sirenix.OdinInspector;
 

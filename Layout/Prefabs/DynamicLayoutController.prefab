@@ -46,7 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a4a1aec4bb54aca8f35fb94c40746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
   _sceneAspectRatio:
     _isSystemReference: 0
     _referenceName: CurrentSceneAspectRatio
