@@ -16,7 +16,6 @@ namespace AltSalt.Maestro.Animation
             ScriptPlayable<TMProWordColorMixerBehaviour> trackPlayable = ScriptPlayable<TMProWordColorMixerBehaviour>.Create(graph, inputCount);
             TMProWordColorMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(go, behaviour);
-
             return trackPlayable;
         }
 

@@ -15,7 +15,6 @@ namespace AltSalt.Maestro.Animation
             ScriptPlayable<LerpFloatVarMixerBehaviour> trackPlayable = ScriptPlayable<LerpFloatVarMixerBehaviour>.Create(graph, inputCount);
             LerpFloatVarMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(go, behaviour);
-
             return trackPlayable;
         }
         

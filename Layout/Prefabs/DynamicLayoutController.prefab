@@ -49,30 +49,30 @@ MonoBehaviour:
   _appSettings:
     _isSystemReference: 0
     _referenceName: AppSettings
-    _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
+    _variable: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae, type: 2}
   _sceneAspectRatio:
     _isSystemReference: 0
     _referenceName: CurrentSceneAspectRatio
     _useConstant: 0
     _constantValue: 0
-    _variable: {fileID: 11400000, guid: 14d1ccc2b421d441f9e8780be5009528, type: 2}
+    _variable: {fileID: 11400000, guid: da4cf35feba6b4740a83a585dcb31212, type: 2}
   _sceneWidth:
     _isSystemReference: 0
     _referenceName: CurrentSceneHeight
     _useConstant: 0
     _constantValue: 0
-    _variable: {fileID: 11400000, guid: 71ec187545d774365b64cd8020e2ea2b, type: 2}
+    _variable: {fileID: 11400000, guid: 97eecb796ffd3450cbe93165f58dc190, type: 2}
   _sceneHeight:
     _isSystemReference: 0
     _referenceName: CurrentSceneWidth
     _useConstant: 0
     _constantValue: 0
-    _variable: {fileID: 11400000, guid: 7409962026f3b4ee08d6b2f6a8ff576d, type: 2}
+    _variable: {fileID: 11400000, guid: 4efd97f9a1bd749f196ceb13195b1f6d, type: 2}
   _deviceBreakpoints:
   - 1.77
   _sceneDimensions:
   - targetAspectRatio: 1
-    resizeType: 1
+    resizeType: 2
   - targetAspectRatio: 1
     resizeType: 0
   _delayStart: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   _doNotRecord: 0
-  _migrated: 0
+  _migrated: 1
 --- !u!114 &9077634932118632401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   _doNotRecord: 0
-  _migrated: 0
+  _migrated: 1
 --- !u!114 &6154787528140349724
 MonoBehaviour:
   m_ObjectHideFlags: 0

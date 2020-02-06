@@ -14,7 +14,9 @@ namespace AltSalt.Maestro.Audio
 
         public float clipEndTime => _clipEndTime;
 
-        public bool isReversing => trackAssetConfig.isReversing;
+        public BoolVariable _isReversingVariable;
+
+        public bool isReversing => _isReversingVariable.value;
 
         public float frameStepValue => trackAssetConfig.frameStepValue;
         

@@ -51,7 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 292b12df71c484cf797c0707e025fad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae, type: 2}
   _loadSceneImmediatelyKey:
     _isSystemReference: 0
     _referenceName: LoadSceneImmediatelyKey
@@ -84,6 +87,10 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: EventCallbackKey
     _variable: {fileID: 11400000, guid: 420ddf56ca3e24f8bbd4453eb1c66057, type: 2}
+  _sceneUnloadCompleted:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 11400000, guid: dd31265763519420e83e5824ebd9feb6, type: 2}
 --- !u!114 &7973420083374359233
 MonoBehaviour:
   m_ObjectHideFlags: 0

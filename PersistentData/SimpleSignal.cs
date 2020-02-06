@@ -10,29 +10,28 @@ namespace AltSalt.Maestro
 
         private List<ISimpleSignalListener> listeners => _listeners;
 
-        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
-        [InfoBox("Raises event")]
+        
         public void SignalChange()
         {
             SanitizeListenerList();
             
             if (CallerRegistered() == false) return;
             
-            if (logCallersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+            if (logCallersOnRaise == true || AppSettings.logEventCallersAndListeners == true) {
                 LogCaller();
             }
-            if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+            if (logListenersOnRaise == true || AppSettings.logEventCallersAndListeners == true) {
                 LogListenersHeading(listeners.Count);
             }
             
             for (int i = listeners.Count - 1; i >= 0; i--) {
-                if (logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+                if (logListenersOnRaise == true || AppSettings.logEventCallersAndListeners == true) {
                     LogListenerOnRaise(listeners[i]);
                 }
                 listeners[i].OnEventRaised();
             }
             
-            if(logCallersOnRaise == true || logListenersOnRaise == true || appSettings.logEventCallersAndListeners == true) {
+            if(logCallersOnRaise == true || logListenersOnRaise == true || AppSettings.logEventCallersAndListeners == true) {
                 LogClosingLine();
             }
             
@@ -85,8 +84,20 @@ namespace AltSalt.Maestro
 
         private void SanitizeListenerList()
         {
-            _listeners.RemoveAll(x => x == null);
+            listeners.RemoveAll(x => x == null);
         }
+        
+#if UNITY_EDITOR
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
+        [InfoBox("Raises event")]
+        [ShowInInspector]
+        private void CallSignalChange()
+        {
+            StoreCaller(this, "editor", "editor");
+            SignalChange();
+        }        
+#endif
+        
     }
     
 }

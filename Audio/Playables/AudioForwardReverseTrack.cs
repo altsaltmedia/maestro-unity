@@ -10,25 +10,26 @@ namespace AltSalt.Maestro.Audio
     [TrackBindingType(typeof(AudioSource))]
     public class AudioForwardReverseTrack : LerpToTargetTrack
     {
-
-#if UNITY_EDITOR
-        public void StoreUtilVars(GameObject directorObject)
+        protected override void StoreClipProperties(GameObject directorObject)
         {
             foreach (var clip in GetClips()) {
                 var myAsset = clip.asset as AudioForwardReverseClip;
                 if (myAsset) {
+                    myAsset.startTime = clip.start;
+                    myAsset.endTime = clip.end;
+                    myAsset.parentTrack = this;
                     myAsset.trackAssetConfig = directorObject.GetComponent<TrackAssetConfig>();
+                    myAsset.isReversingVariable = myAsset.trackAssetConfig.isReversingVariable;
                 }
             }
         }
-#endif
 
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject directorObject, int inputCount)
         {
-#if UNITY_EDITOR
-            StoreUtilVars(directorObject);
-#endif
             StoreClipProperties(directorObject);
+            ScriptPlayable<AudioForwardReverseMixerBehaviour> trackPlayable = ScriptPlayable<AudioForwardReverseMixerBehaviour>.Create(graph, inputCount);
+            AudioForwardReverseMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            StoreMixerProperties(directorObject, behaviour);
             return ScriptPlayable<AudioForwardReverseMixerBehaviour>.Create(graph, inputCount);
         }
         

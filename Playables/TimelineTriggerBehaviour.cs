@@ -35,7 +35,10 @@ namespace AltSalt.Maestro
             set => _triggered = value;
         }
 
-        public bool isReversing => trackAssetConfig.isReversing;
+        [NonSerialized]
+        public BoolVariable _isReversingVariable;
+
+        public bool isReversing => _isReversingVariable.value;
 
         [FormerlySerializedAs("disableOnReverse")]
         [SerializeField]

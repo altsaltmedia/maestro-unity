@@ -85,6 +85,13 @@ namespace AltSalt.Maestro.Sequencing
             
         }
 
+        public void RefreshConfiguration()
+        {
+            if (Application.isPlaying == false) {
+                Configure();
+            }
+        }
+
         private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);

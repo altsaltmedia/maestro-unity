@@ -53,7 +53,7 @@ namespace AltSalt.Maestro.Sequencing
         public bool logElementOnLayoutUpdate {
             get
             {
-                if (_logElementOnLayoutUpdate == true || appSettings.logGlobalResponsiveElementActions == true) {
+                if (_logElementOnLayoutUpdate == true || AppSettings.logGlobalResponsiveElementActions == true) {
                     return true;
                 }
 

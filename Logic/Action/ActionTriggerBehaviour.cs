@@ -14,6 +14,15 @@ namespace AltSalt.Maestro.Logic.Action
         private static bool syncEditorActionHeadings = true;
         
         [SerializeField]
+        private bool _logCallersOnRaise;
+
+        private bool logCallersOnRaise
+        {
+            get => _logCallersOnRaise;
+            set => _logCallersOnRaise = value;
+        }
+
+        [SerializeField]
         [OnValueChanged(nameof(OnEnable))]
         private ActionTrigger _actionTrigger = new ActionTrigger();
 
@@ -36,6 +45,10 @@ namespace AltSalt.Maestro.Logic.Action
             if (actionTrigger.triggerOnStart == true) {
                 CallPerformActions(this.gameObject);
             }
+            
+            if (actionTrigger.resetGameStateOnStart == true) {
+                CallResetGameState(this.gameObject);
+            }
         }
 
         public void CallPerformActions(GameObject callingObject)
@@ -43,8 +56,19 @@ namespace AltSalt.Maestro.Logic.Action
             if (callingObject == null) {
                 throw new UnassignedReferenceException("You must specify a calling game object.");
             }
-            
+
+            if (logCallersOnRaise == true || AppSettings.logEventCallersAndListeners == true) {
+                Debug.Log($"Action Trigger on {this.gameObject.name} triggered!", this.gameObject);
+                Debug.Log($"Call executed by {callingObject.name}", callingObject);
+                Debug.Log("--------------------------");
+            }
+
             actionTrigger.PerformActions(this.gameObject);
+        }
+
+        public void CallResetGameState(GameObject callingObject)
+        {
+            actionTrigger.ResetGameState(callingObject);
         }
 
 #if UNITY_EDITOR

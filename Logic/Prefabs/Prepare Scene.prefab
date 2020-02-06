@@ -43,11 +43,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4814058668971968668, guid: 8da0bd6e170714552929b26bf7311610,
-        type: 3}
-      propertyPath: m_Name
-      value: Prepare Scene
-      objectReference: {fileID: 0}
     - target: {fileID: 169477710756566227, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -103,6 +98,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4814058668971968668, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: m_Name
+      value: Prepare Scene
+      objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._boolActions.Array.size
@@ -137,7 +137,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._boolActions.Array.data[0]._boolReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 0352eb934b1444f31a328976fcec6c7c,
+      objectReference: {fileID: 11400000, guid: f0e99c537d8574738a9ec393dc76d1dc,
         type: 2}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
@@ -158,7 +158,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[0]._axisReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 3c23fc3047524465f85ebe33e9152c55,
+      objectReference: {fileID: 11400000, guid: 5f3dbad399cca472cb95a5c4fb440593,
         type: 2}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
@@ -184,7 +184,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[1]._axisReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 926193b3c2b744184bdb7b79c29afc40,
+      objectReference: {fileID: 11400000, guid: 2202a0dd18d5141af88afc49853c5937,
         type: 2}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
@@ -210,7 +210,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[2]._axisReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 4f918b54369b147a99359a2a9059f972,
+      objectReference: {fileID: 11400000, guid: f042b36d83f2044098949d11c4a7b01d,
         type: 2}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
@@ -231,7 +231,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[3]._axisReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 36c6870632eed4068a6d9adc77ce4a15,
+      objectReference: {fileID: 11400000, guid: 227dedf2cb4244be5bd7e64eae205625,
         type: 2}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
@@ -273,8 +273,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._boolActions.Array.data[1]._boolReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 0513f6430c00a4041ba4d285a07c3eb8,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._boolActions.Array.data[1]._boolReference._referenceName
@@ -283,6 +282,27 @@ PrefabInstance:
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._boolActions.Array.data[1]._targetValue._useConstant
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._appSettings._referenceName
+      value: AppSettings
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._appSettings._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae,
+        type: 2}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._triggerOnStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._resetGameStateOnStart
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

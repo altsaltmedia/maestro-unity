@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 4281599082929628}
   - component: {fileID: 114194128393916672}
   - component: {fileID: 114697932136561384}
-  - component: {fileID: 114588333634542744}
-  - component: {fileID: 114946770816194122}
   m_Layer: 0
   m_Name: SwipeMonitor
   m_TagString: Untagged
@@ -46,7 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c988e76ee47474488013b330da6b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 0}
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae, type: 2}
   _userDataKey:
     _isSystemReference: 0
     _referenceName: User1
@@ -118,82 +119,3 @@ MonoBehaviour:
     eventName: 1
     methodName: OnTouchStart
     parameter: 1
---- !u!114 &114588333634542744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1681194368555834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 418c03a281e7843a68149db5916ea163, type: 2}
-  _simpleSignalReferences: []
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114194128393916672}
-        m_MethodName: HaltMomentum
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _action:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114194128393916672}
-        m_MethodName: HaltMomentum
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
---- !u!114 &114946770816194122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1681194368555834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
-  _complexEventReference:
-    _isSystemReference: 0
-    _referenceName: ConvertMomentum
-    _variable: {fileID: 11400000, guid: 84913226172064f309f3f0b1b8b83ce6, type: 2}
-  DeveloperDescription: This event requires that the string dictionary values 'fromAxis'
-    and 'toAxis' be passed in an EventPayload instance.
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114194128393916672}
-        m_MethodName: UpdateMomentum
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 0

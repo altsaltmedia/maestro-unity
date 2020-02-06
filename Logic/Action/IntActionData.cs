@@ -44,6 +44,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         [SerializeField]
         [HideReferenceObjectPicker]
+        [HideIf(nameof(intActionType), IntActionType.SetToDefaultValue)]
         private IntReference _operatorValue;
 
         private IntReference operatorValue => _operatorValue;
@@ -52,7 +53,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         public override void PerformAction(GameObject callingObject)
         {
-            if (CanPerformAction(callingObject) == false) {
+            if (CanPerformAction() == false) {
                 Debug.Log($"Required variable(s) not specified in {title}, canceling operation", callingObject);
                 return;
             }
@@ -93,13 +94,14 @@ namespace AltSalt.Maestro.Logic.Action
             }
         }
         
-        private bool CanPerformAction(GameObject callingObject)
+        private bool CanPerformAction()
         {
             if (intReference.GetVariable() == null) {
                 return false;
             }
             
-            if (operatorValue.useConstant == false && operatorValue.GetVariable() == null) {
+            if (intActionType == IntActionType.SetToDefaultValue == false && 
+                operatorValue.useConstant == false && operatorValue.GetVariable() == null) {
                 return false;
             }
 

@@ -926,8 +926,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                 ClearHiddenValues();
             }
         }
-
-        [HorizontalGroup("Split", 1f)]
+        
         [InfoBox("Clear any values that are not currently being used by the trigger")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void ClearHiddenValues()

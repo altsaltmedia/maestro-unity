@@ -6,25 +6,15 @@ namespace AltSalt.Maestro
 {
     [TrackColor(0.245149f, 0.895372f, 0.5679245f)]
     [TrackClipType(typeof(ComplexEventTimelineTriggerClip))]
-    public class ComplexEventTimelineTriggerTrack : TrackAsset
+    public class ComplexEventTimelineTriggerTrack : TimelineTriggerTrack
     {
-        public void StoreClipProperties(GameObject go)
-        {
-            foreach (var clip in GetClips()) {
-                var myAsset = clip.asset as ComplexEventTimelineTriggerClip;
-                if (myAsset) {
-                    myAsset.startTime = clip.start;
-                    myAsset.endTime = clip.end;
-                    myAsset.trackAssetConfig = go.GetComponent<TrackAssetConfig>();
-                    myAsset.parentTrack = this;
-                }
-            }
-        }
-
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipProperties(go);
-            return ScriptPlayable<ComplexEventTimelineTriggerMixerBehaviour>.Create (graph, inputCount);
+            ScriptPlayable<ComplexEventTimelineTriggerMixerBehaviour> trackPlayable = ScriptPlayable<ComplexEventTimelineTriggerMixerBehaviour>.Create(graph, inputCount);
+            ComplexEventTimelineTriggerMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            StoreMixerProperties(go, behaviour);
+            return trackPlayable;
         }
         
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)

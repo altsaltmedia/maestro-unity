@@ -13,7 +13,10 @@ namespace AltSalt.Maestro.Animation
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipProperties(go);
-            return ScriptPlayable<LerpVideoPlayerTimeMixerBehaviour>.Create (graph, inputCount);
+            ScriptPlayable<LerpVideoPlayerTimeMixerBehaviour> trackPlayable = ScriptPlayable<LerpVideoPlayerTimeMixerBehaviour>.Create(graph, inputCount);
+            LerpVideoPlayerTimeMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            StoreMixerProperties(go, behaviour);
+            return trackPlayable;
         }
         
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)

@@ -74,7 +74,7 @@ namespace AltSalt.Maestro.Layout
         public bool logElementOnLayoutUpdate {
             get
             {
-                if (_logElementOnLayoutUpdate == true || appSettings.logGlobalResponsiveElementActions == true) {
+                if (_logElementOnLayoutUpdate == true || AppSettings.logGlobalResponsiveElementActions == true) {
                     return true;
                 }
 
@@ -91,7 +91,13 @@ namespace AltSalt.Maestro.Layout
         {
 #if UNITY_EDITOR
             _appSettings.PopulateVariable(this, nameof(_appSettings));
+            if (string.IsNullOrEmpty(_enableDynamicElement.referenceName) == true) {
+                _enableDynamicElement.referenceName = nameof(enableDynamicElement).Capitalize();
+            }
             _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
+            if (string.IsNullOrEmpty(_disableDynamicElement.referenceName) == true) {
+                _disableDynamicElement.referenceName = nameof(disableDynamicElement).Capitalize();
+            }
             _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
 #endif
             enableDynamicElement.RaiseEvent(this.gameObject, this);

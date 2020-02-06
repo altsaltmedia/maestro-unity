@@ -1285,7 +1285,7 @@ namespace AltSalt.Maestro
             }
         }
         
-                public static SerializedProperty FindReferenceProperty(SerializedObject sourceObject, string referencePropertyPath)
+        public static SerializedProperty FindReferenceProperty(SerializedObject sourceObject, string referencePropertyPath)
         {
             return FindReferenceProperty(sourceObject, referencePropertyPath.Split('.'));
         }

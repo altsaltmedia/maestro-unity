@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 169477710756566227}
   - component: {fileID: 5746869645302786098}
   m_Layer: 8
-  m_Name: ActionTrigger
+  m_Name: Action Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,8 +43,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea2c6a66c7a45978bf2cddeb3ee2cb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _logCallersOnRaise: 0
   _actionTrigger:
-    _appSettings: {fileID: 0}
+    _appSettings:
+      _isSystemReference: 0
+      _referenceName: AppSettings
+      _variable: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae, type: 2}
     _parentObject: {fileID: 5746869645302786098}
     _serializedPropertyPath: _actionTrigger
     _triggerOnStart: 0

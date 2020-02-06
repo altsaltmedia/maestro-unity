@@ -46,8 +46,21 @@ namespace AltSalt.Maestro.Layout
 
         [SerializeField]
         private EasingFunction.Ease ease = EasingFunction.Ease.EaseInOutQuad;
-        
-        private EasingFunction.Function easingFunction;
+
+        private EasingFunction.Function _easingFunction;
+
+        private EasingFunction.Function easingFunction
+        {
+            get
+            {
+                if (_easingFunction == null) {
+                    _easingFunction = EasingFunction.GetEasingFunction(ease);
+                }
+
+                return _easingFunction;
+            }
+            set => _easingFunction = value;
+        }
 
         [SerializeField]
         [Range(.1f, 1f)]
@@ -126,6 +139,22 @@ namespace AltSalt.Maestro.Layout
 
         public delegate void AddPanelCallback(ScrollSnapElement scrollSnapElement);
 
+#if UNITY_EDITOR
+        private void Awake()
+        {
+            if (string.IsNullOrEmpty(_enableDynamicElement.referenceName) == true) {
+                _enableDynamicElement.referenceName = nameof(enableDynamicElement).Capitalize();
+            }
+            _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
+            if (string.IsNullOrEmpty(_disableDynamicElement.referenceName) == true) {
+                _disableDynamicElement.referenceName = nameof(disableDynamicElement).Capitalize();
+            }
+            _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
+            
+            enableDynamicElement.RaiseEvent(this.gameObject, this);
+        }
+#endif
+
         protected override void Start()
         {
             base.Start();
@@ -134,17 +163,18 @@ namespace AltSalt.Maestro.Layout
         
         public void CallExecuteLayoutUpdate(Object callingObject)
         {
-            Activate();   
+            baseWidth = (float)Utils.GetResponsiveWidth(sceneHeight, sceneWidth);
+            maxPosition = (baseWidth * scrollSnapElements.Count - 1) * -1f;
+            readyForUpdate = true;
         }
 
         public void Activate()
         {
-            baseWidth = (float)Utils.GetResponsiveWidth(sceneHeight, sceneWidth);
-
+            if (readyForUpdate == false) {
+                LogMessage();
+                return;
+            }
             StartCoroutine(LerpToElement(activeElementID));
-
-            maxPosition = (baseWidth * scrollSnapElements.Count - 1) * -1f;
-            readyForUpdate = true;
         }
         
         public void Deactivate()
@@ -343,6 +373,11 @@ namespace AltSalt.Maestro.Layout
         }
 
         private static bool IsPopulated(FloatReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
+        }
+        
+        private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);
         }

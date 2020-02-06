@@ -42,12 +42,12 @@ namespace AltSalt.Maestro.Audio
                         doubleModifier = inputPlayable.GetTime() / inputPlayable.GetDuration();
                         audioSource.volume = Mathf.Lerp(0, 1, (float)DoubleEasingFunction(0f, 1f, doubleModifier));
                     } else {
-                        if (TimelineUtilsMixerBehaviour.currentTime >= input.endTime) {
+                        if (trackAssetConfig.currentTime >= input.endTime) {
                             if(audioSource.isPlaying == false) {
                                 audioSource.volume = 1;
                                 audioSource.Play();
                             }
-                        } else if (i == 0 && TimelineUtilsMixerBehaviour.currentTime <= input.startTime) {
+                        } else if (i == 0 && trackAssetConfig.currentTime <= input.startTime) {
                             audioSource.volume = 0;
                             audioSource.Stop();
                         }

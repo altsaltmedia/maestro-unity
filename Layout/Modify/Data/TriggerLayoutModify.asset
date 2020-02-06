@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df7551c54cc6d4969a45a8d769935a8e, type: 3}
   m_Name: TriggerLayoutModify
   m_EditorClassIdentifier: 
-  registrationNotice: This object and its dependents will be registered whenever the
-    RegisterDependencies tool is used.
+  registrationNotice: This object and its dependents will be registered whenever
+    the RegisterDependencies tool is used.
   _appSettings:
     _isSystemReference: 0
     _referenceName: AppSettings
-    _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
+    _variable: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae, type: 2}
   logCallersOnRaise: 0
   logListenersOnRegister: 0
   logListenersOnRaise: 0

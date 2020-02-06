@@ -15,7 +15,6 @@ namespace AltSalt.Maestro.Animation
             ScriptPlayable<RectTransformPosMixerBehaviour> trackPlayable = ScriptPlayable<RectTransformPosMixerBehaviour>.Create(graph, inputCount);
             RectTransformPosMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(go, behaviour);
-
             return trackPlayable;
         }
 

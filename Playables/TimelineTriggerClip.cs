@@ -46,6 +46,14 @@ namespace AltSalt.Maestro
         public override double duration => 1d;
 
         public ClipCaps clipCaps => ClipCaps.None;
+
+        private BoolVariable _isReversingVariable;
+
+        public BoolVariable isReversingVariable
+        {
+            get => _isReversingVariable;
+            set => _isReversingVariable = value;
+        }
         
         //        This is here for reference - it should be overriden in your child class
 //        so that the instance of your behaviour has all the necessary variables.

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5474572852560099215}
   - component: {fileID: 2390398158691485511}
   - component: {fileID: -4565310156302280025}
+  - component: {fileID: 970013134367802150}
   m_Layer: 0
   m_Name: MasterSequence
   m_TagString: Untagged
@@ -62,11 +63,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: f87a6af6f475344d4ab531f116006f79, type: 2}
+  _complexEvent: {fileID: 0}
   _complexEventReference:
     _isSystemReference: 0
     _referenceName: MainInput-InputActionComplete
-    _variable: {fileID: 11400000, guid: f87a6af6f475344d4ab531f116006f79, type: 2}
+    _variable: {fileID: 11400000, guid: a9331d97cc9b54c4eaa6b3b6dc542eef, type: 2}
   DeveloperDescription: 
   _response:
     m_PersistentCalls:
@@ -83,4 +84,40 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doNotRecord: 0
-  _migrated: 0
+  _migrated: 1
+--- !u!114 &970013134367802150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993091226287097154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _simpleSignal: {fileID: 0}
+  _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: MainInput-SequenceModified
+    _variable: {fileID: 11400000, guid: 2cc6a74538bed4f0b9c28646ee314416, type: 2}
+  _response:
+    m_PersistentCalls:
+      m_Calls: []
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2390398158691485511}
+        m_MethodName: RefreshHasActiveSequence
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _doNotRecord: 0
+  _migrated: 1

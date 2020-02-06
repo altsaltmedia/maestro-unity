@@ -27,6 +27,14 @@ namespace AltSalt.Maestro
             set => _sequence = value;
         }
 
+        private double _currentTime;
+
+        public double currentTime
+        {
+            get => _currentTime;
+            set => _currentTime = value;
+        }
+
         [SerializeField]
 #if UNITY_EDITOR        
         [HideIf(nameof(SequencePopulated))]
@@ -45,11 +53,8 @@ namespace AltSalt.Maestro
             }
         }
         
-        public bool isReversing
-        {
-            get => appSettings.GetIsReversing(this.gameObject, inputGroupKey);
-            private set => appSettings.SetIsReversing(this.gameObject, inputGroupKey, value);
-        }
+        public BoolVariable isReversingVariable =>
+            appSettings.GetIsReversingReference(this.gameObject, inputGroupKey).GetVariable() as BoolVariable;
 
         public float timelineDebugTime
         {
@@ -63,7 +68,7 @@ namespace AltSalt.Maestro
 
         public float swipeModifierOutput => appSettings.GetSwipeModifierOutput(this.gameObject, inputGroupKey);
 
-        public bool logGlobalResponsiveElementActions => appSettings.logGlobalResponsiveElementActions;
+        public bool logGlobalResponsiveElementActions => AppSettings.logGlobalResponsiveElementActions;
         
 #if UNITY_EDITOR
         private void OnEnable()

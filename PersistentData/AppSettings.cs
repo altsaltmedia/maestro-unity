@@ -109,6 +109,20 @@ namespace AltSalt.Maestro
             
         }
 
+        public static void ResetGameState(GameObject callingObject)
+        {
+            var variableSearch = Resources.FindObjectsOfTypeAll(typeof(ModifiableEditorVariable));
+            ModifiableEditorVariable[] modifiableEditorVariables =
+                Array.ConvertAll(variableSearch, x => (ModifiableEditorVariable) x); 
+            for (int i = 0; i < modifiableEditorVariables.Length; i++) {
+                if (modifiableEditorVariables[i].hasDefault == true
+                    && modifiableEditorVariables[i].resetOnGameRefresh == ToggleState.YES) {
+                    modifiableEditorVariables[i].StoreCaller(callingObject);
+                    modifiableEditorVariables[i].SetToDefaultValue();
+                }
+            }
+        }
+
 
     #region System Settings
 
@@ -603,6 +617,11 @@ namespace AltSalt.Maestro
             return inputData.GetInputGroup(inputGroupKey).isReversing.GetValue();
         }
         
+        public BoolReference GetIsReversingReference(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).isReversing;
+        }
+        
         public BoolVariable SetIsReversing(GameObject callingObject, InputGroupKey inputGroupKey, bool targetValue)
         {
             return inputData.GetInputGroup(inputGroupKey).isReversing.SetValue(callingObject, targetValue);
@@ -665,11 +684,11 @@ namespace AltSalt.Maestro
 
         public bool useAddressables => debugPreferences.useAddressables;
 
-        public bool logEventCallersAndListeners => debugPreferences.logEventCallersAndListeners;
+        public static bool logEventCallersAndListeners => DebugPreferences.logEventCallersAndListeners;
 
-        public bool logGlobalResponsiveElementActions => debugPreferences.logResponsiveElementActions;
+        public static bool logGlobalResponsiveElementActions => DebugPreferences.logResponsiveElementActions;
 
-        public bool logConditionResponses => debugPreferences.logConditionResponses;
+        public static bool logConditionResponses => DebugPreferences.logConditionResponses;
 
     #endregion
         

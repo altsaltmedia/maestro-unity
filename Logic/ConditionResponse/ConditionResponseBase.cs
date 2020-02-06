@@ -86,7 +86,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         [PropertyOrder(8)]
         [HideReferenceObjectPicker]
         [ReadOnly]
-        [HideInInspector]
         protected UnityEvent _response;
 
         public UnityEvent response => _response;
@@ -197,7 +196,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         public void TriggerResponse(GameObject callingObject, bool triggerOnStart)
         {
             if (CheckCondition(callingObject) == true) {
-                if(appSettings.logConditionResponses == true) {
+                if(AppSettings.logConditionResponses == true) {
                     LogConditionResponse(callingObject, triggerOnStart);
                 }
                 action.Invoke(callingObject);

@@ -12,7 +12,10 @@ namespace AltSalt.Maestro.Animation
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipProperties(go);
-            return ScriptPlayable<RectTransformRotationMixerBehaviour>.Create (graph, inputCount);
+            ScriptPlayable<RectTransformRotationMixerBehaviour> trackPlayable = ScriptPlayable<RectTransformRotationMixerBehaviour>.Create(graph, inputCount);
+            RectTransformRotationMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            StoreMixerProperties(go, behaviour);
+            return trackPlayable;
         }
 
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)

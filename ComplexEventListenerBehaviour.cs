@@ -10,6 +10,7 @@ https://www.altsalt.com / ricky@altsalt.com
 
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
@@ -63,6 +64,11 @@ namespace AltSalt.Maestro
 	        
 	        if (migrated == false) {
 		        _complexEventReference.SetVariable(_complexEvent);
+		        var serializedObject = new SerializedObject(this);
+		        var migratedProperty = serializedObject.FindProperty(nameof(_migrated));
+		        migratedProperty.boolValue = true;
+		        serializedObject.ApplyModifiedProperties();
+				serializedObject.Update();
 	        }
 #endif	        
 			
@@ -71,7 +77,7 @@ namespace AltSalt.Maestro
         
 		private void OnDisable()
 		{
-			_complexEvent.UnregisterListener(this);
+			(complexEvent.GetVariable() as ComplexEvent).UnregisterListener(this);
 		}
 
         public void OnEventRaised(ComplexPayload complexPayload)

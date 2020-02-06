@@ -56,6 +56,12 @@ namespace AltSalt.Maestro.Logic.Action
         private bool _triggerOnStart = false;
 
         public bool triggerOnStart => _triggerOnStart;
+        
+        [ValueDropdown(nameof(boolValueList))]
+        [SerializeField]
+        private bool _resetGameStateOnStart = false;
+
+        public bool resetGameStateOnStart => _resetGameStateOnStart;
 
         private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
             {"YES", true },
@@ -178,6 +184,12 @@ namespace AltSalt.Maestro.Logic.Action
             for (int i = 0; i < actionData.Count; i++) {
                 actionData[i].PerformAction(callingObject);
             }
+        }
+        
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
+        public void ResetGameState(GameObject callingObject)
+        {
+            AppSettings.ResetGameState(callingObject);
         }
 
         public void OnAfterDeserialize()

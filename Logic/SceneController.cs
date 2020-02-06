@@ -87,6 +87,12 @@ namespace AltSalt.Maestro.Logic
             get => _sceneLoadCompletedCallback;
             set => _sceneLoadCompletedCallback = value;
         }
+        
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private SimpleEventReference _sceneUnloadCompleted;
+
+        private SimpleEventReference sceneUnloadCompleted => _sceneUnloadCompleted;
 
         private string _targetScene;
 
@@ -294,16 +300,32 @@ namespace AltSalt.Maestro.Logic
         public void TriggerUnloadScene(ComplexPayload complexPayload)
         {
             string unloadSceneName = complexPayload.GetStringValue(DataType.stringType);
-
-            if (appSettings.useAddressables == true) {
-                StartCoroutine(AddressablesAsyncSceneUnload(unloadSceneName));
+            var payloadEvent = complexPayload.GetScriptableObjectValue(this.eventCallbackKey) as SimpleEvent;
+            SimpleEvent eventCallback;
+            if (payloadEvent != null) {
+                eventCallback = payloadEvent;
             }
             else {
-                StartCoroutine(StandardAsyncSceneUnload(unloadSceneName));
+                eventCallback = sceneUnloadCompleted.GetVariable() as SimpleEvent;
+            }
+
+            if (appSettings.useAddressables == true) {
+                StartCoroutine(AddressablesAsyncSceneUnload(unloadSceneName, (AsyncOperationHandle asyncOperation) =>
+                {
+                    eventCallback.StoreCaller(this.gameObject);
+                    eventCallback.SignalChange();
+                }));
+            }
+            else {
+                StartCoroutine(StandardAsyncSceneUnload(unloadSceneName, (AsyncOperation asyncOperation) =>
+                {
+                    eventCallback.StoreCaller(this.gameObject);
+                    eventCallback.SignalChange();
+                }));
             }
         }
 
-        private IEnumerator AddressablesAsyncSceneUnload(string xSceneName)
+        private IEnumerator AddressablesAsyncSceneUnload(string xSceneName, Action<AsyncOperationHandle> callback)
         {
             AsyncOperationHandle<SceneInstance> unloadInstance = addressableSceneInstances[xSceneName];
 
@@ -312,15 +334,18 @@ namespace AltSalt.Maestro.Logic
             }
 
             AsyncOperationHandle asyncLoad = Addressables.UnloadSceneAsync(unloadInstance);
+            asyncLoad.Completed += callback;
 
             while (!asyncLoad.IsDone) {
                 yield return null;
             }
         }
         
-        private IEnumerator StandardAsyncSceneUnload(string xSceneName)
+        private IEnumerator StandardAsyncSceneUnload(string xSceneName, Action<AsyncOperation> callback)
         {
             AsyncOperation asyncLoad = SceneManager.UnloadSceneAsync(xSceneName);
+            asyncLoad.completed += callback;
+            
             while (!asyncLoad.isDone) {
                 yield return null;
             }

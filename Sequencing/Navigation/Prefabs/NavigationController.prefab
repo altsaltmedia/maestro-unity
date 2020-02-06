@@ -57,11 +57,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 410477222a60a45a79c098e5ad34c2b3, type: 2}
+  _simpleSignal: {fileID: 11400000, guid: 42ac1a720d0ef47b2b3952c8e8150de6, type: 2}
   _simpleSignalReferences:
   - _isSystemReference: 0
-    _referenceName: AdditiveSceneLoadCompleted
-    _variable: {fileID: 11400000, guid: 410477222a60a45a79c098e5ad34c2b3, type: 2}
+    _referenceName: MainInput-AppUtilsLoadCompleted
+    _variable: {fileID: 11400000, guid: 42ac1a720d0ef47b2b3952c8e8150de6, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls: []

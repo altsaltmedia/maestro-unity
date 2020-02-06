@@ -200,6 +200,13 @@ namespace AltSalt.Maestro
 
         public BoolReference appUtilsRequested => _appUtilsRequested;
         
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private SimpleEventTrigger _appUtilsLoadCompleted = new SimpleEventTrigger();
+
+        public SimpleEventTrigger appUtilsLoadCompleted => _appUtilsLoadCompleted;
+        
 
     #endregion
 
@@ -347,6 +354,7 @@ namespace AltSalt.Maestro
             (pauseMomentumThreshold.GetVariable() as FloatVariable).defaultValue = .03f;
             (flickThreshold.GetVariable() as FloatVariable).defaultValue = 2500f;
             (axisTransitionSpread.GetVariable() as FloatVariable).defaultValue = .5f;
+            (forkTransitionSpread.GetVariable() as FloatVariable).defaultValue = 2f;
             (frameStepValue.GetVariable() as FloatVariable).defaultValue = .02f;
 
             // With the axes, since every scene should set 

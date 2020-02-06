@@ -19,13 +19,14 @@ namespace AltSalt.Maestro.Audio
         }
         
         public override LerpToTargetBehaviour templateReference => template;
-        
-        private BoolReference _isReversing = new BoolReference();
 
-        public BoolReference isReversingReference
+        [NonSerialized]
+        private BoolVariable _isReversingVariable;
+
+        public BoolVariable isReversingVariable
         {
-            get => _isReversing;
-            set => _isReversing = value;
+            get => _isReversingVariable;
+            set => _isReversingVariable = value;
         }
         
         private FloatReference _frameStepValue = new FloatReference();
@@ -49,6 +50,7 @@ namespace AltSalt.Maestro.Audio
             template.startTime = startTime;
             template.endTime = endTime;
             template.trackAssetConfig = trackAssetConfig;
+            template._isReversingVariable = isReversingVariable;
 
             var playable = ScriptPlayable<AudioForwardReverseBehaviour>.Create(graph, template);
             return playable;

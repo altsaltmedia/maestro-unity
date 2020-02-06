@@ -37,7 +37,7 @@ namespace AltSalt.Maestro.Sequencing
                 sequence.currentTime = 0;
                 sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
                 //rootConfig.sequenceModified.RaiseEvent(this.gameObject, sequence);
-                sequence.sequenceConfig.masterSequence.RefreshMasterSequence(sequence);
+                sequence.sequenceConfig.masterSequence.RefreshElapsedTime(sequence);
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                 rootConfig.joiner.ActivatePreviousSequence(sequence);
                 
@@ -45,13 +45,13 @@ namespace AltSalt.Maestro.Sequencing
                 sequence.currentTime = sequence.sourcePlayable.duration;
                 sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
                 //rootConfig.sequenceModified.RaiseEvent(this.gameObject, sequence);
-                sequence.sequenceConfig.masterSequence.RefreshMasterSequence(sequence);
+                sequence.sequenceConfig.masterSequence.RefreshElapsedTime(sequence);
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                 rootConfig.joiner.ActivateNextSequence(sequence);
                 
             } else  {
                 sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                sequence.sequenceConfig.masterSequence.RefreshMasterSequence(sequence);
+                sequence.sequenceConfig.masterSequence.RefreshElapsedTime(sequence);
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                 //rootConfig.sequenceModified.RaiseEvent(this.gameObject, sequence);
             }

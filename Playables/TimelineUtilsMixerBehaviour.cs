@@ -9,14 +9,6 @@ namespace AltSalt.Maestro
         {
             set => trackAssetConfig.timelineDebugTime = value;
         }
-        
-        private static double _currentTime;
-
-        public static double currentTime
-        {
-            get => _currentTime;
-            set => _currentTime = value;
-        }
 
         private SimpleEventTrigger onEditorGraphStart => trackAssetConfig.onEditorGraphStart;
 
@@ -30,9 +22,9 @@ namespace AltSalt.Maestro
         
         public override void PrepareFrame(Playable playable, FrameData info)
         {
-            currentTime = playable.GetGraph().GetRootPlayable(0).GetTime();
+            trackAssetConfig.currentTime = playable.GetGraph().GetRootPlayable(0).GetTime();
 #if UNITY_EDITOR
-            timelineDebugTime = (float)currentTime;
+            timelineDebugTime = (float)trackAssetConfig.currentTime;
 #endif
         }
 

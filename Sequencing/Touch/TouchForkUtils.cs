@@ -102,13 +102,13 @@ namespace AltSalt.Maestro.Sequencing.Touch
                 touchController.yMomentumAxis.SetStatus(axisMonitorObject, true);
                 touchController.yMomentumAxis.SetInverted(axisMonitorObject, activeBranch.invert);
                 
-                touchController.xSwipeAxis.SetStatus(axisMonitorObject, true);
-                touchController.xMomentumAxis.SetStatus(axisMonitorObject, true);
+                touchController.xSwipeAxis.SetStatus(axisMonitorObject, false);
+                touchController.xMomentumAxis.SetStatus(axisMonitorObject, false);
 
             } else {
 
-                touchController.ySwipeAxis.SetStatus(axisMonitorObject, true);
-                touchController.yMomentumAxis.SetStatus(axisMonitorObject, true);
+                touchController.ySwipeAxis.SetStatus(axisMonitorObject, false);
+                touchController.yMomentumAxis.SetStatus(axisMonitorObject, false);
                 
                 touchController.xSwipeAxis.SetStatus(axisMonitorObject, true);
                 touchController.xSwipeAxis.SetInverted(axisMonitorObject, activeBranch.invert);

@@ -142,17 +142,21 @@ namespace AltSalt.Maestro.Sequencing
             activeInputModule.priority = 0;
         }
 
-        public void RefreshMasterSequence(Sequence modifiedSequence)
+        public MasterSequence RefreshElapsedTime(Sequence modifiedSequence)
+        {
+            MasterTimeData sequenceTimeData = this.masterTimeDataList.Find(x => x.sequence == modifiedSequence);
+            
+            if(sequenceTimeData != null) {
+                this.elapsedTime = sequenceTimeData.masterTimeStart + modifiedSequence.currentTime;
+            }
+
+            return this;
+        }
+
+        public void RefreshHasActiveSequence()
         {
             if (SequenceActive(sequenceConfigs) == true) {
-                
                 hasActiveSequence = true;
-                
-                MasterTimeData sequenceTimeData = this.masterTimeDataList.Find(x => x.sequence == modifiedSequence);
-                
-                if(sequenceTimeData != null) {
-                    this.elapsedTime = sequenceTimeData.masterTimeStart + modifiedSequence.currentTime;
-                }
             }
             else {
                 hasActiveSequence = false;

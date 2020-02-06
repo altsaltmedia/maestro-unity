@@ -12,13 +12,6 @@ namespace AltSalt.Maestro
 
     public abstract class PersistentDataObject : RegisterableScriptableObject, IDependable
     {
-        [Required]
-        [SerializeField]
-        [ReadOnly]
-        private AppSettingsReference _appSettings = new AppSettingsReference();
-
-        protected AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
-
         protected UnityEngine.Object callerObject;
         protected string callerScene = "";
         protected string callerName = "";
@@ -38,11 +31,6 @@ namespace AltSalt.Maestro
         [Header("$"+nameof(title))]
         [FormerlySerializedAs("DeveloperDescription")]
         private string _description = "";
-
-        protected void OnEnable()
-        {
-            _appSettings.PopulateVariable(this, nameof(_appSettings));
-        }
 #endif
 
         protected abstract string title { get; }

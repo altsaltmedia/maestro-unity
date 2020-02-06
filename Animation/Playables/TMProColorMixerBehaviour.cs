@@ -75,9 +75,9 @@ namespace AltSalt.Maestro.Animation
                     }
                 }
                 else {
-                    if(TimelineUtilsMixerBehaviour.currentTime >= input.endTime) {
+                    if(trackAssetConfig.currentTime >= input.endTime) {
                         trackBinding.color = input.targetValue;
-                    } else if (i == 0 && TimelineUtilsMixerBehaviour.currentTime <= input.startTime) {
+                    } else if (i == 0 && trackAssetConfig.currentTime <= input.startTime) {
                         trackBinding.color = input.initialValue;
                     }
                 }

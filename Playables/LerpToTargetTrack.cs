@@ -38,7 +38,7 @@ namespace AltSalt.Maestro
 //            return trackPlayable;
 //        }
     
-        public void StoreClipProperties(GameObject directorObject)
+        protected virtual void StoreClipProperties(GameObject directorObject)
         {
             foreach (var clip in GetClips()) {
                 var myAsset = clip.asset as LerpToTargetClip;

@@ -89,7 +89,7 @@ namespace AltSalt.Maestro.Layout
         public bool logElementOnLayoutUpdate {
             get
             {
-                if (_logElementOnLayoutUpdate == true || appSettings.logGlobalResponsiveElementActions == true) {
+                if (_logElementOnLayoutUpdate == true || AppSettings.logGlobalResponsiveElementActions == true) {
                     return true;
                 }
 
@@ -128,7 +128,13 @@ namespace AltSalt.Maestro.Layout
             base.OnEnable();
 #if UNITY_EDITOR
             _appSettings.PopulateVariable(this, nameof(_appSettings));
+            if (string.IsNullOrEmpty(_enableDynamicElement.referenceName) == true) {
+                _enableDynamicElement.referenceName = nameof(enableDynamicElement).Capitalize();
+            }
             _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
+            if (string.IsNullOrEmpty(_disableDynamicElement.referenceName) == true) {
+                _disableDynamicElement.referenceName = nameof(disableDynamicElement).Capitalize();
+            }
             _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
             
             PopulateNonSerializedProperties();
@@ -337,7 +343,7 @@ namespace AltSalt.Maestro.Layout
             string path = activeLayout.name + "/" + this.name + id.ToString();
             var jsonTextFile = Resources.Load<TextAsset>(path);
             if (jsonTextFile != null) {
-                if (appSettings.logGlobalResponsiveElementActions == true) {
+                if (AppSettings.logGlobalResponsiveElementActions == true) {
                     Debug.Log("Populating " + this.name + " with stored data for " + activeLayout.name + " layout", this);
                 } 
                 JsonUtility.FromJsonOverwrite(jsonTextFile.ToString(), this);

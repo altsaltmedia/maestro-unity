@@ -68,28 +68,28 @@ namespace AltSalt.Maestro
             set => _useAddressables = value;
         }
         
-        [SerializeField]
-        private bool _logEventCallersAndListeners = false;
+        [ShowInInspector]
+        private static bool _logEventCallersAndListeners = false;
         
-        public bool logEventCallersAndListeners
+        public static bool logEventCallersAndListeners
         {
             get => _logEventCallersAndListeners;
             set => _logEventCallersAndListeners = value;
         }
         
-        [SerializeField]
-        private bool _logResponsiveElementActions = false;
+        [ShowInInspector]
+        private static bool _logResponsiveElementActions = false;
 
-        public bool logResponsiveElementActions
+        public static bool logResponsiveElementActions
         {
             get => _logResponsiveElementActions;
             set => _logResponsiveElementActions = value;
         }
         
-        [SerializeField]
-        private bool _logConditionResponses = false;
+        [ShowInInspector]
+        private static bool _logConditionResponses = false;
 
-        public bool logConditionResponses
+        public static bool logConditionResponses
         {
             get => _logConditionResponses;
             set => _logConditionResponses = value;

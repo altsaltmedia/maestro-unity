@@ -108,14 +108,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: a18e207534e2542579281880a9c729e0, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipe
-    _variable: {fileID: 11400000, guid: a18e207534e2542579281880a9c729e0, type: 2}
+    _variable: {fileID: 11400000, guid: 9f1b860c8915f428484183d7caf375b2, type: 2}
   - _isSystemReference: 0
     _referenceName: MainInput-AppUtilsRequested
-    _variable: {fileID: 11400000, guid: fcac5bcce6c604d7694038b5a3d5bfd0, type: 2}
+    _variable: {fileID: 11400000, guid: 63258c7d84ce14694aea05ef65ffe33d, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -207,20 +207,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 07d850dd449ac4c73977c95628984ed5, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-AutoplayActivate
-    _variable: {fileID: 11400000, guid: 07d850dd449ac4c73977c95628984ed5, type: 2}
+    _variable: {fileID: 11400000, guid: 35ea0ec2390654513aa0e3762edbe4df, type: 2}
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipeEnd
-    _variable: {fileID: 11400000, guid: bdf914328d0d1408a94041dc8986f7f5, type: 2}
+    _variable: {fileID: 11400000, guid: 7ca1fb544a84a4b7eb65eead923ceffc, type: 2}
   - _isSystemReference: 0
     _referenceName: PauseSequenceComplete
     _variable: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
   - _isSystemReference: 0
     _referenceName: 
-    _variable: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -263,14 +263,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 21ec05b2ee83f400c8a84a5bb6447b60, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnTouchStart
-    _variable: {fileID: 11400000, guid: 21ec05b2ee83f400c8a84a5bb6447b60, type: 2}
+    _variable: {fileID: 11400000, guid: 54cb1cb41474842c389d5b2313ca4bc8, type: 2}
   - _isSystemReference: 0
     _referenceName: MainInput-AppUtilsRequested
-    _variable: {fileID: 11400000, guid: fcac5bcce6c604d7694038b5a3d5bfd0, type: 2}
+    _variable: {fileID: 11400000, guid: 63258c7d84ce14694aea05ef65ffe33d, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:

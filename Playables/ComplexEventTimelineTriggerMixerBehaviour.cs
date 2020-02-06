@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 
 namespace AltSalt.Maestro
 {    
-    public class ComplexEventTimelineTriggerMixerBehaviour : PlayableBehaviour
+    public class ComplexEventTimelineTriggerMixerBehaviour : LerpToTargetMixerBehaviour
     {
         // Utility vars - specified here to prevent garbage collection
         double currentTime;
