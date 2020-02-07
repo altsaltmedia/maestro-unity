@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
-namespace AltSalt.Maestro.Logic.Action
+namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     public class ComplexEventActionData : ActionData

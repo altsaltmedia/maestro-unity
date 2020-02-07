@@ -48,6 +48,16 @@ namespace AltSalt.Maestro
             get => _invertXInput;
             set => _invertXInput = value;
         }
+        
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _dragSensitivity = new FloatReference();
+
+        public FloatReference dragSensitivity
+        {
+            get => _dragSensitivity;
+            set => _dragSensitivity = value;
+        }
 
         [SerializeField, Required]
         private BoolReference _userAutoplayEnabled = new BoolReference();

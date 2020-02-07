@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace AltSalt.Maestro.Logic.Action
+namespace AltSalt.Maestro.Logic
 {
     [ExecuteInEditMode]
     public class ActionTriggerBehaviour : MonoBehaviour

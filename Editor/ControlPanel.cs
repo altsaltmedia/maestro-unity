@@ -70,6 +70,8 @@ namespace AltSalt.Maestro
                 ModuleNames.LayoutObjects,
                 ModuleNames.EditObjectValues,
                 ModuleNames.TextPlacementUtils,
+                ModuleNames.TextTools,
+                ModuleNames.LayoutTools
             }},
             {ModuleNamespace.Sequencing, new List<ModuleNames>
             {
@@ -105,8 +107,6 @@ namespace AltSalt.Maestro
                 ModuleNames.EventTracks,
                 ModuleNames.ObjectCreation,
                 ModuleNames.HierarchySelection,
-                ModuleNames.LayoutTools,
-                ModuleNames.TextTools,
                 ModuleNames.ResponsiveBreakpointUtils,
                 ModuleNames.RegisterDependencies
             }},
@@ -337,15 +337,22 @@ namespace AltSalt.Maestro
 
                 case nameof(ModuleNames.RegisterDependencies):
                     button.clickable.clicked += RegisterDependencies.ShowWindow;
-                    break;
-
-                case nameof(ModuleNames.TextTools):
-                    button.clickable.clicked += TextTools.ShowWindow;
-                    break;
+                    break; ;
                 
                 case nameof(ModuleNames.LayoutTools):
+                case nameof(ModuleNames.TextTools):
+                case nameof(ModuleNames.ResponsiveBreakpointUtils):
                 {
-                    button.clickable.clicked += LayoutTools.ShowWindow;
+                    if (ModuleTypeExists(this, button.name, out Type moduleType) == false) {
+                        button.SetEnabled(false);
+                        button.text += " (not installed)";
+                    }
+                    else {
+                        button.clickable.clicked += () =>
+                        {
+                            moduleType.GetMethod("ShowWindow", BindingFlags.Static | BindingFlags.Public).Invoke(null, null);
+                        };
+                    }
                     break;
                 }
 
@@ -353,7 +360,7 @@ namespace AltSalt.Maestro
                 {
                     if (ModuleTypeExists(this, button.name, out Type moduleType) == false) {
                         button.SetEnabled(false);
-                        button.text += " (module not installed)";
+                        button.text += " (not installed)";
                     }
                     else {
                         button.clickable.clicked += () =>

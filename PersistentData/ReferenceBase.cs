@@ -36,7 +36,7 @@ namespace AltSalt.Maestro
         }
 
         [SerializeField]
-        [ShowIf(nameof(searchAttempted))]
+        //[ShowIf(nameof(searchAttempted))]
         protected string _referenceName;
 
         public string referenceName

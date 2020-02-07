@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _priority: 0
+  _moduleActive: 1
   _touchController: {fileID: 6351633449510160952}
   _touchExtentsCollection:
     reorderableList:
@@ -88,11 +89,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 21ec05b2ee83f400c8a84a5bb6447b60, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnTouchStart
-    _variable: {fileID: 11400000, guid: 21ec05b2ee83f400c8a84a5bb6447b60, type: 2}
+    _variable: {fileID: 11400000, guid: 6dac74e2f283d4b9fa602da81d754505, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -135,14 +136,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: a18e207534e2542579281880a9c729e0, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipe
-    _variable: {fileID: 11400000, guid: a18e207534e2542579281880a9c729e0, type: 2}
+    _variable: {fileID: 11400000, guid: 81f8190272d57445fb4b8e188db7ef46, type: 2}
   - _isSystemReference: 0
     _referenceName: 
-    _variable: {fileID: 11400000, guid: 94db9806ed7774412803bd7de4230ef5, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -271,8 +272,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _priority: 0
+  _moduleActive: 1
   _touchController: {fileID: 6351633449510160952}
-  _momentumEnabled: 1
   _pauseSequenceComplete:
     _isSystemReference: 0
     _referenceName: PauseSequenceComplete
@@ -289,11 +290,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: bdf914328d0d1408a94041dc8986f7f5, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipeEnd
-    _variable: {fileID: 11400000, guid: bdf914328d0d1408a94041dc8986f7f5, type: 2}
+    _variable: {fileID: 11400000, guid: 0323c9638c2fa4bcb821f9ef313272be, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -336,14 +337,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: f947ddad10f444df7b9e3316ceaf0e24, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnLongTouch
-    _variable: {fileID: 11400000, guid: f947ddad10f444df7b9e3316ceaf0e24, type: 2}
+    _variable: {fileID: 11400000, guid: 15fa8ec22d94146989ee179b7e5aaaea, type: 2}
   - _isSystemReference: 0
     _referenceName: MainInput-MomentumDepleted
-    _variable: {fileID: 11400000, guid: 01d2619b53ba447848652dbf080cf0d2, type: 2}
+    _variable: {fileID: 11400000, guid: ed6da3556e35b48ebbe652df0834ae9c, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -408,14 +409,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 01d2619b53ba447848652dbf080cf0d2, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-MomentumDepleted
-    _variable: {fileID: 11400000, guid: 01d2619b53ba447848652dbf080cf0d2, type: 2}
+    _variable: {fileID: 11400000, guid: ed6da3556e35b48ebbe652df0834ae9c, type: 2}
   - _isSystemReference: 0
     _referenceName: MainInput-AppUtilsRequested
-    _variable: {fileID: 11400000, guid: fcac5bcce6c604d7694038b5a3d5bfd0, type: 2}
+    _variable: {fileID: 11400000, guid: 8e62c6baedf5d4ae9a58b9b668f34cc7, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -514,6 +515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _priority: 5
+  _moduleActive: 1
   _touchController: {fileID: 6351633449510160952}
   pauseSequenceComplete:
     _isSystemReference: 0
@@ -531,11 +533,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: a18e207534e2542579281880a9c729e0, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipe
-    _variable: {fileID: 11400000, guid: a18e207534e2542579281880a9c729e0, type: 2}
+    _variable: {fileID: 11400000, guid: 81f8190272d57445fb4b8e188db7ef46, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -578,11 +580,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: bdf914328d0d1408a94041dc8986f7f5, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipeEnd
-    _variable: {fileID: 11400000, guid: bdf914328d0d1408a94041dc8986f7f5, type: 2}
+    _variable: {fileID: 11400000, guid: 0323c9638c2fa4bcb821f9ef313272be, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:

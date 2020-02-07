@@ -15,6 +15,11 @@ namespace AltSalt.Maestro
         private BoolReference _hasBeenOpened = new BoolReference();
 
         public BoolReference hasBeenOpened => _hasBeenOpened;
+        
+        [SerializeField, Required]
+        private BoolReference _tutorialShown = new BoolReference();
+
+        public BoolReference tutorialShown => _tutorialShown;
 
         [SerializeField, Required]
         private FloatReference _deviceAspectRatio = new FloatReference();
@@ -71,6 +76,11 @@ namespace AltSalt.Maestro
 
         public BoolReference paused => _paused;
 
+        [SerializeField, Required]
+        private IntReference _framesPerSecond = new IntReference();
+        
+        public IntReference framesPerSecond => _framesPerSecond;
+        
         [SerializeField, Required]
         private FloatReference _timescale = new FloatReference();
         

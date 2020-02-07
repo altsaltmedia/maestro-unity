@@ -61,6 +61,11 @@ namespace AltSalt.Maestro
 
         public StringReference swipeDirection => _swipeDirection;
         
+        [SerializeField]
+        [FoldoutGroup("Calculations")]
+        private FloatReference _gestureActionTime = new FloatReference();
+        
+        public FloatReference gestureActionTime => _gestureActionTime;
         
         [SerializeField]
         [FoldoutGroup("Calculations")]

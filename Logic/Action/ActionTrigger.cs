@@ -12,14 +12,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using AltSalt.Maestro.Logic.ConditionResponse;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
-namespace AltSalt.Maestro.Logic.Action
+namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     public class ActionTrigger : ISerializationCallbackReceiver

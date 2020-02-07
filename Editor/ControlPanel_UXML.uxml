@@ -62,6 +62,9 @@ xsi:schemaLocation="
                         <engine:Button text="Layout Objects" class="col-full" name="LayoutObjects" />
                         <engine:Button text="Edit Object Values" class="col-full" name="EditObjectValues" />
                         <engine:Button text="Text Placement Utils" class="col-full" name="TextPlacementUtils" />
+                        <engine:Button text="Content Extension Structures" class="col-full" name="ContentExtensionStructures" />
+                        <engine:Button text="Layout Tools" class="col-full" name="LayoutTools" />
+                        <engine:Button text="Text Tools" class="col-full" name="TextTools" />
                     </engine:VisualElement>
 
 
@@ -152,11 +155,8 @@ xsi:schemaLocation="
                     <engine:VisualElement class="section___content">
                         <engine:Button text="Object Creation" class="col-full" name="ObjectCreation" />
                         <engine:Button text="Hierarchy Selection" class="col-full" name="HierarchySelection" />
-                        <engine:Button text="Modify Structures" class="col-full" name="ModifyStructures" />
-                        <engine:Button text="Layout Tools" class="col-full" name="LayoutTools" />
-                        <engine:Button text="Text Tools" class="col-full" name="TextTools" />
-                        <engine:Button text="Responsive Utils" class="col-full" name="ResponsiveUtils" />
                         <engine:Button text="Register Dependencies" class="col-full" name="RegisterDependencies" />
+                        <engine:Button text="Responsive Breakpoint Utils" class="col-full" name="ResponsiveBreakpointUtils" />
                     </engine:VisualElement>
 
                 </engine:VisualElement>

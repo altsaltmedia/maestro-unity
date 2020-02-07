@@ -5,7 +5,7 @@ namespace AltSalt.Maestro.Layout
 {
     public class ResponsiveText : ResponsiveLayoutElement
     {
-        protected TextMeshPro textMeshPro;
+        protected TMP_Text textMeshPro;
 
         protected override void OnEnable()
         {

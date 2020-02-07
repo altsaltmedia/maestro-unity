@@ -54,7 +54,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b726e75763a3145b5a2ef3bf6aef7ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 0}
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
 --- !u!114 &4170645452252380702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,11 +166,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 234b2552915ec461699c0ac24973cb1a, type: 2}
+  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
-    _referenceName: ToggleVolume
-    _variable: {fileID: 11400000, guid: 234b2552915ec461699c0ac24973cb1a, type: 2}
+    _referenceName: VolumeEnabled
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:

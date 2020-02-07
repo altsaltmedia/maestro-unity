@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using AltSalt.Maestro.Logic.Action;
+using AltSalt.Maestro.Logic;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 using UnityEditor;
 #endif
 
-namespace AltSalt.Maestro.Logic.ConditionResponse
+namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     [ExecuteInEditMode]

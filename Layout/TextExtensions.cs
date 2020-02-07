@@ -45,6 +45,11 @@ namespace AltSalt.Maestro.Layout
         {
             textRenderer.SetText(targetValue.value.ToString());
         }
+        
+        public void SetText(V2Variable targetValue)
+        {
+            textRenderer.SetText(targetValue.value.ToString());
+        }
 
         void StoreTextRenderer()
         {

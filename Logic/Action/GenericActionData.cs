@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace AltSalt.Maestro.Logic.Action
+namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     public class GenericActionData : ActionData, ISyncUnityEventHeadings

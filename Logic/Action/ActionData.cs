@@ -13,7 +13,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace AltSalt.Maestro.Logic.Action
+namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     public abstract class ActionData

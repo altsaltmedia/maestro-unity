@@ -47,7 +47,7 @@ namespace AltSalt.Maestro
             set => _screenResized = value;
         }
 
-        [MenuItem("Tools/Maestro/Responsive Utils")]
+        [MenuItem("Tools/Maestro/Responsive Breakpoint Utils")]
         public static void ShowWindow()
         {
             var moduleWindow = CreateInstance<ResponsiveBreakpointUtils>();

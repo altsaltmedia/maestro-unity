@@ -1,4 +1,4 @@
-namespace AltSalt.Maestro.Logic.Action
+namespace AltSalt.Maestro.Logic
 {
     public class StringAction
     {

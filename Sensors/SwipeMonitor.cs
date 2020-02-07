@@ -8,12 +8,9 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
-using System;
 using UnityEngine;
 using HedgehogTeam.EasyTouch;
 using Sirenix.OdinInspector;
-using UnityEngine.Serialization;
-using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Sensors
 {
@@ -60,6 +57,11 @@ namespace AltSalt.Maestro.Sensors
         private Vector2 swipeForce
         {
             set => appSettings.SetSwipeForce(this.gameObject, inputGroupKey, value);
+        }
+        
+        private float gestureActionTime
+        {
+            set => appSettings.SetGestureActionTime(this.gameObject, inputGroupKey, value);
         }
 
         private Vector2 touchStartPosition
@@ -159,9 +161,7 @@ namespace AltSalt.Maestro.Sensors
             _appSettings.PopulateVariable(this, nameof(_appSettings));
         }
 #endif        
-
-
-        // Update is called once per frame
+        
         private void Update()
         {
             if(hasMomentum == true) {
@@ -200,13 +200,7 @@ namespace AltSalt.Maestro.Sensors
         {            
             isSwiping = true;
         }
-
-        /*
-        * @OnSwipe
-        * 
-        * Translates the camera linearly on finger drag
-        * 
-        */
+        
         public void OnSwipe(Gesture gesture)
         {
             Vector2 swipeVector = gesture.deltaPosition;
@@ -273,6 +267,7 @@ namespace AltSalt.Maestro.Sensors
 //            /**/ gestureActionTimeDebug.GetVariable(this.gameObject).SetValue(gesture.actionTime);
 //            /**/ UpdateVarsDebug.RaiseEvent(this.gameObject);
 
+            gestureActionTime = gesture.actionTime;
 
             // Cancel momentum on certain long swipe gestures with low delta at the end of the movement.
             if(gesture.deltaPosition.sqrMagnitude < cancelMomentumMagnitudeThreshold && gesture.actionTime > cancelMomentumTimeThreshold) {

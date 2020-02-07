@@ -245,6 +245,19 @@ namespace AltSalt.Maestro
         
         // Timescale
         
+        public int GetFramesPerSecond(Object callingObject)
+        {
+            return systemSettings.framesPerSecond.GetValue();
+        }
+        
+        public IntVariable SetFramesPerSecond(GameObject callingObject, int targetValue)
+        {
+            return systemSettings.framesPerSecond.SetValue(callingObject, targetValue);
+        }
+        
+        
+        // Timescale
+        
         public float GetTimescale(Object callingObject)
         {
             return systemSettings.timescale.GetValue();
@@ -503,6 +516,19 @@ namespace AltSalt.Maestro
         public StringVariable SetSwipeDirection(GameObject callingObject, InputGroupKey inputGroupKey, string targetValue)
         {
             return inputData.GetInputGroup(inputGroupKey).swipeDirection.SetValue(callingObject, targetValue);
+        }
+        
+        
+        // Gesture Action Time
+
+        public float GetGestureActionTime(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).gestureActionTime.GetValue();
+        }
+        
+        public FloatVariable SetGestureActionTime(GameObject callingObject, InputGroupKey inputGroupKey, float targetValue)
+        {
+            return inputData.GetInputGroup(inputGroupKey).gestureActionTime.SetValue(callingObject, targetValue);
         }
         
         
@@ -790,25 +816,7 @@ namespace AltSalt.Maestro
                     _user1.SetVariable(assetSearch);
                 }
             }
-            
-//            FieldInfo[] referenceFields = typeof(AppSettings).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
 
-//            for (int i = 0; i < referenceFields.Length; i++) {
-//
-//                if (referenceFields[i].FieldType.IsSubclassOf(typeof(ScriptableObject))) {
-//                    var scriptableObjectValue = referenceFields[i].GetValue(this) as ScriptableObject;
-//                    if (scriptableObjectValue == null) {
-//                        PopulateScriptableObjectField(this, referenceFields[i]);
-//                    }
-//                }
-//                else {
-//                    FieldInfo variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);
-//                    var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
-//                    if (variableValue == null) {
-//                        PopulateReferenceField(referenceValue, referenceFields[i], variableField);
-//                    }
-//                }
-//            }
             systemSettings.RefreshDependencies();
             userData.RefreshDependencies();
             inputData.RefreshDependencies();
@@ -818,35 +826,6 @@ namespace AltSalt.Maestro
         private static dynamic CreateAppSetting(Type assetType, string name)
         {
             return Utils.CreateScriptableObjectAsset(assetType, name, Utils.settingsPath);
-        }
-        
-        private static object PopulateScriptableObjectField(object parentObject, FieldInfo scriptableObjectField)
-        {
-            string variableName = scriptableObjectField.Name.Replace("_", "").Capitalize();
-            var variableSearch = Utils.GetScriptableObject(variableName) as ScriptableObject;
-            if (variableSearch == null) {
-                var newVariable = CreateAppSetting(scriptableObjectField.FieldType, variableName);
-                scriptableObjectField.SetValue(parentObject, newVariable);
-                return newVariable;
-            }
-
-            scriptableObjectField.SetValue(parentObject, variableSearch);
-            return variableSearch;
-        }
-        
-        private static object PopulateReferenceField(object referenceObject, FieldInfo referenceField, FieldInfo variableField)
-        {
-            string variableName = referenceField.Name.Replace("_", "").Capitalize();
-            var variableSearch = Utils.GetCustomKey(variableName) as CustomKey;
-            if (variableSearch == null) {
-                Type variableType = variableField.FieldType;
-                var newVariable = CreateAppSetting(variableType, variableName);
-                variableField.SetValue(referenceObject, newVariable);
-                return newVariable;
-            }
-
-            variableField.SetValue(referenceObject, variableSearch);
-            return variableSearch;
         }
 
 #endif

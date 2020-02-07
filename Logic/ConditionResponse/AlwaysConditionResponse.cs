@@ -8,7 +8,7 @@ using UnityEngine.Events;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
-namespace AltSalt.Maestro.Logic.ConditionResponse {
+namespace AltSalt.Maestro.Logic {
 
     [Serializable]
     [ExecuteInEditMode]
