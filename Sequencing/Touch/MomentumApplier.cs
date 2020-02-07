@@ -7,15 +7,12 @@ namespace AltSalt.Maestro.Sequencing.Touch
 {
     public class MomentumApplier : Touch_Module
     {
-        
-        [SerializeField]
-        private bool _momentumEnabled = true;
 
-        private bool momentumEnabled
+        protected override bool moduleActive
         {
             get
             {
-                if (_momentumEnabled == false ||
+                if (_moduleActive == false ||
                     touchController.appSettings.GetUserMomentumEnabled(this.gameObject, userKey) == false) {
                     return false;
                 }
@@ -75,7 +72,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         private void Update()
         {
-            if (appUtilsRequested == true || hasMomentum == false || momentumEnabled == false) return;
+            if (appUtilsRequested == true || hasMomentum == false || moduleActive == false) return;
             
             float momentumModifier;
 
@@ -126,7 +123,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                     touchController.yMomentumAxis.GetVariable() as Axis, touchController.isReversing);
             }
 
-            if (touchController.xMomentumAxis.IsActive()) {
+            if (touchController.xMomentumAxis.IsActive() == true) {
                 momentumModifier += GetAxisMomentum(momentumForce,
                     touchController.xMomentumAxis.GetVariable() as Axis, touchController.isReversing);
             }

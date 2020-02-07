@@ -34,6 +34,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
         [SerializeField]
         [FoldoutGroup("$"+nameof(debugTitle))]
         [PropertyOrder(6)]
+        [HideReferenceObjectPicker]
         private TouchExtents _previousTouchExtents;
 
         public TouchExtents previousTouchExtents
@@ -45,6 +46,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
         [SerializeField]
         [FoldoutGroup("$"+nameof(debugTitle))]
         [PropertyOrder(7)]
+        [HideReferenceObjectPicker]
         private TouchExtents _nextTouchExtents;
 
         public TouchExtents nextTouchExtents

@@ -350,7 +350,7 @@ namespace AltSalt.Maestro.Layout
                 ExecuteResponsiveAction();
             }
             else {
-                Debug.Log("File not found at resources path " + path);
+                Debug.Log("File not found at resources path " + path, this);
             }
         }
 

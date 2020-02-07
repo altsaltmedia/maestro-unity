@@ -45,13 +45,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logCallersOnRaise: 0
   _actionTrigger:
+    _active: 1
     _appSettings:
       _isSystemReference: 0
       _referenceName: AppSettings
-      _variable: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae, type: 2}
+      _variable: {fileID: 11400000, guid: 98b90c9bfebfd4fd4b352d242c167896, type: 2}
     _parentObject: {fileID: 5746869645302786098}
     _serializedPropertyPath: _actionTrigger
     _triggerOnStart: 0
+    _resetGameStateOnStart: 0
+    _hasDelay: 0
+    _delay: 0
     _genericActions: []
     _boolActions: []
     _floatActions: []

@@ -8,21 +8,18 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 {
     public class Autoplayer : Autorun_Module
     {
-        [SerializeField]
-        private bool _autoplayEnabled = true;
-
-        public bool autoplayEnabled
+        protected override bool moduleActive
         {
             get
             {
-                if (_autoplayEnabled == false ||
+                if (_moduleActive == false ||
                     autorunController.appSettings.GetUserAutoplayEnabled(this.gameObject, userKey) == false) {
                     return false;
                 }
 
                 return true;
             }
-            set => _autoplayEnabled = value;
+            set => _moduleActive = value;
         }
 
         private float frameStepValue => autorunController.appSettings.GetFrameStepValue(this.gameObject, inputGroupKey);
@@ -35,7 +32,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         protected virtual void Update()
         {
-            if (autoplayEnabled == false || appUtilsRequested == true) {
+            if (moduleActive == false || appUtilsRequested == true) {
                 return;
             }
 

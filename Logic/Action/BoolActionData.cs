@@ -36,7 +36,7 @@ namespace AltSalt.Maestro.Logic.Action
         [SerializeField]
         [HideReferenceObjectPicker]
         [HideIf(nameof(boolActionType), BoolActionType.Toggle)]
-        private BoolReference _targetValue;
+        private BoolReference _targetValue = new BoolReference();
 
         private BoolReference targetValue => _targetValue;
 

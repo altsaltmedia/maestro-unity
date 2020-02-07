@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AltSalt.Maestro.Logic.Action;
 using UnityEngine;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
@@ -16,6 +17,10 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     [ExecuteInEditMode]
     public abstract class ConditionResponseBase
     {
+        public static bool debugMode => ActionTrigger.debugMode;
+        
+        public static bool manualOverride => ActionTrigger.manualOverride;
+
         [SerializeField]
         [HideInInspector]
         protected string _conditionEventTitle;
@@ -33,16 +38,10 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             get => _prefix;
             set => _prefix = value;
         }
-        
-        [SerializeField]
-        [ReadOnly]
-        [Required]
-        protected AppSettingsReference _appSettings = new AppSettingsReference();
-
-        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         [SerializeField]
         [ReadOnly]
+        [ShowIf(nameof(debugMode))]
         private Object _parentObject;
 
         protected Object parentObject
@@ -52,7 +51,8 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         }
         
         [SerializeField]
-        [ReadOnly]
+        [ShowIf(nameof(debugMode))]
+        [EnableIf(nameof(manualOverride))]
         private string _serializedPropertyPath;
 
         protected string serializedPropertyPath
@@ -81,15 +81,17 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         
         [FormerlySerializedAs("response")]
         [PropertySpace]
-        [ValidateInput(nameof(IsPopulated))]
         [SerializeField]
         [PropertyOrder(8)]
         [HideReferenceObjectPicker]
         [ReadOnly]
+        [ShowIf(nameof(debugMode))]
         protected UnityEvent _response;
 
         public UnityEvent response => _response;
 
+        [PropertySpace(20)]
+        
         [SerializeField]
         [PropertyOrder(9)]
         [ValidateInput(nameof(IsPopulated))]
@@ -141,9 +143,6 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
 
         public virtual ConditionResponseBase PopulateReferences()
         {
-#if UNITY_EDITOR
-            _appSettings.PopulateVariable(parentObject, $"{serializedPropertyPath}.{nameof(_appSettings)}");
-#endif
             return this;
         }
         

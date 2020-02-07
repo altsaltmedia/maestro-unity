@@ -7,9 +7,8 @@ using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
-    #if UNITY_EDITOR
+    
     [ExecuteInEditMode]
-    #endif
     public class SimpleSignalListenerBehaviour : MonoBehaviour, ISimpleSignalListener, ISkipRegistration
     {
         [Required]

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace AltSalt.Maestro.Sequencing.Touch
@@ -8,6 +9,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
     public class TouchForkExtents : TouchExtents
     {
         [SerializeField]
+        [HideReferenceObjectPicker]
         private Dictionary<BranchKey, TouchBranchingPathData> _branchDictionary =
             new Dictionary<BranchKey, TouchBranchingPathData>();
 
@@ -18,6 +20,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
         }
 
         [SerializeField]
+        [HideReferenceObjectPicker]
         private TouchFork _touchFork;
 
         public TouchFork touchFork

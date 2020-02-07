@@ -24,15 +24,33 @@ namespace AltSalt.Maestro.Logic.Action
     [Serializable]
     public class ActionTrigger : ISerializationCallbackReceiver
     {
+        [SerializeField]
+        private bool _active = true;
+
+        public bool active
+        {
+            get => _active;
+            set => _active = value;
+        }
+        
+        [ShowInInspector]
+        public static bool debugMode = false;
+        
+        [ShowInInspector]
+        [ShowIf(nameof(debugMode))]
+        public static bool manualOverride = false;
+
         [Required]
         [SerializeField]
         [ReadOnly]
+        [ShowIf(nameof(debugMode))]
         private AppSettingsReference _appSettings = new AppSettingsReference();
 
         private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
         
         [SerializeField]
         [ReadOnly]
+        [ShowIf(nameof(debugMode))]
         private Object _parentObject;
 
         private Object parentObject
@@ -42,7 +60,8 @@ namespace AltSalt.Maestro.Logic.Action
         }
 
         [SerializeField]
-        [ReadOnly]
+        [ShowIf(nameof(debugMode))]
+        [EnableIf(nameof(manualOverride))]
         private string _serializedPropertyPath;
 
         private string serializedPropertyPath
@@ -62,6 +81,22 @@ namespace AltSalt.Maestro.Logic.Action
         private bool _resetGameStateOnStart = false;
 
         public bool resetGameStateOnStart => _resetGameStateOnStart;
+        
+        [ValueDropdown(nameof(boolValueList))]
+        [SerializeField]
+        private bool _hasDelay = false;
+
+        public bool hasDelay => _hasDelay;
+
+        [SerializeField]
+        [ShowIf(nameof(hasDelay))]
+        private float _delay;
+
+        public float delay
+        {
+            get => _delay;
+            set => _delay = value;
+        }
 
         private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
             {"YES", true },
@@ -94,37 +129,37 @@ namespace AltSalt.Maestro.Logic.Action
         
         [FormerlySerializedAs("_eventActions")]
         [SerializeField]
-        [HideInInspector]
+        [ShowIf(nameof(debugMode))]
         private List<GenericActionData> _genericActions = new List<GenericActionData>();
 
         private List<GenericActionData> genericActions => _genericActions;
 
         [SerializeField]
-        [HideInInspector]
+        [ShowIf(nameof(debugMode))]
         private List<BoolActionData> _boolActions = new List<BoolActionData>();
 
         private List<BoolActionData> boolActions => _boolActions;
 
         [SerializeField]
-        [HideInInspector]
+        [ShowIf(nameof(debugMode))]
         private List<FloatActionData> _floatActions = new List<FloatActionData>();
 
         private List<FloatActionData> floatActions => _floatActions;
         
         [SerializeField]
-        [HideInInspector]
+        [ShowIf(nameof(debugMode))]
         private List<IntActionData> _intActions = new List<IntActionData>();
 
         private List<IntActionData> intActions => _intActions;
         
         [SerializeField]
-        [HideInInspector]
+        [ShowIf(nameof(debugMode))]
         private List<AxisActionData> _axisActions = new List<AxisActionData>();
 
         private List<AxisActionData> axisActions  => _axisActions;
         
         [SerializeField]
-        [HideInInspector]
+        [ShowIf(nameof(debugMode))]
         private List<ColorActionData> _colorActions = new List<ColorActionData>();
 
         private List<ColorActionData> colorActions => _colorActions;
@@ -132,19 +167,19 @@ namespace AltSalt.Maestro.Logic.Action
         
         [FormerlySerializedAs("_conditionResponseTriggers")]
         [SerializeField]
-        [HideInInspector]
+        [ShowIf(nameof(debugMode))]
         private List<ConditionResponseActionData> _conditionResponseActions = new List<ConditionResponseActionData>();
 
         private List<ConditionResponseActionData> conditionResponseActions => _conditionResponseActions;
         
         [SerializeField]
-        [HideInInspector]
+        [ShowIf(nameof(debugMode))]
         private List<SimpleEventActionData> _simpleEventActions = new List<SimpleEventActionData>();
 
         private List<SimpleEventActionData> simpleEventActions => _simpleEventActions;
         
         [SerializeField]
-        [HideInInspector]
+        [ShowIf(nameof(debugMode))]
         private List<ComplexEventActionData> _complexEventActions = new List<ComplexEventActionData>();
 
         private List<ComplexEventActionData> complexEventActions => _complexEventActions;
@@ -159,7 +194,7 @@ namespace AltSalt.Maestro.Logic.Action
             Color,
             ConditionResponse,
             SimpleEventTrigger,
-            ComplexEventPackager
+            ComplexEventTrigger
         }
 
         [SerializeField]
@@ -167,6 +202,11 @@ namespace AltSalt.Maestro.Logic.Action
         private ActionType _actionType;
 
         private ActionType actionType => _actionType;
+        
+        public static bool GetDebugMode()
+        {
+            return debugMode;
+        }
 
         public ActionTrigger Initialize(Object parentObject, string serializedPropertyPath)
         {
@@ -178,15 +218,21 @@ namespace AltSalt.Maestro.Logic.Action
             return this;
         }
         
-        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         public void PerformActions(GameObject callingObject)
         {
             for (int i = 0; i < actionData.Count; i++) {
                 actionData[i].PerformAction(callingObject);
             }
         }
+
+        public IEnumerator PerformActionsDelayed(GameObject callingObject)
+        {
+            yield return new WaitForSeconds(delay);
+            for (int i = 0; i < actionData.Count; i++) {
+                actionData[i].PerformAction(callingObject);
+            }
+        }
         
-        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         public void ResetGameState(GameObject callingObject)
         {
             AppSettings.ResetGameState(callingObject);
@@ -298,7 +344,7 @@ namespace AltSalt.Maestro.Logic.Action
                     break;
                 }
                 
-                case ActionType.ComplexEventPackager:
+                case ActionType.ComplexEventTrigger:
                 {
                     var action = new ComplexEventActionData(actionData.Count + 1);
                     actionData.Add(action);
@@ -357,8 +403,6 @@ namespace AltSalt.Maestro.Logic.Action
         // Called whenever an item as added or removed from our ActionData list
         private List<ActionData> UpdateActionLists()
         {
-            CallPopulateReferences();
-            
             // Make sure that we add any pasted items to our serialized lists
             for (int i = 0; i < actionData.Count; i++) {
                 switch (actionData[i])
@@ -469,6 +513,8 @@ namespace AltSalt.Maestro.Logic.Action
                 actionData[i].priority = i + 1;
             }
             
+            CallPopulateReferences();
+
             return actionData;
         }
 

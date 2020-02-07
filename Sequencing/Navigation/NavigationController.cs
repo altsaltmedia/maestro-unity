@@ -5,7 +5,6 @@ namespace AltSalt.Maestro.Sequencing.Navigation
 {
     public class NavigationController : Input_Controller
     {
-
         [ShowInInspector]
         [ReadOnly]
         private MasterSequence _activeMasterSequence;
@@ -21,7 +20,6 @@ namespace AltSalt.Maestro.Sequencing.Navigation
         public override void ConfigureData()
         {
             if (Application.isPlaying == true) return;
-            
         }
 
         public void ActivateNavigationModules()

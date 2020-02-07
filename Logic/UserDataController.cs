@@ -55,12 +55,11 @@ namespace AltSalt.Maestro.Logic
             }
         }
 
-        void WriteToStoredData(UserDatum userDatum)
+        private void WriteToStoredData(UserDatum userDatum)
         {
-            switch (userDatum.dataType) {
+            switch (userDatum.scriptableObject) {
 
-                case DataType.boolType:
-                    BoolVariable boolVariable = userDatum.scriptableObject as BoolVariable;
+                case BoolVariable boolVariable:
                     int boolIntValue = boolVariable.value == true ? 1 : 0;
                     PlayerPrefs.SetInt(boolVariable.name, boolIntValue);
 #if UNITY_EDITOR
@@ -69,8 +68,7 @@ namespace AltSalt.Maestro.Logic
 #endif
                     break;
 
-                case DataType.floatType:
-                    FloatVariable floatVariable = userDatum.scriptableObject as FloatVariable;
+                case FloatVariable floatVariable:
                     PlayerPrefs.SetFloat(floatVariable.name, floatVariable.value);
 #if UNITY_EDITOR
                     LogSavedMessage(floatVariable.name, floatVariable.value.ToString("F6"));
@@ -78,20 +76,22 @@ namespace AltSalt.Maestro.Logic
                     break;
 
 
-                case DataType.stringType:
-                    StringVariable stringVariable = userDatum.scriptableObject as StringVariable;
+                case StringVariable stringVariable:
                     PlayerPrefs.SetString(stringVariable.name, stringVariable.value);
 #if UNITY_EDITOR
                     LogSavedMessage(stringVariable.name, stringVariable.value);
 #endif
                     break;
 
-                case DataType.intType:
-                    IntVariable intVariable = userDatum.scriptableObject as IntVariable;
+                case IntVariable intVariable:
                     PlayerPrefs.SetInt(intVariable.name, intVariable.value);
 #if UNITY_EDITOR
                     LogSavedMessage(intVariable.name, intVariable.value.ToString("F6"));
 #endif
+                    break;
+                
+                default:
+                    Debug.LogError("Type not recognized; unable to store data", this);
                     break;
             }
         }
@@ -118,12 +118,12 @@ namespace AltSalt.Maestro.Logic
             }
         }
 
-        void ReadFromStoredData(UserDatum userDatum)
+        private void ReadFromStoredData(UserDatum userDatum)
         {
-            switch (userDatum.dataType) {
+            
+            switch (userDatum.scriptableObject) {
 
-                case DataType.boolType:
-                    BoolVariable boolVariable = userDatum.scriptableObject as BoolVariable;
+                case BoolVariable boolVariable:
                     int boolIntValue = PlayerPrefs.GetInt(boolVariable.name);
                     boolVariable.StoreCaller(this.gameObject);
                     if(boolIntValue == 1) {
@@ -133,23 +133,20 @@ namespace AltSalt.Maestro.Logic
                     }
                     break;
 
-                case DataType.floatType:
-                    FloatVariable floatVariable = userDatum.scriptableObject as FloatVariable;
+                case FloatVariable floatVariable:
                     float floatValue = PlayerPrefs.GetFloat(floatVariable.name);
                     floatVariable.StoreCaller(this.gameObject);
                     floatVariable.SetValue(floatValue);
                     break;
 
 
-                case DataType.stringType:
-                    StringVariable stringVariable = userDatum.scriptableObject as StringVariable;
+                case StringVariable stringVariable:
                     string stringValue = PlayerPrefs.GetString(stringVariable.name);
                     stringVariable.StoreCaller(this.gameObject);
                     stringVariable.SetValue(stringValue);
                     break;
 
-                case DataType.intType:
-                    IntVariable intVariable = userDatum.scriptableObject as IntVariable;
+                case IntVariable intVariable:
                     int intValue = PlayerPrefs.GetInt(intVariable.name);
                     intVariable.StoreCaller(this.gameObject);
                     intVariable.SetValue(intValue);
@@ -182,12 +179,11 @@ namespace AltSalt.Maestro.Logic
             }
         }
 
-        void LogFromStoredData(UserDatum userDatum)
+        private void LogFromStoredData(UserDatum userDatum)
         {
-            switch (userDatum.dataType) {
+            switch (userDatum.scriptableObject) {
 
-                case DataType.boolType:
-                    BoolVariable boolVariable = userDatum.scriptableObject as BoolVariable;
+                case BoolVariable boolVariable:
                     int boolIntValue = PlayerPrefs.GetInt(boolVariable.name);
                     string boolString = "";
                     if (boolIntValue == 1) {
@@ -200,20 +196,17 @@ namespace AltSalt.Maestro.Logic
                     Debug.Log("Value of " + boolVariable.name + " variable in stored data is " + boolString);
                     break;
 
-                case DataType.floatType:
-                    FloatVariable floatVariable = userDatum.scriptableObject as FloatVariable;
+                case FloatVariable floatVariable:
                     float floatValue = PlayerPrefs.GetFloat(floatVariable.name);
                     Debug.Log("Value of " + floatVariable.name + " variable in stored data is " + floatValue);
                     break;
 
-                case DataType.stringType:
-                    StringVariable stringVariable = userDatum.scriptableObject as StringVariable;
+                case StringVariable stringVariable:
                     string stringValue = PlayerPrefs.GetString(stringVariable.name);
                     Debug.Log("Value of " + stringVariable.name + " variable in stored data is " + stringValue);
                     break;
 
-                case DataType.intType:
-                    IntVariable intVariable = userDatum.scriptableObject as IntVariable;
+                case IntVariable intVariable:
                     int intValue = PlayerPrefs.GetInt(intVariable.name);
                     Debug.Log("Value of " + intVariable.name + " variable in stored data is " + intValue);
                     break;
@@ -245,11 +238,13 @@ namespace AltSalt.Maestro.Logic
         public class UserDatum
         {
             [SerializeField]
-            public ScriptableObject scriptableObject;
+            private ScriptableObjectReference _scriptableObject;
 
-            [SerializeField]
-            public DataType dataType;
-
+            public ScriptableObject scriptableObject
+            {
+                get => _scriptableObject.GetVariable();
+                set => _scriptableObject.SetVariable(value);
+            }
         }
     }
 

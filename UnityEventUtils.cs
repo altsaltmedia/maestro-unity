@@ -43,10 +43,12 @@ namespace AltSalt.Maestro
             for (int i = 0; i < unityEventCallList.arraySize; i++) {
                 int mode = unityEventCallList.GetArrayElementAtIndex(i).FindPropertyRelative("m_Mode").intValue;
                 SerializedProperty argumentList = unityEventCallList.GetArrayElementAtIndex(i).FindPropertyRelative("m_Arguments");
-
+                
                 switch (mode) {
                     case 2:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_ObjectArgument").objectReferenceValue.name);
+                        parameterNames.Add(argumentList.FindPropertyRelative("m_ObjectArgument").objectReferenceValue != null
+                            ? argumentList.FindPropertyRelative("m_ObjectArgument").objectReferenceValue.name
+                            : "null");
                         break;
                     
                     case 3:
@@ -62,7 +64,7 @@ namespace AltSalt.Maestro
                         break;
                     
                     case 6:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_BoolArgument").boolValue.ToString());
+                        parameterNames.Add( argumentList.FindPropertyRelative("m_BoolArgument").boolValue.ToString());
                         break;
                     
                     default:

@@ -30,7 +30,7 @@ namespace AltSalt.Maestro.Audio
             ScriptPlayable<AudioForwardReverseMixerBehaviour> trackPlayable = ScriptPlayable<AudioForwardReverseMixerBehaviour>.Create(graph, inputCount);
             AudioForwardReverseMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(directorObject, behaviour);
-            return ScriptPlayable<AudioForwardReverseMixerBehaviour>.Create(graph, inputCount);
+            return trackPlayable;
         }
         
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)

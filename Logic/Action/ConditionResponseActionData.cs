@@ -18,6 +18,10 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
     [ExecuteInEditMode]
     public class ConditionResponseActionData : ActionData, IClearHiddenValues, ISyncUnityEventHeadings
     {
+        public static bool debugMode => ActionTrigger.debugMode;
+        
+        public static bool manualOverride => ActionTrigger.manualOverride;
+        
         protected override string title => nameof(ConditionResponseActionData);
 
         [Serializable]
@@ -25,6 +29,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         
         [SerializeField]
         [ReadOnly]
+        [ShowIf(nameof(debugMode))]
         private Object _parentObject;
 
         private Object parentObject
@@ -34,7 +39,8 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
         }
 
         [SerializeField]
-        [ReadOnly]
+        [ShowIf(nameof(debugMode))]
+        [EnableIf(nameof(manualOverride))]
         private string _serializedPropertyPath;
 
         private string serializedPropertyPath
@@ -358,7 +364,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
             return true;
         }
         
-                private bool IsPopulated(List<BoolConditionResponse> attribute)
+        private bool IsPopulated(List<BoolConditionResponse> attribute)
         {
             if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
                 return true;
@@ -378,7 +384,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                             break;
                         }
 
-                        if (Utils.IsPopulated(attribute[i].response) == false) {
+                        if (Utils.IsPopulated(attribute[i].action) == false) {
                             isValid = false;
                             break;
                         }
@@ -411,7 +417,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                             break;
                         }
 
-                        if (Utils.IsPopulated(attribute[i].response) == false) {
+                        if (Utils.IsPopulated(attribute[i].action) == false) {
                             isValid = false;
                             break;
                         }
@@ -444,7 +450,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                             break;
                         }
 
-                        if (Utils.IsPopulated(attribute[i].response) == false) {
+                        if (Utils.IsPopulated(attribute[i].action) == false) {
                             isValid = false;
                             break;
                         }
@@ -477,7 +483,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                             break;
                         }
 
-                        if (Utils.IsPopulated(attribute[i].response) == false) {
+                        if (Utils.IsPopulated(attribute[i].action) == false) {
                             isValid = false;
                             break;
                         }
@@ -510,7 +516,7 @@ namespace AltSalt.Maestro.Logic.ConditionResponse
                             break;
                         }
 
-                        if (Utils.IsPopulated(attribute[i].response) == false) {
+                        if (Utils.IsPopulated(attribute[i].action) == false) {
                             isValid = false;
                             break;
                         }

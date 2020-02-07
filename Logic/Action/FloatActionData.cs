@@ -48,13 +48,14 @@ namespace AltSalt.Maestro.Logic.Action
         [HideIf(nameof(floatActionType), FloatActionType.SetToDefaultValue)]
         [HideIf(nameof(floatActionType), FloatActionType.SetToRandom)]
         [HideReferenceObjectPicker]
-        private FloatReference _operatorFloatValue;
+        private FloatReference _operatorFloatValue = new FloatReference();
 
         private FloatReference operatorFloatValue => _operatorFloatValue;
 
         [SerializeField]
         [ShowIf(nameof(floatActionType), FloatActionType.SetToSquareMagnitude)]
-        private V2Reference _operatorV2Value;
+        [HideReferenceObjectPicker]
+        private V2Reference _operatorV2Value = new V2Reference();
 
         private V2Reference operatorV2Value => _operatorV2Value;
 

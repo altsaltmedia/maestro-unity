@@ -5,6 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 #if UNITY_IOS
@@ -78,9 +79,10 @@ namespace AltSalt.Maestro.Logic
         private SimpleEventTrigger hideProgressBar => _hideProgressBar;
 
         [SerializeField]
-        private CustomKeyReference _showProgressBarKey;
+        [FormerlySerializedAs("_showProgressBarKey")]
+        private CustomKeyReference _enableProgressBarKey;
 
-        private CustomKey showProgressBarKey => _showProgressBarKey.GetVariable() as CustomKey;
+        private CustomKey enableProgressBarKey => _enableProgressBarKey.GetVariable() as CustomKey;
         
         [SerializeField]
         private CustomKeyReference _eventCallbackKey;
@@ -109,6 +111,7 @@ namespace AltSalt.Maestro.Logic
             _fadeInSpeedKey.PopulateVariable(this, nameof(_fadeInSpeedKey));
             _fadeColorKey.PopulateVariable(this, nameof(_fadeColorKey));
             _enableSpinnerKey.PopulateVariable(this, nameof(_enableSpinnerKey));
+            _enableProgressBarKey.PopulateVariable(this, nameof(_enableProgressBarKey));
             _eventCallbackKey.PopulateVariable(this, nameof(_eventCallbackKey));
 #endif            
         }
@@ -127,7 +130,7 @@ namespace AltSalt.Maestro.Logic
             
             // Get utility bools
             bool enableSpinner = complexPayload.GetBoolValue(enableSpinnerKey);
-            bool enableProgressBar = complexPayload.GetBoolValue(showProgressBarKey);
+            bool enableProgressBar = complexPayload.GetBoolValue(enableProgressBarKey);
 
             // Get the callback
             SimpleEvent eventCallback = complexPayload.GetScriptableObjectValue(eventCallbackKey) as SimpleEvent;
@@ -203,7 +206,6 @@ namespace AltSalt.Maestro.Logic
 #elif UNITY_ANDROID
             Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.Small);
 #endif
-            Handheld.StartActivityIndicator();
             yield return new WaitForSeconds(0);
         }
         
@@ -214,7 +216,6 @@ namespace AltSalt.Maestro.Logic
 #elif UNITY_ANDROID
             Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.DontShow);
 #endif
-            Handheld.StartActivityIndicator();
             yield return new WaitForSeconds(0);
         }
 

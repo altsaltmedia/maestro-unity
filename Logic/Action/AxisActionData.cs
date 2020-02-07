@@ -34,7 +34,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        private BoolReference _targetValue;
+        private BoolReference _targetValue = new BoolReference();
 
         private BoolReference targetValue => _targetValue;
 

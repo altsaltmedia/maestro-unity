@@ -64,7 +64,7 @@ namespace AltSalt.Maestro.Logic.Action
         public void SyncUnityEventHeadings(SerializedProperty unityEventSerializedParent)
         {
             string newDescription = "";
-            
+
             string[] parameterNames = UnityEventUtils.GetUnityEventParameters(unityEventSerializedParent, nameof(_action));
             if (UnityEventUtils.UnityEventValuesChanged(action, parameterNames, cachedEventData, out var eventData)) {
                 newDescription = UnityEventUtils.ParseUnityEventDescription(eventData);

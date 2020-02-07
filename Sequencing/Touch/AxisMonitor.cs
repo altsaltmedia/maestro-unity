@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using RotaryHeart.Lib.SerializableDictionary;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -216,6 +217,10 @@ namespace AltSalt.Maestro.Sequencing.Touch
         
         public void RefreshAxes()
         {
+            if (moduleActive == false) {
+                return;
+            }
+            
             foreach (KeyValuePair<MasterSequence, List<TouchExtents>> touchExtentsItem in touchExtentsCollection) {
 
                 if (touchExtentsItem.Key.hasActiveSequence == false) continue;
@@ -236,6 +241,10 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public void CallResetBranchStates()
         {
+            if (moduleActive == false) {
+                return;
+            }
+            
             foreach (KeyValuePair<MasterSequence, List<TouchExtents>> touchExtentsItem in touchExtentsCollection) {
                 
                 double masterTime = touchExtentsItem.Key.elapsedTime;
@@ -250,6 +259,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
         }
 
         [Serializable]
+        [HideReferenceObjectPicker]
         public class TouchExtentsCollection : SerializableDictionaryBase<MasterSequence, List<TouchExtents>> { }
         
 

@@ -36,7 +36,7 @@ namespace AltSalt.Maestro
         }
 
         [SerializeField]
-        //[ShowIf(nameof(searchAttempted))]
+        [ShowIf(nameof(searchAttempted))]
         protected string _referenceName;
 
         public string referenceName
@@ -75,12 +75,17 @@ namespace AltSalt.Maestro
         protected ReferenceBase UpdateReferenceName()
         {
 #if UNITY_EDITOR
-            var serializedObject = new SerializedObject(parentObject);
-            var referenceNameProperty = Utils.FindReferenceProperty(serializedObject, serializedPropertyPath.ToArray(),
-                nameof(_referenceName));
-            referenceNameProperty.stringValue = ReadVariable().name;
-            serializedObject.ApplyModifiedProperties();
-            serializedObject.Update();
+            if (parentObject != null) {
+                var serializedObject = new SerializedObject(parentObject);
+                var referenceNameProperty = Utils.FindReferenceProperty(serializedObject, serializedPropertyPath.ToArray(),
+                    nameof(_referenceName));
+                referenceNameProperty.stringValue = ReadVariable().name;
+                serializedObject.ApplyModifiedProperties();
+                serializedObject.Update();
+            }
+            else {
+                referenceName = ReadVariable().name;
+            }
 #endif            
             return this;
         }

@@ -10,6 +10,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
     {
         [SerializeField]
         [TitleGroup("$"+nameof(propertiesTitle))]
+        [HideReferenceObjectPicker]
         private AxisReference _swipeAxis;
 
         public AxisReference swipeAxis
@@ -20,6 +21,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         [SerializeField]
         [TitleGroup("$"+nameof(propertiesTitle))]
+        [HideReferenceObjectPicker]
         private AxisReference _momentumAxis;
 
         public AxisReference momentumAxis

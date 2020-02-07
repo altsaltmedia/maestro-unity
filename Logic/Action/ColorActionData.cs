@@ -35,7 +35,7 @@ namespace AltSalt.Maestro.Logic.Action
 
         [SerializeField]
         [HideReferenceObjectPicker]
-        private ColorReference _targetValue;
+        private ColorReference _targetValue = new ColorReference();
 
         private ColorReference targetValue => _targetValue;
 

@@ -14,7 +14,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public void UpdateSequenceWithSwipe()
         {
-            if (appUtilsRequested == true) return; 
+            if (appUtilsRequested == true || moduleActive == false) return; 
             
             Vector2 swipeForceToApply = touchController.swipeForce;
 

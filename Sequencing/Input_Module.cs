@@ -19,6 +19,15 @@ namespace AltSalt.Maestro.Sequencing
         private int _priority;
 
         public int priority => _priority;
+        
+        [SerializeField]
+        protected bool _moduleActive = true;
+
+        protected virtual bool moduleActive
+        {
+            get => _moduleActive;
+            set => _moduleActive = value;
+        }
 
         public bool appUtilsRequested => inputController.appUtilsRequested;
 
@@ -28,6 +37,36 @@ namespace AltSalt.Maestro.Sequencing
 
         protected virtual void Start()
         {
+        }
+        
+        public void Activate(GameObject callingObject)
+        {
+            if (callingObject == null) {
+                throw new UnassignedReferenceException("You must specify a calling game object.");
+            }
+            
+            if (AppSettings.logEventCallersAndListeners == true) {
+                Debug.Log($"{GetType().Name} module  {this.gameObject.name} activated!", this.gameObject);
+                Debug.Log($"Status changed by {callingObject.name}", callingObject);
+                Debug.Log("--------------------------");
+            }
+            
+            moduleActive = true;
+        }
+        
+        public void Deactivate(GameObject callingObject)
+        {
+            if (callingObject == null) {
+                throw new UnassignedReferenceException("You must specify a calling game object.");
+            }
+            
+            if (AppSettings.logEventCallersAndListeners == true) {
+                Debug.Log($"{GetType().Name} module on {this.gameObject.name} deactivated!", this.gameObject);
+                Debug.Log($"Status changed by {callingObject.name}", callingObject);
+                Debug.Log("--------------------------");
+            }
+            
+            moduleActive = false;
         }
 
         public void TriggerInputActionComplete()

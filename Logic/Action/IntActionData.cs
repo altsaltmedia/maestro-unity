@@ -45,7 +45,7 @@ namespace AltSalt.Maestro.Logic.Action
         [SerializeField]
         [HideReferenceObjectPicker]
         [HideIf(nameof(intActionType), IntActionType.SetToDefaultValue)]
-        private IntReference _operatorValue;
+        private IntReference _operatorValue = new IntReference();
 
         private IntReference operatorValue => _operatorValue;
 

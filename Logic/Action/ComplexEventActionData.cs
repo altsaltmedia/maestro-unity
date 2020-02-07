@@ -12,12 +12,13 @@ namespace AltSalt.Maestro.Logic.Action
     {
         protected override string title => nameof(ComplexEventActionData);
         
+        [FormerlySerializedAs("_complexEventPayloadPackagers")]
         [SerializeField]
         [HideReferenceObjectPicker]
         [ListDrawerSettings(Expanded = true, AlwaysAddDefaultValue = true)]
-        private List<ComplexEventConfigurableTrigger> _complexEventPayloadPackagers = new List<ComplexEventConfigurableTrigger> { new ComplexEventConfigurableTrigger() };
+        private List<ComplexEventConfigurableTrigger> _complexEventConfigurableTriggers = new List<ComplexEventConfigurableTrigger> { new ComplexEventConfigurableTrigger() };
 
-        private List<ComplexEventConfigurableTrigger> complexEventPayloadPackagers => _complexEventPayloadPackagers;
+        private List<ComplexEventConfigurableTrigger> complexEventConfigurableTriggers => _complexEventConfigurableTriggers;
 
         public ComplexEventActionData(int priority) : base(priority) { }
         
@@ -26,8 +27,8 @@ namespace AltSalt.Maestro.Logic.Action
         [InfoBox("Raises event")]
         public override void PerformAction(GameObject callingObject)
         {
-            for (int i=0; i<complexEventPayloadPackagers.Count; i++) {
-                complexEventPayloadPackagers[i].RaiseEvent(callingObject);
+            for (int i=0; i<complexEventConfigurableTriggers.Count; i++) {
+                complexEventConfigurableTriggers[i].RaiseEvent(callingObject);
             }
         }
 
@@ -35,13 +36,13 @@ namespace AltSalt.Maestro.Logic.Action
         public override ActionData PopulateReferences(Object parentObject, string serializedPropertyPath)
         {
             string packagersPath = serializedPropertyPath;
-            packagersPath += $".{nameof(_complexEventPayloadPackagers)}";
+            packagersPath += $".{nameof(_complexEventConfigurableTriggers)}";
             
-            for (int i = 0; i < complexEventPayloadPackagers.Count; i++) {
+            for (int i = 0; i < complexEventConfigurableTriggers.Count; i++) {
                 string referencePath = packagersPath;
                 referencePath += $".{i.ToString()}";
-                complexEventPayloadPackagers[i].PopulateVariable(parentObject, referencePath);
-                complexEventPayloadPackagers[i].PopulateReferences(parentObject, referencePath);
+                complexEventConfigurableTriggers[i].PopulateVariable(parentObject, referencePath);
+                complexEventConfigurableTriggers[i].PopulateReferences(parentObject, referencePath);
             }
 
             return this;
@@ -51,10 +52,10 @@ namespace AltSalt.Maestro.Logic.Action
         {
             string complexEventNames = "";
             
-            for (int i = 0; i < complexEventPayloadPackagers.Count; i++) {
-                if (string.IsNullOrEmpty(complexEventPayloadPackagers[i].referenceName) == false) {
-                    complexEventNames += complexEventPayloadPackagers[i].referenceName;
-                    if (i < complexEventPayloadPackagers.Count - 1) {
+            for (int i = 0; i < complexEventConfigurableTriggers.Count; i++) {
+                if (string.IsNullOrEmpty(complexEventConfigurableTriggers[i].referenceName) == false) {
+                    complexEventNames += complexEventConfigurableTriggers[i].referenceName;
+                    if (i < complexEventConfigurableTriggers.Count - 1) {
                         complexEventNames += ", ";
                     }
                 }
@@ -64,7 +65,7 @@ namespace AltSalt.Maestro.Logic.Action
                 actionDescription = "Trigger " + complexEventNames;
             }
             else {
-                actionDescription = "Please populate your complex event packagers";
+                actionDescription = "Please populate your complex event triggers";
             }
         }
 #endif
