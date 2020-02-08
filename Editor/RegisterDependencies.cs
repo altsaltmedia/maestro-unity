@@ -145,12 +145,12 @@ namespace AltSalt.Maestro
             EditorUtility.ClearProgressBar();
         }
 
-        void ClearScriptableObjectList()
+        private void ClearScriptableObjectList()
         {
             scriptableObjectList.Clear();
         }
 
-        void TriggerRegisterDependenciesInTargetScene()
+        private void TriggerRegisterDependenciesInTargetScene()
         {
             string componentRegistryScenePath = Utils.projectPath + "/z_Dependencies/Components/" + targetSceneName;
 
@@ -170,7 +170,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        void TriggerRegisterAllDependencies()
+        private void TriggerRegisterAllDependencies()
         {
             if (EditorUtility.DisplayDialog("Register dependencies in all scenes?", "This will scan the entire project and recreate the dependencies folder. This cannot be undone.", "Proceed", "Cancel")) {
 
@@ -191,13 +191,13 @@ namespace AltSalt.Maestro
             }
         }
 
-        void FindDependencies(string sceneName)
+        private void FindDependencies(string sceneName)
         {
             FindPlayableDependencies(sceneName);
             FindComponentDependencies(sceneName);
         }
 
-        void FindPlayableDependencies(string sceneName)
+        private void FindPlayableDependencies(string sceneName)
         {
             var playableDirectors = Resources.FindObjectsOfTypeAll(typeof(PlayableDirector)) as PlayableDirector[];
             if (playableDirectors == null) return;
@@ -233,7 +233,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        void FindComponentDependencies(string sceneName)
+        private void FindComponentDependencies(string sceneName)
         {
             var components = Resources.FindObjectsOfTypeAll(typeof(Component)) as Component[];
             if (components == null) return;
@@ -244,7 +244,7 @@ namespace AltSalt.Maestro
 
                 // Only search for AltSalt custom scripts & ignore boilerplate values from
                 // SerializableElement, prefabs and other miscellaneous components w/o instances
-                if (componentType.Namespace != null && componentType.Namespace.Contains("AltSalt") == false || component.GetType().IsSubclassOf(typeof(SerializableElement)) || EditorUtility.IsPersistent(component.gameObject) == true || component == null) {
+                if (componentType.Namespace != null && componentType.Namespace.Contains($"{nameof(AltSalt)}.{nameof(Maestro)}") == false || component.GetType().IsSubclassOf(typeof(SerializableElement)) || EditorUtility.IsPersistent(component.gameObject) == true || component == null) {
                     continue;
                 }
 
@@ -263,7 +263,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        void TraverseObjectFields(object source, Component rootComponent, string sceneName)
+        private void TraverseObjectFields(object source, Component rootComponent, string sceneName)
         {
             FieldInfo[] fieldInfoList = source.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
@@ -278,13 +278,7 @@ namespace AltSalt.Maestro
 
                 Type fieldType = fieldInfo.GetValue(source).GetType();
 
-                // Event triggers can contain dependencies at the root level or inside a list
-                if (fieldType.IsSubclassOf(typeof(IPersistentEventTrigger)) || fieldType.IsSubclassOf(typeof(TimelineTriggerBehaviour))) {
-
-                    ParseEventTriggerBase(fieldType, fieldValue, rootComponent, sceneName);
-
-                // Condition responses contain both conditions, as well as responses in the form of Unity events
-                } else if (fieldType.IsSubclassOf(typeof(IConditionResponseTrigger))) {
+                 if (fieldType.GetInterfaces().Contains(typeof(IConditionResponseTrigger))) {
 
                     ParseConditionResponseTriggerBase(fieldType, fieldValue, rootComponent, sceneName);
 
@@ -311,7 +305,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        void ParseEventTriggerBase(Type triggerType, object triggerObject, Component rootComponent, string sceneName)
+        private void ParseEventTriggerBase(Type triggerType, object triggerObject, Component rootComponent, string sceneName)
         {
             FieldInfo[] childFieldInfoList = triggerType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
@@ -333,7 +327,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        void ParseConditionResponseTriggerBase(Type conditionResponseType, object conditionResponseObject, Component rootComponent, string sceneName)
+        private void ParseConditionResponseTriggerBase(Type conditionResponseType, object conditionResponseObject, Component rootComponent, string sceneName)
         {
             FieldInfo[] childFieldInfoList = conditionResponseType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
@@ -379,7 +373,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        void ParseScriptableObjectReference(object scriptableObjValue, FieldInfo fieldInfo, Component rootComponent, string sceneName)
+        private void ParseScriptableObjectReference(object scriptableObjValue, FieldInfo fieldInfo, Component rootComponent, string sceneName)
         {
             foreach (ScriptableObject scriptableObject in scriptableObjectList) {
 
@@ -400,7 +394,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        void ParseReference(Type varReferenceType, object parentObject, object variableReferenceObject, FieldInfo parentFieldInfo, Component rootComponent, string sceneName)
+        private void ParseReference(Type varReferenceType, object parentObject, object variableReferenceObject, FieldInfo parentFieldInfo, Component rootComponent, string sceneName)
         {
             FieldInfo[] varRefFields = varReferenceType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
@@ -467,7 +461,7 @@ namespace AltSalt.Maestro
 
         // If the field is a list, register any scriptable objects in the list. Otherwise, recurse and drill
         // further into the list to see if it contains one of our types flagged above
-        void ParseFieldList(object enumerableObject, FieldInfo fieldInfo, Component rootComponent, string sceneName)
+        private void ParseFieldList(object enumerableObject, FieldInfo fieldInfo, Component rootComponent, string sceneName)
         {
             IEnumerable enumerable = enumerableObject as IEnumerable;
             if (enumerable != null) {
