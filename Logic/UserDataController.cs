@@ -243,7 +243,7 @@ namespace AltSalt.Maestro.Logic
         public class UserDatum
         {
             [SerializeField]
-            private ScriptableObjectReference _scriptableObject;
+            private ScriptableObjectReference _scriptableObject = new ScriptableObjectReference();
 
             public ScriptableObject scriptableObject
             {

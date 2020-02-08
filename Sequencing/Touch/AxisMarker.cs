@@ -1,4 +1,3 @@
-using AltSalt.Maestro.Sequencing.Navigate;
 using UnityEngine;
 
 namespace AltSalt.Maestro.Sequencing.Touch

@@ -1,6 +1,4 @@
-﻿using AltSalt.Maestro.Sequencing.Navigate;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro.Sequencing.Autorun
@@ -11,17 +9,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         [SerializeField]
         private string _description;
 
-        public string description
-        {
-            get => _description;
-        }
+        public string description => _description;
 
         [SerializeField]
         private bool _isVideoSequence;
 
-        public bool isVideoSequence
-        {
-            get => _isVideoSequence;
-        }
+        public bool isVideoSequence => _isVideoSequence;
     }
 }

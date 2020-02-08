@@ -14,7 +14,7 @@ namespace AltSalt.Maestro.Layout
             thisCamera = GetComponent<Camera>();
         }
 
-        void StoreCamera()
+        private void StoreCamera()
         {
             if (thisCamera == null) {
                 thisCamera = GetComponent<Camera>();

@@ -119,7 +119,7 @@ namespace AltSalt.Maestro.Layout
                         // Create and parent an icon to go with the panel
                         GameObject iconElement = PrefabUtility.InstantiatePrefab(iconObject) as GameObject;
                         Undo.RegisterCreatedObjectUndo(iconElement, "create icon");
-                        Undo.SetTransformParent(iconElement.transform, component.snapUtils.IconContainer, "set icon parent");
+                        Undo.SetTransformParent(iconElement.transform, component.snapUtils.iconContainer, "set icon parent");
 
                         // Reset icon positions on the component
                         SetIconInterval(iconInterval, component.snapUtils);
@@ -167,17 +167,17 @@ namespace AltSalt.Maestro.Layout
 
         static ScrollSnapUtils SetIconInterval(float iconInterval, ScrollSnapUtils targetSnapUtils)
         {
-            int iconCount = targetSnapUtils.IconContainer.childCount;
+            int iconCount = targetSnapUtils.iconContainer.childCount;
             int elementCount = iconCount + 2;
 
             List<RectTransform> childElements = new List<RectTransform>();
-            childElements.Add(targetSnapUtils.PrevBtn.GetComponent<RectTransform>());
+            childElements.Add(targetSnapUtils.prevBtn.GetComponent<RectTransform>());
 
             for(int i=0; i<iconCount; i++) {
-                childElements.Add(targetSnapUtils.IconContainer.GetChild(i) as RectTransform);
+                childElements.Add(targetSnapUtils.iconContainer.GetChild(i) as RectTransform);
             }
 
-            childElements.Add(targetSnapUtils.NextBtn.GetComponent<RectTransform>());
+            childElements.Add(targetSnapUtils.nextBtn.GetComponent<RectTransform>());
 
             for (int i = 0; i < elementCount; i++) {
 

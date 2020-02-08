@@ -94,7 +94,7 @@ namespace AltSalt.Maestro
                 case nameof(ButtonNames.RenameElements):
                     button.clickable.clicked += () =>
                     {
-                        if (Selection.objects.ToList().Find(x => x is GameObject == null) != null) {
+                        if (Selection.objects.ToList().Find(x => x is GameObject == null)) {
                             Utils.RenameElements(objectName, Selection.objects);
                         }
                         else {

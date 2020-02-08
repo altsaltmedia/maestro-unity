@@ -12,7 +12,7 @@ namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class BoolConditionResponse : ConditionResponseBase
+    public class BoolConditionResponse : ConditionResponse
     {
         [Title("Bool Reference")]
 //        [InfoBox("Bool value that will be compared against condition")]
@@ -66,7 +66,7 @@ namespace AltSalt.Maestro.Logic
         }
         
 #if UNITY_EDITOR
-        public override ConditionResponseBase PopulateReferences()
+        public override ConditionResponse PopulateReferences()
         {
             base.PopulateReferences();
             

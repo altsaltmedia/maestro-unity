@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using AltSalt.Maestro.Logic;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
@@ -83,18 +82,6 @@ namespace AltSalt.Maestro.Logic
             get => _eventExecutionType;
             set => _eventExecutionType = value;
         }
-
-        [SerializeField]
-#if UNITY_EDITOR
-        [InfoBox("Get rid of this list; no longer needed", InfoMessageType.Warning)]
-        [Title("Always Event List")]
-        [FormerlySerializedAs("alwaysEvents")]
-        [HideReferenceObjectPicker]
-        [ListDrawerSettings(AlwaysAddDefaultValue = true)]
-#endif
-        private List<AlwaysConditionResponse> _alwaysEvents = new List<AlwaysConditionResponse>();
-
-        private List<AlwaysConditionResponse> alwaysEvents => _alwaysEvents;
 
         [SerializeField]
 #if UNITY_EDITOR        
@@ -315,12 +302,6 @@ namespace AltSalt.Maestro.Logic
         
         public bool AllConditionsValid(GameObject caller, bool triggerOnStart)
         {
-
-            for (int i = 0; i < alwaysEvents.Count; i++) {
-                if (alwaysEvents[i].CheckCondition(caller) == false) {
-                    return false;
-                }
-            }
 
             for (int i = 0; i < boolEvents.Count; i++) {
                 if (boolEvents[i].CheckCondition(caller) == false) {
@@ -635,11 +616,11 @@ namespace AltSalt.Maestro.Logic
             if (eventExecutionType == EventExecutionType.CheckAllConditionsValid) {
 
                 actionDescription = "";
-                actionDescription += GetHeaderConditionDescription(boolEvents.ConvertAll(x => (ConditionResponseBase)x));
-                actionDescription += GetHeaderConditionDescription(floatEvents.ConvertAll(x => (ConditionResponseBase)x));
-                actionDescription += GetHeaderConditionDescription(intEvents.ConvertAll(x => (ConditionResponseBase)x));
-                actionDescription += GetHeaderConditionDescription(textFamilyEvents.ConvertAll(x => (ConditionResponseBase)x));
-                actionDescription += GetHeaderConditionDescription(layoutEvents.ConvertAll(x => (ConditionResponseBase)x));
+                actionDescription += GetHeaderConditionDescription(boolEvents.ConvertAll(x => (ConditionResponse)x));
+                actionDescription += GetHeaderConditionDescription(floatEvents.ConvertAll(x => (ConditionResponse)x));
+                actionDescription += GetHeaderConditionDescription(intEvents.ConvertAll(x => (ConditionResponse)x));
+                actionDescription += GetHeaderConditionDescription(textFamilyEvents.ConvertAll(x => (ConditionResponse)x));
+                actionDescription += GetHeaderConditionDescription(layoutEvents.ConvertAll(x => (ConditionResponse)x));
                 RefreshGenericActionDescription();
                 actionDescription += "    ";
                 actionDescription += genericActionDescription.Replace("\n", "\n    ");
@@ -650,29 +631,29 @@ namespace AltSalt.Maestro.Logic
             switch (triggerType) {
 
                 case ConditionResponseTypes.Bool :
-                    actionDescription = GetHeaderConditionDescriptionWithActions(boolEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    actionDescription = GetHeaderConditionDescriptionWithActions(boolEvents.ConvertAll(x => (ConditionResponse)x));
                     break;
                 
                 case ConditionResponseTypes.Float :
-                    actionDescription = GetHeaderConditionDescriptionWithActions(floatEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    actionDescription = GetHeaderConditionDescriptionWithActions(floatEvents.ConvertAll(x => (ConditionResponse)x));
                     break;
                 
                 case ConditionResponseTypes.Int :
-                    actionDescription = GetHeaderConditionDescriptionWithActions(intEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    actionDescription = GetHeaderConditionDescriptionWithActions(intEvents.ConvertAll(x => (ConditionResponse)x));
                     break;
                 
                 case ConditionResponseTypes.TextFamily :
-                    actionDescription = GetHeaderConditionDescriptionWithActions(textFamilyEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    actionDescription = GetHeaderConditionDescriptionWithActions(textFamilyEvents.ConvertAll(x => (ConditionResponse)x));
                     break;
                 
                 case ConditionResponseTypes.Layout :
-                    actionDescription = GetHeaderConditionDescriptionWithActions(layoutEvents.ConvertAll(x => (ConditionResponseBase)x));
+                    actionDescription = GetHeaderConditionDescriptionWithActions(layoutEvents.ConvertAll(x => (ConditionResponse)x));
                     break;
                 
             }
         }
 
-        private static string GetHeaderConditionDescription(List<ConditionResponseBase> conditionResponseList)
+        private static string GetHeaderConditionDescription(List<ConditionResponse> conditionResponseList)
         {
             string actionDescription = "";
             
@@ -701,7 +682,7 @@ namespace AltSalt.Maestro.Logic
             }
         }
         
-        private static string GetHeaderConditionDescriptionWithActions(List<ConditionResponseBase> conditionResponseList)
+        private static string GetHeaderConditionDescriptionWithActions(List<ConditionResponse> conditionResponseList)
         {
             string actionDescription = "";
             
@@ -738,15 +719,15 @@ namespace AltSalt.Maestro.Logic
                 var actionList = fieldValue as IList;
                 var listType = actionList.GetType().GetGenericArguments()[0];
 
-                if (listType.IsSubclassOf(typeof(ConditionResponseBase)) == false) {
+                if (listType.IsSubclassOf(typeof(ConditionResponse)) == false) {
                     continue;
                 }
 
                 string conditionResponseListPath = serializedPropertyPath;
                 conditionResponseListPath += $".{fields[i].Name}";
 
-                MethodInfo methodInfo = typeof(ConditionResponseBase).GetMethod(
-                    nameof(ConditionResponseBase.PopulateReferences), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                MethodInfo methodInfo = typeof(ConditionResponse).GetMethod(
+                    nameof(ConditionResponse.PopulateReferences), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
                 for (int j = 0; j < actionList.Count; j++) {
                     string actionPath = conditionResponseListPath;

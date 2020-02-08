@@ -17,9 +17,12 @@ namespace AltSalt.Maestro
     [Serializable]
     public abstract class LerpToTargetClip : PlayableAsset, ITimelineClipAsset {
 
-        // This is here for implementation reference only. DO NOT attempt to use or access this when
+        // This 'template' variable here for implementation reference only. DO NOT attempt to use or access this when
         // creating subclasses; it won't work. Instead, create a new instance of your behaviour in question.
+        //
         // private LerpToTargetBehaviour template = new LerpToTargetBehaviour();
+        //
+        //
 
         public abstract LerpToTargetBehaviour templateReference { get; }
         

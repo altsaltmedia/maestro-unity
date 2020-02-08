@@ -89,14 +89,14 @@ namespace AltSalt.Maestro.Sequencing.Touch
         public static Touch_Data CreateInstance(Sequence sequence, List<Extents> pauseMomentumIntervals,
             ConfigTrack inputConfigTrack, MasterSequence masterSequence)
         {
-            //var inputData = ScriptableObject.CreateInstance(typeof(TouchData)) as TouchData;
-            var inputData = new Touch_Data();
-
-            inputData.sequence = sequence;
-            inputData.pauseMomentumIntervals = pauseMomentumIntervals;
-            inputData.inputConfigTrack = inputConfigTrack;
-            inputData.masterSequence = masterSequence;
-
+            var inputData = new Touch_Data
+            {
+                sequence = sequence,
+                pauseMomentumIntervals = pauseMomentumIntervals,
+                inputConfigTrack = inputConfigTrack,
+                masterSequence = masterSequence
+            };
+            
             return inputData;
         }
     }

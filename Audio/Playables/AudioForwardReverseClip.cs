@@ -28,22 +28,6 @@ namespace AltSalt.Maestro.Audio
             get => _isReversingVariable;
             set => _isReversingVariable = value;
         }
-        
-        private FloatReference _frameStepValue = new FloatReference();
-
-        public FloatReference frameStepValue
-        {
-            get => _frameStepValue;
-            set => _frameStepValue = value;
-        }
-        
-        private FloatReference _swipeModifierOutput = new FloatReference();
-
-        public FloatReference swipeModifierOutput
-        {
-            get => _swipeModifierOutput;
-            set => _swipeModifierOutput = value;
-        }
 
         public override Playable CreatePlayable (PlayableGraph graph, GameObject owner)
         {

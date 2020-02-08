@@ -13,9 +13,9 @@ namespace AltSalt.Maestro.Layout
     {
         [FormerlySerializedAs("active")]
         [SerializeField]
-        bool _active = true;
-        
-        public bool active {
+        private bool _active = true;
+
+        private bool active {
             get => _active;
             set => _active = value;
         }
@@ -31,32 +31,13 @@ namespace AltSalt.Maestro.Layout
             set => _action = value;
         }
 
-        [SerializeField]
-        private bool _migrated;
-
-        private bool migrated
-        {
-            get => _migrated;
-            set => _migrated = value;
-        }
-
         public void OnPointerClick(PointerEventData pointerEventData)
         {
             if(active == true) {
                 action.Invoke(this.gameObject);
             }
         }
-
-        private void OnEnable()
-        {
-#if UNITY_EDITOR            
-            if (migrated == false) {
-                UnityEventUtils.MigrateUnityEventList(nameof(unityEvent), 
-                    nameof(_action), new SerializedObject(this));
-            }
-#endif            
-        }
-
+        
         private void Start()
         {
             if (active == false) {

@@ -74,7 +74,7 @@ namespace AltSalt.Maestro.Logic
             return true;
         }
     
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         
         public override void SyncEditorActionHeadings()
         {
@@ -121,7 +121,7 @@ namespace AltSalt.Maestro.Logic
             
             return this;
         }
-    #endif
+#endif
         
     }
 }

@@ -2,7 +2,7 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.Serialization;
-
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -12,18 +12,44 @@ namespace AltSalt.Maestro
 
     public abstract class PersistentDataObject : RegisterableScriptableObject, IDependable
     {
-        protected UnityEngine.Object callerObject;
-        protected string callerScene = "";
-        protected string callerName = "";
+        private UnityEngine.Object _callerObject;
 
-        [SerializeField]
-        protected bool logCallersOnRaise;
+        protected Object callerObject
+        {
+            get => _callerObject;
+            private set => _callerObject = value;
+        }
 
-        [SerializeField]
-        protected bool logListenersOnRegister;
+        private string _callerScene = "";
 
-        [SerializeField]
-        protected bool logListenersOnRaise;
+        protected string callerScene
+        {
+            get => _callerScene;
+            private set => _callerScene = value;
+        }
+
+        private string _callerName = "";
+
+        protected string callerName
+        {
+            get => _callerName;
+            private set => _callerName = value;
+        }
+
+        [FormerlySerializedAs("logCallersOnRaise"),SerializeField]
+        protected bool _logCallersOnRaise;
+
+        protected bool logCallersOnRaise => _logCallersOnRaise;
+
+        [FormerlySerializedAs("logListenersOnRegister"),SerializeField]
+        protected bool _logListenersOnRegister;
+
+        protected bool logListenersOnRegister => _logListenersOnRegister;
+
+        [FormerlySerializedAs("logListenersOnRaise"),SerializeField]
+        protected bool _logListenersOnRaise;
+
+        protected bool logListenersOnRaise => _logListenersOnRaise;
 
 #if UNITY_EDITOR
         [Multiline]

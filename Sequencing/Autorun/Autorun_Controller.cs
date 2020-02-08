@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Timeline;
 using System.Linq;
-using AltSalt.Maestro.Sequencing.Navigate;
 using Sirenix.OdinInspector;
 
 #if UNITY_EDITOR
-    using UnityEditor;
+using UnityEditor;
 #endif
 
 namespace AltSalt.Maestro.Sequencing.Autorun
@@ -16,8 +15,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
     [Serializable]
     public class Autorun_Controller : Input_Controller
     {
-        private InputGroupKey inputGroupKey => rootConfig.inputGroupKey; 
-        
         [SerializeField]
         private Autoplayer _autoplayer;
 

@@ -12,32 +12,32 @@ namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class FloatConditionResponse : ConditionResponseBase
+    public class FloatConditionResponse : ConditionResponse
     {
         [SerializeField]
         [Title("Float Reference")]
         [HideReferenceObjectPicker]
         [FormerlySerializedAs("floatReference")]
-        private FloatReference _floatReference;
+        private FloatReference _floatReference = new FloatReference();
 
         private FloatReference floatReference => _floatReference;
-
-        [PropertySpace]
-
-        [SerializeField]
-        [Title("Float Condition Variable")]
-        [HideReferenceObjectPicker]
-        [FormerlySerializedAs("floatConditionVar")]
-        private FloatReference _floatConditionVar;
-
-        private FloatReference floatConditionVar => _floatConditionVar;
-
+        
         [PropertySpace]
         [SerializeField]
         [FormerlySerializedAs("operation")]
         private ComparisonValues _operation;
 
         public ComparisonValues operation => _operation;
+        
+        [PropertySpace]
+
+        [SerializeField]
+        [Title("Float Condition Variable")]
+        [HideReferenceObjectPicker]
+        [FormerlySerializedAs("floatConditionVar")]
+        private FloatReference _floatConditionVar = new FloatReference();
+
+        private FloatReference floatConditionVar => _floatConditionVar;
 
         public FloatConditionResponse(UnityEngine.Object parentObject,
             string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
@@ -45,8 +45,6 @@ namespace AltSalt.Maestro.Logic
         public override bool CheckCondition(Object callingObject)
         {
             CheckPopulateReferences();
-            
-            base.CheckCondition(callingObject);
             
             switch (operation) {
 
@@ -88,7 +86,7 @@ namespace AltSalt.Maestro.Logic
         }
         
 #if UNITY_EDITOR        
-        public override ConditionResponseBase PopulateReferences()
+        public override ConditionResponse PopulateReferences()
         {
             base.PopulateReferences();
             

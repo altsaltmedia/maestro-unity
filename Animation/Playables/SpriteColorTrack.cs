@@ -22,18 +22,6 @@ namespace AltSalt.Maestro.Animation
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)
         {
 #if UNITY_EDITOR
-            //var comp = director.GetGenericBinding(this) as SpriteRenderer;
-            //if (comp == null)
-            //    return;
-            //var so = new UnityEditor.SerializedObject(comp);
-            //var iter = so.GetIterator();
-            //while (iter.NextVisible(true)) {
-            //    if (iter.hasVisibleChildren)
-            //        continue;
-            //    Debug.Log(iter.propertyPath);
-            //    driver.AddFromName<SpriteRenderer>(comp.gameObject, iter.propertyPath);
-            //}
-
             SpriteRenderer trackBinding = director.GetGenericBinding(this) as SpriteRenderer;
             if (trackBinding == null)
                 return;

@@ -8,11 +8,11 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
-using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine.Serialization;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

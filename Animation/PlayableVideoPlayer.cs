@@ -4,9 +4,8 @@ using UnityEngine.Video;
 
 namespace AltSalt.Maestro.Animation
 {
-#if UNITY_EDITOR
+
     [ExecuteInEditMode]
-#endif
     [RequireComponent(typeof(VideoPlayer))]
     public class PlayableVideoPlayer : MonoBehaviour
     {
@@ -14,7 +13,7 @@ namespace AltSalt.Maestro.Animation
         public float initialTime;
 
         [SerializeField]
-        SimpleEventTrigger videoCompleteCallback;
+        private SimpleEventTrigger videoCompleteCallback = new SimpleEventTrigger();
 
         MeshRenderer meshRenderer;
 

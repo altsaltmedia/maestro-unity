@@ -132,8 +132,6 @@ namespace AltSalt.Maestro
             FieldInfo[] referenceFields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
             for (int i = 0; i < referenceFields.Length; i++) {
-                
-                var referenceFieldValue = referenceFields[i].GetValue(this) as ReferenceBase;
 
                 string name = referenceFields[i].Name.Replace("_", "").Capitalize();
                 var variableField = Utils.GetVariableFieldFromReference(referenceFields[i], this, out var referenceValue);

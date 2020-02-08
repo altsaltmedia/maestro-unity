@@ -127,7 +127,7 @@ namespace AltSalt.Maestro.Layout
             
             for (int i = 0; i < responsiveObjects.Length; i++) {
                 GameObject gameObject = responsiveObjects[i] as GameObject;
-                if (gameObject.active == true) {
+                if (gameObject.activeInHierarchy == true) {
                     responsiveElements.Add(gameObject.GetComponent<ResponsiveLayoutElement>());
                 }
             }

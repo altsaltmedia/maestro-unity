@@ -23,16 +23,11 @@ namespace AltSalt.Maestro.Animation
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)
         {
 #if UNITY_EDITOR
-            var comp = director.GetGenericBinding(this) as Image;
-            if (comp == null)
+            Image trackBinding = director.GetGenericBinding(this) as Image;
+            if (trackBinding == null)
                 return;
-            var so = new UnityEditor.SerializedObject(comp);
-            var iter = so.GetIterator();
-            while (iter.NextVisible(true)) {
-                if (iter.hasVisibleChildren)
-                    continue;
-                driver.AddFromName<Image>(comp.gameObject, iter.propertyPath);
-            }
+
+            driver.AddFromName<SpriteRenderer>(trackBinding.gameObject, "m_Color");
 #endif
             base.GatherProperties(director, driver);
         }

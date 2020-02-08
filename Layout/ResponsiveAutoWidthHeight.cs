@@ -59,7 +59,7 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        bool MarginChanged()
+        private bool MarginChanged()
         {
             GetBreakpointIndex();
             if (Mathf.Approximately(internalMultiplierValue, multiplier[breakpointIndex]) == false) {
@@ -70,7 +70,7 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        void StoreInternalMarginVal()
+        private void StoreInternalMarginVal()
         {
             internalMultiplierValue = multiplier[breakpointIndex];
         }
@@ -87,7 +87,7 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        void SetValue(int activeIndex)
+        private void SetValue(int activeIndex)
         {
 #if UNITY_EDITOR
             if (activeIndex >= multiplier.Count || activeIndex >= orientations.Count) {

@@ -375,7 +375,6 @@ namespace AltSalt.Maestro
                 var variableValue = variableField.GetValue(referenceValue) as ScriptableObject;
 
                 if (variableValue is ModifiableEditorVariable modifiableEditorVariable) {
-                    //serializedObject.FindProperty("_" + nameof(modifiableEditorVariable.hasDefault)).boolValue = true;
                     modifiableEditorVariable.StoreCaller(inputData, "setting default from refresh dependencies",
                         "app settings");
                     modifiableEditorVariable.hasDefault = true;

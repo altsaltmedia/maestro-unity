@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout 
 {
@@ -15,12 +16,10 @@ namespace AltSalt.Maestro.Layout
 
         [ValueDropdown("dimensionValues")]
         [SerializeField]
-        DimensionType orientation;
+        [FormerlySerializedAs("orientation")]
+        private DimensionType _orientation;
 
-        private ValueDropdownList<DimensionType> dimensionValues = new ValueDropdownList<DimensionType>(){
-            {"Vertical", DimensionType.Vertical },
-            {"Horizontal", DimensionType.Horizontal }
-        };
+        private DimensionType orientation => _orientation;
 
 #if UNITY_EDITOR
 
@@ -40,18 +39,17 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        bool MarginChanged()
+        private bool MarginChanged()
         {
             if (Mathf.Approximately(internalWidthMarginValue, margin) == false) {
                 StoreInternalMarginVal();
                 return true;
             }
-            else {
-                return false;
-            }
+
+            return false;
         }
 
-        void StoreInternalMarginVal()
+        private void StoreInternalMarginVal()
         {
             internalWidthMarginValue = margin;
         }

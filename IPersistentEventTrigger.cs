@@ -4,5 +4,5 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
-    public abstract class EventTriggerBase { }
+    public interface IPersistentEventTrigger { }
 }

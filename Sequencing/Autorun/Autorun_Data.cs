@@ -65,9 +65,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         public static Autorun_Data CreateInstance(Sequence sequence, List<AutorunExtents> autorunIntervals)
         {
-            //var inputData = ScriptableObject.CreateInstance(typeof(AutorunData)) as AutorunData;
             var inputData = new Autorun_Data {sequence = sequence, autorunIntervals = autorunIntervals};
-
             return inputData;
         }
     }

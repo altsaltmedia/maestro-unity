@@ -12,7 +12,6 @@ namespace AltSalt.Maestro.Animation
         TMP_Text trackBindingComponent;
         Color originalValue;
 
-
         private TMP_TextInfo _textInfo;
 
         public TMP_TextInfo textInfo

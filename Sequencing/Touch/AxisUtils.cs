@@ -60,7 +60,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return activeExtents;
         }
 
-        public static AxisExtents SetDefaultState(AxisExtents activeExtents)
+        private static AxisExtents SetDefaultState(AxisExtents activeExtents)
         {
             activeExtents.axisMonitor.SetTransitionStatus(false);
             Touch_Controller touchController = activeExtents.axisMonitor.touchController;
@@ -84,7 +84,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return activeExtents;
         }
 
-        public static AxisExtents SetAxisTransitionState(AxisExtents activeExtents, AxisExtents siblingAxisExtents)
+        private static AxisExtents SetAxisTransitionState(AxisExtents activeExtents, AxisExtents siblingAxisExtents)
         {
             activeExtents.axisMonitor.SetTransitionStatus(true);
             GameObject axisMonitorObject = activeExtents.axisMonitor.gameObject;
@@ -97,7 +97,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return activeExtents;
         }
 
-        public static TouchForkExtents SetForkTransitionState(Touch_Controller touchController, TouchForkExtents touchForkExtents)
+        private static TouchForkExtents SetForkTransitionState(Touch_Controller touchController, TouchForkExtents touchForkExtents)
         {
             touchController.axisMonitor.SetTransitionStatus(true);
             TouchBranchingPathData activeBranch = TouchForkUtils.GetActiveBranch(touchController, touchForkExtents);

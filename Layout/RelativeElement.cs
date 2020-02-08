@@ -21,11 +21,7 @@ namespace AltSalt.Maestro.Layout {
         [SerializeField]
         private bool _isNegative;
 
-        public bool isNegative
-        {
-            get => _isNegative;
-            set => _isNegative = value;
-        }
+        protected bool isNegative => _isNegative;
 
         protected RectTransform rectTransform;
 

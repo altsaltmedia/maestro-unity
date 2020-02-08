@@ -43,7 +43,7 @@ namespace AltSalt.Maestro.Logic
             set => _actionDescription = value;
         }
 
-        public ActionData(int priority)
+        protected ActionData(int priority)
         {
             this.priority = priority;
         }

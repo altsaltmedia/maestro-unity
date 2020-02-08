@@ -211,40 +211,40 @@ namespace AltSalt.Maestro
         {
             if (stringDictionary.ContainsKey(DataType.stringType)) {
                 return stringDictionary[DataType.stringType];
-            } else {
-                Debug.Log("Key for string value not found in EventPayload");
-                return null;
             }
+
+            //Debug.Log("Key for string value not found in EventPayload");
+            return null;
         }
         
         public string GetStringValue(object key)
         {
             if (stringDictionary.ContainsKey(key)) {
                 return stringDictionary[key];
-            } else {
-                Debug.Log("Key for string value not found in EventPayload");
-                return null;
             }
+
+            //Debug.Log("Key for string value not found in EventPayload");
+            return null;
         }
 
         public float GetFloatValue()
         {
             if (floatDictionary.ContainsKey(DataType.floatType)) {
                 return floatDictionary[DataType.floatType];
-            } else {
-                Debug.Log("Key for float value not found in EventPayload");
-                return float.NaN;
             }
+
+            //Debug.Log("Key for float value not found in EventPayload");
+            return float.NaN;
         }
         
         public float GetFloatValue(object key)
         {
             if (floatDictionary.ContainsKey(key)) {
                 return floatDictionary[key];
-            } else {
-//                Debug.Log("Key for float value not found in EventPayload");
-                return float.NaN;
             }
+
+            //Debug.Log("Key for float value not found in EventPayload");
+            return float.NaN;
         }
         
         
@@ -252,20 +252,20 @@ namespace AltSalt.Maestro
         {
             if (intDictionary.ContainsKey(DataType.intType)) {
                 return intDictionary[DataType.intType];
-            } else {
-                Debug.Log("Key for int value not found in EventPayload");
-                return -1;
             }
+
+            //Debug.Log("Key for int value not found in EventPayload");
+            return -1;
         }
         
         public int GetIntValue(object key)
         {
             if (intDictionary.ContainsKey(key)) {
                 return intDictionary[key];
-            } else {
-                Debug.Log("Key for int value not found in EventPayload");
-                return -1;
             }
+
+            //Debug.Log("Key for int value not found in EventPayload");
+            return -1;
         }
 
 
@@ -273,49 +273,49 @@ namespace AltSalt.Maestro
         {
             if (boolDictionary.ContainsKey(key)) {
                 return boolDictionary[key];
-            } else {
-                return false;
             }
+
+            return false;
         }
 
         public ScriptableObject GetScriptableObjectValue()
         {
             if (scriptableObjectDictionary.ContainsKey(DataType.scriptableObjectType)) {
                 return scriptableObjectDictionary[DataType.scriptableObjectType];
-            } else {
-//                Debug.Log("Key for scriptable object value not found in EventPayload");
-                return null;
             }
+
+            // Debug.Log("Key for scriptable object value not found in EventPayload");
+            return null;
         }
         
         public ScriptableObject GetScriptableObjectValue(object key)
         {
             if (scriptableObjectDictionary.ContainsKey(key)) {
                 return scriptableObjectDictionary[key];
-            } else {
-//                Debug.Log("Key for scriptable object value not found in EventPayload");
-                return null;
             }
+
+            //Debug.Log("Key for scriptable object value not found in EventPayload");
+            return null;
         }
 
         public object GetObjectValue()
         {
             if (objectDictionary.ContainsKey(DataType.systemObjectType)) {
                 return objectDictionary[DataType.systemObjectType];
-            } else {
-                //                Debug.Log("Key for scriptable object value not found in EventPayload");
-                return null;
             }
+
+            //Debug.Log("Key for object value not found in EventPayload");
+            return null;
         }
         
         public object GetObjectValue(object key)
         {
             if (objectDictionary.ContainsKey(key)) {
                 return objectDictionary[key];
-            } else {
-                //                Debug.Log("Key for scriptable object value not found in EventPayload");
-                return null;
             }
+
+            //Debug.Log("Key for object value not found in EventPayload");
+            return null;
         }
 
         [Serializable]

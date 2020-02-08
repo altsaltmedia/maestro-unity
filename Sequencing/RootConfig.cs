@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 
 namespace AltSalt.Maestro.Sequencing
@@ -22,7 +20,7 @@ namespace AltSalt.Maestro.Sequencing
         public InputGroupKey inputGroupKey => _inputGroupKey.GetVariable() as InputGroupKey;
 
         [SerializeField]
-        private UserDataKeyReference _userKey;
+        private UserDataKeyReference _userKey = new UserDataKeyReference();
 
         public UserDataKey userKey => _userKey.GetVariable() as UserDataKey;
         
@@ -53,7 +51,7 @@ namespace AltSalt.Maestro.Sequencing
         [OnValueChanged(nameof(Configure))]
         private List<RootDataCollector> _rootDataCollectors = new List<RootDataCollector>();
 
-        public List<RootDataCollector> rootDataCollectors => _rootDataCollectors;
+        private List<RootDataCollector> rootDataCollectors => _rootDataCollectors;
 
         public bool appUtilsRequested => appSettings.GetAppUtilsRequested(this.gameObject, inputGroupKey);
 
@@ -92,11 +90,6 @@ namespace AltSalt.Maestro.Sequencing
             }
         }
 
-        private static bool IsPopulated(ComplexEventManualTrigger attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-        
         private static bool IsPopulated(List<MasterSequence> attribute)
         {
             return Utils.IsPopulated(attribute);

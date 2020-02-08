@@ -14,17 +14,8 @@ namespace AltSalt.Maestro
     [ExecuteInEditMode]
     // Meant to be used within ComplexEventPackagerBehaviour or ComplexEventTimelineTrigger.
     // If implementing a custom trigger from within a script, use the basic ComplexEventTrigger instead.
-    public class ComplexEventConfigurableTrigger : ComplexEventReference
+    public class ComplexEventConfigurableTrigger : ComplexEventReference, IPersistentEventTrigger
     {
-        [SerializeField]
-        private bool _migrated;
-
-        private bool migrated
-        {
-            get => _migrated;
-            set => _migrated = value;
-        }
-
         [SerializeField]
         [BoxGroup("String Packager")]
         [FormerlySerializedAs("hasString")]
@@ -48,13 +39,6 @@ namespace AltSalt.Maestro
             set => _customStringKey = value;
         }
 
-        [FormerlySerializedAs("_stringKeys"),SerializeField]
-        [ShowIf(nameof(ShowStringKeys))]
-        [ValidateInput(nameof(CheckStringKeys), "Keys and Values must be of equal length")]
-        [BoxGroup("String Packager")]
-        [FormerlySerializedAs("stringKeys")]
-        private List<CustomKey> _stringKeysOld = new List<CustomKey>();
-        
         [SerializeField]
         [ShowIf(nameof(ShowStringKeys))]
         [ValidateInput(nameof(CheckStringKeys), "Keys and Values must be of equal length")]
@@ -69,13 +53,6 @@ namespace AltSalt.Maestro
             set => _stringKeyReferences = value;
         }
 
-        [FormerlySerializedAs("_stringValues"),SerializeField]
-        [ShowIf(nameof(hasString))]
-        [ValidateInput(nameof(CheckStringValues), "Keys and Values must be of equal length")]
-        [BoxGroup("String Packager")]
-        [FormerlySerializedAs("stringValues")]
-        private List<string> _stringValuesOld = new List<string>();
-        
         [SerializeField]
         [ShowIf(nameof(hasString))]
         [ValidateInput(nameof(CheckStringValues), "Keys and Values must be of equal length")]
@@ -114,13 +91,7 @@ namespace AltSalt.Maestro
             get => _customFloatKey;
             set => _customFloatKey = value;
         }
-
-        [FormerlySerializedAs("_floatKeys"),SerializeField]
-        [ShowIf(nameof(ShowFloatKeys))]
-        [ValidateInput(nameof(CheckFloatKeys), "Keys and Values must be of equal length")]
-        [BoxGroup("Float Packager")]
-        [FormerlySerializedAs("floatKeys")]
-        private List<CustomKey> _floatKeysOld = new List<CustomKey>();
+        
         
         [SerializeField]
         [ShowIf(nameof(ShowFloatKeys))]
@@ -136,13 +107,6 @@ namespace AltSalt.Maestro
             set => _floatKeyReferences = value;
         }
 
-        [FormerlySerializedAs("_floatValues"),SerializeField]
-        [ShowIf(nameof(hasFloat))]
-        [ValidateInput(nameof(CheckFloatValues), "Keys and Values must be of equal length")]
-        [BoxGroup("Float Packager")]
-        [FormerlySerializedAs("floatValues")]
-        List<float> _floatValuesOld = new List<float>();
-        
         [SerializeField]
         [ShowIf(nameof(hasFloat))]
         [ValidateInput(nameof(CheckFloatValues), "Keys and Values must be of equal length")]
@@ -182,13 +146,6 @@ namespace AltSalt.Maestro
             set => _customBoolKey = value;
         }
 
-        [FormerlySerializedAs("_boolKeys"),SerializeField]
-        [ShowIf(nameof(ShowBoolKeys))]
-        [ValidateInput(nameof(CheckBoolKeys), "Keys and Values must be of equal length")]
-        [BoxGroup("Bool Packager")]
-        [FormerlySerializedAs("boolKeys")]
-        private List<CustomKey> _boolKeysOld = new List<CustomKey>();
-        
         [SerializeField]
         [ShowIf(nameof(ShowBoolKeys))]
         [ValidateInput(nameof(CheckBoolKeys), "Keys and Values must be of equal length")]
@@ -203,14 +160,6 @@ namespace AltSalt.Maestro
             set => _boolKeyReferences = value;
         }
 
-        [FormerlySerializedAs("_boolValues"),SerializeField]
-        [ShowIf(nameof(hasBool))]
-        [ValidateInput(nameof(CheckBoolValues), "Keys and Values must be of equal length")]
-        [BoxGroup("Bool Packager")]
-        [FormerlySerializedAs(nameof(boolValues))]
-        private List<bool> _boolValuesOld = new List<bool>();
-        
-        
         [SerializeField]
         [ShowIf(nameof(hasBool))]
         [ValidateInput(nameof(CheckBoolValues), "Keys and Values must be of equal length")]
@@ -250,13 +199,6 @@ namespace AltSalt.Maestro
             set => _customScriptableObjectKey = value;
         }
 
-        [FormerlySerializedAs("_scriptableObjectKeys"),SerializeField]
-        [ShowIf(nameof(ShowScriptableObjectKeys))]
-        [ValidateInput(nameof(CheckScriptableObjectKeys), "Keys and Values must be of equal length")]
-        [BoxGroup("Scriptable Object Packager")]
-        [FormerlySerializedAs("scriptableObjectKeys")]
-        private List<CustomKey> _scriptableObjectKeysOld = new List<CustomKey>();
-        
         [SerializeField]
         [ShowIf(nameof(ShowScriptableObjectKeys))]
         [ValidateInput(nameof(CheckScriptableObjectKeys), "Keys and Values must be of equal length")]
@@ -270,13 +212,6 @@ namespace AltSalt.Maestro
             get => _scriptableObjectKeyReferences;
             set => _scriptableObjectKeyReferences = value;
         }
-
-        [FormerlySerializedAs("_scriptableObjectValues"),SerializeField]
-        [ShowIf(nameof(hasScriptableObject))]
-        [ValidateInput(nameof(CheckScriptableObjectValues), "Keys and Values must be of equal length")]
-        [BoxGroup("Scriptable Object Packager")]
-        [FormerlySerializedAs("scriptableObjectValues")]
-        private List<ScriptableObject> _scriptableObjectValuesOld = new List<ScriptableObject>();
         
         [SerializeField]
         [ShowIf(nameof(hasScriptableObject))]
@@ -295,10 +230,6 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR        
         public void PopulateReferences(UnityEngine.Object parentObject, string serializedPropertyPath)
         {
-            if (migrated == false) {
-                MigrateData(parentObject, serializedPropertyPath);
-            }
-            
             FieldInfo[] fields = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
             for (int i = 0; i < fields.Length; i++) {
 
@@ -319,16 +250,6 @@ namespace AltSalt.Maestro
                         new object[] { parentObject, referencePath });
                 }
             }
-
-//            string stringKeyReferencesPath = serializedPropertyPath;
-//            stringKeyReferencesPath += $".{nameof(_stringKeyReferences)}";
-//            for (int i = 0; i < _stringKeyReferences.Count; i++) {
-//                string stringReferencePath = stringKeyReferencesPath;
-//                stringReferencePath += $".{i.ToString()}";
-//                _stringKeyReferences[i].PopulateVariable(parentObject, stringReferencePath);
-//            }
-
-
         }
 
         private bool IsReferenceList(FieldInfo field, out IList actionList)
@@ -371,78 +292,6 @@ namespace AltSalt.Maestro
                         new object[] {} );
                 }
             }
-        }
-
-        private void MigrateData(UnityEngine.Object parentObject, string serializedPropertyPath)
-        {
-            var serializedObject = new SerializedObject(parentObject);
-            string[] complexTriggerPath = serializedPropertyPath.Split('.'); 
-            
-            // Strings
-            
-            for (int i = 0; i < _stringKeysOld.Count; i++) {
-                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_stringKeyReferences));
-                serializedProperty.arraySize++;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_variable").objectReferenceValue = _stringKeysOld[i];
-            }
-            
-            for (int i = 0; i < _stringValuesOld.Count; i++) {
-                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_stringValueReferences));
-                serializedProperty.arraySize++;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_useConstant").boolValue = true;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_constantValue").stringValue = _stringValuesOld[i];
-            }
-            
-            // Floats
-            
-            for (int i = 0; i < _floatKeysOld.Count; i++) {
-                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_floatKeyReferences));
-                serializedProperty.arraySize++;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_variable").objectReferenceValue = _floatKeysOld[i];
-            }
-            
-            for (int i = 0; i < _floatValuesOld.Count; i++) {
-                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_floatValueReferences));
-                serializedProperty.arraySize++;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_useConstant").boolValue = true;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_constantValue").floatValue = _floatValuesOld[i];
-            }
-
-            
-            // Bools
-
-            for (int i = 0; i < _boolKeysOld.Count; i++) {
-                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_boolKeyReferences));
-                serializedProperty.arraySize++;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_variable").objectReferenceValue = _boolKeysOld[i];
-            }
-            
-            for (int i = 0; i < _boolValuesOld.Count; i++) {
-                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_boolValueReferences));
-                serializedProperty.arraySize++;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_useConstant").boolValue = true;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_constantValue").boolValue = _boolValuesOld[i];
-            }
-            
-            // Scriptable Object
-
-            for (int i = 0; i < _scriptableObjectKeysOld.Count; i++) {
-                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_scriptableObjectKeyReferences));
-                serializedProperty.arraySize++;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_variable").objectReferenceValue = _scriptableObjectKeysOld[i];
-            }
-            
-            for (int i = 0; i < _scriptableObjectValuesOld.Count; i++) {
-                var serializedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_scriptableObjectValueReferences));
-                serializedProperty.arraySize++;
-                serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_variable").objectReferenceValue = _scriptableObjectValuesOld[i];
-            }
-
-            var migratedProperty = Utils.FindReferenceProperty(serializedObject, complexTriggerPath, nameof(_migrated));
-            migratedProperty.boolValue = true;
-
-            serializedObject.ApplyModifiedProperties();
-            serializedObject.Update();
         }
 #endif        
 

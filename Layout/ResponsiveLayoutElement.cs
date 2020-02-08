@@ -354,12 +354,12 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        protected static bool IsPopulated(ComplexEventManualTrigger attribute)
+        private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);
         }
 
-        protected static bool IsPopulated(FloatReference attribute)
+        private static bool IsPopulated(FloatReference attribute)
         {
             return Utils.IsPopulated(attribute);
         }

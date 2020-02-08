@@ -14,13 +14,11 @@ namespace AltSalt.Maestro.Sequencing
         
         public virtual MarkerPlacement markerPlacement => MarkerPlacement.Manual;
 
-//        This code doesn't work; likely a Unity bug 
-//
-//        public override void OnInitialize(TrackAsset aPent)
-//        {
-//            base.OnInitialize(aPent);
-//            ModifyMarkerTime(this, aPent);
-//        }
+        // public override void OnInitialize(TrackAsset aPent)
+        // {
+        //     base.OnInitialize(aPent);
+        //     ModifyMarkerTime(this, aPent);
+        // }
 
         private static void ModifyMarkerTime(JoinMarker joinMarker, TrackAsset aPent)
         {

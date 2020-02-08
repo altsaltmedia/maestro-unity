@@ -17,20 +17,26 @@ namespace AltSalt.Maestro
             get => _hasDefault;
             set => _hasDefault = value;
         }
-        
+
         [SerializeField]
         [ShowIf(nameof(hasDefault))]
-        private ToggleState _resetOnGameRefresh = ToggleState.NO;
+        [ValueDropdown(nameof(boolValues))]
+        private bool _resetOnGameRefresh;
 
-        public ToggleState resetOnGameRefresh
+        public bool resetOnGameRefresh
         {
             get => _resetOnGameRefresh;
             set => _resetOnGameRefresh = value;
         }
+        
+        private ValueDropdownList<bool> boolValues = new ValueDropdownList<bool>() {
+            { "Yes", true },
+            { "No", false}
+        };
 
         private void OnEnable()
         {
-            if (resetOnGameRefresh == ToggleState.YES) {
+            if (resetOnGameRefresh == true) {
                 StoreCaller(this, "setting from OnEnable", "default functionality");
                 SetToDefaultValue(); 
             }

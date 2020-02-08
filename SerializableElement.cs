@@ -153,7 +153,7 @@ namespace AltSalt.Maestro
             UpdateActiveLayoutName();
         }
 
-        void UpdateActiveLayoutName()
+        private void UpdateActiveLayoutName()
         {
             if (activeLayout != null) {
                 activeLayoutName = "Current active layout: " + activeLayout.name;

@@ -27,6 +27,7 @@ namespace AltSalt.Maestro
         }
 
 //        This method should be overridden in child classes; a sample body is provided below
+//
 //        public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
 //        {
 //            StoreClipProperties(go);
@@ -48,12 +49,41 @@ namespace AltSalt.Maestro
                     myAsset.parentTrack = this;
                     myAsset.trackAssetConfig = directorObject.GetComponent<TrackAssetConfig>();
                     
-                    if (this is TMProColorTrack tmProColorTrack) {
-                        tmProColorTrack.MigrateClip(clip, directorObject);
-                    }
+                    // MIGRATION CALLS GO HERE
+                    
+                    // if (this is TMProColorTrack tmProColorTrack) {
+                    //     tmProColorTrack.MigrateClip(clip, directorObject);
+                    // }
                 }
             }
         }
+
+        // SAMPLE MIGRATION SCRIPT FOR CLIPS  
+        
+        // public void MigrateClip(TimelineClip clip, GameObject directorObject)
+        // {
+        //     if (clip.asset is ColorClip colorClip) {
+        //
+        //         if (colorClip.migrated == false) {
+        //             TimelineClip migratedClip = clip.parentTrack.CreateClip<TMProColorClip>();
+        //             TMProColorClip migratedClipAsset = migratedClip.asset as TMProColorClip;
+        //
+        //             migratedClip.duration = clip.duration;
+        //             migratedClip.start = clip.start;
+        //
+        //             migratedClipAsset.template.ease = colorClip.template.ease;
+        //             migratedClipAsset.template.initialValue = colorClip.template.initialValue;
+        //             migratedClipAsset.template.targetValue = colorClip.template.targetValue;
+        //                     
+        //             colorClip.migrated = true;
+        //         }
+        //
+        //         if (colorClip.migrated == true) {
+        //             TimelineAsset directorAsset = directorObject.GetComponent<PlayableDirector>().playableAsset as TimelineAsset;
+        //             directorAsset.DeleteClip(clip);
+        //         }
+        //     }
+        // }
 
         protected LerpToTargetMixerBehaviour StoreMixerProperties(GameObject directorObject, LerpToTargetMixerBehaviour trackMixer)
         {
@@ -65,13 +95,13 @@ namespace AltSalt.Maestro
             return trackMixer;
         }
 
+        // SYNTAX FOR MARKING PROPERTIES TO NOT BE SAVED IN EDIT MODE, CAN ITERATE
+        // THROUGH ALL PROPERTIES DYNAMICALLY OR USE DEBUG.LOG STATEMENT BELOW TO FIND
+        // NAMES OF SERIALIZED PROPERTIES AND MARK THEM EXPLICITY
+        
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)
         {
             // #if UNITY_EDITOR
-            //
-            // SYNTAX FOR MARKING PROPERTIES TO NOT BE SAVED IN EDIT MODE, CAN ITERATE
-            // THROUGH ALL PROPERTIES DYNAMICALLY OR USE DEBUG.LOG STATEMENT BELOW TO FIND
-            // NAMES OF SERIALIZED PROPERTIES AND MARK THEM EXPLICITY
             //
             // GameObject trackBinding = director.GetGenericBinding(this) as GameObject;
             // if (trackBinding == null)

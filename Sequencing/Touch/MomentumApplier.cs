@@ -7,7 +7,6 @@ namespace AltSalt.Maestro.Sequencing.Touch
 {
     public class MomentumApplier : Touch_Module
     {
-
         protected override bool moduleActive
         {
             get
@@ -112,7 +111,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             hasMomentum = false;
         }
 
-        public static float GetMomentumModifier(Touch_Controller touchController, Vector2 momentumForce)
+        private static float GetMomentumModifier(Touch_Controller touchController, Vector2 momentumForce)
         {
             float momentumModifier = 0;
 
@@ -131,8 +130,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return momentumModifier;
         }
 
-        public static Touch_Controller UpdateSequenceWithMomentum(MomentumApplier momentumApplier, float momentumModifier) {
-            
+        private static Touch_Controller UpdateSequenceWithMomentum(MomentumApplier momentumApplier, float momentumModifier)
+        {
             Touch_Controller touchController = momentumApplier.touchController;
             
             for (int q=0; q < touchController.touchDataList.Count; q++)
@@ -166,7 +165,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return targetSequence;
         }
 
-        public static float GetAxisMomentum(Vector2 momentumForce, Axis sourceAxis, bool isReversing)
+        private static float GetAxisMomentum(Vector2 momentumForce, Axis sourceAxis, bool isReversing)
         {
             float correctedMomentum;
             float directionModifier;
@@ -189,9 +188,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
             return correctedMomentum;
         }
-
-//        public static MomentumApplier NormalizeMomentumForce(MomentumApplier momentumApplier, Axis fromAxis, Axis toAxis)
-        public static Vector2 NormalizeMomentumForce(SwipeDirection swipeDirection, Vector2 momentumForce)
+        
+        private static Vector2 NormalizeMomentumForce(SwipeDirection swipeDirection, Vector2 momentumForce)
         {
             // Replace momentum on the new axis with momentum from the old axis.
             // In most cases, we'll need to do this transformation by undoing the sensitivity operation
@@ -201,33 +199,15 @@ namespace AltSalt.Maestro.Sequencing.Touch
             } 
             
             return new Vector2( momentumForce.y, momentumForce.y);
-
-//            if (fromAxis.axisType == AxisType.X && toAxis.axisType == AxisType.Y) {
-//                correctedMomentum = new Vector2(momentumApplier.momentumForceToApply.x, momentumApplier.momentumForceToApply.x);
-//            } 
-//            else if (fromAxis.axisType == AxisType.Y && toAxis.axisType == AxisType.X) {
-//                correctedMomentum = new Vector2( momentumApplier.momentumForceToApply.y, momentumApplier.momentumForceToApply.y);
-//            }
-
         }
 
-        public static Vector2 GetDominantMomentumForce(SwipeDirection swipeDirection, Vector2 momentumForce)
+        private static Vector2 GetDominantMomentumForce(SwipeDirection swipeDirection, Vector2 momentumForce)
         {
             if (swipeDirection == SwipeDirection.xPositive || swipeDirection == SwipeDirection.xNegative) {
                 return new Vector2(momentumForce.x, 0);
             } 
             
             return new Vector2( 0, momentumForce.y);
-        }
-
-        private static bool IsPopulated(V2Reference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-
-        private static bool IsPopulated(FloatReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
         }
     }
 }

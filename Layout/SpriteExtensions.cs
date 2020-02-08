@@ -9,12 +9,12 @@ namespace AltSalt.Maestro.Layout
     {
         SpriteRenderer spriteRenderer;
 
-        void Start()
+        private void Start()
         {
             GetSpriteComponent();
         }
 
-        void GetSpriteComponent()
+        private void GetSpriteComponent()
         {
             if (spriteRenderer == null) {
                 spriteRenderer = GetComponent<SpriteRenderer>();

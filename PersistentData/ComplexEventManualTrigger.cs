@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AltSalt.Maestro
 {
     [Serializable]
-    public class ComplexEventManualTrigger : ComplexEventReference
+    public class ComplexEventManualTrigger : ComplexEventReference, IPersistentEventTrigger
     {
         public void RaiseEvent(GameObject caller)
         {

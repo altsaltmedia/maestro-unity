@@ -6,9 +6,9 @@ namespace AltSalt.Maestro.Layout
     public class SimpleVideoPlayer : MonoBehaviour
     {
         [SerializeField]
-        private SimpleEventTrigger _playedCallback = new SimpleEventTrigger();
+        private SimpleEventTrigger _startedCallback = new SimpleEventTrigger();
 
-        private SimpleEventTrigger playedCallback => _playedCallback;
+        private SimpleEventTrigger startedCallback => _startedCallback;
 
         [SerializeField]
         private SimpleEventTrigger _pausedCallback = new SimpleEventTrigger();
@@ -47,7 +47,7 @@ namespace AltSalt.Maestro.Layout
 
         private void FireStartedCallback (VideoPlayer source)
         {
-            loopPointReachedCallback.RaiseEvent(this.gameObject);
+            startedCallback.RaiseEvent(this.gameObject);
         }
         
         private void FireLoopPointReachedCallback (VideoPlayer source)

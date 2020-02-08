@@ -29,14 +29,6 @@ namespace AltSalt.Maestro.Animation
             driver.AddFromName<RectTransform>(comp.gameObject, "m_LocalRotation.x");
             driver.AddFromName<RectTransform>(comp.gameObject, "m_LocalRotation.y");
             driver.AddFromName<RectTransform>(comp.gameObject, "m_LocalRotation.z");
-
-            //var so = new UnityEditor.SerializedObject(comp);
-            //var iter = so.GetIterator();
-            //while (iter.NextVisible(true)) {
-            //    if (iter.hasVisibleChildren)
-            //        continue;
-            //    driver.AddFromName<RectTransform>(comp.gameObject, iter.propertyPath);
-            //}
 #endif
             base.GatherProperties(director, driver);
         }

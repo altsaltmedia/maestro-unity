@@ -8,16 +8,14 @@ https://www.altsalt.com / ricky@altsalt.com
         
 **********************************************/
 
-using System;
 using UnityEngine;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
-#if UNITY_EDITOR
-using UnityEditor;
-using UnityEditor.Timeline;
 
+#if UNITY_EDITOR
+using UnityEditor.Timeline;
 #endif
 
 namespace AltSalt.Maestro.Sequencing
@@ -127,8 +125,7 @@ namespace AltSalt.Maestro.Sequencing
             sequence.sequenceConfig.playableDirector.time = sequence.currentTime;
             sequence.sequenceConfig.playableDirector.Evaluate();
         }
-
-
+        
 #if UNITY_EDITOR
         private void OnEnable()
         {

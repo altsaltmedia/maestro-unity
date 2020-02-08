@@ -90,7 +90,6 @@ namespace AltSalt.Maestro.Layout
 
             if (targetTextFamily != null) {
                 if (targetTextFamily.layoutDependencies.Count > 0) {
-                    bool triggerLayoutChange = true;
                     string layoutNames = "";
                     for (int i = 0; i < targetTextFamily.layoutDependencies.Count; i++) {
                         layoutNames += targetTextFamily.layoutDependencies[i].referenceName;
@@ -415,7 +414,7 @@ namespace AltSalt.Maestro.Layout
             
             for (int i = 0; i < textObjects.Length; i++) {
                 GameObject gameObject = textObjects[i] as GameObject;
-                if (gameObject.active == true) {
+                if (gameObject.activeInHierarchy == true) {
                     textLoaders.Add(gameObject.GetComponent<TextLoader>());
                 }
             }

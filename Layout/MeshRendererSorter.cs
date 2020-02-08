@@ -14,30 +14,25 @@ namespace AltSalt.Maestro.Layout
     {
         
         [InfoBox("The sorting order for meshes, unlike sprites, must be set via script")]
+        [OnValueChanged(nameof(SetSortingOrder))]
         public int sortingOrder;
 
+        [OnValueChanged(nameof(SetSortingOrder))]
         public string sortingLayer;
         
         MeshRenderer meshRenderer;
-        
-        void Awake()
+
+        private void Awake()
         {
             meshRenderer = GetComponent<MeshRenderer>();
         }
-        
-        void Start()
+
+        private void Start()
         {
             SetSortingOrder();
         }
 
-#if UNITY_EDITOR
-        void OnGUI()
-        {
-            SetSortingOrder();
-        }
-#endif
-
-        public void SetSortingOrder()
+        private void SetSortingOrder()
         {
             meshRenderer.sortingOrder = sortingOrder;
             if(sortingLayer.Length > 0) {

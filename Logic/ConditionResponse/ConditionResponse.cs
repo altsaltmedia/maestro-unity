@@ -15,7 +15,7 @@ namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     [ExecuteInEditMode]
-    public abstract class ConditionResponseBase
+    public abstract class ConditionResponse
     {
         public static bool debugMode => ActionTrigger.debugMode;
         
@@ -130,7 +130,7 @@ namespace AltSalt.Maestro.Logic
             set => _initialized = value;
         }
 
-        protected ConditionResponseBase CheckPopulateReferences()
+        protected ConditionResponse CheckPopulateReferences()
         {
 #if UNITY_EDITOR
             if (initialized == false) {
@@ -141,7 +141,7 @@ namespace AltSalt.Maestro.Logic
             return this;
         }
 
-        public virtual ConditionResponseBase PopulateReferences()
+        public virtual ConditionResponse PopulateReferences()
         {
             return this;
         }
@@ -180,17 +180,14 @@ namespace AltSalt.Maestro.Logic
             }
         }
 #endif
-        public ConditionResponseBase(UnityEngine.Object parentObject,
+        protected ConditionResponse(UnityEngine.Object parentObject,
             string serializedPropertyPath)
         {
             this.parentObject = parentObject;
             this.serializedPropertyPath = serializedPropertyPath;
         }
-        
-        public virtual bool CheckCondition(Object callingObject)
-        {
-            return true;
-        }
+
+        public abstract bool CheckCondition(Object callingObject);
 
         public void TriggerResponse(GameObject callingObject, bool triggerOnStart)
         {

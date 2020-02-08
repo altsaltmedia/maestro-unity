@@ -13,7 +13,7 @@ namespace AltSalt.Maestro.Layout
             StoreText();
         }
 
-        void StoreText()
+        private void StoreText()
         {
             if (textMeshPro == null) {
                 textMeshPro = GetComponent<TextMeshPro>();

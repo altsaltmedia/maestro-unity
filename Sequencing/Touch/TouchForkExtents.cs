@@ -97,21 +97,5 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
             return this;
         }
-        
-
-//        public TouchFork_Extents Configure(TouchExtents previousAxisExtents, TouchExtents nextAxisExtents)
-//        {
-//            if (this.markerPlacement == MarkerPlacement.EndOfSequence) {
-//                this.startTransitionThreshold = MasterSequence.LocalToMasterTime(forkData.sequence.sequenceConfig.masterSequence, forkData.sequence, forkData.extents.startTime);
-//                this.startTime = this.startTransitionThreshold - axisMonitor.resetSpread;
-//                this.endTime = MasterSequence.LocalToMasterTime(forkData.sequence.sequenceConfig.masterSequence, forkData.sequence, forkData.extents.endTime);
-//                this.endTransitionThreshold = this.endTime;
-//            } else {
-//                this.startTime = MasterSequence.LocalToMasterTime(forkData.sequence.sequenceConfig.masterSequence, forkData.sequence, forkData.extents.startTime);
-//                this.startTransitionThreshold = MasterSequence.LocalToMasterTime(forkData.sequence.sequenceConfig.masterSequence, forkData.sequence, forkData.extents.endTime);
-//                this.endTime = this.startTransitionThreshold + axisMonitor.resetSpread;;
-//                this.endTransitionThreshold = this.endTime;
-//            }
-//        }
     }
 }

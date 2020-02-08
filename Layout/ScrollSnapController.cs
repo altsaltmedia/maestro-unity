@@ -190,14 +190,14 @@ namespace AltSalt.Maestro.Layout
             }
 
             Vector2 modifier = GetDragModifier(horizontalDrag, verticalDrag, dragSensitivity.GetValue(), data);
-            _content.anchoredPosition = GetNewPosition(_content, modifier);
+            content.anchoredPosition = GetNewPosition(content, modifier);
 
-            if (_content.anchoredPosition.x > 0) {
-                _content.anchoredPosition = new Vector2(0, _content.anchoredPosition.y);
+            if (content.anchoredPosition.x > 0) {
+                content.anchoredPosition = new Vector2(0, content.anchoredPosition.y);
             }
 
-            if(_content.anchoredPosition.x < maxPosition) {
-                _content.anchoredPosition = new Vector2(maxPosition, _content.anchoredPosition.y);
+            if(content.anchoredPosition.x < maxPosition) {
+                content.anchoredPosition = new Vector2(maxPosition, content.anchoredPosition.y);
             }
         }
 
@@ -208,9 +208,9 @@ namespace AltSalt.Maestro.Layout
                 return;
             }
 
-            if (_content.anchoredPosition.x > previousPosition) {
+            if (content.anchoredPosition.x > previousPosition) {
                 CallLerpToPreviousElement();
-            } else if (_content.anchoredPosition.x < previousPosition) {
+            } else if (content.anchoredPosition.x < previousPosition) {
                 CallLerpToNextElement();
             }
         }
@@ -246,7 +246,7 @@ namespace AltSalt.Maestro.Layout
 
         private IEnumerator LerpToElement(int elementID)
         {
-            float initialPosition = _content.anchoredPosition.x;
+            float initialPosition = content.anchoredPosition.x;
             float targetPosition = baseWidth * elementID * -1f;
 
             isLerping = true;
@@ -256,15 +256,15 @@ namespace AltSalt.Maestro.Layout
                 easingModifier = easingFunction(.2f, 1f, lerpValue);
 
                 // Calculate and set the new position
-                float newX = Mathf.Lerp(_content.anchoredPosition.x, targetPosition, easingModifier);
-                Vector2 newPosition = new Vector2(newX, _content.anchoredPosition.y);
-                _content.anchoredPosition = newPosition;
+                float newX = Mathf.Lerp(content.anchoredPosition.x, targetPosition, easingModifier);
+                Vector2 newPosition = new Vector2(newX, content.anchoredPosition.y);
+                content.anchoredPosition = newPosition;
 
                 // Increment our lerp value for the next loop
                 lerpValue += lerpModifier;
 
-                if (Mathf.Approximately(Mathf.Abs(_content.anchoredPosition.x), Mathf.Abs(targetPosition)) == true) {
-                    _content.anchoredPosition = new Vector2(targetPosition, _content.anchoredPosition.y);
+                if (Mathf.Approximately(Mathf.Abs(content.anchoredPosition.x), Mathf.Abs(targetPosition)) == true) {
+                    content.anchoredPosition = new Vector2(targetPosition, content.anchoredPosition.y);
                     LerpToElementCallback();
                     yield break;
                 }
@@ -281,7 +281,7 @@ namespace AltSalt.Maestro.Layout
                 }
             }
             scrollSnapElements[activeElementID].Activate();
-            previousPosition = _content.anchoredPosition.x;
+            previousPosition = content.anchoredPosition.x;
             lerpValue = 0f;
             isLerping = false;
         }

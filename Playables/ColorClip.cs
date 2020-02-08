@@ -17,15 +17,6 @@ namespace AltSalt.Maestro
             set => _template = value;
         }
 
-        [SerializeField]
-        private bool _migrated;
-
-        public bool migrated
-        {
-            get => _migrated;
-            set => _migrated = value;
-        }
-
         public override LerpToTargetBehaviour templateReference => template;
         
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)

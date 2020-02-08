@@ -95,8 +95,7 @@ MonoBehaviour:
       _serializedPropertyPath: _actionTrigger._conditionResponseActions.0
       _triggerType: 0
       _triggerOnStart: 1
-      _eventExecutionType: 0
-      _alwaysEvents: []
+      _eventExecutionType: 1
       _boolEvents:
       - _conditionEventTitle: Please populate a bool reference.
         _parentObject: {fileID: 6558071551123153877}
@@ -191,20 +190,6 @@ MonoBehaviour:
   - _isSystemReference: 0
     _referenceName: VolumeEnabled
     _variable: {fileID: 11400000, guid: aad01515d17e04bbaa0169c935a3b210, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: CallTriggerResponses
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -220,4 +205,3 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doNotRecord: 0
-  _migrated: 1

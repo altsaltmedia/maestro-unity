@@ -31,7 +31,8 @@ namespace AltSalt.Maestro
             set => _inputGroupKey = value;
         }
 
-        // Utility vars - specified here to prevent garbage collection
+        // Utility vars - specified here to prevent garbage collection //
+        
         private int _inputCount;
 
         protected int inputCount
@@ -73,9 +74,6 @@ namespace AltSalt.Maestro
             get => _parentTrack;
             set => _parentTrack = value;
         }
-
-        //public IEnumerable<IMarker> markers;
-        //public List<IMarker> markers;
 
 //        This ProcessFrame() method should be implemented and overridden in inheriting mixer behaviours
 //

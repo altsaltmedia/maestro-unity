@@ -108,15 +108,5 @@ namespace AltSalt.Maestro
         }
 
 #endif
-
-        private static bool IsPopulated(BoolReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-        
-        private static bool IsPopulated(FloatReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
     }
 }

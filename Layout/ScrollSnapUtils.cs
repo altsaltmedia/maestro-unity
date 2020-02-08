@@ -1,43 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout
 {
     [ExecuteInEditMode]
     public class ScrollSnapUtils : MonoBehaviour
     {
-        [SerializeField]
-        Touchable prevBtn;
-        public Touchable PrevBtn {
-            get {
-                return prevBtn;
-            }
-        }
+        [FormerlySerializedAs("prevBtn"),SerializeField]
+        private Touchable _prevBtn;
+        public Touchable prevBtn => _prevBtn;
 
-        [SerializeField]
-        Touchable nextBtn;
-        public Touchable NextBtn {
-            get {
-                return nextBtn;
-            }
-        }
+        [FormerlySerializedAs("nextBtn"),SerializeField]
+        private Touchable _nextBtn;
+        public Touchable nextBtn => _nextBtn;
 
-        [SerializeField]
-        Touchable closeBtn;
-        public Touchable CloseBtn {
-            get {
-                return closeBtn;
-            }
-        }
+        [FormerlySerializedAs("closeBtn"),SerializeField]
+        private Touchable _closeBtn;
+        public Touchable closeBtn => _closeBtn;
 
-        [SerializeField]
-        RectTransform iconContainer;
-        public RectTransform IconContainer {
-            get {
-                return iconContainer;
-            }
-        }
+        [FormerlySerializedAs("iconContainer"),SerializeField]
+        private RectTransform _iconContainer;
+        public RectTransform iconContainer => _iconContainer;
     }
 }
 

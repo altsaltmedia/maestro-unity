@@ -1,4 +1,4 @@
-namespace AltSalt.Maestro.Sequencing.Navigate
+namespace AltSalt.Maestro.Sequencing
 {
     public interface IMarkerDescription
     {

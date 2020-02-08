@@ -12,10 +12,10 @@ namespace AltSalt.Maestro
         protected override string title => nameof(ComplexEvent);
         
         [SerializeField]
-        List<ComplexEventParameters> requiredParameters = new List<ComplexEventParameters>();
+        private List<ComplexEventParameters> requiredParameters = new List<ComplexEventParameters>();
 
         [SerializeField]
-        List<ComplexEventParameters> optionalParameters = new List<ComplexEventParameters>();
+        private List<ComplexEventParameters> optionalParameters = new List<ComplexEventParameters>();
 
         private List<ComplexEventListenerBehaviour> listeners = new List<ComplexEventListenerBehaviour>();
 

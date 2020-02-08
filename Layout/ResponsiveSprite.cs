@@ -12,7 +12,7 @@ namespace AltSalt.Maestro.Layout
             StoreSprite();
         }
 
-        void StoreSprite()
+        private void StoreSprite()
         {
             if (spriteRenderer == null) {
                 spriteRenderer = GetComponent<SpriteRenderer>();

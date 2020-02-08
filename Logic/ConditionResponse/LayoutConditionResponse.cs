@@ -12,7 +12,7 @@ namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class LayoutConditionResponse : ConditionResponseBase
+    public class LayoutConditionResponse : ConditionResponse
     {
         [SerializeField]
         [Title("Layout Reference")]
@@ -36,8 +36,6 @@ namespace AltSalt.Maestro.Logic
         {
             CheckPopulateReferences();
             
-            base.CheckCondition(callingObject);
-            
             if (layoutReference.active == activeLayoutCondition.GetValue()) {
                 return true;
             }
@@ -60,7 +58,7 @@ namespace AltSalt.Maestro.Logic
         }
         
 #if UNITY_EDITOR
-        public override ConditionResponseBase PopulateReferences()
+        public override ConditionResponse PopulateReferences()
         {
             base.PopulateReferences();
             

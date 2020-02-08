@@ -12,27 +12,16 @@ namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class IntConditionResponse : ConditionResponseBase
+    public class IntConditionResponse : ConditionResponse
     {
         [SerializeField]
         [Title("Int Reference")]
         [InfoBox("Int value that will be compared against condition")]
         [HideReferenceObjectPicker]
         [FormerlySerializedAs("intReference")]
-        private IntReference _intReference;
+        private IntReference _intReference = new IntReference();
 
         private IntReference intReference => _intReference;
-
-        [PropertySpace]
-
-        [SerializeField]
-        [Title("Int Condition Variable")]
-        [InfoBox("Condition the reference value will be compared to when determining whether to execute response")]
-        [HideReferenceObjectPicker]
-        [FormerlySerializedAs("intConditionVar")]
-        private IntReference _intConditionVar;
-
-        private IntReference intConditionVar => _intConditionVar;
 
         [PropertySpace]
         [SerializeField]
@@ -40,6 +29,17 @@ namespace AltSalt.Maestro.Logic
         private ComparisonValues _operation;
 
         private ComparisonValues operation => _operation;
+        
+        [PropertySpace]
+
+        [SerializeField]
+        [Title("Int Condition Variable")]
+        [InfoBox("Condition the reference value will be compared to when determining whether to execute response")]
+        [HideReferenceObjectPicker]
+        [FormerlySerializedAs("intConditionVar")]
+        private IntReference _intConditionVar = new IntReference();
+
+        private IntReference intConditionVar => _intConditionVar;
 
         public IntConditionResponse(UnityEngine.Object parentObject,
             string serializedPropertyPath) : base(parentObject, serializedPropertyPath) { }
@@ -47,8 +47,6 @@ namespace AltSalt.Maestro.Logic
         public override bool CheckCondition(Object callingObject)
         {
             CheckPopulateReferences();
-            
-            base.CheckCondition(callingObject);
             
             switch (operation) {
 
@@ -122,7 +120,7 @@ namespace AltSalt.Maestro.Logic
             conditionEventTitle = newTitle;
         }
         
-        public override ConditionResponseBase PopulateReferences()
+        public override ConditionResponse PopulateReferences()
         {
             base.PopulateReferences();
             

@@ -10,13 +10,6 @@ namespace AltSalt.Maestro.Layout
     [ExecuteInEditMode]
     public class RelativeElementController : MonoBehaviour, IDynamicLayoutElement
     {
-        [SerializeField]
-        [Required]
-        [ReadOnly]
-        private AppSettingsReference _appSettings = new AppSettingsReference();
-
-        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
-
         private RelativeElement[] _relativeElements;
 
         private RelativeElement[] relativeElements
@@ -90,7 +83,6 @@ namespace AltSalt.Maestro.Layout
         private void OnEnable()
         {
 #if UNITY_EDITOR
-            _appSettings.PopulateVariable(this, nameof(_appSettings));
             if (string.IsNullOrEmpty(_enableDynamicElement.referenceName) == true) {
                 _enableDynamicElement.referenceName = nameof(enableDynamicElement).Capitalize();
             }
@@ -142,7 +134,7 @@ namespace AltSalt.Maestro.Layout
         [PropertyOrder(8)]
         public void CallExecuteLayoutUpdate(UnityEngine.Object callingObject)
         {
-            if (logElementOnLayoutUpdate == true) {
+            if (logElementOnLayoutUpdate == true || AppSettings.logGlobalResponsiveElementActions == true) {
                 Debug.Log("CallExecuteLayoutUpdate triggered!");
                 Debug.Log("Calling object : " + callingObject.name, callingObject);
                 Debug.Log("Triggered object : " + elementName, gameObject);
@@ -151,7 +143,7 @@ namespace AltSalt.Maestro.Layout
             }
             
             for (int i = 0; i < sortedElements.Count; i++) {
-                if (logElementOnLayoutUpdate == true) {
+                if (logElementOnLayoutUpdate == true || AppSettings.logGlobalResponsiveElementActions == true) {
                     Debug.Log("Relative object updated: " + sortedElements[i].gameObject.name, sortedElements[i].gameObject);
                 }
                 sortedElements[i].ExecuteRelativeAction();

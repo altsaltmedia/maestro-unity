@@ -14,26 +14,14 @@ namespace AltSalt.Maestro.Sequencing.Touch
     [ExecuteInEditMode]
     public class Touch_Controller : Input_Controller
     {
-        private UserDataKey userKey => rootConfig.userKey;
-        
-        private InputGroupKey inputGroupKey => rootConfig.inputGroupKey;
-        
         public Vector2 swipeForce => appSettings.GetSwipeForce(this.gameObject, inputGroupKey);
-
-        public float ySensitivity => appSettings.GetYSensitivity(this.gameObject, userKey);
-        
-        public float xSensitivity => appSettings.GetXSensitivity(this.gameObject, userKey);
 
         [SerializeField]
         [Required]
         private AxisMonitor _axisMonitor;
 
-        public AxisMonitor axisMonitor
-        {
-            get => _axisMonitor;
-            set => _axisMonitor = value;
-        }
-        
+        public AxisMonitor axisMonitor => _axisMonitor;
+
         [SerializeField]
         [Required]
         private SwipeApplier _swipeApplier;
@@ -223,26 +211,6 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return Touch_Data.CreateInstance(targetSequence, pauseIntervals, inputConfigTrack, masterSequence);
         }
 //#endif
-
-        private static bool IsPopulated(V2Reference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-        
-        private static bool IsPopulated(FloatReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-
-        private static bool IsPopulated(BoolReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-        
-        private static bool IsPopulated(StringReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
 
     }
 

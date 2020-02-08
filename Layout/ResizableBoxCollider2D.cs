@@ -23,7 +23,7 @@ namespace AltSalt.Maestro.Layout
             boxCollider.size = newSize;
         }
 
-        void Reset()
+        private void Reset()
         {
             GetCollider();
             boxCollider.offset = new Vector2(0, 0);

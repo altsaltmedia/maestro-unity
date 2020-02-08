@@ -13,11 +13,7 @@ namespace AltSalt.Maestro.Animation
         [SerializeField]
         private UnityEvent _endEvent;
 
-        private UnityEvent endEvent
-        {
-            get => _endEvent;
-            set => _endEvent = value;
-        }
+        private UnityEvent endEvent => _endEvent;
 
         private void Start()
         {

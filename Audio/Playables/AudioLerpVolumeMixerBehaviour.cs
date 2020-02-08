@@ -48,8 +48,7 @@ namespace AltSalt.Maestro.Audio
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-
-            // Reset color if we're working in edit mode
+            
 #if UNITY_EDITOR
             if (trackBinding != null) {
                 trackBinding.time = 0;

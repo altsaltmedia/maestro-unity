@@ -12,7 +12,7 @@ namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     [ExecuteInEditMode]
-    public class TextFamilyConditionResponse : ConditionResponseBase
+    public class TextFamilyConditionResponse : ConditionResponse
     {
         [SerializeField]
         [Title("Text Family Reference")]
@@ -25,7 +25,7 @@ namespace AltSalt.Maestro.Logic
         [ValidateInput(nameof(IsPopulated))]
         [Title("Text Family Status Condition")]
         [HideReferenceObjectPicker]
-        private BoolReference _activeTextFamilyCondition;
+        private BoolReference _activeTextFamilyCondition = new BoolReference();
 
         private BoolReference activeTextFamilyCondition => _activeTextFamilyCondition;
         
@@ -35,8 +35,6 @@ namespace AltSalt.Maestro.Logic
         public override bool CheckCondition(Object callingObject)
         {
             CheckPopulateReferences();
-            
-            base.CheckCondition(callingObject);
             
             if (textFamilyReference.active == activeTextFamilyCondition.GetValue()) {
                 return true;
@@ -60,7 +58,7 @@ namespace AltSalt.Maestro.Logic
         }
         
 #if UNITY_EDITOR        
-        public override ConditionResponseBase PopulateReferences()
+        public override ConditionResponse PopulateReferences()
         {
             base.PopulateReferences();
             

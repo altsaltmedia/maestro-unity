@@ -63,11 +63,8 @@ namespace AltSalt.Maestro.Sequencing
         [TitleGroup("$"+nameof(defaultsTitle))]
         private bool _defaultStatus;
 
-        protected bool defaultStatus
-        {
-            get => _defaultStatus;
-        }
-        
+        private bool defaultStatus => _defaultStatus;
+
         [SerializeField]
         [TitleGroup("$"+nameof(defaultsTitle))]
         private double _defaultTime;

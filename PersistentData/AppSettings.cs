@@ -116,7 +116,7 @@ namespace AltSalt.Maestro
                 Array.ConvertAll(variableSearch, x => (ModifiableEditorVariable) x); 
             for (int i = 0; i < modifiableEditorVariables.Length; i++) {
                 if (modifiableEditorVariables[i].hasDefault == true
-                    && modifiableEditorVariables[i].resetOnGameRefresh == ToggleState.YES) {
+                    && modifiableEditorVariables[i].resetOnGameRefresh == true) {
                     modifiableEditorVariables[i].StoreCaller(callingObject);
                     modifiableEditorVariables[i].SetToDefaultValue();
                 }
@@ -219,7 +219,7 @@ namespace AltSalt.Maestro
             return systemSettings.volumeEnabled.GetValue();
         }
         
-        public bool SetVolumeEnabled(GameObject callingObject, bool targetValue)
+        public BoolVariable SetVolumeEnabled(GameObject callingObject, bool targetValue)
         {
             return systemSettings.volumeEnabled.SetValue(callingObject, targetValue);
         }

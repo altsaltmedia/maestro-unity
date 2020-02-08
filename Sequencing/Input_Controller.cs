@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro.Sequencing
 {
@@ -15,11 +14,5 @@ namespace AltSalt.Maestro.Sequencing
         public Joiner joiner => rootConfig.joiner;
 
         public bool appUtilsRequested => appSettings.GetAppUtilsRequested(this.gameObject, inputGroupKey);
-
-        protected static bool IsPopulated(ComplexEventManualTrigger attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-
     }   
 }

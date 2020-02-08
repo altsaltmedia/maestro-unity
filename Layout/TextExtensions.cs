@@ -12,13 +12,21 @@ namespace AltSalt.Maestro.Layout
     {
         TMP_Text textRenderer;
 
+#if UNITY_EDITOR        
         [SerializeField]
         [TextArea]
         string description;
-
-        void OnEnable()
+#endif
+        private void OnEnable()
         {
             StoreTextRenderer();
+        }
+
+        private void StoreTextRenderer()
+        {
+            if(textRenderer == null) {
+                textRenderer = gameObject.GetComponent<TMP_Text>();
+            }
         }
 
         public void SetText(float targetValue)
@@ -51,11 +59,5 @@ namespace AltSalt.Maestro.Layout
             textRenderer.SetText(targetValue.value.ToString());
         }
 
-        void StoreTextRenderer()
-        {
-            if(textRenderer == null) {
-                textRenderer = gameObject.GetComponent<TMP_Text>();
-            }
-        }
     }
 }

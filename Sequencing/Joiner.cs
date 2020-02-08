@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AltSalt.Maestro.Sequencing.Touch;
 using RotaryHeart.Lib.SerializableDictionary;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Timeline;
-using UnityEngine.UIElements;
 
 namespace AltSalt.Maestro.Sequencing
 {
@@ -63,19 +61,19 @@ namespace AltSalt.Maestro.Sequencing
 
         [SerializeField]
         [Required]
-        private CustomKeyReference _forkKey;
+        private CustomKeyReference _forkKey = new CustomKeyReference();
 
         private CustomKey forkKey => _forkKey.GetVariable() as CustomKey;
 
         [SerializeField]
         [Required]
-        private CustomKeyReference _updateForkViaBranchKey;
+        private CustomKeyReference _updateForkViaBranchKey = new CustomKeyReference();
 
         private CustomKey updateForkViaBranchKey => _updateForkViaBranchKey.GetVariable() as CustomKey;
 
         [SerializeField]
         [Required]
-        private CustomKeyReference _updateForkViaSequence;
+        private CustomKeyReference _updateForkViaSequence = new CustomKeyReference();
 
         private CustomKey updateForkViaSequence => _updateForkViaSequence.GetVariable() as CustomKey;
 
@@ -317,20 +315,5 @@ namespace AltSalt.Maestro.Sequencing
         [Serializable]
         public class ForkDataCollection : SerializableDictionaryBase<Sequence, List<ForkData>> { }
         
-        private static bool IsPopulated(SimpleEventTrigger attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-        
-        private static bool IsPopulated(BoolReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-        
-        private static bool IsPopulated(FloatReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
     }
-    
 }

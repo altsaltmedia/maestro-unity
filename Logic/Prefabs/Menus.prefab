@@ -249,12 +249,9 @@ MonoBehaviour:
       - _isSystemReference: 0
         _referenceName: TriggerUnloadScene
         _variable: {fileID: 11400000, guid: 78ed74bcb687e42448ff50814110f2f2, type: 2}
-        _migrated: 1
         _hasString: 1
         _customStringKey: 0
-        _stringKeysOld: []
         _stringKeyReferences: []
-        _stringValuesOld: []
         _stringValueReferences:
         - _isSystemReference: 0
           _referenceName: MenusSceneName
@@ -263,21 +260,15 @@ MonoBehaviour:
           _variable: {fileID: 11400000, guid: adda91428e47a47dfa78dcd9d552697a, type: 2}
         _hasFloat: 0
         _customFloatKey: 0
-        _floatKeysOld: []
         _floatKeyReferences: []
-        _floatValuesOld: []
         _floatValueReferences: []
         _hasBool: 0
         _customBoolKey: 0
-        _boolKeysOld: []
         _boolKeyReferences: []
-        _boolValuesOld: 
         _boolValueReferences: []
         _hasScriptableObject: 0
         _customScriptableObjectKey: 0
-        _scriptableObjectKeysOld: []
         _scriptableObjectKeyReferences: []
-        _scriptableObjectValuesOld: []
         _scriptableObjectValueReferences: []
     _actionType: 8
 --- !u!114 &4296466310419051170
@@ -319,12 +310,9 @@ MonoBehaviour:
       - _isSystemReference: 0
         _referenceName: TriggerSceneLoad
         _variable: {fileID: 11400000, guid: be8a28980d8f0432191e478ff82225b4, type: 2}
-        _migrated: 1
         _hasString: 1
         _customStringKey: 0
-        _stringKeysOld: []
         _stringKeyReferences: []
-        _stringValuesOld: []
         _stringValueReferences:
         - _isSystemReference: 0
           _referenceName: 
@@ -333,21 +321,15 @@ MonoBehaviour:
           _variable: {fileID: 0}
         _hasFloat: 0
         _customFloatKey: 0
-        _floatKeysOld: []
         _floatKeyReferences: []
-        _floatValuesOld: []
         _floatValueReferences: []
         _hasBool: 0
         _customBoolKey: 0
-        _boolKeysOld: []
         _boolKeyReferences: []
-        _boolValuesOld: 
         _boolValueReferences: []
         _hasScriptableObject: 0
         _customScriptableObjectKey: 0
-        _scriptableObjectKeysOld: []
         _scriptableObjectKeyReferences: []
-        _scriptableObjectValuesOld: []
         _scriptableObjectValueReferences: []
     _actionType: 8
 --- !u!1 &7670105104129346745
@@ -359,7 +341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7670105104129346750}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Menus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -422,12 +404,9 @@ MonoBehaviour:
       - _isSystemReference: 0
         _referenceName: TriggerSceneLoad
         _variable: {fileID: 11400000, guid: be8a28980d8f0432191e478ff82225b4, type: 2}
-        _migrated: 1
         _hasString: 1
         _customStringKey: 0
-        _stringKeysOld: []
         _stringKeyReferences: []
-        _stringValuesOld: []
         _stringValueReferences:
         - _isSystemReference: 0
           _referenceName: 
@@ -436,21 +415,15 @@ MonoBehaviour:
           _variable: {fileID: 0}
         _hasFloat: 0
         _customFloatKey: 0
-        _floatKeysOld: []
         _floatKeyReferences: []
-        _floatValuesOld: []
         _floatValueReferences: []
         _hasBool: 0
         _customBoolKey: 0
-        _boolKeysOld: []
         _boolKeyReferences: []
-        _boolValuesOld: 
         _boolValueReferences: []
         _hasScriptableObject: 0
         _customScriptableObjectKey: 0
-        _scriptableObjectKeysOld: []
         _scriptableObjectKeyReferences: []
-        _scriptableObjectValuesOld: []
         _scriptableObjectValueReferences: []
     _actionType: 8
 --- !u!225 &7670105104747037100
@@ -764,12 +737,9 @@ MonoBehaviour:
       - _isSystemReference: 0
         _referenceName: TriggerUnloadScene
         _variable: {fileID: 11400000, guid: 78ed74bcb687e42448ff50814110f2f2, type: 2}
-        _migrated: 1
         _hasString: 1
         _customStringKey: 0
-        _stringKeysOld: []
         _stringKeyReferences: []
-        _stringValuesOld: []
         _stringValueReferences:
         - _isSystemReference: 0
           _referenceName: MenusSceneName
@@ -778,21 +748,15 @@ MonoBehaviour:
           _variable: {fileID: 11400000, guid: adda91428e47a47dfa78dcd9d552697a, type: 2}
         _hasFloat: 0
         _customFloatKey: 0
-        _floatKeysOld: []
         _floatKeyReferences: []
-        _floatValuesOld: []
         _floatValueReferences: []
         _hasBool: 0
         _customBoolKey: 0
-        _boolKeysOld: []
         _boolKeyReferences: []
-        _boolValuesOld: 
         _boolValueReferences: []
         _hasScriptableObject: 0
         _customScriptableObjectKey: 0
-        _scriptableObjectKeysOld: []
         _scriptableObjectKeyReferences: []
-        _scriptableObjectValuesOld: []
         _scriptableObjectValueReferences: []
     _actionType: 8
 --- !u!1001 &482050873475282683
@@ -958,6 +922,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Close Button
       objectReference: {fileID: 0}
+    - target: {fileID: 5744983532308915004, guid: 37aed1986cd694b60a08dce5141ce0c7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37aed1986cd694b60a08dce5141ce0c7, type: 3}
 --- !u!1001 &3456380679767040715
@@ -1032,10 +1001,20 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 712621384338128519, guid: a14396576e27641aaaa353d4ed30efc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2056790664156692789, guid: a14396576e27641aaaa353d4ed30efc8,
         type: 3}
       propertyPath: m_Name
       value: Show Navigation Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 2056790664156692789, guid: a14396576e27641aaaa353d4ed30efc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6296418912980737101, guid: a14396576e27641aaaa353d4ed30efc8,
         type: 3}
@@ -1465,6 +1444,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panel
       objectReference: {fileID: 0}
+    - target: {fileID: 1107099737434088, guid: 5c52b09f87a504837a72579557970f61, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 114469526166008392, guid: 5c52b09f87a504837a72579557970f61,
         type: 3}
       propertyPath: m_Color.r
@@ -1639,10 +1622,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Label
       objectReference: {fileID: 0}
+    - target: {fileID: 712621384338128519, guid: a14396576e27641aaaa353d4ed30efc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2056790664156692789, guid: a14396576e27641aaaa353d4ed30efc8,
         type: 3}
       propertyPath: m_Name
       value: Button 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2056790664156692789, guid: a14396576e27641aaaa353d4ed30efc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6296418912980737101, guid: a14396576e27641aaaa353d4ed30efc8,
         type: 3}
@@ -1864,10 +1857,20 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 712621384338128519, guid: a14396576e27641aaaa353d4ed30efc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2056790664156692789, guid: a14396576e27641aaaa353d4ed30efc8,
         type: 3}
       propertyPath: m_Name
       value: Show Settings Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 2056790664156692789, guid: a14396576e27641aaaa353d4ed30efc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6296418912980737101, guid: a14396576e27641aaaa353d4ed30efc8,
         type: 3}
@@ -3464,10 +3467,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Label
       objectReference: {fileID: 0}
+    - target: {fileID: 712621384338128519, guid: a14396576e27641aaaa353d4ed30efc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2056790664156692789, guid: a14396576e27641aaaa353d4ed30efc8,
         type: 3}
       propertyPath: m_Name
       value: Button 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2056790664156692789, guid: a14396576e27641aaaa353d4ed30efc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6296418912980737101, guid: a14396576e27641aaaa353d4ed30efc8,
         type: 3}

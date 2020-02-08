@@ -69,12 +69,12 @@ namespace AltSalt.Maestro.Logic
         private float animationDuration => _animationDuration;
 
         [SerializeField]
-        private ComplexEventManualTrigger _triggerUnloadScene;
+        private ComplexEventManualTrigger _triggerUnloadScene = new ComplexEventManualTrigger();
 
         private ComplexEventManualTrigger triggerUnloadScene => _triggerUnloadScene;
 
         [SerializeField]
-        private StringReference _appUtilsSceneName;
+        private StringReference _appUtilsSceneName = new StringReference();
 
         private string appUtilsSceneName => _appUtilsSceneName.GetValue();
 

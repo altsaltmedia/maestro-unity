@@ -4,6 +4,6 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
-    public abstract class ConditionResponseTriggerBase { }
+    public interface IConditionResponseTrigger { }
 
 }

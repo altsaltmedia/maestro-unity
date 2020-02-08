@@ -13,7 +13,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -34,13 +33,13 @@ namespace AltSalt.Maestro.Logic
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private CustomKeyReference _loadSceneImmediatelyKey;
+        private CustomKeyReference _loadSceneImmediatelyKey = new CustomKeyReference();
 
         private CustomKey loadSceneImmediatelyKey => _loadSceneImmediatelyKey.GetVariable() as CustomKey;
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private CustomKeyReference _loadSceneAdditiveKey;
+        private CustomKeyReference _loadSceneAdditiveKey = new CustomKeyReference();
 
         private CustomKey loadSceneAdditiveKey => _loadSceneAdditiveKey.GetVariable() as CustomKey;
         
@@ -52,7 +51,7 @@ namespace AltSalt.Maestro.Logic
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private SimpleEventReference _fadeToBlackCompleted;
+        private SimpleEventReference _fadeToBlackCompleted = new SimpleEventReference();
 
         private SimpleEventReference fadeToBlackCompleted => _fadeToBlackCompleted;
         
@@ -64,19 +63,19 @@ namespace AltSalt.Maestro.Logic
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private SimpleEventReference _singleSceneLoadCompleted;
+        private SimpleEventReference _singleSceneLoadCompleted = new SimpleEventReference();
 
         private SimpleEventReference singleSceneLoadCompleted => _singleSceneLoadCompleted;
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private SimpleEventReference _additiveSceneLoadCompleted;
+        private SimpleEventReference _additiveSceneLoadCompleted = new SimpleEventReference();
 
         private SimpleEventReference additiveSceneLoadCompleted => _additiveSceneLoadCompleted;
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private CustomKeyReference _eventCallbackKey;
+        private CustomKeyReference _eventCallbackKey = new CustomKeyReference();
 
         private CustomKey eventCallbackKey => _eventCallbackKey.GetVariable() as CustomKey;
 
@@ -90,7 +89,7 @@ namespace AltSalt.Maestro.Logic
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private SimpleEventReference _sceneUnloadCompleted;
+        private SimpleEventReference _sceneUnloadCompleted = new SimpleEventReference();
 
         private SimpleEventReference sceneUnloadCompleted => _sceneUnloadCompleted;
 

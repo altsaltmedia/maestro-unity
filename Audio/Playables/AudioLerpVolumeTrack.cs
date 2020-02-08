@@ -18,25 +18,5 @@ namespace AltSalt.Maestro.Audio
             StoreMixerProperties(go, behaviour);
             return trackPlayable;
         }
-        
-        public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)
-        {
-
-//#if UNITY_EDITOR
-//            var comp = director.GetGenericBinding(this) as AudioSource;
-//            if (comp == null)
-//                return;
-//            var so = new UnityEditor.SerializedObject(comp);
-//            var iter = so.GetIterator();
-//            while (iter.NextVisible(true)) {
-//                if (iter.hasVisibleChildren)
-//                    continue;
-//                driver.AddFromName<AudioSource>(comp.gameObject, iter.propertyPath);
-//            }
-//#endif
-
-            base.GatherProperties(director, driver);
-        }
     }
-    
 }

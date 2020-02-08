@@ -25,19 +25,6 @@ namespace AltSalt.Maestro
             }
         }
 
-        private void OnEnable()
-        {
-//            foreach (KeyValuePair<InputGroupKey,InputGroup> inputGroup in inputGroupCollection) {
-//                FieldInfo[] fields = typeof(InputGroup).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-//                for (int i = 0; i < fields.Length; i++) {
-//                    var fieldValue = fields[i].GetValue(inputGroup.Value);
-//                    if (fieldValue is ReferenceBase variableReference) {
-//                        variableReference.isSystemReference = true;
-//                    }
-//                }
-//            }
-        }
-
         public InputGroup GetInputGroup(InputGroupKey inputGroupKey)
         {
             if (inputGroupCollection.ContainsKey(inputGroupKey)) {

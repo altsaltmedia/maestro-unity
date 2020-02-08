@@ -37,10 +37,6 @@ namespace AltSalt.Maestro.Logic
             actionTrigger.Initialize(this, nameof(_actionTrigger));
 #if UNITY_EDITOR
             actionTrigger.CallPopulateReferences();
-            // var serializedObject = new SerializedObject(this);
-            // serializedObject.FindProperty("_actionTrigger._active").boolValue = true;
-            // serializedObject.ApplyModifiedProperties();
-            // serializedObject.Update();
 #endif
         }
 

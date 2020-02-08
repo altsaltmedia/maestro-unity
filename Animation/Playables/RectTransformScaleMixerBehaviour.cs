@@ -38,11 +38,5 @@ namespace AltSalt.Maestro.Animation
                 }
             }
         }
-
-        public override void OnGraphStop(Playable playable)
-        {
-            base.OnGraphStop(playable);
-
-        }
     }   
 }

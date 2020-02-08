@@ -42,13 +42,11 @@ namespace AltSalt.Maestro.Layout
                 if (attribute.useConstant == true) {
                     return true;
                 }
-                else {
-                    return attribute.GetVariable() == null ? false : true;
-                }
+
+                return attribute.GetVariable() == null ? false : true;
             }
-            else {
-                return true;
-            }
+
+            return true;
         }
         
         private bool IsPopulated(FloatReference attribute)
@@ -57,13 +55,11 @@ namespace AltSalt.Maestro.Layout
                 if (attribute.useConstant == true) {
                     return true;
                 }
-                else {
-                    return attribute.GetVariable() == null ? false : true;
-                }
+
+                return attribute.GetVariable() == null ? false : true;
             }
-            else {
-                return true;
-            }
+
+            return true;
         }
         
     }

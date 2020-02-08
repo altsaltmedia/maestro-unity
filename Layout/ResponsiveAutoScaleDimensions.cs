@@ -90,7 +90,7 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        void UpdateDimensions()
+        private void UpdateDimensions()
         {
             UpdateBreakpointDependencies();
             ExecuteResponsiveAction();
@@ -108,7 +108,7 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        void SetValue(int activeIndex)
+        private void SetValue(int activeIndex)
         {
             double baseDimension = Utils.GetResponsiveWidth(sceneHeight, sceneWidth);
 
@@ -127,41 +127,43 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        double GetDependentDimension(AspectRatioType referenceAspectRatio, double referenceVal, RatioType ratioType)
+        private static double GetDependentDimension(AspectRatioType referenceAspectRatio, double referenceVal, RatioType ratioType)
         {
             if (referenceAspectRatio == AspectRatioType.x16x9) {
 
                 if (ratioType == RatioType.Numerator) {
                     return (referenceVal * 9.0d / 16.0d);
-                } else {
-                    return (referenceVal * 16.0d / 9.0d);
                 }
 
-            } else if (referenceAspectRatio == AspectRatioType.x9x16) {
+                return (referenceVal * 16.0d / 9.0d);
+
+            }
+
+            if (referenceAspectRatio == AspectRatioType.x9x16) {
 
                 if (ratioType == RatioType.Numerator) {
                     return (referenceVal * 16.0d / 9.0d);
-                } else {
-                    return (referenceVal * 9.0d / 16.0d);
                 }
 
-            } else if (referenceAspectRatio == AspectRatioType.x4x3) {
+                return (referenceVal * 9.0d / 16.0d);
+
+            }
+
+            if (referenceAspectRatio == AspectRatioType.x4x3) {
 
                 if (ratioType == RatioType.Numerator) {
                     return (referenceVal * 3.0d / 4.0d);
-                } else {
-                    return (referenceVal * 4.0d / 3.0d);
                 }
 
-            } else {
-
-                if (ratioType == RatioType.Numerator) {
-                    return (referenceVal* 4.0d / 3.0d);
-                } else {
-                    return (referenceVal* 3.0d / 4.0d);
-                }
+                return (referenceVal * 4.0d / 3.0d);
 
             }
+
+            if (ratioType == RatioType.Numerator) {
+                return (referenceVal* 4.0d / 3.0d);
+            }
+
+            return (referenceVal* 3.0d / 4.0d);
         }
 
     }

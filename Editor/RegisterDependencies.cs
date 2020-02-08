@@ -279,12 +279,12 @@ namespace AltSalt.Maestro
                 Type fieldType = fieldInfo.GetValue(source).GetType();
 
                 // Event triggers can contain dependencies at the root level or inside a list
-                if (fieldType.IsSubclassOf(typeof(EventTriggerBase)) || fieldType.IsSubclassOf(typeof(TimelineTriggerBehaviour))) {
+                if (fieldType.IsSubclassOf(typeof(IPersistentEventTrigger)) || fieldType.IsSubclassOf(typeof(TimelineTriggerBehaviour))) {
 
                     ParseEventTriggerBase(fieldType, fieldValue, rootComponent, sceneName);
 
                 // Condition responses contain both conditions, as well as responses in the form of Unity events
-                } else if (fieldType.IsSubclassOf(typeof(ConditionResponseTriggerBase))) {
+                } else if (fieldType.IsSubclassOf(typeof(IConditionResponseTrigger))) {
 
                     ParseConditionResponseTriggerBase(fieldType, fieldValue, rootComponent, sceneName);
 

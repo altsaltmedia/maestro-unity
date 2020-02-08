@@ -19,12 +19,8 @@ namespace AltSalt.Maestro.Logic
         [SerializeField]
         private string _bootstrapScene;
 
-        public string bootstrapScene
-        {
-            get => _bootstrapScene;
-            set => _bootstrapScene = value;
-        }
-        
+        private string bootstrapScene => _bootstrapScene;
+
 #if UNITY_EDITOR
         private void OnEnable()
         {

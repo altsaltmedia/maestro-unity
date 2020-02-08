@@ -6,10 +6,8 @@ using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout
 {
-
-#if UNITY_EDITOR
+    
     [ExecuteInEditMode]
-#endif
     public class MeshRendererUpdater : MonoBehaviour
     {
         [SerializeField]
@@ -99,14 +97,5 @@ namespace AltSalt.Maestro.Layout
         {
             materialInstances.Clear();
         }
-
-        private static bool IsPopulated(ColorReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-
-        private static bool IsPopulated(List<TargetMaterialAttribute> attribute) {
-            return Utils.IsPopulated(attribute);
-        }
-}
+    }
 }

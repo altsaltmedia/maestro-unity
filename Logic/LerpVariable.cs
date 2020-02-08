@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Sirenix.OdinInspector;
@@ -39,8 +37,8 @@ namespace AltSalt.Maestro.Logic
         {
             this.variableTarget = variableTarget;
 
-            if(targetValue is float) {
-                this.targetFloat = (float)targetValue;
+            if(targetValue is float value) {
+                this.targetFloat = value;
             } else if(targetValue is Color) {
                 this.targetColor = (Color)targetValue;
             } else if(targetValue is Vector3) {
@@ -92,7 +90,7 @@ namespace AltSalt.Maestro.Logic
             return variableTarget;
         }
 
-        bool FloatPopulated()
+        private bool FloatPopulated()
         {
             if (variableTarget is FloatVariable) {
                 return true;
@@ -101,7 +99,7 @@ namespace AltSalt.Maestro.Logic
             return false;
         }
 
-        bool ColorPopulated()
+        private bool ColorPopulated()
         {
             if (variableTarget is ColorVariable) {
                 return true;
@@ -110,7 +108,7 @@ namespace AltSalt.Maestro.Logic
             return false;
         }
 
-        bool V3Populated()
+        private bool V3Populated()
         {
             if (variableTarget is V3Variable) {
                 return true;
@@ -119,7 +117,7 @@ namespace AltSalt.Maestro.Logic
             return false;
         }
 
-        bool IntPopulated()
+        private bool IntPopulated()
         {
             if (variableTarget is IntVariable) {
                 return true;

@@ -27,7 +27,7 @@ namespace AltSalt.Maestro
         }
         
         [SerializeField]
-        private List<TextFamilyReference> _textFamiliesToDisable;
+        private List<TextFamilyReference> _textFamiliesToDisable = new List<TextFamilyReference>();
 
         public List<TextFamilyReference> textFamiliesToDisable => _textFamiliesToDisable;
 

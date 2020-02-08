@@ -39,6 +39,7 @@ namespace AltSalt.Maestro.Animation {
 
         [SerializeField]
         [FormerlySerializedAs("sortingLayer")]
+        [OnValueChanged(nameof(SetSortingOrder))]
         private string _sortingLayer = "Default";
 
         private string sortingLayer => _sortingLayer;
@@ -46,6 +47,7 @@ namespace AltSalt.Maestro.Animation {
         [InfoBox("The sorting order for meshes, unlike sprites, must be set via script")]
         [SerializeField]
         [FormerlySerializedAs("sortingOrder")]
+        [OnValueChanged(nameof(SetSortingOrder))]
         private int _sortingOrder;
 
         private int sortingOrder => _sortingOrder;
@@ -76,19 +78,6 @@ namespace AltSalt.Maestro.Animation {
             GetMeshRenderer();
             RefreshRenderer();
         }
-
-        private void OnGUI()
-        {
-            if(Application.isPlaying == false) {
-                SetSortingOrder();
-                //RefreshRenderer();
-            }
-        }
-
-//        private void Update ()
-//        {
-//            RefreshRenderer();
-//        }
 
         [Button(ButtonSizes.Large)]
         public void RefreshRenderer()

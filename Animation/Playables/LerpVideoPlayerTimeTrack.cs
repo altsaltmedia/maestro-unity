@@ -23,16 +23,18 @@ namespace AltSalt.Maestro.Animation
         {
 
 #if UNITY_EDITOR
-            var comp = director.GetGenericBinding(this) as VideoPlayer;
-            if (comp == null)
-                return;
-            var so = new UnityEditor.SerializedObject(comp);
-            var iter = so.GetIterator();
-            while (iter.NextVisible(true)) {
-                if (iter.hasVisibleChildren)
-                    continue;
-                driver.AddFromName<PlayableVideoPlayerController>(comp.gameObject, iter.propertyPath);
-            }
+            // This is incorrect - should be revised when used
+            // 
+            // var comp = director.GetGenericBinding(this) as VideoPlayer;
+            // if (comp == null)
+            //     return;
+            // var so = new UnityEditor.SerializedObject(comp);
+            // var iter = so.GetIterator();
+            // while (iter.NextVisible(true)) {
+            //     if (iter.hasVisibleChildren)
+            //         continue;
+            //     driver.AddFromName<PlayableVideoPlayerController>(comp.gameObject, iter.propertyPath);
+            // }
 #endif
 
             base.GatherProperties(director, driver);

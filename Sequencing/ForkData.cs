@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using AltSalt.Maestro.Sequencing.Touch;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -56,12 +54,6 @@ namespace AltSalt.Maestro.Sequencing
             this.joinMarker = joinMarker;
             this.markerPlacement = joinMarker.markerPlacement;
             this.description = joinMarker.description;
-            
-//            if (forkMarker is ForkMarker_JoinPrevious) {
-//                this.extents = new Extents(forkMarker.time, forkMarker.time + forkTransitionSpread);
-//            } else if (forkMarker is ForkMarker_JoinNext) {
-//                this.extents = new Extents(forkMarker.time - forkTransitionSpread, forkMarker.time);
-//            }
 
             this.fork = fork;
         }

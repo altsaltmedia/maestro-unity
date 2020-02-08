@@ -713,7 +713,7 @@ namespace AltSalt.Maestro
             return duplicatedHierarchy.ToArray();
         }
         
-        // Given an empty list and a game object, will recursively traverse through the a hierarchy,
+        // Given an empty list and a game object, will recursively traverse through its hierarchy,
         // duplicating and re-parenting the duplicates as it goes. Important to note: This method requires an
         // empty dictionary, which we use to map instanceIDs of the old objects to the duplicated objects.
         public static List<GameObject> TraverseAndDuplicateHierarchy(List<GameObject> targetList,

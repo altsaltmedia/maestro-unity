@@ -12,21 +12,21 @@ namespace AltSalt.Maestro.Logic
         [SerializeField]
         SimpleEventTrigger callback;
 
-        //void LerpAllValues()
-        //{
-        //    for (int i = 0; i < variableData.Count; i++) {
-        //        LerpToTargetValue(variableData[i]);
-        //    }
-        //}
-
-        //void LerpSingleValue(VariableBase targetVariable)
-        //{
-        //    for (int i = 0; i < variableData.Count; i++) {
-        //        if (variableData[i].variable == targetVariable) {
-        //            LerpToTargetValue(variableData[i]);
-        //        }
-        //    }
-        //}
+        // public void LerpAllValues()
+        // {
+        //     for (int i = 0; i < variableData.Count; i++) {
+        //         LerpToTargetValue(variableData[i]);
+        //     }
+        // }
+        //
+        // public void LerpSingleValue(VariableBase targetVariable)
+        // {
+        //     for (int i = 0; i < variableData.Count; i++) {
+        //         if (variableData[i].variable == targetVariable) {
+        //             LerpToTargetValue(variableData[i]);
+        //         }
+        //     }
+        // }
 
         //public void SetTargetValue(float targetValue)
         //{

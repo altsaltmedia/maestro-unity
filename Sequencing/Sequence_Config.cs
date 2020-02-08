@@ -25,25 +25,6 @@ namespace AltSalt.Maestro.Sequencing
             set => _sequence = value;
         }
 
-        [Required]
-        [SerializeField]
-        [ReadOnly]
-        private AppSettings _appSettings;
-        
-        protected AppSettings appSettings
-        {
-            get
-            {
-#if UNITY_EDITOR
-                if (_appSettings == null) {
-                    _appSettings = Utils.GetAppSettings();
-                }
-#endif
-                return _appSettings;
-            }
-            set => _appSettings = value;
-        }
-
         [ReadOnly]
         [SerializeField]
         [InfoBox("This value must be set by a Master Sequence component")]
@@ -122,12 +103,7 @@ namespace AltSalt.Maestro.Sequencing
             trackAssetConfig = gameObject.GetComponent<TrackAssetConfig>();
             trackAssetConfig.sequence = sequence;
         }
-
-        // public bool DependenciesLoaded()
-        // {
-        //     return playableDirector != null && syncTimeline != null && processModify != null && masterSequence != null;
-        // }
-
+        
         private void GetPlayableDirector()
         {
             if (playableDirector == null) {

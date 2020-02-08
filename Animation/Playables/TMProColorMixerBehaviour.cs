@@ -42,7 +42,7 @@ namespace AltSalt.Maestro.Animation
         {
             trackBinding = playerData as TMP_Text;
 
-            if (trackBinding == null || trackBinding.gameObject.active == false)
+            if (trackBinding == null || trackBinding.gameObject.activeInHierarchy == false)
                 return;
             
             inputCount = playable.GetInputCount();
@@ -60,8 +60,6 @@ namespace AltSalt.Maestro.Animation
                     switch (input.textAnimationStyle) {
 
                         case TextAnimationStyle.Whole:
-                            // Color newColor = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
-                            // trackBinding.alpha = newColor.a; 
                             trackBinding.color = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
                             break;
 

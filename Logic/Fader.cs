@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using DG.Tweening;
-using UnityEditor;
-using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -49,55 +46,55 @@ namespace AltSalt.Maestro.Logic
         private float fadeInTime => _fadeInTime;
         
         [SerializeField]
-        private CustomKeyReference _fadeToBlackSpeedKey;
+        private CustomKeyReference _fadeToBlackSpeedKey = new CustomKeyReference();
 
         private CustomKey fadeTimeBlackSpeedKey => _fadeToBlackSpeedKey.GetVariable() as CustomKey;
         
         [SerializeField]
-        private CustomKeyReference _fadeInSpeedKey;
+        private CustomKeyReference _fadeInSpeedKey = new CustomKeyReference();
 
         private CustomKey fadeInSpeedKey => _fadeInSpeedKey.GetVariable() as CustomKey;
         
         [SerializeField]
-        private CustomKeyReference _fadeColorKey;
+        private CustomKeyReference _fadeColorKey = new CustomKeyReference();
         
         private CustomKey fadeColorKey => _fadeColorKey.GetVariable() as CustomKey;
         
         [SerializeField]
-        private CustomKeyReference _enableSpinnerKey;
+        private CustomKeyReference _enableSpinnerKey = new CustomKeyReference();
 
         private CustomKey enableSpinnerKey => _enableSpinnerKey.GetVariable() as CustomKey;
         
         [SerializeField]
-        private SimpleEventTrigger _showProgressBar;
+        private SimpleEventTrigger _showProgressBar = new SimpleEventTrigger();
 
         private SimpleEventTrigger showProgressBar => _showProgressBar;
         
         [SerializeField]
-        private SimpleEventTrigger _hideProgressBar;
+        private SimpleEventTrigger _hideProgressBar = new SimpleEventTrigger();
 
         private SimpleEventTrigger hideProgressBar => _hideProgressBar;
 
         [SerializeField]
         [FormerlySerializedAs("_showProgressBarKey")]
-        private CustomKeyReference _enableProgressBarKey;
+        private CustomKeyReference _enableProgressBarKey = new CustomKeyReference();
 
         private CustomKey enableProgressBarKey => _enableProgressBarKey.GetVariable() as CustomKey;
         
         [SerializeField]
-        private CustomKeyReference _eventCallbackKey;
+        private CustomKeyReference _eventCallbackKey = new CustomKeyReference();
 
         private CustomKey eventCallbackKey => _eventCallbackKey.GetVariable() as CustomKey;
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private SimpleEventReference _fadeToBlackCompleted;
+        private SimpleEventReference _fadeToBlackCompleted = new SimpleEventReference();
 
         private SimpleEventReference fadeToBlackCompleted => _fadeToBlackCompleted;
         
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
-        private SimpleEventReference _fadeInCompleted;
+        private SimpleEventReference _fadeInCompleted = new SimpleEventReference();
 
         private SimpleEventReference fadeInCompleted => _fadeInCompleted;
 
