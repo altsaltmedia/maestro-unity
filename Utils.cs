@@ -1235,6 +1235,10 @@ namespace AltSalt.Maestro
                 LogDuplicateAssetWarning(target);
             }
 
+            if (filePaths.Count < 1) {
+                return null;
+            }
+
             return (ScriptableObject)AssetDatabase.LoadAssetAtPath(filePaths[0], typeof(ScriptableObject));
         }
 

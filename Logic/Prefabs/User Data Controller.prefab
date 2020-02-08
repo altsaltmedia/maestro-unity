@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3144316825054138896}
   - component: {fileID: 3144316825054138898}
   - component: {fileID: 3144316825054138897}
-  - component: {fileID: 97697348217540041}
   m_Layer: 0
   m_Name: User Data Controller
   m_TagString: Untagged
@@ -45,10 +44,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92fc5b8f2b65a4ecdb030d56a24f704a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 0}
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae, type: 2}
   userData:
-  - scriptableObject: {fileID: 0}
-    dataType: 2
+  - _scriptableObject:
+      _isSystemReference: 0
+      _referenceName: HasBeenOpened
+      _variable: {fileID: 11400000, guid: ed49f0723a1d2404896e3ae456be63b2, type: 2}
+  - _scriptableObject:
+      _isSystemReference: 0
+      _referenceName: TutorialShown
+      _variable: {fileID: 11400000, guid: a2b6f749c303d49d4af0797edc152f05, type: 2}
 --- !u!114 &3144316825054138897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,7 +72,7 @@ MonoBehaviour:
   _complexEvent: {fileID: 11400000, guid: db7806a5976574da4ad42f2d8b4b17ae, type: 2}
   _complexEventReference:
     _isSystemReference: 0
-    _referenceName: 
+    _referenceName: StoreData
     _variable: {fileID: 11400000, guid: db7806a5976574da4ad42f2d8b4b17ae, type: 2}
   DeveloperDescription: Takes in a scriptable object, compares it to the data stored
     on this object, and saves into PlayerPrefs if there's a match.
@@ -83,55 +91,4 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doNotRecord: 0
-  _migrated: 0
---- !u!114 &97697348217540041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3144316825054138903}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a83e3ba43e2a84fbda5921021a7bab72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _triggerOnStart: 1
-  _eventExecutionType: 0
-  _conditionResponseActionData:
-    _priority: 0
-    _parentObject: {fileID: 0}
-    _serializedPropertyPath: 
-    _triggerType: 0
-    _triggerOnStart: 1
-    _eventExecutionType: 0
-    _alwaysEvents:
-    - _conditionEventTitle: 
-      _parentObject: {fileID: 0}
-      _serializedPropertyPath: 
-      _response:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 3144316825054138898}
-            m_MethodName: CallReadFromStoredData
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-      _action:
-        m_PersistentCalls:
-          m_Calls: []
-      _migrated: 0
-    _boolEvents: []
-    _floatEvents: []
-    _intEvents: []
-    _textFamilyEvents: []
-    _layoutEvents: []
-    _action:
-      m_PersistentCalls:
-        m_Calls: []
+  _migrated: 1

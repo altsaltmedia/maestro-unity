@@ -18,6 +18,11 @@ namespace AltSalt.Maestro.Logic
         [SerializeField]
         private List<UserDatum> userData = new List<UserDatum>();
 
+        private void Start()
+        {
+            CallReadFromStoredData();
+        }
+
         public void CallWriteToStoredData(ComplexPayload complexPayload)
         {
             if(appSettings.saveDataActive == false) {
