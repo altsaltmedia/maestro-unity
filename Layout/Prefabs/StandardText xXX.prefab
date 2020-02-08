@@ -64,6 +64,7 @@ MeshRenderer:
   m_MotionVectors: 2
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -241,8 +242,8 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: TextUpdate
     _variable: {fileID: 11400000, guid: bdf4f2741533040a5b432c919bb86d9b, type: 2}
-  DeveloperDescription: Should receive an event payload with a scriptable object containing
-    the target corpus that's being updated
+  DeveloperDescription: Should receive an event payload with a scriptable object
+    containing the target corpus that's being updated
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -258,7 +259,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   _doNotRecord: 1
-  _migrated: 0
+  _migrated: 1
 --- !u!114 &-2335259992271015214
 MonoBehaviour:
   m_ObjectHideFlags: 0

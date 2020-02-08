@@ -141,11 +141,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea2c6a66c7a45978bf2cddeb3ee2cb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _logCallersOnRaise: 0
   _actionTrigger:
-    _appSettings: {fileID: 0}
+    _active: 1
+    _appSettings:
+      _isSystemReference: 0
+      _referenceName: AppSettings
+      _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
     _parentObject: {fileID: 3194247117588569635}
     _serializedPropertyPath: _actionTrigger
     _triggerOnStart: 0
+    _resetGameStateOnStart: 0
+    _hasDelay: 0
+    _delay: 0
     _genericActions: []
     _boolActions:
     - _priority: 1
@@ -154,7 +162,7 @@ MonoBehaviour:
         _referenceName: MainInput-AppUtilsRequested
         _useConstant: 0
         _constantValue: 0
-        _variable: {fileID: 11400000, guid: fcac5bcce6c604d7694038b5a3d5bfd0, type: 2}
+        _variable: {fileID: 0}
       _boolActionType: 0
       _targetValue:
         _isSystemReference: 0
@@ -170,7 +178,7 @@ MonoBehaviour:
     _simpleEventActions: []
     _complexEventActions:
     - _priority: 2
-      _complexEventPayloadPackagers:
+      _complexEventConfigurableTriggers:
       - _isSystemReference: 0
         _referenceName: TriggerSceneLoad
         _variable: {fileID: 11400000, guid: be8a28980d8f0432191e478ff82225b4, type: 2}
@@ -206,12 +214,18 @@ MonoBehaviour:
           _useConstant: 1
           _constantValue: 1
           _variable: {fileID: 0}
-        _hasScriptableObject: 0
-        _customScriptableObjectKey: 0
+        _hasScriptableObject: 1
+        _customScriptableObjectKey: 1
         _scriptableObjectKeysOld: []
-        _scriptableObjectKeyReferences: []
+        _scriptableObjectKeyReferences:
+        - _isSystemReference: 0
+          _referenceName: EventCallbackKey
+          _variable: {fileID: 11400000, guid: 420ddf56ca3e24f8bbd4453eb1c66057, type: 2}
         _scriptableObjectValuesOld: []
-        _scriptableObjectValueReferences: []
+        _scriptableObjectValueReferences:
+        - _isSystemReference: 0
+          _referenceName: MainInput-AppUtilsLoadCompleted
+          _variable: {fileID: 0}
     _actionType: 1
 --- !u!114 &4605564757825332035
 MonoBehaviour:
@@ -273,6 +287,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 223911689641662440, guid: 29634cb06c81e425c8b6963007e7dd8a,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 223911689641662440, guid: 29634cb06c81e425c8b6963007e7dd8a,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 6615837452433307810}
     - target: {fileID: 224992439711100554, guid: 29634cb06c81e425c8b6963007e7dd8a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -378,16 +402,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 223911689641662440, guid: 29634cb06c81e425c8b6963007e7dd8a,
-        type: 3}
-      propertyPath: m_RenderMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 223911689641662440, guid: 29634cb06c81e425c8b6963007e7dd8a,
-        type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 6615837452433307810}
     m_RemovedComponents:
     - {fileID: 114597682972467240, guid: 29634cb06c81e425c8b6963007e7dd8a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 29634cb06c81e425c8b6963007e7dd8a, type: 3}
@@ -454,46 +468,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
     - target: {fileID: 20290996921888062, guid: 42935d41d9ee547bd8168a010681781a,
         type: 3}
       propertyPath: m_BackGroundColor.r
@@ -538,6 +512,51 @@ PrefabInstance:
         type: 3}
       propertyPath: m_NormalizedViewPortRect.width
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224767354529110132, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762982322118964362, guid: 42935d41d9ee547bd8168a010681781a,
+        type: 3}
+      propertyPath: m_EventMask.m_Bits
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 7582347771626022076, guid: 42935d41d9ee547bd8168a010681781a,
         type: 3}
@@ -585,11 +604,6 @@ PrefabInstance:
         type: 3}
       propertyPath: _disableDynamicElement._referenceName
       value: DisableDynamicElement
-      objectReference: {fileID: 0}
-    - target: {fileID: 6762982322118964362, guid: 42935d41d9ee547bd8168a010681781a,
-        type: 3}
-      propertyPath: m_EventMask.m_Bits
-      value: 256
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6762982322118964362, guid: 42935d41d9ee547bd8168a010681781a, type: 3}

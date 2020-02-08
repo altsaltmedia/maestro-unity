@@ -55,7 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _appSettings:
     _isSystemReference: 0
-    _referenceName: 
+    _referenceName: AppSettings
     _variable: {fileID: 0}
   _frameStepValues:
   - _isSystemReference: 0

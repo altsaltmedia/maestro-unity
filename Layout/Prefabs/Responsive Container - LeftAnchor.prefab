@@ -9,7 +9,22 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1865775484262442, guid: a9aac29e430174582b3f0545758b45f2, type: 3}
       propertyPath: m_Name
-      value: ResponsiveContainer - LeftAnchor
+      value: Responsive Container - LeftAnchor
+      objectReference: {fileID: 0}
+    - target: {fileID: 114336812794643902, guid: a9aac29e430174582b3f0545758b45f2,
+        type: 3}
+      propertyPath: _migrated
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114336812794643902, guid: a9aac29e430174582b3f0545758b45f2,
+        type: 3}
+      propertyPath: _appSettings._referenceName
+      value: AppSettings
+      objectReference: {fileID: 0}
+    - target: {fileID: 114336812794643902, guid: a9aac29e430174582b3f0545758b45f2,
+        type: 3}
+      propertyPath: nonserializedProperties.Array.data[3]
+      value: _layoutsLegacy
       objectReference: {fileID: 0}
     - target: {fileID: 224169880954122132, guid: a9aac29e430174582b3f0545758b45f2,
         type: 3}

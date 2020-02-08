@@ -16,7 +16,7 @@ namespace AltSalt.Maestro.Animation
             ScriptPlayable<TMProCharacterColorMixerBehaviour> trackPlayable = ScriptPlayable<TMProCharacterColorMixerBehaviour>.Create(graph, inputCount);
             TMProCharacterColorMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(go, behaviour);
-            return ScriptPlayable<TMProCharSpacingMixerBehaviour>.Create (graph, inputCount);
+            return trackPlayable;
         }
 
         public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)

@@ -52,7 +52,7 @@ MonoBehaviour:
   audioElements: []
   loopAudioKey: {fileID: 11400000, guid: 1ebc7f3fa274d463a8256066c48e2089, type: 2}
   volumeKey: {fileID: 11400000, guid: 8b9af6247445a4d8d89fb45f6fa8e470, type: 2}
-  pitchKey: {fileID: 0}
+  pitchKey: {fileID: 11400000, guid: 35d17899bb6a64f81921487f30c05907, type: 2}
 --- !u!114 &1665444724315265665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doNotRecord: 0
-  _migrated: 0
+  _migrated: 1
 --- !u!114 &-6483300248613923237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,7 +120,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doNotRecord: 0
-  _migrated: 0
+  _migrated: 1
 --- !u!114 &1665444724871226524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doNotRecord: 0
-  _migrated: 0
+  _migrated: 1
 --- !u!82 &-5602970116745558848
 AudioSource:
   m_ObjectHideFlags: 0

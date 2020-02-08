@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4170645452252380700}
   - component: {fileID: 4170645452252380699}
   - component: {fileID: 4170645452252380703}
-  - component: {fileID: 4170645452252380702}
+  - component: {fileID: 6558071551123153877}
   - component: {fileID: 4170645452252380701}
   m_Layer: 0
   m_Name: Audio Listener
@@ -58,7 +58,7 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: 
     _variable: {fileID: 0}
---- !u!114 &4170645452252380702
+--- !u!114 &6558071551123153877
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67,93 +67,113 @@ MonoBehaviour:
   m_GameObject: {fileID: 4170645452252380698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a83e3ba43e2a84fbda5921021a7bab72, type: 3}
+  m_Script: {fileID: 11500000, guid: fea2c6a66c7a45978bf2cddeb3ee2cb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _triggerOnStart: 1
-  _eventExecutionType: 0
-  _conditionResponseActionData:
-    _priority: 0
-    _parentObject: {fileID: 0}
-    _serializedPropertyPath: 
-    _triggerType: 1
-    _triggerOnStart: 1
-    _eventExecutionType: 0
-    _alwaysEvents: []
-    _boolEvents:
-    - _conditionEventTitle: 
-      _parentObject: {fileID: 0}
-      _serializedPropertyPath: 
-      _response:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 4170645452252380703}
-            m_MethodName: ActivateVolume
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 1
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
+  _logCallersOnRaise: 0
+  _actionTrigger:
+    _active: 1
+    _appSettings:
+      _isSystemReference: 0
+      _referenceName: AppSettings
+      _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
+    _parentObject: {fileID: 6558071551123153877}
+    _serializedPropertyPath: _actionTrigger
+    _triggerOnStart: 0
+    _resetGameStateOnStart: 0
+    _hasDelay: 0
+    _delay: 0
+    _genericActions: []
+    _boolActions: []
+    _floatActions: []
+    _intActions: []
+    _axisActions: []
+    _colorActions: []
+    _conditionResponseActions:
+    - _priority: 1
+      _parentObject: {fileID: 6558071551123153877}
+      _serializedPropertyPath: _actionTrigger._conditionResponseActions.0
+      _triggerType: 0
+      _triggerOnStart: 1
+      _eventExecutionType: 0
+      _alwaysEvents: []
+      _boolEvents:
+      - _conditionEventTitle: Please populate a bool reference.
+        _parentObject: {fileID: 6558071551123153877}
+        _serializedPropertyPath: _actionTrigger._conditionResponseActions.0._boolEvents.0
+        _response:
+          m_PersistentCalls:
+            m_Calls: []
+        _action:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 4170645452252380703}
+              m_MethodName: ActivateVolume
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+        _migrated: 1
+        _boolReference:
+          _isSystemReference: 0
+          _referenceName: VolumeEnabled
+          _useConstant: 0
+          _constantValue: 0
+          _variable: {fileID: 0}
+        _boolCondition:
+          _isSystemReference: 0
+          _referenceName: 
+          _useConstant: 1
+          _constantValue: 1
+          _variable: {fileID: 0}
+      - _conditionEventTitle: Please populate a bool reference.
+        _parentObject: {fileID: 6558071551123153877}
+        _serializedPropertyPath: _actionTrigger._conditionResponseActions.0._boolEvents.1
+        _response:
+          m_PersistentCalls:
+            m_Calls: []
+        _action:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 4170645452252380703}
+              m_MethodName: DeactivateVolume
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+        _migrated: 1
+        _boolReference:
+          _isSystemReference: 0
+          _referenceName: VolumeEnabled
+          _useConstant: 0
+          _constantValue: 0
+          _variable: {fileID: 0}
+        _boolCondition:
+          _isSystemReference: 0
+          _referenceName: 
+          _useConstant: 1
+          _constantValue: 0
+          _variable: {fileID: 0}
+      _floatEvents: []
+      _intEvents: []
+      _textFamilyEvents: []
+      _layoutEvents: []
       _action:
         m_PersistentCalls:
           m_Calls: []
-      _migrated: 0
-      _boolReference:
-        _isSystemReference: 0
-        _referenceName: 
-        _useConstant: 0
-        _constantValue: 0
-        _variable: {fileID: 0}
-      _boolCondition:
-        _isSystemReference: 0
-        _referenceName: 
-        _useConstant: 1
-        _constantValue: 1
-        _variable: {fileID: 0}
-    - _conditionEventTitle: 
-      _parentObject: {fileID: 0}
-      _serializedPropertyPath: 
-      _response:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 4170645452252380703}
-            m_MethodName: DeactivateVolume
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-      _action:
-        m_PersistentCalls:
-          m_Calls: []
-      _migrated: 0
-      _boolReference:
-        _isSystemReference: 0
-        _referenceName: 
-        _useConstant: 0
-        _constantValue: 0
-        _variable: {fileID: 0}
-      _boolCondition:
-        _isSystemReference: 0
-        _referenceName: 
-        _useConstant: 1
-        _constantValue: 0
-        _variable: {fileID: 0}
-    _floatEvents: []
-    _intEvents: []
-    _textFamilyEvents: []
-    _layoutEvents: []
-    _action:
-      m_PersistentCalls:
-        m_Calls: []
+    _simpleEventActions: []
+    _complexEventActions: []
+    _actionType: 6
 --- !u!114 &4170645452252380701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,11 +190,11 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: VolumeEnabled
-    _variable: {fileID: 0}
+    _variable: {fileID: 11400000, guid: aad01515d17e04bbaa0169c935a3b210, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4170645452252380702}
+      - m_Target: {fileID: 0}
         m_MethodName: CallTriggerResponses
         m_Mode: 1
         m_Arguments:
@@ -188,9 +208,9 @@ MonoBehaviour:
   _action:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4170645452252380702}
-        m_MethodName: CallTriggerResponses
-        m_Mode: 1
+      - m_Target: {fileID: 6558071551123153877}
+        m_MethodName: CallPerformActions
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

@@ -14,9 +14,8 @@ GameObject:
   - component: {fileID: 1384256474148654812}
   - component: {fileID: 114615924759454770}
   - component: {fileID: 320944326161814764}
-  - component: {fileID: 9192232105761766021}
   m_Layer: 0
-  m_Name: SequenceConfig
+  m_Name: Sequence Config
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,7 +53,7 @@ MonoBehaviour:
   _playableDirector: {fileID: 320944326161814764}
   _processModify: {fileID: 1384256474148654812}
   _syncTimeline: {fileID: 114615924759454770}
-  _trackAssetConfig: {fileID: 0}
+  _trackAssetConfig: {fileID: 8562162275732644144}
 --- !u!114 &8562162275732644144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,7 +66,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df6b19ab5020452e82eaad85aff31d92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 0}
   _sequence: {fileID: 0}
   _inputGroupKey:
     _isSystemReference: 0
@@ -98,8 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75f341101880147d780c70b58b68d843, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 0}
   _sequence: {fileID: 0}
-  _appSettings: {fileID: 0}
   _logElementOnLayoutUpdate: 0
   _enableDynamicElement:
     _isSystemReference: 0
@@ -127,47 +132,3 @@ PlayableDirector:
   m_SceneBindings: []
   m_ExposedReferences:
     m_References: []
---- !u!114 &9192232105761766021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1651845744537938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 9ff5b71473dbd4bacac724317cf05171, type: 2}
-  _simpleSignalReferences: []
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114615924759454770}
-        m_MethodName: RefreshPlayableDirector
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _action:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114615924759454770}
-        m_MethodName: RefreshPlayableDirector
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1

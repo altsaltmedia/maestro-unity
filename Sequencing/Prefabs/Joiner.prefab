@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1495709949950452273}
   - component: {fileID: 3156366569489139294}
   m_Layer: 12
-  m_Name: JoinTools
+  m_Name: Joiner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
   _complexEventReference:
     _isSystemReference: 0
     _referenceName: MainInput-UpdateFork
-    _variable: {fileID: 11400000, guid: b095002c33a124b6e82b1bc8ca829f4d, type: 2}
+    _variable: {fileID: 0}
   DeveloperDescription: 
   _response:
     m_PersistentCalls:
@@ -140,4 +140,4 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doNotRecord: 0
-  _migrated: 0
+  _migrated: 1

@@ -93,7 +93,7 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnTouchStart
-    _variable: {fileID: 11400000, guid: 6dac74e2f283d4b9fa602da81d754505, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -140,9 +140,9 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipe
-    _variable: {fileID: 11400000, guid: 81f8190272d57445fb4b8e188db7ef46, type: 2}
+    _variable: {fileID: 0}
   - _isSystemReference: 0
-    _referenceName: 
+    _referenceName: MainInput-SequenceModified
     _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
@@ -294,7 +294,7 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipeEnd
-    _variable: {fileID: 11400000, guid: 0323c9638c2fa4bcb821f9ef313272be, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -341,10 +341,10 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnLongTouch
-    _variable: {fileID: 11400000, guid: 15fa8ec22d94146989ee179b7e5aaaea, type: 2}
+    _variable: {fileID: 0}
   - _isSystemReference: 0
     _referenceName: MainInput-MomentumDepleted
-    _variable: {fileID: 11400000, guid: ed6da3556e35b48ebbe652df0834ae9c, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -413,10 +413,10 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-MomentumDepleted
-    _variable: {fileID: 11400000, guid: ed6da3556e35b48ebbe652df0834ae9c, type: 2}
+    _variable: {fileID: 0}
   - _isSystemReference: 0
     _referenceName: MainInput-AppUtilsRequested
-    _variable: {fileID: 11400000, guid: 8e62c6baedf5d4ae9a58b9b668f34cc7, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -537,7 +537,7 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipe
-    _variable: {fileID: 11400000, guid: 81f8190272d57445fb4b8e188db7ef46, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -584,7 +584,7 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipeEnd
-    _variable: {fileID: 11400000, guid: 0323c9638c2fa4bcb821f9ef313272be, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:

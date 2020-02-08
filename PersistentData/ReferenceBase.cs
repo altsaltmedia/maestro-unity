@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
 
 namespace AltSalt.Maestro
@@ -107,22 +108,11 @@ namespace AltSalt.Maestro
         
         private ReferenceBase PopulateVariable(UnityEngine.Object parentObject, string[] serializedPropertyPath)
         {
-//            
-//            SerializedProperty parentObjectProperty =
-//                FindReferenceProperty(serializedObject, serializedPropertyPath, nameof(_parentObject));
-//            parentObjectProperty.objectReferenceValue = parentObject;
-//
-//            SerializedProperty propertyPathProperty = FindReferenceProperty(serializedObject, serializedPropertyPath,
-//                nameof(_serializedPropertyPath));
-//            propertyPathProperty.ClearArray();
-//            for (int i = 0; i < serializedPropertyPath.Length; i++) {
-//                propertyPathProperty.InsertArrayElementAtIndex(i);
-//                propertyPathProperty.GetArrayElementAtIndex(i).stringValue = serializedPropertyPath[i];
-//            }
-//
-//            serializedObject.ApplyModifiedProperties();
-//            serializedObject.Update();
-//            
+            // Do not execute if we are in prefab editing mode
+            if (PrefabStageUtility.GetCurrentPrefabStage() != null) {
+                return this;
+            }
+        
             this.parentObject = parentObject;
             this.serializedPropertyPath.Clear();
             this.serializedPropertyPath.AddRange(serializedPropertyPath);
@@ -143,9 +133,7 @@ namespace AltSalt.Maestro
                     
                     serializedObject.ApplyModifiedProperties();
                     serializedObject.Update();
-                    //EditorApplication.update.Invoke();
-                    //StoreVariable(variableSearch);
-                    
+
                     LogFoundReferenceMessage(GetType().Name, variableSearch);
                 }
                 else {

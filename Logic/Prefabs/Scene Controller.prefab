@@ -54,7 +54,7 @@ MonoBehaviour:
   _appSettings:
     _isSystemReference: 0
     _referenceName: AppSettings
-    _variable: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae, type: 2}
+    _variable: {fileID: 0}
   _loadSceneImmediatelyKey:
     _isSystemReference: 0
     _referenceName: LoadSceneImmediatelyKey
@@ -125,7 +125,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doNotRecord: 0
-  _migrated: 0
+  _migrated: 1
 --- !u!114 &7973420083374359232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,7 +159,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doNotRecord: 0
-  _migrated: 0
+  _migrated: 1
 --- !u!114 &3517205928990522322
 MonoBehaviour:
   m_ObjectHideFlags: 0

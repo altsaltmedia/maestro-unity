@@ -94,6 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _priority: 3
+  _moduleActive: 1
   _autorunController: {fileID: 2061094698163370185}
   _lerpThreshold: 0.03
 --- !u!114 &7884193363350299396
@@ -112,10 +113,10 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipe
-    _variable: {fileID: 11400000, guid: 9f1b860c8915f428484183d7caf375b2, type: 2}
+    _variable: {fileID: 0}
   - _isSystemReference: 0
     _referenceName: MainInput-AppUtilsRequested
-    _variable: {fileID: 11400000, guid: 63258c7d84ce14694aea05ef65ffe33d, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -192,8 +193,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _priority: 2
+  _moduleActive: 1
   _autorunController: {fileID: 2061094698163370185}
-  _autoplayEnabled: 1
   _autoplayEaseThreshold: 0.25
 --- !u!114 &4944100776945312249
 MonoBehaviour:
@@ -211,15 +212,15 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-AutoplayActivate
-    _variable: {fileID: 11400000, guid: 35ea0ec2390654513aa0e3762edbe4df, type: 2}
+    _variable: {fileID: 0}
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipeEnd
-    _variable: {fileID: 11400000, guid: 7ca1fb544a84a4b7eb65eead923ceffc, type: 2}
+    _variable: {fileID: 0}
   - _isSystemReference: 0
     _referenceName: PauseSequenceComplete
     _variable: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
   - _isSystemReference: 0
-    _referenceName: 
+    _referenceName: MainInput-SequenceModified
     _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
@@ -267,10 +268,10 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnTouchStart
-    _variable: {fileID: 11400000, guid: 54cb1cb41474842c389d5b2313ca4bc8, type: 2}
+    _variable: {fileID: 0}
   - _isSystemReference: 0
     _referenceName: MainInput-AppUtilsRequested
-    _variable: {fileID: 11400000, guid: 63258c7d84ce14694aea05ef65ffe33d, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:

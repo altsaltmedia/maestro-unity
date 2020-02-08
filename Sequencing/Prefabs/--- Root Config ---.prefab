@@ -81,7 +81,7 @@ MonoBehaviour:
   _appSettings:
     _isSystemReference: 0
     _referenceName: AppSettings
-    _variable: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae, type: 2}
+    _variable: {fileID: 0}
   _inputGroupKey:
     _isSystemReference: 0
     _referenceName: MainInput
@@ -113,7 +113,7 @@ MonoBehaviour:
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: OnEditorGraphStart
-    _variable: {fileID: 11400000, guid: 76b0ecf9e318b412ba666b93e66dc8c0, type: 2}
+    _variable: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -371,6 +371,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2482685240502513279}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: _complexEventReference._parentObject
+      value: 
+      objectReference: {fileID: 2670429561480060543}
+    - target: {fileID: 0}
+      propertyPath: _complexEventReference._variable
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2364722153129588570, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: m_Name
@@ -380,16 +388,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TouchController
-      objectReference: {fileID: 0}
-    - target: {fileID: 3318923730177639291, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _complexEventReference._parentObject
-      value: 
-      objectReference: {fileID: 2670429561480060543}
-    - target: {fileID: 3318923730177639291, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _complexEventReference._variable
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4245464629320551496, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
@@ -533,8 +531,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[0]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[0]._touchData._sequence
@@ -554,8 +551,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[1]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[1]._touchData._sequence
@@ -575,8 +571,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[2]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[2]._touchData._sequence
@@ -596,8 +591,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[3]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[3]._touchData._sequence
@@ -617,8 +611,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[4]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[4]._touchData._sequence
@@ -638,8 +631,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[5]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[5]._touchData._sequence
@@ -659,8 +651,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[6]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[6]._touchData._sequence
@@ -680,8 +671,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[7]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[7]._touchData._sequence
@@ -701,8 +691,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[8]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[8]._touchData._sequence
@@ -722,8 +711,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[9]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[9]._touchData._sequence
@@ -743,8 +731,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _switchData.Array.data[10]._touchController
       value: 
-      objectReference: {fileID: 6525276476879253434, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4581706541368278684, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _switchData.Array.data[10]._touchData._sequence
@@ -784,62 +771,21 @@ PrefabInstance:
       propertyPath: _simpleSignalReference._parentObject
       value: 
       objectReference: {fileID: 2670429561480060543}
-    - target: {fileID: 4592680014928591579, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[0]._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: 54cb1cb41474842c389d5b2313ca4bc8,
-        type: 2}
     - target: {fileID: 4742324807908144558, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _simpleSignalReference._parentObject
       value: 
       objectReference: {fileID: 8963318062627150209}
-    - target: {fileID: 4742324807908144558, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[0]._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: 6d6b91ebbc0984fbe8448a7ebef0449b,
-        type: 2}
-    - target: {fileID: 4742324807908144558, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[1]._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: 63258c7d84ce14694aea05ef65ffe33d,
-        type: 2}
     - target: {fileID: 5339541314759043643, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _simpleSignalReference._parentObject
       value: 
       objectReference: {fileID: 2670429561480060543}
-    - target: {fileID: 5339541314759043643, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[1]._referenceName
-      value: MainInput-SequenceModified
-      objectReference: {fileID: 0}
-    - target: {fileID: 5339541314759043643, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[0]._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: 9f1b860c8915f428484183d7caf375b2,
-        type: 2}
-    - target: {fileID: 5339541314759043643, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[1]._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: 2cc6a74538bed4f0b9c28646ee314416,
-        type: 2}
     - target: {fileID: 5768031951818456644, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _simpleSignalReference._parentObject
       value: 
       objectReference: {fileID: 9166170985059980559}
-    - target: {fileID: 5768031951818456644, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[0]._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: 7ca1fb544a84a4b7eb65eead923ceffc,
-        type: 2}
     - target: {fileID: 6351633449510160952, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _touchDataList.Array.size
@@ -1039,8 +985,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _forkTools
       value: 
-      objectReference: {fileID: 2377695840817729464, guid: e4c2b97aa54074291a8892d9ae0aae85,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 6351633449510160952, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _inputRootConfig
@@ -1065,8 +1010,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _simpleSignalReferences.Array.data[0]._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 9f1b860c8915f428484183d7caf375b2,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8132643687515368099, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _simpleSignalReference._parentObject
@@ -1076,25 +1020,12 @@ PrefabInstance:
         type: 3}
       propertyPath: _simpleSignalReferences.Array.data[0]._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 7ca1fb544a84a4b7eb65eead923ceffc,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8140058799231212654, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: _simpleSignalReference._parentObject
       value: 
       objectReference: {fileID: 8963318062627150209}
-    - target: {fileID: 8140058799231212654, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[0]._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: 40ae9f65532de4a6eacd0be50b355401,
-        type: 2}
-    - target: {fileID: 8140058799231212654, guid: 105b53ea87dd04ce095228865dda57bc,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[1]._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: 6d6b91ebbc0984fbe8448a7ebef0449b,
-        type: 2}
     - target: {fileID: 8771448038486601892, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: m_IsActive
@@ -1257,6 +1188,78 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2482685240502513279}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _complexEventReference._parentObject
+      value: 
+      objectReference: {fileID: 134381654221151000}
+    - target: {fileID: 0}
+      propertyPath: _complexEventReference._variable
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _simpleSignalReference._parentObject
+      value: 
+      objectReference: {fileID: 134381654221151000}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5437714518085294113}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ActivateAutoplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _migrated
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _simpleSignalReference._parentObject
+      value: 
+      objectReference: {fileID: 134381654221151000}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5437714518085294113}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ActivateAutoplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _migrated
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1133069145979638054, guid: 97feac8a06fe740d99eeffdc9dd3352e,
         type: 3}
       propertyPath: _action.m_PersistentCalls.m_Calls.Array.size
@@ -1296,16 +1299,6 @@ PrefabInstance:
         type: 3}
       propertyPath: _migrated
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1764233776882483978, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _complexEventReference._parentObject
-      value: 
-      objectReference: {fileID: 134381654221151000}
-    - target: {fileID: 1764233776882483978, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _complexEventReference._variable
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2061094698163370185, guid: 97feac8a06fe740d99eeffdc9dd3352e,
         type: 3}
@@ -1372,46 +1365,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4465262678314197478, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4465262678314197478, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _simpleSignalReference._parentObject
-      value: 
-      objectReference: {fileID: 134381654221151000}
-    - target: {fileID: 4465262678314197478, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 5437714518085294113}
-    - target: {fileID: 4465262678314197478, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ActivateAutoplay
-      objectReference: {fileID: 0}
-    - target: {fileID: 4465262678314197478, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4465262678314197478, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 4465262678314197478, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4465262678314197478, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _migrated
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4944100776945312249, guid: 97feac8a06fe740d99eeffdc9dd3352e,
         type: 3}
       propertyPath: _action.m_PersistentCalls.m_Calls.Array.size
@@ -1448,57 +1401,6 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4944100776945312249, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _migrated
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4944100776945312249, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[3]._referenceName
-      value: MainInput-SequenceModified
-      objectReference: {fileID: 0}
-    - target: {fileID: 4944100776945312249, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _simpleSignalReferences.Array.data[3]._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: 2cc6a74538bed4f0b9c28646ee314416,
-        type: 2}
-    - target: {fileID: 7211087801763608557, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7211087801763608557, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _simpleSignalReference._parentObject
-      value: 
-      objectReference: {fileID: 134381654221151000}
-    - target: {fileID: 7211087801763608557, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 5437714518085294113}
-    - target: {fileID: 7211087801763608557, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ActivateAutoplay
-      objectReference: {fileID: 0}
-    - target: {fileID: 7211087801763608557, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7211087801763608557, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7211087801763608557, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-        type: 3}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7211087801763608557, guid: 97feac8a06fe740d99eeffdc9dd3352e,
         type: 3}
       propertyPath: _migrated
       value: 1

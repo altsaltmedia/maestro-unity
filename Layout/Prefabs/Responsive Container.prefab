@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 224169880954122132}
   - component: {fileID: 114336812794643902}
   m_Layer: 0
-  m_Name: ResponsiveContainer
+  m_Name: Responsive Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,14 +57,17 @@ MonoBehaviour:
   - id
   - sceneName
   - initialized
-  - _layouts
+  - _layoutsLegacy
   - nonserializedProperties
   - _logElementOnLayoutUpdate
   - _appSettings
   - _enableDynamicElement
   - _disableDynamicElement
-  _migrated: 0
-  _appSettings: {fileID: 0}
+  _migrated: 1
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 0}
   _enableDynamicElement:
     _isSystemReference: 0
     _referenceName: ResponsiveElementEnable

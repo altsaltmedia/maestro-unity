@@ -73,6 +73,74 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2171946221659300693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5213021089270343000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _complexEvent: {fileID: 11400000, guid: 224e3cd3815394e878c2e0bf8a54004a, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: TriggerFadeToBlack
+    _variable: {fileID: 11400000, guid: 224e3cd3815394e878c2e0bf8a54004a, type: 2}
+  DeveloperDescription: 
+  _response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7605784589186762815}
+        m_MethodName: FadeToBlack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _doNotRecord: 0
+  _migrated: 1
+--- !u!114 &3332928382826325544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5213021089270343000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _complexEvent: {fileID: 11400000, guid: dfee30ca42be848fab35ac15ceabe65d, type: 2}
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: TriggerFadeIn
+    _variable: {fileID: 11400000, guid: dfee30ca42be848fab35ac15ceabe65d, type: 2}
+  DeveloperDescription: 
+  _response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7605784589186762815}
+        m_MethodName: FadeIn
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _doNotRecord: 0
+  _migrated: 1
 --- !u!114 &7605784589186762815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,7 +177,7 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: HideProgressBar
     _variable: {fileID: 11400000, guid: e67c7d17976064d15947461bdf23172f, type: 2}
-  _showProgressBarKey:
+  _enableProgressBarKey:
     _isSystemReference: 0
     _referenceName: ShowProgressBarKey
     _variable: {fileID: 11400000, guid: 14c3c0555ecf44e82a85491873cf054e, type: 2}
@@ -125,74 +193,6 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: FadeInCompleted
     _variable: {fileID: 11400000, guid: fc87f5b274eb14be5a126169e2437c44, type: 2}
---- !u!114 &2171946221659300693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5213021089270343000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 224e3cd3815394e878c2e0bf8a54004a, type: 2}
-  _complexEventReference:
-    _isSystemReference: 0
-    _referenceName: TriggerFadeToBlack
-    _variable: {fileID: 11400000, guid: 224e3cd3815394e878c2e0bf8a54004a, type: 2}
-  DeveloperDescription: 
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7605784589186762815}
-        m_MethodName: FadeToBlack
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 0
---- !u!114 &3332928382826325544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5213021089270343000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: dfee30ca42be848fab35ac15ceabe65d, type: 2}
-  _complexEventReference:
-    _isSystemReference: 0
-    _referenceName: TriggerFadeIn
-    _variable: {fileID: 11400000, guid: dfee30ca42be848fab35ac15ceabe65d, type: 2}
-  DeveloperDescription: 
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7605784589186762815}
-        m_MethodName: FadeIn
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 0
 --- !u!1001 &7346492303960967192
 PrefabInstance:
   m_ObjectHideFlags: 0
