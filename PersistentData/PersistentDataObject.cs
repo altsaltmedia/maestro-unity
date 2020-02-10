@@ -10,7 +10,7 @@ using UnityEditor;
 namespace AltSalt.Maestro
 {
 
-    public abstract class PersistentDataObject : RegisterableScriptableObject, IDependable
+    public abstract class PersistentDataObject : RegisterableScriptableObject
     {
         private UnityEngine.Object _callerObject;
 

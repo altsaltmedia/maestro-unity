@@ -48,11 +48,11 @@ namespace AltSalt.Maestro
         
         public void SetValue(int value)
         {
-            if (CallerRegistered() == false) return;
+            //if (CallerRegistered() == false) return;
 
             this.value = value;
 
-            SignalChange();
+            //SignalChange();
         }
 
         public void SetValue(IntVariable value)
@@ -66,11 +66,11 @@ namespace AltSalt.Maestro
 
         public void ApplyChange(int amount)
         {
-            if (CallerRegistered() == false) return;
+            //if (CallerRegistered() == false) return;
 
             value += amount;
 
-            SignalChange();
+            //SignalChange();
         }
 
         public void ApplyChange(IntVariable amount)

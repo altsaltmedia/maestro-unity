@@ -16,7 +16,7 @@ using Object = UnityEngine.Object;
 namespace AltSalt.Maestro.Logic
 {
     [Serializable]
-    public abstract class ActionData
+    public abstract class ActionData : IRegisterActionData
     {
         [SerializeField]
         [HideInInspector]
@@ -28,7 +28,7 @@ namespace AltSalt.Maestro.Logic
             set => _priority = value;
         }
         
-        protected abstract string title { get; } 
+        protected abstract string title { get; }
 
         [TitleGroup("$"+nameof(title))]
         [ShowInInspector]

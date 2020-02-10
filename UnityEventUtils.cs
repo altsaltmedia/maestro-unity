@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using UnityEngine.Events;
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -12,7 +13,7 @@ namespace AltSalt.Maestro
     {
         
 #if UNITY_EDITOR        
-        public static string[] GetUnityEventParameters(SerializedProperty eventList)
+        public static UnityEventParameter[] GetUnityEventParameters(SerializedProperty eventList)
         {
             SerializedProperty unityEventCallList = eventList
                 .FindPropertyRelative($"m_PersistentCalls.m_Calls");
@@ -20,7 +21,7 @@ namespace AltSalt.Maestro
             return ParseUnityEventParameters(unityEventCallList);
         }
         
-        public static string[] GetUnityEventParameters(SerializedObject eventSourceObject, string eventListName)
+        public static UnityEventParameter[] GetUnityEventParameters(SerializedObject eventSourceObject, string eventListName)
         {
             SerializedProperty unityEventCallList = eventSourceObject
                 .FindProperty($"{eventListName}.m_PersistentCalls.m_Calls");
@@ -28,7 +29,7 @@ namespace AltSalt.Maestro
             return ParseUnityEventParameters(unityEventCallList);
         }
 
-        public static string[] GetUnityEventParameters(SerializedProperty eventListParentProperty, string eventListName)
+        public static UnityEventParameter[] GetUnityEventParameters(SerializedProperty eventListParentProperty, string eventListName)
         {
             SerializedProperty unityEventCallList = eventListParentProperty
                 .FindPropertyRelative($"{eventListName}.m_PersistentCalls.m_Calls");
@@ -36,9 +37,9 @@ namespace AltSalt.Maestro
             return ParseUnityEventParameters(unityEventCallList);
         }
 
-        private static string[] ParseUnityEventParameters(SerializedProperty unityEventCallList)
+        private static UnityEventParameter[] ParseUnityEventParameters(SerializedProperty unityEventCallList)
         {
-            List<string> parameterNames = new List<string>();
+            List<UnityEventParameter> parameters = new List<UnityEventParameter>();
             
             for (int i = 0; i < unityEventCallList.arraySize; i++) {
                 int mode = unityEventCallList.GetArrayElementAtIndex(i).FindPropertyRelative("m_Mode").intValue;
@@ -46,34 +47,49 @@ namespace AltSalt.Maestro
                 
                 switch (mode) {
                     case 2:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_ObjectArgument").objectReferenceValue != null
-                            ? argumentList.FindPropertyRelative("m_ObjectArgument").objectReferenceValue.name
-                            : "null");
+                    {
+                        var value = argumentList.FindPropertyRelative("m_ObjectArgument").objectReferenceValue;
+                        parameters.Add(value != null
+                            ? new UnityEventParameter(value.GetType(), value, value.name)
+                            : new UnityEventParameter(typeof(Object), null, "null"));
                         break;
-                    
+                    }
+
                     case 3:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_IntArgument").intValue.ToString());
+                    {
+                        var value = argumentList.FindPropertyRelative("m_IntArgument").intValue;
+                        parameters.Add(new UnityEventParameter(typeof(int), value, value.ToString()));
                         break;
-                    
+                    }
+
                     case 4:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_FloatArgument").floatValue.ToString("F"));
+                    {
+                        var value = argumentList.FindPropertyRelative("m_FloatArgument").floatValue;
+                        parameters.Add(new UnityEventParameter(typeof(float), value, value.ToString("F")));
                         break;
-                    
+                    }
+
                     case 5:
-                        parameterNames.Add(argumentList.FindPropertyRelative("m_StringArgument").stringValue);
+                    {
+                        var value = argumentList.FindPropertyRelative("m_StringArgument").stringValue;
+                        parameters.Add(new UnityEventParameter(typeof(string), value, value));
                         break;
-                    
+                    }
+
                     case 6:
-                        parameterNames.Add( argumentList.FindPropertyRelative("m_BoolArgument").boolValue.ToString());
+                    {
+                        var value = argumentList.FindPropertyRelative("m_BoolArgument").boolValue;
+                        parameters.Add(new UnityEventParameter(typeof(bool), value, value.ToString()));
                         break;
+                    }
                     
                     default:
-                        parameterNames.Add("");
+                        parameters.Add(new UnityEventParameter(null, null, ""));
                         break;
                 }
             }
 
-            return parameterNames.ToArray();
+            return parameters.ToArray();
         }
 
         public static void MigrateUnityEventList(string originalCallListName, string targetCallListName, 
@@ -154,10 +170,10 @@ namespace AltSalt.Maestro
             return newCallList;
         }
 
-        public static bool UnityEventValuesChanged(GameObjectGenericAction genericAction, string[] parameterNames,
+        public static bool UnityEventValuesChanged(GameObjectGenericAction genericAction, UnityEventParameter[] parameterNames,
             List<UnityEventData> cachedEventData, out List<UnityEventData> eventData)
         {
-            eventData = UnityEventData.GetUnityEventData(genericAction, parameterNames);
+            eventData = GetUnityEventData(genericAction, parameterNames);
             var addedItems = eventData.Except(cachedEventData);
             return addedItems.Any();
         }
@@ -168,9 +184,9 @@ namespace AltSalt.Maestro
 
             for (int i = 0; i < eventData.Count; i++) {
                 eventDescription += eventData[i].targetName;
-                if (String.IsNullOrEmpty(eventData[i].methdodName) == false) {
-                    eventDescription += $" > {eventData[i].methdodName}";
-                    eventDescription += $" ({eventData[i].parameterName})";
+                if (String.IsNullOrEmpty(eventData[i].methodName) == false) {
+                    eventDescription += $" > {eventData[i].methodName}";
+                    eventDescription += $" ({eventData[i].parameter.valueName})";
                 }
 
                 if (i < eventData.Count - 1) {
@@ -180,7 +196,24 @@ namespace AltSalt.Maestro
             
             return eventDescription;
         }
-#endif
         
+        public static List<UnityEventData> GetUnityEventData(UnityEventBase unityEvent, UnityEventParameter[] parameters = null)
+        {
+            List<UnityEventData> eventData = new List<UnityEventData>();
+            
+            for (int i = 0; i < unityEvent.GetPersistentEventCount(); i++) {
+                if (unityEvent.GetPersistentTarget(i) != null) {
+                    var data = new UnityEventData(unityEvent.GetPersistentTarget(i).GetInstanceID(),
+                        unityEvent.GetPersistentTarget(i).name, unityEvent.GetPersistentMethodName(i));
+                    if (parameters != null) {
+                        data.parameter = parameters[i];
+                    } 
+                    eventData.Add(data);
+                }
+            }
+
+            return eventData;
+        }
+#endif
     }
 }

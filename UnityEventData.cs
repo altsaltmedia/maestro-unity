@@ -21,45 +21,27 @@ namespace AltSalt.Maestro
             private set => _targetName = value;
         }
 
-        private string _methdodName;
+        private string _methodName;
 
-        public string methdodName
+        public string methodName
         {
-            get => _methdodName;
-            private set => _methdodName = value;
+            get => _methodName;
+            private set => _methodName = value;
         }
 
-        private string _parameterName = "";
+        private UnityEventParameter _parameter;
 
-        public string parameterName
+        public UnityEventParameter parameter
         {
-            get => _parameterName;
-            private set => _parameterName = value;
+            get => _parameter;
+            set => _parameter = value;
         }
 
-        private UnityEventData(int instanceID, string targetName, string methdodName)
+        public UnityEventData(int instanceID, string targetName, string methodName)
         {
             this.instanceID = instanceID;
             this.targetName = targetName;
-            this.methdodName = methdodName;
-        }
-
-        public static List<UnityEventData> GetUnityEventData(GameObjectGenericAction genericAction, string[] parameterNames = null)
-        {
-            List<UnityEventData> eventData = new List<UnityEventData>();
-            
-            for (int i = 0; i < genericAction.GetPersistentEventCount(); i++) {
-                if (genericAction.GetPersistentTarget(i) != null) {
-                    var data = new UnityEventData(genericAction.GetPersistentTarget(i).GetInstanceID(),
-                        genericAction.GetPersistentTarget(i).name, genericAction.GetPersistentMethodName(i));
-                    if (parameterNames != null) {
-                        data.parameterName = parameterNames[i];
-                    } 
-                    eventData.Add(data);
-                }
-            }
-
-            return eventData;
+            this.methodName = methodName;
         }
     }
 }

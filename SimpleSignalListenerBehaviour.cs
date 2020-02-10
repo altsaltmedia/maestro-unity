@@ -28,7 +28,7 @@ namespace AltSalt.Maestro
         [FormerlySerializedAs("doNotRecord")]
         private bool _doNotRecord;
 
-        public bool doNotRecord => _doNotRecord;
+        public bool skipRegistration => _doNotRecord;
 
         public UnityEngine.Object parentObject => gameObject;
 

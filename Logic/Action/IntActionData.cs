@@ -10,7 +10,7 @@ namespace AltSalt.Maestro.Logic
     public class IntActionData : ActionData
     {
         protected override string title => nameof(IntActionData);
-
+        
         [SerializeField]
         [HideReferenceObjectPicker]
         private IntReference _intReference = new IntReference();

@@ -15,7 +15,7 @@ namespace AltSalt.Maestro.Logic
 {
     [Serializable]
     [ExecuteInEditMode]
-    public abstract class ConditionResponse
+    public abstract class ConditionResponse : IRegisterConditionResponse
     {
         public static bool debugMode => ActionTrigger.debugMode;
         
@@ -171,8 +171,8 @@ namespace AltSalt.Maestro.Logic
                 UnityEventUtils.MigrateUnityEventList(nameof(_response), nameof(_action), serializedConditionResponse);
             }
             
-            string[] parameterNames = UnityEventUtils.GetUnityEventParameters(serializedConditionResponse, nameof(_action));
-            if (UnityEventUtils.UnityEventValuesChanged(action, parameterNames, cachedEventData, out var eventData)) {
+            UnityEventParameter[] parameters = UnityEventUtils.GetUnityEventParameters(serializedConditionResponse, nameof(_action));
+            if (UnityEventUtils.UnityEventValuesChanged(action, parameters, cachedEventData, out var eventData)) {
                 if (eventData.Count > 0) {
                     eventDescription = UnityEventUtils.ParseUnityEventDescription(eventData);
                     cachedEventData = eventData;

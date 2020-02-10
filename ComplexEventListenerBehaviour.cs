@@ -42,7 +42,7 @@ namespace AltSalt.Maestro
         [FormerlySerializedAs("doNotRecord")]
         private bool _doNotRecord;
 
-        public bool doNotRecord => _doNotRecord;
+        public bool skipRegistration => _doNotRecord;
 
         private void OnEnable()
         {

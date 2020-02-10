@@ -113,6 +113,15 @@ namespace AltSalt.Maestro
             }
             return trackAssets;
         }
+        
+        public static List<TrackAsset> GetAllTracks(TimelineAsset sourceTimelineAsset)
+        {
+            List<TrackAsset> trackAssets = new List<TrackAsset>();
+            foreach (TrackAsset rootTrack in sourceTimelineAsset.GetRootTracks()) {
+                trackAssets.AddRange(GetChildTracks(rootTrack));
+            }
+            return trackAssets;
+        }
 
         public static List<TrackAsset> GetChildTracks(TrackAsset trackAsset)
         {

@@ -21,7 +21,7 @@ using Object = UnityEngine.Object;
 namespace AltSalt.Maestro.Logic
 {
     [Serializable]
-    public class ActionTrigger : ISerializationCallbackReceiver
+    public class ActionTrigger : ISerializationCallbackReceiver, IRegisterActionData
     {
         [SerializeField]
         private bool _active = true;

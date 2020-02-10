@@ -11,7 +11,7 @@ namespace AltSalt.Maestro.Logic
     public class GenericActionData : ActionData, ISyncUnityEventHeadings
     {
         protected override string title => nameof(GenericActionData);
-
+        
         [SerializeField]
         [HideReferenceObjectPicker]
         private GameObjectGenericAction _action = new GameObjectGenericAction();
@@ -65,8 +65,8 @@ namespace AltSalt.Maestro.Logic
         {
             string newDescription = "";
 
-            string[] parameterNames = UnityEventUtils.GetUnityEventParameters(unityEventSerializedParent, nameof(_action));
-            if (UnityEventUtils.UnityEventValuesChanged(action, parameterNames, cachedEventData, out var eventData)) {
+            UnityEventParameter[] parameters = UnityEventUtils.GetUnityEventParameters(unityEventSerializedParent, nameof(_action));
+            if (UnityEventUtils.UnityEventValuesChanged(action, parameters, cachedEventData, out var eventData)) {
                 newDescription = UnityEventUtils.ParseUnityEventDescription(eventData);
                 cachedEventData = eventData;
             }

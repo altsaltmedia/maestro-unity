@@ -20,16 +20,10 @@ namespace AltSalt.Maestro.Layout
             set => _active = value;
         }
 
-        public UnityEvent unityEvent;
-
         [SerializeField]
         private GameObjectGenericAction _action;
 
-        private GameObjectGenericAction action
-        {
-            get => _action;
-            set => _action = value;
-        }
+        private GameObjectGenericAction action => _action;
 
         public void OnPointerClick(PointerEventData pointerEventData)
         {

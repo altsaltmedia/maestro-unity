@@ -17,12 +17,12 @@ namespace AltSalt.Maestro.Logic
     [ExecuteInEditMode]
     public class ConditionResponseActionData : ActionData, IClearHiddenValues, ISyncUnityEventHeadings
     {
+        protected override string title => nameof(ConditionResponseActionData);
+        
         public static bool debugMode => ActionTrigger.debugMode;
         
         public static bool manualOverride => ActionTrigger.manualOverride;
         
-        protected override string title => nameof(ConditionResponseActionData);
-
         [Serializable]
         private enum ConditionResponseTypes { Bool, Float, Int, TextFamily, Layout }
         
@@ -669,8 +669,8 @@ namespace AltSalt.Maestro.Logic
             var serializedObject = new SerializedObject(parentObject);
             SerializedProperty eventList =
                 Utils.FindReferenceProperty(serializedObject, serializedPropertyPath.Split('.'), nameof(_action));
-            string[] parameterNames = UnityEventUtils.GetUnityEventParameters(eventList);
-            if (UnityEventUtils.UnityEventValuesChanged(action, parameterNames, cachedEventData, out var eventData)) {
+            UnityEventParameter[] parameters = UnityEventUtils.GetUnityEventParameters(eventList);
+            if (UnityEventUtils.UnityEventValuesChanged(action, parameters, cachedEventData, out var eventData)) {
                 if (eventData.Count > 0) {
                     cachedEventData = eventData;
                     genericActionDescription = UnityEventUtils.ParseUnityEventDescription(eventData);
