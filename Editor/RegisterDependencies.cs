@@ -14,7 +14,6 @@ using UnityEngine.Timeline;
 using System.Linq;
 using System.Text.RegularExpressions;
 using DG.Tweening;
-using QuickEngine.Extensions;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -387,16 +386,17 @@ namespace AltSalt.Maestro
                     }
 
                     FieldInfo[] fields = component.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                    List<Tuple<string, JSONNode>> sceneRegistration = TraverseObjectFields(component, component);
-                    foreach (var registration in sceneRegistration) {
-                        if(registration == null) continue;
-                        var ( filePath, jsonData ) = registration;
-                        WriteData(filePath, jsonData);
-                    }
+                    ParseAndWriteObjectDependencies(component, component);
+                    // List<Tuple<string, JSONNode>> sceneRegistration = ParseAndWriteObjectDependencies(component, component);
+                    // foreach (var registration in sceneRegistration) {
+                    //     if(registration == null) continue;
+                    //     var ( filePath, jsonData ) = registration;
+                    //     WriteData(filePath, jsonData);
+                    // }
                 }
             }
         }
-        private static List<Tuple<string, JSONNode>> TraverseObjectFields(object source, Component rootComponent, string serializedPropertyPath = "")
+        private static List<Tuple<string, JSONNode>> ParseAndWriteObjectDependencies(object source, Component rootComponent, string serializedPropertyPath = "")
         {
             List<Tuple<string, JSONNode>> fieldRegistration = new List<Tuple<string, JSONNode>>();
             
@@ -447,7 +447,7 @@ namespace AltSalt.Maestro
                     
                     string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, fieldInfo);
                     
-                    fieldRegistration.AddRange(TraverseObjectFields(fieldValue, rootComponent, relativePropertyPath));
+                    fieldRegistration.AddRange(ParseAndWriteObjectDependencies(fieldValue, rootComponent, relativePropertyPath));
                 }
             }
 
@@ -481,13 +481,14 @@ namespace AltSalt.Maestro
                 eventItem.Add("target", unityEventData[i].targetName);
                 eventItem.Add("method", unityEventData[i].methodName);
 
-                if (string.IsNullOrEmpty(unityEventData[i].parameter.typeName) == false) {
-                    eventItem.Add("argument type", unityEventData[i].parameter.typeName);
+                if (unityEventData[i].parameter != null) {
+                    if(string.IsNullOrEmpty(unityEventData[i].parameter.typeName) == false) {
+                        eventItem.Add("argument type", unityEventData[i].parameter.typeName);
+                    }
+                    if(string.IsNullOrEmpty(unityEventData[i].parameter.valueName) == false) {
+                        eventItem.Add("parameter", unityEventData[i].parameter.valueName);
+                    }
                 }
-                if(string.IsNullOrEmpty(unityEventData[i].parameter.valueName) == false) {
-                    eventItem.Add("parameter", unityEventData[i].parameter.valueName);
-                }
-                
                 // Register with a helpful "this" indicator when
                 // looking at the event data from the variable context 
                 if (unityEvent.GetPersistentTarget(i) is ScriptableObject target) {
@@ -496,7 +497,8 @@ namespace AltSalt.Maestro
                     eventItem["target"] = unityEventData[i].targetName;
                 }
                 
-                if (unityEventData[i].parameter.value is ScriptableObject parameter) {
+                if (unityEventData[i].parameter != null &&
+                    unityEventData[i].parameter.value is ScriptableObject parameter) {
                     eventItem["parameter"] = eventItem["parameter"] + " (this)";
                     eventRegistration.Add(GetUnityEventReferenceRegistration(parameter, rootComponent, serializedPropertyPath, eventItem));
                     eventItem["parameter"] = unityEventData[i].parameter.valueName;
@@ -515,11 +517,20 @@ namespace AltSalt.Maestro
             string filePath = GetAssetRegistryFilePath(target);
             JSONNode jsonData = GetRootJsonNode(filePath);
 
+            JSONNode eventDescription = new JSONArray();
+            eventDescription.Add(SanitizePropertyPath(serializedPropertypath));
+            eventDescription.Add(eventItem);
+            
             jsonData[$"Scene: {rootComponent.gameObject.scene.name}"]
-                [$"Object: {rootComponent.gameObject.name} > {rootComponent.GetType().Name} > {SanitizePropertyPath(serializedPropertypath)}"].Add(eventItem);
+                [$"Object: {rootComponent.gameObject.name} > {rootComponent.GetType().Name}"]["Unity Event"].Add(eventDescription);
+            
+            // jsonData[$"Scene: {rootComponent.gameObject.scene.name}"]
+            //     [$"Object: {rootComponent.gameObject.name} > {rootComponent.GetType().Name}"][
+            //         $"{SanitizePropertyPath(serializedPropertypath)}"].Add("Unity Event");
+                //.Add(eventItem);
 
+            WriteData(filePath, jsonData);
             return new Tuple<string, JSONNode>(filePath, jsonData);
-            //WriteData(filePath, jsonData);
         }
 
         private static Tuple<string, JSONNode> GetUnityEventSceneRegistration(JSONNode eventData, Component rootComponent, string serializedPropertyPath)
@@ -529,8 +540,8 @@ namespace AltSalt.Maestro
 
             jsonData[$"Component: {rootComponent.GetType().Name} > {SanitizePropertyPath(serializedPropertyPath)}"]["Unity Event"].Add(eventData);
 
+            WriteData(filePath, jsonData);
             return new Tuple<string, JSONNode>(filePath, jsonData);
-            //WriteData(filePath, jsonData);
         }
 
         private static List<Tuple<string, JSONNode>> ParseActionData(IRegisterActionData actionData, Component rootComponent,
@@ -557,7 +568,7 @@ namespace AltSalt.Maestro
             
             // Some action data contains nested fields that also need to be parsed
             if (actionData is IRegisterNestedActionData) {
-                actionDataRegistration.AddRange(TraverseObjectFields(actionData, rootComponent, serializedPropertyPath));
+                actionDataRegistration.AddRange(ParseAndWriteObjectDependencies(actionData, rootComponent, serializedPropertyPath));
             }
 
             return actionDataRegistration;
@@ -629,7 +640,7 @@ namespace AltSalt.Maestro
                         listRegistration.AddRange(ParseActionData(actionData, rootComponent, relativePropertyPath));   
                     }
                     else {
-                        listRegistration.AddRange(TraverseObjectFields(listItem, rootComponent, relativePropertyPath));
+                        listRegistration.AddRange(ParseAndWriteObjectDependencies(listItem, rootComponent, relativePropertyPath));
                     }
                 }
             }
@@ -640,25 +651,39 @@ namespace AltSalt.Maestro
         private static List<Tuple<string, JSONNode>> ParseConditionResponseActionData(IRegisterConditionResponseActionData conditionResponseData, Component rootComponent,
             string serializedPropertyPath)
         {
-            bool isComplexConditionResponse =
-                string.IsNullOrEmpty(conditionResponseData.genericActionDescription) == false;
+            var conditionResponseRegistration = new List<Tuple<string, JSONNode>>();
 
-            if (isComplexConditionResponse == false) {
-                return ParseStandardConditionResponse(conditionResponseData, rootComponent, serializedPropertyPath);
+            if (conditionResponseData.eventExecutionType != EventExecutionType.CheckAllConditionsValid) {
+                conditionResponseRegistration.AddRange(ParseStandardConditionResponse(conditionResponseData, rootComponent, serializedPropertyPath));
+            }
+            else {
+                conditionResponseRegistration.AddRange(ParseComplexConditionResponse(conditionResponseData, rootComponent, serializedPropertyPath));
             }
 
-            return ParseComplexConditionResponse(conditionResponseData, rootComponent, serializedPropertyPath);
+            return conditionResponseRegistration;
         }
 
+        /// <summary>
+        /// Parsing a standard condition response involves grabbing the
+        /// UnityEvent data from each condition and saving them both together
+        /// </summary>
+        /// <param name="conditionResponseData"></param>
+        /// <param name="rootComponent"></param>
+        /// <param name="serializedPropertyPath"></param>
+        /// <returns></returns>
         private static List<Tuple<string, JSONNode>> ParseStandardConditionResponse(IRegisterConditionResponseActionData conditionResponseData,
             Component rootComponent, string serializedPropertyPath)
         {
             var conditionResponseDataRegistration = new List<Tuple<string, JSONNode>>();
             
             FieldInfo[] fields = conditionResponseData.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                        
-            foreach (FieldInfo field in fields) {
 
+            string filePath = GetSceneRegistryFilePath(rootComponent.gameObject);
+            JSONNode jsonData = GetRootJsonNode(filePath);
+            string componentName = rootComponent.GetType().Name;
+
+            foreach (FieldInfo field in fields) {
+                
                 var fieldValue = field.GetValue(conditionResponseData);
                 string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, field);
 
@@ -667,17 +692,52 @@ namespace AltSalt.Maestro
                     foreach (var item in listItems) {
                         if (item is IRegisterConditionResponse conditionResponse) {
                             string listPropertyPath = $"{relativePropertyPath}.Array.data[{counter}]";
-                            conditionResponseDataRegistration.AddRange(
-                                    GetFullConditionResponseRegistration(conditionResponse, rootComponent, listPropertyPath));
-                            counter++;
+                            
+                            // Asset Registration
+                            var assetRegistration =
+                                GetConditionResponseAssetRegistration(conditionResponse, rootComponent, listPropertyPath);
+                            conditionResponseDataRegistration.AddRange(assetRegistration);
+                            jsonData[$"Component: {componentName}"]
+                                [SanitizePropertyPath(serializedPropertyPath)].Add(conditionResponse.conditionEventTitle);
+                            
+                            JSONNode eventDescription = new JSONArray();
+                            string[] eventDescriptionRaw = conditionResponse.eventDescription.Split('\n');
+                            for (int i = 0; i < eventDescriptionRaw.Length; i++) {
+                                eventDescription.Add(eventDescriptionRaw[i]);
+                            }
+                            jsonData[$"Component: {componentName}"]
+                                [SanitizePropertyPath(serializedPropertyPath)].Add(eventDescription);
+                            
+                            // Event Registration
+                            var eventRegistrations =
+                                GetConditionResponseEventRegistration(conditionResponse, rootComponent,
+                                    listPropertyPath);
+                            conditionResponseDataRegistration.AddRange(eventRegistrations);
+                            // foreach (var action in eventRegistrations) {
+                            //     var ( writePath, data ) = action;
+                            //     jsonData[$"Component: {componentName}"]
+                            //         [SanitizePropertyPath(serializedPropertyPath)].Add(data);
+                            // }
+                            // counter++;
                         }
                     }
                 }
             }
-            
+
+            WriteData(filePath, jsonData);
+            conditionResponseDataRegistration.Add(new Tuple<string, JSONNode>(filePath, jsonData));
             return conditionResponseDataRegistration;
         }
         
+        /// <summary>
+        /// A complex condition response involves parsing each condition,
+        /// but in contrast to the standard condition response (above), we
+        /// extract the Unity event from the Action Data level 
+        /// </summary>
+        /// <param name="conditionResponseData"></param>
+        /// <param name="rootComponent"></param>
+        /// <param name="serializedPropertyPath"></param>
+        /// <returns></returns>
         private static List<Tuple<string, JSONNode>> ParseComplexConditionResponse(IRegisterConditionResponseActionData conditionResponseData,
             Component rootComponent, string serializedPropertyPath)
         {
@@ -700,15 +760,10 @@ namespace AltSalt.Maestro
                         if (item is IRegisterConditionResponse conditionResponse) {
                             string listPropertyPath = $"{relativePropertyPath}.Array.data[{counter}]";
                             var conditionRegistration =
-                                GetPartialConditionResponseRegistration(conditionResponse, rootComponent, listPropertyPath);
-                            conditionResponseDataRegistration.Add(conditionRegistration);
+                                GetConditionResponseAssetRegistration(conditionResponse, rootComponent, listPropertyPath);
+                            conditionResponseDataRegistration.AddRange(conditionRegistration);
                             jsonData[$"Component: {componentName}"]
                                 [SanitizePropertyPath(serializedPropertyPath)].Add(conditionResponse.conditionEventTitle);
-                            // foreach (var condition in conditionRegistration) {
-                            //     var ( writePath, data ) = condition;
-                            //     filePath = string.IsNullOrEmpty(filePath) ? writePath : filePath;
-                            //     jsonData[$"Scene: {rootComponent.gameObject.scene.name}"].Add(data);
-                            // }
                             counter++;
                         }
                     }
@@ -726,53 +781,15 @@ namespace AltSalt.Maestro
                 }
             }
 
+            WriteData(filePath, jsonData);
             conditionResponseDataRegistration.Add(new Tuple<string, JSONNode>(filePath, jsonData));
             return conditionResponseDataRegistration;
         }
-        
-        private static List<Tuple<string, JSONNode>> GetFullConditionResponseRegistration(IRegisterConditionResponse conditionResponse, Component rootComponent,
+
+        private static List<Tuple<string, JSONNode>> GetConditionResponseAssetRegistration(IRegisterConditionResponse conditionResponse, Component rootComponent,
             string serializedPropertyPath)
         {
-            var conditionResponseRegistration = new List<Tuple<string, JSONNode>>();
-            
-            FieldInfo[] fields = conditionResponse.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-            
-            JSONNode descriptionNode = new JSONArray();
-            descriptionNode.Add(conditionResponse.conditionEventTitle);
-
-            JSONNode eventDescription = new JSONArray();
-            string[] rawDescription = conditionResponse.eventDescription.Split('\n');
-            for (int i = 0; i < rawDescription.Length; i++) {
-                eventDescription.Add(rawDescription[i]);
-            }
-            
-            descriptionNode.Add(eventDescription);
-
-            foreach (FieldInfo field in fields) {
-
-                var fieldValue = field.GetValue(conditionResponse);
-                string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, field);
-
-                if (fieldValue is ReferenceBase referenceBase) {
-                    
-                    conditionResponseRegistration.AddRange(ParseReference(referenceBase, rootComponent, relativePropertyPath,
-                        out var scriptableObjecList));
-                    
-                    conditionResponseRegistration.AddRange(
-                        GetScriptableObjectListRegistration(rootComponent, serializedPropertyPath, scriptableObjecList, descriptionNode));
-                    
-                } else if (fieldValue is UnityEventBase unityEvent) {
-                    conditionResponseRegistration.AddRange(ParseUnityEvent(unityEvent, rootComponent, relativePropertyPath));
-                }
-            }
-
-            return conditionResponseRegistration;
-        }
-        
-        private static Tuple<string, JSONNode> GetPartialConditionResponseRegistration(IRegisterConditionResponse conditionResponse, Component rootComponent,
-            string serializedPropertyPath)
-        {
-            Tuple<string, JSONNode> conditionResponseRegistration = null;
+            List<Tuple<string, JSONNode>> conditionResponseRegistration = new List<Tuple<string, JSONNode>>();
             
             FieldInfo[] fields = conditionResponse.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             
@@ -795,14 +812,34 @@ namespace AltSalt.Maestro
                         if (descriptionNode.Value.Contains(scriptableObject.name)) {
                             JSONNode descriptionOverride =
                                 descriptionNode.Value.Replace(scriptableObject.name, $"{scriptableObject.name} (this)");
-                            conditionResponseRegistration = GetAssetRegistration(scriptableObject, rootComponent,
-                                serializedPropertyPath, descriptionOverride);
+                            conditionResponseRegistration.Add(GetAssetRegistration(scriptableObject, rootComponent,
+                                serializedPropertyPath, descriptionOverride));
                         }
                         else {
-                            conditionResponseRegistration = GetAssetRegistration(scriptableObject, rootComponent,
-                                serializedPropertyPath, descriptionNode);
+                            conditionResponseRegistration.Add(GetAssetRegistration(scriptableObject, rootComponent,
+                                serializedPropertyPath, descriptionNode));
                         }
                     }
+                }
+            }
+
+            return conditionResponseRegistration;
+        }
+        
+        private static List<Tuple<string, JSONNode>> GetConditionResponseEventRegistration(IRegisterConditionResponse conditionResponse, Component rootComponent,
+            string serializedPropertyPath)
+        {
+            var conditionResponseRegistration = new List<Tuple<string, JSONNode>>();
+            
+            FieldInfo[] fields = conditionResponse.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            
+            foreach (FieldInfo field in fields) {
+
+                var fieldValue = field.GetValue(conditionResponse);
+                string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, field);
+
+                if (fieldValue is UnityEventBase unityEvent) {
+                    conditionResponseRegistration.AddRange(ParseUnityEvent(unityEvent, rootComponent, relativePropertyPath));
                 }
             }
 
@@ -906,9 +943,8 @@ namespace AltSalt.Maestro
                     .Add(registrationData);
             }
             
+            WriteData(filePath, jsonData);
             return new Tuple<string, JSONNode>(filePath, jsonData);
-            
-            //return WriteData(filePath, jsonData);
         }
 
         private static Tuple<string, JSONNode> GetSceneRegistration(ScriptableObject scriptableObject, Component rootComponent, string serializedPropertyPath, JSONNode registrationData = null)
@@ -930,9 +966,8 @@ namespace AltSalt.Maestro
                     .Add(registrationData);
             }
             
+            WriteData(filePath, jsonData);
             return new Tuple<string, JSONNode>(filePath, jsonData);
-            
-            //return WriteData(filePath, jsonData);
         }
 
         private static void ClearHiddenValues(string scenePath)

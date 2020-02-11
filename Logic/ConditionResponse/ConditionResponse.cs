@@ -78,17 +78,6 @@ namespace AltSalt.Maestro.Logic
             set => _eventDescription = value;
         }
         
-        [FormerlySerializedAs("response")]
-        [PropertySpace]
-        [SerializeField]
-        [PropertyOrder(8)]
-        [HideReferenceObjectPicker]
-        [ReadOnly]
-        [ShowIf(nameof(debugMode))]
-        protected UnityEvent _response;
-
-        public UnityEvent response => _response;
-
         [PropertySpace(20)]
         
         [SerializeField]
@@ -111,16 +100,7 @@ namespace AltSalt.Maestro.Logic
             get => _hideGenericAction;
             set => _hideGenericAction = value;
         }
-
-        [SerializeField]
-        private bool _migrated = false;
-
-        private bool migrated
-        {
-            get => _migrated;
-            set => _migrated = value;
-        }
-
+        
         private bool _initialized;
 
         private bool initialized
@@ -165,11 +145,6 @@ namespace AltSalt.Maestro.Logic
 
         public void SyncUnityEventHeading(SerializedProperty serializedConditionResponse)
         {
-            if (migrated == false) {
-                migrated = true;
-                UnityEventUtils.MigrateUnityEventList(nameof(_response), nameof(_action), serializedConditionResponse);
-            }
-            
             UnityEventParameter[] parameters = UnityEventUtils.GetUnityEventParameters(serializedConditionResponse, nameof(_action));
             if (UnityEventUtils.UnityEventValuesChanged(action, parameters, cachedEventData, out var eventData)) {
                 if (eventData.Count > 0) {
@@ -203,11 +178,11 @@ namespace AltSalt.Maestro.Logic
             Debug.Log(string.Format("[condition response] [{0}] [{1}] Following condition met on start {2} : ", callerObject.scene.name, callerObject.name, triggerOnStart.ToString().ToUpper()), callerObject);
             Debug.Log(string.Format("[condition response] [{0}] [event] {1} ", callerObject.scene.name, conditionEventTitle), callerObject);
             Debug.Log(string.Format("[condition response] [{0}] {1} triggered the following :", callerObject.scene.name, callerObject.name), callerObject);
-            for (int i=0; i<response.GetPersistentEventCount(); i++) {
-                object targetObject = response.GetPersistentTarget(i);
+            for (int i=0; i<action.GetPersistentEventCount(); i++) {
+                object targetObject = action.GetPersistentTarget(i);
                 string objectScene = GetObjectScene(targetObject);
                 string objectName = GetObjectName(targetObject);
-                Debug.Log(string.Format("[condition response] [{0}] [{1}] {2}", objectScene, objectName, response.GetPersistentMethodName(i)), response.GetPersistentTarget(i));
+                Debug.Log(string.Format("[condition response] [{0}] [{1}] {2}", objectScene, objectName, action.GetPersistentMethodName(i)), action.GetPersistentTarget(i));
             }
             Debug.Log("[condition response] ---------");
         }

@@ -205,7 +205,7 @@ namespace AltSalt.Maestro
                 if (unityEvent.GetPersistentTarget(i) != null) {
                     var data = new UnityEventData(unityEvent.GetPersistentTarget(i).GetInstanceID(),
                         unityEvent.GetPersistentTarget(i).name, unityEvent.GetPersistentMethodName(i));
-                    if (parameters != null) {
+                    if (parameters != null && parameters.Length > 0) {
                         data.parameter = parameters[i];
                     } 
                     eventData.Add(data);
