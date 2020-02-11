@@ -26,9 +26,9 @@ namespace AltSalt.Maestro
         [SerializeField]
         [InfoBox("Specifies whether this dependency should be recorded when the RegisterDependencies tool is used.")]
         [FormerlySerializedAs("doNotRecord")]
-        private bool _doNotRecord;
+        private bool _skipRegistration;
 
-        public bool skipRegistration => _doNotRecord;
+        public bool skipRegistration => _skipRegistration;
 
         public UnityEngine.Object parentObject => gameObject;
 

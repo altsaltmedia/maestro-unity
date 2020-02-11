@@ -14,8 +14,7 @@ using UnityEditor;
 namespace AltSalt.Maestro.Logic
 {
     [Serializable]
-    [ExecuteInEditMode]
-    public class ConditionResponseActionData : ActionData, IClearHiddenValues, ISyncUnityEventHeadings
+    public class ConditionResponseActionData : ActionData, IClearHiddenValues, ISyncUnityEventHeadings, IRegisterConditionResponseActionData
     {
         protected override string title => nameof(ConditionResponseActionData);
         
@@ -167,7 +166,7 @@ namespace AltSalt.Maestro.Logic
 
         private string _genericActionDescription;
 
-        private string genericActionDescription
+        public string genericActionDescription
         {
             get => _genericActionDescription;
             set => _genericActionDescription = value;

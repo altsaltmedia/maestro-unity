@@ -14,6 +14,7 @@ using UnityEngine.Timeline;
 using System.Linq;
 using System.Text.RegularExpressions;
 using DG.Tweening;
+using QuickEngine.Extensions;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -21,17 +22,17 @@ namespace AltSalt.Maestro
 {
     public class RegisterDependencies : EditorWindow
     {
-        List<ScriptableObject> scriptableObjectList = new List<ScriptableObject>();
+        private static List<ScriptableObject> masterScriptableObjectList = new List<ScriptableObject>();
+        
         string targetScenePath = "";
         string targetSceneName = "";
         string callbackScenePath = "";
         string callbackSceneName = "";
-
-        [SerializeField]
-        private IntVariable counter;
+        
+        private static IntVariable counter;
         
         [SerializeField]
-        private IntVariable maxValue;
+        private static IntVariable maxValue;
 
         [MenuItem("Tools/Maestro/Register Dependencies")]
         public static void ShowWindow()
@@ -92,6 +93,20 @@ namespace AltSalt.Maestro
                 ClearHiddenValuesInTargetScene();
             }
             EditorGUI.EndDisabledGroup();
+            
+            if (GUILayout.Button(new GUIContent("Find Counter"))) {
+                FindCounter();
+            }
+        }
+
+        void FindCounter()
+        {
+            if (counter == null) {
+                counter = Utils.GetScriptableObject("RegisterDependenciesCounter") as IntVariable;
+                maxValue = Utils.GetScriptableObject("MaxValue") as IntVariable;
+            }
+            
+            EditorUtility.ClearProgressBar();
         }
 
         void ShowAllSceneOptions()
@@ -141,30 +156,28 @@ namespace AltSalt.Maestro
             return sceneGuids;
         }
 
-        void PopulateScriptableObjectList()
+        private static List<ScriptableObject> PopulateScriptableObjectList()
         {
             string scriptableObjectQuery = typeof(RegisterableScriptableObject).Name;
-
             string[] scriptableObjectGuids = AssetDatabase.FindAssets(string.Format("t:{0}", scriptableObjectQuery));
 
+            List<ScriptableObject> registerableScriptableObjects = new List<ScriptableObject>();
+            
             int searchCounter = 0;
 
             foreach (string scriptableObjectGuid in scriptableObjectGuids) {
                 EditorUtility.DisplayProgressBar("Scanning project", "Populating scriptable object list", 1.0f / scriptableObjectGuids.Length * searchCounter);
                 string assetPath = AssetDatabase.GUIDToAssetPath(scriptableObjectGuid);
                 ScriptableObject scriptableObject = (ScriptableObject)AssetDatabase.LoadAssetAtPath(assetPath, typeof(ScriptableObject));
-                scriptableObjectList.Add(scriptableObject);
+                registerableScriptableObjects.Add(scriptableObject);
 
                 searchCounter++;
             }
             EditorUtility.ClearProgressBar();
-        }
 
-        private void ClearScriptableObjectList()
-        {
-            scriptableObjectList.Clear();
+            return registerableScriptableObjects;
         }
-
+        
         private void TriggerRegisterDependenciesInTargetScene()
         {
             string componentRegistryScenePath = Utils.projectPath + "/z_Dependencies/Components/" + targetSceneName;
@@ -177,11 +190,11 @@ namespace AltSalt.Maestro
                     AssetDatabase.Refresh();
                 }
 
-                PopulateScriptableObjectList();
+                masterScriptableObjectList = PopulateScriptableObjectList();
                 Scene scene = EditorSceneManager.OpenScene(targetScenePath);
                 FindDependencies();
                 AssetDatabase.Refresh();
-                ClearScriptableObjectList();
+                masterScriptableObjectList.Clear();
             }
         }
 
@@ -190,7 +203,7 @@ namespace AltSalt.Maestro
             if (EditorUtility.DisplayDialog("Register dependencies in all scenes?", "This will scan the entire project and recreate the dependencies folder. This cannot be undone.", "Proceed", "Cancel")) {
 
                 RemoveDependenciesFolder();
-                PopulateScriptableObjectList();
+                masterScriptableObjectList = PopulateScriptableObjectList();
                 string[] sceneGuids = GetSceneGuids();
                 for (int i = 0; i < sceneGuids.Length; i++) {
 
@@ -202,7 +215,7 @@ namespace AltSalt.Maestro
                 AssetDatabase.Refresh();
                 LoadCallbackScene();
                 EditorUtility.ClearProgressBar();
-                ClearScriptableObjectList();
+                masterScriptableObjectList.Clear();
             }
         }
 
@@ -215,8 +228,10 @@ namespace AltSalt.Maestro
 
         private static void FindPlayableDependencies()
         {
-            var playableDirectors = Resources.FindObjectsOfTypeAll(typeof(PlayableDirector)) as PlayableDirector[];
+            var playableDirectors = Resources.FindObjectsOfTypeAll(typeof(PlayableDirector)) as Component[];
             if (playableDirectors == null) return;
+            
+            playableDirectors = Utils.SortComponentSelection(playableDirectors);
 
             foreach (PlayableDirector playableDirector in playableDirectors) {
 
@@ -336,6 +351,8 @@ namespace AltSalt.Maestro
             var components = Resources.FindObjectsOfTypeAll(typeof(Component)) as Component[];
             if (components == null) return;
 
+            components = Utils.SortComponentSelection(components);
+
             foreach (Component component in components) {
 
                 Type componentType = component.GetType();
@@ -365,17 +382,27 @@ namespace AltSalt.Maestro
                         }
                     }
 
+                    if (component is IRegisterActionTriggerBehaviour actionTriggerBehaviour) {
+                        actionTriggerBehaviour.SyncTriggerDescriptions();
+                    }
+
                     FieldInfo[] fields = component.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                    TraverseObjectFields(component, component);
+                    List<Tuple<string, JSONNode>> sceneRegistration = TraverseObjectFields(component, component);
+                    foreach (var registration in sceneRegistration) {
+                        if(registration == null) continue;
+                        var ( filePath, jsonData ) = registration;
+                        WriteData(filePath, jsonData);
+                    }
                 }
             }
         }
-        private void TraverseObjectFields(object source, Component rootComponent, string serializedPropertyPath = "")
+        private static List<Tuple<string, JSONNode>> TraverseObjectFields(object source, Component rootComponent, string serializedPropertyPath = "")
         {
-            FieldInfo[] fieldInfoList = source.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            List<Tuple<string, JSONNode>> fieldRegistration = new List<Tuple<string, JSONNode>>();
             
+            FieldInfo[] fieldInfoList = source.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             if (counter.value > maxValue.value) {
-                return;
+                return null;
             }
             
             // Check types flagged here for dependencies and drill down into the fields if necessary
@@ -395,142 +422,51 @@ namespace AltSalt.Maestro
                 }
 
                 if (fieldType.IsSubclassOf(typeof(UnityEventBase))) {
-
-                    string relativePropertyPath;
                     
-                    if (string.IsNullOrEmpty(serializedPropertyPath) == true) {
-                        relativePropertyPath = fieldInfo.Name;
-                    }
-                    else {
-                        relativePropertyPath = $"{serializedPropertyPath}.{fieldInfo.Name}";
-                    }
+                    string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, fieldInfo);
 
-                    ParseUnityEvent(fieldValue as UnityEventBase, rootComponent, relativePropertyPath);
+                    fieldRegistration.AddRange(ParseUnityEvent(fieldValue as UnityEventBase, rootComponent, relativePropertyPath));
                 }
-
-                // If the field is a list, parse and drill down to find dependencies or other flagged types
-
-
-                // if (fieldType.GetInterfaces().Contains(typeof(IConditionResponseTrigger))) {
-                //
-                //     ParseConditionResponseTriggerBase(fieldType, fieldValue, rootComponent, sceneName);
-                //
-                //     // Compare any field that is a scriptable object to our master list and register dependencies accordingly
-                // }
-                // else if (fieldValue is RegisterableScriptableObject) {
-                //
-                //     RegisterScriptableObject(fieldValue, fieldInfo, rootComponent, sceneName);
-                //
-                // // If we reach a variable references, such as BoolReference, FloatReference, etc., we don't need to drill further
-                // }
-                //
+                
                 else if (fieldType.IsSubclassOf(typeof(ReferenceBase))) {
                 
-                    string relativePropertyPath;
+                    string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, fieldInfo);
                     
-                    if (string.IsNullOrEmpty(serializedPropertyPath) == true) {
-                        relativePropertyPath = fieldInfo.Name;
-                    }
-                    else {
-                        relativePropertyPath = $"{serializedPropertyPath}.{fieldInfo.Name}";
-                    }
-                    
-                    ParseReference(fieldValue as ReferenceBase, rootComponent, relativePropertyPath);
+                    fieldRegistration.AddRange(ParseReference(fieldValue as ReferenceBase, rootComponent, relativePropertyPath, out var scriptableObjectList));
+                    fieldRegistration.AddRange(GetScriptableObjectListRegistration(rootComponent, relativePropertyPath, scriptableObjectList));
                 }
 
                 else if (fieldType.GetInterfaces().Contains(typeof(IEnumerable)) && fieldType.IsGenericType) {
                     
-                    string relativePropertyPath;
-                    
-                    if (string.IsNullOrEmpty(serializedPropertyPath) == true) {
-                        relativePropertyPath = fieldInfo.Name;
-                    }
-                    else {
-                        relativePropertyPath = $"{serializedPropertyPath}.{fieldInfo.Name}";
-                    }
+                    string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, fieldInfo);
                 
-                    ParseFieldList(fieldValue as IEnumerable, fieldInfo, rootComponent, relativePropertyPath);
+                    fieldRegistration.AddRange(ParseFieldList(fieldValue as IEnumerable, fieldInfo, rootComponent, relativePropertyPath));
                 }
-                
-                else if(fieldType.GetInterfaces().Contains(typeof(IRegisterActionData)) == true
-                        && fieldType.IsAbstract == false
-                        || fieldType.GetInterfaces().Contains(typeof(IRegisterConditionResponse)) == true)
 
-                {
-                    string relativePropertyPath;
+                else if(fieldType.GetInterfaces().Contains(typeof(IRegisterActionTrigger))) {
                     
-                    if (string.IsNullOrEmpty(serializedPropertyPath) == true) {
-                        relativePropertyPath = fieldInfo.Name;
-                    }
-                    else {
-                        relativePropertyPath = $"{serializedPropertyPath}.{fieldInfo.Name}";
-                    }
+                    string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, fieldInfo);
                     
-                    TraverseObjectFields(fieldValue, rootComponent, relativePropertyPath);
+                    fieldRegistration.AddRange(TraverseObjectFields(fieldValue, rootComponent, relativePropertyPath));
                 }
             }
+
+            return fieldRegistration;
         }
-    
-
-
-        // private void ParseConditionResponseTriggerBase(Type conditionResponseType, object conditionResponseObject, Component rootComponent, string sceneName)
-        // {
-        //     FieldInfo[] childFieldInfoList = conditionResponseType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-        //
-        //     foreach (FieldInfo childFieldInfo in childFieldInfoList) {
-        //
-        //         var fieldValue = childFieldInfo.GetValue(conditionResponseObject);
-        //         Type fieldType = childFieldInfo.GetValue(conditionResponseObject).GetType();
-        //
-        //         if (fieldValue != null && typeof(IEnumerable).IsAssignableFrom(fieldType) && fieldType.IsGenericType) {
-        //
-        //             IEnumerable conditionResponses = fieldValue as IEnumerable;
-        //             if (conditionResponses != null) {
-        //
-        //                 foreach (object conditionResponse in conditionResponses) {
-        //
-        //                     FieldInfo[] conditionResponseFields = conditionResponse.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-        //
-        //                     foreach(FieldInfo conditionResponseField in conditionResponseFields) {
-        //
-        //                         var conditionResponseFieldValue = conditionResponseField.GetValue(conditionResponse);
-        //
-        //                         if(conditionResponseFieldValue == null) {
-        //                             continue;
-        //                         }
-        //
-        //                         Type conditionResponseFieldType = conditionResponseField.GetValue(conditionResponse).GetType();
-        //
-        //                         if (conditionResponseFieldType.IsSubclassOf(typeof(ReferenceBase))) {
-        //
-        //                             ParseReference(conditionResponseFieldType, conditionResponse, conditionResponseFieldValue, conditionResponseField, rootComponent, sceneName);
-        //
-        //                         } else if (conditionResponseFieldType.IsSubclassOf(typeof(UnityEventBase))) {
-        //
-        //                             //ParseUnityEvent(conditionResponseFieldValue, rootComponent, sceneName);
-        //
-        //                         } else if (conditionResponseFieldValue is string){
-        //                             
-        //                             RegisterComponentConditionResponseDesc(conditionResponseFieldValue, rootComponent, sceneName);
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        private void ParseUnityEvent(UnityEventBase unityEvent, Component rootComponent, string serializedPropertyPath)
+        
+        private static List<Tuple<string, JSONNode>> ParseUnityEvent(UnityEventBase unityEvent, Component rootComponent, string serializedPropertyPath)
         {
+            var eventRegistration = new List<Tuple<string, JSONNode>>();
+            
             if (unityEvent.GetPersistentEventCount() < 1) {
-                return;
+                return eventRegistration;
             }
             
             var serializedObject = new SerializedObject(rootComponent);
             var serializedProperty = serializedObject.FindProperty(serializedPropertyPath);
 
             if (serializedProperty == null) {
-                return;
+                return eventRegistration;
             }
 
             JSONNode eventData = new JSONArray();
@@ -554,74 +490,323 @@ namespace AltSalt.Maestro
                 
                 // Register with a helpful "this" indicator when
                 // looking at the event data from the variable context 
-                
                 if (unityEvent.GetPersistentTarget(i) is ScriptableObject target) {
                     eventItem["target"] = eventItem["target"] + " (this)";
-                    RegisterPersistentUnityEventReference(target, rootComponent, serializedPropertyPath, eventItem);
+                    eventRegistration.Add(GetUnityEventReferenceRegistration(target, rootComponent, serializedPropertyPath, eventItem));
                     eventItem["target"] = unityEventData[i].targetName;
                 }
                 
                 if (unityEventData[i].parameter.value is ScriptableObject parameter) {
                     eventItem["parameter"] = eventItem["parameter"] + " (this)";
-                    RegisterPersistentUnityEventReference(parameter, rootComponent, serializedPropertyPath, eventItem);
+                    eventRegistration.Add(GetUnityEventReferenceRegistration(parameter, rootComponent, serializedPropertyPath, eventItem));
                     eventItem["parameter"] = unityEventData[i].parameter.valueName;
                 }
                 
                 eventData.Add(eventItem);
             }
 
-            RegisterSceneUnityEventData(eventData, rootComponent, serializedPropertyPath);
-        }
+            eventRegistration.Add(GetUnityEventSceneRegistration(eventData, rootComponent, serializedPropertyPath));
 
-        private void RegisterPersistentUnityEventReference(ScriptableObject target, Component rootComponent, string serializedPropertypath, JSONNode eventItem)
+            return eventRegistration;
+        }
+        
+        private static Tuple<string, JSONNode> GetUnityEventReferenceRegistration(ScriptableObject target, Component rootComponent, string serializedPropertypath, JSONNode eventItem)
         {
-            foreach (ScriptableObject scriptableObject in scriptableObjectList) {
-                
-                if (target == scriptableObject) {
-                    string filePath = GetAssetRegistryFilePath(scriptableObject);
-                    JSONNode jsonData = GetRootJsonNode(filePath);
+            string filePath = GetAssetRegistryFilePath(target);
+            JSONNode jsonData = GetRootJsonNode(filePath);
 
-                    jsonData[$"Scene: {rootComponent.gameObject.scene.name}"]
-                        [$"Object: {rootComponent.gameObject.name} > {rootComponent.GetType().Name} > {SanitizePropertyPath(serializedPropertypath)}"].Add(eventItem);
-                    WriteData(filePath, jsonData);
-                    
-                    break;
-                }
-            }
+            jsonData[$"Scene: {rootComponent.gameObject.scene.name}"]
+                [$"Object: {rootComponent.gameObject.name} > {rootComponent.GetType().Name} > {SanitizePropertyPath(serializedPropertypath)}"].Add(eventItem);
+
+            return new Tuple<string, JSONNode>(filePath, jsonData);
+            //WriteData(filePath, jsonData);
         }
 
-        void RegisterSceneUnityEventData(JSONNode eventData, Component rootComponent, string serializedPropertyPath)
+        private static Tuple<string, JSONNode> GetUnityEventSceneRegistration(JSONNode eventData, Component rootComponent, string serializedPropertyPath)
         {
             string filePath = GetSceneRegistryFilePath(rootComponent.gameObject);
-
             JSONNode jsonData = GetRootJsonNode(filePath);
 
             jsonData[$"Component: {rootComponent.GetType().Name} > {SanitizePropertyPath(serializedPropertyPath)}"]["Unity Event"].Add(eventData);
 
-            WriteData(filePath, jsonData);
+            return new Tuple<string, JSONNode>(filePath, jsonData);
+            //WriteData(filePath, jsonData);
         }
-        
-        private void ParseReference(ReferenceBase reference, Component rootComponent, string serializedPropertyPath)
-        {
-            FieldInfo[] fields = reference.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
+        private static List<Tuple<string, JSONNode>> ParseActionData(IRegisterActionData actionData, Component rootComponent,
+            string serializedPropertyPath)
+        {
+            var actionDataRegistration = new List<Tuple<string, JSONNode>>();
+            
+            FieldInfo[] fields = actionData.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            
+            JSONNode descriptionNode = new JSONString(actionData.actionDescription);
+            
+            foreach (FieldInfo field in fields) {
+
+                var fieldValue = field.GetValue(actionData);
+                string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, field);
+
+                if (fieldValue is ReferenceBase referenceBase) {
+                    actionDataRegistration.AddRange(ParseReference(referenceBase, rootComponent, relativePropertyPath,
+                        out var scriptableObjecList));
+
+                    actionDataRegistration.AddRange(GetScriptableObjectListRegistration(rootComponent, serializedPropertyPath, scriptableObjecList, descriptionNode));
+                } 
+            }
+            
+            // Some action data contains nested fields that also need to be parsed
+            if (actionData is IRegisterNestedActionData) {
+                actionDataRegistration.AddRange(TraverseObjectFields(actionData, rootComponent, serializedPropertyPath));
+            }
+
+            return actionDataRegistration;
+        }
+
+        private static List<Tuple<string, JSONNode>> ParseReference(ReferenceBase reference, Component rootComponent, string serializedPropertyPath, out List<ScriptableObject> objectsAtReferenceRoot)
+        {
+            var referenceRegistration = new List<Tuple<string, JSONNode>>();
+            
+            FieldInfo[] fields = reference.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            objectsAtReferenceRoot = new List<ScriptableObject>();
+            
             foreach (FieldInfo field in fields) {
 
                 var fieldValue = field.GetValue(reference);
                 Type fieldType = field.FieldType;
 
-                if (fieldValue != null) {
+                if (fieldValue != null && fieldValue is string == false) {
                     
-                    // Skip Sirenix lists and other enumerables
-                    if (fieldType.GetInterfaces().Contains(typeof(IEnumerable)) || fieldType.IsGenericType) {
-                        ParseFieldList(fieldValue as IEnumerable, field, rootComponent, serializedPropertyPath);
+                    if (fieldType.GetInterfaces().Contains(typeof(IEnumerable))) {
+                        
+                        referenceRegistration.AddRange(ParseFieldList(fieldValue as IEnumerable, field, rootComponent, serializedPropertyPath));
                         
                     } else if (fieldValue is ScriptableObject scriptableObject) {
-                        RegisterAssetReference(scriptableObject, rootComponent, serializedPropertyPath);
-                        RegisterSceneDependency(scriptableObject, rootComponent, serializedPropertyPath);
+                        
+                        objectsAtReferenceRoot.Add(scriptableObject);
                     }
                 }
             }
+
+            return referenceRegistration;
+        }
+        
+        // If the field is a list, register any scriptable objects in the list. Otherwise, recurse and drill
+        // further into the list to see if it contains one of our types flagged above
+        private static List<Tuple<string, JSONNode>> ParseFieldList(IEnumerable list, FieldInfo fieldInfo, Component rootComponent, string serializedPropertyPath)
+        {
+            var listRegistration = new List<Tuple<string, JSONNode>>();
+            
+            int counter = 0;
+            if (list != null) {
+                foreach (var listItem in list) {
+                    string relativePropertyPath = $"{serializedPropertyPath}.Array.data[{counter}]";
+                    
+                    if (listItem is ISkipRegistration skipRegistration &&
+                        skipRegistration.skipRegistration == true) {
+                        continue;
+                    }
+                    
+                    if (listItem is string || listItem is bool || listItem is float) {
+                        continue;
+                    }
+                    
+                    if (listItem is ScriptableObject scriptableObject) {
+                        listRegistration.AddRange(GetScriptableObjectRegistration(scriptableObject, rootComponent, relativePropertyPath));
+                    }
+                    else if (listItem is ReferenceBase referenceBase) {
+                        listRegistration.AddRange(ParseReference(referenceBase, rootComponent, relativePropertyPath, out var scriptableObjectList));
+                        listRegistration.AddRange(GetScriptableObjectListRegistration(rootComponent, relativePropertyPath, scriptableObjectList));
+                    }
+                    // Note: When it comes to parsing ActionData, which is housed underneath ActionTrigger,
+                    // we only want the serialized data, not the editor-only generic, abstract ActionData list that is
+                    // used only in the inspector (see the ActionTrigger class for details).
+                    else if (listItem is IRegisterConditionResponseActionData conditionResponseData
+                             && list.GetType().GetGenericArguments()[0].IsAbstract == false) {
+                        listRegistration.AddRange(ParseConditionResponseActionData(conditionResponseData, rootComponent, relativePropertyPath));
+                    }
+                    else if (listItem is IRegisterActionData actionData && list.GetType().GetGenericArguments()[0].IsAbstract == false) {
+                        listRegistration.AddRange(ParseActionData(actionData, rootComponent, relativePropertyPath));   
+                    }
+                    else {
+                        listRegistration.AddRange(TraverseObjectFields(listItem, rootComponent, relativePropertyPath));
+                    }
+                }
+            }
+
+            return listRegistration;
+        }
+        
+        private static List<Tuple<string, JSONNode>> ParseConditionResponseActionData(IRegisterConditionResponseActionData conditionResponseData, Component rootComponent,
+            string serializedPropertyPath)
+        {
+            bool isComplexConditionResponse =
+                string.IsNullOrEmpty(conditionResponseData.genericActionDescription) == false;
+
+            if (isComplexConditionResponse == false) {
+                return ParseStandardConditionResponse(conditionResponseData, rootComponent, serializedPropertyPath);
+            }
+
+            return ParseComplexConditionResponse(conditionResponseData, rootComponent, serializedPropertyPath);
+        }
+
+        private static List<Tuple<string, JSONNode>> ParseStandardConditionResponse(IRegisterConditionResponseActionData conditionResponseData,
+            Component rootComponent, string serializedPropertyPath)
+        {
+            var conditionResponseDataRegistration = new List<Tuple<string, JSONNode>>();
+            
+            FieldInfo[] fields = conditionResponseData.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                        
+            foreach (FieldInfo field in fields) {
+
+                var fieldValue = field.GetValue(conditionResponseData);
+                string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, field);
+
+                if (fieldValue is IEnumerable listItems) {
+                    int counter = 0;
+                    foreach (var item in listItems) {
+                        if (item is IRegisterConditionResponse conditionResponse) {
+                            string listPropertyPath = $"{relativePropertyPath}.Array.data[{counter}]";
+                            conditionResponseDataRegistration.AddRange(
+                                    GetFullConditionResponseRegistration(conditionResponse, rootComponent, listPropertyPath));
+                            counter++;
+                        }
+                    }
+                }
+            }
+            
+            return conditionResponseDataRegistration;
+        }
+        
+        private static List<Tuple<string, JSONNode>> ParseComplexConditionResponse(IRegisterConditionResponseActionData conditionResponseData,
+            Component rootComponent, string serializedPropertyPath)
+        {
+            var conditionResponseDataRegistration = new List<Tuple<string, JSONNode>>();
+            
+            FieldInfo[] fields = conditionResponseData.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+
+            string filePath = GetSceneRegistryFilePath(rootComponent.gameObject);
+            JSONNode jsonData = GetRootJsonNode(filePath);
+            string componentName = rootComponent.GetType().Name;
+
+            foreach (FieldInfo field in fields) {
+                
+                var fieldValue = field.GetValue(conditionResponseData);
+                string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, field);
+
+                if (fieldValue is IEnumerable listItems) {
+                    int counter = 0;
+                    foreach (var item in listItems) {
+                        if (item is IRegisterConditionResponse conditionResponse) {
+                            string listPropertyPath = $"{relativePropertyPath}.Array.data[{counter}]";
+                            var conditionRegistration =
+                                GetPartialConditionResponseRegistration(conditionResponse, rootComponent, listPropertyPath);
+                            conditionResponseDataRegistration.Add(conditionRegistration);
+                            jsonData[$"Component: {componentName}"]
+                                [SanitizePropertyPath(serializedPropertyPath)].Add(conditionResponse.conditionEventTitle);
+                            // foreach (var condition in conditionRegistration) {
+                            //     var ( writePath, data ) = condition;
+                            //     filePath = string.IsNullOrEmpty(filePath) ? writePath : filePath;
+                            //     jsonData[$"Scene: {rootComponent.gameObject.scene.name}"].Add(data);
+                            // }
+                            counter++;
+                        }
+                    }
+                }
+                else if (fieldValue is UnityEventBase unityEvent) {
+                    var eventRegistrations= ParseUnityEvent(unityEvent, rootComponent,
+                        relativePropertyPath);
+                    foreach (var action in eventRegistrations) {
+                        var ( writePath, data ) = action;
+                        filePath = string.IsNullOrEmpty(filePath) ? writePath : filePath;
+                        JSONNode sanitizedNode = data[ $"Component: {componentName} > {SanitizePropertyPath(relativePropertyPath)}"];
+                        jsonData[$"Component: {componentName}"]
+                            [SanitizePropertyPath(serializedPropertyPath)].Add(sanitizedNode);
+                    }
+                }
+            }
+
+            conditionResponseDataRegistration.Add(new Tuple<string, JSONNode>(filePath, jsonData));
+            return conditionResponseDataRegistration;
+        }
+        
+        private static List<Tuple<string, JSONNode>> GetFullConditionResponseRegistration(IRegisterConditionResponse conditionResponse, Component rootComponent,
+            string serializedPropertyPath)
+        {
+            var conditionResponseRegistration = new List<Tuple<string, JSONNode>>();
+            
+            FieldInfo[] fields = conditionResponse.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            
+            JSONNode descriptionNode = new JSONArray();
+            descriptionNode.Add(conditionResponse.conditionEventTitle);
+
+            JSONNode eventDescription = new JSONArray();
+            string[] rawDescription = conditionResponse.eventDescription.Split('\n');
+            for (int i = 0; i < rawDescription.Length; i++) {
+                eventDescription.Add(rawDescription[i]);
+            }
+            
+            descriptionNode.Add(eventDescription);
+
+            foreach (FieldInfo field in fields) {
+
+                var fieldValue = field.GetValue(conditionResponse);
+                string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, field);
+
+                if (fieldValue is ReferenceBase referenceBase) {
+                    
+                    conditionResponseRegistration.AddRange(ParseReference(referenceBase, rootComponent, relativePropertyPath,
+                        out var scriptableObjecList));
+                    
+                    conditionResponseRegistration.AddRange(
+                        GetScriptableObjectListRegistration(rootComponent, serializedPropertyPath, scriptableObjecList, descriptionNode));
+                    
+                } else if (fieldValue is UnityEventBase unityEvent) {
+                    conditionResponseRegistration.AddRange(ParseUnityEvent(unityEvent, rootComponent, relativePropertyPath));
+                }
+            }
+
+            return conditionResponseRegistration;
+        }
+        
+        private static Tuple<string, JSONNode> GetPartialConditionResponseRegistration(IRegisterConditionResponse conditionResponse, Component rootComponent,
+            string serializedPropertyPath)
+        {
+            Tuple<string, JSONNode> conditionResponseRegistration = null;
+            
+            FieldInfo[] fields = conditionResponse.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            
+            JSONNode descriptionNode = new JSONArray();
+            descriptionNode.Add(conditionResponse.conditionEventTitle);
+
+            foreach (FieldInfo field in fields) {
+
+                var fieldValue = field.GetValue(conditionResponse);
+                string relativePropertyPath = GetRelativePropertyPath(serializedPropertyPath, field);
+
+                if (fieldValue is ReferenceBase referenceBase) {
+
+                    ParseReference(referenceBase, rootComponent, relativePropertyPath, out var scriptableObjectList);
+
+                    foreach (var scriptableObject in scriptableObjectList) {
+
+                        // When registering the asset, if the action is referencing
+                        // the asset itself, let's add a flag to make that explicit
+                        if (descriptionNode.Value.Contains(scriptableObject.name)) {
+                            JSONNode descriptionOverride =
+                                descriptionNode.Value.Replace(scriptableObject.name, $"{scriptableObject.name} (this)");
+                            conditionResponseRegistration = GetAssetRegistration(scriptableObject, rootComponent,
+                                serializedPropertyPath, descriptionOverride);
+                        }
+                        else {
+                            conditionResponseRegistration = GetAssetRegistration(scriptableObject, rootComponent,
+                                serializedPropertyPath, descriptionNode);
+                        }
+                    }
+                }
+            }
+
+            return conditionResponseRegistration;
         }
 
         private static string SanitizePropertyPath(string serializedPropertyPath)
@@ -638,98 +823,119 @@ namespace AltSalt.Maestro
             return sanitizedPath;
         }
 
-        // If the field is a list, register any scriptable objects in the list. Otherwise, recurse and drill
-        // further into the list to see if it contains one of our types flagged above
-        private void ParseFieldList(IEnumerable list, FieldInfo fieldInfo, Component rootComponent, string serializedPropertyPath)
+        private static List<Tuple<string, JSONNode>> GetScriptableObjectListRegistration(Component rootComponent, string relativePropertyPath,
+            List<ScriptableObject> scriptableObjectList)
         {
-            int counter = 0;
-            if (list != null) {
-                foreach (var listItem in list) {
-                    string relativePropertyPath = $"{serializedPropertyPath}.Array.data[{counter}]";
-
-                    if (listItem is ISkipRegistration skipRegistration &&
-                        skipRegistration.skipRegistration == true) {
-                        continue;
-                    }
-                    
-                    if (listItem is string || listItem is bool || listItem is float) {
-                        continue;
-                    }
-                    
-                    if (listItem is ScriptableObject scriptableObject) {
-                        RegisterScriptableObjectListItem(scriptableObject, rootComponent, relativePropertyPath);
-                    }
-                    else {
-                        TraverseObjectFields(listItem, rootComponent, relativePropertyPath);
-                    }
-                }
+            var scriptableObjectRegistration = new List<Tuple<string, JSONNode>>();
+            
+            foreach (var scriptableObject in scriptableObjectList) {
+                scriptableObjectRegistration.Add(GetAssetRegistration(scriptableObject, rootComponent, relativePropertyPath));
+                scriptableObjectRegistration.Add(GetSceneRegistration(scriptableObject, rootComponent, relativePropertyPath));
             }
+
+            return scriptableObjectRegistration;
+        }
+        
+        private static List<Tuple<string, JSONNode>> GetScriptableObjectListRegistration(Component rootComponent,
+            string serializedPropertyPath, List<ScriptableObject> scriptableObjectList, JSONNode descriptionNode)
+        {
+            var scriptableObjectRegistration = new List<Tuple<string, JSONNode>>();
+            
+            foreach (var scriptableObject in scriptableObjectList) {
+
+                // When registering the asset, if the action is referencing
+                // the asset itself, let's add a flag to make that explicit
+                if (descriptionNode.Value.Contains(scriptableObject.name)) {
+                    JSONNode descriptionOverride = 
+                        descriptionNode.Value.Replace(scriptableObject.name, $"{scriptableObject.name} (this)");
+                    scriptableObjectRegistration.Add(GetAssetRegistration(scriptableObject, rootComponent, serializedPropertyPath, descriptionOverride));
+                }
+                else {
+                    scriptableObjectRegistration.Add(GetAssetRegistration(scriptableObject, rootComponent, serializedPropertyPath, descriptionNode));
+                }
+                        
+                scriptableObjectRegistration.Add(GetSceneRegistration(scriptableObject, rootComponent, serializedPropertyPath, descriptionNode));
+            }
+
+            return scriptableObjectRegistration;
         }
 
-        private void RegisterScriptableObjectListItem(ScriptableObject target, Component rootComponent, string serializedPropertyPath)
+
+        private static List<Tuple<string, JSONNode>> GetScriptableObjectRegistration(ScriptableObject target, Component rootComponent, string serializedPropertyPath)
         {
-            foreach (ScriptableObject scriptableObject in scriptableObjectList) {
-                
-                if (target == scriptableObject) {
-                    
-                    RegisterAssetReference(target, rootComponent, serializedPropertyPath);
-                    RegisterSceneDependency(target, rootComponent, serializedPropertyPath);
-                    
-                    break;
-                }
-            }
+            var scriptableObjectRegistration = new List<Tuple<string, JSONNode>>
+            {
+                GetAssetRegistration(target, rootComponent, serializedPropertyPath),
+                GetSceneRegistration(target, rootComponent, serializedPropertyPath)
+            };
+            
+            return scriptableObjectRegistration;
         }
 
-        void RegisterAssetReference(ScriptableObject scriptableObject, Component rootComponent, string serializedPropertyPath)
+        private static Tuple<string, JSONNode> GetAssetRegistration(ScriptableObject scriptableObject, Component rootComponent, string serializedPropertyPath, JSONNode registrationData = null)
         {
             var serializedObject = new SerializedObject(rootComponent);
             var serializedProperty = serializedObject.FindProperty(serializedPropertyPath);
 
             if (serializedProperty == null) {
-                return;
+                return null;
             }
             
             string filePath = GetAssetRegistryFilePath(scriptableObject);
             JSONNode jsonData = GetRootJsonNode(filePath);
             
             GameObject referencingObject = rootComponent.gameObject;
-            
+
+            string assetString = SanitizePropertyPath(serializedPropertyPath);
+
+            if (assetString.Contains(scriptableObject.name)) {
+                assetString = assetString.
+                    Replace(scriptableObject.name, $"{scriptableObject.name} (this)");
+            }
+            else {
+                assetString = $"{assetString} > {scriptableObject.name} (this)";
+            }
+
             jsonData[$"Scene: {referencingObject.scene.name}"]
                 [$"Object: {referencingObject.name} > {rootComponent.GetType().Name}"]
-                .Add($"{SanitizePropertyPath(serializedPropertyPath)}");
+                .Add(assetString);
             
-            WriteData(filePath, jsonData);
+            if (registrationData != null) {
+                jsonData[$"Scene: {referencingObject.scene.name}"]
+                    [$"Object: {referencingObject.name} > {rootComponent.GetType().Name}"]
+                    .Add(registrationData);
+            }
+            
+            return new Tuple<string, JSONNode>(filePath, jsonData);
+            
+            //return WriteData(filePath, jsonData);
         }
 
-        private static void RegisterSceneDependency(ScriptableObject scriptableObject, Component rootComponent, string serializedPropertyPath)
+        private static Tuple<string, JSONNode> GetSceneRegistration(ScriptableObject scriptableObject, Component rootComponent, string serializedPropertyPath, JSONNode registrationData = null)
         {
             var serializedObject = new SerializedObject(rootComponent);
             var serializedProperty = serializedObject.FindProperty(serializedPropertyPath);
 
             if (serializedProperty == null) {
-                return;
+                return null;
             }
             
             string filePath = GetSceneRegistryFilePath(rootComponent.gameObject);
             JSONNode jsonData = GetRootJsonNode(filePath);
-            jsonData[$"Component: {rootComponent.GetType().Name}"].Add($"{SanitizePropertyPath(serializedPropertyPath)} > {scriptableObject.name}");
+            jsonData[$"Component: {rootComponent.GetType().Name}"]
+                .Add($"{SanitizePropertyPath(serializedPropertyPath)} > {scriptableObject.name}");
+
+            if (registrationData != null) {
+                jsonData[$"Component: {rootComponent.GetType().Name}"]
+                    .Add(registrationData);
+            }
             
-            WriteData(filePath, jsonData);
+            return new Tuple<string, JSONNode>(filePath, jsonData);
+            
+            //return WriteData(filePath, jsonData);
         }
 
-        void RegisterComponentConditionResponseDesc(object conditionResponseDescObject, Component rootComponent, string sceneName)
-        {
-            string conditionDescription = conditionResponseDescObject as string;
-
-            string filePath = GetSceneRegistryFilePath(rootComponent.gameObject);
-            JSONNode jsonData = GetRootJsonNode(filePath);
-
-            jsonData[rootComponent.GetType().Name]["Conditions"].Add(conditionDescription);
-
-            WriteData(filePath, jsonData);
-        }
-
-        void ClearHiddenValues(string scenePath)
+        private static void ClearHiddenValues(string scenePath)
         {
             Scene scene = EditorSceneManager.OpenScene(scenePath);
 
@@ -762,7 +968,7 @@ namespace AltSalt.Maestro
             EditorSceneManager.SaveScene(scene);
         }
 
-        void ClearHiddenValuesInTargetScene()
+        private void ClearHiddenValuesInTargetScene()
         {
             if (EditorUtility.DisplayDialog("Clear hidden values in " + targetSceneName+ "?", "This will search " + targetSceneName + " for hidden values " +
                 "on relevant components and erase them. This action cannot be undone.", "Proceed", "Cancel")) {
@@ -772,7 +978,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        void ClearAllHiddenValues()
+        private void ClearAllHiddenValues()
         {
             if (EditorUtility.DisplayDialog("Clear hidden values in all scenes?", "This will search all scenes for hidden values" +
                 "on relevant components and erase them. This action cannot be undone.", "Proceed", "Cancel")) {
@@ -789,12 +995,12 @@ namespace AltSalt.Maestro
             }
         }
 
-        void LoadCallbackScene()
+        private void LoadCallbackScene()
         {
             EditorSceneManager.OpenScene(callbackScenePath);
         }
 
-        void RemoveDependenciesFolder()
+        private static void RemoveDependenciesFolder()
         {
             string dependenciesFolderPath = Utils.projectPath + "z_Dependencies";
 
@@ -836,10 +1042,26 @@ namespace AltSalt.Maestro
 
             return rootNode;
         }
-
-        private static void WriteData(string filePath, JSONNode jsonData)
+        
+        private static string GetRelativePropertyPath(string serializedPropertyPath, FieldInfo fieldInfo)
         {
-            File.WriteAllText(filePath, jsonData.ToString(2));
+            string relativePropertyPath;
+            
+            if (string.IsNullOrEmpty(serializedPropertyPath) == true) {
+                relativePropertyPath = fieldInfo.Name;
+            }
+            else {
+                relativePropertyPath = $"{serializedPropertyPath}.{fieldInfo.Name}";
+            }
+
+            return relativePropertyPath;
+        }
+
+        private static string WriteData(string filePath, JSONNode jsonData)
+        {
+            string data = jsonData.ToString(2);
+            File.WriteAllText(filePath, data);
+            return data;
         }
 
     }

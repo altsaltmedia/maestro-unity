@@ -21,7 +21,7 @@ using Object = UnityEngine.Object;
 namespace AltSalt.Maestro.Logic
 {
     [Serializable]
-    public class ActionTrigger : ISerializationCallbackReceiver, IRegisterActionData
+    public class ActionTrigger : ISerializationCallbackReceiver, IRegisterActionTrigger
     {
         [SerializeField]
         private bool _active = true;
@@ -122,6 +122,12 @@ namespace AltSalt.Maestro.Logic
         [HideReferenceObjectPicker]
         [ListDrawerSettings(HideAddButton = true, Expanded = true)]
         [HideDuplicateReferenceBox]
+        /// NOTE: THIS FIELD IS NOT SERIALIZED AND IS ONLY USED FOR
+        /// CONVENIENCE'S SAKE IN THE EDITOR. THIS WILL NOT GET REGISTERED
+        /// WITH THE REGISTERDEPENDENCIES TOOL; THE OTHER BACKING
+        /// FIELDS IN THIS SCRIPT WILL GET REGISTERED INSTEAD.
+        /// THE REASON IS THAT THIS FUNCTIONALITY WAS WRITTEN PRIOR
+        /// TO UNITY 2019.3, BEFORE WE COULD SERIALIZE REFERENCES, 
         private List<ActionData> _actionData = new List<ActionData>();
 
         private List<ActionData> actionData => _actionData;

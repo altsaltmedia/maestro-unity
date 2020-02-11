@@ -14,7 +14,6 @@ using Object = UnityEngine.Object;
 namespace AltSalt.Maestro.Logic
 {
     [Serializable]
-    [ExecuteInEditMode]
     public abstract class ConditionResponse : IRegisterConditionResponse
     {
         public static bool debugMode => ActionTrigger.debugMode;
@@ -76,7 +75,7 @@ namespace AltSalt.Maestro.Logic
                 }
                 return _eventDescription;
             }
-            private set => _eventDescription = value;
+            set => _eventDescription = value;
         }
         
         [FormerlySerializedAs("response")]

@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 namespace AltSalt.Maestro.Logic
 {
     [Serializable]
-    public class ComplexEventActionData : ActionData
+    public class ComplexEventActionData : ActionData, IRegisterNestedActionData
     {
         protected override string title => nameof(ComplexEventActionData);
         

@@ -8,7 +8,7 @@ using UnityEditor;
 namespace AltSalt.Maestro.Logic
 {
     [ExecuteInEditMode]
-    public class ActionTriggerBehaviour : MonoBehaviour
+    public class ActionTriggerBehaviour : MonoBehaviour, IRegisterActionTriggerBehaviour
     {
         [ShowInInspector]
         private static bool syncEditorActionHeadings = true;
@@ -139,11 +139,16 @@ namespace AltSalt.Maestro.Logic
         private void Update()
         {
             if (syncEditorActionHeadings == true) {
-                actionTrigger.CallSyncEditorActionHeadings();
-                actionTrigger.CallSyncComplexSubheadings(this.gameObject,
-                    new SerializedObject(this).FindProperty(nameof(_actionTrigger)));
-                actionTrigger.SyncFullActionDescription();
+                SyncTriggerDescriptions();
             }
+        }
+
+        public void SyncTriggerDescriptions()
+        {
+            actionTrigger.CallSyncEditorActionHeadings();
+            actionTrigger.CallSyncComplexSubheadings(this.gameObject,
+                new SerializedObject(this).FindProperty(nameof(_actionTrigger)));
+            actionTrigger.SyncFullActionDescription();
         }
 #endif
     }

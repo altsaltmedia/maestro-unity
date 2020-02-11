@@ -11,7 +11,6 @@ using Object = UnityEngine.Object;
 namespace AltSalt.Maestro.Logic
 {
     [Serializable]
-    [ExecuteInEditMode]
     public class FloatConditionResponse : ConditionResponse
     {
         [SerializeField]

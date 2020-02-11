@@ -10,6 +10,7 @@ https://www.altsalt.com / artemio@altsalt.com
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.Events;
 using System.IO;
@@ -21,6 +22,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Timeline;
 using Object = UnityEngine.Object;
 #if UNITY_EDITOR
+using System.Collections;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
@@ -429,6 +431,44 @@ namespace AltSalt.Maestro
                 }
                 return targetList;
             }
+        }
+
+        public static Component[] SortComponentSelection(Component[] components)
+        {
+            var parentObjects = new List<GameObject>();
+
+            for (int i = 0; i < components.Length; i++) {
+                if (parentObjects.Contains(components[i].gameObject) == false) {
+                    parentObjects.Add(components[i].gameObject);
+                }
+            }
+
+            GameObject[] sortedGameObjects = SortGameObjectSelection(parentObjects.ToArray());
+            var componentDictionary = new OrderedDictionary();
+
+            for (int i = 0; i < sortedGameObjects.Length; i++) {
+                GameObject currentGameObject = sortedGameObjects[i];
+                componentDictionary.Add(currentGameObject, new List<Component>());
+                for (int j = 0; j < components.Length; j++) {
+                    if (components[j].gameObject == currentGameObject) {
+                        var componentList = componentDictionary[currentGameObject] as List<Component>;
+                            componentList.Add(components[j]);
+                    }
+                }
+            }
+
+            List<Component> sortedComponents = new List<Component>();
+            IDictionaryEnumerator enumerator = componentDictionary.GetEnumerator();
+            
+            while (enumerator.MoveNext())
+            {
+                var componentList = enumerator.Value as List<Component>;
+                componentList.Sort(
+                    (x, y) => x.GetType().Name.CompareTo(y.GetType().Name));
+                sortedComponents.AddRange(componentList);
+            }
+            
+            return sortedComponents.ToArray();
         }
         
         public static GameObject[] SortGameObjectSelection(GameObject[] gameObjects)

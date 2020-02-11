@@ -8,7 +8,7 @@ using UnityEngine.Events;
 namespace AltSalt.Maestro.Logic
 {
     [Serializable]
-    public class GenericActionData : ActionData, ISyncUnityEventHeadings
+    public class GenericActionData : ActionData, ISyncUnityEventHeadings, IRegisterNestedActionData
     {
         protected override string title => nameof(GenericActionData);
         
