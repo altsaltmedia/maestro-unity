@@ -21,17 +21,10 @@ namespace AltSalt.Maestro
 {
     public class RegisterDependencies : EditorWindow
     {
-        private static List<ScriptableObject> masterScriptableObjectList = new List<ScriptableObject>();
-        
         string targetScenePath = "";
         string targetSceneName = "";
         string callbackScenePath = "";
         string callbackSceneName = "";
-        
-        private static IntVariable counter;
-        
-        [SerializeField]
-        private static IntVariable maxValue;
 
         [MenuItem("Tools/Maestro/Register Dependencies")]
         public static void ShowWindow()
@@ -43,11 +36,6 @@ namespace AltSalt.Maestro
 
         private void ShowTitle()
         {
-            if (counter == null) {
-                counter = Utils.GetScriptableObject("RegisterDependenciesCounter") as IntVariable;
-                maxValue = Utils.GetScriptableObject("MaxValue") as IntVariable;
-            }
-
             titleContent = new GUIContent("Register Dependencies");
         }
 
@@ -70,7 +58,7 @@ namespace AltSalt.Maestro
             }
         }
 
-        void ShowSingleSceneOptions()
+        private void ShowSingleSceneOptions()
         {
             if (targetScenePath.Length > 0) {
                 GUILayout.Label("Ready to find dependencies in '" + targetSceneName + "'.");
@@ -93,22 +81,17 @@ namespace AltSalt.Maestro
             }
             EditorGUI.EndDisabledGroup();
             
-            if (GUILayout.Button(new GUIContent("Find Counter"))) {
-                FindCounter();
+            if (GUILayout.Button(new GUIContent("Clear Progress Bar"))) {
+                ClearProgressBar();
             }
         }
 
-        void FindCounter()
+        private void ClearProgressBar()
         {
-            if (counter == null) {
-                counter = Utils.GetScriptableObject("RegisterDependenciesCounter") as IntVariable;
-                maxValue = Utils.GetScriptableObject("MaxValue") as IntVariable;
-            }
-            
             EditorUtility.ClearProgressBar();
         }
 
-        void ShowAllSceneOptions()
+        private void ShowAllSceneOptions()
         {
             if (callbackScenePath.Length > 0) {
                 GUILayout.Label("Callback scene '" + callbackSceneName + "' loaded.");
@@ -155,28 +138,6 @@ namespace AltSalt.Maestro
             return sceneGuids;
         }
 
-        private static List<ScriptableObject> PopulateScriptableObjectList()
-        {
-            string scriptableObjectQuery = typeof(RegisterableScriptableObject).Name;
-            string[] scriptableObjectGuids = AssetDatabase.FindAssets(string.Format("t:{0}", scriptableObjectQuery));
-
-            List<ScriptableObject> registerableScriptableObjects = new List<ScriptableObject>();
-            
-            int searchCounter = 0;
-
-            foreach (string scriptableObjectGuid in scriptableObjectGuids) {
-                EditorUtility.DisplayProgressBar("Scanning project", "Populating scriptable object list", 1.0f / scriptableObjectGuids.Length * searchCounter);
-                string assetPath = AssetDatabase.GUIDToAssetPath(scriptableObjectGuid);
-                ScriptableObject scriptableObject = (ScriptableObject)AssetDatabase.LoadAssetAtPath(assetPath, typeof(ScriptableObject));
-                registerableScriptableObjects.Add(scriptableObject);
-
-                searchCounter++;
-            }
-            EditorUtility.ClearProgressBar();
-
-            return registerableScriptableObjects;
-        }
-        
         private void TriggerRegisterDependenciesInTargetScene()
         {
             string componentRegistryScenePath = Utils.projectPath + "/z_Dependencies/Components/" + targetSceneName;
@@ -189,11 +150,9 @@ namespace AltSalt.Maestro
                     AssetDatabase.Refresh();
                 }
 
-                masterScriptableObjectList = PopulateScriptableObjectList();
                 Scene scene = EditorSceneManager.OpenScene(targetScenePath);
                 FindDependencies();
                 AssetDatabase.Refresh();
-                masterScriptableObjectList.Clear();
             }
         }
 
@@ -202,7 +161,7 @@ namespace AltSalt.Maestro
             if (EditorUtility.DisplayDialog("Register dependencies in all scenes?", "This will scan the entire project and recreate the dependencies folder. This cannot be undone.", "Proceed", "Cancel")) {
 
                 RemoveDependenciesFolder();
-                masterScriptableObjectList = PopulateScriptableObjectList();
+                
                 string[] sceneGuids = GetSceneGuids();
                 for (int i = 0; i < sceneGuids.Length; i++) {
 
@@ -214,14 +173,12 @@ namespace AltSalt.Maestro
                 AssetDatabase.Refresh();
                 LoadCallbackScene();
                 EditorUtility.ClearProgressBar();
-                masterScriptableObjectList.Clear();
             }
         }
 
         private void FindDependencies()
         {
-            counter.SetValue(0);
-            //FindPlayableDependencies();
+            FindPlayableDependencies();
             FindComponentDependencies();
         }
 
@@ -320,8 +277,10 @@ namespace AltSalt.Maestro
             return referenceBases;
         }
         
-        private static void RegisterTimelineTriggerReference(TimelineClip timelineClip, PlayableDirector playableDirector, ReferenceBase reference)
+        private static List<Tuple<string, JSONNode>> RegisterTimelineTriggerReference(TimelineClip timelineClip, PlayableDirector playableDirector, ReferenceBase reference)
         {
+            List<Tuple<string, JSONNode>> timelineRegistrations = new List<Tuple<string, JSONNode>>();
+            
             Type referenceType = reference.GetType();
             FieldInfo[] fields = referenceType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             
@@ -335,14 +294,18 @@ namespace AltSalt.Maestro
                     JSONNode jsonData = GetRootJsonNode(filePath);
                     jsonData[$"Scene: {playableDirector.gameObject.scene.name}"][playableDirector.name][timelineClip.parentTrack.name][timelineClip.start.ToString()].Add(referenceType.Name);
                     WriteData(filePath, jsonData);
+                    timelineRegistrations.Add(new Tuple<string, JSONNode>(filePath, jsonData));
                     
                     // Also register at the component path
                     filePath = GetSceneRegistryFilePath(playableDirector.gameObject);
                     jsonData = GetRootJsonNode(filePath);
                     jsonData[playableDirector.name][timelineClip.parentTrack.name][scriptableObject.name].Add(timelineClip.start.ToString());
                     WriteData(filePath, jsonData);
+                    timelineRegistrations.Add(new Tuple<string, JSONNode>(filePath, jsonData));
                 }
             }
+
+            return timelineRegistrations;
         }
 
         private void FindComponentDependencies()
@@ -387,33 +350,19 @@ namespace AltSalt.Maestro
 
                     FieldInfo[] fields = component.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                     ParseAndWriteObjectDependencies(component, component);
-                    // List<Tuple<string, JSONNode>> sceneRegistration = ParseAndWriteObjectDependencies(component, component);
-                    // foreach (var registration in sceneRegistration) {
-                    //     if(registration == null) continue;
-                    //     var ( filePath, jsonData ) = registration;
-                    //     WriteData(filePath, jsonData);
-                    // }
                 }
             }
         }
+        
         private static List<Tuple<string, JSONNode>> ParseAndWriteObjectDependencies(object source, Component rootComponent, string serializedPropertyPath = "")
         {
             List<Tuple<string, JSONNode>> fieldRegistration = new List<Tuple<string, JSONNode>>();
             
             FieldInfo[] fieldInfoList = source.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-            if (counter.value > maxValue.value) {
-                return null;
-            }
-            
+
             // Check types flagged here for dependencies and drill down into the fields if necessary
             foreach (FieldInfo fieldInfo in fieldInfoList) {
-                
-                counter.ApplyChange(1);
 
-                if (counter.value > maxValue.value) {
-                    break;
-                }
-                
                 var fieldValue = fieldInfo.GetValue(source);
                 Type fieldType = fieldInfo.FieldType;
 
@@ -523,11 +472,6 @@ namespace AltSalt.Maestro
             
             jsonData[$"Scene: {rootComponent.gameObject.scene.name}"]
                 [$"Object: {rootComponent.gameObject.name} > {rootComponent.GetType().Name}"]["Unity Event"].Add(eventDescription);
-            
-            // jsonData[$"Scene: {rootComponent.gameObject.scene.name}"]
-            //     [$"Object: {rootComponent.gameObject.name} > {rootComponent.GetType().Name}"][
-            //         $"{SanitizePropertyPath(serializedPropertypath)}"].Add("Unity Event");
-                //.Add(eventItem);
 
             WriteData(filePath, jsonData);
             return new Tuple<string, JSONNode>(filePath, jsonData);
@@ -608,8 +552,8 @@ namespace AltSalt.Maestro
         {
             var listRegistration = new List<Tuple<string, JSONNode>>();
             
-            int counter = 0;
             if (list != null) {
+                int counter = 0;
                 foreach (var listItem in list) {
                     string relativePropertyPath = $"{serializedPropertyPath}.Array.data[{counter}]";
                     
@@ -642,6 +586,8 @@ namespace AltSalt.Maestro
                     else {
                         listRegistration.AddRange(ParseAndWriteObjectDependencies(listItem, rootComponent, relativePropertyPath));
                     }
+
+                    counter++;
                 }
             }
 
@@ -713,12 +659,6 @@ namespace AltSalt.Maestro
                                 GetConditionResponseEventRegistration(conditionResponse, rootComponent,
                                     listPropertyPath);
                             conditionResponseDataRegistration.AddRange(eventRegistrations);
-                            // foreach (var action in eventRegistrations) {
-                            //     var ( writePath, data ) = action;
-                            //     jsonData[$"Component: {componentName}"]
-                            //         [SanitizePropertyPath(serializedPropertyPath)].Add(data);
-                            // }
-                            // counter++;
                         }
                     }
                 }
@@ -1092,6 +1032,22 @@ namespace AltSalt.Maestro
             return relativePropertyPath;
         }
 
+        /// <summary>
+        /// Ideally, we would collect all of the data into one big
+        /// object and write everything at once. However, to do that,
+        /// we'd need to merge registration data from separate JSON objects,
+        /// which would likely require importing a robust JSON data
+        /// handling library.
+        ///
+        /// In lieu of that, we perform several calls to this function
+        /// throughout the registration process to make sure each JSON
+        /// object's data gets appended, rather than overwriting,
+        /// existing data.
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="jsonData"></param>
+        /// <returns></returns>
         private static string WriteData(string filePath, JSONNode jsonData)
         {
             string data = jsonData.ToString(2);

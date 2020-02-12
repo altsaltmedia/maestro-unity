@@ -139,7 +139,7 @@ namespace AltSalt.Maestro.Logic
         private void Update()
         {
             if (syncEditorActionHeadings == true) {
-                //SyncTriggerDescriptions();
+                SyncTriggerDescriptions();
             }
         }
 

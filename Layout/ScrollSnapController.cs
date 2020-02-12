@@ -16,7 +16,8 @@ namespace AltSalt.Maestro.Layout
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(ResponsiveAutoWidthHeight))]
-    public class ScrollSnapController : DraggableBase, IDragHandler, IEndDragHandler, IDynamicLayoutElement, ISceneDimensionListener
+    public class ScrollSnapController : DraggableBase, IDragHandler, IEndDragHandler,
+        IDynamicLayoutElement, ISceneDimensionListener
     {
         [SerializeField]
         [FormerlySerializedAs("readyForUpdate")]
