@@ -235,6 +235,19 @@ namespace AltSalt.Maestro
         }
         
         
+        // Progress Bar
+        
+        public bool GetProgressBarVisible(Object callingObject)
+        {
+            return systemSettings.progressBarVisible.GetValue();
+        }
+        
+        public bool SetProgressBarVisible(GameObject callingObject, bool targetValue)
+        {
+            return systemSettings.progressBarVisible.SetValue(callingObject, targetValue);
+        }
+        
+        
         // Paused
         
         public bool GetIsPaused(Object callingObject)
@@ -243,7 +256,7 @@ namespace AltSalt.Maestro
         }
         
         
-        // Timescale
+        // Frames Per Second
         
         public int GetFramesPerSecond(Object callingObject)
         {
@@ -261,6 +274,19 @@ namespace AltSalt.Maestro
         public float GetTimescale(Object callingObject)
         {
             return systemSettings.timescale.GetValue();
+        }
+        
+        
+        // Scene Loading Progress
+        
+        public float GetSceneLoadingProgress(Object callingObject)
+        {
+            return systemSettings.sceneLoadingProgress.GetValue();
+        }
+        
+        public FloatVariable SetSceneLoadingProgress(GameObject callingObject, float targetValue)
+        {
+            return systemSettings.sceneLoadingProgress.SetValue(callingObject, targetValue);
         }
 
         

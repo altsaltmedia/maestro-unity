@@ -17,8 +17,14 @@ namespace AltSalt.Maestro.Logic
 {
     [RequireComponent(typeof(Canvas))]
     [RequireComponent(typeof(CanvasGroup))]
+    [ExecuteInEditMode]
     public class Fader : MonoBehaviour
     {
+        [SerializeField]
+        private AppSettingsReference _appSettings;
+
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
+
         private CanvasGroup _canvasGroup;
 
         private CanvasGroup canvasGroup
@@ -48,7 +54,7 @@ namespace AltSalt.Maestro.Logic
         [SerializeField]
         private CustomKeyReference _fadeToBlackSpeedKey = new CustomKeyReference();
 
-        private CustomKey fadeTimeBlackSpeedKey => _fadeToBlackSpeedKey.GetVariable() as CustomKey;
+        private CustomKey fadeToBlackSpeedKey => _fadeToBlackSpeedKey.GetVariable() as CustomKey;
         
         [SerializeField]
         private CustomKeyReference _fadeInSpeedKey = new CustomKeyReference();
@@ -66,21 +72,23 @@ namespace AltSalt.Maestro.Logic
         private CustomKey enableSpinnerKey => _enableSpinnerKey.GetVariable() as CustomKey;
         
         [SerializeField]
-        private SimpleEventTrigger _showProgressBar = new SimpleEventTrigger();
-
-        private SimpleEventTrigger showProgressBar => _showProgressBar;
-        
-        [SerializeField]
-        private SimpleEventTrigger _hideProgressBar = new SimpleEventTrigger();
-
-        private SimpleEventTrigger hideProgressBar => _hideProgressBar;
-
-        [SerializeField]
         [FormerlySerializedAs("_showProgressBarKey")]
         private CustomKeyReference _enableProgressBarKey = new CustomKeyReference();
 
         private CustomKey enableProgressBarKey => _enableProgressBarKey.GetVariable() as CustomKey;
         
+        [SerializeField]
+        private SimpleEventTrigger _triggerShowProgressBar = new SimpleEventTrigger();
+
+        private SimpleEventTrigger triggerShowProgressBar => _triggerShowProgressBar;
+
+        private bool progressBarVisible => appSettings.GetProgressBarVisible(this);
+        
+        [SerializeField]
+        private ComplexEventManualTrigger _triggerHideProgressBar = new ComplexEventManualTrigger();
+
+        private ComplexEventManualTrigger triggerHideProgressBar => _triggerHideProgressBar;
+
         [SerializeField]
         private CustomKeyReference _eventCallbackKey = new CustomKeyReference();
 
@@ -98,18 +106,31 @@ namespace AltSalt.Maestro.Logic
 
         private SimpleEventReference fadeInCompleted => _fadeInCompleted;
 
-        private void OnEnable()
+        private ComplexPayload _fadeInPayloadCache;
+
+        private ComplexPayload fadeInPayloadCache
+        {
+            get => _fadeInPayloadCache;
+            set => _fadeInPayloadCache = value;
+        }
+
+        private void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
             image = GetComponentInChildren<Image>();
 
-#if UNITY_EDITOR            
+#if UNITY_EDITOR
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
             _fadeToBlackSpeedKey.PopulateVariable(this, nameof(_fadeToBlackSpeedKey));
             _fadeInSpeedKey.PopulateVariable(this, nameof(_fadeInSpeedKey));
             _fadeColorKey.PopulateVariable(this, nameof(_fadeColorKey));
             _enableSpinnerKey.PopulateVariable(this, nameof(_enableSpinnerKey));
             _enableProgressBarKey.PopulateVariable(this, nameof(_enableProgressBarKey));
+            _triggerShowProgressBar.PopulateVariable(this, nameof(_triggerShowProgressBar));
+            _triggerHideProgressBar.PopulateVariable(this, nameof(_triggerHideProgressBar));
             _eventCallbackKey.PopulateVariable(this, nameof(_eventCallbackKey));
+            _fadeToBlackCompleted.PopulateVariable(this, nameof(_fadeToBlackCompleted));
+            _fadeInCompleted.PopulateVariable(this, nameof(_fadeInCompleted));
 #endif            
         }
 
@@ -118,7 +139,7 @@ namespace AltSalt.Maestro.Logic
             canvasGroup.blocksRaycasts = true;
             
             // Get the fade time
-            float fadeTime = complexPayload.GetFloatValue(fadeTimeBlackSpeedKey);
+            float fadeTime = complexPayload.GetFloatValue(fadeToBlackSpeedKey);
             if (float.IsNaN(fadeTime) == true) {
                 fadeTime = fadeToBlackTime;
             }
@@ -135,14 +156,16 @@ namespace AltSalt.Maestro.Logic
                 eventCallback = fadeToBlackCompleted.GetVariable() as SimpleEvent;
             }
 
-            DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1, fadeTime).OnComplete(() =>
+            DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1, fadeTime).SetEase(Ease.Linear).OnComplete(() =>
             {
+
                 if (enableSpinner == true) {
+                    Debug.Log("Calling show activity indicator");
                     StartCoroutine(ShowActivityIndicator());
                 }
 
                 if (enableProgressBar == true) {
-                    showProgressBar.RaiseEvent(this.gameObject);
+                    triggerShowProgressBar.RaiseEvent(this.gameObject);
                 }
                 
                 if (eventCallback != null) {
@@ -154,9 +177,24 @@ namespace AltSalt.Maestro.Logic
 
         public void FadeIn(ComplexPayload complexPayload)
         {
+            if (progressBarVisible == true) {
+                fadeInPayloadCache = complexPayload;
+                triggerHideProgressBar.RaiseEvent(this.gameObject);
+            }
+            else {
+                ExecuteFadeIn(complexPayload);
+            }
+        }
+        
+        public void HideProgressBarCompletedCallback()
+        {
+            ExecuteFadeIn(fadeInPayloadCache);
+        }
+
+        private void ExecuteFadeIn(ComplexPayload complexPayload)
+        {
             StartCoroutine(HideActivityIndicator());
-            hideProgressBar.RaiseEvent(this.gameObject);
-            
+
             // Get the fade time
             float fadeTime = complexPayload.GetFloatValue(fadeInSpeedKey);
             if (float.IsNaN(fadeTime) == true) {
@@ -164,7 +202,7 @@ namespace AltSalt.Maestro.Logic
             }
 
             image.color = GetFadeColor(complexPayload, fadeColorKey);
-            
+
             // Get the callback
             SimpleEvent eventCallback = complexPayload.GetScriptableObjectValue(eventCallbackKey) as SimpleEvent;
             if (eventCallback == null) {
@@ -174,15 +212,12 @@ namespace AltSalt.Maestro.Logic
             DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 0, fadeTime).OnComplete(() =>
             {
                 canvasGroup.blocksRaycasts = false;
-
-                if (eventCallback != null) {
-                    eventCallback.StoreCaller(this.gameObject);
-                    eventCallback.SignalChange();
-                }
+                
+                eventCallback.StoreCaller(this.gameObject);
+                eventCallback.SignalChange();
             });
         }
-        
-        
+
         private static Color GetFadeColor(ComplexPayload complexPayload, CustomKey colorKey)
         {
             // Get the fade color
@@ -196,23 +231,26 @@ namespace AltSalt.Maestro.Logic
             return fadeColor;
         }
         
-        private static IEnumerator ShowActivityIndicator()
+        private IEnumerator ShowActivityIndicator()
         {
+            Debug.Log("Showing activity indicator");
 #if UNITY_IPHONE
-            Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.Gray);
+            Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.WhiteLarge);
 #elif UNITY_ANDROID
             Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.Small);
 #endif
+            Handheld.StartActivityIndicator();
             yield return new WaitForSeconds(0);
         }
         
-        private static IEnumerator HideActivityIndicator()
+        private IEnumerator HideActivityIndicator()
         {
-#if UNITY_IPHONE
-            Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.DontShow);
-#elif UNITY_ANDROID
-            Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.DontShow);
-#endif
+            Handheld.StopActivityIndicator();
+// #if UNITY_IPHONE
+//             Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.DontShow);
+// #elif UNITY_ANDROID
+//             Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.DontShow);
+// #endif
             yield return new WaitForSeconds(0);
         }
 

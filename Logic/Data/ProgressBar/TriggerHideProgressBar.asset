@@ -9,13 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6cfefc9189b422d8e558b5019449b3, type: 3}
-  m_Name: ShowProgressBar
+  m_Script: {fileID: 11500000, guid: df7551c54cc6d4969a45a8d769935a8e, type: 3}
+  m_Name: TriggerHideProgressBar
   m_EditorClassIdentifier: 
   registrationNotice: This object and its dependents will be registered whenever
     the RegisterDependencies tool is used.
-  logCallersOnRaise: 0
-  logListenersOnRegister: 0
-  logListenersOnRaise: 0
+  _logCallersOnRaise: 0
+  _logListenersOnRegister: 0
+  _logListenersOnRaise: 0
   _description: 
-  _associatedVariables: []
+  requiredParameters: []
+  optionalParameters:
+  - description: Custom event callback when hide is complete
+    dataType: 4
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 420ddf56ca3e24f8bbd4453eb1c66057, type: 2}

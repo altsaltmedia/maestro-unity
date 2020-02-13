@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4955752512214733401}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33,8 +33,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3988577304394195251
 GameObject:
@@ -46,7 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 370540170017313173}
   - component: {fileID: 3311623787197344957}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,17 +62,17 @@ RectTransform:
   m_GameObject: {fileID: 3988577304394195251}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2898110664077262261}
   - {fileID: 4955752512214733401}
   m_Father: {fileID: 5292875436709280656}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -480}
-  m_SizeDelta: {x: 700, y: 50}
+  m_SizeDelta: {x: -140, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3311623787197344957
 MonoBehaviour:
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 2898110664077262261}
   - component: {fileID: 812793227801365347}
   - component: {fileID: 856401938254556378}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,8 +282,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 388ae094ae8841469d41bfec3e724bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _appSettings:
+    _isSystemReference: 0
+    _referenceName: AppSettings
+    _variable: {fileID: 0}
   _fadeTime: 0.6
---- !u!114 &4662112444478393848
+  _eventCallbackKey:
+    _isSystemReference: 0
+    _referenceName: EventCallbackKey
+    _variable: {fileID: 11400000, guid: 420ddf56ca3e24f8bbd4453eb1c66057, type: 2}
+  _hideProgressBarCompleted:
+    _isSystemReference: 0
+    _referenceName: HideProgressBarCompleted
+    _variable: {fileID: 11400000, guid: 9c6ba2c36a6234908aee6e4c6cca6cc6, type: 2}
+--- !u!114 &4243896946721626295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5363707216924224000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: TriggerHideProgressBar
+    _variable: {fileID: 11400000, guid: e67c7d17976064d15947461bdf23172f, type: 2}
+  DeveloperDescription: 
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3749289892929074195}
+        m_MethodName: HideProgressBar
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
+--- !u!114 &4655615988048772610
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -295,19 +339,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: e67c7d17976064d15947461bdf23172f, type: 2}
   _simpleSignalReferences:
   - _isSystemReference: 0
-    _referenceName: HideProgressBar
-    _variable: {fileID: 11400000, guid: e67c7d17976064d15947461bdf23172f, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls: []
+    _referenceName: SceneLoadingProgress
+    _variable: {fileID: 0}
   _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3749289892929074195}
-        m_MethodName: HideProgressBar
+        m_MethodName: UpdateProgress
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -317,8 +357,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &4926946035574799643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,14 +370,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 598f21c1756b74a03aef61c0ac09392b, type: 2}
   _simpleSignalReferences:
   - _isSystemReference: 0
-    _referenceName: ShowProgressBar
+    _referenceName: TriggerShowProgressBar
     _variable: {fileID: 11400000, guid: 598f21c1756b74a03aef61c0ac09392b, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls: []
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -353,42 +388,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
---- !u!114 &8687117873275236610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5363707216924224000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 940a0f59179da48b7b3311de30d13a61, type: 2}
-  _complexEventReference:
-    _isSystemReference: 0
-    _referenceName: UpdateProgress
-    _variable: {fileID: 11400000, guid: 940a0f59179da48b7b3311de30d13a61, type: 2}
-  DeveloperDescription: 
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3749289892929074195}
-        m_MethodName: UpdateProgress
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!1001 &7477122822983092032
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -505,6 +505,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364190833857133776, guid: 12fe947e51a2442c18ae4147895585db,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364190833857133776, guid: 12fe947e51a2442c18ae4147895585db,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364190833857133776, guid: 12fe947e51a2442c18ae4147895585db,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12fe947e51a2442c18ae4147895585db, type: 3}

@@ -37,12 +37,11 @@ namespace AltSalt.Maestro
 
 		private ComplexPayloadGenericAction action => _action;
 
-		[SerializeField]
+		[FormerlySerializedAs("_doNotRecord"),SerializeField]
         [InfoBox("Specifies whether this dependency should be recorded when the RegisterDependencies tool is used.")]
-        [FormerlySerializedAs("doNotRecord")]
-        private bool _doNotRecord;
+		private bool _skipRegistration;
 
-        public bool skipRegistration => _doNotRecord;
+        public bool skipRegistration => _skipRegistration;
 
         private void OnEnable()
         {

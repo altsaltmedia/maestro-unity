@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7973420083374359233}
   - component: {fileID: 7973420083374359232}
   - component: {fileID: 3517205928990522322}
+  - component: {fileID: 8936868205621349410}
   m_Layer: 8
   m_Name: Scene Controller
   m_TagString: Untagged
@@ -71,10 +72,6 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: FadeToBlackCompleted
     _variable: {fileID: 11400000, guid: 4024297f7cf5b4ac18af9d9bda3557ec, type: 2}
-  _updateProgress:
-    _isSystemReference: 0
-    _referenceName: UpdateProgress
-    _variable: {fileID: 11400000, guid: 940a0f59179da48b7b3311de30d13a61, type: 2}
   _singleSceneLoadCompleted:
     _isSystemReference: 0
     _referenceName: SingleSceneLoadCompleted
@@ -103,14 +100,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: be8a28980d8f0432191e478ff82225b4, type: 2}
   _complexEventReference:
     _isSystemReference: 0
     _referenceName: TriggerSceneLoad
     _variable: {fileID: 11400000, guid: be8a28980d8f0432191e478ff82225b4, type: 2}
   DeveloperDescription: Receives a string containing scene name, as well as a bool
     containing whether the scene load should be single or additive
-  _response:
+  _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7973420083374359235}
@@ -124,8 +120,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &7973420083374359232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,13 +133,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 78ed74bcb687e42448ff50814110f2f2, type: 2}
   _complexEventReference:
     _isSystemReference: 0
     _referenceName: TriggerUnloadScene
     _variable: {fileID: 11400000, guid: 78ed74bcb687e42448ff50814110f2f2, type: 2}
   DeveloperDescription: Receives a string containing scene name to unload
-  _response:
+  _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7973420083374359235}
@@ -158,8 +152,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &3517205928990522322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,14 +165,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 4024297f7cf5b4ac18af9d9bda3557ec, type: 2}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: FadeToBlackCompleted
     _variable: {fileID: 11400000, guid: 4024297f7cf5b4ac18af9d9bda3557ec, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls: []
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -194,5 +183,35 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
+--- !u!114 &8936868205621349410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7973420083374359238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: FadeInCompleted
+    _variable: {fileID: 0}
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7973420083374359235}
+        m_MethodName: ResetSceneLoadingProgress
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0

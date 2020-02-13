@@ -98,7 +98,9 @@ namespace AltSalt.Maestro.Sequencing
         public void Init()
         {
             // Generate master times for sequences
-            masterTimeDataList = GenerateSequenceData(sequenceConfigs);
+            if (Application.isPlaying == false) {
+                masterTimeDataList = GenerateSequenceData(sequenceConfigs);
+            }
 
             for (int i = 0; i < sequenceConfigs.Count; i++) {
                 sequenceConfigs[i].SetMasterSequence(this);

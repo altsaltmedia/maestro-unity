@@ -72,6 +72,11 @@ namespace AltSalt.Maestro
         public BoolReference soundEffectsEnabled => _soundEffectsEnabled;
 
         [SerializeField, Required]
+        private BoolReference _progressBarVisible = new BoolReference();
+
+        public BoolReference progressBarVisible => _progressBarVisible;
+        
+        [SerializeField, Required]
         private BoolReference _paused = new BoolReference();
 
         public BoolReference paused => _paused;
@@ -85,6 +90,11 @@ namespace AltSalt.Maestro
         private FloatReference _timescale = new FloatReference();
         
         public FloatReference timescale => _timescale;
+        
+        [SerializeField, Required]
+        private FloatReference _sceneLoadingProgress = new FloatReference();
+        
+        public FloatReference sceneLoadingProgress => _sceneLoadingProgress;
         
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SetDefaults()
@@ -102,8 +112,11 @@ namespace AltSalt.Maestro
             (volumeEnabled.GetVariable() as BoolVariable).defaultValue = true;
             (musicEnabled.GetVariable() as BoolVariable).defaultValue = true;
             (soundEffectsEnabled.GetVariable() as BoolVariable).defaultValue = true;
+            (progressBarVisible.GetVariable() as BoolVariable).defaultValue = false;
             (paused.GetVariable() as BoolVariable).defaultValue = false;
             (timescale.GetVariable() as FloatVariable).defaultValue = 1;
+            (sceneLoadingProgress.GetVariable() as FloatVariable).defaultValue = 0;
+            (sceneLoadingProgress.GetVariable() as FloatVariable).resetOnGameRefresh = true;
 
             for (int i = 0; i < fields.Length; i++) {
                 var variableReference = fields[i].GetValue(this);

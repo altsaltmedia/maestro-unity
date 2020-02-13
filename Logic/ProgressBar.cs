@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,8 +8,21 @@ namespace AltSalt.Maestro.Logic
 {
     [RequireComponent(typeof(Canvas))]
     [RequireComponent(typeof(CanvasGroup))]
+    [ExecuteInEditMode]
     public class ProgressBar : MonoBehaviour
     {
+        [SerializeField]
+        private AppSettingsReference _appSettings;
+
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
+        
+        private bool progressBarVisible
+        {
+            set => appSettings.SetProgressBarVisible(this.gameObject, value);
+        }
+
+        private float sceneLoadingProgress => appSettings.GetSceneLoadingProgress(this);
+
         private CanvasGroup _canvasGroup;
 
         private CanvasGroup canvasGroup
@@ -36,33 +50,65 @@ namespace AltSalt.Maestro.Logic
         private float _fadeTime = 0.6f;
 
         private float fadeTime => _fadeTime;
+        
+        [SerializeField]
+        private CustomKeyReference _eventCallbackKey = new CustomKeyReference();
 
-        private void OnEnable()
+        private CustomKey eventCallbackKey => _eventCallbackKey.GetVariable() as CustomKey;
+        
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private SimpleEventReference _hideProgressBarCompleted = new SimpleEventReference();
+
+        private SimpleEventReference hideProgressBarCompleted => _hideProgressBarCompleted;
+
+        private void Awake()
         {
-            
+#if UNITY_EDITOR
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+            _eventCallbackKey.PopulateVariable(this, nameof(_eventCallbackKey));
+            _hideProgressBarCompleted.PopulateVariable(this, nameof(_hideProgressBarCompleted));
+#endif
             canvasGroup = GetComponent<CanvasGroup>();
             slider = GetComponentInChildren<Slider>();
+
+            if (Application.isPlaying == true) {
+                canvasGroup.alpha = 0;
+            }            
         }
 
         public void ShowProgressBar()
         {
-            DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1, fadeTime);
+            progressBarVisible = true;
+            DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1, fadeTime).SetId(this.gameObject.GetInstanceID());
         }
         
-        public void HideProgressBar()
+        public void HideProgressBar(ComplexPayload complexPayload)
         {
+            SimpleEvent eventCallback = complexPayload.GetScriptableObjectValue(eventCallbackKey) as SimpleEvent;
+            if (eventCallback == null) {
+                eventCallback = hideProgressBarCompleted.GetVariable() as SimpleEvent;
+            }
+
+            DOTween.Complete(this.gameObject.GetInstanceID());
             DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 0, fadeTime).OnComplete(() =>
             {
+                progressBarVisible = false;
                 slider.value = 0;
+                
+                eventCallback.StoreCaller(this.gameObject);
+                eventCallback.SignalChange();
             });
         }
 
-        public void UpdateProgress(ComplexPayload complexPayload)
+        public void UpdateProgress()
         {
-            float progress = complexPayload.GetFloatValue();
-            if (float.IsNaN(progress) == false) {
-                slider.value = progress;
-            }
+            slider.value = sceneLoadingProgress;
+        }
+        
+        private static bool IsPopulated(SimpleEventReference attribute)
+        {
+            return Utils.IsPopulated(attribute);
         }
     }
 }

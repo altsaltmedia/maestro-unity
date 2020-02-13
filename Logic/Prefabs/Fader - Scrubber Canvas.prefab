@@ -136,6 +136,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9128029477020065530}
     m_Modifications:
+    - target: {fileID: 370540170017313173, guid: bf5c71f6af5fb48c985e25e82faaff93,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 370540170017313173, guid: bf5c71f6af5fb48c985e25e82faaff93,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 370540170017313173, guid: bf5c71f6af5fb48c985e25e82faaff93,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 935579721539505872, guid: bf5c71f6af5fb48c985e25e82faaff93,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -268,7 +283,7 @@ PrefabInstance:
     - target: {fileID: 4143621777924271494, guid: 0d33f0f33305b493db37a5dc9304d159,
         type: 3}
       propertyPath: m_Name
-      value: Overlay Elements Canvas
+      value: Fader - Scrubber Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 4222898073442614294, guid: 0d33f0f33305b493db37a5dc9304d159,
         type: 3}

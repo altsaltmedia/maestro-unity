@@ -151,10 +151,13 @@ namespace AltSalt.Maestro.Layout
                 _disableDynamicElement.referenceName = nameof(disableDynamicElement).Capitalize();
             }
             _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
-            
-            enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
 #endif
+
+        private void OnEnable()
+        {
+            enableDynamicElement.RaiseEvent(this.gameObject, this);
+        }
 
         protected override void Start()
         {

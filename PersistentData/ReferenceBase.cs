@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEngine;
+
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
-using UnityEngine;
+#endif
 
 namespace AltSalt.Maestro
 {

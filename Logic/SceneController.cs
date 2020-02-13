@@ -55,11 +55,10 @@ namespace AltSalt.Maestro.Logic
 
         private SimpleEventReference fadeToBlackCompleted => _fadeToBlackCompleted;
         
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventManualTrigger _updateProgress = new ComplexEventManualTrigger();
-
-        private ComplexEventManualTrigger updateProgress => _updateProgress;
+        private float sceneLoadingProgress
+        {
+            set => appSettings.SetSceneLoadingProgress(this.gameObject, value);
+        }
 
         [SerializeField]
         [ValidateInput(nameof(IsPopulated))]
@@ -133,8 +132,9 @@ namespace AltSalt.Maestro.Logic
         // and additive scenes are loaded immediately without a call to the fader
         public void TriggerSceneLoad(ComplexPayload complexPayload)
         {
-
             if (Application.isPlaying == false) return;
+
+            sceneLoadingProgress = 0;
             
             this.targetScene = complexPayload.GetStringValue(DataType.stringType);;
             this.appSettings.SetActiveScene(this.gameObject,this.targetScene);
@@ -247,8 +247,8 @@ namespace AltSalt.Maestro.Logic
             }
             else {
                 StartCoroutine(StandardAsyncSceneLoad(targetScene, loadMode, (AsyncOperation asyncOperation) =>
-                    {
-                        eventCallback.StoreCaller(this.gameObject);
+                {
+                    eventCallback.StoreCaller(this.gameObject);
                         eventCallback.SignalChange();
                     }));
             }
@@ -266,7 +266,7 @@ namespace AltSalt.Maestro.Logic
             }
             
             while (!asyncLoad.IsDone) {
-                updateProgress.RaiseEvent(this.gameObject, asyncLoad.PercentComplete);
+                sceneLoadingProgress = Mathf.Clamp01(asyncLoad.PercentComplete / .9f);
                 yield return null;
             }
         }
@@ -275,11 +275,12 @@ namespace AltSalt.Maestro.Logic
         {
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(xSceneName, xLoadMode);
             asyncLoad.completed += callback;
-            Debug.Log(asyncLoad);
 
+            Debug.Log("Loading started");
+            
             while (!asyncLoad.isDone) {
-                Debug.Log(asyncLoad.progress);
-                updateProgress.RaiseEvent(this.gameObject, asyncLoad.progress);
+                Debug.Log(asyncLoad.progress.ToString("F6"));
+                sceneLoadingProgress = Mathf.Clamp01(asyncLoad.progress / .9f);
                 yield return null;
             }
         }
@@ -348,6 +349,11 @@ namespace AltSalt.Maestro.Logic
             while (!asyncLoad.isDone) {
                 yield return null;
             }
+        }
+
+        public void ResetSceneLoadingProgress()
+        {
+            sceneLoadingProgress = 0;
         }
 
         private static bool IsPopulated(ComplexEventManualTrigger attribute)

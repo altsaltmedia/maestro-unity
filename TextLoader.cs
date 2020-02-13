@@ -43,21 +43,29 @@ namespace AltSalt.Maestro
 
         public TextCollectionBank textCollectionBank => _textCollectionBank;
 
-        TMP_Text textComponent;
+        private TMP_Text _textComponent;
 
-        private void Start()
-        {
-            if(appSettings.modifyTextActive == true && textCollectionBank != null) {
-                PopulateWithText();
+        private TMP_Text textComponent {
+            get
+            {
+                if (_textComponent == null) {
+                    _textComponent = GetComponent<TMP_Text>();
+                }
+
+                return _textComponent;
             }
+            set => _textComponent = value;
+        }
+
+        private void Awake()
+        {
+#if UNITY_EDITOR
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+#endif
+            textComponent = GetComponent<TMP_Text>();
         }
 
 #if UNITY_EDITOR
-        private void OnEnable()
-        {
-            _appSettings.PopulateVariable(this, nameof(_appSettings));
-        }
-        
         private string GetActiveTextFamilyName()
         {
             if (textCollectionBank != null) {
@@ -67,11 +75,11 @@ namespace AltSalt.Maestro
             return "Please populate a text collection bank";
         }
 #endif
-
-        void GetTextComponent()
+        
+        private void Start()
         {
-            if (textComponent == null) {
-                textComponent = GetComponent<TMP_Text>();
+            if(appSettings.modifyTextActive == true && textCollectionBank != null) {
+                PopulateWithText();
             }
         }
 
@@ -79,7 +87,6 @@ namespace AltSalt.Maestro
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void PopulateWithText()
         {
-            GetTextComponent();
             if(textCollectionBank != null) {
 #if UNITY_EDITOR
                 Undo.RecordObject(textComponent, "populate text");

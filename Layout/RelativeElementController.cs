@@ -10,21 +10,18 @@ namespace AltSalt.Maestro.Layout
     [ExecuteInEditMode]
     public class RelativeElementController : MonoBehaviour, IDynamicLayoutElement
     {
-        private RelativeElement[] _relativeElements;
+        private RelativeElement[] _unsortedElements;
 
-        private RelativeElement[] relativeElements
+        private RelativeElement[] unsortedElements
         {
-            get => _relativeElements;
-            set => _relativeElements = value;
+            get => _unsortedElements;
+            set => _unsortedElements = value;
         }
 
         private Dictionary<int, RelativeElement> _elementCollection = new Dictionary<int, RelativeElement>();
 
         private Dictionary<int, RelativeElement> elementCollection => _elementCollection;
-
-        private int _elementCount;
-
-        private int elementCount => _elementCount;
+        
 
         private List<int> _elementKeys = new List<int>();
 
@@ -75,9 +72,18 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
+        private bool _initialized = false;
+
+        public bool initialized
+        {
+            get => _initialized;
+            set => _initialized = value;
+        }
+
         private void Start()
         {
             RefreshElements();
+            initialized = true;
         }
         
         private void OnEnable()
@@ -104,19 +110,18 @@ namespace AltSalt.Maestro.Layout
         {
             GetUnsortedElements();
             StoreSortedElements();
-            CallExecuteLayoutUpdate(this.gameObject);
         }
 
         private void GetUnsortedElements()
         {
-            relativeElements = GetComponentsInChildren<RelativeElement>();
+            unsortedElements = GetComponentsInChildren<RelativeElement>();
         }
 
         private void StoreSortedElements()
         {
             elementCollection.Clear();
-            for (int i = 0; i < relativeElements.Length; i++) {
-                elementCollection.Add(relativeElements[i].gameObject.transform.GetSiblingIndex(), relativeElements[i]);
+            for (int i = 0; i < unsortedElements.Length; i++) {
+                elementCollection.Add(unsortedElements[i].gameObject.transform.GetSiblingIndex(), unsortedElements[i]);
             }
             elementKeys = elementCollection.Keys.ToList();
             elementKeys.Sort();
@@ -134,6 +139,10 @@ namespace AltSalt.Maestro.Layout
         [PropertyOrder(8)]
         public void CallExecuteLayoutUpdate(UnityEngine.Object callingObject)
         {
+            if (initialized == false) {
+                RefreshElements();
+                initialized = true;
+            }
             if (logElementOnLayoutUpdate == true || AppSettings.logGlobalResponsiveElementActions == true) {
                 Debug.Log("CallExecuteLayoutUpdate triggered!");
                 Debug.Log("Calling object : " + callingObject.name, callingObject);
@@ -163,11 +172,11 @@ namespace AltSalt.Maestro.Layout
         private bool ElementsChanged()
         {
             GetUnsortedElements();
-            if (relativeElements.Length != elementCount) {
+            if (unsortedElements.Length != elementCollection.Count) {
                 return true;
-            } else {
-                return false;
             }
+
+            return false;
         }
 #endif
         

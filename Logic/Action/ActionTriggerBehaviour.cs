@@ -16,14 +16,10 @@ namespace AltSalt.Maestro.Logic
         [SerializeField]
         private bool _logCallersOnRaise;
 
-        private bool logCallersOnRaise
-        {
-            get => _logCallersOnRaise;
-            set => _logCallersOnRaise = value;
-        }
+        private bool logCallersOnRaise => _logCallersOnRaise;
 
         [SerializeField]
-        [OnValueChanged(nameof(OnEnable))]
+        [OnValueChanged(nameof(Initialize))]
         private ActionTrigger _actionTrigger = new ActionTrigger();
 
         private ActionTrigger actionTrigger
@@ -32,12 +28,17 @@ namespace AltSalt.Maestro.Logic
             set => _actionTrigger = value;
         }
 
-        private void OnEnable()
+        private void Awake()
         {
-            actionTrigger.Initialize(this, nameof(_actionTrigger));
 #if UNITY_EDITOR
             actionTrigger.CallPopulateReferences();
 #endif
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            actionTrigger.Initialize(this, nameof(_actionTrigger));
         }
 
         private void Start()

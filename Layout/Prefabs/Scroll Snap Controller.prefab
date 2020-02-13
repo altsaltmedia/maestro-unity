@@ -86,7 +86,7 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: DisableDynamicElement
     _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
-  _priority: 0
+  _priority: -15
   _logElementOnLayoutUpdate: 0
 --- !u!61 &8985265788023737600
 BoxCollider2D:
@@ -159,7 +159,7 @@ MonoBehaviour:
   _appSettings:
     _isSystemReference: 0
     _referenceName: AppSettings
-    _variable: {fileID: 11400000, guid: 98b90c9bfebfd4fd4b352d242c167896, type: 2}
+    _variable: {fileID: 0}
   _enableDynamicElement:
     _isSystemReference: 0
     _referenceName: EnableDynamicElement
@@ -224,10 +224,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ed573b88597c4b0886ecc16a12f92f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings:
-    _isSystemReference: 0
-    _referenceName: AppSettings
-    _variable: {fileID: 11400000, guid: 98b90c9bfebfd4fd4b352d242c167896, type: 2}
   _enableDynamicElement:
     _isSystemReference: 0
     _referenceName: EnableDynamicElement
@@ -236,7 +232,7 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: DisableDynamicElement
     _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
-  _priority: 0
+  _priority: -10
   _logElementOnLayoutUpdate: 0
 --- !u!1001 &2889429691697077815
 PrefabInstance:
@@ -259,8 +255,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _appSettings._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 98b90c9bfebfd4fd4b352d242c167896,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 408880100416678160, guid: e2b1f1bd0ec954242920d6a699a345d0,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -320,8 +315,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _appSettings._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 98b90c9bfebfd4fd4b352d242c167896,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 3139824689574341381, guid: e2b1f1bd0ec954242920d6a699a345d0,
         type: 3}
       propertyPath: m_Layer
@@ -561,8 +555,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _appSettings._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 98b90c9bfebfd4fd4b352d242c167896,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8296539947654168201, guid: e2b1f1bd0ec954242920d6a699a345d0,
         type: 3}
       propertyPath: m_Layer
@@ -793,8 +786,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _appSettings._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 98b90c9bfebfd4fd4b352d242c167896,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 1820016223117700670, guid: 7f83d03ac65ea434e97192b7341aa13d,
         type: 3}
       propertyPath: m_Name
@@ -990,8 +982,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _appSettings._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 98b90c9bfebfd4fd4b352d242c167896,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 224540287842941266, guid: 3debdbfe67bf74f7d80607d7136b89a9,
         type: 3}
       propertyPath: m_LocalPosition.x

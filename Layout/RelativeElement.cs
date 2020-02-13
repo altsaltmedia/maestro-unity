@@ -23,31 +23,33 @@ namespace AltSalt.Maestro.Layout {
 
         protected bool isNegative => _isNegative;
 
-        protected RectTransform rectTransform;
+        protected RectTransform _rectTransform;
 
-        protected void Start()
+        public RectTransform rectTransform
         {
-            GetRectTransform();
-        }
+            get {
+                if (_rectTransform == null) {
+                    _rectTransform = GetComponent<RectTransform>();
+                }
 
-        void GetRectTransform()
-        {
-            if (rectTransform == null) {
-                rectTransform = GetComponent<RectTransform>();
+                return _rectTransform;
             }
+            private set => _rectTransform = value;
         }
 
-        void OnValidate()
+        private void Awake()
         {
-            if(rectTransform != null) {
-                ExecuteRelativeAction();
-            }
+            rectTransform = GetComponent<RectTransform>();
         }
+        
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ExecuteRelativeAction();
+        }
+#endif
 
-        public virtual void ExecuteRelativeAction()
-        {
-            GetRectTransform();
-        }
+        public virtual void ExecuteRelativeAction() { }
     }
     
 }

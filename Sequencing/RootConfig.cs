@@ -55,7 +55,7 @@ namespace AltSalt.Maestro.Sequencing
 
         public bool appUtilsRequested => appSettings.GetAppUtilsRequested(this.gameObject, inputGroupKey);
 
-        private void OnEnable()
+        private void Awake()
         {
 #if UNITY_EDITOR
             _appSettings.PopulateVariable(this, nameof(_appSettings));
@@ -72,15 +72,16 @@ namespace AltSalt.Maestro.Sequencing
                 masterSequences[i].rootConfig = this;
                 masterSequences[i].Init();
             }
-            
-            joiner.rootConfig = this;
-            joiner.ConfigureData();
 
-            for (int i = 0; i < rootDataCollectors.Count; i++) {
-                rootDataCollectors[i].rootConfig = this;
-                rootDataCollectors[i].ConfigureData();
-            }
-            
+            //if (Application.isPlaying == false) {
+                joiner.rootConfig = this;
+                joiner.ConfigureData();
+                
+                for (int i = 0; i < rootDataCollectors.Count; i++) {
+                    rootDataCollectors[i].rootConfig = this;
+                    rootDataCollectors[i].ConfigureData();
+                }
+            //}
         }
 
         public void RefreshConfiguration()

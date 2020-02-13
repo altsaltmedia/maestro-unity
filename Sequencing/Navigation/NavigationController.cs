@@ -27,7 +27,9 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             activeMasterSequence = 
                 masterSequences.Find(x => x.sequenceConfigs.Find(y => y.sequence.active == true));
 
-            refreshScrubber.RaiseEvent(this.gameObject, this);
+            if (activeMasterSequence != null) {
+                refreshScrubber.RaiseEvent(this.gameObject, this);
+            }
         }
 
     }

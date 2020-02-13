@@ -1,15 +1,11 @@
-﻿using System;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout
 {
     [RequireComponent(typeof(ResizableBoxCollider2D))]
     [ExecuteInEditMode]
-    public class Touchable : MonoBehaviour, IPointerClickHandler
+    public class Touchable : MonoBehaviour
     {
         [FormerlySerializedAs("active")]
         [SerializeField]
@@ -25,7 +21,29 @@ namespace AltSalt.Maestro.Layout
 
         private GameObjectGenericAction action => _action;
 
-        public void OnPointerClick(PointerEventData pointerEventData)
+        
+        private BoxCollider2D _boxCollider;
+
+        private BoxCollider2D boxCollider
+        {
+            get
+            {
+                if (_boxCollider == null) {
+                    _boxCollider = GetComponent<BoxCollider2D>();
+                }
+
+                return _boxCollider;
+            }
+            set => _boxCollider = value;
+        }
+
+        private void Awake()
+        {
+            boxCollider = GetComponent<BoxCollider2D>();
+        }
+        
+
+        public void OnMouseDown()
         {
             if(active == true) {
                 action.Invoke(this.gameObject);
@@ -35,26 +53,20 @@ namespace AltSalt.Maestro.Layout
         private void Start()
         {
             if (active == false) {
-                if (TryGetComponent(typeof(BoxCollider2D), out var boxCollider) == true) {
-                    (boxCollider as BoxCollider2D).enabled = false;   
-                }
+                boxCollider.enabled = false;
             }
         }
 
         public void Activate()
         {
             active = true;
-            if (TryGetComponent(typeof(BoxCollider2D), out var boxCollider) == true) {
-                (boxCollider as BoxCollider2D).enabled = true;   
-            }
+            boxCollider.enabled = true;
         }
         
         public void Deactivate()
         {
             active = false;
-            if (TryGetComponent(typeof(BoxCollider2D), out var boxCollider) == true) {
-                (boxCollider as BoxCollider2D).enabled = false;
-            }
+            boxCollider.enabled = false;
         }
 
         public void Toggle()

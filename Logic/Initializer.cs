@@ -20,7 +20,7 @@ namespace AltSalt.Maestro.Logic
         private string _bootstrapScene;
 
         private string bootstrapScene => _bootstrapScene;
-
+        
 #if UNITY_EDITOR
         private void OnEnable()
         {
