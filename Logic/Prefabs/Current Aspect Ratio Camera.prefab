@@ -1,72 +1,53 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &8731343291193823595
+--- !u!114 &5493616117406232224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892881052307360}
-  m_Enabled: 1
+  m_GameObject: {fileID: 7418774611178018253}
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9ced0210ec494ceabf10468baa52844, type: 3}
+  m_Script: {fileID: 11500000, guid: e0c9caf06f4441c684ddfc0f96f2bff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1063644436
-  sceneName: Responsive Camera
-  initialized: 1
-  _layoutsLegacy: []
-  _layoutReferences: []
-  nonserializedProperties:
-  - id
-  - sceneName
-  - initialized
-  - _layoutsLegacy
-  - nonserializedProperties
-  - _logElementOnLayoutUpdate
-  - _appSettings
-  - _enableDynamicElement
-  - _disableDynamicElement
-  _migrated: 1
   _appSettings:
     _isSystemReference: 0
     _referenceName: AppSettings
     _variable: {fileID: 0}
-  _enableDynamicElement:
-    _isSystemReference: 0
-    _referenceName: EnableDynamicElement
-    _variable: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
-  _disableDynamicElement:
-    _isSystemReference: 0
-    _referenceName: DisableDynamicElement
-    _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
-  _hasBreakpoints: 0
-  _priority: 0
-  _logElementOnLayoutUpdate: 0
-  _aspectRatioBreakpoints: []
-  viewportModifiers:
-  - serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
---- !u!114 &9191773466666089548
+--- !u!114 &8999950798585534629
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892881052307360}
+  m_GameObject: {fileID: 7418774611178018253}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56666c5a40171f54783dd416a44f42bf, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EventMask:
-    serializedVersion: 2
-    m_Bits: 4096
-  m_MaxRayIntersections: 0
---- !u!1001 &769603655906813367
+  _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: CurrentSceneAspectRatio
+    _variable: {fileID: 0}
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5493616117406232224}
+        m_MethodName: RefreshViewport
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
+--- !u!1001 &7808221209256050650
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -181,13 +162,48 @@ PrefabInstance:
     - target: {fileID: 768030734032267799, guid: 7e634be71c99846aaa2e65cf389dd3fb,
         type: 3}
       propertyPath: m_Name
-      value: Responsive Camera
+      value: Current Scene Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 768030734032267799, guid: 7e634be71c99846aaa2e65cf389dd3fb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 785377854224337033, guid: 7e634be71c99846aaa2e65cf389dd3fb,
+        type: 3}
+      propertyPath: m_ClearFlags
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 785377854224337033, guid: 7e634be71c99846aaa2e65cf389dd3fb,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 785377854224337033, guid: 7e634be71c99846aaa2e65cf389dd3fb,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 785377854224337033, guid: 7e634be71c99846aaa2e65cf389dd3fb,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 785377854224337033, guid: 7e634be71c99846aaa2e65cf389dd3fb,
+        type: 3}
+      propertyPath: m_Depth
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 785377854224337033, guid: 7e634be71c99846aaa2e65cf389dd3fb,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e634be71c99846aaa2e65cf389dd3fb, type: 3}
---- !u!1 &1892881052307360 stripped
+--- !u!1 &7418774611178018253 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 768030734032267799, guid: 7e634be71c99846aaa2e65cf389dd3fb,
     type: 3}
-  m_PrefabInstance: {fileID: 769603655906813367}
+  m_PrefabInstance: {fileID: 7808221209256050650}
   m_PrefabAsset: {fileID: 0}

@@ -49,25 +49,25 @@ MonoBehaviour:
   _appSettings:
     _isSystemReference: 0
     _referenceName: AppSettings
-    _variable: {fileID: 11400000, guid: 98b90c9bfebfd4fd4b352d242c167896, type: 2}
+    _variable: {fileID: 0}
   _sceneAspectRatio:
     _isSystemReference: 0
     _referenceName: CurrentSceneAspectRatio
     _useConstant: 0
     _constantValue: 0
-    _variable: {fileID: 11400000, guid: 8f46fe63b60024eb8a95ab4a1d9727e9, type: 2}
+    _variable: {fileID: 0}
   _sceneWidth:
-    _isSystemReference: 0
-    _referenceName: CurrentSceneHeight
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: 00acd253ee4de4ef281c22522ee6e438, type: 2}
-  _sceneHeight:
     _isSystemReference: 0
     _referenceName: CurrentSceneWidth
     _useConstant: 0
     _constantValue: 0
-    _variable: {fileID: 11400000, guid: 3afa5314698034b0f90b4e8dae5e2623, type: 2}
+    _variable: {fileID: 0}
+  _sceneHeight:
+    _isSystemReference: 0
+    _referenceName: CurrentSceneHeight
+    _useConstant: 0
+    _constantValue: 0
+    _variable: {fileID: 0}
   _deviceBreakpoints:
   - 1.77
   _sceneDimensions:
@@ -92,13 +92,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
   _complexEventReference:
     _isSystemReference: 0
     _referenceName: EnableDynamicElement
     _variable: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
   DeveloperDescription: 
-  _response:
+  _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114017477341823712}
@@ -112,8 +111,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &9077634932118632401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,13 +124,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
   _complexEventReference:
     _isSystemReference: 0
     _referenceName: DisableDynamicElement
     _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
   DeveloperDescription: 
-  _response:
+  _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114017477341823712}
@@ -146,8 +143,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &6154787528140349724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,22 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: e010ae733dcd441eab0f2fd144a4213d, type: 2}
   _simpleSignalReferences: []
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114017477341823712}
-        m_MethodName: CallExecuteLayoutUpdate
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -190,5 +171,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0

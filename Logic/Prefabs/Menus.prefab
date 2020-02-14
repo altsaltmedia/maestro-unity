@@ -1338,34 +1338,6 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4752486613020334, guid: b4bf611a1042843f9af2e0dd625c3c64, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 34.944473
-      objectReference: {fileID: 0}
-    - target: {fileID: 4752486613020334, guid: b4bf611a1042843f9af2e0dd625c3c64, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 62.123516
-      objectReference: {fileID: 0}
-    - target: {fileID: 4752486613020334, guid: b4bf611a1042843f9af2e0dd625c3c64, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4752486613020334, guid: b4bf611a1042843f9af2e0dd625c3c64, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4752486613020334, guid: b4bf611a1042843f9af2e0dd625c3c64, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4752486613020334, guid: b4bf611a1042843f9af2e0dd625c3c64, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4752486613020334, guid: b4bf611a1042843f9af2e0dd625c3c64, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4752486613020334, guid: b4bf611a1042843f9af2e0dd625c3c64, type: 3}
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
@@ -1406,24 +1378,36 @@ PrefabInstance:
         type: 3}
       propertyPath: _sceneAspectRatio._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 14d1ccc2b421d441f9e8780be5009528,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 114017477341823712, guid: b4bf611a1042843f9af2e0dd625c3c64,
         type: 3}
       propertyPath: _sceneWidth._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 71ec187545d774365b64cd8020e2ea2b,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 114017477341823712, guid: b4bf611a1042843f9af2e0dd625c3c64,
         type: 3}
       propertyPath: _sceneHeight._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 7409962026f3b4ee08d6b2f6a8ff576d,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 114017477341823712, guid: b4bf611a1042843f9af2e0dd625c3c64,
         type: 3}
       propertyPath: _sceneDimensions.Array.data[0].targetAspectRatio
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114017477341823712, guid: b4bf611a1042843f9af2e0dd625c3c64,
+        type: 3}
+      propertyPath: _sceneAspectRatio._referenceName
+      value: MenusAspectRatio
+      objectReference: {fileID: 0}
+    - target: {fileID: 114017477341823712, guid: b4bf611a1042843f9af2e0dd625c3c64,
+        type: 3}
+      propertyPath: _sceneWidth._referenceName
+      value: MenusWidth
+      objectReference: {fileID: 0}
+    - target: {fileID: 114017477341823712, guid: b4bf611a1042843f9af2e0dd625c3c64,
+        type: 3}
+      propertyPath: _sceneHeight._referenceName
+      value: MenusHeight
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4bf611a1042843f9af2e0dd625c3c64, type: 3}
@@ -2350,6 +2334,7 @@ PrefabInstance:
         type: 2}
     m_RemovedComponents:
     - {fileID: 6762982322118964362, guid: 42935d41d9ee547bd8168a010681781a, type: 3}
+    - {fileID: 9191773466666089548, guid: 42935d41d9ee547bd8168a010681781a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 42935d41d9ee547bd8168a010681781a, type: 3}
 --- !u!224 &7597334268598392236 stripped
 RectTransform:
