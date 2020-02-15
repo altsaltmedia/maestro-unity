@@ -53,7 +53,7 @@ namespace AltSalt.Maestro.Animation
                 
                 trackBinding.StoreCaller(trackBinding, input.parentTrack.name, input.parentTrack.name);
                 
-                if (Application.isPlaying == true && appUtilsRequested == true) {
+                if (Application.isPlaying == true && isScrubbing == true) {
                     trackBinding.SetValue(Utils.transparent);
                 }
 #if UNITY_EDITOR

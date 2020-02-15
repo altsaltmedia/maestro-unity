@@ -276,10 +276,7 @@ namespace AltSalt.Maestro.Logic
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(xSceneName, xLoadMode);
             asyncLoad.completed += callback;
 
-            Debug.Log("Loading started");
-            
             while (!asyncLoad.isDone) {
-                Debug.Log(asyncLoad.progress.ToString("F6"));
                 sceneLoadingProgress = Mathf.Clamp01(asyncLoad.progress / .9f);
                 yield return null;
             }

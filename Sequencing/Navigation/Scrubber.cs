@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Playables;
 using Sirenix.OdinInspector;
+using UnityEngine.EventSystems;
 
 namespace AltSalt.Maestro.Sequencing.Navigation
 {
 
     [RequireComponent(typeof(Slider))]
-    public class Scrubber : NavigationModule
+    public class Scrubber : NavigationModule, IPointerDownHandler, IPointerUpHandler
     {
+        private bool isScrubbing
+        {
+            set => navigationController.appSettings.SetIsScrubbing(this.gameObject, inputGroupKey, value);
+        }
+        
+        private bool isReversing
+        {
+            set => navigationController.appSettings.SetIsReversing(this.gameObject, inputGroupKey, value);
+        }
+        
         [SerializeField]
         SimpleEventTrigger sequenceScrubbed;
-        
         private Slider _slider;
 
         private Slider slider
@@ -34,6 +39,14 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             set => _activeMasterSequence = value;
         }
 
+        private float _previousValue;
+
+        private float previousValue
+        {
+            get => _previousValue;
+            set => _previousValue = value;
+        }
+
         // Use this for initialization
         private void OnEnable()
         {
@@ -49,13 +62,26 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             slider.value = (float)activeMasterSequence.elapsedTime;
         }
 
-        private void OnMouseUpAsButton()
-        { 
-            TriggerInputActionComplete();
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            isScrubbing = true;
+        }
+        
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            isScrubbing = false;
         }
 
         public void ScrubSequence(float newValue)
         {
+            if (newValue > previousValue) {
+                isReversing = false;
+            }
+            else {
+                isReversing = true;
+            }
+
+            previousValue = newValue;
             activeMasterSequence.SetElapsedTime(newValue);
         }
     }

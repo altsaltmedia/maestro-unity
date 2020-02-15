@@ -65,7 +65,7 @@ namespace AltSalt.Maestro
             set => _trackAssetConfig = value;
         }
 
-        protected bool appUtilsRequested => appSettings.GetAppUtilsRequested(parentTrack, inputGroupKey);
+        protected bool isScrubbing => appSettings.GetIsScrubbing(parentTrack, inputGroupKey);
 
         private TrackAsset _parentTrack;
 

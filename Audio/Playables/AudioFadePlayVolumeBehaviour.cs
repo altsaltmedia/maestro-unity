@@ -22,6 +22,11 @@ namespace AltSalt.Maestro.Audio
             get => _targetAudioSources;
             set => _targetAudioSources = value;
         }
+        
+        [SerializeField]
+        private bool _isReset = false;
+
+        public bool isReset => _isReset;
     }
 
 }

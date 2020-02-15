@@ -9,10 +9,8 @@ namespace AltSalt.Maestro.Audio
     {
         ScriptPlayable<AudioFadePlayVolumeBehaviour> inputPlayable;
         AudioFadePlayVolumeBehaviour input;
-        List<float> originalVolumes = new List<float>();
 
         double doubleModifier;
-
 
         public double DoubleEasingFunction(double start, double end, double value) {
             return ((end - start) * value) + start;
@@ -27,27 +25,39 @@ namespace AltSalt.Maestro.Audio
                 inputPlayable = (ScriptPlayable<AudioFadePlayVolumeBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour();
 
-
-                if (originalVolumes.Count < 1) {
-                    for (int z = 0; z < input.targetAudioSources.Count; z++){
-                        originalVolumes.Add(input.targetAudioSources[z].volume);
-                    }
-                }
-
                 for (int q=0; q < input.targetAudioSources.Count; q++) {
 
                     AudioSource audioSource = input.targetAudioSources[q];
 
+                    // In most cases, when we set up a fadePlay track,
+                    // we want to play audio when moving forward and slowly
+                    // fade out when going in reverse. However, when we link a
+                    // sequence containing an initial fadePlay track to a sibling
+                    // sequence, we'll simply want to make sure the track is playing
+                    // in the sibling and don't need the fading in / out behaviour.
+                    if (input.isReset == true && inputWeight >= 1f || trackAssetConfig.currentTime >= input.endTime) {
+                        if(audioSource.isPlaying == false) {
+                            audioSource.volume = 1;
+                            audioSource.Play();
+                        }
+                        continue;
+                    }
+
+                    // While the playhead is over the clip, slowly fade in / fade out a track's volume
                     if (inputWeight >= 1f) {
                         doubleModifier = inputPlayable.GetTime() / inputPlayable.GetDuration();
                         audioSource.volume = Mathf.Lerp(0, 1, (float)DoubleEasingFunction(0f, 1f, doubleModifier));
                     } else {
+                        // Once the playhead is beyond the clip's end threshold, play the audio
                         if (trackAssetConfig.currentTime >= input.endTime) {
                             if(audioSource.isPlaying == false) {
                                 audioSource.volume = 1;
                                 audioSource.Play();
                             }
-                        } else if (i == 0 && trackAssetConfig.currentTime <= input.startTime) {
+                            
+                        }
+                        // Once the playhead is before the clip's start threshold, stop the audio
+                        else if (i == 0 && trackAssetConfig.currentTime <= input.startTime) {
                             audioSource.volume = 0;
                             audioSource.Stop();
                         }
@@ -66,7 +76,6 @@ namespace AltSalt.Maestro.Audio
         {
             base.OnGraphStop(playable);
 
-            // Reset color if we're working in edit mode
 #if UNITY_EDITOR
             if (input != null) {
                 for (int q = 0; q < input.targetAudioSources.Count; q++) {

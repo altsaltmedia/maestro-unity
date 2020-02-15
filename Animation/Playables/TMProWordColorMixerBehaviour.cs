@@ -69,7 +69,7 @@ namespace AltSalt.Maestro.Animation
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            if (Application.isPlaying == true && appUtilsRequested == true) {
+            if (Application.isPlaying == true && isScrubbing == true) {
                 if (trackBindingComponent != null) {    
                     trackBindingComponent.color = Utils.transparent;
                 }

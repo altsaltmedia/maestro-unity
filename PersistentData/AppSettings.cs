@@ -620,10 +620,29 @@ namespace AltSalt.Maestro
             return inputData.GetInputGroup(inputGroupKey).updateFork;
         }
         
+        
+        // Refresh Scrubber
+        
         public ComplexEventManualTrigger GetRefreshScrubber(Object callingObject, InputGroupKey inputGroupKey)
         {
             return inputData.GetInputGroup(inputGroupKey).refreshScrubber;
         }
+        
+        
+        // Is Scrubbing
+        
+        public bool GetIsScrubbing(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).isScrubbing.GetValue();
+        }
+
+        public BoolVariable SetIsScrubbing(GameObject callingObject, InputGroupKey inputGroupKey, bool targetValue)
+        {
+            return inputData.GetInputGroup(inputGroupKey).isScrubbing.SetValue(callingObject, targetValue);
+        }
+        
+        
+        // App Utils Requested
 
         public bool GetAppUtilsRequested(Object callingObject, InputGroupKey inputGroupKey)
         {

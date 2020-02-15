@@ -173,6 +173,7 @@ namespace AltSalt.Maestro.Sequencing
             return false;
         }
 
+        [Button(ButtonSizes.Large)]
         public void SetElapsedTime(double targetTime)
         {
             _elapsedTime = targetTime;
@@ -205,14 +206,22 @@ namespace AltSalt.Maestro.Sequencing
 
                     // Prep preceding sequence, if applicable
                     if (i > 0) {
-                        sequenceData[i - 1].sequence.currentTime = sequenceData[i - 1].sequence.sourcePlayable.duration;
-                        sequenceData[i - 1].sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                        for (int j = 0; j < sequenceData.Count; j++) {
+                            if (j < i) {
+                                sequenceData[j].sequence.currentTime = sequenceData[j].sequence.sourcePlayable.duration;
+                                sequenceData[j].sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                            }
+                        }
                     }
 
                     // Prep following sequence, if applicable
-                    if (sequenceData.Count - 1 > i) {
-                        sequenceData[i + 1].sequence.currentTime = 0;
-                        sequenceData[i + 1].sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                    if (i < sequenceData.Count - 1) {
+                        for (int j = sequenceData.Count - 1; j >= 0; j--) {
+                            if (j > i) {
+                                sequenceData[j].sequence.currentTime = 0;
+                                sequenceData[j].sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                            }
+                        }
                     }
 
                     activeSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();

@@ -10,15 +10,25 @@ namespace AltSalt.Maestro
     [Serializable]
     public class ComplexEventTimelineTriggerBehaviour : TimelineTriggerBehaviour
     {
+        [FormerlySerializedAs("_complexEventTriggerPackagers")]
         [FormerlySerializedAs("complexEventTriggerPackagers")]
         [SerializeField]
-        private List<ComplexEventConfigurableTrigger> _complexEventTriggerPackagers;
+        private List<ComplexEventConfigurableTrigger> _complexEventConfigurableTriggers;
 
-        public List<ComplexEventConfigurableTrigger> complexEventTriggerPackagers
+        public List<ComplexEventConfigurableTrigger> complexEventConfigurableTriggers
         {
-            get => _complexEventTriggerPackagers;
-            set => _complexEventTriggerPackagers = value;
+            get => _complexEventConfigurableTriggers;
+            set => _complexEventConfigurableTriggers = value;
         }
         
+        [SerializeField]
+        private bool _forceActivateOnForward = false;
+
+        public override bool forceActivateOnForward => _forceActivateOnForward;
+        
+        [SerializeField]
+        private bool _forceActivateOnReverse = false;
+        
+        public override bool forceActivateOnReverse => _forceActivateOnReverse;
     }
 }

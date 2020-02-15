@@ -39,16 +39,17 @@ namespace AltSalt.Maestro
         public BoolVariable _isReversingVariable;
 
         public bool isReversing => _isReversingVariable.value;
+        
 
-        [FormerlySerializedAs("disableOnReverse")]
-        [SerializeField]
-        private bool _disableOnReverse;
-
-        public bool disableOnReverse
-        {
-            get => _disableOnReverse;
-            set => _disableOnReverse = value;
-        }
+        // Not all triggers should be activated if we're past the clip
+        // thresholds. While in general, we DO want to execute any events that
+        // affect the game state (loading scenes, changing variables, etc.)
+        // no matter what, other triggers, such as those used to
+        // play audio clips, we only want to execute within the confines
+        // of the clip's duration.
+        public abstract bool forceActivateOnForward { get; }
+        
+        public abstract bool forceActivateOnReverse { get; }
         
         [HideInInspector]
         private TrackAssetConfig _trackAssetConfig;

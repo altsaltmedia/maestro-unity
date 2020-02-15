@@ -201,6 +201,13 @@ namespace AltSalt.Maestro
         [Required]
         [FoldoutGroup("Events")]
         [SerializeField]
+        private BoolReference _isScrubbing = new BoolReference();
+
+        public BoolReference isScrubbing => _isScrubbing;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
         private BoolReference _appUtilsRequested = new BoolReference();
 
         public BoolReference appUtilsRequested => _appUtilsRequested;

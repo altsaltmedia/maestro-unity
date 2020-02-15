@@ -15,7 +15,8 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             set => _activeMasterSequence = value;
         }
 
-        private ComplexEventManualTrigger refreshScrubber => appSettings.GetRefreshScrubber(this, inputGroupKey);
+        private ComplexEventManualTrigger refreshScrubber => 
+            appSettings.GetRefreshScrubber(this, inputGroupKey);
 
         public override void ConfigureData()
         {
@@ -25,7 +26,8 @@ namespace AltSalt.Maestro.Sequencing.Navigation
         public void ActivateNavigationModules()
         {
             activeMasterSequence = 
-                masterSequences.Find(x => x.sequenceConfigs.Find(y => y.sequence.active == true));
+                masterSequences.Find(x => x.sequenceConfigs.Find(
+                    y => y.sequence.active && y.sequence.canBeScrubbed == true));
 
             if (activeMasterSequence != null) {
                 refreshScrubber.RaiseEvent(this.gameObject, this);

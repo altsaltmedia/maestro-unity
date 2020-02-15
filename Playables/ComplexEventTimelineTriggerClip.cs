@@ -14,13 +14,13 @@ namespace AltSalt.Maestro
         public override Playable CreatePlayable (PlayableGraph graph, GameObject owner)
         {
 #if UNITY_EDITOR
-            string complexEventTriggersListPath = $"{nameof(template)}._{nameof(template.complexEventTriggerPackagers)}";
+            string complexEventTriggersListPath = $"{nameof(template)}._{nameof(template.complexEventConfigurableTriggers)}";
             
-            for (int i = 0; i < template.complexEventTriggerPackagers.Count; i++) {
+            for (int i = 0; i < template.complexEventConfigurableTriggers.Count; i++) {
             
                 // Make sure that the 'search attempted' bool is reset every time the graph starts
-                template.complexEventTriggerPackagers[i].ResetSearchAttempted();
-                template.complexEventTriggerPackagers[i].ResetReferencesSearchAttempted();
+                template.complexEventConfigurableTriggers[i].ResetSearchAttempted();
+                template.complexEventConfigurableTriggers[i].ResetReferencesSearchAttempted();
                 
                 string complexTriggerPath = complexEventTriggersListPath;
                 complexTriggerPath += $".{i.ToString()}";
@@ -30,8 +30,8 @@ namespace AltSalt.Maestro
                 /// variable is reimported / recreated with the same GUID. Workaround: just close and open the project.
                 ///
                 /// Hours spent trying to fix this: 3 hours
-                template.complexEventTriggerPackagers[i].PopulateVariable(this, complexTriggerPath);
-                template.complexEventTriggerPackagers[i].PopulateReferences(this, complexTriggerPath);
+                template.complexEventConfigurableTriggers[i].PopulateVariable(this, complexTriggerPath);
+                template.complexEventConfigurableTriggers[i].PopulateReferences(this, complexTriggerPath);
             }
 #endif
 
