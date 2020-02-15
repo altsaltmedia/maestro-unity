@@ -49,6 +49,16 @@ namespace AltSalt.Maestro.Animation
         }
 
         [SerializeField]
+        private AppSettingsReference _appSettings;
+
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
+
+        [SerializeField]
+        private InputGroupKeyReference _inputGroupKey;
+
+        private InputGroupKey inputGroupKey => _inputGroupKey.GetVariable() as InputGroupKey;
+
+        [SerializeField]
         [Required]
         public VideoPlayerItem mainVideoInstance;
 
@@ -57,14 +67,19 @@ namespace AltSalt.Maestro.Animation
         [BoxGroup("Android Dependencies")]
         public VideoPlayerItem reverseVideoInstance;
 
-        [SerializeField]
-        [ValidateInput("IsPopulated")]
-        [BoxGroup("Android Dependencies")]
-        BoolReference isReversing;
+        private bool isReversing => appSettings.GetIsReversing(this, inputGroupKey);
 
         bool internalIsReversingValue = false;
         bool mainVideoSwapLoaded = false;
         bool reverseVideoSwapLoaded = false;
+
+#if UNITY_EDITOR        
+        private void Awake()
+        {
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+            _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
+        }
+#endif        
 
         void Start()
         {
@@ -108,9 +123,9 @@ namespace AltSalt.Maestro.Animation
 #if UNITY_ANDROID
             reverseVideoInstance.vpComponent.time = reverseVideoInstance.vpComponent.length - targetTime;
 
-            if(isReversing.Value != internalIsReversingValue) {
+            if(isReversing != internalIsReversingValue) {
 
-                if (isReversing.Value == false) {
+                if (isReversing == false) {
                 
                     mainVideoSwapLoaded = true;
                 
@@ -119,7 +134,7 @@ namespace AltSalt.Maestro.Animation
                     reverseVideoSwapLoaded = true;
                 }
 
-                internalIsReversingValue = isReversing.Value;
+                internalIsReversingValue = isReversing;
             }
 #endif
         }

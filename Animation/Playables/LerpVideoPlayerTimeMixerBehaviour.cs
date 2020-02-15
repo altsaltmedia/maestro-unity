@@ -34,7 +34,7 @@ namespace AltSalt.Maestro.Animation
                 if (inputWeight >= 1f) {
                     percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
 #if UNITY_ANDROID
-                    trackBinding.SetTime((double)Mathf.Lerp(input.initialValueAndroid, input.targetValueAndroid, input.easingFunction(0f, 1f, modifier)));
+                    trackBinding.SetTime((double)Mathf.Lerp(input.initialValueAndroid, input.targetValueAndroid, input.easingFunction(0f, 1f, percentageComplete)));
 #else
                     trackBinding.SetTime((double)Mathf.Lerp(input.initialValueIOS, input.targetValueIOS, input.easingFunction(0f, 1f, percentageComplete)));
 #endif

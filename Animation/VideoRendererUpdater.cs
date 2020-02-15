@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Animation
 {
@@ -16,57 +17,71 @@ namespace AltSalt.Maestro.Animation
         [InfoBox("By default, we should only change the _Color attribute on videos.")]
         string targetAttributeName = "_Color";
 
+        [FormerlySerializedAs("_Color")]
         [ValidateInput("IsPopulated")]
-        public ColorReference _Color;
+        [SerializeField]
+        private ColorReference _color;
+
+        private Color color => _color.GetValue();
 
         [SerializeField]
-        protected List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
+        protected List<MeshRenderer> _meshRenderers = new List<MeshRenderer>();
+
+        protected List<MeshRenderer> meshRenderers => _meshRenderers;
 
         [SerializeField]
         [ReadOnly]
-        protected List<Material> materialInstances = new List<Material>();
+        protected List<Material> _materialInstances = new List<Material>();
+
+        private List<Material> materialInstances => _materialInstances;
 
         [SerializeField]
         [ReadOnly]
-        PlayableVideoPlayerController playableVideoPlayerController;
+        private PlayableVideoPlayerController _playableVideoPlayerController;
 
-        void Start()
+        private PlayableVideoPlayerController playableVideoPlayerController
+        {
+            get => _playableVideoPlayerController;
+            set => _playableVideoPlayerController = value;
+        }
+
+        private void Awake()
         {
             playableVideoPlayerController = GetComponent<PlayableVideoPlayerController>();
             CreateMaterials();
         }
 
 #if UNITY_EDITOR
-        void OnGUI()
+        private void OnGUI()
         {
             RefreshRenderer();
         }
 #endif
 
-        void Update()
+        private void Update()
         {
             RefreshRenderer();
         }
 
-        void RefreshRenderer()
+        private void RefreshRenderer()
         {
             if (meshRenderers.Count < 1) {
                 return;
             }
-            if(_Color.GetVariable() == null) {
+            if(_color.GetVariable() == null) {
                 Debug.Log("Please provide a color variable.", this);
                 return;
             }
 
             if(playableVideoPlayerController.mainVideoInstance.isHidden == false) {
-                UpdateVideoColor(0, _Color.GetValue());
+                UpdateVideoColor(0, _color.GetValue());
             } else {
                 UpdateVideoColor(0, Utils.transparent);
             }
 
 #if UNITY_ANDROID
             if (playableVideoPlayerController.reverseVideoInstance.isHidden == false) {
-                UpdateVideoColor(1, _Color.Value);
+                UpdateVideoColor(1, color);
             } else {
                 UpdateVideoColor(1, Utils.transparent);
             }
@@ -74,7 +89,7 @@ namespace AltSalt.Maestro.Animation
 
         }
 
-        void UpdateVideoColor(int targetId, Color targetColor)
+        private void UpdateVideoColor(int targetId, Color targetColor)
         {
             materialInstances[targetId].SetColor(targetAttributeName, targetColor);
         }
@@ -82,7 +97,7 @@ namespace AltSalt.Maestro.Animation
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         [InfoBox("Creates and assigns duplicate materials based on assigned mesh renderers.")]
         [SerializeField]
-        void CreateMaterials()
+        private void CreateMaterials()
         {
             for (int q = 0; q < meshRenderers.Count; q++) {
                 while (materialInstances.Count < meshRenderers.Count) {
@@ -96,7 +111,7 @@ namespace AltSalt.Maestro.Animation
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         [InfoBox("Reset and remove materials.")]
         [SerializeField]
-        void RemoveMaterials()
+        private void RemoveMaterials()
         {
             materialInstances.Clear();
         }
