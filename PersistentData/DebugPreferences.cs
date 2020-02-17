@@ -68,6 +68,15 @@ namespace AltSalt.Maestro
             set => _useAddressables = value;
         }
         
+        [SerializeField]
+        private bool _bookmarkingEnabled = false;
+
+        public bool bookmarkingEnabled
+        {
+            get => _bookmarkingEnabled;
+            set => _bookmarkingEnabled = value;
+        }
+        
         [ShowInInspector]
         private static bool _logEventCallersAndListeners = false;
         
@@ -103,6 +112,7 @@ namespace AltSalt.Maestro
             modifyLayoutActive = true;
             saveDataActive = true;
             useAddressables = false;
+            bookmarkingEnabled = false;
             logEventCallersAndListeners = false;
             logResponsiveElementActions = false;
             logConditionResponses = false;

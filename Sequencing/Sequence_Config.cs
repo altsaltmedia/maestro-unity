@@ -75,11 +75,6 @@ namespace AltSalt.Maestro.Sequencing
             get => _trackAssetConfig;
             private set => _trackAssetConfig = value;
         }
-        
-        private void Start()
-        {
-            Init();
-        }
 
         // Since scriptable objects by default cannot serialize references to
         // game objects and Monobehaviours, set all of the sequence dependencies
@@ -88,6 +83,7 @@ namespace AltSalt.Maestro.Sequencing
         public void Init()
         {
             sequence.sequenceConfig = this;
+            sequence.SetDefaults();
             
             GetPlayableDirector();
             if (playableDirector.playableAsset == null) {

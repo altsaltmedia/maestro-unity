@@ -276,6 +276,38 @@ namespace AltSalt.Maestro
             return systemSettings.timescale.GetValue();
         }
         
+
+        // Has Bookmark
+        
+        public BoolReference GetHasBookmarkReference(Object callingObject)
+        {
+            return systemSettings.hasBookmark;
+        }
+        
+        
+        // Last Opened Scene
+        
+        public StringReference GetLastOpenedSceneReference(Object callingObject)
+        {
+            return systemSettings.lastOpenedScene;
+        }
+        
+        
+        // Last Loaded Sequence
+        
+        public StringReference GetLastLoadedSequenceReference(Object callingObject)
+        {
+            return systemSettings.lastLoadedSequence;
+        }
+
+        
+        // Last Loaded Sequence Time
+        
+        public FloatReference GetLastLoadedSequenceTimeReference(Object callingObject)
+        {
+            return systemSettings.lastLoadedSequenceTime;
+        }
+        
         
         // Scene Loading Progress
         
@@ -621,11 +653,11 @@ namespace AltSalt.Maestro
         }
         
         
-        // Refresh Scrubber
+        // Refresh App Utils
         
-        public ComplexEventManualTrigger GetRefreshScrubber(Object callingObject, InputGroupKey inputGroupKey)
+        public ComplexEventManualTrigger GetRefreshAppUtils(Object callingObject, InputGroupKey inputGroupKey)
         {
-            return inputData.GetInputGroup(inputGroupKey).refreshScrubber;
+            return inputData.GetInputGroup(inputGroupKey).refreshAppUtils;
         }
         
         
@@ -642,6 +674,14 @@ namespace AltSalt.Maestro
         }
         
         
+        // On Scrub
+        
+        public SimpleEventTrigger GetOnScrub(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).onScrub;
+        }
+        
+        
         // App Utils Requested
 
         public bool GetAppUtilsRequested(Object callingObject, InputGroupKey inputGroupKey)
@@ -653,7 +693,28 @@ namespace AltSalt.Maestro
         {
             return inputData.GetInputGroup(inputGroupKey).appUtilsRequested.SetValue(callingObject, targetValue);
         }
-
+        
+        
+        // Configuration Completed
+        
+        public SimpleEventTrigger GetConfigurationCompleted(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).configurationCompleted;
+        }
+        
+        
+        // Bookmark Loading Completed
+        
+        public bool GetBookmarkLoadingCompleted(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).bookmarkLoadingCompleted.GetValue();
+        }
+        
+        public bool SetBookmarkLoadingCompleted(GameObject callingObject, InputGroupKey inputGroupKey, bool targetValue)
+        {
+            return inputData.GetInputGroup(inputGroupKey).bookmarkLoadingCompleted.SetValue(callingObject, targetValue);
+        }
+        
 
         // Y Axes
 
@@ -754,6 +815,8 @@ namespace AltSalt.Maestro
         public bool modifyLayoutActive => debugPreferences.modifyLayoutActive;
 
         public bool useAddressables => debugPreferences.useAddressables;
+        
+        public bool bookmarkingEnabled => debugPreferences.bookmarkingEnabled;
 
         public static bool logEventCallersAndListeners => DebugPreferences.logEventCallersAndListeners;
 

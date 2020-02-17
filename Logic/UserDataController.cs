@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Logic
 {
@@ -15,11 +17,22 @@ namespace AltSalt.Maestro.Logic
 
         private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
-        [SerializeField]
-        private List<UserDatum> userData = new List<UserDatum>();
+        [FormerlySerializedAs("userData"),SerializeField]
+        private List<UserDatum> _userData = new List<UserDatum>();
 
-        private void Start()
+        private List<UserDatum> userData => _userData;
+
+        private void Awake()
         {
+#if UNITY_EDITOR
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+            
+            string userDataListPath = nameof(_userData);
+            for (int i = 0; i < userData.Count; i++) {
+                string userPataPath = $"{userDataListPath}.{i}";
+                userData[i].PopulateReference(this, userPataPath);
+            }
+#endif
             CallReadFromStoredData();
         }
 
@@ -29,17 +42,18 @@ namespace AltSalt.Maestro.Logic
                 return;
             }
 
-            ScriptableObject receivedObject = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType);
-            bool valueFound = false;
-            for (int i = 0; i < userData.Count; i++) {
-                if (receivedObject == userData[i].scriptableObject) {
-                    valueFound = true;
-                    WriteToStoredData(userData[i]);
+            foreach (KeyValuePair<object, ScriptableObject> payloadObject in complexPayload.scriptableObjectDictionary) {
+                ScriptableObject receivedObject = payloadObject.Value;
+                bool valueFound = false;
+                for (int j = 0; j < _userData.Count; j++) {
+                    if (receivedObject == _userData[j].scriptableObject) {
+                        valueFound = true;
+                        WriteToStoredData(_userData[j]);
+                    }
                 }
-            }
-
-            if(valueFound == false) {
-                Debug.LogError("Data unable to be written - " + receivedObject.name + " variable not stored in " + this.name, this);
+                if(valueFound == false) {
+                    Debug.LogError("Data unable to be written - " + receivedObject.name + " variable not stored in " + this.name, this);
+                }
             }
         }
 
@@ -48,10 +62,10 @@ namespace AltSalt.Maestro.Logic
         public void CallWriteToStoredData(ScriptableObject receivedObject)
         {
             bool valueFound = false;
-            for (int i = 0; i < userData.Count; i++) {
-                if (receivedObject == userData[i].scriptableObject) {
+            for (int i = 0; i < _userData.Count; i++) {
+                if (receivedObject == _userData[i].scriptableObject) {
                     valueFound = true;
-                    WriteToStoredData(userData[i]);
+                    WriteToStoredData(_userData[i]);
                 }
             }
 
@@ -103,18 +117,18 @@ namespace AltSalt.Maestro.Logic
 
         public void CallReadFromStoredData()
         {
-            for (int i = 0; i < userData.Count; i++) {
-                ReadFromStoredData(userData[i]);
+            for (int i = 0; i < _userData.Count; i++) {
+                ReadFromStoredData(_userData[i]);
             }
         }
 
         public void CallReadFromStoredData(ScriptableObject sourceObject)
         {
             bool valueFound = false;
-            for (int i = 0; i < userData.Count; i++) {
-                if (sourceObject == userData[i].scriptableObject) {
+            for (int i = 0; i < _userData.Count; i++) {
+                if (sourceObject == _userData[i].scriptableObject) {
                     valueFound = true;
-                    ReadFromStoredData(userData[i]);
+                    ReadFromStoredData(_userData[i]);
                 }
             }
 
@@ -157,12 +171,6 @@ namespace AltSalt.Maestro.Logic
                     intVariable.SetValue(intValue);
                     break;
             }
-        }
-
-#if UNITY_EDITOR
-        private void OnEnable()
-        {
-            _appSettings.PopulateVariable(this, nameof(_appSettings));
         }
         
         [InfoBox("Print values of user data stored in Player Prefs.")]
@@ -230,7 +238,6 @@ namespace AltSalt.Maestro.Logic
         {
             Debug.Log("Saved " + attributeName + " value of " + value + " to Player Prefs.");
         }
-#endif
 
         [InfoBox("Delete all stored data in Player Prefs. Use with caution.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
@@ -250,6 +257,13 @@ namespace AltSalt.Maestro.Logic
                 get => _scriptableObject.GetVariable();
                 set => _scriptableObject.SetVariable(value);
             }
+            
+#if UNITY_EDITOR
+            public void PopulateReference(Object parentObject, string serializedPropertyPath)
+            {
+                _scriptableObject.PopulateVariable(parentObject, $"{serializedPropertyPath}.{nameof(_scriptableObject)}");
+            }
+#endif            
         }
     }
 

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1362800772877632
+--- !u!1 &770529053451357263
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,25 +8,25 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4752486613020334}
-  - component: {fileID: 114017477341823712}
-  - component: {fileID: 5206624469968826649}
-  - component: {fileID: 9077634932118632401}
-  - component: {fileID: 6154787528140349724}
+  - component: {fileID: 767104241222283169}
+  - component: {fileID: 801848713650947055}
+  - component: {fileID: 4824492354251042838}
+  - component: {fileID: 8597252403021625054}
+  - component: {fileID: 6908413831520641043}
   m_Layer: 0
-  m_Name: Dynamic Layout Controller
+  m_Name: Dynamic App Layout Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4752486613020334
+--- !u!4 &767104241222283169
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362800772877632}
+  m_GameObject: {fileID: 770529053451357263}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -34,13 +34,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114017477341823712
+--- !u!114 &801848713650947055
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362800772877632}
+  m_GameObject: {fileID: 770529053451357263}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3a4a1aec4bb54aca8f35fb94c40746d, type: 3}
@@ -50,21 +50,21 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: AppSettings
     _variable: {fileID: 0}
-  _sceneAspectRatio:
+  _targetAspectRatio:
     _isSystemReference: 0
-    _referenceName: CurrentSceneAspectRatio
+    _referenceName: AppAspectRatio
     _useConstant: 0
     _constantValue: 0
     _variable: {fileID: 0}
-  _sceneWidth:
+  _targetWidth:
     _isSystemReference: 0
-    _referenceName: CurrentSceneWidth
+    _referenceName: AppWidth
     _useConstant: 0
     _constantValue: 0
     _variable: {fileID: 0}
-  _sceneHeight:
+  _targetHeight:
     _isSystemReference: 0
-    _referenceName: CurrentSceneHeight
+    _referenceName: AppHeight
     _useConstant: 0
     _constantValue: 0
     _variable: {fileID: 0}
@@ -80,13 +80,13 @@ MonoBehaviour:
   _layoutRenderCompleteEvents:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5206624469968826649
+--- !u!114 &4824492354251042838
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362800772877632}
+  m_GameObject: {fileID: 770529053451357263}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
@@ -100,7 +100,7 @@ MonoBehaviour:
   _action:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114017477341823712}
+      - m_Target: {fileID: 801848713650947055}
         m_MethodName: RegisterDynamicElement
         m_Mode: 0
         m_Arguments:
@@ -112,13 +112,13 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   _skipRegistration: 0
---- !u!114 &9077634932118632401
+--- !u!114 &8597252403021625054
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362800772877632}
+  m_GameObject: {fileID: 770529053451357263}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
@@ -132,7 +132,7 @@ MonoBehaviour:
   _action:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114017477341823712}
+      - m_Target: {fileID: 801848713650947055}
         m_MethodName: DeregisterDynamicElement
         m_Mode: 0
         m_Arguments:
@@ -144,13 +144,13 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   _skipRegistration: 0
---- !u!114 &6154787528140349724
+--- !u!114 &6908413831520641043
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362800772877632}
+  m_GameObject: {fileID: 770529053451357263}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
@@ -160,7 +160,7 @@ MonoBehaviour:
   _action:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114017477341823712}
+      - m_Target: {fileID: 801848713650947055}
         m_MethodName: CallExecuteLayoutUpdate
         m_Mode: 1
         m_Arguments:

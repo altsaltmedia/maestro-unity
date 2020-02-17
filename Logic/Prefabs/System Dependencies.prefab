@@ -1039,36 +1039,6 @@ PrefabInstance:
       propertyPath: _complexEventReference._referenceName
       value: StoreData
       objectReference: {fileID: 0}
-    - target: {fileID: 3144316825054138898, guid: a0a7ea057e4b245c7861ca939848b432,
-        type: 3}
-      propertyPath: userData.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3144316825054138898, guid: a0a7ea057e4b245c7861ca939848b432,
-        type: 3}
-      propertyPath: userData.Array.data[0].scriptableObject
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3144316825054138898, guid: a0a7ea057e4b245c7861ca939848b432,
-        type: 3}
-      propertyPath: userData.Array.data[1].scriptableObject
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3144316825054138898, guid: a0a7ea057e4b245c7861ca939848b432,
-        type: 3}
-      propertyPath: userData.Array.data[1].dataType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3144316825054138898, guid: a0a7ea057e4b245c7861ca939848b432,
-        type: 3}
-      propertyPath: _appSettings._referenceName
-      value: AppSettings
-      objectReference: {fileID: 0}
-    - target: {fileID: 3144316825054138898, guid: a0a7ea057e4b245c7861ca939848b432,
-        type: 3}
-      propertyPath: _appSettings._variable
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 3144316825054138903, guid: a0a7ea057e4b245c7861ca939848b432,
         type: 3}
       propertyPath: m_Name

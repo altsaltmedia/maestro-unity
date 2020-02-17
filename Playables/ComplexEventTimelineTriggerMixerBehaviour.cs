@@ -42,12 +42,12 @@ namespace AltSalt.Maestro
 
                     if (inputWeight >= 1 && input.triggered == false) {
                         input.triggered = true;
-                        TriggerEvents(input);
+                        TriggerEvents(this, input);
                     } else {
                         if (trackAssetConfig.currentTime > input.endTime
                             && input.forceActivateOnForward == true && input.triggered == false) {
                             input.triggered = true;
-                            TriggerEvents(input);
+                            TriggerEvents(this, input);
                         }
                     }
                 }
@@ -57,26 +57,43 @@ namespace AltSalt.Maestro
                 // When we're reversing, we need to make sure all
                 // the events get executed in reverse order as well
                 for (int i = inputCount - 1; i >= 0; i--) {
+                    
                     inputWeight = playable.GetInputWeight(i);
                     inputPlayable = (ScriptPlayable<ComplexEventTimelineTriggerBehaviour>) playable.GetInput(i);
                     input = inputPlayable.GetBehaviour();
+                    
+                    if (input.disableOnReverse == true) {
+                        continue;
+                    }
 
                     if (inputWeight >= 1 && input.triggered == false) {
                         input.triggered = true;
-                        TriggerEvents(input);
+                        TriggerEvents(this, input);
                     } else {
                         if (trackAssetConfig.currentTime < input.startTime
                             && input.forceActivateOnReverse == true && input.triggered == false) {
                             input.triggered = true;
-                            TriggerEvents(input);
+                            TriggerEvents(this, input);
                         }
                     }
                 }
             }
         }
         
-        private static ComplexEventTimelineTriggerBehaviour TriggerEvents(ComplexEventTimelineTriggerBehaviour triggerBehaviour)
+        private static ComplexEventTimelineTriggerBehaviour TriggerEvents(
+            ComplexEventTimelineTriggerMixerBehaviour mixerBehaviour,
+            ComplexEventTimelineTriggerBehaviour triggerBehaviour)
         {
+            if (mixerBehaviour.trackAssetConfig.bookmarkLoadingCompleted == false &&
+                triggerBehaviour.executeWhileLoadingBookmarks == false) {
+                return triggerBehaviour;
+            }
+
+            if (mixerBehaviour.appUtilsRequested == true &&
+                triggerBehaviour.executeWhileAppUtilsRequested == false) {
+                return triggerBehaviour;
+            }
+            
             for (int q = 0; q < triggerBehaviour.complexEventConfigurableTriggers.Count; q++) {
                 triggerBehaviour.complexEventConfigurableTriggers[q].RaiseEvent(triggerBehaviour.trackAssetConfig.gameObject,
                     $"{triggerBehaviour.trackAssetConfig.name} director at {triggerBehaviour.trackAssetConfig.currentTime:F2}");

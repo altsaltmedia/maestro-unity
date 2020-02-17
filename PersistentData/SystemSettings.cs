@@ -42,6 +42,21 @@ namespace AltSalt.Maestro
         public StringReference activeScene => _activeScene;
         
         [SerializeField, Required]
+        private FloatReference _appAspectRatio = new FloatReference();
+        
+        public FloatReference appAspectRatio => _appAspectRatio;
+
+        [SerializeField, Required]
+        private FloatReference _appHeight = new FloatReference();
+        
+        public FloatReference appHeight => _appHeight;
+
+        [SerializeField, Required]
+        private FloatReference _appWidth = new FloatReference();
+        
+        public FloatReference appWidth => _appWidth;
+        
+        [SerializeField, Required]
         private FloatReference _currentSceneAspectRatio = new FloatReference();
         
         public FloatReference currentSceneAspectRatio => _currentSceneAspectRatio;
@@ -88,8 +103,28 @@ namespace AltSalt.Maestro
         
         [SerializeField, Required]
         private FloatReference _timescale = new FloatReference();
-        
+
         public FloatReference timescale => _timescale;
+            
+        [SerializeField]
+        private BoolReference _hasBookmark = new BoolReference();
+
+        public BoolReference hasBookmark => _hasBookmark;
+        
+        [SerializeField, Required]
+        private StringReference _lastOpenedScene = new StringReference();
+        
+        public StringReference lastOpenedScene => _lastOpenedScene;
+        
+        [SerializeField, Required]
+        private StringReference _lastLoadedSequence = new StringReference();
+        
+        public StringReference lastLoadedSequence => _lastLoadedSequence;
+        
+        [SerializeField, Required]
+        private FloatReference _lastLoadedSequenceTime = new FloatReference();
+        
+        public FloatReference lastLoadedSequenceTime => _lastLoadedSequenceTime;
         
         [SerializeField, Required]
         private FloatReference _sceneLoadingProgress = new FloatReference();
@@ -115,6 +150,16 @@ namespace AltSalt.Maestro
             (progressBarVisible.GetVariable() as BoolVariable).defaultValue = false;
             (paused.GetVariable() as BoolVariable).defaultValue = false;
             (timescale.GetVariable() as FloatVariable).defaultValue = 1;
+            
+            // Bookmarking
+            
+            (hasBookmark.GetVariable() as BoolVariable).defaultValue = false;
+            (lastOpenedScene.GetVariable() as StringVariable).defaultValue = "";
+            (lastLoadedSequence.GetVariable() as StringVariable).defaultValue = "";
+            (lastLoadedSequenceTime.GetVariable() as FloatVariable).defaultValue = 0;
+            
+            // Scene Loading Progress
+            
             (sceneLoadingProgress.GetVariable() as FloatVariable).defaultValue = 0;
             (sceneLoadingProgress.GetVariable() as FloatVariable).resetOnGameRefresh = true;
 
@@ -155,6 +200,7 @@ namespace AltSalt.Maestro
                     variableField.SetValue(referenceValue, CreateSystemSetting(variableField.FieldType, $"{name}"));
                 }
             }
+            EditorUtility.SetDirty(this);
         }
         
         private static dynamic CreateSystemSetting(Type assetType, string name)

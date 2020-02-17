@@ -20,8 +20,17 @@ namespace AltSalt.Maestro
             get => _complexEventConfigurableTriggers;
             set => _complexEventConfigurableTriggers = value;
         }
+
+        [SerializeField]
+        private bool _disableOnReverse = true;
+
+        public override bool disableOnReverse => _disableOnReverse;
         
         [SerializeField]
+        private bool _executeWhileLoadingBookmarks = false;
+
+        public override bool executeWhileLoadingBookmarks => _executeWhileLoadingBookmarks;
+
         private bool _forceActivateOnForward = false;
 
         public override bool forceActivateOnForward => _forceActivateOnForward;

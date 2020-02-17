@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
@@ -88,11 +86,6 @@ namespace AltSalt.Maestro.Sequencing
         
         private string defaultsTitle => "Defaults";
         
-        private void Start()
-        {
-            currentTime = 0f;
-        }
-
         public void SetStatus(bool targetStatus)
         {
             active = targetStatus;

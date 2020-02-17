@@ -37,7 +37,7 @@ namespace AltSalt.Maestro
         [SerializeField]
         private ScriptableObjectDictionary _scriptableObjectDictionary = new ScriptableObjectDictionary();
 
-        private ScriptableObjectDictionary scriptableObjectDictionary => _scriptableObjectDictionary;
+        public ScriptableObjectDictionary scriptableObjectDictionary => _scriptableObjectDictionary;
 
         [SerializeField]
         private ObjectDictionary _objectDictionary = new ObjectDictionary();

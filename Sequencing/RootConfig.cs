@@ -24,6 +24,9 @@ namespace AltSalt.Maestro.Sequencing
 
         public UserDataKey userKey => _userKey.GetVariable() as UserDataKey;
         
+        private SimpleEventTrigger configurationCompleted =>
+            appSettings.GetConfigurationCompleted(this, inputGroupKey);
+        
         public SimpleEventTrigger sequenceModified =>
             appSettings.GetSequenceModified(this.gameObject, inputGroupKey);
 
@@ -61,8 +64,11 @@ namespace AltSalt.Maestro.Sequencing
             _appSettings.PopulateVariable(this, nameof(_appSettings));
             _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
             _userKey.PopulateVariable(this, nameof(_userKey));
+            
+            if (Application.isPlaying == false) {
+                Configure();
+            }
 #endif
-            Configure();
         }
 
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.4f, 1)]
@@ -73,15 +79,16 @@ namespace AltSalt.Maestro.Sequencing
                 masterSequences[i].Init();
             }
 
-            //if (Application.isPlaying == false) {
-                joiner.rootConfig = this;
-                joiner.ConfigureData();
-                
-                for (int i = 0; i < rootDataCollectors.Count; i++) {
-                    rootDataCollectors[i].rootConfig = this;
-                    rootDataCollectors[i].ConfigureData();
-                }
-            //}
+            
+            joiner.rootConfig = this;
+            joiner.ConfigureData();
+            
+            for (int i = 0; i < rootDataCollectors.Count; i++) {
+                rootDataCollectors[i].rootConfig = this;
+                rootDataCollectors[i].ConfigureData();
+            }
+            
+            configurationCompleted.RaiseEvent(this.gameObject);
         }
 
         public void RefreshConfiguration()

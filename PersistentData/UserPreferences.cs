@@ -82,6 +82,7 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR
             RefreshDependencies(userKey);
             SetDefaults(userData, userKey);
+            EditorUtility.SetDirty(userData);
 #endif
         }
 

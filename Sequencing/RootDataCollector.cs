@@ -7,7 +7,7 @@ namespace AltSalt.Maestro.Sequencing
 {
     public abstract class RootDataCollector : MonoBehaviour
     {
-        protected List<MasterSequence> masterSequences => rootConfig.masterSequences;
+        public List<MasterSequence> masterSequences => rootConfig.masterSequences;
 
         [ReadOnly]
         [SerializeField]

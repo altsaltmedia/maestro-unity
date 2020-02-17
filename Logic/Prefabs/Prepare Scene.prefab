@@ -12,14 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: SingleSceneLoadCompleted
     _variable: {fileID: 11400000, guid: a3f57b945ac64452ba073911e9ed6db5, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls: []
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -34,8 +30,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!1001 &3724877325734310083
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -142,8 +137,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._boolActions.Array.data[0]._boolReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: f8c7af2e2adf448ce8016fea9cdbadb3,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._boolActions.Array.data[0]._targetValue._useConstant
@@ -163,8 +157,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[0]._axisReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 397e7ff0936e94f77ac051103a3e7ce2,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[0]._targetValue._useConstant
@@ -189,8 +182,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[1]._axisReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 1e9736bd340254192824c558fde5bb29,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[1]._targetValue._useConstant
@@ -215,8 +207,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[2]._axisReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 9e2a7de228d864e9eaca2a85171897fd,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[2]._targetValue._useConstant
@@ -236,8 +227,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[3]._axisReference._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 4290e80755514442b91af48c99802b3d,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._axisActions.Array.data[3]._targetValue._useConstant
@@ -298,8 +288,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._appSettings._variable
       value: 
-      objectReference: {fileID: 11400000, guid: 98b90c9bfebfd4fd4b352d242c167896,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._triggerOnStart

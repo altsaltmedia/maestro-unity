@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
+using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.Timeline;
 using UnityEditor.SceneManagement;
 #endif
@@ -40,31 +42,31 @@ namespace AltSalt.Maestro.Layout {
             set => appSettings.SetDeviceHeight(this.gameObject, value);
         }
         
-        [SerializeField]
-        private FloatReference _sceneAspectRatio = new FloatReference();
+        [FormerlySerializedAs("_sceneAspectRatio"),SerializeField]
+        private FloatReference _targetAspectRatio = new FloatReference();
 
-        private float sceneAspectRatio
+        private float targetAspectRatio
         {
-            get => _sceneAspectRatio.GetValue();
-            set => _sceneAspectRatio.SetValue(this.gameObject, value);
+            get => _targetAspectRatio.GetValue();
+            set => _targetAspectRatio.SetValue(this.gameObject, value);
         }
         
-        [SerializeField]
-        private FloatReference _sceneWidth = new FloatReference();
+        [FormerlySerializedAs("_sceneWidth"),SerializeField]
+        private FloatReference _targetWidth = new FloatReference();
 
         private float sceneWidth
         {
-            get => _sceneWidth.GetValue();
-            set => _sceneWidth.SetValue(this.gameObject, value);
+            get => _targetWidth.GetValue();
+            set => _targetWidth.SetValue(this.gameObject, value);
         }
         
-        [SerializeField]
-        private FloatReference _sceneHeight = new FloatReference();
+        [FormerlySerializedAs("_sceneHeight"),SerializeField]
+        private FloatReference _targetHeight = new FloatReference();
 
         private float sceneHeight
         {
-            get => _sceneHeight.GetValue();
-            set => _sceneHeight.SetValue(this.gameObject, value);
+            get => _targetHeight.GetValue();
+            set => _targetHeight.SetValue(this.gameObject, value);
         }
 
         [SerializeField]
@@ -121,9 +123,9 @@ namespace AltSalt.Maestro.Layout {
         private void OnEnable()
         {
             _appSettings.PopulateVariable(this, nameof(_appSettings));
-            _sceneAspectRatio.PopulateVariable(this, nameof(_sceneAspectRatio));
-            _sceneWidth.PopulateVariable(this, nameof(_sceneWidth));
-            _sceneHeight.PopulateVariable(this, nameof(_sceneHeight));
+            _targetAspectRatio.PopulateVariable(this, nameof(_targetAspectRatio));
+            _targetWidth.PopulateVariable(this, nameof(_targetWidth));
+            _targetHeight.PopulateVariable(this, nameof(_targetHeight));
 
             
             EditorSceneManager.sceneSaved += scene =>
@@ -138,6 +140,11 @@ namespace AltSalt.Maestro.Layout {
 
         private void Update()
         {
+            // Do not execute if we are in prefab editing mode
+            if (PrefabStageUtility.GetCurrentPrefabStage() != null) {
+                return;
+            }
+            
             if (ScreenResized() == true) {
                 SaveScreenValues();
                 RefreshLayout();
@@ -246,7 +253,7 @@ namespace AltSalt.Maestro.Layout {
 
                 if (dynamicElementsList[i].priority >= minPriority && dynamicElementsList[i].priority <= maxPriority) {
                     if (dynamicElementsList[i] is ISceneDimensionListener sceneDimensionListener) {
-                        sceneDimensionListener.sceneAspectRatio = dynamicLayoutController.sceneAspectRatio;
+                        sceneDimensionListener.sceneAspectRatio = dynamicLayoutController.targetAspectRatio;
                         sceneDimensionListener.sceneWidth = dynamicLayoutController.sceneWidth;
                         sceneDimensionListener.sceneHeight = dynamicLayoutController.sceneHeight;
                     }
@@ -305,13 +312,13 @@ namespace AltSalt.Maestro.Layout {
                         break;
                 }
 
-                sceneAspectRatio = sceneHeight / sceneWidth;
+                targetAspectRatio = sceneHeight / sceneWidth;
 
             } else {
 
                 sceneWidth = deviceWidth;
                 sceneHeight = deviceHeight;
-                sceneAspectRatio = deviceHeight / deviceWidth;
+                targetAspectRatio = deviceHeight / deviceWidth;
 
             }
         }

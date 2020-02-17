@@ -61,7 +61,8 @@ namespace AltSalt.Maestro
         {
             foreach (KeyValuePair<UserDataKey, UserPreferences> userPreferencesItem in userPreferencesCollection) {
                 userPreferencesItem.Value.RefreshDependencies(userPreferencesItem.Key);
-            }            
+            }
+            EditorUtility.SetDirty(this);
         }
 #endif
         

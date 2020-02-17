@@ -334,10 +334,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _priority: 0
   _moduleActive: 1
-  sequenceScrubbed:
-    _isSystemReference: 0
-    _referenceName: 
-    _variable: {fileID: 0}
+  _slider: {fileID: 5779439111652668753}
 --- !u!114 &5974689152440835585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,13 +347,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 0}
   _complexEventReference:
     _isSystemReference: 0
-    _referenceName: MainInput-RefreshScrubber
+    _referenceName: MainInput-RefreshAppUtils
     _variable: {fileID: 0}
   DeveloperDescription: 
-  _response:
+  _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2073437791769418856}
@@ -370,8 +366,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!1 &5054605562192033553
 GameObject:
   m_ObjectHideFlags: 0

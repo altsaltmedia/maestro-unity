@@ -58,6 +58,7 @@ namespace AltSalt.Maestro
             foreach (KeyValuePair<InputGroupKey, InputGroup> inputGroupItem in inputGroupCollection) {
                 inputGroupItem.Value.RefreshDependencies(inputGroupItem.Key);
             }
+            EditorUtility.SetDirty(this);
         }
 #endif        
         

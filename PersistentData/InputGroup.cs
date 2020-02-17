@@ -101,7 +101,6 @@ namespace AltSalt.Maestro
 
         public BoolReference forkTransitionActive => _forkTransitionActive;
 
-
     #endregion
 
     
@@ -194,9 +193,9 @@ namespace AltSalt.Maestro
         [Required]
         [FoldoutGroup("Events")]
         [SerializeField]
-        private ComplexEventManualTrigger _refreshScrubber = new ComplexEventManualTrigger();
+        private ComplexEventManualTrigger _refreshAppUtils = new ComplexEventManualTrigger();
 
-        public ComplexEventManualTrigger refreshScrubber => _refreshScrubber;
+        public ComplexEventManualTrigger refreshAppUtils => _refreshAppUtils;
         
         [Required]
         [FoldoutGroup("Events")]
@@ -204,6 +203,13 @@ namespace AltSalt.Maestro
         private BoolReference _isScrubbing = new BoolReference();
 
         public BoolReference isScrubbing => _isScrubbing;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private SimpleEventTrigger _onScrub = new SimpleEventTrigger();
+
+        public SimpleEventTrigger onScrub => _onScrub;
         
         [Required]
         [FoldoutGroup("Events")]
@@ -218,6 +224,20 @@ namespace AltSalt.Maestro
         private SimpleEventTrigger _appUtilsLoadCompleted = new SimpleEventTrigger();
 
         public SimpleEventTrigger appUtilsLoadCompleted => _appUtilsLoadCompleted;
+
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private SimpleEventTrigger _configurationCompleted = new SimpleEventTrigger();
+
+        public SimpleEventTrigger configurationCompleted => _configurationCompleted;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private BoolReference _bookmarkLoadingCompleted = new BoolReference();
+
+        public BoolReference bookmarkLoadingCompleted => _bookmarkLoadingCompleted;
         
 
     #endregion
@@ -342,6 +362,7 @@ namespace AltSalt.Maestro
 #if UNITY_EDITOR
             RefreshDependencies(inputGroupKey);
             SetDefaults(inputData, inputGroupKey);
+            EditorUtility.SetDirty(inputData);
 #endif
         }
 
@@ -414,6 +435,7 @@ namespace AltSalt.Maestro
                 }
             }
         }
+        
         private static dynamic CreateInputDependency(Type assetType, string name, string groupName)
         {
             return Utils.CreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/InputSettings/{groupName}");

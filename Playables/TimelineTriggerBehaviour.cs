@@ -39,8 +39,16 @@ namespace AltSalt.Maestro
         public BoolVariable _isReversingVariable;
 
         public bool isReversing => _isReversingVariable.value;
-        
 
+        [SerializeField]
+        private bool _executeWhileAppUtilsRequested;
+
+        public bool executeWhileAppUtilsRequested => _executeWhileAppUtilsRequested;
+        
+        public abstract bool disableOnReverse { get; }
+        
+        public abstract bool executeWhileLoadingBookmarks { get; }
+        
         // Not all triggers should be activated if we're past the clip
         // thresholds. While in general, we DO want to execute any events that
         // affect the game state (loading scenes, changing variables, etc.)

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout
@@ -45,7 +46,9 @@ namespace AltSalt.Maestro.Layout
 
         public void OnMouseDown()
         {
-            if(active == true) {
+            // Make sure not only that we're active, but
+            // that the user isn't pressing a UI element
+            if(active == true && EventSystem.current.currentSelectedGameObject == null) {
                 action.Invoke(this.gameObject);
             }
         }

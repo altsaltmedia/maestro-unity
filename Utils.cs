@@ -1724,7 +1724,7 @@ namespace AltSalt.Maestro
             return true;
         }
         
-        public static bool IsPopulated(GameObjectGenericAction attribute)
+        public static bool IsPopulated(UnityEventBase attribute)
         {
             if(attribute == null) {
                 return false;
@@ -1739,11 +1739,6 @@ namespace AltSalt.Maestro
             }
 
             return true;
-        }
-
-        public static bool IsPopulated(ComplexPayloadGenericAction attribute)
-        {
-            return attribute.GetPersistentMethodName(0).Length < 1 ? false : true;
         }
 
         public static int GetNthIndexFromEnd(string s, char t, int n)

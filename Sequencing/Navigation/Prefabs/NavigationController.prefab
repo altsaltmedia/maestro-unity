@@ -1,5 +1,87 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &868510078636146610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5286326379595216151}
+  - component: {fileID: 6688961520195211194}
+  - component: {fileID: 749544140532562687}
+  m_Layer: 8
+  m_Name: Bookmarker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5286326379595216151
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868510078636146610}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5308574500125922695}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6688961520195211194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868510078636146610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bca401b53e4a4a14b6f3bcba9b041944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _priority: 0
+  _moduleActive: 1
+  _navigationController: {fileID: 3136450081857097390}
+  _storeData:
+    _isSystemReference: 0
+    _referenceName: StoreData
+    _variable: {fileID: 11400000, guid: db7806a5976574da4ad42f2d8b4b17ae, type: 2}
+--- !u!114 &749544140532562687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868510078636146610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: MainInput-ConfigurationCompleted
+    _variable: {fileID: 0}
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6688961520195211194}
+        m_MethodName: ActivateBookmark
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
 --- !u!1 &5308574500125922692
 GameObject:
   m_ObjectHideFlags: 0
@@ -28,7 +110,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 5286326379595216151}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -57,14 +140,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 11400000, guid: 42ac1a720d0ef47b2b3952c8e8150de6, type: 2}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-AppUtilsLoadCompleted
     _variable: {fileID: 11400000, guid: 42ac1a720d0ef47b2b3952c8e8150de6, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls: []
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -79,5 +158,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0

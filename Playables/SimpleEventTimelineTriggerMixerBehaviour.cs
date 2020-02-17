@@ -42,12 +42,12 @@ namespace AltSalt.Maestro
 
                     if (inputWeight >= 1 && input.triggered == false) {
                         input.triggered = true;
-                        TriggerEvents(input);
+                        TriggerEvents(this, input);
                     } else {
                         if (trackAssetConfig.currentTime > input.endTime
                             && input.forceActivateOnForward == true && input.triggered == false) {
                             input.triggered = true;
-                            TriggerEvents(input);
+                            TriggerEvents(this, input);
                         }
                     }
                 }
@@ -60,22 +60,38 @@ namespace AltSalt.Maestro
                     inputPlayable = (ScriptPlayable<SimpleEventTimelineTriggerBehaviour>) playable.GetInput(i);
                     input = inputPlayable.GetBehaviour();
 
+                    if (input.disableOnReverse == true) {
+                        continue;
+                    }
+
                     if (inputWeight >= 1 && input.triggered == false) {
                         input.triggered = true;
-                        TriggerEvents(input);
+                        TriggerEvents(this, input);
                     } else {
                         if (trackAssetConfig.currentTime < input.startTime
                             && input.forceActivateOnReverse == true && input.triggered == false) {
                             input.triggered = true;
-                            TriggerEvents(input);
+                            TriggerEvents(this, input);
                         }
                     }
                 }
             }
         }
 
-        private static SimpleEventTimelineTriggerBehaviour TriggerEvents(SimpleEventTimelineTriggerBehaviour triggerBehaviour)
+        private static SimpleEventTimelineTriggerBehaviour TriggerEvents(
+            SimpleEventTimelineTriggerMixerBehaviour mixerBehaviour,
+            SimpleEventTimelineTriggerBehaviour triggerBehaviour)
         {
+            if (mixerBehaviour.trackAssetConfig.bookmarkLoadingCompleted == false &&
+                triggerBehaviour.executeWhileLoadingBookmarks == false) {
+                return triggerBehaviour;
+            }
+            
+            if (mixerBehaviour.appUtilsRequested == true &&
+                triggerBehaviour.executeWhileAppUtilsRequested == false) {
+                return triggerBehaviour;
+            }
+            
             for (int q = 0; q < triggerBehaviour.simpleEventTriggers.Count; q++) {
                 triggerBehaviour.simpleEventTriggers[q].RaiseEvent(triggerBehaviour.trackAssetConfig.gameObject,
                     $"{triggerBehaviour.trackAssetConfig.name} director at {triggerBehaviour.trackAssetConfig.currentTime:F2}");

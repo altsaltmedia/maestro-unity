@@ -9,6 +9,16 @@ namespace AltSalt.Maestro.Sequencing.Navigation
     [RequireComponent(typeof(Slider))]
     public class Scrubber : NavigationModule, IPointerDownHandler, IPointerUpHandler
     {
+        [ReadOnly]
+        [ShowInInspector]
+        private NavigationController _navigationController;
+
+        protected override NavigationController navigationController
+        {
+            get => _navigationController;
+            set => _navigationController = value;
+        }
+        
         private bool isScrubbing
         {
             set => navigationController.appSettings.SetIsScrubbing(this.gameObject, inputGroupKey, value);
@@ -18,9 +28,11 @@ namespace AltSalt.Maestro.Sequencing.Navigation
         {
             set => navigationController.appSettings.SetIsReversing(this.gameObject, inputGroupKey, value);
         }
-        
-        [SerializeField]
-        SimpleEventTrigger sequenceScrubbed;
+
+        private SimpleEventTrigger onScrub =>
+            navigationController.appSettings.GetOnScrub(this.gameObject, inputGroupKey);
+
+            [SerializeField]
         private Slider _slider;
 
         private Slider slider
@@ -83,6 +95,7 @@ namespace AltSalt.Maestro.Sequencing.Navigation
 
             previousValue = newValue;
             activeMasterSequence.SetElapsedTime(newValue);
+            onScrub.RaiseEvent(this.gameObject);
         }
     }
 

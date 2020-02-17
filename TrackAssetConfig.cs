@@ -64,6 +64,8 @@ namespace AltSalt.Maestro
 
         public SimpleEventTrigger onEditorGraphStart => appSettings.onEditorGraphStart;
 
+        public bool bookmarkLoadingCompleted => appSettings.GetBookmarkLoadingCompleted(this, inputGroupKey);
+
         public float frameStepValue => appSettings.GetFrameStepValue(this.gameObject, inputGroupKey);
 
         public float swipeModifierOutput => appSettings.GetSwipeModifierOutput(this.gameObject, inputGroupKey);

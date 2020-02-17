@@ -88,13 +88,6 @@ namespace AltSalt.Maestro.Sequencing
             set => _hasActiveSequence = value;
         }
 
-        private void Start()
-        {
-            for (int i = 0; i < sequenceConfigs.Count; i++) {
-                sequenceConfigs[i].sequence.SetDefaults();
-            }
-        }
-        
         public void Init()
         {
             // Generate master times for sequences
@@ -178,6 +171,7 @@ namespace AltSalt.Maestro.Sequencing
         {
             _elapsedTime = targetTime;
             ApplyElapsedTimeToSequences(targetTime, masterTimeDataList);
+            rootConfig.sequenceModified.RaiseEvent(this.gameObject);
         }
         
         private static Sequence ApplyElapsedTimeToSequences(double targetTime, List<MasterTimeData> sequenceData)
@@ -224,8 +218,6 @@ namespace AltSalt.Maestro.Sequencing
                         }
                     }
 
-                    activeSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                    
                     // Deactivate the other sequences
                     for (int z = 0; z < sequenceData.Count; z++) {
 
@@ -236,7 +228,9 @@ namespace AltSalt.Maestro.Sequencing
                         sequenceData[z].sequence.active = false;
                         sequenceData[z].sequence.sequenceConfig.gameObject.SetActive(false);
                     }
-
+                    
+                    activeSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                    
                     break;
                 }
             }
@@ -269,7 +263,9 @@ namespace AltSalt.Maestro.Sequencing
 
         public static double LocalToMasterTime(MasterSequence masterSequence, Sequence sourceSequence, double localTime)
         {
-            masterSequence.Init();
+            if (masterSequence.masterTimeDataList.Count < 1) {
+                masterSequence.Init();
+            }
             List<MasterTimeData> masterTimeData = masterSequence.masterTimeDataList;
             for (int i = 0; i < masterTimeData.Count; i++)
             {
