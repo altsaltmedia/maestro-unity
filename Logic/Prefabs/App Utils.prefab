@@ -424,6 +424,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4337971050899840189}
   - component: {fileID: 567160992160274637}
+  - component: {fileID: 1317443500675848925}
   m_Layer: 9
   m_Name: App Utils
   m_TagString: Untagged
@@ -482,6 +483,112 @@ MonoBehaviour:
     _useConstant: 0
     _constantValue: 
     _variable: {fileID: 11400000, guid: 1f4b404e4eaca4139b7d4263ba239999, type: 2}
+--- !u!114 &1317443500675848925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4337971050899840188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fea2c6a66c7a45978bf2cddeb3ee2cb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _logCallersOnRaise: 0
+  _actionTrigger:
+    _active: 1
+    _appSettings:
+      _isSystemReference: 0
+      _referenceName: AppSettings
+      _variable: {fileID: 0}
+    _parentObject: {fileID: 1317443500675848925}
+    _serializedPropertyPath: _actionTrigger
+    _triggerOnStart: 1
+    _resetGameStateOnStart: 0
+    _hasDelay: 0
+    _delay: 0
+    _genericActions: []
+    _boolActions: []
+    _floatActions: []
+    _intActions: []
+    _axisActions: []
+    _colorActions: []
+    _conditionResponseActions:
+    - _priority: 1
+      _parentObject: {fileID: 1317443500675848925}
+      _serializedPropertyPath: _actionTrigger._conditionResponseActions.0
+      _triggerType: 0
+      _eventExecutionType: 0
+      _boolEvents:
+      - _conditionEventTitle: Please populate a bool reference.
+        _parentObject: {fileID: 1317443500675848925}
+        _serializedPropertyPath: _actionTrigger._conditionResponseActions.0._boolEvents.0
+        _action:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 7368253910978532753}
+              m_MethodName: SetActive
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+        _boolReference:
+          _isSystemReference: 0
+          _referenceName: MainInput-ArrowIndicatorEnabled
+          _useConstant: 0
+          _constantValue: 0
+          _variable: {fileID: 0}
+        _boolCondition:
+          _isSystemReference: 0
+          _referenceName: 
+          _useConstant: 1
+          _constantValue: 0
+          _variable: {fileID: 0}
+      - _conditionEventTitle: Please populate a bool reference.
+        _parentObject: {fileID: 1317443500675848925}
+        _serializedPropertyPath: _actionTrigger._conditionResponseActions.0._boolEvents.1
+        _action:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1831909422393175312}
+              m_MethodName: SetActive
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+        _boolReference:
+          _isSystemReference: 0
+          _referenceName: MainInput-ScrubberEnabled
+          _useConstant: 0
+          _constantValue: 0
+          _variable: {fileID: 0}
+        _boolCondition:
+          _isSystemReference: 0
+          _referenceName: 
+          _useConstant: 1
+          _constantValue: 0
+          _variable: {fileID: 0}
+      _floatEvents: []
+      _intEvents: []
+      _textFamilyEvents: []
+      _layoutEvents: []
+      _action:
+        m_PersistentCalls:
+          m_Calls: []
+    _simpleEventActions: []
+    _complexEventActions: []
+    _actionType: 6
 --- !u!1001 &5483941825469141343
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -751,6 +858,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d6445770b9d44ef28e2327227c205d1, type: 3}
+--- !u!1 &7368253910978532753 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3692700088946118707, guid: 6d6445770b9d44ef28e2327227c205d1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6160450186879288738}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6670978675413548154
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -885,6 +998,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a184245bd69e42aa91fc7cc62eb3423, type: 3}
+--- !u!1 &1831909422393175312 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5041828346612502890, guid: 4a184245bd69e42aa91fc7cc62eb3423,
+    type: 3}
+  m_PrefabInstance: {fileID: 6670978675413548154}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6874045576611455394
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1004,15 +1123,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9c65eec66e39447497a542c02897145, type: 3}
---- !u!224 &4218040088061338555 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7344518959624192537, guid: f9c65eec66e39447497a542c02897145,
-    type: 3}
-  m_PrefabInstance: {fileID: 6874045576611455394}
-  m_PrefabAsset: {fileID: 0}
 --- !u!20 &4170301535087351537 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 7402342388005386067, guid: f9c65eec66e39447497a542c02897145,
+    type: 3}
+  m_PrefabInstance: {fileID: 6874045576611455394}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &4218040088061338555 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7344518959624192537, guid: f9c65eec66e39447497a542c02897145,
     type: 3}
   m_PrefabInstance: {fileID: 6874045576611455394}
   m_PrefabAsset: {fileID: 0}

@@ -75,11 +75,12 @@ namespace AltSalt.Maestro.Logic
 
         public bool triggerOnStart => _triggerOnStart;
         
+        [FormerlySerializedAs("_resetGameStateOnStart")]
         [ValueDropdown(nameof(boolValueList))]
         [SerializeField]
-        private bool _resetGameStateOnStart = false;
+        private bool _resetGameStateOnExecute = false;
 
-        public bool resetGameStateOnStart => _resetGameStateOnStart;
+        public bool resetGameStateOnExecute => _resetGameStateOnExecute;
         
         [ValueDropdown(nameof(boolValueList))]
         [SerializeField]

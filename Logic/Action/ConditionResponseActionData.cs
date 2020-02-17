@@ -56,23 +56,7 @@ namespace AltSalt.Maestro.Logic
         private ConditionResponseTypes _triggerType;
 
         private ConditionResponseTypes triggerType => _triggerType;
-        
-        [ValueDropdown(nameof(boolValueList))]
-        [SerializeField]
-        [FormerlySerializedAs("triggerOnStart")]
-        private bool _triggerOnStart = true;
 
-        public bool triggerOnStart
-        {
-            get => _triggerOnStart;
-            set => _triggerOnStart = value;
-        }
-
-        private ValueDropdownList<bool> boolValueList = new ValueDropdownList<bool>(){
-            {"YES", true },
-            {"NO", false }
-        };
-        
         [SerializeField]
         private EventExecutionType _eventExecutionType;
 
@@ -200,62 +184,62 @@ namespace AltSalt.Maestro.Logic
         public override void PerformAction(GameObject callingObject)
         {
             if (eventExecutionType == EventExecutionType.ExecuteAll) {
-                TriggerAllResponses(callingObject, triggerOnStart);
+                TriggerAllResponses(callingObject);
             }
             else if(eventExecutionType == EventExecutionType.CancelAfterFirstSuccess) {
-                TriggerUntilFirstSuccess(callingObject, triggerOnStart);
+                TriggerUntilFirstSuccess(callingObject);
             }
             else {
-                if (AllConditionsValid(callingObject, triggerOnStart) == true) {
+                if (AllConditionsValid(callingObject) == true) {
                     action.Invoke(callingObject);
                 }
             }
         }
 
-        public void TriggerAllResponses(GameObject caller, bool triggerOnStart)
+        public void TriggerAllResponses(GameObject caller)
         {
             switch (triggerType) {
 
                 case ConditionResponseTypes.Bool:
                     for (int i = 0; i < boolEvents.Count; i++) {
-                        boolEvents[i].TriggerResponse(caller, triggerOnStart);
+                        boolEvents[i].TriggerResponse(caller);
                     }
                     break;
 
                 case ConditionResponseTypes.Float:
                     for (int i = 0; i < floatEvents.Count; i++) {
-                        floatEvents[i].TriggerResponse(caller, triggerOnStart);
+                        floatEvents[i].TriggerResponse(caller);
                     }
                     break;
 
                 case ConditionResponseTypes.Int:
                     for (int i = 0; i < intEvents.Count; i++) {
-                        intEvents[i].TriggerResponse(caller, triggerOnStart);
+                        intEvents[i].TriggerResponse(caller);
                     }
                     break;
 
                 case ConditionResponseTypes.TextFamily:
                     for (int i = 0; i < textFamilyEvents.Count; i++) {
-                        textFamilyEvents[i].TriggerResponse(caller, triggerOnStart);
+                        textFamilyEvents[i].TriggerResponse(caller);
                     }
                     break;
 
                 case ConditionResponseTypes.Layout:
                     for (int i = 0; i < layoutEvents.Count; i++) {
-                        layoutEvents[i].TriggerResponse(caller, triggerOnStart);
+                        layoutEvents[i].TriggerResponse(caller);
                     }
                     break;
             }
         }
 
-        public void TriggerUntilFirstSuccess(GameObject caller, bool triggerOnStart)
+        public void TriggerUntilFirstSuccess(GameObject caller)
         {
             switch (triggerType) {
 
                 case ConditionResponseTypes.Bool:
                     for (int i = 0; i < boolEvents.Count; i++) {
                         if (boolEvents[i].CheckCondition(caller) == true) {
-                            boolEvents[i].TriggerResponse(caller, triggerOnStart);
+                            boolEvents[i].TriggerResponse(caller);
                             return;
                         }
                     }
@@ -264,7 +248,7 @@ namespace AltSalt.Maestro.Logic
                 case ConditionResponseTypes.Float:
                     for (int i = 0; i < floatEvents.Count; i++) {
                         if (floatEvents[i].CheckCondition(caller) == true) {
-                            floatEvents[i].TriggerResponse(caller, triggerOnStart);
+                            floatEvents[i].TriggerResponse(caller);
                             return;
                         }
                     }
@@ -273,7 +257,7 @@ namespace AltSalt.Maestro.Logic
                 case ConditionResponseTypes.Int:
                     for (int i = 0; i < intEvents.Count; i++) {
                         if (intEvents[i].CheckCondition(caller) == true) {
-                            intEvents[i].TriggerResponse(caller, triggerOnStart);
+                            intEvents[i].TriggerResponse(caller);
                             return;
                         }
                     }
@@ -282,7 +266,7 @@ namespace AltSalt.Maestro.Logic
                 case ConditionResponseTypes.TextFamily:
                     for (int i = 0; i < textFamilyEvents.Count; i++) {
                         if (textFamilyEvents[i].CheckCondition(caller) == true) {
-                            textFamilyEvents[i].TriggerResponse(caller, triggerOnStart);
+                            textFamilyEvents[i].TriggerResponse(caller);
                             return;
                         }
                     }
@@ -291,7 +275,7 @@ namespace AltSalt.Maestro.Logic
                 case ConditionResponseTypes.Layout:
                     for (int i = 0; i < layoutEvents.Count; i++) {
                         if (layoutEvents[i].CheckCondition(caller) == true) {
-                            layoutEvents[i].TriggerResponse(caller, triggerOnStart);
+                            layoutEvents[i].TriggerResponse(caller);
                             return;
                         }
                     }
@@ -299,12 +283,12 @@ namespace AltSalt.Maestro.Logic
             }
         }
         
-        public bool AllConditionsValid(GameObject caller, bool triggerOnStart)
+        public bool AllConditionsValid(GameObject caller)
         {
 
             for (int i = 0; i < boolEvents.Count; i++) {
                 if (boolEvents[i].CheckCondition(caller) == false) {
-                    boolEvents[i].TriggerResponse(caller, triggerOnStart);
+                    boolEvents[i].TriggerResponse(caller);
                     return false;
                 }
             }
@@ -312,7 +296,7 @@ namespace AltSalt.Maestro.Logic
 
             for (int i = 0; i < floatEvents.Count; i++) {
                 if (floatEvents[i].CheckCondition(caller) == false) {
-                    floatEvents[i].TriggerResponse(caller, triggerOnStart);
+                    floatEvents[i].TriggerResponse(caller);
                     return false;
                 }
             }
@@ -320,7 +304,7 @@ namespace AltSalt.Maestro.Logic
 
             for (int i = 0; i < intEvents.Count; i++) {
                 if (intEvents[i].CheckCondition(caller) == false) {
-                    intEvents[i].TriggerResponse(caller, triggerOnStart);
+                    intEvents[i].TriggerResponse(caller);
                     return false;
                 }
             }
@@ -328,7 +312,7 @@ namespace AltSalt.Maestro.Logic
 
             for (int i = 0; i < textFamilyEvents.Count; i++) {
                 if (textFamilyEvents[i].CheckCondition(caller) == false) {
-                    textFamilyEvents[i].TriggerResponse(caller, triggerOnStart);
+                    textFamilyEvents[i].TriggerResponse(caller);
                     return false;
                 }
             }
@@ -336,7 +320,7 @@ namespace AltSalt.Maestro.Logic
 
             for (int i = 0; i < layoutEvents.Count; i++) {
                 if (layoutEvents[i].CheckCondition(caller) == false) {
-                    layoutEvents[i].TriggerResponse(caller, triggerOnStart);
+                    layoutEvents[i].TriggerResponse(caller);
                     return false;
                 }
             }

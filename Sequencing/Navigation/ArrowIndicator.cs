@@ -1,3 +1,4 @@
+using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -35,6 +36,7 @@ namespace AltSalt.Maestro.Sequencing.Navigation
         
         private Axis xSwipeAxis =>
             navigationController.appSettings.GetXSwipeAxisReference(this, inputGroupKey).GetVariable() as Axis;
+
         
         public void RefreshArrowIndicator(ComplexPayload complexPayload)
         {

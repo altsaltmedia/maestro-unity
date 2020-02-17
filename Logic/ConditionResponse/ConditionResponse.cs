@@ -163,19 +163,19 @@ namespace AltSalt.Maestro.Logic
 
         public abstract bool CheckCondition(Object callingObject);
 
-        public void TriggerResponse(GameObject callingObject, bool triggerOnStart)
+        public void TriggerResponse(GameObject callingObject)
         {
             if (CheckCondition(callingObject) == true) {
                 if(AppSettings.logConditionResponses == true) {
-                    LogConditionResponse(callingObject, triggerOnStart);
+                    LogConditionResponse(callingObject);
                 }
                 action.Invoke(callingObject);
             }
         }
 
-        private void LogConditionResponse(GameObject callerObject, bool triggerOnStart)
+        private void LogConditionResponse(GameObject callerObject)
         {
-            Debug.Log(string.Format("[condition response] [{0}] [{1}] Following condition met on start {2} : ", callerObject.scene.name, callerObject.name, triggerOnStart.ToString().ToUpper()), callerObject);
+            Debug.Log(string.Format("[condition response] [{0}] [{1}] Following condition met : ", callerObject.scene.name, callerObject.name), callerObject);
             Debug.Log(string.Format("[condition response] [{0}] [event] {1} ", callerObject.scene.name, conditionEventTitle), callerObject);
             Debug.Log(string.Format("[condition response] [{0}] {1} triggered the following :", callerObject.scene.name, callerObject.name), callerObject);
             for (int i=0; i<action.GetPersistentEventCount(); i++) {

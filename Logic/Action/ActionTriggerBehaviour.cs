@@ -46,14 +46,21 @@ namespace AltSalt.Maestro.Logic
             if (actionTrigger.active == false) {
                 return;
             }
-            
-            if (actionTrigger.resetGameStateOnStart == true) {
-                CallResetGameState(this.gameObject);
-            }
-            
+
             if (actionTrigger.triggerOnStart == true) {
                 CallPerformActions(this.gameObject);
             }
+        }
+
+        private void CallResetGameState(GameObject callingObject)
+        {
+            if (logCallersOnRaise == true || AppSettings.logEventCallersAndListeners == true) {
+                Debug.Log($"Reset Game State  on {this.gameObject.name} triggered!", this.gameObject);
+                Debug.Log($"Call executed by {callingObject.name}", callingObject);
+                Debug.Log("--------------------------");
+            }
+            
+            actionTrigger.ResetGameState(callingObject);
         }
 
         public void CallPerformActions(GameObject callingObject)
@@ -64,6 +71,10 @@ namespace AltSalt.Maestro.Logic
 
             if (actionTrigger.active == false) {
                 return;
+            }
+
+            if (actionTrigger.resetGameStateOnExecute == true) {
+                CallResetGameState(this.gameObject);
             }
 
             if (logCallersOnRaise == true || AppSettings.logEventCallersAndListeners == true) {
@@ -79,12 +90,7 @@ namespace AltSalt.Maestro.Logic
                 StartCoroutine(actionTrigger.PerformActionsDelayed(this.gameObject));
             }
         }
-
-        private void CallResetGameState(GameObject callingObject)
-        {
-            actionTrigger.ResetGameState(callingObject);
-        }
-
+        
         public void Activate(GameObject callingObject)
         {
             if (callingObject == null) {

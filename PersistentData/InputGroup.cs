@@ -14,14 +14,14 @@ namespace AltSalt.Maestro
     #region Calculated Values
     
         [SerializeField]
-        [FoldoutGroup("Configuration")]
+        [FoldoutGroup("Calculations")]
         private BoolReference _isSwiping = new BoolReference();
         
         public BoolReference isSwiping => _isSwiping;
         
                 
         [SerializeField]
-        [FoldoutGroup("Configuration")]
+        [FoldoutGroup("Calculations")]
         private BoolReference _isFlicked = new BoolReference();
         
         public BoolReference isFlicked => _isFlicked;
@@ -243,7 +243,7 @@ namespace AltSalt.Maestro
     #endregion
 
 
-    #region Configuration
+    #region Input Configuration
 
         [SerializeField]
         [FoldoutGroup("Configuration")]
@@ -328,31 +328,43 @@ namespace AltSalt.Maestro
     #endregion
 
 
-    #region Axes
+    #region Scene Configuration
 
         [SerializeField]
-        [FoldoutGroup("Axes")]
+        [FoldoutGroup("Scene Configuration")]
         private AxisReference _ySwipeAxis = new AxisReference();
 
         public AxisReference ySwipeAxis => _ySwipeAxis;
 
         [SerializeField]
-        [FoldoutGroup("Axes")]
+        [FoldoutGroup("Scene Configuration")]
         private AxisReference _yMomentumAxis = new AxisReference();
 
         public AxisReference yMomentumAxis => _yMomentumAxis;
 
         [SerializeField]
-        [FoldoutGroup("Axes")]
+        [FoldoutGroup("Scene Configuration")]
         private AxisReference _xSwipeAxis = new AxisReference();
 
         public AxisReference xSwipeAxis => _xSwipeAxis;
 
         [SerializeField]
-        [FoldoutGroup("Axes")]
+        [FoldoutGroup("Scene Configuration")]
         private AxisReference _xMomentumAxis = new AxisReference();
 
         public AxisReference xMomentumAxis => _xMomentumAxis;
+        
+        [SerializeField]
+        [FoldoutGroup("Scene Configuration")]
+        private BoolReference _scrubberEnabled = new BoolReference();
+        
+        public BoolReference scrubberEnabled => _scrubberEnabled;
+        
+        [SerializeField]
+        [FoldoutGroup("Scene Configuration")]
+        private BoolReference _arrowIndicatorEnabled = new BoolReference();
+        
+        public BoolReference arrowIndicatorEnabled => _arrowIndicatorEnabled;
 
     #endregion
         
@@ -390,12 +402,16 @@ namespace AltSalt.Maestro
             (forkTransitionSpread.GetVariable() as FloatVariable).defaultValue = 2f;
             (frameStepValue.GetVariable() as FloatVariable).defaultValue = .02f;
 
-            // With the axes, since every scene should set 
+            // Every scene should set the following
             (ySwipeAxis.GetVariable() as Axis).SetAxisType(inputData, AxisType.Y);
             (yMomentumAxis.GetVariable() as Axis).SetAxisType(inputData, AxisType.Y);
-            
             (xSwipeAxis.GetVariable() as Axis).SetAxisType(inputData, AxisType.X);
             (xMomentumAxis.GetVariable() as Axis).SetAxisType(inputData, AxisType.X);
+
+            (scrubberEnabled.GetVariable() as BoolVariable).defaultValue = false;
+            (scrubberEnabled.GetVariable() as BoolVariable).resetOnGameRefresh = true;
+            (arrowIndicatorEnabled.GetVariable() as BoolVariable).defaultValue = false;
+            (arrowIndicatorEnabled.GetVariable() as BoolVariable).resetOnGameRefresh = true;
 
             for (int i = 0; i < fields.Length; i++) {
 

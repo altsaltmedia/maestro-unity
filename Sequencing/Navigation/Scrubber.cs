@@ -58,9 +58,8 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             get => _previousValue;
             set => _previousValue = value;
         }
-
-        // Use this for initialization
-        private void OnEnable()
+        
+        private void Awake()
         {
             slider = GetComponent<Slider>();
         }

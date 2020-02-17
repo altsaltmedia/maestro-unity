@@ -38,8 +38,7 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             get => navigationController.appSettings.GetBookmarkLoadingCompleted(this, inputGroupKey);
             set => navigationController.appSettings.SetBookmarkLoadingCompleted(this.gameObject, inputGroupKey, value);
         }
-
-
+        
         private StringReference lastOpenedSceneReference
             => navigationController.appSettings.GetLastOpenedSceneReference(this);
         

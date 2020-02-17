@@ -79,7 +79,7 @@ namespace AltSalt.Maestro.Logic
         private string appUtilsSceneName => _appUtilsSceneName.GetValue();
 
 #if UNITY_EDITOR
-        private void OnEnable()
+        private void Awake()
         {
             _appSettings.PopulateVariable(this, nameof(_appSettings));
             _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));

@@ -714,34 +714,8 @@ namespace AltSalt.Maestro
         {
             return inputData.GetInputGroup(inputGroupKey).bookmarkLoadingCompleted.SetValue(callingObject, targetValue);
         }
-        
 
-        // Y Axes
 
-        public AxisReference GetYSwipeAxisReference(Object callingObject, InputGroupKey inputGroupKey)
-        {
-            return inputData.GetInputGroup(inputGroupKey).ySwipeAxis;
-        }
-
-        public AxisReference GetYMomentumAxisReference(Object callingObject, InputGroupKey inputGroupKey)
-        {
-            return inputData.GetInputGroup(inputGroupKey).yMomentumAxis;
-        }
-        
-        
-        // X Axes
-
-        public AxisReference GetXSwipeAxisReference(Object callingObject, InputGroupKey inputGroupKey)
-        {
-            return inputData.GetInputGroup(inputGroupKey).xSwipeAxis;
-        }
-
-        public AxisReference GetXMomentumAxisReference(Object callingObject, InputGroupKey inputGroupKey)
-        {
-            return inputData.GetInputGroup(inputGroupKey).xMomentumAxis;
-        }
-        
-        
         // Is Reversing
         
         public bool GetIsReversing(Object callingObject, InputGroupKey inputGroupKey)
@@ -792,6 +766,49 @@ namespace AltSalt.Maestro
         {
             return inputData.GetInputGroup(inputGroupKey).frameStepValue.GetValue();
         }
+        
+        
+        // Y Axes
+
+        public AxisReference GetYSwipeAxisReference(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).ySwipeAxis;
+        }
+
+        public AxisReference GetYMomentumAxisReference(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).yMomentumAxis;
+        }
+        
+        
+        // X Axes
+
+        public AxisReference GetXSwipeAxisReference(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).xSwipeAxis;
+        }
+
+        public AxisReference GetXMomentumAxisReference(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).xMomentumAxis;
+        }
+        
+        
+        // Scrubber Enabled
+        
+        public bool GetScrubberEnabled(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).scrubberEnabled.GetValue();
+        }
+        
+        
+        // Arrow Indicator Enabled
+
+        public bool GetArrowIndicatorEnabled(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).arrowIndicatorEnabled.GetValue();
+        }
+        
         
     #endregion
 
