@@ -18,9 +18,9 @@ namespace AltSalt.Maestro.Audio
 
         public bool isReversing => _isReversingVariable.value;
 
-        public float frameStepValue => trackAssetConfig.frameStepValue;
+        public float frameStepValue => timelineInstanceConfig.frameStepValue;
         
-        public float swipeModifierOutput => trackAssetConfig.swipeModifierOutput;
+        public float swipeModifierOutput => timelineInstanceConfig.swipeModifierOutput;
 
         private bool _playingTriggered = false;
 

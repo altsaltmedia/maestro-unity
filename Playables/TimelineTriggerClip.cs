@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro
@@ -8,14 +9,14 @@ namespace AltSalt.Maestro
         // This is here for implementation reference only. DO NOT attempt to use or access this when
         // creating subclasses; it won't work. Instead, create a new instance of your behaviour in question.
         // private LerpToTargetBehaviour template = new LerpToTargetBehaviour();
-        [HideInInspector]
+        [FormerlySerializedAs("_trackAssetConfig"),HideInInspector]
         [SerializeField]
-        private TrackAssetConfig _trackAssetConfig;
+        private TimelineInstanceConfig _timelineInstanceConfig;
 
-        public TrackAssetConfig trackAssetConfig
+        public TimelineInstanceConfig timelineInstanceConfig
         {
-            get => _trackAssetConfig;
-            set => _trackAssetConfig = value;
+            get => _timelineInstanceConfig;
+            set => _timelineInstanceConfig = value;
         }
         
         [SerializeField]

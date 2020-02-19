@@ -52,10 +52,10 @@ namespace AltSalt.Maestro.Sequencing.Touch
             if (this.markerPlacement == MarkerPlacement.EndOfSequence) {
                 double localStartTime = forkData.joinMarker.time - forkTransitionSpread;
                 this.startTransitionThreshold =
-                    MasterSequence.LocalToMasterTime(forkData.sequence.sequenceConfig.masterSequence, forkData.sequence,
+                    MasterSequence.LocalToMasterTime(forkData.sequence.sequenceController.masterSequence, forkData.sequence,
                         localStartTime);
                 this.startTime = this.startTransitionThreshold - axisMonitor.axisTransitionSpread;
-                this.endTransitionThreshold = MasterSequence.LocalToMasterTime(forkData.sequence.sequenceConfig.masterSequence, forkData.sequence,
+                this.endTransitionThreshold = MasterSequence.LocalToMasterTime(forkData.sequence.sequenceController.masterSequence, forkData.sequence,
                     forkData.joinMarker.time);
                 this.endTime = this.endTransitionThreshold;
             }

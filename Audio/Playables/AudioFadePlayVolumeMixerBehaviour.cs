@@ -35,7 +35,7 @@ namespace AltSalt.Maestro.Audio
                     // sequence containing an initial fadePlay track to a sibling
                     // sequence, we'll simply want to make sure the track is playing
                     // in the sibling and don't need the fading in / out behaviour.
-                    if (input.isReset == true && inputWeight >= 1f || trackAssetConfig.currentTime >= input.endTime) {
+                    if (input.isReset == true && inputWeight >= 1f || timelineInstanceConfig.currentTime >= input.endTime) {
                         if(audioSource.isPlaying == false) {
                             audioSource.volume = 1;
                             audioSource.Play();
@@ -49,7 +49,7 @@ namespace AltSalt.Maestro.Audio
                         audioSource.volume = Mathf.Lerp(0, 1, (float)DoubleEasingFunction(0f, 1f, doubleModifier));
                     } else {
                         // Once the playhead is beyond the clip's end threshold, play the audio
-                        if (trackAssetConfig.currentTime >= input.endTime) {
+                        if (timelineInstanceConfig.currentTime >= input.endTime) {
                             if(audioSource.isPlaying == false) {
                                 audioSource.volume = 1;
                                 audioSource.Play();
@@ -57,7 +57,7 @@ namespace AltSalt.Maestro.Audio
                             
                         }
                         // Once the playhead is before the clip's start threshold, stop the audio
-                        else if (i == 0 && trackAssetConfig.currentTime <= input.startTime) {
+                        else if (i == 0 && timelineInstanceConfig.currentTime <= input.startTime) {
                             audioSource.volume = 0;
                             audioSource.Stop();
                         }

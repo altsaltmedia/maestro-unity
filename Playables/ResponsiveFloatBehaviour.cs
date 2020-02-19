@@ -109,7 +109,7 @@ namespace AltSalt.Maestro
                 breakpointInitialValue[0] = targetValue;
             }
             UpdateBreakpointDependencies();
-            CallExecuteLayoutUpdate(trackAssetConfig);
+            CallExecuteLayoutUpdate(timelineInstanceConfig);
             return breakpointInitialValue;
         }
 
@@ -133,7 +133,7 @@ namespace AltSalt.Maestro
                 breakpointTargetValue[0] = targetValue;
             }
             UpdateBreakpointDependencies();
-            CallExecuteLayoutUpdate(trackAssetConfig);
+            CallExecuteLayoutUpdate(timelineInstanceConfig);
             return breakpointTargetValue;
         }
 #endif

@@ -126,7 +126,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                 if (masterSequences[i].hasActiveSequence == true) {
                     foreach (KeyValuePair<BranchKey, TouchBranchingPathData> branchData in
                         touchForkExtents.branchDictionary.Where(branchData =>
-                            masterSequences[i].sequenceConfigs.Find(x => x.sequence == branchData.Value.sequence))) {
+                            masterSequences[i].sequenceControllers.Find(x => x.sequence == branchData.Value.sequence))) {
                         return branchData.Value;
                     }
                 }

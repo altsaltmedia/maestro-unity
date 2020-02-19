@@ -121,7 +121,7 @@ namespace AltSalt.Maestro.Sequencing
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.PlayableDirectorSelected, false);
             }
             
-            if (Utils.FilterSelection(Selection.gameObjects, typeof(Sequence_Config)).Length > 0
+            if (Utils.FilterSelection(Selection.gameObjects, typeof(SequenceController)).Length > 0
                 && string.IsNullOrEmpty(selectedObjectDirectory) == false) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SiblingSequeenceConfigDependenciesPopulated, true);
             } else {
@@ -299,13 +299,13 @@ namespace AltSalt.Maestro.Sequencing
 
                 sequenceConfigObject.name = name;
                 
-                Sequence_Config sequenceConfig = sequenceConfigObject.GetComponent<Sequence_Config>();
+                SequenceController sequenceConfig = sequenceConfigObject.GetComponent<SequenceController>();
                 sequenceConfig.sequence = newSequence;
 
                 PlayableDirector playableDirector = sequenceConfigObject.GetComponent<PlayableDirector>();
                 playableDirector.playableAsset = newTimelineAsset;
 
-                masterSequence.sequenceConfigs.Add(sequenceConfigObject.GetComponent<Sequence_Config>());
+                masterSequence.sequenceControllers.Add(sequenceConfigObject.GetComponent<SequenceController>());
                 EditorUtility.SetDirty(masterSequence);
 
                 Undo.SetTransformParent(sequenceConfigObject.transform, masterSequence.gameObject.transform, "set parent on new element");
@@ -533,13 +533,13 @@ namespace AltSalt.Maestro.Sequencing
                 // Components whose data we'll use for migration
                 GameObject sourceSequenceObject = gameObjectSelection[i];
                 PlayableDirector sourceDirector = sourceSequenceObject.GetComponent<PlayableDirector>();
-                Sequence_Config sourceConfigComponent = sourceSequenceObject.GetComponent<Sequence_Config>();
+                SequenceController sourceConfigComponent = sourceSequenceObject.GetComponent<SequenceController>();
 
                 // Objects to receive the data
                 GameObject siblingSequenceObject = Utils.DuplicateGameObject(sourceSequenceObject);
                 siblingSequenceObject.name += " (Sibling)";
                 PlayableDirector siblingDirector = siblingSequenceObject.GetComponent<PlayableDirector>();
-                Sequence_Config siblingConfigComponent = siblingSequenceObject.GetComponent<Sequence_Config>();
+                SequenceController siblingConfigComponent = siblingSequenceObject.GetComponent<SequenceController>();
                 
                 // Clone the sequence
                 Sequence siblingSequence = CreateSiblingSequence(sourceConfigComponent);
@@ -571,7 +571,7 @@ namespace AltSalt.Maestro.Sequencing
             return clonedSequenceObjects.ToArray();
         }
 
-        private static Sequence CreateSiblingSequence(Sequence_Config sourceSequenceConfig)
+        private static Sequence CreateSiblingSequence(SequenceController sourceSequenceConfig)
         {
             string sourceAssetPath = AssetDatabase.GetAssetPath(sourceSequenceConfig.sequence);
             string clonePath = Utils.GetCloneAssetPath(sourceAssetPath, "(Sibling)");
@@ -582,7 +582,7 @@ namespace AltSalt.Maestro.Sequencing
             return AssetDatabase.LoadMainAssetAtPath(clonePath) as Sequence;
         }
 
-        private static TimelineAsset CreateSiblingTimelineAsset(Sequence_Config sourceSequenceConfig)
+        private static TimelineAsset CreateSiblingTimelineAsset(SequenceController sourceSequenceConfig)
         {
             // Create new timeline asset
             string sourceAssetPath = AssetDatabase.GetAssetPath(sourceSequenceConfig.sequence.sourcePlayable);
@@ -663,7 +663,7 @@ namespace AltSalt.Maestro.Sequencing
                 return false;
             }
 
-            var sequenceConfig = selection.GetComponent<Sequence_Config>();
+            var sequenceConfig = selection.GetComponent<SequenceController>();
             if (sequenceConfig == null) {
                 Debug.LogError("Sequence config component not found", selection);
                 return false;

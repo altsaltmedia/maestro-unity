@@ -33,13 +33,13 @@ namespace AltSalt.Maestro.Animation
                 
                 if (inputWeight >= 1f) {
                     percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());;
-                    trackBinding.SetValue(trackAssetConfig.gameObject, Mathf.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete)));
+                    trackBinding.SetValue(timelineInstanceConfig.gameObject, Mathf.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete)));
                 } else {
-                    if (trackAssetConfig.currentTime >= input.endTime) {
-                        trackBinding.SetValue(trackAssetConfig.gameObject, input.targetValue);
+                    if (timelineInstanceConfig.currentTime >= input.endTime) {
+                        trackBinding.SetValue(timelineInstanceConfig.gameObject, input.targetValue);
                     }
-                    else if (i == 0 && trackAssetConfig.currentTime <= input.startTime) {
-                        trackBinding.SetValue(trackAssetConfig.gameObject, input.initialValue);
+                    else if (i == 0 && timelineInstanceConfig.currentTime <= input.startTime) {
+                        trackBinding.SetValue(timelineInstanceConfig.gameObject, input.initialValue);
                     }
                 }
             }

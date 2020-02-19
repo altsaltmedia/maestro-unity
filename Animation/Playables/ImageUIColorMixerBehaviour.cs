@@ -30,9 +30,9 @@ namespace AltSalt.Maestro.Animation
                     percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
                     trackBinding.color = Color.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
                 } else {
-                    if(trackAssetConfig.currentTime >= input.endTime) {
+                    if(timelineInstanceConfig.currentTime >= input.endTime) {
                         trackBinding.color = input.targetValue;
-                    } else if (i == 0 && trackAssetConfig.currentTime <= input.startTime) {
+                    } else if (i == 0 && timelineInstanceConfig.currentTime <= input.startTime) {
                         trackBinding.color = input.initialValue;
                     }
                 }

@@ -1,13 +1,12 @@
-using System;
+using System.Linq;
 using AltSalt.Maestro.Sequencing;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using UnityEditor;
 
 namespace AltSalt.Maestro
 {
     [ExecuteInEditMode]
-    public class TrackAssetConfig : MonoBehaviour
+    public class TimelineInstanceConfig : MonoBehaviour
     {
         [Required]
         [SerializeField]
@@ -32,7 +31,27 @@ namespace AltSalt.Maestro
         public double currentTime
         {
             get => _currentTime;
-            set => _currentTime = value;
+            set
+            {
+                _currentTime = value;
+                _timelineUpdated.Invoke(this, _currentTime);
+            }
+        }
+
+        public delegate void TimelineUpdateHandler(object sender, double currentTime);
+        
+        private event TimelineUpdateHandler _timelineUpdated = (sender, updatedSequence) => { };
+        
+        public event TimelineUpdateHandler timelineUpdated
+        {
+            add
+            {
+                if (_timelineUpdated == null
+                    || _timelineUpdated.GetInvocationList().Contains(value) == false) {
+                    _timelineUpdated += value;
+                }
+            }
+            remove => _timelineUpdated -= value;
         }
 
         [SerializeField]
@@ -46,7 +65,7 @@ namespace AltSalt.Maestro
             get
             {
                 if (sequence != null) {
-                    return sequence.sequenceConfig.masterSequence.rootConfig.inputGroupKey;
+                    return sequence.sequenceController.masterSequence.rootConfig.inputGroupKey;
                 }
                 
                 return _inputGroupKey.GetVariable() as InputGroupKey;

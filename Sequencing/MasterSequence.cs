@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Sequencing
 {
@@ -30,15 +31,13 @@ namespace AltSalt.Maestro.Sequencing
             set => _activeInputModule = value;
         }
 
+        [FormerlySerializedAs("_sequenceConfigs")]
         [SerializeField]
         [ListDrawerSettings(Expanded = true)]
-        private List<Sequence_Config> _sequenceConfigs = new List<Sequence_Config>();
+        private List<SequenceController> _sequenceControllers = new List<SequenceController>();
 
-        public List<Sequence_Config> sequenceConfigs
-        {
-            get => _sequenceConfigs;
-        }
-        
+        public List<SequenceController> sequenceControllers => _sequenceControllers;
+
         [SerializeField]
         private List<MasterTimeData> _masterTimeDataList = new List<MasterTimeData>();
 
@@ -91,11 +90,10 @@ namespace AltSalt.Maestro.Sequencing
         public void Init()
         {
             // Generate master times for sequences
-            masterTimeDataList = GenerateSequenceData(sequenceConfigs);
+            masterTimeDataList = GenerateSequenceData(sequenceControllers);
 
-            for (int i = 0; i < sequenceConfigs.Count; i++) {
-                sequenceConfigs[i].SetMasterSequence(this);
-                sequenceConfigs[i].Init();
+            for (int i = 0; i < sequenceControllers.Count; i++) {
+                sequenceControllers[i].Init(this);
             }
             
             // Get total time from master time of last sequence
@@ -108,13 +106,48 @@ namespace AltSalt.Maestro.Sequencing
                 return;
             }
             
-            Sequence_Config sequenceConfig = sequenceConfigs.Find(x => x.sequence == targetSequence);
+            SequenceController sequenceController = sequenceControllers.Find(x => x.sequence == targetSequence);
 
             if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
             {
                 activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
                 
-                sequenceConfig.processModify.ModifySequence(timeModifier);
+                sequenceController.ModifySequence(timeModifier);
+            }
+        }
+        
+        public bool TriggerAutoplayRequest(Sequence targetSequence, int requestPriority, string moduleName, float timeModifier)
+        {
+            if (rootConfig.appUtilsRequested == true) {
+                return false;
+            }
+            
+            SequenceController sequenceController = sequenceControllers.Find(x => x.sequence == targetSequence);
+
+            if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
+            {
+                activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
+                
+                sequenceController.ActivateAutoplay();
+                return true;
+            }
+
+            return false;
+        }
+        
+        public void TriggerAutoplayPause(Sequence targetSequence, int requestPriority, string moduleName, float timeModifier)
+        {
+            if (rootConfig.appUtilsRequested == true) {
+                return;
+            }
+            
+            SequenceController sequenceController = sequenceControllers.Find(x => x.sequence == targetSequence);
+
+            if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
+            {
+                activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
+                
+                sequenceController.DeactivateAutoplay();
             }
         }
 
@@ -126,12 +159,16 @@ namespace AltSalt.Maestro.Sequencing
             return activeInputModule;
         }
 
-        public void UnlockInputeModule(ComplexPayload complexPayload)
+        public void UnlockInputModule(GameObject inputModuleObject)
         {
-            if (activeInputModule.name != complexPayload.GetStringValue()) return;
+            if (activeInputModule.name != inputModuleObject.name) return;
             
             activeInputModule.name = string.Empty;
             activeInputModule.priority = 0;
+
+            for (int i = 0; i < sequenceControllers.Count; i++) {
+                sequenceControllers[i].SetSpeed(0);
+            }
         }
 
         public MasterSequence RefreshElapsedTime(Sequence modifiedSequence)
@@ -147,7 +184,7 @@ namespace AltSalt.Maestro.Sequencing
 
         public void RefreshHasActiveSequence()
         {
-            if (SequenceActive(sequenceConfigs) == true) {
+            if (SequenceActive(sequenceControllers) == true) {
                 hasActiveSequence = true;
             }
             else {
@@ -155,7 +192,7 @@ namespace AltSalt.Maestro.Sequencing
             }
         }
 
-        private static bool SequenceActive(List<Sequence_Config> sequenceConfigs)
+        private static bool SequenceActive(List<SequenceController> sequenceConfigs)
         {
             for (int i = 0; i < sequenceConfigs.Count; i++) {
                 if (sequenceConfigs[i].sequence.active == true) {
@@ -187,7 +224,7 @@ namespace AltSalt.Maestro.Sequencing
 
                     activeSequence = sequenceData[i].sequence;
                     activeSequence.active = true;
-                    activeSequence.sequenceConfig.gameObject.SetActive(true);
+                    activeSequence.sequenceController.gameObject.SetActive(true);
 
                     // Update the active sequence
                     if (i == 0) {
@@ -203,7 +240,7 @@ namespace AltSalt.Maestro.Sequencing
                         for (int j = 0; j < sequenceData.Count; j++) {
                             if (j < i) {
                                 sequenceData[j].sequence.currentTime = sequenceData[j].sequence.sourcePlayable.duration;
-                                sequenceData[j].sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                                sequenceData[j].sequence.sequenceController.RefreshPlayableDirector();
                             }
                         }
                     }
@@ -213,7 +250,7 @@ namespace AltSalt.Maestro.Sequencing
                         for (int j = sequenceData.Count - 1; j >= 0; j--) {
                             if (j > i) {
                                 sequenceData[j].sequence.currentTime = 0;
-                                sequenceData[j].sequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                                sequenceData[j].sequence.sequenceController.RefreshPlayableDirector();
                             }
                         }
                     }
@@ -226,10 +263,10 @@ namespace AltSalt.Maestro.Sequencing
                         }
 
                         sequenceData[z].sequence.active = false;
-                        sequenceData[z].sequence.sequenceConfig.gameObject.SetActive(false);
+                        sequenceData[z].sequence.sequenceController.gameObject.SetActive(false);
                     }
                     
-                    activeSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
+                    activeSequence.sequenceController.RefreshPlayableDirector();
                     
                     break;
                 }
@@ -238,7 +275,7 @@ namespace AltSalt.Maestro.Sequencing
             return activeSequence;
         }
 
-        private static List<MasterTimeData> GenerateSequenceData(List<Sequence_Config> sourceSequenceConfigs)
+        private static List<MasterTimeData> GenerateSequenceData(List<SequenceController> sourceSequenceConfigs)
         {
             List<MasterTimeData> sequenceData = new List<MasterTimeData>();
             for (int i = 0; i < sourceSequenceConfigs.Count; i++)

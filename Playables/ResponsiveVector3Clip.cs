@@ -27,7 +27,7 @@ namespace AltSalt.Maestro
             template.endTime = endTime;
             template.parentTrack = parentTrack;
             template.clipAsset = this;
-            template.trackAssetConfig = trackAssetConfig;
+            template.timelineInstanceConfig = timelineInstanceConfig;
 
             var playable = ScriptPlayable<ResponsiveVector3Behaviour>.Create(graph, template);
             return playable;

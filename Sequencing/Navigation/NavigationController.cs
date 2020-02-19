@@ -28,7 +28,7 @@ namespace AltSalt.Maestro.Sequencing.Navigation
         public void ActivateNavigationModules()
         {
             activeMasterSequence = 
-                masterSequences.Find(x => x.sequenceConfigs.Find(
+                masterSequences.Find(x => x.sequenceControllers.Find(
                     y => y.sequence.active && y.sequence.canBeScrubbed == true));
 
             if (activeMasterSequence != null) {

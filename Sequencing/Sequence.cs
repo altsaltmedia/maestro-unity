@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Sequencing
 {
@@ -46,15 +47,15 @@ namespace AltSalt.Maestro.Sequencing
             set => _sourcePlayable = value;
         }
 
-        [SerializeField]
+        [FormerlySerializedAs("_sequenceConfig"),SerializeField]
         [ReadOnly]
         [InfoBox("This value must be set at runtime via a Sequence Config component.")]
         [TitleGroup("$"+nameof(propertiesTitle))]
-        private Sequence_Config _sequenceConfig;
+        private SequenceController _sequenceController;
         
-        public Sequence_Config sequenceConfig {
-            get => _sequenceConfig;
-            set => _sequenceConfig = value;
+        public SequenceController sequenceController {
+            get => _sequenceController;
+            set => _sequenceController = value;
         }
 
         [SerializeField]
@@ -204,7 +205,7 @@ namespace AltSalt.Maestro.Sequencing
                 
                 if (targetSequence.internalIsReversingVal != targetSequence.isReversing) {
                     targetSequence.internalIsReversingVal = targetSequence.isReversing;
-                    targetSequence.sequenceConfig.StartCoroutine(PauseSequence(targetSequence));
+                    targetSequence.sequenceController.StartCoroutine(PauseSequence(targetSequence));
                     return true;
                 }
             }
@@ -216,12 +217,12 @@ namespace AltSalt.Maestro.Sequencing
         {
             targetSequence.active = false;
             targetSequence.momentumDisabled = true;
-            targetSequence.triggerSpinnerShow.RaiseEvent(targetSequence.sequenceConfig.gameObject);
+            targetSequence.triggerSpinnerShow.RaiseEvent(targetSequence.sequenceController.gameObject);
             yield return new WaitForSeconds(.5f);
             targetSequence.active = true;
-            targetSequence.pauseSequenceComplete.RaiseEvent(targetSequence.sequenceConfig.gameObject);
+            targetSequence.pauseSequenceComplete.RaiseEvent(targetSequence.sequenceController.gameObject);
             yield return new WaitForSeconds(.5f);
-            targetSequence.triggerSpinnerHide.RaiseEvent(targetSequence.sequenceConfig.gameObject);
+            targetSequence.triggerSpinnerHide.RaiseEvent(targetSequence.sequenceController.gameObject);
             yield return new WaitForSeconds(1f);
             targetSequence.momentumDisabled = false;
         }

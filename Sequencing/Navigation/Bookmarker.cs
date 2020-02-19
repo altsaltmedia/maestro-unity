@@ -84,14 +84,14 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             bookmarkLoadingCompleted = false;
             
             if (moduleActive == true && bookmarkingEnabled == true && hasBookmark == true) {
-                MasterSequence targerMasterSequence = navigationController.masterSequences.Find(x => x.sequenceConfigs.Find(
+                MasterSequence targerMasterSequence = navigationController.masterSequences.Find(x => x.sequenceControllers.Find(
                     y => y.sequence.name == lastLoadedSequence));
                 if (targerMasterSequence != null) {
                     targerMasterSequence.SetElapsedTime(lastLoadedSequenceTime);
 
                     for (int i = 0; i < navigationController.masterSequences.Count; i++) {
                         if (navigationController.masterSequences[i] != targerMasterSequence) {
-                            navigationController.masterSequences[i].sequenceConfigs.ForEach(x =>
+                            navigationController.masterSequences[i].sequenceControllers.ForEach(x =>
                                 {
                                     x.sequence.active = false;
                                 });
@@ -108,7 +108,7 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             if (moduleActive == false || bookmarkingEnabled == false) return;
 
             for (int i = 0; i < navigationController.masterSequences.Count; i++) {
-                Sequence_Config targetSequenceConfig = navigationController.masterSequences[i].sequenceConfigs
+                SequenceController targetSequenceConfig = navigationController.masterSequences[i].sequenceControllers
                     .Find(x => x.sequence.active == true);
 
                 if (targetSequenceConfig != null) {

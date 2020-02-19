@@ -10,6 +10,7 @@ using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro
@@ -53,13 +54,13 @@ namespace AltSalt.Maestro
             set => _parentTrack = value;
         }
 
-        [HideInInspector]
-        public TrackAssetConfig _trackAssetConfig;
+        [FormerlySerializedAs("_trackAssetConfig"),HideInInspector]
+        public TimelineInstanceConfig _timelineInstanceConfig;
 
-        public TrackAssetConfig trackAssetConfig
+        public TimelineInstanceConfig timelineInstanceConfig
         {
-            get => _trackAssetConfig;
-            set => _trackAssetConfig = value;
+            get => _timelineInstanceConfig;
+            set => _timelineInstanceConfig = value;
         }
 
         public override double duration => 1d;

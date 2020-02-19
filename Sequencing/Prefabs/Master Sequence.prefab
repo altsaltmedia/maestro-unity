@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -4565310156302280025}
   - component: {fileID: 970013134367802150}
   m_Layer: 0
-  m_Name: MasterSequence
+  m_Name: Master Sequence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
   _activeInputModule:
     _name: 
     _priority: 0
-  _sequenceConfigs: []
+  _sequenceControllers: []
   _masterTimeDataList: []
 --- !u!114 &-4565310156302280025
 MonoBehaviour:
@@ -58,18 +58,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1993091226287097154}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 0}
   _complexEventReference:
     _isSystemReference: 0
     _referenceName: MainInput-InputActionComplete
-    _variable: {fileID: 11400000, guid: a9331d97cc9b54c4eaa6b3b6dc542eef, type: 2}
+    _variable: {fileID: 0}
   DeveloperDescription: 
-  _response:
+  _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2390398158691485511}
@@ -83,8 +82,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &970013134367802150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,14 +95,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-SequenceModified
-    _variable: {fileID: 11400000, guid: 2cc6a74538bed4f0b9c28646ee314416, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls: []
+    _variable: {fileID: 0}
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -119,5 +113,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0

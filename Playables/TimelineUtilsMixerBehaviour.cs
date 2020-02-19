@@ -7,24 +7,24 @@ namespace AltSalt.Maestro
     {
         private float timelineDebugTime
         {
-            set => trackAssetConfig.timelineDebugTime = value;
+            set => timelineInstanceConfig.timelineDebugTime = value;
         }
 
-        private SimpleEventTrigger onEditorGraphStart => trackAssetConfig.onEditorGraphStart;
+        private SimpleEventTrigger onEditorGraphStart => timelineInstanceConfig.onEditorGraphStart;
 
         public override void OnGraphStart(Playable playable)
         {
             base.OnGraphStart(playable);
 #if UNITY_EDITOR
-            onEditorGraphStart.RaiseEvent(trackAssetConfig.gameObject, "debug timeline");
+            onEditorGraphStart.RaiseEvent(timelineInstanceConfig.gameObject, "debug timeline");
 #endif
         }
         
         public override void PrepareFrame(Playable playable, FrameData info)
         {
-            trackAssetConfig.currentTime = playable.GetGraph().GetRootPlayable(0).GetTime();
+            timelineInstanceConfig.currentTime = playable.GetGraph().GetRootPlayable(0).GetTime();
 #if UNITY_EDITOR
-            timelineDebugTime = (float)trackAssetConfig.currentTime;
+            timelineDebugTime = (float)timelineInstanceConfig.currentTime;
 #endif
         }
 

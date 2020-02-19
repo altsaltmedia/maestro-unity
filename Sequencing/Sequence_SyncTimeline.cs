@@ -22,10 +22,10 @@ namespace AltSalt.Maestro.Sequencing
 {
 
     [ExecuteInEditMode]
-    [RequireComponent(typeof(Sequence_Config))]
+    [RequireComponent(typeof(SequenceController))]
     [RequireComponent(typeof(Sequence_ProcessModify))]
     [RequireComponent(typeof(PlayableDirector))]
-    public class Sequence_SyncTimeline : MonoBehaviour, IDynamicLayoutElement
+    public class Sequence_SyncTimeline : MonoBehaviour
     {
         [SerializeField]
         [Required]
@@ -45,112 +45,7 @@ namespace AltSalt.Maestro.Sequencing
             set => _sequence = value;
         }
 
-        [SerializeField]
-        private bool _logElementOnLayoutUpdate = false;
 
-        public bool logElementOnLayoutUpdate {
-            get
-            {
-                if (_logElementOnLayoutUpdate == true || AppSettings.logGlobalResponsiveElementActions == true) {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-        
-        public string elementName => gameObject.name;
-        
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventManualTrigger _enableDynamicElement = new ComplexEventManualTrigger();
-
-        public ComplexEventManualTrigger enableDynamicElement => _enableDynamicElement;
-
-        [SerializeField]
-        [ValidateInput(nameof(IsPopulated))]
-        private ComplexEventManualTrigger _disableDynamicElement = new ComplexEventManualTrigger();
-
-        public ComplexEventManualTrigger disableDynamicElement => _disableDynamicElement;
-
-        public Scene parentScene => gameObject.scene;
-
-        [SerializeField]
-        private int _priority = -10;
-        
-        public int priority => _priority;
-
-        public void CallExecuteLayoutUpdate(Object callingObject)
-        {
-#if UNITY_EDITOR
-            if (sequence == null || sequence.sequenceConfig == null ||
-                TimelineEditor.inspectedDirector != sequence.sequenceConfig.playableDirector) {
-                return;
-            }
-            
-            if (logElementOnLayoutUpdate == true) {
-                Debug.Log("CallExecuteLayoutUpdate triggered!");
-                Debug.Log("Calling object : " + callingObject.name, callingObject);
-                Debug.Log("Triggered object : " + elementName, gameObject);
-                Debug.Log("Component : " + this.GetType().Name, gameObject);
-                Debug.Log("--------------------------");
-            }
-            
-            sequence.sequenceConfig.playableDirector.Evaluate();
-#endif
-        }
-
-        public void RefreshPlayableDirector()
-        {
-            sequence.sequenceConfig.playableDirector.time = sequence.currentTime;
-            sequence.sequenceConfig.playableDirector.Evaluate();
-        }
-
-        public void ForceEvaluate()
-        {
-            sequence.sequenceConfig.playableDirector.time = sequence.currentTime;
-            sequence.sequenceConfig.playableDirector.Evaluate();
-        }
-
-        public void SetToBeginning()
-        {
-            sequence.currentTime = 0;
-            sequence.sequenceConfig.playableDirector.time = sequence.currentTime;
-            sequence.sequenceConfig.playableDirector.Evaluate();
-        }
-
-        public void SetToEnd()
-        {
-            sequence.currentTime = sequence.sourcePlayable.duration;
-            sequence.sequenceConfig.playableDirector.time = sequence.currentTime;
-            sequence.sequenceConfig.playableDirector.Evaluate();
-        }
-        
-#if UNITY_EDITOR
-        private void OnEnable()
-        {
-            _appSettings.PopulateVariable(this, nameof(_appSettings));
-            _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
-            _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
-            
-            enableDynamicElement.RaiseEvent(this.gameObject, this);
-        }
-
-//        private void OnDisable()
-//        {
-//            dynamicElementDisable.RaiseEvent(this.gameObject, this);
-//        }
-    
-#endif
-        private static bool IsPopulated(ComplexEventManualTrigger attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-
-        private static bool IsPopulated(BoolReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
 
     }
 

@@ -21,8 +21,8 @@ namespace AltSalt.Maestro
             inputCount = playable.GetInputCount ();
 
             // If there's been a change in direction, reset all of the clips 
-            if (trackAssetConfig.isReversingVariable.value != internalIsReversingVal) {
-                internalIsReversingVal = trackAssetConfig.isReversingVariable.value;
+            if (timelineInstanceConfig.isReversingVariable.value != internalIsReversingVal) {
+                internalIsReversingVal = timelineInstanceConfig.isReversingVariable.value;
                 
                 for (int i = 0; i < inputCount; i++) {
                     inputWeight = playable.GetInputWeight(i);
@@ -33,7 +33,7 @@ namespace AltSalt.Maestro
                 }
             }
 
-            if (trackAssetConfig.isReversingVariable.value == false) {
+            if (timelineInstanceConfig.isReversingVariable.value == false) {
                 for (int i = 0; i < inputCount; i++)
                 {
                     inputWeight = playable.GetInputWeight(i);
@@ -44,7 +44,7 @@ namespace AltSalt.Maestro
                         input.triggered = true;
                         TriggerEvents(this, input);
                     } else {
-                        if (trackAssetConfig.currentTime > input.endTime
+                        if (timelineInstanceConfig.currentTime > input.endTime
                             && input.forceActivateOnForward == true && input.triggered == false) {
                             input.triggered = true;
                             TriggerEvents(this, input);
@@ -68,7 +68,7 @@ namespace AltSalt.Maestro
                         input.triggered = true;
                         TriggerEvents(this, input);
                     } else {
-                        if (trackAssetConfig.currentTime < input.startTime
+                        if (timelineInstanceConfig.currentTime < input.startTime
                             && input.forceActivateOnReverse == true && input.triggered == false) {
                             input.triggered = true;
                             TriggerEvents(this, input);
@@ -82,7 +82,7 @@ namespace AltSalt.Maestro
             SimpleEventTimelineTriggerMixerBehaviour mixerBehaviour,
             SimpleEventTimelineTriggerBehaviour triggerBehaviour)
         {
-            if (mixerBehaviour.trackAssetConfig.bookmarkLoadingCompleted == false &&
+            if (mixerBehaviour.timelineInstanceConfig.bookmarkLoadingCompleted == false &&
                 triggerBehaviour.executeWhileLoadingBookmarks == false) {
                 return triggerBehaviour;
             }
@@ -93,8 +93,8 @@ namespace AltSalt.Maestro
             }
             
             for (int q = 0; q < triggerBehaviour.simpleEventTriggers.Count; q++) {
-                triggerBehaviour.simpleEventTriggers[q].RaiseEvent(triggerBehaviour.trackAssetConfig.gameObject,
-                    $"{triggerBehaviour.trackAssetConfig.name} director at {triggerBehaviour.trackAssetConfig.currentTime:F2}");
+                triggerBehaviour.simpleEventTriggers[q].RaiseEvent(triggerBehaviour.timelineInstanceConfig.gameObject,
+                    $"{triggerBehaviour.timelineInstanceConfig.name} director at {triggerBehaviour.timelineInstanceConfig.currentTime:F2}");
             }
 
             return triggerBehaviour;

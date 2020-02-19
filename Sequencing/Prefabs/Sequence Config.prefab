@@ -42,18 +42,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1651845744537938}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f1c3d276d5274b029caedebcbfdf933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _sequence: {fileID: 0}
-  _appSettings: {fileID: 0}
   _masterSequence: {fileID: 0}
   _playableDirector: {fileID: 320944326161814764}
-  _processModify: {fileID: 1384256474148654812}
-  _syncTimeline: {fileID: 114615924759454770}
   _trackAssetConfig: {fileID: 8562162275732644144}
+  _enableDynamicElement:
+    _isSystemReference: 0
+    _referenceName: EnableDynamicElement
+    _variable: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
+  _disableDynamicElement:
+    _isSystemReference: 0
+    _referenceName: DisableDynamicElement
+    _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
+  _priority: -10
+  _logElementOnLayoutUpdate: 0
 --- !u!114 &8562162275732644144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,16 +112,6 @@ MonoBehaviour:
     _referenceName: AppSettings
     _variable: {fileID: 0}
   _sequence: {fileID: 0}
-  _logElementOnLayoutUpdate: 0
-  _enableDynamicElement:
-    _isSystemReference: 0
-    _referenceName: EnableDynamicElement
-    _variable: {fileID: 11400000, guid: 351e43b28004544c8a23c42b36e101cd, type: 2}
-  _disableDynamicElement:
-    _isSystemReference: 0
-    _referenceName: DisableDynamicElement
-    _variable: {fileID: 11400000, guid: 493d1ddf35db847e78eccd926b0362b3, type: 2}
-  _priority: -10
 --- !u!320 &320944326161814764
 PlayableDirector:
   m_ObjectHideFlags: 0

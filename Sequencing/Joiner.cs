@@ -100,11 +100,11 @@ namespace AltSalt.Maestro.Sequencing
                     previousSequence = sequence;
                     previousSequence.currentTime = previousSequence.sourcePlayable.duration;
                     previousSequence.active = true;
-                    previousSequence.sequenceConfig.gameObject.SetActive(true);
-                    previousSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                    previousSequence.sequenceConfig.masterSequence.RefreshElapsedTime(previousSequence);
+                    previousSequence.sequenceController.gameObject.SetActive(true);
+                    previousSequence.sequenceController.RefreshPlayableDirector();
+                    previousSequence.sequenceController.masterSequence.RefreshElapsedTime(previousSequence);
                     rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                    sourceSequence.sequenceConfig.gameObject.SetActive(false);
+                    sourceSequence.sequenceController.gameObject.SetActive(false);
                 }
                 else if (sequenceSettings.previousDestination is Fork fork) {
                     if (fork.active == false || fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
@@ -119,11 +119,11 @@ namespace AltSalt.Maestro.Sequencing
                             ForkData previousForkData = forkDataCollection[previousSequence].Find(x => x.fork == fork);
                             previousSequence.currentTime =  previousForkData.markerPlacement == MarkerPlacement.StartOfSequence  ? 0d : previousSequence.sourcePlayable.duration;
                             previousSequence.active = true;
-                            previousSequence.sequenceConfig.gameObject.SetActive(true);
-                            previousSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                            previousSequence.sequenceConfig.masterSequence.RefreshElapsedTime(previousSequence);
+                            previousSequence.sequenceController.gameObject.SetActive(true);
+                            previousSequence.sequenceController.RefreshPlayableDirector();
+                            previousSequence.sequenceController.masterSequence.RefreshElapsedTime(previousSequence);
                             rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                            sourceSequence.sequenceConfig.gameObject.SetActive(false);
+                            sourceSequence.sequenceController.gameObject.SetActive(false);
                         }
                     }
                 }
@@ -149,11 +149,11 @@ namespace AltSalt.Maestro.Sequencing
                     nextSequence = sequence;
                     nextSequence.currentTime = 0d;
                     nextSequence.active = true;
-                    nextSequence.sequenceConfig.gameObject.SetActive(true);
-                    nextSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                    nextSequence.sequenceConfig.masterSequence.RefreshElapsedTime(nextSequence);
+                    nextSequence.sequenceController.gameObject.SetActive(true);
+                    nextSequence.sequenceController.RefreshPlayableDirector();
+                    nextSequence.sequenceController.masterSequence.RefreshElapsedTime(nextSequence);
                     rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                    sourceSequence.sequenceConfig.gameObject.SetActive(false);
+                    sourceSequence.sequenceController.gameObject.SetActive(false);
                 }
                 else if (sequenceSettings.nextDestination is Fork fork) {
                     if (fork.active == false || fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
@@ -168,11 +168,11 @@ namespace AltSalt.Maestro.Sequencing
                             ForkData nextForkData = forkDataCollection[nextSequence].Find(x => x.fork == fork);
                             nextSequence.currentTime = nextForkData.markerPlacement == MarkerPlacement.StartOfSequence ? 0d : nextSequence.sourcePlayable.duration;
                             nextSequence.active = true;
-                            nextSequence.sequenceConfig.gameObject.SetActive(true);
-                            nextSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-                            nextSequence.sequenceConfig.masterSequence.RefreshElapsedTime(nextSequence);
+                            nextSequence.sequenceController.gameObject.SetActive(true);
+                            nextSequence.sequenceController.RefreshPlayableDirector();
+                            nextSequence.sequenceController.masterSequence.RefreshElapsedTime(nextSequence);
                             rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                            sourceSequence.sequenceConfig.gameObject.SetActive(false);
+                            sourceSequence.sequenceController.gameObject.SetActive(false);
                         }    
                     }
                 }
@@ -231,9 +231,9 @@ namespace AltSalt.Maestro.Sequencing
 
             for (int i = 0; i < masterSequences.Count; i++)
             {
-                for (int q = 0; q < masterSequences[i].sequenceConfigs.Count; q++) {
+                for (int q = 0; q < masterSequences[i].sequenceControllers.Count; q++) {
                     
-                    var sequence = masterSequences[i].sequenceConfigs[q].sequence;
+                    var sequence = masterSequences[i].sequenceControllers[q].sequence;
                     TimelineAsset rootTimelineAsset = sequence.sourcePlayable as TimelineAsset;
                     
                     ConfigTrack configTrack =
@@ -291,8 +291,8 @@ namespace AltSalt.Maestro.Sequencing
             if (marker is JoinMarker_IJoinSequence joinSequence && marker is JoinMarker joinMarker && joinSequence.joinDestination is Fork fork) {
 
                 if (joinSequence.joinDestination == null) {
-                    Debug.Log("You must add a fork to the marker at " + joinMarker.time + " on sequence " + sequence.sequenceConfig.gameObject.name,
-                        sequence.sequenceConfig.gameObject);
+                    Debug.Log("You must add a fork to the marker at " + joinMarker.time + " on sequence " + sequence.sequenceController.gameObject.name,
+                        sequence.sequenceController.gameObject);
                     return joiner.forkDataCollection;
                 }
 

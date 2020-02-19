@@ -106,10 +106,10 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
                 List<TouchExtents> rawExtents = CreateExtentsList(this, touchData, markers);
                 
-                if (touchExtentsCollection.ContainsKey(touchData.sequence.sequenceConfig.masterSequence) == false) {
-                    touchExtentsCollection.Add(touchData.sequence.sequenceConfig.masterSequence, rawExtents);
+                if (touchExtentsCollection.ContainsKey(touchData.sequence.sequenceController.masterSequence) == false) {
+                    touchExtentsCollection.Add(touchData.sequence.sequenceController.masterSequence, rawExtents);
                 } else {
-                    touchExtentsCollection[touchData.sequence.sequenceConfig.masterSequence].AddRange(rawExtents);
+                    touchExtentsCollection[touchData.sequence.sequenceController.masterSequence].AddRange(rawExtents);
                 }
             }
 

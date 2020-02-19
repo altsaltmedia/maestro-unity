@@ -90,7 +90,7 @@ namespace AltSalt.Maestro.Sequencing
 
             for (int q = 0; q < extents.Count; q++) {
                 if(sourceTime > extents[q].startTime &&
-                   sourceTime < extents[q].endTime) {
+                   sourceTime <= extents[q].endTime) {
                     withinExtents = true;
                     break;
                 }
@@ -106,7 +106,7 @@ namespace AltSalt.Maestro.Sequencing
 
             for (int q = 0; q < extents.Count; q++) {
                 if(sourceTime > extents[q].startTime &&
-                   sourceTime < extents[q].endTime) {
+                   sourceTime <= extents[q].endTime) {
                     currentExtents = extents[q];
                     withinExtents = true;
                     break;

@@ -20,15 +20,15 @@ namespace AltSalt.Maestro
             TimelineUtilsMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(gameObject, behaviour);
 #if UNITY_EDITOR
-            if(gameObject.TryGetComponent(typeof(TrackAssetConfig), out Component component) == false) {
-                gameObject.AddComponent(typeof(TrackAssetConfig));
+            if(gameObject.TryGetComponent(typeof(TimelineInstanceConfig), out Component component) == false) {
+                gameObject.AddComponent(typeof(TimelineInstanceConfig));
             }
             
-            TrackAssetConfig trackAssetConfig = component as TrackAssetConfig;
-            behaviour.trackAssetConfig = trackAssetConfig;
+            TimelineInstanceConfig timelineInstanceConfig = component as TimelineInstanceConfig;
+            behaviour.timelineInstanceConfig = timelineInstanceConfig;
             
             if (Application.isPlaying == false && TimelineEditor.inspectedDirector != null) {
-                TimelineEditor.inspectedDirector.time = trackAssetConfig.timelineDebugTime;
+                TimelineEditor.inspectedDirector.time = timelineInstanceConfig.timelineDebugTime;
             }
 #endif
             return trackPlayable;

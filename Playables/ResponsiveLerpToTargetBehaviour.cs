@@ -32,7 +32,7 @@ namespace AltSalt.Maestro
             get
             {
                 if (_sceneAspectRatio == 0) {
-                    _sceneAspectRatio = trackAssetConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
+                    _sceneAspectRatio = timelineInstanceConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
                 }
 
                 return _sceneAspectRatio;
@@ -49,7 +49,7 @@ namespace AltSalt.Maestro
             get
             {
                 if (_sceneWidth == 0) {
-                    _sceneWidth = trackAssetConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
+                    _sceneWidth = timelineInstanceConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
                 }
 
                 return _sceneWidth;
@@ -66,7 +66,7 @@ namespace AltSalt.Maestro
             get
             {
                 if (_sceneHeight == 0) {
-                    _sceneHeight = trackAssetConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
+                    _sceneHeight = timelineInstanceConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
                 }
 
                 return _sceneHeight;
@@ -125,7 +125,7 @@ namespace AltSalt.Maestro
         public bool logElementOnLayoutUpdate {
             get
             {
-                if (_logElementOnLayoutUpdate == true || trackAssetConfig.logGlobalResponsiveElementActions == true) {
+                if (_logElementOnLayoutUpdate == true || timelineInstanceConfig.logGlobalResponsiveElementActions == true) {
                     return true;
                 }
 
@@ -147,7 +147,7 @@ namespace AltSalt.Maestro
 
         public string elementName => this.ToString();
 
-        public Scene parentScene => trackAssetConfig.gameObject.scene;
+        public Scene parentScene => timelineInstanceConfig.gameObject.scene;
 
         public override void OnPlayableCreate(Playable playable)
         {
@@ -166,7 +166,7 @@ namespace AltSalt.Maestro
             enableDynamicElement.RaiseEvent(clipAsset, parentScene.name, clipAsset.name, this);
 
             easingFunction = EasingFunction.GetEasingFunction(ease);
-            CallExecuteLayoutUpdate(trackAssetConfig);
+            CallExecuteLayoutUpdate(timelineInstanceConfig);
         }
 
         public void CallExecuteLayoutUpdate(UnityEngine.Object callingObject)

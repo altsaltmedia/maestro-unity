@@ -25,7 +25,7 @@ namespace AltSalt.Maestro.Animation
             template.endTime = endTime;
             template.parentTrack = parentTrack;
             template.clipAsset = this;
-            template.trackAssetConfig = trackAssetConfig;
+            template.timelineInstanceConfig = timelineInstanceConfig;
             
             var playable = ScriptPlayable<TMProColorBehaviour>.Create(graph, template);
             return playable;

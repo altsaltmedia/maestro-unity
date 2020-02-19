@@ -113,7 +113,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             Autorun_Data autorunData, float timeModifier, AutorunExtents currentExtents, CoroutineCallback callback)
         {
             MasterSequence masterSequence = autorunController.rootConfig.masterSequences.
-                Find(x => x.sequenceConfigs.Find(y => y.sequence == autorunData.sequence));
+                Find(x => x.sequenceControllers.Find(y => y.sequence == autorunData.sequence));
             
             while(true) {
                 masterSequence.TriggerModifyRequest(autorunData.sequence, source.priority, source.gameObject.name, timeModifier);

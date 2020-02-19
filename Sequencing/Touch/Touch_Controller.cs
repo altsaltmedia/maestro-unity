@@ -131,9 +131,9 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
             for (int i = 0; i < masterSequences.Count; i++)
             {
-                for (int q = 0; q < masterSequences[i].sequenceConfigs.Count; q++)
+                for (int q = 0; q < masterSequences[i].sequenceControllers.Count; q++)
                 {
-                    var sequence = masterSequences[i].sequenceConfigs[q].sequence;
+                    var sequence = masterSequences[i].sequenceControllers[q].sequence;
                     TimelineAsset rootTimelineAsset = sequence.sourcePlayable as TimelineAsset;
 
                     var markerConfig = Tuple.Create(new List<double>(), new List<double>());

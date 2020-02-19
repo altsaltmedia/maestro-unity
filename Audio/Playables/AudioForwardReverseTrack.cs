@@ -18,8 +18,8 @@ namespace AltSalt.Maestro.Audio
                     myAsset.startTime = clip.start;
                     myAsset.endTime = clip.end;
                     myAsset.parentTrack = this;
-                    myAsset.trackAssetConfig = directorObject.GetComponent<TrackAssetConfig>();
-                    myAsset.isReversingVariable = myAsset.trackAssetConfig.isReversingVariable;
+                    myAsset.timelineInstanceConfig = directorObject.GetComponent<TimelineInstanceConfig>();
+                    myAsset.isReversingVariable = myAsset.timelineInstanceConfig.isReversingVariable;
                 }
             }
         }

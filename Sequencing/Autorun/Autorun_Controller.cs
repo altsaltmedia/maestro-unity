@@ -33,8 +33,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         public List<Autorun_Data> autorunData => _autorunData;
 
-
-//#if UNITY_EDITOR
+        //#if UNITY_EDITOR
 
         public override void ConfigureData()
         {
@@ -44,9 +43,9 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
             for (int i = 0; i < masterSequences.Count; i++)
             {
-                for (int q = 0; q < masterSequences[i].sequenceConfigs.Count; q++)
+                for (int q = 0; q < masterSequences[i].sequenceControllers.Count; q++)
                 {
-                    var sequence = masterSequences[i].sequenceConfigs[q].sequence;
+                    var sequence = masterSequences[i].sequenceControllers[q].sequence;
                     
                     TimelineAsset rootTimelineAsset = sequence.sourcePlayable as TimelineAsset;
 
@@ -61,6 +60,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                         CreateAutorunData(sequence, markerConfig.Item1, markerConfig.Item2, markerConfig.Item3, markerConfig.Item4, markerConfig.Item5));
                 }
             }
+            
+            CreateAutorunCallbacks(autorunData);
 
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this);
@@ -147,6 +148,18 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             }
 
             return autorunExtents;
+        }
+
+        public void CreateAutorunCallbacks(List<Autorun_Data> autorunData)
+        {
+            for (int i = 0; i < autorunData.Count; i++) {
+                autorunData[i].sequence.sequenceController.sequenceUpdated += OnSequenceUpdated;
+            }
+        }
+
+        private void OnSequenceUpdated(object sender, Sequence updatedSequence)
+        {
+            autoplayer.RefreshAutoplay(updatedSequence);
         }
 
 //#endif

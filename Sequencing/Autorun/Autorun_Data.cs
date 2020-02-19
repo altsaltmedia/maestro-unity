@@ -20,6 +20,33 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         }
 
         [ShowInInspector]
+        private AutorunExtents _activeInterval;
+
+        public AutorunExtents activeInterval
+        {
+            get => _activeInterval;
+            set => _activeInterval = value;
+        }
+
+        [ShowInInspector]
+        private bool _forwardUpdateActive;
+
+        public bool forwardUpdateActive
+        {
+            get => _forwardUpdateActive;
+            set => _forwardUpdateActive = value;
+        }
+        
+        [ShowInInspector]
+        private bool _backwardUpdateActive;
+
+        public bool backwardUpdateActive
+        {
+            get => _backwardUpdateActive;
+            set => _backwardUpdateActive = value;
+        }
+
+        [ShowInInspector]
         private bool _autoplayActive;
 
         public bool autoplayActive
@@ -49,10 +76,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         [SerializeField]
         private EasingUtility _easingUtility = new EasingUtility();
 
-        public EasingUtility easingUtility
-        {
-            get => _easingUtility;
-        }
+        public EasingUtility easingUtility => _easingUtility;
 
         private IEnumerator _lerpCoroutine;
 

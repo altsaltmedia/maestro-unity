@@ -29,10 +29,10 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         private float _autoplayEaseThreshold = 0.25f;
 
         private float autoplayEaseThreshold => _autoplayEaseThreshold;
-
+        
         protected virtual void Update()
         {
-            if (moduleActive == false || appUtilsRequested == true) {
+            if (moduleActive == false || appUtilsRequested == true || autorunController.isReversing == false) {
                 return;
             }
 
@@ -40,15 +40,18 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             {
                 var autorunData = autorunController.autorunData[q];
 
-                if (autorunData.autoplayActive == false || autorunData.isLerping == true || autorunData.sequence.active == false) {
+                if (autorunData.autoplayActive == false || autorunData.isLerping == true ||
+                    autorunData.sequence.active == false || autorunData.backwardUpdateActive == false) {
+                    continue;
+                }
+
+                if (AutorunExtents.TimeWithinThreshold(autorunData.sequence.currentTime,
+                        autorunData.autorunIntervals, out var currentInterval) == false) {
                     continue;
                 }
                 
-                if (AutorunExtents.TimeWithinThreshold(autorunData.sequence.currentTime,
-                        autorunData.autorunIntervals, out var currentInterval) == false)
-                    continue;
+                autorunData.activeInterval = currentInterval;
 
-                
                 float autoplayModifer = 0f;
 
 #if UNITY_EDITOR
@@ -56,10 +59,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 #else
                 autoplayModifer = frameStepValue;
 #endif
-                
                 autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, autorunData.loop, autorunController.isReversing, autoplayEaseThreshold, autorunData.easingUtility);
-
-                AutoplaySequence(autorunController.rootConfig.masterSequences, this, autorunData.sequence, autoplayModifer);
+                AutoplaySequenceBackward(autorunController.rootConfig.masterSequences, this, autorunData.sequence, autoplayModifer);
                 
                 if(autorunData.loop == true) continue;
 
@@ -74,7 +75,63 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 }
             }
         }
-        
+
+        public virtual void RefreshAutoplay(Sequence updatedSequence)
+        {
+            if (moduleActive == false || appUtilsRequested == true) {
+                return;
+            }
+            
+            var autorunData = autorunController.autorunData.Find(x => x.sequence == updatedSequence);
+
+            if (autorunData == null) return;
+
+            if (autorunData.autoplayActive == false || autorunData.isLerping == true || autorunData.sequence.active == false) {
+                autorunData.backwardUpdateActive = false;
+                autorunData.forwardUpdateActive = false;
+                PauseSequence(autorunController.rootConfig.masterSequences, this, autorunData.sequence, 0);
+                return;
+            }
+            
+            if(autorunData.forwardUpdateActive == true && autorunData.activeInterval != null) {
+                if (updatedSequence.currentTime > autorunData.activeInterval.endTime
+                    || updatedSequence.currentTime < autorunData.activeInterval.startTime) {
+                    autorunData.backwardUpdateActive = false;
+                    autorunData.forwardUpdateActive = false;
+                    PauseSequence(autorunController.rootConfig.masterSequences, this, autorunData.sequence, 0);
+                    return;
+                }
+            }
+            
+            if (autorunController.isReversing == false) {
+                if (autorunData.forwardUpdateActive == false && AutorunExtents.TimeWithinThreshold(updatedSequence.currentTime,
+                    autorunData.autorunIntervals, out var currentInterval) == true) {
+                    autorunData.backwardUpdateActive = false;
+                    if (updatedSequence.sequenceController.masterSequence.TriggerAutoplayRequest(updatedSequence,
+                            this.priority, this.gameObject.name, 0) == true) {
+                        autorunData.activeInterval = currentInterval;
+                        autorunData.forwardUpdateActive = true;
+                    }
+                    //AutoplaySequenceForward(autorunController.rootConfig.masterSequences, this, updatedSequence, 0);
+                }
+            }
+            else {
+                autorunData.forwardUpdateActive = false;
+                autorunData.backwardUpdateActive = true;
+            }
+        }
+
+        // public void CheckDeactivateAutoplay(Sequence updatedSequence)
+        // {
+        //     var autorunData = autorunController.autorunData.Find(x => x.sequence == updatedSequence);
+        //     
+        //     if (autorunData != null && updatedSequence.currentTime + frameStepValue > autorunData.activeInterval.endTime
+        //         || updatedSequence.currentTime - frameStepValue < autorunData.activeInterval.startTime) {
+        //
+        //         PauseSequence(autorunController.rootConfig.masterSequences, this, autorunData.sequence, 0);
+        //     }
+        // }
+        //
         private static float CalculateAutoplayModifier(Sequence targetSequence, Extents currentInterval, bool loop,
             bool isReversing, float easeThreshold, EasingUtility easingUtility)
         {
@@ -114,14 +171,32 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             return false;
         }
 
-        private static Sequence AutoplaySequence(List<MasterSequence> masterSequences, Input_Module source, Sequence targetSequence, float timeModifier)
+        private static Sequence AutoplaySequenceForward(List<MasterSequence> masterSequences, Input_Module source, Sequence targetSequence, float timeModifier)
         {
-            MasterSequence masterSequence = masterSequences.Find(x => x.sequenceConfigs.Find(y => y.sequence == targetSequence));
+            MasterSequence masterSequence = masterSequences.Find(x => x.sequenceControllers.Find(y => y.sequence == targetSequence));
+            masterSequence.TriggerAutoplayRequest(targetSequence, source.priority, source.gameObject.name, timeModifier);
+            
+            return targetSequence;
+        }
+        
+        private static Sequence AutoplaySequenceBackward(List<MasterSequence> masterSequences, Input_Module source, Sequence targetSequence, float timeModifier)
+        {
+            MasterSequence masterSequence = masterSequences.Find(x => x.sequenceControllers.Find(y => y.sequence == targetSequence));
             masterSequence.TriggerModifyRequest(targetSequence, source.priority, source.gameObject.name, timeModifier);
+
+            return targetSequence;
+        }
+
+        private static Sequence PauseSequence(List<MasterSequence> masterSequences, Input_Module source, Sequence targetSequence, float timeModifier)
+        {
+            MasterSequence masterSequence = masterSequences.Find(x => x.sequenceControllers.Find(y => y.sequence == targetSequence));
+            //masterSequence.TriggerModifyRequest(targetSequence, source.priority, source.gameObject.name, timeModifier);
+            masterSequence.TriggerAutoplayPause(targetSequence, source.priority, source.gameObject.name, timeModifier);
             
             return targetSequence;
         }
 
+        
         public void ActivateAutoplay()
         {
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
@@ -138,6 +213,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 
                 if (autorunController.autorunData[q].sequence.active == true) {
                     autorunController.autorunData[q].autoplayActive = false;
+                    // autorunController.autorunData[q].forwardUpdateActive = false;
+                    // autorunController.autorunData[q].backwardUpdateActive = false;
                     autorunController.autorunData[q].easingUtility.Reset();
                 }
             }

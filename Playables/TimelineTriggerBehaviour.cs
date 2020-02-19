@@ -60,12 +60,12 @@ namespace AltSalt.Maestro
         public abstract bool forceActivateOnReverse { get; }
         
         [HideInInspector]
-        private TrackAssetConfig _trackAssetConfig;
+        private TimelineInstanceConfig _timelineInstanceConfig;
 
-        public TrackAssetConfig trackAssetConfig
+        public TimelineInstanceConfig timelineInstanceConfig
         {
-            get => _trackAssetConfig;
-            set => _trackAssetConfig = value;
+            get => _timelineInstanceConfig;
+            set => _timelineInstanceConfig = value;
         }
 
     }

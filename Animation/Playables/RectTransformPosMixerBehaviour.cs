@@ -29,9 +29,9 @@ namespace AltSalt.Maestro.Animation
                     percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
                     trackBinding.anchoredPosition3D = Vector3.Lerp(input.initialValue, input.targetValue, input.easingFunction(0f, 1f, percentageComplete));
                 } else {
-                    if(trackAssetConfig.currentTime >= input.endTime) {
+                    if(timelineInstanceConfig.currentTime >= input.endTime) {
                         trackBinding.anchoredPosition3D = input.targetValue;
-                    } else if (i == 0 && trackAssetConfig.currentTime <= input.startTime && input.disableReset == false) {
+                    } else if (i == 0 && timelineInstanceConfig.currentTime <= input.startTime && input.disableReset == false) {
                         trackBinding.anchoredPosition3D = input.initialValue;
                     }
                 }

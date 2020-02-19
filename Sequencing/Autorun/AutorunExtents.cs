@@ -48,7 +48,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             bool withinThreshold = false;
 
             for (int q = 0; q < intervals.Count; q++) {
-                if(sourceTime >= intervals[q].startTime &&
+                if(sourceTime > intervals[q].startTime &&
                    sourceTime < intervals[q].endTime) {
                     withinThreshold = true;
                     break;
@@ -61,8 +61,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         public static bool TimeWithinThreshold(double sourceTime, List<AutorunExtents> intervals, out AutorunExtents currentExtents)
         {
             for (int q = 0; q < intervals.Count; q++) {
-                if(sourceTime >= intervals[q].startTime &&
-                   sourceTime <= intervals[q].endTime) {
+                if(sourceTime > intervals[q].startTime &&
+                   sourceTime < intervals[q].endTime) {
                     currentExtents = intervals[q];
                     return true;
                 }
