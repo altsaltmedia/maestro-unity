@@ -83,14 +83,14 @@ namespace AltSalt.Maestro.Sequencing
             return extents;
         }
 
-        public static bool TimeWithinExtents(double sourceTime, List<Extents> extents)
+        public static bool TimeWithinThresholdExclusive(double sourceTime, List<Extents> extents)
         {
             // Check if we're inside a pauseMomentumThreshold
             bool withinExtents = false;
 
             for (int q = 0; q < extents.Count; q++) {
                 if(sourceTime > extents[q].startTime &&
-                   sourceTime <= extents[q].endTime) {
+                   sourceTime < extents[q].endTime) {
                     withinExtents = true;
                     break;
                 }
@@ -99,14 +99,14 @@ namespace AltSalt.Maestro.Sequencing
             return withinExtents;
         }
             
-        public static bool TimeWithinExtents(double sourceTime, List<Extents> extents, out Extents currentExtents)
+        public static bool TimeWithinThresholdExclusive(double sourceTime, List<Extents> extents, out Extents currentExtents)
         {
             // Check if we're inside a pauseMomentumThreshold
             bool withinExtents = false;
 
             for (int q = 0; q < extents.Count; q++) {
                 if(sourceTime > extents[q].startTime &&
-                   sourceTime <= extents[q].endTime) {
+                   sourceTime < extents[q].endTime) {
                     currentExtents = extents[q];
                     withinExtents = true;
                     break;
@@ -114,6 +114,18 @@ namespace AltSalt.Maestro.Sequencing
             }
             currentExtents = null;
             return withinExtents;
+        }
+
+        public static bool TimeBeyondThresholdInclusive(double sourceTime, Extents interval)
+        {
+            if (Mathf.Approximately((float) sourceTime, (float) interval.endTime)
+                || sourceTime > interval.endTime
+                || Mathf.Approximately((float) sourceTime, (float) interval.startTime)
+                || sourceTime < interval.startTime) {
+                return true;
+            }
+
+            return false;
         }
     }
 }

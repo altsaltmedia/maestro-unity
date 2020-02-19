@@ -98,10 +98,9 @@ namespace AltSalt.Maestro.Sequencing
                 if (sequenceSettings.previousDestination is Sequence sequence) {
                     sourceSequence.active = false;
                     previousSequence = sequence;
-                    previousSequence.currentTime = previousSequence.sourcePlayable.duration;
                     previousSequence.active = true;
                     previousSequence.sequenceController.gameObject.SetActive(true);
-                    previousSequence.sequenceController.RefreshPlayableDirector();
+                    previousSequence.sequenceController.SetToEnd(this);
                     previousSequence.sequenceController.masterSequence.RefreshElapsedTime(previousSequence);
                     rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                     sourceSequence.sequenceController.gameObject.SetActive(false);
@@ -116,11 +115,11 @@ namespace AltSalt.Maestro.Sequencing
                             for (int i = 0; i < fork.branchingPaths.Count; i++) {
                                 fork.branchingPaths[i].sequence.active = false;
                             }
-                            ForkData previousForkData = forkDataCollection[previousSequence].Find(x => x.fork == fork);
-                            previousSequence.currentTime =  previousForkData.markerPlacement == MarkerPlacement.StartOfSequence  ? 0d : previousSequence.sourcePlayable.duration;
                             previousSequence.active = true;
                             previousSequence.sequenceController.gameObject.SetActive(true);
-                            previousSequence.sequenceController.RefreshPlayableDirector();
+                            ForkData previousForkData = forkDataCollection[previousSequence].Find(x => x.fork == fork);
+                            double targetTime = previousForkData.markerPlacement == MarkerPlacement.StartOfSequence  ? 0d : previousSequence.sourcePlayable.duration;
+                            previousSequence.sequenceController.SetSequenceTime(this, (float) targetTime);
                             previousSequence.sequenceController.masterSequence.RefreshElapsedTime(previousSequence);
                             rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                             sourceSequence.sequenceController.gameObject.SetActive(false);
@@ -147,10 +146,9 @@ namespace AltSalt.Maestro.Sequencing
                 if (sequenceSettings.nextDestination is Sequence sequence) {
                     sourceSequence.active = false;
                     nextSequence = sequence;
-                    nextSequence.currentTime = 0d;
                     nextSequence.active = true;
                     nextSequence.sequenceController.gameObject.SetActive(true);
-                    nextSequence.sequenceController.RefreshPlayableDirector();
+                    nextSequence.sequenceController.SetSequenceTime(this, 0);
                     nextSequence.sequenceController.masterSequence.RefreshElapsedTime(nextSequence);
                     rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                     sourceSequence.sequenceController.gameObject.SetActive(false);
@@ -165,11 +163,11 @@ namespace AltSalt.Maestro.Sequencing
                             for (int i = 0; i < fork.branchingPaths.Count; i++) {
                                 fork.branchingPaths[i].sequence.active = false;
                             }
-                            ForkData nextForkData = forkDataCollection[nextSequence].Find(x => x.fork == fork);
-                            nextSequence.currentTime = nextForkData.markerPlacement == MarkerPlacement.StartOfSequence ? 0d : nextSequence.sourcePlayable.duration;
                             nextSequence.active = true;
                             nextSequence.sequenceController.gameObject.SetActive(true);
-                            nextSequence.sequenceController.RefreshPlayableDirector();
+                            ForkData nextForkData = forkDataCollection[nextSequence].Find(x => x.fork == fork);
+                            double targetTime = nextForkData.markerPlacement == MarkerPlacement.StartOfSequence ? 0d : nextSequence.sourcePlayable.duration;
+                            nextSequence.sequenceController.SetSequenceTime(this, (float)targetTime);
                             nextSequence.sequenceController.masterSequence.RefreshElapsedTime(nextSequence);
                             rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                             sourceSequence.sequenceController.gameObject.SetActive(false);

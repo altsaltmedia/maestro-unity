@@ -42,7 +42,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             this.description = description;
         }
         
-        public static bool TimeWithinThreshold(double sourceTime, List<AutorunExtents> intervals)
+        public static bool TimeWithinThresholdExclusive(double sourceTime, List<AutorunExtents> intervals)
         {
             // Check if we're inside a pauseMomentumThreshold
             bool withinThreshold = false;
@@ -58,7 +58,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             return withinThreshold;
         }
         
-        public static bool TimeWithinThreshold(double sourceTime, List<AutorunExtents> intervals, out AutorunExtents currentExtents)
+        public static bool TimeWithinThresholdExclusive(double sourceTime, List<AutorunExtents> intervals, out AutorunExtents currentExtents)
         {
             for (int q = 0; q < intervals.Count; q++) {
                 if(sourceTime > intervals[q].startTime &&

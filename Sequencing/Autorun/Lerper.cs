@@ -47,7 +47,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     thresholdModifier *= -1d;
                 }
 
-                if (AutorunExtents.TimeWithinThreshold(autorunData.sequence.currentTime + thresholdModifier,
+                if (AutorunExtents.TimeWithinThresholdExclusive(autorunData.sequence.currentTime + thresholdModifier,
                         autorunData.autorunIntervals, out var currentInterval) == false) return autorunData;
 
                 autorunData.isLerping = true;
@@ -116,7 +116,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 Find(x => x.sequenceControllers.Find(y => y.sequence == autorunData.sequence));
             
             while(true) {
-                masterSequence.TriggerModifyRequest(autorunData.sequence, source.priority, source.gameObject.name, timeModifier);
+                masterSequence.RequestModifySequenceTime(autorunData.sequence, source.priority, source.gameObject.name, timeModifier);
                 callback(autorunController, autorunData, currentExtents);
                 yield return new WaitForEndOfFrame();
             }

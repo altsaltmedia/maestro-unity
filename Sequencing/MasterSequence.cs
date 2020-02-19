@@ -100,7 +100,46 @@ namespace AltSalt.Maestro.Sequencing
             duration = masterTimeDataList[masterTimeDataList.Count - 1].masterTimeEnd;
         }
 
-        public void TriggerModifyRequest(Sequence targetSequence, int requestPriority, string moduleName, float timeModifier)
+        public Sequence RequestModifySequenceTime(Sequence targetSequence, int requestPriority, string moduleName, float timeModifier)
+        {
+            if (rootConfig.appUtilsRequested == true) {
+                return targetSequence;
+            }
+            
+            SequenceController sequenceController = sequenceControllers.Find(x => x.sequence == targetSequence);
+
+            if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
+            {
+                activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
+                
+                sequenceController.ModifySequenceTime(timeModifier);
+            }
+
+            return targetSequence;
+        }
+        
+        public Sequence RequestActivateForwardAutoplay(Sequence targetSequence, int requestPriority, string moduleName, float targetSpeed, out bool requestSuccessful)
+        {
+            requestSuccessful = false;
+            
+            if (rootConfig.appUtilsRequested == true) {
+                return targetSequence;
+            }
+            
+            SequenceController sequenceController = sequenceControllers.Find(x => x.sequence == targetSequence);
+
+            if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
+            {
+                activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
+                
+                sequenceController.ActivateForwardAutoplay(targetSpeed);
+                requestSuccessful = true;
+            }
+
+            return targetSequence;
+        }
+        
+        public void RequestDeactivateForwardAutoplay(Sequence targetSequence, int requestPriority, string moduleName)
         {
             if (rootConfig.appUtilsRequested == true) {
                 return;
@@ -112,42 +151,7 @@ namespace AltSalt.Maestro.Sequencing
             {
                 activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
                 
-                sequenceController.ModifySequence(timeModifier);
-            }
-        }
-        
-        public bool TriggerAutoplayRequest(Sequence targetSequence, int requestPriority, string moduleName, float timeModifier)
-        {
-            if (rootConfig.appUtilsRequested == true) {
-                return false;
-            }
-            
-            SequenceController sequenceController = sequenceControllers.Find(x => x.sequence == targetSequence);
-
-            if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
-            {
-                activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
-                
-                sequenceController.ActivateAutoplay();
-                return true;
-            }
-
-            return false;
-        }
-        
-        public void TriggerAutoplayPause(Sequence targetSequence, int requestPriority, string moduleName, float timeModifier)
-        {
-            if (rootConfig.appUtilsRequested == true) {
-                return;
-            }
-            
-            SequenceController sequenceController = sequenceControllers.Find(x => x.sequence == targetSequence);
-
-            if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
-            {
-                activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
-                
-                sequenceController.DeactivateAutoplay();
+                sequenceController.DeactivateForwardAutoplay();
             }
         }
 
@@ -204,75 +208,74 @@ namespace AltSalt.Maestro.Sequencing
         }
 
         [Button(ButtonSizes.Large)]
-        public void SetElapsedTime(double targetTime)
+        public void SetElapsedTime(GameObject caller, double targetTime)
         {
             _elapsedTime = targetTime;
-            ApplyElapsedTimeToSequences(targetTime, masterTimeDataList);
+            ApplyElapsedTimeToSequences(caller, targetTime, this.masterTimeDataList);
             rootConfig.sequenceModified.RaiseEvent(this.gameObject);
         }
         
-        private static Sequence ApplyElapsedTimeToSequences(double targetTime, List<MasterTimeData> sequenceData)
+        private static Sequence ApplyElapsedTimeToSequences(GameObject caller, double targetTime, List<MasterTimeData> sequenceData)
         {
-            Sequence activeSequence = null;
+            Sequence targetSequence = null;
             
-            for (int i = 0; i < sequenceData.Count; i++) {
+            for (int targetID = 0; targetID < sequenceData.Count; targetID++) {
                 
-                // Since we're going through the sequences in order,
-                // as soon as our target time does not exceed the end time,
-                // that means we've found the sequence we'll want to target
-                if (targetTime < sequenceData[i].masterTimeEnd) {
+                // Since we're going through the sequences in order
+                // from beginning to end, as soon as our target time
+                // does not exceed the end time of a sequence, that
+                // means we've found the sequence we'll want to target
+                if (targetTime < sequenceData[targetID].masterTimeEnd) {
 
-                    activeSequence = sequenceData[i].sequence;
-                    activeSequence.active = true;
-                    activeSequence.sequenceController.gameObject.SetActive(true);
-
-                    // Update the active sequence
-                    if (i == 0) {
-                        activeSequence.currentTime = targetTime;
-                    } else {
-                        activeSequence.currentTime = targetTime - sequenceData[i - 1].masterTimeEnd;
-                    }
+                    targetSequence = sequenceData[targetID].sequence;
+                    targetSequence.active = true;
+                    targetSequence.sequenceController.gameObject.SetActive(true);
                     
-                    //activeSequence.sequenceConfig.syncTimeline.RefreshPlayableDirector();
-
-                    // Prep preceding sequence, if applicable
-                    if (i > 0) {
+                    // If applicable, evaluate all of the preceding sequences at their last frame
+                    if (targetID > 0) {
                         for (int j = 0; j < sequenceData.Count; j++) {
-                            if (j < i) {
-                                sequenceData[j].sequence.currentTime = sequenceData[j].sequence.sourcePlayable.duration;
-                                sequenceData[j].sequence.sequenceController.RefreshPlayableDirector();
+                            if (j < targetID) {
+                                sequenceData[j].sequence.sequenceController
+                                    .SetSequenceTime(caller, (float)sequenceData[j].sequence.sourcePlayable.duration);
                             }
                         }
                     }
 
-                    // Prep following sequence, if applicable
-                    if (i < sequenceData.Count - 1) {
+                    // If applicable, evaluate all of the following sequences at their first frame
+                    if (targetID < sequenceData.Count - 1) {
                         for (int j = sequenceData.Count - 1; j >= 0; j--) {
-                            if (j > i) {
-                                sequenceData[j].sequence.currentTime = 0;
-                                sequenceData[j].sequence.sequenceController.RefreshPlayableDirector();
+                            if (j > targetID) {
+                                sequenceData[j].sequence.sequenceController.SetSequenceTime(caller, 0);
                             }
                         }
                     }
 
-                    // Deactivate the other sequences
+                    // Deactivate all other sequences
                     for (int z = 0; z < sequenceData.Count; z++) {
 
-                        if (z == i) {
-                            continue;
+                        if (z != targetID) {
+                            sequenceData[z].sequence.active = false;
+                            sequenceData[z].sequence.sequenceController.gameObject.SetActive(false);
                         }
-
-                        sequenceData[z].sequence.active = false;
-                        sequenceData[z].sequence.sequenceController.gameObject.SetActive(false);
                     }
                     
-                    activeSequence.sequenceController.RefreshPlayableDirector();
-                    
+                    // Finally, update our target sequence
+                    if (targetID == 0) {
+                        // If our target sequence is the first in the master list,
+                        // then the target time is already our local time
+                        targetSequence.sequenceController.SetSequenceTime(caller, (float)targetTime);
+                    } else {
+                        // Otherwise, we need to convert the target time to local time
+                        // based on its position in the MasterSequence's sequence list
+                        double localTime = targetTime - sequenceData[targetID - 1].masterTimeEnd;
+                        targetSequence.sequenceController.SetSequenceTime(caller, (float)localTime);
+                    }
+
                     break;
                 }
             }
 
-            return activeSequence;
+            return targetSequence;
         }
 
         private static List<MasterTimeData> GenerateSequenceData(List<SequenceController> sourceSequenceConfigs)

@@ -87,7 +87,7 @@ namespace AltSalt.Maestro.Sequencing.Navigation
                 MasterSequence targerMasterSequence = navigationController.masterSequences.Find(x => x.sequenceControllers.Find(
                     y => y.sequence.name == lastLoadedSequence));
                 if (targerMasterSequence != null) {
-                    targerMasterSequence.SetElapsedTime(lastLoadedSequenceTime);
+                    targerMasterSequence.SetElapsedTime(this.gameObject, lastLoadedSequenceTime);
 
                     for (int i = 0; i < navigationController.masterSequences.Count; i++) {
                         if (navigationController.masterSequences[i] != targerMasterSequence) {

@@ -93,7 +93,7 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             }
 
             previousValue = newValue;
-            activeMasterSequence.SetElapsedTime(newValue);
+            activeMasterSequence.SetElapsedTime(this.gameObject, newValue);
             onScrub.RaiseEvent(this.gameObject);
         }
     }

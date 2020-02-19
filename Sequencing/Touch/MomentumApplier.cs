@@ -160,7 +160,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
         private static Sequence ApplyMomentumModifier(List<MasterSequence> masterSequences, Input_Module source, Sequence targetSequence, float timeModifier)
         {
             MasterSequence masterSequence = masterSequences.Find(x => x.sequenceControllers.Find(y => y.sequence == targetSequence));
-            masterSequence.TriggerModifyRequest(targetSequence, source.priority, source.gameObject.name, timeModifier);
+            masterSequence.RequestModifySequenceTime(targetSequence, source.priority, source.gameObject.name, timeModifier);
 
             return targetSequence;
         }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
@@ -15,8 +14,6 @@ using UnityEditor.Timeline;
 namespace AltSalt.Maestro.Sequencing
 {
     [ExecuteInEditMode]
-    [RequireComponent(typeof(Sequence_SyncTimeline))]
-    [RequireComponent(typeof(Sequence_ProcessModify))]
     [RequireComponent(typeof(PlayableDirector))]
     [RequireComponent(typeof(TimelineInstanceConfig))]
     public class SequenceController : MonoBehaviour, IDynamicLayoutElement
@@ -123,10 +120,11 @@ namespace AltSalt.Maestro.Sequencing
         private bool audioMuted;
 
         [ShowInInspector]
+        [DisplayAsString]
         private float currentSpeed;
 
         [ShowInInspector]
-        private bool isAutoplaying;
+        private bool isForwardAutoplaying;
         
         public delegate void SequenceUpdatedHandler(object sender, Sequence updatedSequence);
 
@@ -145,7 +143,7 @@ namespace AltSalt.Maestro.Sequencing
         }
 
 #if UNITY_EDITOR
-        private void OnEnable()
+        private void Awake()
         {
             _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
             _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
@@ -170,7 +168,9 @@ namespace AltSalt.Maestro.Sequencing
             sequence.sequenceController = this;
             sequence.SetDefaults();
             
-            GetPlayableDirector();
+            if (playableDirector == null) {
+                playableDirector = gameObject.GetComponent<PlayableDirector>();
+            };
             if (playableDirector.playableAsset == null) {
                 playableDirector.playableAsset = sequence.sourcePlayable;
             }
@@ -178,120 +178,112 @@ namespace AltSalt.Maestro.Sequencing
             timelineInstanceConfig = gameObject.GetComponent<TimelineInstanceConfig>();
             timelineInstanceConfig.sequence = sequence;
             timelineInstanceConfig.timelineUpdated += OnTimelineUpdated;
-        }
-        
-        private void GetPlayableDirector()
-        {
-            if (playableDirector == null) {
-                playableDirector = gameObject.GetComponent<PlayableDirector>();
-            }
+            
+            playableDirector.Play();
+            SetSpeed(0);
         }
 
-        public void ActivateAutoplay()
+        public void ActivateForwardAutoplay(float targetSpeed)
         {
             if (audioMuted == true) {
                 EnableAudioSources();
             }
             
-            if (isAutoplaying == false ||
+            if (isForwardAutoplaying == false ||
                 rootPlayable.GetPlayState() != PlayState.Playing || rootPlayable.GetSpeed() < 1) {
-                isAutoplaying = true;
                 playableDirector.Play();
-                SetSpeed(1);
+                SetSpeed(targetSpeed);
+                isForwardAutoplaying = true;
             }
         }
         
-        public void DeactivateAutoplay()
-        {
-            if (audioMuted == false) {
-                MuteAudioSources();
-            }
-            isAutoplaying = false;
-            SetSpeed(0);
-        }
-        
-        public void ModifySequence(float timeModifier)
+        public void DeactivateForwardAutoplay()
         {
             if (audioMuted == false) {
                 MuteAudioSources();
             }
             
-            sequence.currentTime += timeModifier;
+            playableDirector.Play();
+            SetSpeed(0);
+            isForwardAutoplaying = false;
+        }
+        
+        public void OnTimelineUpdated(object sender, double currentTime)
+        {
+            if (isForwardAutoplaying == true) {
+                sequence.currentTime = currentTime;
+                OnSequenceUpdated();
+            }
+        }
+        
+        public void SetToBeginning(UnityEngine.Object caller)
+        {
+            SetSequenceTime(caller, 0);
+        }
 
+        public void SetToEnd(UnityEngine.Object caller)
+        {
+            SetSequenceTime(caller, (float)sequence.sourcePlayable.duration);
+        }
+        
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.4f, 1)]
+        public void SetSpeed(float targetSpeed)
+        {
+            currentSpeed = targetSpeed; // This value is for debugging purposes
+            if (rootPlayable.IsValid()) {
+                rootPlayable.SetSpeed(targetSpeed);
+            }
+        }
+        
+        public Sequence ModifySequenceTime(float timeModifier)
+        {
+            DeactivateForwardAutoplay();
+            
+            sequence.currentTime += timeModifier;
             RootConfig rootConfig = sequence.sequenceController.masterSequence.rootConfig;
 
             if (sequence.currentTime < 0) {
-                sequence.currentTime = 0;
-                sequence.sequenceController.RefreshPlayableDirector();
+                sequence.sequenceController.SetSequenceTime(this, 0);
                 sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                 rootConfig.joiner.ActivatePreviousSequence(sequence);
                 
             } else if (sequence.currentTime > sequence.sourcePlayable.duration) {
-                sequence.currentTime = sequence.sourcePlayable.duration;
-                sequence.sequenceController.RefreshPlayableDirector();
+                sequence.sequenceController.SetSequenceTime(this, (float)sequence.sourcePlayable.duration);
                 sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                 rootConfig.joiner.ActivateNextSequence(sequence);
                 
-            } else  {
-                sequence.sequenceController.RefreshPlayableDirector();
+            } else {
+                playableDirector.time = sequence.currentTime;
+                playableDirector.Evaluate();
                 sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject);
             }
             
-            SetSpeed(0);
-            playableDirector.Play();
             OnSequenceUpdated();
+            return sequence;
         }
 
-        public void OnTimelineUpdated(object sender, double currentTime)
+        public Sequence SetSequenceTime(UnityEngine.Object caller, float targetTime)
         {
-            if (isAutoplaying == true) {
-                sequence.currentTime = currentTime;
-                OnSequenceUpdated();
+            if (targetTime > sequence.sourcePlayable.duration) {
+                Debug.LogError($"Target time is greater than sequence {sequence.name} duration; unable to set", caller);
             }
+            
+            DeactivateForwardAutoplay();
+            
+            sequence.currentTime = targetTime;
+            playableDirector.time = sequence.currentTime;
+            playableDirector.Evaluate();
+                
+            OnSequenceUpdated();
+            return sequence;
         }
 
         private void OnSequenceUpdated()
         {
             _sequenceUpdated.Invoke(this, sequence);
-        }
-        
-        public void RefreshPlayableDirector()
-        {
-            
-            sequence.sequenceController.playableDirector.time = sequence.currentTime;
-            sequence.sequenceController.playableDirector.Evaluate();
-        }
-
-        public void ForceEvaluate()
-        {
-            sequence.sequenceController.playableDirector.time = sequence.currentTime;
-            sequence.sequenceController.playableDirector.Evaluate();
-        }
-
-        public void SetToBeginning()
-        {
-            sequence.currentTime = 0;
-            sequence.sequenceController.playableDirector.time = sequence.currentTime;
-            sequence.sequenceController.playableDirector.Evaluate();
-        }
-
-        public void SetToEnd()
-        {
-            sequence.currentTime = sequence.sourcePlayable.duration;
-            sequence.sequenceController.playableDirector.time = sequence.currentTime;
-            sequence.sequenceController.playableDirector.Evaluate();
-        }
-
-        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.4f, 1)]
-        public void SetSpeed(float targetSpeed)
-        {
-            currentSpeed = targetSpeed;
-            if (rootPlayable.IsValid()) {
-                rootPlayable.SetSpeed(targetSpeed);
-            }
         }
 
         public void EnableAudioSources()

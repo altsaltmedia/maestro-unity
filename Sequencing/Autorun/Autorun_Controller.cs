@@ -159,7 +159,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         private void OnSequenceUpdated(object sender, Sequence updatedSequence)
         {
-            autoplayer.RefreshAutoplay(updatedSequence);
+            autoplayer.RefreshAutoplayStatus(updatedSequence);
         }
 
 //#endif
