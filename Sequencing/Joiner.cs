@@ -100,7 +100,7 @@ namespace AltSalt.Maestro.Sequencing
                     previousSequence = sequence;
                     previousSequence.active = true;
                     previousSequence.sequenceController.gameObject.SetActive(true);
-                    previousSequence.sequenceController.SetToEnd(this);
+                    previousSequence.sequenceController.SetSequenceTime(this, (float)previousSequence.sourcePlayable.duration);
                     previousSequence.sequenceController.masterSequence.RefreshElapsedTime(previousSequence);
                     rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                     sourceSequence.sequenceController.gameObject.SetActive(false);

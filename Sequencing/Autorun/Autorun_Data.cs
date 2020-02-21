@@ -47,12 +47,12 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         }
 
         [ShowInInspector]
-        private bool _autoplayActive;
+        private bool _eligibleForAutoplay;
 
-        public bool autoplayActive
+        public bool eligibleForAutoplay
         {
-            get => _autoplayActive;
-            set => _autoplayActive = value;
+            get => _eligibleForAutoplay;
+            set => _eligibleForAutoplay = value;
         }
 
         [ShowInInspector]

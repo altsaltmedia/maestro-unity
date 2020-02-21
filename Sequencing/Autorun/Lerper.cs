@@ -7,16 +7,13 @@ using UnityEngine;
 namespace AltSalt.Maestro.Sequencing.Autorun
 {
     public class Lerper : Autorun_Module
-    {
-        
+    {        
         private float frameStepValue => autorunController.appSettings.GetFrameStepValue(this.gameObject, inputGroupKey);
 
         [SerializeField]
         private double _lerpThreshold = .03d;
 
-        private double lerpThreshold {
-            get => _lerpThreshold;
-        }
+        private double lerpThreshold => _lerpThreshold;
 
         private delegate Autorun_Data CoroutineCallback(Autorun_Controller autorunController, Autorun_Data autorunData, AutorunExtents extents);
 
@@ -47,7 +44,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     thresholdModifier *= -1d;
                 }
 
-                if (AutorunExtents.TimeWithinThresholdExclusive(autorunData.sequence.currentTime + thresholdModifier,
+                if (AutorunExtents.TimeWithinThresholdInclusive(autorunData.sequence.currentTime + thresholdModifier,
                         autorunData.autorunIntervals, out var currentInterval) == false) return autorunData;
 
                 autorunData.isLerping = true;

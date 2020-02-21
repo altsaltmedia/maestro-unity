@@ -71,6 +71,13 @@ namespace AltSalt.Maestro.Sequencing
 #endif
         }
 
+        /// <summary>
+        /// This is our sole entry point for configuring MasterSequences,
+        /// corresponding SequenceControllers, and input modules.
+        /// To make sure data is synced properly, children of the RootConfig
+        /// should not configure themselves on Awake(), OnEnable(), or Start()
+        /// — it should all be done through here.
+        /// </summary>
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.4f, 1)]
         public void Configure()
         {
@@ -79,7 +86,6 @@ namespace AltSalt.Maestro.Sequencing
                 masterSequences[i].Init();
             }
 
-            
             joiner.rootConfig = this;
             joiner.ConfigureData();
             

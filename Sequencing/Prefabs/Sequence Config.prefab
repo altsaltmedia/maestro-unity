@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 4381932292706670}
   - component: {fileID: -776454405983421783}
   - component: {fileID: 8562162275732644144}
-  - component: {fileID: 1384256474148654812}
-  - component: {fileID: 114615924759454770}
   - component: {fileID: 320944326161814764}
   m_Layer: 0
   m_Name: Sequence Config
@@ -50,7 +48,7 @@ MonoBehaviour:
   _sequence: {fileID: 0}
   _masterSequence: {fileID: 0}
   _playableDirector: {fileID: 320944326161814764}
-  _trackAssetConfig: {fileID: 8562162275732644144}
+  _timelineInstanceConfig: {fileID: 8562162275732644144}
   _enableDynamicElement:
     _isSystemReference: 0
     _referenceName: EnableDynamicElement
@@ -82,36 +80,6 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: MainInput
     _variable: {fileID: 11400000, guid: 5291240e14d3a457986c095206701a0c, type: 2}
---- !u!114 &1384256474148654812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1651845744537938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76fa58767a30481d8821769c6e2ea5ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sequence: {fileID: 0}
---- !u!114 &114615924759454770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1651845744537938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75f341101880147d780c70b58b68d843, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _appSettings:
-    _isSystemReference: 0
-    _referenceName: AppSettings
-    _variable: {fileID: 0}
-  _sequence: {fileID: 0}
 --- !u!320 &320944326161814764
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -124,7 +92,7 @@ PlayableDirector:
   m_PlayableAsset: {fileID: 0}
   m_InitialState: 0
   m_WrapMode: 0
-  m_DirectorUpdateMode: 1
+  m_DirectorUpdateMode: 0
   m_InitialTime: 0
   m_SceneBindings: []
   m_ExposedReferences:

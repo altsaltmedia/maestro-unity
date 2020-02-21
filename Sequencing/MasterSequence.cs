@@ -100,6 +100,15 @@ namespace AltSalt.Maestro.Sequencing
             duration = masterTimeDataList[masterTimeDataList.Count - 1].masterTimeEnd;
         }
 
+        /// <summary>
+        /// Simple modification requests will simply send details to update the sequence,
+        /// then update that sequence manually every frame. 
+        /// </summary>
+        /// <param name="targetSequence"></param>
+        /// <param name="requestPriority"></param>
+        /// <param name="moduleName"></param>
+        /// <param name="timeModifier"></param>
+        /// <returns></returns>
         public Sequence RequestModifySequenceTime(Sequence targetSequence, int requestPriority, string moduleName, float timeModifier)
         {
             if (rootConfig.appUtilsRequested == true) {
@@ -118,6 +127,16 @@ namespace AltSalt.Maestro.Sequencing
             return targetSequence;
         }
         
+        /// <summary>
+        /// Autoplay modules will want to activate autoplay once, and then cache the interval in which
+        /// it was activated so it can halt when the end of that interval is reached.
+        /// </summary>
+        /// <param name="targetSequence"></param>
+        /// <param name="requestPriority"></param>
+        /// <param name="moduleName"></param>
+        /// <param name="targetSpeed"></param>
+        /// <param name="requestSuccessful"></param>
+        /// <returns></returns>
         public Sequence RequestActivateForwardAutoplay(Sequence targetSequence, int requestPriority, string moduleName, float targetSpeed, out bool requestSuccessful)
         {
             requestSuccessful = false;
@@ -132,13 +151,20 @@ namespace AltSalt.Maestro.Sequencing
             {
                 activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
                 
-                sequenceController.ActivateForwardAutoplay(targetSpeed);
+                sequenceController.ActivateForwardAutoplayState(targetSpeed);
                 requestSuccessful = true;
             }
 
             return targetSequence;
         }
         
+        /// <summary>
+        /// Once the end of an autoplay interval is reached,
+        /// we'll want to revert to manual update status.
+        /// </summary>
+        /// <param name="targetSequence"></param>
+        /// <param name="requestPriority"></param>
+        /// <param name="moduleName"></param>
         public void RequestDeactivateForwardAutoplay(Sequence targetSequence, int requestPriority, string moduleName)
         {
             if (rootConfig.appUtilsRequested == true) {
@@ -149,12 +175,20 @@ namespace AltSalt.Maestro.Sequencing
 
             if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
             {
-                activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
-                
-                sequenceController.DeactivateForwardAutoplay();
+                sequenceController.ActivateManualUpdateState();
             }
         }
 
+        /// <summary>
+        /// We want certain modules to take precedence over others. For example,
+        /// the minute a swipe is initiated, we want the swipe to take priority no matter what;
+        /// and for autoplaying, we want autoplayers to override momentum the moment an autoplay
+        /// interval is reached. 
+        /// </summary>
+        /// <param name="activeInputModule"></param>
+        /// <param name="moduleName"></param>
+        /// <param name="priority"></param>
+        /// <returns></returns>
         private static ActiveInputModuleData LockInputModule(ActiveInputModuleData activeInputModule, string moduleName, int priority)
         {
             activeInputModule.name = moduleName;
@@ -163,18 +197,28 @@ namespace AltSalt.Maestro.Sequencing
             return activeInputModule;
         }
 
+        /// <summary>
+        /// Note: Not every module should unlock itself when completed. For example,
+        /// to prevent momentum from taking over the moment an autorun interval is complete,
+        /// we leave the autorun modules locked until a swipe or other high-priority module
+        /// takes over.
+        /// </summary>
+        /// <param name="inputModuleObject"></param>
         public void UnlockInputModule(GameObject inputModuleObject)
         {
-            if (activeInputModule.name != inputModuleObject.name) return;
-            
-            activeInputModule.name = string.Empty;
-            activeInputModule.priority = 0;
-
-            for (int i = 0; i < sequenceControllers.Count; i++) {
-                sequenceControllers[i].SetSpeed(0);
+            if (activeInputModule.name == inputModuleObject.name) {
+                activeInputModule.name = string.Empty;
+                activeInputModule.priority = 0;
             }
         }
 
+        /// <summary>
+        /// We need to refresh elapsed time whenever a child sequence is modified
+        /// in order to make sure the scrubber and other navigation modules
+        /// can initialize with the correct time data
+        /// </summary>
+        /// <param name="modifiedSequence"></param>
+        /// <returns></returns>
         public MasterSequence RefreshElapsedTime(Sequence modifiedSequence)
         {
             MasterTimeData sequenceTimeData = this.masterTimeDataList.Find(x => x.sequence == modifiedSequence);
@@ -186,27 +230,31 @@ namespace AltSalt.Maestro.Sequencing
             return this;
         }
 
+        /// <summary>
+        /// We need to know if the MasterSequence is currently active -
+        /// the AxisMonitor uses that data to make sure we're not inadvertently
+        /// activating / deactivating playable directors and sequences the user
+        /// hasn't reached yet
+        /// </summary>
         public void RefreshHasActiveSequence()
         {
-            if (SequenceActive(sequenceControllers) == true) {
-                hasActiveSequence = true;
-            }
-            else {
-                hasActiveSequence = false;
-            }
-        }
-
-        private static bool SequenceActive(List<SequenceController> sequenceConfigs)
-        {
-            for (int i = 0; i < sequenceConfigs.Count; i++) {
-                if (sequenceConfigs[i].sequence.active == true) {
-                    return true;
+            for (int i = 0; i < sequenceControllers.Count; i++) {
+                if (sequenceControllers[i].sequence.active == true) {
+                    this.hasActiveSequence = true;
+                    return;
                 }
             }
-
-            return false;
+            this.hasActiveSequence = false;
         }
 
+        /// <summary>
+        /// For now, modules setting elapsed time directly on the MasterSequence
+        /// (scrubber and bookmarker) bypass the normal module registration
+        /// and priority comparison, as it's not currently needed; we can revise this
+        /// in the future if need be.
+        /// </summary>
+        /// <param name="caller"></param>
+        /// <param name="targetTime"></param>
         [Button(ButtonSizes.Large)]
         public void SetElapsedTime(GameObject caller, double targetTime)
         {
@@ -215,6 +263,21 @@ namespace AltSalt.Maestro.Sequencing
             rootConfig.sequenceModified.RaiseEvent(this.gameObject);
         }
         
+        /// <summary>
+        /// Making sure that events and animations are executed properly across timelines
+        /// requires an elaborate setup. If we want to jump from point 0 in timeline A to
+        /// point 50 in timeline Z for example, we need to make sure we execute all intervening
+        /// timelines in the correct order to ensure we arrive at the correct state. Not only that,
+        /// we need to make sure that it works both going forward *and* backward.
+        ///
+        /// This method ensures that we do just that, making sure that we evaluate and
+        /// disable playable directors in the correct order to ensure smooth evaluation, namely
+        /// via scrubbing and bookmarking, when traversing through a MasterSequence's data. 
+        /// </summary>
+        /// <param name="caller"></param>
+        /// <param name="targetTime"></param>
+        /// <param name="sequenceData"></param>
+        /// <returns></returns>
         private static Sequence ApplyElapsedTimeToSequences(GameObject caller, double targetTime, List<MasterTimeData> sequenceData)
         {
             Sequence targetSequence = null;
@@ -231,7 +294,8 @@ namespace AltSalt.Maestro.Sequencing
                     targetSequence.active = true;
                     targetSequence.sequenceController.gameObject.SetActive(true);
                     
-                    // If applicable, evaluate all of the preceding sequences at their last frame
+                    // If applicable, evaluate all of the preceding sequences,
+                    // from first to last, at their last frame
                     if (targetID > 0) {
                         for (int j = 0; j < sequenceData.Count; j++) {
                             if (j < targetID) {
@@ -241,7 +305,8 @@ namespace AltSalt.Maestro.Sequencing
                         }
                     }
 
-                    // If applicable, evaluate all of the following sequences at their first frame
+                    // If applicable, evaluate all of the following sequences,
+                    // from last to first, at their first frame
                     if (targetID < sequenceData.Count - 1) {
                         for (int j = sequenceData.Count - 1; j >= 0; j--) {
                             if (j > targetID) {
@@ -278,29 +343,46 @@ namespace AltSalt.Maestro.Sequencing
             return targetSequence;
         }
 
-        private static List<MasterTimeData> GenerateSequenceData(List<SequenceController> sourceSequenceConfigs)
+        /// <summary>
+        /// The MasterSequence iterates through its child sequences to convert their local
+        /// time into global time, as we need global times to ensure scrubbing, bookmarking,
+        /// and axis monitoring can operate consistently across timelines.
+        /// </summary>
+        /// <param name="sourceSequenceControllers"></param>
+        /// <returns></returns>
+        private static List<MasterTimeData> GenerateSequenceData(List<SequenceController> sourceSequenceControllers)
         {
             List<MasterTimeData> sequenceData = new List<MasterTimeData>();
-            for (int i = 0; i < sourceSequenceConfigs.Count; i++)
+            for (int i = 0; i < sourceSequenceControllers.Count; i++)
             {
                 double masterTimeStart = 0d;
                 double masterTimeEnd = 0d;
 
                 if (i == 0)  {
-                    masterTimeEnd = sourceSequenceConfigs[i].sequence.sourcePlayable.duration;
+                    masterTimeEnd = sourceSequenceControllers[i].sequence.sourcePlayable.duration;
                 } else
                 {
                     masterTimeStart = sequenceData[i - 1].masterTimeEnd;
-                    masterTimeEnd = sourceSequenceConfigs[i].sequence.sourcePlayable.duration + sequenceData[i - 1].masterTimeEnd;
+                    masterTimeEnd = sourceSequenceControllers[i].sequence.sourcePlayable.duration + sequenceData[i - 1].masterTimeEnd;
                 }
 
-                MasterTimeData newSequenceData = new MasterTimeData(sourceSequenceConfigs[i].sequence, masterTimeStart, masterTimeEnd);
+                MasterTimeData newSequenceData = new MasterTimeData(sourceSequenceControllers[i].sequence, masterTimeStart, masterTimeEnd);
                 sequenceData.Add(newSequenceData);
             }
 
             return sequenceData;
         }
 
+        /// <summary>
+        /// Modules need to be able to convert local sequence time to
+        /// global time when configuring themselves so they can create the correct
+        /// intervals to use when evaluating user input 
+        /// </summary>
+        /// <param name="masterSequence"></param>
+        /// <param name="sourceSequence"></param>
+        /// <param name="localTime"></param>
+        /// <returns></returns>
+        /// <exception cref="SystemException"></exception>
         public static double LocalToMasterTime(MasterSequence masterSequence, Sequence sourceSequence, double localTime)
         {
             if (masterSequence.masterTimeDataList.Count < 1) {

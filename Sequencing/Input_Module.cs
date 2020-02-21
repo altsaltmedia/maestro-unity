@@ -67,7 +67,7 @@ namespace AltSalt.Maestro.Sequencing
             moduleActive = false;
         }
 
-        public void TriggerInputActionComplete()
+        public virtual void TriggerInputActionComplete()
         {
             // ComplexPayload complexPayload = ComplexPayload.CreateInstance();
             // complexPayload.Set(DataType.stringType, this.gameObject.name);

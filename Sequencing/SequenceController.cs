@@ -107,7 +107,7 @@ namespace AltSalt.Maestro.Sequencing
         {
             get
             {
-                if (_rootPlayable.Equals(default) && playableDirector.playableGraph.IsValid()) {
+                if (playableDirector.playableGraph.IsValid()) {
                     _rootPlayable = playableDirector.playableGraph.GetRootPlayable(0);
                 }
 
@@ -122,10 +122,18 @@ namespace AltSalt.Maestro.Sequencing
         [ShowInInspector]
         [DisplayAsString]
         private float currentSpeed;
+        
+        private enum SequenceUpdateState { ForwardAutoplay, ManualUpdate }
 
         [ShowInInspector]
-        private bool isForwardAutoplaying;
-        
+        private SequenceUpdateState _sequenceUpdateState;
+
+        private SequenceUpdateState sequenceUpdateState
+        {
+            get => _sequenceUpdateState;
+            set => _sequenceUpdateState = value;
+        }
+
         public delegate void SequenceUpdatedHandler(object sender, Sequence updatedSequence);
 
         private event SequenceUpdatedHandler _sequenceUpdated = (sender, updatedSequence) => { };
@@ -157,11 +165,14 @@ namespace AltSalt.Maestro.Sequencing
 //        }
     
 #endif
-
-        // Since scriptable objects by default cannot serialize references to
-        // game objects and Monobehaviours, set all of the sequence dependencies
-        // here. This also allows any script to access related components directly
-        // via the sequence scriptable object.
+        
+        /// <summary>
+        /// Since scriptable objects by default cannot serialize references to
+        /// game objects and Monobehaviours, we set the sequence controller
+        /// here. This also allows any script to these control functions directly
+        /// via the sequence scriptable object. 
+        /// </summary>
+        /// <param name="masterSequence"></param>
         public void Init(MasterSequence masterSequence)
         {
             this.masterSequence = masterSequence;
@@ -178,69 +189,78 @@ namespace AltSalt.Maestro.Sequencing
             timelineInstanceConfig = gameObject.GetComponent<TimelineInstanceConfig>();
             timelineInstanceConfig.sequence = sequence;
             timelineInstanceConfig.timelineUpdated += OnTimelineUpdated;
-            
-            playableDirector.Play();
-            SetSpeed(0);
+        }
+        
+        /// <summary>
+        /// If the timeline is autoplaying, then we need to refresh our sequence
+        /// state on every frame to sync with our custom configuration
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="currentTime"></param>
+        public void OnTimelineUpdated(object sender, double currentTime)
+        {
+            if (sequenceUpdateState == SequenceUpdateState.ForwardAutoplay) {
+                sequence.currentTime = currentTime;
+                sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
+                OnSequenceUpdated();
+                
+                RootConfig rootConfig = sequence.sequenceController.masterSequence.rootConfig;
+                
+                if (sequence.currentTime <= 0) {
+                    rootConfig.joiner.ActivatePreviousSequence(sequence);
+                } else if (sequence.currentTime >= sequence.sourcePlayable.duration) {
+                    rootConfig.joiner.ActivateNextSequence(sequence);
+                }
+            }
         }
 
-        public void ActivateForwardAutoplay(float targetSpeed)
+        private void OnSequenceUpdated()
+        {
+            _sequenceUpdated.Invoke(this, sequence);
+        }
+
+        public void ActivateForwardAutoplayState(float targetSpeed)
         {
             if (audioMuted == true) {
                 EnableAudioSources();
             }
             
-            if (isForwardAutoplaying == false ||
+            if (sequenceUpdateState == SequenceUpdateState.ManualUpdate ||
                 rootPlayable.GetPlayState() != PlayState.Playing || rootPlayable.GetSpeed() < 1) {
                 playableDirector.Play();
                 SetSpeed(targetSpeed);
-                isForwardAutoplaying = true;
+                sequenceUpdateState = SequenceUpdateState.ForwardAutoplay;
             }
         }
         
-        public void DeactivateForwardAutoplay()
+        public void ActivateManualUpdateState()
         {
             if (audioMuted == false) {
                 MuteAudioSources();
             }
             
+            // We must be playing in manual update state in order
+            // for timeline to evaluate animation tracks
             playableDirector.Play();
             SetSpeed(0);
-            isForwardAutoplaying = false;
-        }
-        
-        public void OnTimelineUpdated(object sender, double currentTime)
-        {
-            if (isForwardAutoplaying == true) {
-                sequence.currentTime = currentTime;
-                OnSequenceUpdated();
-            }
-        }
-        
-        public void SetToBeginning(UnityEngine.Object caller)
-        {
-            SetSequenceTime(caller, 0);
-        }
-
-        public void SetToEnd(UnityEngine.Object caller)
-        {
-            SetSequenceTime(caller, (float)sequence.sourcePlayable.duration);
+            sequenceUpdateState = SequenceUpdateState.ManualUpdate;
         }
         
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.4f, 1)]
         public void SetSpeed(float targetSpeed)
         {
             currentSpeed = targetSpeed; // This value is for debugging purposes
-            if (rootPlayable.IsValid()) {
+            if (rootPlayable.IsValid() == true) {
                 rootPlayable.SetSpeed(targetSpeed);
             }
         }
         
         public Sequence ModifySequenceTime(float timeModifier)
         {
-            DeactivateForwardAutoplay();
-            
             sequence.currentTime += timeModifier;
             RootConfig rootConfig = sequence.sequenceController.masterSequence.rootConfig;
+            
+            ActivateManualUpdateState();
 
             if (sequence.currentTime < 0) {
                 sequence.sequenceController.SetSequenceTime(this, 0);
@@ -267,23 +287,15 @@ namespace AltSalt.Maestro.Sequencing
 
         public Sequence SetSequenceTime(UnityEngine.Object caller, float targetTime)
         {
-            if (targetTime > sequence.sourcePlayable.duration) {
-                Debug.LogError($"Target time is greater than sequence {sequence.name} duration; unable to set", caller);
-            }
-            
-            DeactivateForwardAutoplay();
+            ActivateManualUpdateState();
             
             sequence.currentTime = targetTime;
             playableDirector.time = sequence.currentTime;
             playableDirector.Evaluate();
-                
+            sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
+             
             OnSequenceUpdated();
             return sequence;
-        }
-
-        private void OnSequenceUpdated()
-        {
-            _sequenceUpdated.Invoke(this, sequence);
         }
 
         public void EnableAudioSources()

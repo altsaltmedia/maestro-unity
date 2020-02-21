@@ -18,7 +18,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             }
             set => _moduleActive = value;
         }
-
+        
         private float frameStepValue => autorunController.appSettings.GetFrameStepValue(this.gameObject, inputGroupKey);
 
         [SerializeField]
@@ -47,7 +47,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             MasterSequence targetMasterSequence = targetSequence.sequenceController.masterSequence;
 
             // Autoplay may be overriden by game conditions; if so, deactivate
-            if (targetSequence.active == false || autorunData.autoplayActive == false || autorunData.isLerping == true) {
+            if (targetSequence.active == false || autorunData.eligibleForAutoplay == false || autorunData.isLerping == true) {
                 autorunData.backwardUpdateActive = false;
                 autorunData.forwardUpdateActive = false;
                 targetMasterSequence.RequestDeactivateForwardAutoplay(targetSequence, this.priority, this.gameObject.name);
@@ -101,7 +101,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             MasterSequence targetMasterSequence = autorunData.sequence.sequenceController.masterSequence;
             Sequence targetSequence = autorunData.sequence; 
             
-            if (AutorunExtents.TimeWithinThresholdExclusive(targetSequence.currentTime,
+            if (AutorunExtents.TimeWithinThresholdInclusive(targetSequence.currentTime,
                     autorunData.autorunIntervals, out var currentInterval) == true) {
                 
                 targetMasterSequence.RequestActivateForwardAutoplay(targetSequence,
@@ -152,11 +152,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// <returns></returns>
         private Autorun_Data AttemptReverseAutoplay(Autorun_Data autorunData)
         {
-            if (autorunData.autoplayActive == false || autorunData.isLerping == true || autorunData.sequence.active == false) {
+            if (autorunData.eligibleForAutoplay == false || autorunData.isLerping == true || autorunData.sequence.active == false) {
                 return autorunData;
             }
 
-            if (AutorunExtents.TimeWithinThresholdExclusive(autorunData.sequence.currentTime,
+            if (AutorunExtents.TimeWithinThresholdInclusive(autorunData.sequence.currentTime,
                     autorunData.autorunIntervals, out var currentInterval) == false) {
                 return autorunData;
             }
@@ -182,7 +182,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// Calculates a modifier based on our current direction.
         /// Importantly, when updating a sequence timeline manually,
         /// the final few frames are abrupt unless we perform an ease,
-        /// so this calculates an easy based a passed-in easing utility.
+        /// so this smooths out that motion based a passed-in easing utility.
         /// Note that we only currently use this for reverse autoplay.
         /// </summary>
         /// <param name="targetSequence"></param>
@@ -238,25 +238,30 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
             return false;
         }
-
-        public void ActivateAutoplay()
+        
+        /// <summary>
+        /// By default, we enable autoplay when certain conditions are met -
+        /// i.e., a swipe a has completed, autoplay has been
+        /// explicitly requested, or a sequence has been modified,
+        /// either with our without explicit input (an example of the
+        /// latter: a joiner activating a preceding or following sequence)
+        /// </summary>
+        public void ActivateEligibleForAutoplay()
         {
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
-                
-                if (autorunController.autorunData[q].sequence.active == true) {
-                    autorunController.autorunData[q].autoplayActive = true;
-                }
+                autorunController.autorunData[q].eligibleForAutoplay = true;
             }
         }
 
-        public void DeactivateAutoplay()
+        /// <summary>
+        /// By default, we disable autoplay when app utils get requested,
+        /// or a swipe begins.
+        /// </summary>
+        public void DeactivateEligibleForAutoplay()
         {
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
-                
-                if (autorunController.autorunData[q].sequence.active == true) {
-                    autorunController.autorunData[q].autoplayActive = false;
-                    autorunController.autorunData[q].easingUtility.Reset();
-                }
+                autorunController.autorunData[q].eligibleForAutoplay = false;
+                autorunController.autorunData[q].easingUtility.Reset();
             }
         }
 
