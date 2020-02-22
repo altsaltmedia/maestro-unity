@@ -319,7 +319,11 @@ namespace AltSalt.Maestro
         
         public FloatReference forkTransitionSpread => _forkTransitionSpread;
 
-        
+        [SerializeField, Required]
+        private FloatReference _lerpSpeed = new FloatReference();
+                
+        public FloatReference lerpSpeed => _lerpSpeed; 
+       
         [SerializeField, Required]
         private FloatReference _frameStepValue = new FloatReference();
         
@@ -400,6 +404,7 @@ namespace AltSalt.Maestro
             (flickThreshold.GetVariable() as FloatVariable).defaultValue = 2500f;
             (axisTransitionSpread.GetVariable() as FloatVariable).defaultValue = .5f;
             (forkTransitionSpread.GetVariable() as FloatVariable).defaultValue = 2f;
+            (lerpSpeed.GetVariable() as FloatVariable).defaultValue = 1f;
             (frameStepValue.GetVariable() as FloatVariable).defaultValue = .02f;
 
             // Every scene should set the following

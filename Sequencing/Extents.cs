@@ -118,6 +118,12 @@ namespace AltSalt.Maestro.Sequencing
 
         public static bool TimeBeyondThresholdInclusive(double sourceTime, Extents interval)
         {
+            // Special case for 0 - we don't want to count beginnings
+            // of sequences as beyond the threshold bounds
+            if (sourceTime == 0 && interval.startTime == 0) {
+                return false;
+            }
+            
             if (Mathf.Approximately((float) sourceTime, (float) interval.endTime)
                 || sourceTime > interval.endTime
                 || Mathf.Approximately((float) sourceTime, (float) interval.startTime)

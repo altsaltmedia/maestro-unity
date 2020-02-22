@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace AltSalt.Maestro.Sequencing.Autorun
 {
@@ -21,6 +22,9 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         
         private float frameStepValue => autorunController.appSettings.GetFrameStepValue(this.gameObject, inputGroupKey);
 
+        private bool bookmarkLoadingCompleted =>
+            autorunController.appSettings.GetBookmarkLoadingCompleted(this.gameObject, inputGroupKey);
+
         [SerializeField]
         [Range(0f, 1f)]
         private float _autoplayEaseThreshold = 0.25f;
@@ -36,7 +40,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// <param name="targetSequence"></param>
         public void RefreshAutoplayStatus(Sequence targetSequence)
         {
-            if (moduleActive == false || appUtilsRequested == true) {
+            if (moduleActive == false || appUtilsRequested == true || bookmarkLoadingCompleted == false) {
                 return;
             }
             
@@ -45,6 +49,13 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             if (autorunData == null) return;
 
             MasterSequence targetMasterSequence = targetSequence.sequenceController.masterSequence;
+            
+            // Handling to activate the next timeline if we've reached the end of the current sequence
+            if (autorunData.forwardUpdateActive == true && autorunData.loop == false && autorunController.isReversing == false &&
+                
+                targetSequence.currentTime >= targetSequence.sourcePlayable.duration) {
+                autorunController.rootConfig.joiner.ActivateNextSequence(targetSequence);
+            }
 
             // Autoplay may be overriden by game conditions; if so, deactivate
             if (targetSequence.active == false || autorunData.eligibleForAutoplay == false || autorunData.isLerping == true) {
@@ -252,6 +263,17 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 autorunController.autorunData[q].eligibleForAutoplay = true;
             }
         }
+        
+        public void ActivateEligibleForAutoplayAndRefresh()
+        {
+            for (int q = 0; q < autorunController.autorunData.Count; q++) {
+                autorunController.autorunData[q].eligibleForAutoplay = true;
+                Sequence sequence = autorunController.autorunData[q].sequence;
+                if (sequence.active == true) {
+                    RefreshAutoplayStatus(sequence);
+                }
+            }
+        }
 
         /// <summary>
         /// By default, we disable autoplay when app utils get requested,
@@ -270,6 +292,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             Autorun_Data autorunData = autorunController.autorunData.Find(autorunMatchData => autorunMatchData.sequence == targetSequence);
             if (autorunData != null) {
                 autorunData.loop = true;
+                autorunData.sequence.sequenceController.playableDirector.extrapolationMode = DirectorWrapMode.Loop;
             }
             else {
                 Debug.Log("Autoplayer does not contain data for target sequence.");
@@ -281,6 +304,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             Autorun_Data autorunData = autorunController.autorunData.Find(autorunMatchData => autorunMatchData.sequence == targetSequence);
             if (autorunData != null) {
                 autorunData.loop = false;
+                autorunData.sequence.sequenceController.playableDirector.extrapolationMode = DirectorWrapMode.Hold;
             }
             else {
                 Debug.Log("Autoplayer does not contain data for target sequence.");

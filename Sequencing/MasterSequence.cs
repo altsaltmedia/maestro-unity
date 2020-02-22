@@ -288,7 +288,8 @@ namespace AltSalt.Maestro.Sequencing
                 // from beginning to end, as soon as our target time
                 // does not exceed the end time of a sequence, that
                 // means we've found the sequence we'll want to target
-                if (targetTime < sequenceData[targetID].masterTimeEnd) {
+                if (targetTime < sequenceData[targetID].masterTimeEnd ||
+                    Mathf.Approximately((float)targetTime, (float)sequenceData[targetID].masterTimeEnd)) {
 
                     targetSequence = sequenceData[targetID].sequence;
                     targetSequence.active = true;

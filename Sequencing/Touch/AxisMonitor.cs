@@ -217,6 +217,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
         
         public void RefreshAxes()
         {
+            if (Application.isPlaying == false) return;
+            
             if (moduleActive == false) {
                 return;
             }
@@ -241,6 +243,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
 
         public void CallResetBranchStates()
         {
+            if (Application.isPlaying == false) return;
+            
             if (moduleActive == false) {
                 return;
             }

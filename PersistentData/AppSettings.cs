@@ -760,6 +760,14 @@ namespace AltSalt.Maestro
         }
 
         
+        // Lerp Speed
+        
+        public float GetLerpSpeed(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).lerpSpeed.GetValue();
+        }
+        
+        
         // Frame Step Value
         
         public float GetFrameStepValue(Object callingObject, InputGroupKey inputGroupKey)

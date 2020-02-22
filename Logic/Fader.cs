@@ -239,13 +239,11 @@ namespace AltSalt.Maestro.Logic
 #elif UNITY_ANDROID
             Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.Small);
 #endif
-            Handheld.StartActivityIndicator();
             yield return new WaitForSeconds(0);
         }
         
         private IEnumerator HideActivityIndicator()
         {
-            Handheld.StopActivityIndicator();
 // #if UNITY_IPHONE
 //             Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.DontShow);
 // #elif UNITY_ANDROID

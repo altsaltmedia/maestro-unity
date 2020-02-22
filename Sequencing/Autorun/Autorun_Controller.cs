@@ -160,6 +160,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         private void OnSequenceUpdated(object sender, Sequence updatedSequence)
         {
             autoplayer.RefreshAutoplayStatus(updatedSequence);
+            lerper.RefreshLerpStatus(updatedSequence);
         }
 
 //#endif

@@ -103,7 +103,12 @@ namespace AltSalt.Maestro.Sequencing
                     previousSequence.sequenceController.SetSequenceTime(this, (float)previousSequence.sourcePlayable.duration);
                     previousSequence.sequenceController.masterSequence.RefreshElapsedTime(previousSequence);
                     rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                    sourceSequence.sequenceController.gameObject.SetActive(false);
+                    
+                    // In some cases, like looping, we don't
+                    // want to deactivate the playable director
+                    if (previousSequence != sourceSequence) {
+                        sourceSequence.sequenceController.gameObject.SetActive(false);
+                    }
                 }
                 else if (sequenceSettings.previousDestination is Fork fork) {
                     if (fork.active == false || fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
@@ -122,7 +127,10 @@ namespace AltSalt.Maestro.Sequencing
                             previousSequence.sequenceController.SetSequenceTime(this, (float) targetTime);
                             previousSequence.sequenceController.masterSequence.RefreshElapsedTime(previousSequence);
                             rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                            sourceSequence.sequenceController.gameObject.SetActive(false);
+                            
+                            if (previousSequence != sourceSequence) {
+                                sourceSequence.sequenceController.gameObject.SetActive(false);
+                            }
                         }
                     }
                 }
@@ -151,7 +159,12 @@ namespace AltSalt.Maestro.Sequencing
                     nextSequence.sequenceController.SetSequenceTime(this, 0);
                     nextSequence.sequenceController.masterSequence.RefreshElapsedTime(nextSequence);
                     rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                    sourceSequence.sequenceController.gameObject.SetActive(false);
+                    
+                    // In some cases, namely looping, we don't
+                    // want to deactivate the playable director
+                    if (nextSequence != sourceSequence) {
+                        sourceSequence.sequenceController.gameObject.SetActive(false);
+                    }
                 }
                 else if (sequenceSettings.nextDestination is Fork fork) {
                     if (fork.active == false || fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
@@ -170,7 +183,10 @@ namespace AltSalt.Maestro.Sequencing
                             nextSequence.sequenceController.SetSequenceTime(this, (float)targetTime);
                             nextSequence.sequenceController.masterSequence.RefreshElapsedTime(nextSequence);
                             rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                            sourceSequence.sequenceController.gameObject.SetActive(false);
+                            
+                            if (nextSequence != sourceSequence) {
+                                sourceSequence.sequenceController.gameObject.SetActive(false);
+                            }
                         }    
                     }
                 }

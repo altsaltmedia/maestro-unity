@@ -18,6 +18,7 @@ namespace AltSalt.Maestro.Sequencing
     [RequireComponent(typeof(TimelineInstanceConfig))]
     public class SequenceController : MonoBehaviour, IDynamicLayoutElement
     {
+        
         [Required]
         [SerializeField]
         private Sequence _sequence;
@@ -126,7 +127,7 @@ namespace AltSalt.Maestro.Sequencing
         private enum SequenceUpdateState { ForwardAutoplay, ManualUpdate }
 
         [ShowInInspector]
-        private SequenceUpdateState _sequenceUpdateState;
+        private SequenceUpdateState _sequenceUpdateState = SequenceUpdateState.ManualUpdate;
 
         private SequenceUpdateState sequenceUpdateState
         {
@@ -199,23 +200,19 @@ namespace AltSalt.Maestro.Sequencing
         /// <param name="currentTime"></param>
         public void OnTimelineUpdated(object sender, double currentTime)
         {
+            if (Application.isPlaying == false) return;
+            
             if (sequenceUpdateState == SequenceUpdateState.ForwardAutoplay) {
                 sequence.currentTime = currentTime;
                 sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
                 OnSequenceUpdated();
-                
-                RootConfig rootConfig = sequence.sequenceController.masterSequence.rootConfig;
-                
-                if (sequence.currentTime <= 0) {
-                    rootConfig.joiner.ActivatePreviousSequence(sequence);
-                } else if (sequence.currentTime >= sequence.sourcePlayable.duration) {
-                    rootConfig.joiner.ActivateNextSequence(sequence);
-                }
             }
         }
 
         private void OnSequenceUpdated()
         {
+            if (Application.isPlaying == false) return;
+            
             _sequenceUpdated.Invoke(this, sequence);
         }
 
@@ -301,18 +298,19 @@ namespace AltSalt.Maestro.Sequencing
         public void EnableAudioSources()
         {
             audioMuted = false;
+            
             var timelineAsset = playableDirector.playableAsset as TimelineAsset;
-
+            
             foreach (var track in timelineAsset.GetOutputTracks()) {
                 
                 if (track is AudioTrack audioTrack) {
-
+            
                     foreach (var playableBinding in audioTrack.outputs) {
                         
                         Object objectBinding = playableDirector.GetGenericBinding(playableBinding.sourceObject);
-
+            
                         if (objectBinding is AudioSource audioSource) {
-                            audioSource.volume = 1;
+                            audioSource.mute = false;
                         }
                         
                     }
@@ -323,18 +321,19 @@ namespace AltSalt.Maestro.Sequencing
         public void MuteAudioSources()
         {
             audioMuted = true;
+            
             var timelineAsset = playableDirector.playableAsset as TimelineAsset;
-
+            
             foreach (var track in timelineAsset.GetOutputTracks()) {
                 
                 if (track is AudioTrack audioTrack) {
-
+            
                     foreach (var playableBinding in audioTrack.outputs) {
                         
                         Object objectBinding = playableDirector.GetGenericBinding(playableBinding.sourceObject);
-
+            
                         if (objectBinding is AudioSource audioSource) {
-                            audioSource.volume = 0;
+                            audioSource.mute = true;
                         }
                     }
                 }
@@ -360,7 +359,7 @@ namespace AltSalt.Maestro.Sequencing
             sequence.sequenceController.playableDirector.Evaluate();
 #endif
         }
-        
+
         private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);
