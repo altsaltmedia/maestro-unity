@@ -6,10 +6,14 @@ using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Layout
 {
-    
     [ExecuteInEditMode]
     public class MeshRendererUpdater : MonoBehaviour
     {
+        [SerializeField]
+        private bool _refreshRendererOnUpdate = true;
+
+        private bool refreshRendererOnUpdate => _refreshRendererOnUpdate;
+
         [SerializeField]
         [FormerlySerializedAs("meshRenderers")]
         protected List<MeshRenderer> _meshRenderers = new List<MeshRenderer>();
@@ -29,24 +33,40 @@ namespace AltSalt.Maestro.Layout
 
         private List<TargetMaterialAttribute> targetMaterialAttributes => _targetMaterialAttributes;
 
-        protected void Start()
+        protected void Awake()
         {
             StoreRenderer();
             CreateMaterials();
         }
 
-#if UNITY_EDITOR
-        private void OnGUI()
-        {
-            RefreshRenderer();
-        }
-#endif
-
         private void Update()
         {
-            RefreshRenderer();
+            if (refreshRendererOnUpdate == true) {
+                RefreshRenderer();
+            }
         }
 
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
+        protected void StoreRenderer()
+        {
+            if (GetComponent<MeshRenderer>() != null) {
+                meshRenderers[0] = GetComponent<MeshRenderer>();
+            }
+        }
+
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
+        private void CreateMaterials()
+        {
+            for (int q = 0; q < meshRenderers.Count; q++) {
+                while (materialInstances.Count < meshRenderers.Count) {
+                    materialInstances.Add(null);
+                }
+                materialInstances[q] = new Material(meshRenderers[q].sharedMaterial);
+                meshRenderers[q].sharedMaterial = materialInstances[q];
+            }
+        }
+        
+        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         private void RefreshRenderer()
         {
             if(meshRenderers.Count < 1) {
@@ -67,33 +87,7 @@ namespace AltSalt.Maestro.Layout
         }
 
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
-        [InfoBox("Gets the current game object's mesh renderer, then creates and assigns a duplicate material.")]
-        [SerializeField]
-        protected void StoreRenderer()
-        {
-            if (GetComponent<MeshRenderer>() != null) {
-                meshRenderers[0] = GetComponent<MeshRenderer>();
-            }
-        }
-
-        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
-        [InfoBox("Creates and assigns duplicate materials based on assigned mesh renderers.")]
-        [SerializeField]
-        void CreateMaterials()
-        {
-            for (int q = 0; q < meshRenderers.Count; q++) {
-                while (materialInstances.Count < meshRenderers.Count) {
-                    materialInstances.Add(null);
-                }
-                materialInstances[q] = new Material(meshRenderers[q].sharedMaterial);
-                meshRenderers[q].sharedMaterial = materialInstances[q];
-            }
-        }
-
-        [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
-        [InfoBox("Reset and remove materials.")]
-        [SerializeField]
-        void RemoveMaterials()
+        private void RemoveMaterials()
         {
             materialInstances.Clear();
         }

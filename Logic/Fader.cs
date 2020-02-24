@@ -236,19 +236,23 @@ namespace AltSalt.Maestro.Logic
             Debug.Log("Showing activity indicator");
 #if UNITY_IPHONE
             Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.WhiteLarge);
+            Handheld.StartActivityIndicator();
 #elif UNITY_ANDROID
             Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.Small);
+            Handheld.StartActivityIndicator();
 #endif
             yield return new WaitForSeconds(0);
         }
         
         private IEnumerator HideActivityIndicator()
         {
-// #if UNITY_IPHONE
-//             Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.DontShow);
-// #elif UNITY_ANDROID
-//             Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.DontShow);
-// #endif
+#if UNITY_IPHONE
+            Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.DontShow);
+            Handheld.StopActivityIndicator();
+#elif UNITY_ANDROID
+            Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.DontShow);
+            Handheld.StopActivityIndicator();
+#endif
             yield return new WaitForSeconds(0);
         }
 

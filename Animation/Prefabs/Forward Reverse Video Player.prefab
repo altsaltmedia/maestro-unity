@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 224720744687290240}
   - component: {fileID: 6606845192107337356}
-  - component: {fileID: 7697093155523303832}
+  - component: {fileID: 6583523150273412013}
   m_Layer: 0
-  m_Name: TimelineVideoController
+  m_Name: Forward Reverse Video Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,53 +46,52 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675102690481016}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c20be5edccebb4fd497268187e18588b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainVideoInstance:
-    videoObject: {fileID: 8611712818853803513}
-    vpScript: {fileID: 352308171004964100}
-    vpComponent: {fileID: 3260139102654044801}
-    vpRenderer: {fileID: 7765384545820753366}
-    isHidden: 0
-  reverseVideoInstance:
-    videoObject: {fileID: 0}
-    vpScript: {fileID: 0}
-    vpComponent: {fileID: 0}
-    vpRenderer: {fileID: 0}
-    isHidden: 0
-  isReversing:
+  _videoInstance: {fileID: 352308171004964100}
+  _appSettings:
     _isSystemReference: 0
-    _referenceName: 
-    _useConstant: 0
-    _constantValue: 0
-    _variable: {fileID: 11400000, guid: f98dcfa24361c43bbbcec8e83706062a, type: 2}
---- !u!114 &7697093155523303832
+    _referenceName: AppSettings
+    _variable: {fileID: 0}
+  _inputGroupKey:
+    _isSystemReference: 0
+    _referenceName: MainInput
+    _variable: {fileID: 0}
+  _reverseVideoInstance: {fileID: 8281539030200065033}
+--- !u!114 &6583523150273412013
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675102690481016}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc48946a320fd4091aa27622f5bf3489, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetAttributeName: _Color
-  _Color:
-    _isSystemReference: 0
-    _referenceName: 
-    _useConstant: 0
-    _constantValue: {r: 0, g: 0, b: 0, a: 0}
+  _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: MainInput-OnSwipe
     _variable: {fileID: 0}
-  meshRenderers:
-  - {fileID: 7765384545820753366}
-  - {fileID: 351002992639903556}
-  materialInstances: []
-  playableVideoPlayerController: {fileID: 0}
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6606845192107337356}
+        m_MethodName: set_playbackOverriden
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  _skipRegistration: 0
 --- !u!1 &5605975289144988313
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +107,7 @@ GameObject:
   - component: {fileID: 8767628001873964000}
   - component: {fileID: 8281539030200065033}
   m_Layer: 0
-  m_Name: Reverse Video
+  m_Name: Reverse Video (Android)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -155,6 +154,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -237,10 +237,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e4b48fa98254781a1a51d2f15c6840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialTime: 0
-  videoCompleteCallback:
+  _initialTime: 0
+  _videoMaterial: {fileID: 2100000, guid: f105af474ee0647009f5c4ff823a2914, type: 2}
+  _targetAttributeName: _Color
+  _color:
     _isSystemReference: 0
     _referenceName: 
+    _useConstant: 0
+    _constantValue: {r: 0, g: 0, b: 0, a: 0}
     _variable: {fileID: 0}
 --- !u!1 &8611712818853803513
 GameObject:
@@ -304,6 +308,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -386,8 +391,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e4b48fa98254781a1a51d2f15c6840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialTime: 0
-  videoCompleteCallback:
+  _initialTime: 0
+  _videoMaterial: {fileID: 2100000, guid: f105af474ee0647009f5c4ff823a2914, type: 2}
+  _targetAttributeName: _Color
+  _color:
     _isSystemReference: 0
     _referenceName: 
+    _useConstant: 0
+    _constantValue: {r: 0, g: 0, b: 0, a: 0}
     _variable: {fileID: 0}

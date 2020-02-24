@@ -20,6 +20,15 @@ namespace AltSalt.Maestro.Sequencing
         
         [SerializeField]
         [TitleGroup("$"+nameof(propertiesTitle))]
+        private bool _paused = false;
+        
+        public bool paused {
+            get => _paused;
+            set => _paused = value;
+        }
+        
+        [SerializeField]
+        [TitleGroup("$"+nameof(propertiesTitle))]
         private bool _canBeScrubbed = true;
         
         public bool canBeScrubbed {

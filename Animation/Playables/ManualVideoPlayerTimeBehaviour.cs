@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 namespace AltSalt.Maestro.Animation
 {
     [Serializable]
-    public class LerpVideoPlayerTimeBehaviour : LerpToTargetBehaviour
+    public class ManualVideoPlayerTimeBehaviour : LerpToTargetBehaviour
     {
         [FormerlySerializedAs("initialValue")]
         [SerializeField]

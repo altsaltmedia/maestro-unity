@@ -6,15 +6,15 @@ using UnityEngine.Video;
 namespace AltSalt.Maestro.Animation
 {
     [TrackColor(0.245149f, 0.595372f, 0.1679245f)]
-    [TrackClipType(typeof(LerpVideoPlayerTimeClip))]
-    [TrackBindingType(typeof(PlayableVideoPlayerController))]
-    public class LerpVideoPlayerTimeTrack : LerpToTargetTrack
+    [TrackClipType(typeof(ManualVideoPlayerTimeClip))]
+    [TrackBindingType(typeof(ManualVideoPlayer))]
+    public class ManualVideoPlayerTimeTrack : LerpToTargetTrack
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipProperties(go);
-            ScriptPlayable<LerpVideoPlayerTimeMixerBehaviour> trackPlayable = ScriptPlayable<LerpVideoPlayerTimeMixerBehaviour>.Create(graph, inputCount);
-            LerpVideoPlayerTimeMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            ScriptPlayable<ManualVideoPlayerTimeMixerBehaviour> trackPlayable = ScriptPlayable<ManualVideoPlayerTimeMixerBehaviour>.Create(graph, inputCount);
+            ManualVideoPlayerTimeMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(go, behaviour);
             return trackPlayable;
         }

@@ -3,22 +3,24 @@ using UnityEngine.Video;
 
 namespace AltSalt.Maestro.Layout
 {
+    [ExecuteInEditMode]
+    [RequireComponent(typeof(VideoPlayer))]
     public class SimpleVideoPlayer : MonoBehaviour
     {
         [SerializeField]
-        private SimpleEventTrigger _startedCallback = new SimpleEventTrigger();
+        private GameObjectGenericAction _startedCallback = new GameObjectGenericAction();
 
-        private SimpleEventTrigger startedCallback => _startedCallback;
-
-        [SerializeField]
-        private SimpleEventTrigger _pausedCallback = new SimpleEventTrigger();
-
-        private SimpleEventTrigger pausedCallback => _pausedCallback;
+        private GameObjectGenericAction startedCallback => _startedCallback;
 
         [SerializeField]
-        private SimpleEventTrigger _loopPointReachedCallback = new SimpleEventTrigger();
+        private GameObjectGenericAction _pausedCallback = new GameObjectGenericAction();
 
-        private SimpleEventTrigger loopPointReachedCallback => _loopPointReachedCallback;
+        private GameObjectGenericAction pausedCallback => _pausedCallback;
+
+        [SerializeField]
+        private GameObjectGenericAction _loopPointReachedCallback = new GameObjectGenericAction();
+
+        private GameObjectGenericAction loopPointReachedCallback => _loopPointReachedCallback;
 
         private VideoPlayer _videoPlayer;
 
@@ -31,39 +33,29 @@ namespace AltSalt.Maestro.Layout
         private void Awake()
         {
             videoPlayer = GetComponent<VideoPlayer>();
-        }
-
-        private void Start ()
-        {
             videoPlayer.Prepare();
-
             videoPlayer.started += FireStartedCallback;
             videoPlayer.loopPointReached += FireLoopPointReachedCallback;
-
-            if(videoPlayer.playOnAwake) {
-                videoPlayer.Play();
-            }
         }
 
         private void FireStartedCallback (VideoPlayer source)
         {
-            startedCallback.RaiseEvent(this.gameObject);
+            startedCallback.Invoke(this.gameObject);
         }
         
         private void FireLoopPointReachedCallback (VideoPlayer source)
         {
-            loopPointReachedCallback.RaiseEvent(this.gameObject);
+            loopPointReachedCallback.Invoke(this.gameObject);
         }
 
 		public void TogglePlay()
 		{
             if(videoPlayer.isPlaying) {
                 videoPlayer.Pause();
-                pausedCallback.RaiseEvent(this.gameObject);
+                pausedCallback.Invoke(this.gameObject);
             } else {
                 videoPlayer.Play();
             }
 		}
     }
-       
 }
