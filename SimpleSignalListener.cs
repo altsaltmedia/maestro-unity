@@ -1,19 +1,33 @@
 ﻿using UnityEngine;
+using System.Linq;
 
 namespace AltSalt.Maestro
 {
     [ExecuteInEditMode]
     public class SimpleSignalListener : ISimpleSignalListener
     {
-        public delegate void OnTargetEventDelegate();
-        public event OnTargetEventDelegate OnTargetEventExecuted = () => { };
-
-        private SimpleSignal _targetEvent;
-
-        private SimpleSignal targetEvent
+        public delegate void TargetSignalExecutedHandler();
+        
+        private event TargetSignalExecutedHandler _targetEventExecuted = () => { };
+        
+        public event TargetSignalExecutedHandler targetEventExecuted
         {
-            get => _targetEvent;
-            set => _targetEvent = value;
+            add
+            {
+                if (_targetEventExecuted == null
+                    || _targetEventExecuted.GetInvocationList().Contains(value) == false) {
+                    _targetEventExecuted += value;
+                }
+            }
+            remove => _targetEventExecuted -= value;
+        }
+
+        private SimpleSignal _targetSignal;
+
+        private SimpleSignal targetSignal
+        {
+            get => _targetSignal;
+            set => _targetSignal = value;
         }
 
         private GameObject _parentGameObject;
@@ -44,33 +58,33 @@ namespace AltSalt.Maestro
         public string sceneName
         {
             get => _sceneName;
-            set => _sceneName = value;
+            private set => _sceneName = value;
         }
 
-        public SimpleSignalListener(SimpleEvent eventToRegister, GameObject parentObject)
+        public SimpleSignalListener(SimpleSignal signalToRegister, GameObject parentObject)
         {
-            this.targetEvent = eventToRegister;
+            this.targetSignal = signalToRegister;
             this.parentGameObject = parentObject;
             this.sceneName = parentObject.scene.name;
-            this.targetEvent.RegisterListener(this);
+            this.targetSignal.RegisterListener(this);
         }
 
-        public SimpleSignalListener(SimpleEvent eventToRegister, UnityEngine.Object parentObject, string sceneName)
+        public SimpleSignalListener(SimpleSignal signalToRegister, UnityEngine.Object parentObject, string sceneName)
         {
-            this.targetEvent = eventToRegister;
+            this.targetSignal = signalToRegister;
             this.parentObject = parentObject;
             this.sceneName = sceneName;
-            this.targetEvent.RegisterListener(this);
+            this.targetSignal.RegisterListener(this);
         }
 
         public void OnEventRaised()
         {
-            OnTargetEventExecuted();
+            _targetEventExecuted.Invoke();
         }
 
         public void DestroyListener()
         {
-            targetEvent.UnregisterListener(this);
+            targetSignal.UnregisterListener(this);
         }
 
         public void LogName(string callingInfo)

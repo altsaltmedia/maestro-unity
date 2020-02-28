@@ -1,5 +1,4 @@
 using System.Linq;
-using AltSalt.Maestro.Sequencing;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -18,12 +17,12 @@ namespace AltSalt.Maestro
         [SerializeField]
         [ReadOnly]
         [InfoBox("Sequence is populated dynamically when this component is used with a SequenceConfig")]
-        private Sequence _sequence;
+        private bool _connectedToSequence;
 
-        public Sequence sequence
+        public bool connectedToSequence
         {
-            get => _sequence;
-            set => _sequence = value;
+            get => _connectedToSequence;
+            set => _connectedToSequence = value;
         }
 
         private double _currentTime;
@@ -40,7 +39,7 @@ namespace AltSalt.Maestro
 
         public delegate void TimelineUpdateHandler(object sender, double currentTime);
         
-        private event TimelineUpdateHandler _timelineUpdated = (sender, updatedSequence) => { };
+        private event TimelineUpdateHandler _timelineUpdated = (sender, currentTime) => { };
         
         public event TimelineUpdateHandler timelineUpdated
         {
@@ -54,24 +53,43 @@ namespace AltSalt.Maestro
             remove => _timelineUpdated -= value;
         }
 
-        [SerializeField]
-#if UNITY_EDITOR        
-        [HideIf(nameof(SequencePopulated))]
-#endif        
-        private InputGroupKeyReference _inputGroupKey = new InputGroupKeyReference();
-
-        public InputGroupKey inputGroupKey
+        public delegate void PauseSequenceHandler(object sender);
+        
+        private PauseSequenceHandler _pauseSequenceRequested = sender => { };
+        
+        public event PauseSequenceHandler pauseSequenceRequested
         {
-            get
+            add
             {
-                if (sequence != null) {
-                    return sequence.sequenceController.masterSequence.rootConfig.inputGroupKey;
+                if (_pauseSequenceRequested == null
+                    || _pauseSequenceRequested.GetInvocationList().Contains(value) == false) {
+                    _pauseSequenceRequested += value;
                 }
-                
-                return _inputGroupKey.GetVariable() as InputGroupKey;
             }
+            remove => _pauseSequenceRequested -= value;
         }
         
+        public delegate void ResumeSequenceHandler(object sender, bool activateForwardAutoplay);
+        
+        private ResumeSequenceHandler _resumeSequenceRequested = (sender, activateForwardAutoplay) => { };
+        
+        public event ResumeSequenceHandler resumeSequenceRequested
+        {
+            add
+            {
+                if (_resumeSequenceRequested == null
+                    || _resumeSequenceRequested.GetInvocationList().Contains(value) == false) {
+                    _resumeSequenceRequested += value;
+                }
+            }
+            remove => _resumeSequenceRequested -= value;
+        }
+
+        [SerializeField]
+        private InputGroupKeyReference _inputGroupKey = new InputGroupKeyReference();
+
+        public InputGroupKey inputGroupKey => _inputGroupKey.GetVariable() as InputGroupKey;
+
         public BoolVariable isReversingVariable =>
             appSettings.GetIsReversingReference(this.gameObject, inputGroupKey).GetVariable() as BoolVariable;
 
@@ -92,13 +110,13 @@ namespace AltSalt.Maestro
         public bool logGlobalResponsiveElementActions => AppSettings.logGlobalResponsiveElementActions;
         
 #if UNITY_EDITOR
-        private void OnEnable()
+        private void Awake()
         {
             _appSettings.PopulateVariable(this, nameof(_appSettings));
 
             // If part of a sequence config, we'll get the group key from there.
             // Otherwise, we need to look for one.
-            if (sequence == null) {
+            if (connectedToSequence == false) {
                 PopulateGroupKey();
             }
         }
@@ -118,16 +136,16 @@ namespace AltSalt.Maestro
                 }
             }
         }
-        
-        private bool SequencePopulated()
-        {
-            if (sequence != null) {
-                return true;
-            }
-
-            return false;
-        }
-
 #endif
+
+        public PauseSequenceHandler GetPauseSequenceHandler(GameObject gameObject)
+        {
+            return _pauseSequenceRequested;
+        }
+        
+        public ResumeSequenceHandler GetResumeSequenceHandler(GameObject gameObject)
+        {
+            return _resumeSequenceRequested;
+        }
     }
 }

@@ -6,13 +6,13 @@ using UnityEngine.Serialization;
 namespace AltSalt.Maestro.Animation
 {
     [Serializable]
-    public class LerpVideoPlayerTimeClip : LerpToTargetClip
+    public class ManualVideoPlayerTimeClip : LerpToTargetClip
     {
         [FormerlySerializedAs("template")]
         [SerializeField]
-        private LerpVideoPlayerTimeBehaviour _template = new LerpVideoPlayerTimeBehaviour ();
+        private ManualVideoPlayerTimeBehaviour _template = new ManualVideoPlayerTimeBehaviour ();
 
-        private LerpVideoPlayerTimeBehaviour template
+        private ManualVideoPlayerTimeBehaviour template
         {
             get => _template;
             set => _template = value;
@@ -28,7 +28,7 @@ namespace AltSalt.Maestro.Animation
             template.clipAsset = this;
             template.timelineInstanceConfig = timelineInstanceConfig;
             
-            var playable = ScriptPlayable<LerpVideoPlayerTimeBehaviour>.Create(graph, template);
+            var playable = ScriptPlayable<ManualVideoPlayerTimeBehaviour>.Create(graph, template);
             return playable;
         }
     }

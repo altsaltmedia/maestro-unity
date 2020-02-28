@@ -714,7 +714,7 @@ namespace AltSalt.Maestro
         {
             return inputData.GetInputGroup(inputGroupKey).bookmarkLoadingCompleted.SetValue(callingObject, targetValue);
         }
-
+        
 
         // Is Reversing
         

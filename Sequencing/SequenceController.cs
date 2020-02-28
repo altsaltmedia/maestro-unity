@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
 using Sirenix.OdinInspector;
@@ -18,6 +20,8 @@ namespace AltSalt.Maestro.Sequencing
     [RequireComponent(typeof(TimelineInstanceConfig))]
     public class SequenceController : MonoBehaviour, IDynamicLayoutElement
     {
+        private bool isReversing =>
+            masterSequence.rootConfig.appSettings.GetIsReversing(this, masterSequence.rootConfig.inputGroupKey);
         
         [Required]
         [SerializeField]
@@ -159,12 +163,6 @@ namespace AltSalt.Maestro.Sequencing
             
             enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
-
-//        private void OnDisable()
-//        {
-//            dynamicElementDisable.RaiseEvent(this.gameObject, this);
-//        }
-    
 #endif
         
         /// <summary>
@@ -188,10 +186,20 @@ namespace AltSalt.Maestro.Sequencing
             }
             
             timelineInstanceConfig = gameObject.GetComponent<TimelineInstanceConfig>();
-            timelineInstanceConfig.sequence = sequence;
+            timelineInstanceConfig.connectedToSequence = true;
             timelineInstanceConfig.timelineUpdated += OnTimelineUpdated;
+            timelineInstanceConfig.pauseSequenceRequested += OnPauseSequenceRequested;
+            timelineInstanceConfig.resumeSequenceRequested += OnResumeSequenceRequested;
         }
-        
+
+        private void OnDisable()
+        {
+            timelineInstanceConfig.timelineUpdated -= OnTimelineUpdated;
+            timelineInstanceConfig.pauseSequenceRequested -= OnPauseSequenceRequested;
+            timelineInstanceConfig.resumeSequenceRequested -= OnResumeSequenceRequested;
+//            dynamicElementDisable.RaiseEvent(this.gameObject, this);
+        }
+
         /// <summary>
         /// If the timeline is autoplaying, then we need to refresh our sequence
         /// state on every frame to sync with our custom configuration
@@ -206,6 +214,20 @@ namespace AltSalt.Maestro.Sequencing
                 sequence.currentTime = currentTime;
                 sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
                 OnSequenceUpdated();
+            }
+        }
+
+        public void OnPauseSequenceRequested(object sender)
+        {
+            sequence.paused = true;
+            SetSpeed(0);
+        }
+        
+        public void OnResumeSequenceRequested(object sender, bool activateForwardAutoplay)
+        {
+            sequence.paused = false;
+            if (activateForwardAutoplay == true) {
+                ActivateForwardAutoplayState(1);
             }
         }
 
@@ -254,6 +276,8 @@ namespace AltSalt.Maestro.Sequencing
         
         public Sequence ModifySequenceTime(float timeModifier)
         {
+            if (sequence.paused == true) return sequence;
+            
             sequence.currentTime += timeModifier;
             RootConfig rootConfig = sequence.sequenceController.masterSequence.rootConfig;
             
@@ -284,6 +308,8 @@ namespace AltSalt.Maestro.Sequencing
 
         public Sequence SetSequenceTime(UnityEngine.Object caller, float targetTime)
         {
+            if (sequence.paused == true) return sequence;
+            
             ActivateManualUpdateState();
             
             sequence.currentTime = targetTime;

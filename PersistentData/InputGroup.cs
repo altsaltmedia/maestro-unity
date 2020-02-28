@@ -238,7 +238,6 @@ namespace AltSalt.Maestro
         private BoolReference _bookmarkLoadingCompleted = new BoolReference();
 
         public BoolReference bookmarkLoadingCompleted => _bookmarkLoadingCompleted;
-        
 
     #endregion
 
