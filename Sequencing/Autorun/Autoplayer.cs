@@ -52,7 +52,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             
             // Handling to activate the next timeline if we've reached the end of the current sequence
             if (autorunData.forwardUpdateActive == true && autorunData.loop == false && autorunController.isReversing == false &&
-                
                 targetSequence.currentTime >= targetSequence.sourcePlayable.duration) {
                 autorunController.rootConfig.joiner.ActivateNextSequence(targetSequence);
             }
@@ -282,8 +281,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         public void DeactivateEligibleForAutoplay()
         {
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
-                autorunController.autorunData[q].eligibleForAutoplay = false;
-                autorunController.autorunData[q].easingUtility.Reset();
+                Autorun_Data autorunData = autorunController.autorunData[q];
+                autorunData.eligibleForAutoplay = false;
+                autorunData.backwardUpdateActive = false;
+                autorunData.forwardUpdateActive = false;
+                autorunData.easingUtility.Reset();
             }
         }
 
