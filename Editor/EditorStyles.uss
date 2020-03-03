@@ -4,12 +4,19 @@
 }
 
 .toolbar {
-	height: 25px;
 	justify-content: center;
-	unity-text-align: center;
 	margin-bottom: 10px;
-	flex-grow: 1;
-	flex-shrink: 0;
+	border-color: rgba(0,0,0,0);
+}
+
+.toolbar-button {
+	height: 20px;
+	-unity-text-align: middle-center;
+}
+
+.scroll-view {
+	display: flex;
+	margin-top: 25px;
 }
 
 .toolbar * {
@@ -17,7 +24,7 @@
 }
 
 .toolbar-button.active {
-	background: #B4B4B4;
+	background-color: rgba(67, 67, 67, 255);
 }
 
 .unity-foldout__toggle {
@@ -31,6 +38,11 @@
 
 .altsalt .unity-foldout--depth-1 {
 	margin-bottom: 0;
+}
+
+.altsalt .unity-button {
+	margin-left: 2px;
+	margin-right: 2px;
 }
 
 .section-container {
@@ -49,7 +61,7 @@
 	flex-wrap: wrap;
 	align-items: flex-start;
 	justify-content: center;
-	max-width: 275px;
+	max-width: 300px;
 }
 
 .section___title {
@@ -196,10 +208,6 @@
 	justify-content: flex-start;
 }
 
-.altsalt .margin-top-5 {
-	margin-top: 5px;
-}
-
 .altsalt .margin-right-0 {
 	margin-right: 0;
 }
@@ -220,6 +228,16 @@
 
 .text-medium {
 	font-size: 11px;
+}
+
+.middle-center {
+	-unity-text-align: middle-center;
+}
+
+/** Timeline Asset Manipulation **/
+
+.altsalt .clip-selection-manipulation #CurrentTime {
+	margin-left: 0px;
 }
 
 /** Timeline Utils **/

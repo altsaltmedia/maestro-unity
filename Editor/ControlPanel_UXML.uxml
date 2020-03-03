@@ -18,15 +18,16 @@ xsi:schemaLocation="
 
     <engine:VisualElement class="altsalt page-builder-window">
 
+
         <editor:Toolbar class="toolbar">
             <editor:ToolbarButton class="toolbar-button" text="Modules" name="ModulesButton" />
-            <editor:ToolbarButton class="toolbar-button active" text="Configure Window" name="ConfigureWindowButton" />
+            <editor:ToolbarButton class="toolbar-button active" text="Configure" name="ConfigureWindowButton" />
         </editor:Toolbar>
-
+    
         
         <!-- MODULES -->
 
-        <engine:ScrollView class="create-edit-tools border-bottom-1" name="Modules"  style="display:none">
+        <engine:ScrollView class="scroll-view" name="Modules"  style="display:none">
 
 <!--             
             <engine:Instance template="CreateOtherElements" />
@@ -46,7 +47,7 @@ xsi:schemaLocation="
 
         <!-- CONFIGURE WINDOW -->
 
-        <engine:ScrollView name="ConfigureWindow">
+        <engine:ScrollView class="scroll-view" name="ConfigureWindow">
 
             <engine:VisualElement class="section-container">
 

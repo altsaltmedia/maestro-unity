@@ -65,7 +65,7 @@ xsi:schemaLocation="
 		  	<engine:VisualElement class="section___content margin-bottom-5">
 
 		  		<!-- Set -->
-		  		<editor:FloatField label="Time :" text="0.00" class="col-40-percent persistent-float-field" name="CurrentTime"/>
+		  		<editor:FloatField label="Time :" text="0.00" class="col-40-percent persistent-float-field margin-right-5" name="CurrentTime"/>
 				<engine:Button text="Set" class="col-30-percent" name="SetToPlayhead"/>
 			    <engine:Button text="Set (&lt;>)" class="col-30-percent margin-right-0" name="TransposeToPlayhead" />
 		  	

@@ -8,6 +8,11 @@ namespace AltSalt.Maestro.Layout
     public class SimpleVideoPlayer : MonoBehaviour
     {
         [SerializeField]
+        private double _startTime;
+
+        private double startTime => _startTime;
+
+        [SerializeField]
         private GameObjectGenericAction _startedCallback = new GameObjectGenericAction();
 
         private GameObjectGenericAction startedCallback => _startedCallback;
@@ -33,11 +38,17 @@ namespace AltSalt.Maestro.Layout
         private void Awake()
         {
             videoPlayer = GetComponent<VideoPlayer>();
-            videoPlayer.Prepare();
+            videoPlayer.prepareCompleted += PrepareCompletedCallback; 
             videoPlayer.started += FireStartedCallback;
             videoPlayer.loopPointReached += FireLoopPointReachedCallback;
+            videoPlayer.Prepare();
         }
 
+        private void PrepareCompletedCallback (VideoPlayer source)
+        {
+            videoPlayer.time = startTime;
+        }
+        
         private void FireStartedCallback (VideoPlayer source)
         {
             startedCallback.Invoke(this.gameObject);

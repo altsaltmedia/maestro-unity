@@ -584,6 +584,9 @@ namespace AltSalt.Maestro
         public static bool TargetTypeSelected(Object[] currentSelection, Type targetType)
         {
             for (int i = 0; i < currentSelection.Length; i++) {
+                
+                if (currentSelection[i] == null) continue;
+                
                 Type currentType = currentSelection[i].GetType();
                 if (currentType.IsSubclassOf(targetType) || currentType == targetType) {
                     return true;

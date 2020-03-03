@@ -19,6 +19,21 @@ namespace AltSalt.Maestro
             SelectedClips
         }
 
+        private AppSettings _appSettings;
+
+        private AppSettings appSettings
+        {
+            get
+            {
+                if (_appSettings == null) {
+                    _appSettings = Utils.GetAppSettings();
+                }
+
+                return _appSettings;
+            }
+            set => _appSettings = value;
+        }
+
         private ListDisplayType _listDisplayType;
 
         private ListDisplayType listDisplayType
@@ -83,13 +98,7 @@ namespace AltSalt.Maestro
             set => _listItemsSelected = value;
         }
 
-        private static FloatVariable _timelineCurrentTime;
-
-        private static FloatVariable timelineCurrentTime
-        {
-            get => _timelineCurrentTime;
-            set => _timelineCurrentTime = value;
-        }
+        private float timelineDebugTime => appSettings.timelineDebugTime; 
 
         private List<TimelineClip> _clipsToDisplay = new List<TimelineClip>();
 
@@ -140,7 +149,6 @@ namespace AltSalt.Maestro
             base.Configure(controlPanel, uxmlPath);
 
             listContainer = moduleWindowUXML.Query("ClipListContainer");
-            timelineCurrentTime = Utils.GetFloatVariable(nameof(VarDependencies.TimelineCurrentTime));
 
             if (TimelineEditor.inspectedAsset != null) {
                 allTimelineClips = TimelineUtils.GetAllTimelineClips();
@@ -189,9 +197,9 @@ namespace AltSalt.Maestro
 
             if (TimelineEditor.inspectedAsset == null) return;
 
-            if (Mathf.Approximately(lastTimeValue, timelineCurrentTime.value) && TimelineEditor.selectedClips.SequenceEqual(previousClipSelection)) return;
+            if (Mathf.Approximately(lastTimeValue, timelineDebugTime) && TimelineEditor.selectedClips.SequenceEqual(previousClipSelection)) return;
 
-            lastTimeValue = timelineCurrentTime.value;
+            lastTimeValue = timelineDebugTime;
             previousClipSelection = TimelineEditor.selectedClips;
 
             allTimelineClips = TimelineUtils.GetAllTimelineClips();
@@ -214,11 +222,11 @@ namespace AltSalt.Maestro
             return CreateSelectedClipsListView(timelineMonitor);
         }
 
-        private static VisualElement CreateIntersectingClipsListView(TimelineMonitor timelineMonitor)
+        private VisualElement CreateIntersectingClipsListView(TimelineMonitor timelineMonitor)
         {
             for (int i = 0; i < allTimelineClips.Length; i++) {
-                if (timelineCurrentTime.value >= allTimelineClips[i].start &&
-                    timelineCurrentTime.value <= allTimelineClips[i].end) {
+                if (timelineDebugTime >= allTimelineClips[i].start &&
+                    timelineDebugTime <= allTimelineClips[i].end) {
                     timelineMonitor.clipsToDisplay.Add(allTimelineClips[i]);
                 }
             }
@@ -262,6 +270,10 @@ namespace AltSalt.Maestro
 
         private static ListView CreateListView(List<TimelineClip> listElements, bool expandListView)
         {
+            if (TimelineEditor.inspectedDirector == null) {
+                return null;
+            }
+            
             Func<VisualElement> makeItem = () => new Label();
 
             Action<VisualElement, int> bindItem = (label, index) =>

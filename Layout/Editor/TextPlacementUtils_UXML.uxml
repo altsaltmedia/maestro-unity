@@ -34,20 +34,21 @@ xsi:schemaLocation="
 
                                     <editor:PropertyField label="Enable / Disable :" class="col-full" binding-path="toggleOnionSkin" name="ToggleOnionSkin"/>
 
-                                    <engine:Button text="Populate" class="col-full" name="PopulateOnionSkin" />
+                                    <engine:Button text="Populate from Selection" class="col-full" name="PopulateOnionSkin" />
 
-                                    <engine:Button text="Set Position" class="col-full" name="PositionOnionSkin" />
+                                    <engine:Button text="Set Position from Selection" class="col-full" name="PositionOnionSkin" />
 
-                                    <engine:Button text="Select" class="col-full" name="SelectOnionSkin" />
+                                    <engine:Button text="Select Onion Skin" class="col-full" name="SelectOnionSkin" />
 
-                                    <engine:Label text="Alignment : " class="col-1" />
                                     <engine:Button text="L" class="col-15-percent" name="AlignLeft"/>
+
                                     <engine:Button text="C" class="col-15-percent" name="AlignCenter"/>
                                     <engine:Button text="R" class="col-15-percent" name="AlignRight"/>
                                     <engine:Button text="J" class="col-15-percent" name="Justify"/>
                                     <engine:Button text="F" class="col-15-percent" name="Flush"/>
 
                                 </engine:VisualElement>
+
 
                                 <engine:VisualElement class="section___title">
                                     <engine:Label text="extraction" />
