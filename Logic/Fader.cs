@@ -247,10 +247,8 @@ namespace AltSalt.Maestro.Logic
         private IEnumerator HideActivityIndicator()
         {
 #if UNITY_IPHONE
-            Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.DontShow);
             Handheld.StopActivityIndicator();
 #elif UNITY_ANDROID
-            Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.DontShow);
             Handheld.StopActivityIndicator();
 #endif
             yield return new WaitForSeconds(0);

@@ -117,6 +117,10 @@ namespace AltSalt.Maestro.Logic
 
         public void CallReadFromStoredData()
         {
+            if(appSettings.saveDataActive == false) {
+                return;
+            }
+            
             for (int i = 0; i < _userData.Count; i++) {
                 ReadFromStoredData(_userData[i]);
             }
@@ -124,6 +128,10 @@ namespace AltSalt.Maestro.Logic
 
         public void CallReadFromStoredData(ScriptableObject sourceObject)
         {
+            if(appSettings.saveDataActive == false) {
+                return;
+            }
+            
             bool valueFound = false;
             for (int i = 0; i < _userData.Count; i++) {
                 if (sourceObject == _userData[i].scriptableObject) {
