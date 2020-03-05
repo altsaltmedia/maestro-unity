@@ -43,17 +43,19 @@ namespace AltSalt.Maestro.Sequencing
         
         private enum EnableCondition
         {
-            DirectorySelected
+            DirectoryAndNamePopulated
         }
         
         private string selectedObjectDirectory => controlPanel.objectCreation.selectedObjectDirectory;
 
+        private string objectName => controlPanel.objectCreation.objectName;
+        
         private void UpdateDisplay()
         {
-            if (String.IsNullOrEmpty(selectedObjectDirectory) == false) {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectorySelected, true);
+            if (string.IsNullOrEmpty(selectedObjectDirectory) == false && string.IsNullOrEmpty(objectName) == false) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectoryAndNamePopulated, true);
             } else {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectorySelected, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectoryAndNamePopulated, false);
             }
         }
 
@@ -100,11 +102,11 @@ namespace AltSalt.Maestro.Sequencing
                 case nameof(ButtonNames.SimpleFork):
                     button.clickable.clicked += () =>
                     {
-                        Selection.activeObject = TriggerCreateSimpleFork(selectedObjectDirectory);
+                        Selection.activeObject = Utils.CreateScriptableObjectAsset(typeof(Fork), selectedObjectDirectory, objectName);
                         EditorUtility.FocusProjectWindow();
                         EditorGUIUtility.PingObject(Selection.activeObject);
                     };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectorySelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectoryAndNamePopulated, button);
                     break;
             }
 

@@ -5,6 +5,7 @@ public enum ModuleNamespace
     Sequencing,
     Autorun,
     Touch,
+    Navigation,
     Animation,
     Audio,
     Logic,

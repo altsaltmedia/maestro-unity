@@ -12,7 +12,7 @@ namespace AltSalt.Maestro.Animation
         [SerializeField]
         private ManualVideoPlayerTimeBehaviour _template = new ManualVideoPlayerTimeBehaviour ();
 
-        private ManualVideoPlayerTimeBehaviour template
+        public ManualVideoPlayerTimeBehaviour template
         {
             get => _template;
             set => _template = value;

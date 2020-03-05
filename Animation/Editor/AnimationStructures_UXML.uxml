@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+	<engine:VisualElement name="animation-structures">
+
+        <engine:Foldout class="foldout" text="Animation > Animation Structures" value="true" name="AnimationStructures">    
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="animation structures" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Manual Video Player" class="col-full" name="ManualVideoPlayer" />
+                    <engine:Button text="Forward Reverse Video Player" class="col-full" name="ForwardReverseVideoPlayer" />
+                    <engine:Button text="DOTween Utils" class="col-full" name="DOTweenUtils" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

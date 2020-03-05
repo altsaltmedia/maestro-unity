@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+	<engine:VisualElement name="hierarchy-selection">
+
+        <engine:Foldout class="foldout" text="Utilities > Content Extension Structures" value="true" name="ContentExtensionStructures">    
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="content extension structures" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Layout Config" class="col-full" name="LayoutConfig" />
+                    <engine:Button text="Text Family" class="col-full" name="TextFamily" />
+                    <engine:Button text="Text Collection Bank" class="col-full" name="TextCollectionBank" />
+                    <engine:Button text="Content Extension Controller" class="col-full" name="ContentExtensionController" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

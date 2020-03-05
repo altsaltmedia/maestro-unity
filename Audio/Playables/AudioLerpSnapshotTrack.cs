@@ -10,6 +10,15 @@ namespace AltSalt.Maestro.Audio
     [TrackBindingType(typeof(AudioMixer))]
     public class AudioLerpSnapshotTrack : LerpToTargetTrack
     {
+        [SerializeField]
+        private DefaultSnapshotLerpType _defaultSnapshotLerpType;
+
+        public DefaultSnapshotLerpType defaultSnapshotLerpType
+        {
+            get => _defaultSnapshotLerpType;
+            set => _defaultSnapshotLerpType = value;
+        }
+
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipProperties(go);

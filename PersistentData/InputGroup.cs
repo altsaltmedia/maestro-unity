@@ -458,7 +458,7 @@ namespace AltSalt.Maestro
         
         private static dynamic CreateInputDependency(Type assetType, string name, string groupName)
         {
-            return Utils.CreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/InputSettings/{groupName}");
+            return Utils.ForceCreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/InputSettings/{groupName}");
         }
 #endif
         

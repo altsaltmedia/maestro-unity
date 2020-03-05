@@ -1129,14 +1129,40 @@ namespace AltSalt.Maestro
             Debug.LogWarning("More than one matching asset found for search " + assetName + ". Please check to see if this is intentional.");
         }
 
-        public static ScriptableObject CreateScriptableObjectAsset(Type assetType, string name, string path)
+        public static ScriptableObject ForceCreateScriptableObjectAsset(Type assetType, string name, string targetPath)
         {
             var instance = ScriptableObject.CreateInstance(assetType);
-            string[] arrayPath = path.Split(new[]{'/'}, StringSplitOptions.RemoveEmptyEntries);
-            string productionSettingsDirectory = Utils.GetDirectory(arrayPath);
-            string filePath = Utils.GetFilePath(productionSettingsDirectory, name, ".asset");
-            AssetDatabase.CreateAsset(instance, filePath);
-            return AssetDatabase.LoadMainAssetAtPath(filePath) as ScriptableObject;
+            string[] arrayPath = targetPath.Split(new[]{'/'}, StringSplitOptions.RemoveEmptyEntries);
+            string targetDirectory = Utils.GetDirectory(arrayPath);
+            string newAssetPath = Utils.GetFilePath(targetDirectory, name, ".asset");
+            AssetDatabase.CreateAsset(instance, newAssetPath);
+            return AssetDatabase.LoadMainAssetAtPath(newAssetPath) as ScriptableObject;
+        }
+        
+        public static ScriptableObject CreateScriptableObjectAsset(Type assetType, string name, string targetPath)
+        {
+            var instance = ScriptableObject.CreateInstance(assetType);
+            string[] arrayPath = targetPath.Split(new[]{'/'}, StringSplitOptions.RemoveEmptyEntries);
+            string targetDirectory = Utils.GetDirectory(arrayPath);
+            string newAssetPath = Utils.GetFilePath(targetDirectory, name, ".asset");
+            
+            bool createAsset = true;
+            
+            if (File.Exists(Path.GetFullPath(newAssetPath))) {
+                if (EditorUtility.DisplayDialog("Overwrite existing file?", 
+                        "This will overwrite the existing file(s) at " + newAssetPath, 
+                        "Proceed", "Cancel") == false) {
+                    createAsset = false;
+                }
+            }
+
+            if (createAsset == true) {
+                ScriptableObject newAsset = ScriptableObject.CreateInstance(assetType);
+                AssetDatabase.CreateAsset(newAsset, newAssetPath);
+                return newAsset;
+            }
+            
+            return null;
         }
 
         public static AppSettings GetAppSettings()
@@ -1149,7 +1175,7 @@ namespace AltSalt.Maestro
 
             if (guids.Length < 1) {
                 Debug.Log($"App settings not found, creating new instance.");
-                return CreateScriptableObjectAsset(typeof(AppSettings), nameof(AppSettings), settingsPath) as AppSettings;
+                return ForceCreateScriptableObjectAsset(typeof(AppSettings), nameof(AppSettings), settingsPath) as AppSettings;
             }
             
             if(guids.Length > 1) {

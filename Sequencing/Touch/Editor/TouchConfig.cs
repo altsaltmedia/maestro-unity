@@ -22,8 +22,19 @@ namespace AltSalt.Maestro.Sequencing.Touch
         {
             AxisMarker,
             AxisJoinNext,
-            AxisJoinPrevious
+            AxisJoinPrevious,
+            TouchFork
         }
+        private static VisualElementToggleData toggleData = new VisualElementToggleData();
+        
+        private enum EnableCondition
+        {
+            DirectoryAndNamePopulated
+        }
+
+        private string selectedObjectDirectory => controlPanel.objectCreation.selectedObjectDirectory;
+
+        private string objectName => controlPanel.objectCreation.objectName;
 
         private Button SetupButton(Button button)
         {
@@ -54,6 +65,16 @@ namespace AltSalt.Maestro.Sequencing.Touch
                             typeof(AxisMarker_JoinPrevious), 0);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
+                    break;
+                
+                case nameof(ButtonNames.TouchFork):
+                    button.clickable.clicked += () =>
+                    {
+                        Selection.activeObject = Utils.CreateScriptableObjectAsset(typeof(TouchFork), selectedObjectDirectory, objectName);
+                        EditorUtility.FocusProjectWindow();
+                        EditorGUIUtility.PingObject(Selection.activeObject);
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectoryAndNamePopulated, button);
                     break;
             }
 

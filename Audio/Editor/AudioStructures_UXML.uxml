@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+	<engine:VisualElement name="audio-structures">
+
+        <engine:Foldout class="foldout" text="Audio > Audio Structures" value="true" name="AnimationStructures">    
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="audio structures" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Audio Clip Bundle" class="col-full" name="AudioClipBundle" />
+                    <engine:Button text="Audio Source Controller" class="col-full" name="AudioSourceController" />
+                    <engine:Button text="Audio Mixer" class="col-full" name="AudioMixer" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

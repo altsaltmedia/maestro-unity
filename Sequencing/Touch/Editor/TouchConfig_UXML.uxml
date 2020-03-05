@@ -32,7 +32,7 @@ xsi:schemaLocation="
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
-                    <engine:Button text="Create Touch Fork" class="col-full" name="CreateSimpleFork" />
+                    <engine:Button text="Touch Fork" class="col-full" name="TouchFork" />
                 </engine:VisualElement>
 
             </engine:VisualElement>

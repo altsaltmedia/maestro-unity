@@ -26,8 +26,8 @@ namespace AltSalt.Maestro.Animation
 
             UpdateDisplay();
             ControlPanel.selectionChangedDelegate += UpdateDisplay;
-            TrackPlacement.allowBlankTracksChangedDelegate += UpdateDisplay;
-            TrackPlacement.triggerCreateTrackDelegate += PopulateTrackAsset;
+            TrackPlacement.allowBlankTracksChanged += UpdateDisplay;
+            TrackPlacement.trackCreated += OnTrackCreated;
             
             return this;
         }
@@ -35,7 +35,7 @@ namespace AltSalt.Maestro.Animation
         void OnDestroy()
         {
             ControlPanel.selectionChangedDelegate -= UpdateDisplay;
-            TrackPlacement.allowBlankTracksChangedDelegate -= UpdateDisplay;
+            TrackPlacement.allowBlankTracksChanged -= UpdateDisplay;
         }
         
         VisualElementToggleData toggleData = new VisualElementToggleData();
@@ -61,6 +61,7 @@ namespace AltSalt.Maestro.Animation
             TextSelected,
             RectTransformSelected,
             SpriteSelected,
+            ManualVideoPlayerSelected,
             FloatVarPopulated,
             ColorVarPopulated
         };
@@ -68,15 +69,14 @@ namespace AltSalt.Maestro.Animation
         enum ButtonNames
         {
             TMProColorTrack,
+            TMProCharSpacingTrack,
             RectTransformPosTrack,
             SpriteColorTrack,
             RectTransformScaleTrack,
             RectTransformRotationTrack,
+            ManualVideoPlayerTimeTrack,
             FloatVarTrack,
             ColorVarTrack,
-            TMProCharSpacingTrack,
-            ResponsiveRectTransformPosTrack,
-            ResponsiveRectTransformScaleTrack,
         };
         
         enum UpdateWindowTriggers
@@ -118,6 +118,13 @@ namespace AltSalt.Maestro.Animation
                 }
                 else {
                     ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, false);
+                }
+                
+                if (Utils.TargetComponentSelected(Selection.gameObjects, typeof(ManualVideoPlayer))) {
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ManualVideoPlayerSelected, true);
+                }
+                else {
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ManualVideoPlayerSelected, false);
                 }
 
                 if (targetFloat != null) {
@@ -227,6 +234,26 @@ namespace AltSalt.Maestro.Animation
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
+                    break;
+                
+                case nameof(ButtonNames.ManualVideoPlayerTimeTrack):
+                    button.clickable.clicked += () =>
+                    {
+                        if (selectCreatedObject == true) {
+                            Selection.objects = TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset,
+                                TimelineEditor.inspectedDirector, Selection.gameObjects,
+                                typeof(ManualVideoPlayerTimeTrack), typeof(ManualVideoPlayer), Selection.objects,
+                                TimelineEditor.selectedClips);
+                        }
+                        else {
+                            TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector,
+                                Selection.gameObjects, typeof(ManualVideoPlayerTimeTrack), typeof(ManualVideoPlayer),
+                                Selection.objects, TimelineEditor.selectedClips);
+                        }
+
+                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ManualVideoPlayerSelected, button);
                     break;
 
                 case nameof(ButtonNames.FloatVarTrack):
@@ -371,7 +398,7 @@ namespace AltSalt.Maestro.Animation
             return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformPosTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
         }
         
-        private static TrackAsset PopulateTrackAsset(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject)
+        private static TrackAsset OnTrackCreated(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject)
         {
             foreach (PlayableBinding playableBinding in targetTrack.outputs) {
 
@@ -391,6 +418,10 @@ namespace AltSalt.Maestro.Animation
                     case nameof(SpriteColorTrack):
                         targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<SpriteRenderer>());
                         break;
+                    
+                    case nameof(ManualVideoPlayerTimeTrack):
+                        targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<ManualVideoPlayer>());
+                        break;
 
                     case nameof(LerpFloatVarTrack):
                         targetDirector.SetGenericBinding(playableBinding.sourceObject, targetObject);
@@ -399,10 +430,7 @@ namespace AltSalt.Maestro.Animation
                     case nameof(LerpColorVarTrack):
                         targetDirector.SetGenericBinding(playableBinding.sourceObject, targetObject);
                         break;
-
-                    default:
-                        Debug.LogError("Track type not supported");
-                        break;
+                    
                 }
             }
 

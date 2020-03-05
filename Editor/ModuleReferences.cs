@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Audio;
 
 namespace AltSalt.Maestro
 {
@@ -36,46 +37,48 @@ namespace AltSalt.Maestro
         private GameObject _responsiveContainerLeftAnchorPrefab;
 
         public GameObject responsiveContainerLeftAnchorPrefab => _responsiveContainerLeftAnchorPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _simpleVideoPlayerPrefab;
+
+        public GameObject simpleVideoPlayerPrefab => _simpleVideoPlayerPrefab;
 
         [Required]
         [SerializeField]
-        private GameObject _sequenceTouchApplier;
+        private GameObject _scrollSnapControllerPrefab;
 
-        public GameObject sequenceTouchApplier => _sequenceTouchApplier;
-
-        [Required]
-        [SerializeField]
-        private GameObject _sequenceAutoplayer;
-
-        public GameObject sequenceAutoplayer => _sequenceAutoplayer;
-
-        [Required]
-        [SerializeField]
-        private GameObject _standardDirector;
-
-        public GameObject standardDirector => _standardDirector;
-
-        [Required]
-        [SerializeField]
-        private GameObject _swipeDirector;
-
-        public GameObject swipeDirector => _swipeDirector;
-
-        [Required]
-        [SerializeField]
-        private GameObject _scrollSnapController;
-
-        public GameObject scrollSnapController
-        {
-            get => _scrollSnapController;
-            set => _scrollSnapController = value;
-        }
-
+        public GameObject scrollSnapControllerPrefab => _scrollSnapControllerPrefab;
+        
         [Required]
         [SerializeField]
         private GameObject _scrollSnapIcon;
 
         public GameObject scrollSnapIcon => _scrollSnapIcon;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _dynamicAppLayoutControllerPrefab;
+
+        public GameObject dynamicAppLayoutControllerPrefab => _dynamicAppLayoutControllerPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _dynamicStoryLayoutControllerPrefab;
+
+        public GameObject dynamicStoryLayoutControllerPrefab => _dynamicStoryLayoutControllerPrefab;
+
+        [Required]
+        [SerializeField]
+        private GameObject _simplePlayableDirectorPrefab;
+
+        public GameObject simplePlayableDirectorPrefab => _simplePlayableDirectorPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _contentExtensionControllerPrefab;
+
+        public GameObject contentExtensionControllerPrefab => _contentExtensionControllerPrefab;
 
         [Required]
         [SerializeField]
@@ -94,5 +97,49 @@ namespace AltSalt.Maestro
         private GameObject _sequenceConfig;
 
         public GameObject sequenceConfig => _sequenceConfig;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _arrowIndicatorPrefab;
+
+        public GameObject arrowIndicatorPrefab => _arrowIndicatorPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _scrubberPrefab;
+
+        public GameObject scrubberPrefab => _scrubberPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _manualVideoPlayerPrefab;
+
+        public GameObject manualVideoPlayerPrefab => _manualVideoPlayerPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _forwardReverseVideoPlayerPrefab;
+
+        public GameObject forwardReverseVideoPlayerPrefab => _forwardReverseVideoPlayerPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _DOTweenUtilsPrefab;
+
+        public GameObject DOTweenUtilsPrefab => _DOTweenUtilsPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _audioSourceController;
+
+        public GameObject audioSourceController => _audioSourceController;
+        
+        [Required]
+        [SerializeField]
+        private AudioMixer _audioMixerTemplate;
+
+        public AudioMixer audioMixerTemplate => _audioMixerTemplate;
+
+
     }
 }

@@ -53,7 +53,8 @@ namespace AltSalt.Maestro.Sequencing
             MasterSequencePlusConfig,
             MasterSequence,
             SequenceConfig,
-            SimpleDirector,
+            SimplePlayableDirector,
+            SimplePlayableDirectorPlusTimeline,
             Sequence,
             TimelineAsset,
             CloneTimeline,
@@ -188,14 +189,25 @@ namespace AltSalt.Maestro.Sequencing
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SequenceConfigDependenciesPopulated, button);
                     break;
-
-                case nameof(ButtonNames.SimpleDirector):
+                
+                case nameof(ButtonNames.SimplePlayableDirector):
                     button.clickable.clicked += () => {
                         if (selectOnCreation == true) {
-                            Selection.activeObject = CreateSimpleDirector(Selection.transforms, selectedObjectDirectory, sequenceName);
+                            Selection.activeObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.simplePlayableDirectorPrefab, sequenceName);
                         }
                         else {
-                            CreateSimpleDirector(Selection.transforms, selectedObjectDirectory, sequenceName);
+                            ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.simplePlayableDirectorPrefab, sequenceName);
+                        }
+                    };
+                    break;
+
+                case nameof(ButtonNames.SimplePlayableDirectorPlusTimeline):
+                    button.clickable.clicked += () => {
+                        if (selectOnCreation == true) {
+                            Selection.activeObject = CreateSimpleDirectorPlusTimeline(Selection.transforms, selectedObjectDirectory, sequenceName);
+                        }
+                        else {
+                            CreateSimpleDirectorPlusTimeline(Selection.transforms, selectedObjectDirectory, sequenceName);
                         }
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SimpleDirectorDependenciesPopulated, button);
@@ -368,12 +380,12 @@ namespace AltSalt.Maestro.Sequencing
             return targetSequence;
         }
         
-        public static PlayableDirector CreateSimpleDirector(Transform[] selectedTransforms, string targetDirectory, string name)
+        public static PlayableDirector CreateSimpleDirectorPlusTimeline(Transform[] selectedTransforms, string targetDirectory, string name)
         {
             TimelineAsset timelineAsset = CreateTimelineAsset(targetDirectory, name);
             
             if (timelineAsset != null) {
-                PlayableDirector playableDirector = ModuleUtils.CreateElement(selectedTransforms, ModuleUtils.moduleReferences.standardDirector, name).GetComponent<PlayableDirector>();
+                PlayableDirector playableDirector = ModuleUtils.CreateElement(selectedTransforms, ModuleUtils.moduleReferences.simplePlayableDirectorPrefab, name).GetComponent<PlayableDirector>();
                 playableDirector.playableAsset = timelineAsset;
                 EditorUtility.SetDirty(playableDirector);
 

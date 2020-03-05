@@ -71,14 +71,14 @@ namespace AltSalt.Maestro
                 // Re-parent the newly created element so that it appears in the hierarchy where you'd expect it to be
                 Undo.SetTransformParent(newElement.transform, parentTransform, "set parent on new element");
                 newElement.transform.SetSiblingIndex(sibIndex);
-
+                newElement.layer = selectedTransforms[0].gameObject.layer;
+                
             // Otherwise, set the newly created element as the child of the current selection. 
             } else if (selectedTransforms.Length == 1) {
                 newElement.transform.SetParent(selectedTransforms[0]);
+                newElement.layer = selectedTransforms[0].gameObject.layer;
             }
 
-            newElement.layer = selectedTransforms[0].gameObject.layer;
-            
             FocusHierarchyWindow();
             return newElement;
         }

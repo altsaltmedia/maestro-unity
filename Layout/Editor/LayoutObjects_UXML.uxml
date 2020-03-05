@@ -19,12 +19,34 @@ xsi:schemaLocation="
             <engine:VisualElement class="section">
 
                 <engine:VisualElement class="section___content">
-                    <engine:Button text="New Text" class="col-full" name="NewText" />
-                    <engine:Button text="New Sprite" class="col-full" name="NewSprite" />
-                    <engine:Button text="New Empty Container" class="col-full" name="NewEmptyContainer" />
-                    <engine:Button text="New Empty Responsive Container" class="col-full" name="NewEmptyResponsiveContainer" />
-                    <engine:Button text="New Container" class="col-full" name="NewContainer" />
-                    <engine:Button text="New Responsive Container" class="col-full" name="NewResponsiveContainer" />
+                    <engine:Label class="bold" text="simple objects" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Text" class="col-full" name="Text" />
+                    <engine:Button text="Sprite" class="col-full" name="Sprite" />
+                    <engine:Button text="Empty Container" class="col-full" name="EmptyContainer" />
+                    <engine:Button text="Empty Responsive Container" class="col-full" name="EmptyResponsiveContainer" />
+                    <engine:Button text="Container" class="col-full" name="Container" />
+                    <engine:Button text="Responsive Container" class="col-full" name="ResponsiveContainer" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="complex objects" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Simple Video Player" class="col-full" name="SimpleVideoPlayer" />
+                    <engine:Button text="Scroll Snap Controller" class="col-full" name="ScrollSnapController" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="utilities" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Dynamic App Layout Controller" class="col-full" name="DynamicAppLayoutController" />
+                    <engine:Button text="Dynamic Story Layout Controller" class="col-full" name="DynamicStoryLayoutController" />
                 </engine:VisualElement>
 
             </engine:VisualElement>

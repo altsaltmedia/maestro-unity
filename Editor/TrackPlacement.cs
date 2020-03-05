@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
+using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using Sirenix.Utilities;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
@@ -16,12 +15,42 @@ namespace AltSalt.Maestro
     {
         private static TrackPlacement trackPlacementWindow;
         
-        public delegate void AllowBlankTracksChangedDelegate();
-        public static AllowBlankTracksChangedDelegate allowBlankTracksChangedDelegate = () => { };
+        public delegate void AllowBlankTracksChangedHandler();
         
-        public delegate TrackAsset TriggerCreateTrackDelegate(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject);
-        public static TriggerCreateTrackDelegate triggerCreateTrackDelegate =
+        private static event AllowBlankTracksChangedHandler _allowBlankTracksChanged = () => { };
+        
+        public static event AllowBlankTracksChangedHandler allowBlankTracksChanged
+        {
+            add
+            {
+                if (_allowBlankTracksChanged == null
+                    || _allowBlankTracksChanged.GetInvocationList().Contains(value) == false) {
+                    _allowBlankTracksChanged += value;
+                }
+                
+            }
+            
+            remove => _allowBlankTracksChanged -= value;
+        }
+        
+        public delegate TrackAsset TrackCreatedHandler(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject);
+        
+        private static event TrackCreatedHandler _trackCreated =
             (targetDirector, targetTrack, targetObject) => targetTrack;
+        
+        public static event TrackCreatedHandler trackCreated
+        {
+            add
+            {
+                if (_trackCreated == null
+                    || _trackCreated.GetInvocationList().Contains(value) == false) {
+                    _trackCreated += value;
+                }
+                
+            }
+            
+            remove => _trackCreated -= value;
+        }
 
         protected override ModuleWindow Configure(ControlPanel controlPanel, string uxmlPath)
         {
@@ -238,7 +267,7 @@ namespace AltSalt.Maestro
                     visualElement.RegisterCallback<ChangeEvent<bool>>((ChangeEvent<bool> evt) => {
                         allowBlankTracks = evt.newValue;
                         UpdateDisplay();
-                        allowBlankTracksChangedDelegate.Invoke();
+                        _allowBlankTracksChanged.Invoke();
                     });
                     break;
             }
@@ -617,7 +646,7 @@ namespace AltSalt.Maestro
                     if (requiredObjectType != null && Utils.TargetTypeSelected(sourceObjects[i], requiredObjectType) == true) {
                         TrackAsset newTrack = CreateNewTrack(targetTimelineAsset, parentTrack, trackType);
                         trackAssets.Add(newTrack);
-                        triggerCreateTrackDelegate.Invoke(targetDirector, newTrack, sourceObjects[i]);
+                        _trackCreated.Invoke(targetDirector, newTrack, sourceObjects[i]);
                     }
                 }
             } else {
@@ -641,7 +670,7 @@ namespace AltSalt.Maestro
                     if (requiredComponentType != null && Utils.TargetComponentSelected(sortedGameObjects[i], requiredComponentType) == true) {
                         TrackAsset newTrack = CreateNewTrack(targetTimelineAsset, parentTrack, trackType);
                         trackAssets.Add(newTrack);
-                        triggerCreateTrackDelegate.Invoke(targetDirector, newTrack, sortedGameObjects[i]);
+                        _trackCreated.Invoke(targetDirector, newTrack, sortedGameObjects[i]);
                     }
                 }
             } else {

@@ -54,10 +54,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b726e75763a3145b5a2ef3bf6aef7ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appSettings:
-    _isSystemReference: 0
-    _referenceName: 
-    _variable: {fileID: 0}
 --- !u!114 &6558071551123153877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,11 +72,11 @@ MonoBehaviour:
     _appSettings:
       _isSystemReference: 0
       _referenceName: AppSettings
-      _variable: {fileID: 11400000, guid: dac4caa1201f7491ab92309e0a642ecb, type: 2}
+      _variable: {fileID: 0}
     _parentObject: {fileID: 6558071551123153877}
     _serializedPropertyPath: _actionTrigger
     _triggerOnStart: 0
-    _resetGameStateOnStart: 0
+    _resetGameStateOnExecute: 0
     _hasDelay: 0
     _delay: 0
     _genericActions: []
@@ -94,15 +90,11 @@ MonoBehaviour:
       _parentObject: {fileID: 6558071551123153877}
       _serializedPropertyPath: _actionTrigger._conditionResponseActions.0
       _triggerType: 0
-      _triggerOnStart: 1
       _eventExecutionType: 1
       _boolEvents:
       - _conditionEventTitle: Please populate a bool reference.
         _parentObject: {fileID: 6558071551123153877}
         _serializedPropertyPath: _actionTrigger._conditionResponseActions.0._boolEvents.0
-        _response:
-          m_PersistentCalls:
-            m_Calls: []
         _action:
           m_PersistentCalls:
             m_Calls:
@@ -117,13 +109,12 @@ MonoBehaviour:
                 m_StringArgument: 
                 m_BoolArgument: 0
               m_CallState: 2
-        _migrated: 1
         _boolReference:
           _isSystemReference: 0
           _referenceName: VolumeEnabled
           _useConstant: 0
           _constantValue: 0
-          _variable: {fileID: 0}
+          _variable: {fileID: 11400000, guid: 3aa915155becf4e5093bc601bc47ed4f, type: 2}
         _boolCondition:
           _isSystemReference: 0
           _referenceName: 
@@ -133,9 +124,6 @@ MonoBehaviour:
       - _conditionEventTitle: Please populate a bool reference.
         _parentObject: {fileID: 6558071551123153877}
         _serializedPropertyPath: _actionTrigger._conditionResponseActions.0._boolEvents.1
-        _response:
-          m_PersistentCalls:
-            m_Calls: []
         _action:
           m_PersistentCalls:
             m_Calls:
@@ -150,13 +138,12 @@ MonoBehaviour:
                 m_StringArgument: 
                 m_BoolArgument: 0
               m_CallState: 2
-        _migrated: 1
         _boolReference:
           _isSystemReference: 0
           _referenceName: VolumeEnabled
           _useConstant: 0
           _constantValue: 0
-          _variable: {fileID: 0}
+          _variable: {fileID: 11400000, guid: 3aa915155becf4e5093bc601bc47ed4f, type: 2}
         _boolCondition:
           _isSystemReference: 0
           _referenceName: 
@@ -185,11 +172,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: VolumeEnabled
-    _variable: {fileID: 11400000, guid: aad01515d17e04bbaa0169c935a3b210, type: 2}
+    _variable: {fileID: 0}
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -204,4 +190,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
+  _skipRegistration: 0

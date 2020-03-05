@@ -37,16 +37,20 @@ namespace AltSalt.Maestro
             LayoutObjects,
             EditObjectValues,
             TextPlacementUtils,
+            ContentExtensionStructures,
+            LayoutTools,
+            TextTools,
             SequencingStructures,
             JoinConfig,
             TouchConfig,
             AutorunConfig,
+            NavigationStructures,
             TrackPlacement,
             TimelineAssetManipulation,
             ClipPlacement,
             PopulateAnimationClips,
             TimelineMonitor,
-            SimpleAnimation,
+            AnimationStructures,
             AnimationTracks,
             EditAnimationClips,
             AudioStructures,
@@ -55,8 +59,6 @@ namespace AltSalt.Maestro
             EventTracks,
             ComplexLogicStructures,
             SensorStructures,
-            LayoutTools,
-            TextTools,
             ObjectCreation,
             HierarchySelection,
             ResponsiveBreakpointUtils,
@@ -71,7 +73,8 @@ namespace AltSalt.Maestro
                 ModuleNames.EditObjectValues,
                 ModuleNames.TextPlacementUtils,
                 ModuleNames.TextTools,
-                ModuleNames.LayoutTools
+                ModuleNames.LayoutTools,
+                ModuleNames.ContentExtensionStructures
             }},
             {ModuleNamespace.Sequencing, new List<ModuleNames>
             {
@@ -86,9 +89,13 @@ namespace AltSalt.Maestro
             {
                 ModuleNames.AutorunConfig
             }},
+            {ModuleNamespace.Navigation, new List<ModuleNames>
+            {
+                ModuleNames.NavigationStructures
+            }},
             {ModuleNamespace.Animation, new List<ModuleNames>
             {
-                ModuleNames.SimpleAnimation,
+                ModuleNames.AnimationStructures,
                 ModuleNames.AnimationTracks,
                 ModuleNames.EditAnimationClips
             }},
@@ -127,11 +134,14 @@ namespace AltSalt.Maestro
             { ModuleNames.ObjectCreation, new List<ModuleNames>()
             {
                 ModuleNames.LayoutObjects,
+                ModuleNames.ContentExtensionStructures,
                 ModuleNames.SequencingStructures,
                 ModuleNames.TrackPlacement,
                 ModuleNames.JoinConfig,
                 ModuleNames.TouchConfig,
                 ModuleNames.AutorunConfig,
+                ModuleNames.NavigationStructures,
+                ModuleNames.AnimationStructures,
                 ModuleNames.AudioStructures,
                 ModuleNames.SimpleLogicStructures,
                 ModuleNames.ComplexLogicStructures
@@ -402,11 +412,11 @@ namespace AltSalt.Maestro
             ModuleWindow moduleWindow = null;
             
             if (ModuleNames.TryParse(moduleString, out ModuleNames moduleName) == false) {
-                Debug.Log($"Unable to find data for module {moduleString}. Is your button named correctly?");   
+                Debug.LogError($"Unable to find data for module {moduleString}. Is your button named correctly?");   
             }
             
             else if (controlPanel.disabledButtonNames.Contains(moduleName) == true) {
-                Debug.Log($"{moduleString} module already created.");
+                //Debug.Log($"{moduleString} module already created.");
             }
             
             else {

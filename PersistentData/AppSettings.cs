@@ -958,7 +958,7 @@ namespace AltSalt.Maestro
         
         private static dynamic CreateAppSetting(Type assetType, string name)
         {
-            return Utils.CreateScriptableObjectAsset(assetType, name, Utils.settingsPath);
+            return Utils.ForceCreateScriptableObjectAsset(assetType, name, Utils.settingsPath);
         }
 
 #endif

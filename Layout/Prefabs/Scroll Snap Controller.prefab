@@ -973,6 +973,26 @@ PrefabInstance:
       propertyPath: m_firstOverflowCharacterIndex
       value: 16
       objectReference: {fileID: 0}
+    - target: {fileID: 114831698138452250, guid: 3debdbfe67bf74f7d80607d7136b89a9,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114831698138452250, guid: 3debdbfe67bf74f7d80607d7136b89a9,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114831698138452250, guid: 3debdbfe67bf74f7d80607d7136b89a9,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114831698138452250, guid: 3debdbfe67bf74f7d80607d7136b89a9,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190335
+      objectReference: {fileID: 0}
     - target: {fileID: 114860081495304408, guid: 3debdbfe67bf74f7d80607d7136b89a9,
         type: 3}
       propertyPath: modifySettings

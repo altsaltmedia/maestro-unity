@@ -158,7 +158,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f105af474ee0647009f5c4ff823a2914, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -243,8 +243,8 @@ MonoBehaviour:
   _color:
     _isSystemReference: 0
     _referenceName: 
-    _useConstant: 0
-    _constantValue: {r: 0, g: 0, b: 0, a: 0}
+    _useConstant: 1
+    _constantValue: {r: 1, g: 1, b: 1, a: 1}
     _variable: {fileID: 0}
 --- !u!1 &8611712818853803513
 GameObject:
@@ -397,6 +397,6 @@ MonoBehaviour:
   _color:
     _isSystemReference: 0
     _referenceName: 
-    _useConstant: 0
-    _constantValue: {r: 0, g: 0, b: 0, a: 0}
+    _useConstant: 1
+    _constantValue: {r: 1, g: 1, b: 1, a: 1}
     _variable: {fileID: 0}

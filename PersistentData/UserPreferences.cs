@@ -144,7 +144,7 @@ namespace AltSalt.Maestro
         
         private static dynamic CreateUserPreference(Type assetType, string name, string userName)
         {
-            return Utils.CreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/UsetData/{userName}");
+            return Utils.ForceCreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/UsetData/{userName}");
         }
 #endif
     }

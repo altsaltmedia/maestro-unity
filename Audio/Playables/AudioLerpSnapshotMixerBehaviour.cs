@@ -26,29 +26,30 @@ namespace AltSalt.Maestro.Audio
                 input = inputPlayable.GetBehaviour();
                 percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
 
+                // Skip this clip if snapshots are not defined.
+                if (input.snapshotA == null || input.snapshotB == null) continue;
+
                 AudioMixerSnapshot[] audioMixerSnapshots = CreateSnapshotArrayFromInput(input);
 
+                // Because the volume of mixers is on an logarithmic scale,
+                // we need special handling for when we're crossfading volume to make
+                // sure things scale as expected
                 if (input.crossfade == true) {
 
-                    if (input.targetStartingWeight < 0.0001f) {
-                        input.targetStartingWeight = 0.0001f;
+                    if (input.initialBlend < 0.0001f) {
+                        input.initialBlend = 0.0001f;
                     }
 
-                    if (input.targetEndingWeight < 0.0001f) {
-                        input.targetEndingWeight = 0.0001f;
+                    if (input.targetBlend < 0.0001f) {
+                        input.targetBlend = 0.0001f;
                     }
 
                     float weightModifier = CrossfadeAudio(i, input, inputWeight, percentageComplete, timelineInstanceConfig.currentTime);
 
                     if (float.IsNaN(weightModifier) == false) {
                         float[] newWeights = new float[2];
-                        if(input.fadeType == FadeType.FadeIn) {
-                            newWeights[0] = weightModifier / -80f;
-                            newWeights[1] = 1 - (weightModifier / -80f);
-                        } else {
-                            newWeights[0] = 1 - (weightModifier / -80f);
-                            newWeights[1] = weightModifier / -80f;
-                        }
+                        newWeights[0] = weightModifier / -80f;
+                        newWeights[1] = 1 - (weightModifier / -80f);
                         trackBinding.TransitionToSnapshots(audioMixerSnapshots, newWeights, Time.deltaTime);
                     }
 
@@ -67,27 +68,27 @@ namespace AltSalt.Maestro.Audio
             } 
         }
 
-        AudioMixerSnapshot[] CreateSnapshotArrayFromInput(AudioLerpSnapshotBehaviour behaviour)
+        private static AudioMixerSnapshot[] CreateSnapshotArrayFromInput(AudioLerpSnapshotBehaviour behaviour)
         {
             AudioMixerSnapshot[] snapshotArray = new AudioMixerSnapshot[2];
 
-            snapshotArray[0] = behaviour.fromSnapshot;
-            snapshotArray[1] = behaviour.targetSnapshot;
+            snapshotArray[0] = behaviour.snapshotA;
+            snapshotArray[1] = behaviour.snapshotB;
 
             return snapshotArray;
         }
 
-        static float CrossfadeAudio(int inputCount, AudioLerpSnapshotBehaviour behaviour, float inputWeight, float clipPercentage, double currentTime)
+        private static float CrossfadeAudio(int inputCount, AudioLerpSnapshotBehaviour behaviour, float inputWeight, float clipPercentage, double currentTime)
         {
             float weightModifier = float.NaN;
 
             if (inputWeight >= 1f) {
-                weightModifier = Mathf.Log10(Mathf.Lerp(behaviour.targetStartingWeight, behaviour.targetEndingWeight, behaviour.easingFunction(0f, 1f, clipPercentage))) * 20f;
+                weightModifier = Mathf.Log10(Mathf.Lerp(behaviour.initialBlend, behaviour.targetBlend, behaviour.easingFunction(0f, 1f, clipPercentage))) * 20f;
             } else {
                 if (currentTime >= behaviour.endTime) {
-                    weightModifier = Mathf.Log10(Mathf.Lerp(behaviour.targetStartingWeight, behaviour.targetEndingWeight, behaviour.easingFunction(0f, 1f, 1f))) * 20f;
+                    weightModifier = Mathf.Log10(Mathf.Lerp(behaviour.initialBlend, behaviour.targetBlend, behaviour.easingFunction(0f, 1f, 1f))) * 20f;
                 } else if (inputCount == 0 && currentTime <= behaviour.startTime) {
-                    weightModifier = Mathf.Log10(Mathf.Lerp(behaviour.targetStartingWeight, behaviour.targetEndingWeight, behaviour.easingFunction(0f, 1f, 0))) * 20f;
+                    weightModifier = Mathf.Log10(Mathf.Lerp(behaviour.initialBlend, behaviour.targetBlend, behaviour.easingFunction(0f, 1f, 0))) * 20f;
                 }
             }
 
@@ -95,17 +96,17 @@ namespace AltSalt.Maestro.Audio
         }
 
 
-        static float BlendSnapshots(int inputCount, AudioLerpSnapshotBehaviour behaviour, float inputWeight, float clipPercentage, double currentTime)
+        protected virtual float BlendSnapshots(int inputCount, AudioLerpSnapshotBehaviour behaviour, float inputWeight, float clipPercentage, double currentTime)
         {
             float weightModifier = float.NaN;
 
             if (inputWeight >= 1f) {
-                weightModifier = Mathf.Lerp(behaviour.targetStartingWeight, behaviour.targetEndingWeight, behaviour.easingFunction(0f, 1f, clipPercentage));
+                weightModifier = Mathf.Lerp(behaviour.initialBlend, behaviour.targetBlend, behaviour.easingFunction(0f, 1f, clipPercentage));
             } else {
                 if (currentTime >= behaviour.endTime) {
-                    weightModifier = Mathf.Lerp(behaviour.targetStartingWeight, behaviour.targetEndingWeight, behaviour.easingFunction(0f, 1f, 1f));
+                    weightModifier = Mathf.Lerp(behaviour.initialBlend, behaviour.targetBlend, behaviour.easingFunction(0f, 1f, 1f));
                 } else if (inputCount == 0 && currentTime <= behaviour.startTime) {
-                    weightModifier = Mathf.Lerp(behaviour.targetStartingWeight, behaviour.targetEndingWeight, behaviour.easingFunction(0f, 1f, 0));
+                    weightModifier = Mathf.Lerp(behaviour.initialBlend, behaviour.targetBlend, behaviour.easingFunction(0f, 1f, 0));
                 }
             }
 

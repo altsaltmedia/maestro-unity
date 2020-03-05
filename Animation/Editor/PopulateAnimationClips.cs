@@ -70,6 +70,19 @@ namespace AltSalt.Maestro.Animation
                         asset.template.ease = easeType;
                         return asset;
                     }
+                
+                case nameof(ManualVideoPlayerTimeTrack): {
+                    ManualVideoPlayerTimeClip asset = timelineClip.asset as ManualVideoPlayerTimeClip;
+                    ManualVideoPlayer component = sourceObject as ManualVideoPlayer;
+                    if (component != null) {
+                        asset.template.initialValueIOS = (float)component.masterTime;
+                        asset.template.targetValueIOS = (float)component.masterTime;
+                        asset.template.initialValueAndroid = (float)component.masterTime;
+                        asset.template.targetValueAndroid = (float)component.masterTime;
+                    }
+                    asset.template.ease = easeType;
+                    return asset;
+                }
 
                 case nameof(LerpFloatVarTrack): {
                         FloatClip asset = timelineClip.asset as FloatClip;
@@ -106,7 +119,7 @@ namespace AltSalt.Maestro.Animation
 
                 default:
                 {
-                    Debug.LogError("Track type not recognized");
+                    //Debug.Log("Track type not recognized");
                     return null;
                 }
             }

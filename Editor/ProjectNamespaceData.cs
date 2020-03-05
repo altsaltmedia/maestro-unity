@@ -11,6 +11,7 @@ namespace AltSalt.Maestro
             { ModuleNamespace.Sequencing, new ModuleNamespaceStrings( Utils.rootNamespace + ".Sequencing", Utils.scriptsPath + "/Sequencing/")},
             { ModuleNamespace.Autorun, new ModuleNamespaceStrings( Utils.rootNamespace + ".Sequencing.Autorun", Utils.scriptsPath + "/Sequencing/Autorun/")},
             { ModuleNamespace.Touch, new ModuleNamespaceStrings( Utils.rootNamespace + ".Sequencing.Touch", Utils.scriptsPath + "/Sequencing/Touch/")},
+            { ModuleNamespace.Navigation, new ModuleNamespaceStrings( Utils.rootNamespace + ".Sequencing.Navigation", Utils.scriptsPath + "/Sequencing/Navigation/")},
             { ModuleNamespace.Animation, new ModuleNamespaceStrings( Utils.rootNamespace + ".Animation",Utils.scriptsPath + "/Animation/")},
             { ModuleNamespace.Audio, new ModuleNamespaceStrings( Utils.rootNamespace + ".Audio", Utils.scriptsPath + "/Audio/")},
             { ModuleNamespace.Logic, new ModuleNamespaceStrings( Utils.rootNamespace + ".Logic", Utils.scriptsPath + "/Logic/")},

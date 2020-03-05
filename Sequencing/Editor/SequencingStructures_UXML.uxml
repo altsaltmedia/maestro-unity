@@ -32,7 +32,8 @@ xsi:schemaLocation="
                     <engine:Button text="Master Sequence + Config" class="col-full" name="MasterSequencePlusConfig"/>
                     <engine:Button text="Master Sequence" class="col-full" name="MasterSequence"/>
                     <engine:Button text="Sequence Config" class="col-full" name="SequenceConfig" />
-                    <engine:Button text="Simple Director" class="col-full" name="SimpleDirector" />
+                    <engine:Button text="Simple Playable Director" class="col-full" name="SimplePlayableDirector" />
+                    <engine:Button text="Simple Playable Director + Timeline" class="col-full" name="SimplePlayableDirectorPlusTimeline" />
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">
@@ -72,7 +73,7 @@ xsi:schemaLocation="
                         </engine:VisualElement>
 
                         <engine:VisualElement class="section___content">
-                            <engine:TextElement class="bold" text="Simple Director" />
+                            <engine:TextElement class="bold" text="Simple Playable Director + Timeline" />
                             <engine:TextElement text="Select a game object, name, and directory to activate." />
                         </engine:VisualElement>
 

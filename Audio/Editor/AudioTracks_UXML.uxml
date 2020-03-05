@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+	<engine:VisualElement name="audio-tracks">
+
+        <engine:Foldout class="foldout" text="Audio > Audio Tracks" value="true" name="AudioTracks">    
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="audio source tracks" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Fade Play Track(s)" class="col-full" name="AudioFadePlayVolumeTrack" />
+                    <engine:Button text="Lerp Volume Track(s)" class="col-full" name="AudioLerpVolumeTrack" />
+                    <engine:Button text="Forward Reverse Track(s)" class="col-full" name="AudioForwardReverseTrack" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="audio mixer tracks" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Lerp Snapshot Track(s)" class="col-full" name="AudioLerpSnapshotTrack" />
+                    <engine:Button text="Fade In Track(s)" class="col-full" name="AudioLerpSnapshotFadeInTrack" />
+                    <engine:Button text="Fade Out Track(s)" class="col-full" name="AudioLerpSnapshotFadeOutTrack" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

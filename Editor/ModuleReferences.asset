@@ -22,17 +22,19 @@ MonoBehaviour:
     type: 3}
   _responsiveContainerLeftAnchorPrefab: {fileID: 1820016223117700670, guid: 7f83d03ac65ea434e97192b7341aa13d,
     type: 3}
-  _sequenceTouchApplier: {fileID: 1187882997373286, guid: a08611f7b640e4826b42e1a84b4a6221,
+  _simpleVideoPlayerPrefab: {fileID: 5355875081997321778, guid: 9bbd1dd5f858d4d4e874b404bff3bbdc,
     type: 3}
-  _sequenceAutoplayer: {fileID: 1170332053769480, guid: be5fcc5036f2446f9a35aceadc3fd2cb,
-    type: 3}
-  _standardDirector: {fileID: 1176190904042262, guid: 45500f98c099c4c6ba46239041287a4f,
-    type: 3}
-  _swipeDirector: {fileID: 1651845744537938, guid: 965a9055c56ab4990862478b56e0829d,
-    type: 3}
-  _scrollSnapController: {fileID: 8985265788023737603, guid: c917a1d67419a49529112d5d955987b9,
+  _scrollSnapControllerPrefab: {fileID: 8985265788023737603, guid: c917a1d67419a49529112d5d955987b9,
     type: 3}
   _scrollSnapIcon: {fileID: 5769402479335331085, guid: 20d233b6ec3c147a1b02241028dfaef8,
+    type: 3}
+  _dynamicAppLayoutControllerPrefab: {fileID: 770529053451357263, guid: 3deee83047b8742e78c2ece3b8b6bd19,
+    type: 3}
+  _dynamicStoryLayoutControllerPrefab: {fileID: 1362800772877632, guid: b4bf611a1042843f9af2e0dd625c3c64,
+    type: 3}
+  _simplePlayableDirectorPrefab: {fileID: 1176190904042262, guid: 45500f98c099c4c6ba46239041287a4f,
+    type: 3}
+  _contentExtensionControllerPrefab: {fileID: 8425377671037399255, guid: b403bb85d596c42a0bb1cc9c30b5f022,
     type: 3}
   _rootConfig: {fileID: 2293772597486834399, guid: 0fce366f787b24fc5bfddeceb1f4704f,
     type: 3}
@@ -40,3 +42,17 @@ MonoBehaviour:
     type: 3}
   _sequenceConfig: {fileID: 1651845744537938, guid: 965a9055c56ab4990862478b56e0829d,
     type: 3}
+  _arrowIndicatorPrefab: {fileID: 3692700088946118707, guid: 6d6445770b9d44ef28e2327227c205d1,
+    type: 3}
+  _scrubberPrefab: {fileID: 5041828346612502890, guid: 4a184245bd69e42aa91fc7cc62eb3423,
+    type: 3}
+  _manualVideoPlayerPrefab: {fileID: 5710149980118981051, guid: c6283816672a549b9930a71c9a04f609,
+    type: 3}
+  _forwardReverseVideoPlayerPrefab: {fileID: 1675102690481016, guid: 889dec489754d48f482a4a83097ad325,
+    type: 3}
+  _DOTweenUtilsPrefab: {fileID: 2405777664073437529, guid: 9db9335831ef34b0896263e4f720a977,
+    type: 3}
+  _audioSourceController: {fileID: 1665444724315265679, guid: 71c34f49520934411831fc7f6734add6,
+    type: 3}
+  _audioMixerTemplate: {fileID: 24100000, guid: c61233630a93749a795aff87c2b4f4c0,
+    type: 2}

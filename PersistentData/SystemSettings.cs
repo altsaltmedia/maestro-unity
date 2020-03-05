@@ -205,7 +205,7 @@ namespace AltSalt.Maestro
         
         private static dynamic CreateSystemSetting(Type assetType, string name)
         {
-            return Utils.CreateScriptableObjectAsset(assetType, name, Utils.settingsPath + "/SystemSettings");
+            return Utils.ForceCreateScriptableObjectAsset(assetType, name, Utils.settingsPath + "/SystemSettings");
         }
 #endif
   

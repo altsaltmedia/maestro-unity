@@ -57,11 +57,14 @@ namespace AltSalt.Maestro.Layout
         [Button(ButtonSizes.Large), GUIColor(0.8f, 0.6f, 1)]
         private void CreateMaterials()
         {
+            // Create / recreate all materials
             for (int q = 0; q < meshRenderers.Count; q++) {
-                while (materialInstances.Count < meshRenderers.Count) {
-                    materialInstances.Add(null);
+                if (q > materialInstances.Count - 1) {
+                    materialInstances.Add(new Material(meshRenderers[q].sharedMaterial));
                 }
-                materialInstances[q] = new Material(meshRenderers[q].sharedMaterial);
+                else {
+                    materialInstances[q] = new Material(meshRenderers[q].sharedMaterial);
+                }
                 meshRenderers[q].sharedMaterial = materialInstances[q];
             }
         }

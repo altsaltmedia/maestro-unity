@@ -11,7 +11,7 @@ using Object = UnityEngine.Object;
 using UnityEditor;
 #endif
 
-namespace AltSalt.Maestro
+namespace AltSalt.Maestro.Layout
 {
     [ExecuteInEditMode]
     public class ContentExtensionController : MonoBehaviour

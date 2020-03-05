@@ -80,7 +80,7 @@ xsi:schemaLocation="
                         <engine:Button text="Join Config" class="col-full" name="JoinConfig" />
                         <engine:Button text="Touch Config" class="col-full" name="TouchConfig" />
                         <engine:Button text="Autorun Config" class="col-full" name="AutorunConfig" />
-                        <engine:Button text="Navigation Config" class="col-full" name="NavigationConfig" />
+                        <engine:Button text="Navigation Structures" class="col-full" name="NavigationStructures" />
                     </engine:VisualElement>
 
 
@@ -105,7 +105,7 @@ xsi:schemaLocation="
                     </engine:VisualElement>
 
                     <engine:VisualElement class="section___content">
-                        <engine:Button text="Simple Animation" class="col-full" name="SimpleAnimation" />
+                        <engine:Button text="Animation Structures" class="col-full" name="AnimationStructures" />
                         <engine:Button text="Animation Tracks" class="col-full" name="AnimationTracks" />
                         <engine:Button text="Edit Animation Clips" class="col-full" name="EditAnimationClips" />
                     </engine:VisualElement>

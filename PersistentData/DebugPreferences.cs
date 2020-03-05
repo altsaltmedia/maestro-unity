@@ -154,7 +154,7 @@ namespace AltSalt.Maestro
         
         private static dynamic CreateDebugPreference(Type assetType, string name)
         {
-            return Utils.CreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/DebugEvents");
+            return Utils.ForceCreateScriptableObjectAsset(assetType, name, $"{Utils.settingsPath}/DebugEvents");
         }
 #endif
 
