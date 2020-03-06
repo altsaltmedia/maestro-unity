@@ -40,7 +40,7 @@ namespace AltSalt.Maestro
         private VisualElementToggleData toggleData = new VisualElementToggleData();
         
         public string objectName = "";
-        public bool selectCreatedObject;
+        public bool selectCreatedObject = true;
 
         private Label directoryPathLabel;
         public string selectedObjectDirectory = "";

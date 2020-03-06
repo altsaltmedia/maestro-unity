@@ -6,7 +6,7 @@ namespace AltSalt.Maestro
 {
 
     [Serializable]
-    [CreateAssetMenu(menuName = "AltSalt/Events/Event Payload")]
+    [CreateAssetMenu(menuName = "Maestro/Events/Event Payload")]
     public class ComplexPayload : ScriptableObject
     {
 #if UNITY_EDITOR

@@ -169,7 +169,7 @@ namespace AltSalt.Maestro
             return button;
         }
         
-        [MenuItem("Edit/AltSalt/Create New Clip(s)", false, 0)]
+        [MenuItem("Edit/Maestro/Timeline/Create New Clip(s)", false, 0)]
         public static void HotkeyTriggerCreateClips()
         {
             bool selectCreatedClip = clipPlacement.selectCreatedClip;

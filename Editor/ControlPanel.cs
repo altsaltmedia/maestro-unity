@@ -55,9 +55,9 @@ namespace AltSalt.Maestro
             EditAnimationClips,
             AudioStructures,
             AudioTracks,
-            SimpleLogicStructures,
+            GameLogicStructures,
             EventTracks,
-            ComplexLogicStructures,
+            AppLogicStructures,
             SensorStructures,
             ObjectCreation,
             HierarchySelection,
@@ -110,8 +110,6 @@ namespace AltSalt.Maestro
                 ModuleNames.TimelineAssetManipulation,
                 ModuleNames.ClipPlacement,
                 ModuleNames.TimelineMonitor,
-                ModuleNames.SimpleLogicStructures,
-                ModuleNames.EventTracks,
                 ModuleNames.ObjectCreation,
                 ModuleNames.HierarchySelection,
                 ModuleNames.ResponsiveBreakpointUtils,
@@ -119,7 +117,9 @@ namespace AltSalt.Maestro
             }},
             {ModuleNamespace.Logic, new List<ModuleNames>
             {
-                ModuleNames.ComplexLogicStructures,
+                ModuleNames.GameLogicStructures,
+                ModuleNames.EventTracks,
+                ModuleNames.AppLogicStructures,
             }},
             {ModuleNamespace.Sensors, new List<ModuleNames>
             {
@@ -143,8 +143,8 @@ namespace AltSalt.Maestro
                 ModuleNames.NavigationStructures,
                 ModuleNames.AnimationStructures,
                 ModuleNames.AudioStructures,
-                ModuleNames.SimpleLogicStructures,
-                ModuleNames.ComplexLogicStructures
+                ModuleNames.GameLogicStructures,
+                ModuleNames.AppLogicStructures
             }},
             { ModuleNames.TrackPlacement, new List<ModuleNames>()
             {    

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AltSalt.Maestro
 {
     [Serializable]
-    [CreateAssetMenu(menuName = "AltSalt/Input Group Key")]
+    [CreateAssetMenu(menuName = "Maestro/Data Keys/Input Group Key")]
     public class InputGroupKey : CustomKey
     {
 #if UNITY_EDITOR

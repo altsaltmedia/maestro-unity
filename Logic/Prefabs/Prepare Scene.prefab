@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _simpleSignalReferences:
   - _isSystemReference: 0
-    _referenceName: SingleSceneLoadCompleted
-    _variable: {fileID: 11400000, guid: a3f57b945ac64452ba073911e9ed6db5, type: 2}
+    _referenceName: MainInput-BookmarkLoadingCompleted
+    _variable: {fileID: 11400000, guid: 4bf630a44a3f943a797dbc82bca9d42d, type: 2}
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -313,6 +313,11 @@ PrefabInstance:
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._complexEventActions.Array.data[0]._complexEventConfigurableTriggers.Array.data[0]._migrated
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._resetGameStateOnExecute
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

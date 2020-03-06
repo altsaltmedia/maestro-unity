@@ -340,7 +340,7 @@ namespace AltSalt.Maestro.Animation
             return visualElement;
         }
         
-        [MenuItem("Edit/AltSalt/Create Color Track", false, 0)]
+        [MenuItem("Edit/Maestro/Animation/Create Color Track", false, 0)]
         public static void HotkeyCreateColorTrack()
         {
             bool selectCreatedObject = animationTracks.selectCreatedObject;
@@ -369,7 +369,7 @@ namespace AltSalt.Maestro.Animation
             TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
         }
 
-        [MenuItem("Edit/AltSalt/Create Position Track", false, 0)]
+        [MenuItem("Edit/Maestro/Animation/Create Position Track", false, 0)]
         public static void HotkeyCreatePositionTrack()
         {
             bool selectCreatedObject = animationTracks.selectCreatedObject;

@@ -139,6 +139,30 @@ namespace AltSalt.Maestro
         private AudioMixer _audioMixerTemplate;
 
         public AudioMixer audioMixerTemplate => _audioMixerTemplate;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _simpleSignalListenerPrefab;
+
+        public GameObject simpleSignalListenerPrefab => _simpleSignalListenerPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _complexEventListenerPrefab;
+
+        public GameObject complexEventListenerPrefab => _complexEventListenerPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _actionTriggerPrefab;
+
+        public GameObject actionTriggerPrefab => _actionTriggerPrefab;
+        
+        [Required]
+        [SerializeField]
+        private GameObject _prepareScenePrefab;
+
+        public GameObject prepareScenePrefab => _prepareScenePrefab;
 
 
     }

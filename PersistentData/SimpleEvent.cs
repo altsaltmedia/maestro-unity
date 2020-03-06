@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Events/Simple Event")]
+    [CreateAssetMenu(menuName = "Maestro/Events/Simple Event")]
     public class SimpleEvent : SimpleSignal
     {
         protected override string title => nameof(SimpleEvent);

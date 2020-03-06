@@ -34,7 +34,7 @@ namespace AltSalt.Maestro
         }
 
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
-        [MenuItem("Tools/Maestro/Reset App Settings", false, 0)]
+        [MenuItem("Tools/Maestro/Reset App Settings")]
         public static void ResetAppSettings()
         {
             AppSettings appSettings = Utils.GetAppSettings();

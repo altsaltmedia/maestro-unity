@@ -178,7 +178,7 @@ namespace AltSalt.Maestro.Audio
             return button;
         }
 
-        [MenuItem("Edit/AltSalt/Audio/Fade Play Volume Track", false, 0)]
+        [MenuItem("Edit/Maestro/Audio/Fade Play Volume Track", false, 0)]
         public static void HotkeyCreateAudioFadePlayVolumeTrack()
         {
             bool selectCreatedObject = audioTracks.selectCreatedObject;
@@ -192,7 +192,7 @@ namespace AltSalt.Maestro.Audio
             TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
         }
 
-        [MenuItem("Edit/AltSalt/Audio/Lerp Snapshot Track", false, 0)]
+        [MenuItem("Edit/Maestro/Audio/Lerp Snapshot Track", false, 0)]
         public static void HotkeyCreateAudioLerpSnapshotTrack()
         {
             bool selectCreatedObject = audioTracks.selectCreatedObject;

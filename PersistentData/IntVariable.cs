@@ -13,7 +13,7 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Variables/Int Variable")]
+    [CreateAssetMenu(menuName = "Maestro/Variables/Int Variable")]
     public class IntVariable : ModifiableEditorVariable
     {
         protected override string title => nameof(IntVariable);

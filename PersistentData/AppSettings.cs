@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/App Settings")]
+    [CreateAssetMenu(menuName = "Maestro/Settings/App Settings")]
     public class AppSettings : ScriptableObject
     {
         [SerializeField, Required]

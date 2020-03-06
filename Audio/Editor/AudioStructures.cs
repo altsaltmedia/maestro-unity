@@ -1,5 +1,4 @@
-﻿using System.IO;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine.Audio;
 using UnityEngine.UIElements;
 
@@ -19,7 +18,6 @@ namespace AltSalt.Maestro.Audio
             UpdateDisplay();
             ControlPanel.inspectorUpdateDelegate += UpdateDisplay;
             ControlPanel.selectionChangedDelegate += UpdateDisplay;
-            //ControlPanel.selectionChangedDelegate += MoveAudioMixer;
 
             return this;
         }
@@ -28,7 +26,6 @@ namespace AltSalt.Maestro.Audio
         {
             ControlPanel.inspectorUpdateDelegate -= UpdateDisplay;
             ControlPanel.selectionChangedDelegate -= UpdateDisplay;
-            //ControlPanel.selectionChangedDelegate -= MoveAudioMixer;
         }
 
         private static VisualElementToggleData toggleData = new VisualElementToggleData();
@@ -37,41 +34,6 @@ namespace AltSalt.Maestro.Audio
         public bool selectOnCreation = true;
 
         private string selectedObjectDirectory => controlPanel.objectCreation.selectedObjectDirectory;
-
-        private AudioMixer audioMixerTemplate => ModuleUtils.moduleReferences.audioMixerTemplate;
-        
-        // private bool _audioMixerCreated;
-        //
-        // private bool audioMixerCreated
-        // {
-        //     get => _audioMixerCreated;
-        //     set => _audioMixerCreated = value;
-        // }
-        //
-        // private bool _moveAudioMixerLoaded;
-        //
-        // private bool moveAudioMixerLoaded
-        // {
-        //     get => _moveAudioMixerLoaded;
-        //     set => _moveAudioMixerLoaded = value;
-        // }
-
-        // private string _cachedMixerName;
-        //
-        // private string cachedMixerName
-        // {
-        //     get => _cachedMixerName;
-        //     set => _cachedMixerName = value;
-        // }
-        //
-        // private string _cachedDirectoryPath;
-        //
-        // private string cachedDirectoryPath
-        // {
-        //     get => _cachedDirectoryPath;
-        //     set => _cachedDirectoryPath = value;
-        // }
-
 
         private enum ButtonNames
         {

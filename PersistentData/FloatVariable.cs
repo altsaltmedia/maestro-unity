@@ -15,7 +15,7 @@ using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Variables/Float Variable")]
+    [CreateAssetMenu(menuName = "Maestro/Variables/Float Variable")]
     public class FloatVariable : ModifiableEditorVariable
     {
         protected override string title => nameof(FloatVariable);

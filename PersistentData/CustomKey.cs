@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Maestro
 {
     [Serializable]
-    [CreateAssetMenu(menuName = "AltSalt/Custom Key")]
+    [CreateAssetMenu(menuName = "Maestro/Data Keys/Custom Key")]
     public class CustomKey : RegisterableScriptableObject
     {
     protected virtual string title => "Custom Key";

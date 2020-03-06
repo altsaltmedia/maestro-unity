@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
-    [Serializable]
+    [CreateAssetMenu(menuName = "Maestro/Settings/Input Data")]
     public class InputData : ScriptableObject
     {
         [SerializeField]

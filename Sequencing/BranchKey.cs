@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AltSalt.Maestro.Sequencing
 {
 
-    [CreateAssetMenu(menuName = "AltSalt/Sequencing/Branch Key")]
+    [CreateAssetMenu(menuName = "Maestro/Sequencing/Branch Key")]
     [Serializable]
     public class BranchKey : CustomKey
     {

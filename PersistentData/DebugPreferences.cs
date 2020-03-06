@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Debug Settings")]
+    [CreateAssetMenu(menuName = "Maestro/Settings/Debug Preferences")]
     public class DebugPreferences : ScriptableObject
     {
         [SerializeField]

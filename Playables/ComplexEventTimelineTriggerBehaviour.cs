@@ -31,6 +31,7 @@ namespace AltSalt.Maestro
 
         public override bool executeWhileLoadingBookmarks => _executeWhileLoadingBookmarks;
 
+        [SerializeField]
         private bool _forceActivateOnForward = false;
 
         public override bool forceActivateOnForward => _forceActivateOnForward;

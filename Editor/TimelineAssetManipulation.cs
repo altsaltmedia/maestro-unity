@@ -336,7 +336,7 @@ namespace AltSalt.Maestro
 
                 case nameof(ButtonNames.DeselectAll):
                     button.clickable.clicked += () => {
-                        DeselectAll();
+                        ModuleUtils.DeselectAll();
                     };
                     break;
 
@@ -358,25 +358,17 @@ namespace AltSalt.Maestro
             return button;
         }
 
-        [MenuItem("Edit/AltSalt/Select Source Objects", false, 0)]
+        [MenuItem("Edit/Maestro/Timeline/Select Source Objects", false, 0)]
         public static void SelectSourceObjects()
         {
             Selection.objects = GetObjectsFromTimelineSelection(Selection.objects, TimelineEditor.selectedClips, TimelineEditor.inspectedDirector);
             TimelineUtils.RefreshTimelineContentsModified();
         }
 
-        [MenuItem("Edit/AltSalt/Select Target Tracks", false, 0)]
+        [MenuItem("Edit/Maestro/Timeline/Select Target Tracks", false, 0)]
         public static void SelectTargetTracks()
         {
             Selection.objects = SelectTargetTracks(Selection.objects, TimelineEditor.selectedClips, TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector);
-            TimelineUtils.RefreshTimelineContentsModified();
-        }
-
-        [MenuItem("Edit/AltSalt/Deselect All", false, 0)]
-        public static void DeselectAll()
-        {
-            TimelineEditor.selectedClips = new TimelineClip[0];
-            Selection.objects = new UnityEngine.Object[0];
             TimelineUtils.RefreshTimelineContentsModified();
         }
 

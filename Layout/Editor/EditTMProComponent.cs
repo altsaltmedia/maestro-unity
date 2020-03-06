@@ -239,7 +239,7 @@ namespace AltSalt.Maestro.Layout
             return button;
         }
 
-        [MenuItem("Edit/AltSalt/Rename Text Object", false, 0)]
+        [MenuItem("Edit/Maestro/Layout/Rename Text Object", false, 0)]
         public static void CallRenameTextUsingContent()
         {
             RenameTextUsingContent(Selection.gameObjects, renamePrefix);

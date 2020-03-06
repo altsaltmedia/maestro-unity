@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro
 {   
-    [CreateAssetMenu(menuName = "AltSalt/Touch/Axis")]
+    [CreateAssetMenu(menuName = "Maestro/Variables/Axis Variable")]
 	public class Axis : SimpleSignal
     {
         protected override string title => nameof(Axis);

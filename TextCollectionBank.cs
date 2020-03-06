@@ -10,7 +10,7 @@ using RotaryHeart.Lib.SerializableDictionary;
 namespace AltSalt.Maestro
 {
 
-    [CreateAssetMenu(menuName = "AltSalt/Modify/Text Collection Bank")]
+    [CreateAssetMenu(menuName = "Maestro/Content Extension/Text Collection Bank")]
     [Serializable]
     public class TextCollectionBank : ScriptableObject
     {

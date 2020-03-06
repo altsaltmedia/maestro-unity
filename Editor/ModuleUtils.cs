@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Timeline;
+using UnityEngine.Timeline;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro
 {
@@ -143,6 +146,31 @@ namespace AltSalt.Maestro
                 }
             }
             return targetListView;
+        }
+
+        [MenuItem("Edit/Maestro/Duplicate #d", false, -1000)]
+        private static void DuplicateSelection()
+        {
+            List<Object> newSelection = new List<Object>();
+
+            if (Selection.gameObjects.Length >= 1) {
+                newSelection.AddRange(Utils.DuplicateHierarchy(Selection.gameObjects));
+            }
+
+            if(TimelineEditor.inspectedAsset != null) {
+                newSelection.AddRange(TrackPlacement.DuplicateTracks(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.objects));
+                TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+            }
+
+            Selection.objects = newSelection.ToArray();
+        }
+
+        [MenuItem("Edit/Maestro/Deselect All",false, -1000)]
+        public static void DeselectAll()
+        {
+            TimelineEditor.selectedClips = new TimelineClip[0];
+            Selection.objects = new UnityEngine.Object[0];
+            TimelineUtils.RefreshTimelineContentsModified();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AltSalt.Maestro.Sequencing.Touch
 {
-    [CreateAssetMenu(menuName = "AltSalt/Sequencing/Touch Fork")]
+    [CreateAssetMenu(menuName = "Maestro/Sequencing/Touch Fork")]
     public class TouchFork : Fork
     {
         [TitleGroup("Y North")]

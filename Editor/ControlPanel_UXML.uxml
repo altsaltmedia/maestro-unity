@@ -63,10 +63,18 @@ xsi:schemaLocation="
                         <engine:Button text="Layout Objects" class="col-full" name="LayoutObjects" />
                         <engine:Button text="Edit Object Values" class="col-full" name="EditObjectValues" />
                         <engine:Button text="Text Placement Utils" class="col-full" name="TextPlacementUtils" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
+                            <engine:Label class="bold" text="Content Extension" />
+                    </engine:VisualElement>
+
+                    <engine:VisualElement class="section___content">
                         <engine:Button text="Content Extension Structures" class="col-full" name="ContentExtensionStructures" />
                         <engine:Button text="Layout Tools" class="col-full" name="LayoutTools" />
                         <engine:Button text="Text Tools" class="col-full" name="TextTools" />
                     </engine:VisualElement>
+
 
 
                     <!-- SEQUENCING -->
@@ -126,24 +134,14 @@ xsi:schemaLocation="
                     <!-- SIMPLE LOGIC -->
 
                     <engine:VisualElement class="section___content">
-                        <engine:Label class="bold" text="Simple Logic" />
+                        <engine:Label class="bold" text="Logic &amp; Sensors" />
                     </engine:VisualElement>
 
                     <engine:VisualElement class="section___content">
-                        <engine:Button text="Simple Logic Structures" class="col-full" name="LogicStructures" />
+                        <engine:Button text="Game Logic Structures" class="col-full" name="GameLogicStructures" />
                         <engine:Button text="Event Tracks" class="col-full" name="EventTracks" />
-                    </engine:VisualElement>
-
-                    
-                    <!-- COMPLEX LOGIC AND SENSORS -->
-
-                    <engine:VisualElement class="section___content">
-                        <engine:Label class="bold" text="Complex Logic / Sensors" />
-                    </engine:VisualElement>
-
-                    <engine:VisualElement class="section___content">
-                        <engine:Button text="Complex Logic Structures" class="col-full" name="LogicStructures" />
-                        <engine:Button text="Sensor Structures" class="col-full" name="LogicStructures" />
+                        <engine:Button text="App Logic Structures" class="col-full" name="AppLogicStructures" />
+                        <engine:Button text="Sensor Structures" class="col-full" name="SensorStructures" />
                     </engine:VisualElement>
 
 

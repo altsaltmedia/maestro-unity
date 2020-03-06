@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Events/Complex Event")]
+    [CreateAssetMenu(menuName = "Maestro/Events/Complex Event")]
     public class ComplexEvent : PersistentDataObject
     {
         protected override string title => nameof(ComplexEvent);

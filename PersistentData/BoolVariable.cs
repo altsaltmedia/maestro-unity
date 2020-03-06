@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Variables/Bool Variable")]
+    [CreateAssetMenu(menuName = "Maestro/Variables/Bool Variable")]
     public class BoolVariable : ModifiableEditorVariable
     {
         protected override string title => nameof(BoolVariable);

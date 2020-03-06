@@ -1144,6 +1144,9 @@ namespace AltSalt.Maestro
             var instance = ScriptableObject.CreateInstance(assetType);
             string[] arrayPath = targetPath.Split(new[]{'/'}, StringSplitOptions.RemoveEmptyEntries);
             string targetDirectory = Utils.GetDirectory(arrayPath);
+            if (string.IsNullOrEmpty(name) == true) {
+                name = assetType.Name;
+            }
             string newAssetPath = Utils.GetFilePath(targetDirectory, name, ".asset");
             
             bool createAsset = true;

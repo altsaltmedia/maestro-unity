@@ -193,7 +193,7 @@ namespace AltSalt.Maestro.Layout
             return button;
         }
 
-        [MenuItem("Edit/AltSalt/TextUtils/Toggle Onion Skin", false, 0)]
+        [MenuItem("Edit/Maestro/Text Placement Utils/Toggle Onion Skin", false, 0)]
         public static TMP_Text ToggleOnionSkin()
         {
             textPlacementUtils.toggleOnionSkin = !textPlacementUtils.toggleOnionSkin;
@@ -201,7 +201,7 @@ namespace AltSalt.Maestro.Layout
             return textPlacementUtils.onionSkin;
         }
 
-        [MenuItem("Edit/AltSalt/TextUtils/Populate Onion Skin", false, 0)]
+        [MenuItem("Edit/Maestro/Text Placement Utils/Populate Onion Skin", false, 0)]
         public static TMP_Text PopulateOnionSkin()
         {
             TMP_Text[] textSelection = GetTextComponents(Selection.gameObjects);
@@ -210,7 +210,7 @@ namespace AltSalt.Maestro.Layout
             return textPlacementUtils.onionSkin;
         }
 
-        [MenuItem("Edit/AltSalt/TextUtils/Select Onion Skin", false, 0)]
+        [MenuItem("Edit/Maestro/Text Placement Utils/Select Onion Skin", false, 0)]
         public static TMP_Text SelectOnionSkin()
         {
             Selection.activeGameObject = textPlacementUtils.onionSkin.gameObject;

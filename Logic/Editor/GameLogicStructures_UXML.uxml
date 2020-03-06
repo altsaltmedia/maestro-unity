@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+	<engine:VisualElement name="game-logic-structures">
+
+        <engine:Foldout class="foldout" text="Logic > Game Logic Structures" value="true" name="GameLogicStructures">    
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="variables" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Bool Variable" class="col-full" name="BoolVariable" />
+                    <engine:Button text="Int Variable" class="col-full" name="IntVariable" />
+                    <engine:Button text="String Variable" class="col-full" name="StringVariable" />
+                    <engine:Button text="Color Variable" class="col-full" name="ColorVariable" />
+                    <engine:Button text="Float Variable" class="col-full" name="FloatVariable" />
+                    <engine:Button text="Vector 2 Variable" class="col-full" name="V2Variable" />
+                    <engine:Button text="Vector 3 Variable" class="col-full" name="V3Variable" />
+                    <engine:Button text="Axis Variable" class="col-full" name="AxisVariable" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="events" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Simple Event" class="col-full" name="SimpleEvent" />
+                    <engine:Button text="Complex Event" class="col-full" name="ComplexEvent" />
+                    <engine:Button text="Complex Payload" class="col-full" name="ComplexPayload" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="objects" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Simple Signal Listener" class="col-full" name="SimpleSignalListener" />
+                    <engine:Button text="Complex Event Listener" class="col-full" name="ComplexEventListener" />
+                    <engine:Button text="Action Trigger" class="col-full" name="ActionTrigger" />
+                    <engine:Button text="Prepare Scene" class="col-full" name="PrepareScene" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

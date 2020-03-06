@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Modify/Text Family")]
+    [CreateAssetMenu(menuName = "Maestro/Content Extension/Text Family")]
     public class TextFamily : RegisterableScriptableObject, IContentExtensionConfig
     {
         

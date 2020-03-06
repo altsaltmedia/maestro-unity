@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Variables/String Variable")]
+    [CreateAssetMenu(menuName = "Maestro/Variables/String Variable")]
     public class StringVariable : ModifiableEditorVariable
     {
         protected override string title => nameof(StringVariable);

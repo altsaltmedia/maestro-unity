@@ -93,6 +93,9 @@ namespace AltSalt.Maestro
             }
             
             for (int q = 0; q < triggerBehaviour.simpleEventTriggers.Count; q++) {
+                
+                if(triggerBehaviour.simpleEventTriggers[q].GetVariable() == null) continue;
+                
                 triggerBehaviour.simpleEventTriggers[q].RaiseEvent(triggerBehaviour.timelineInstanceConfig.gameObject,
                     $"{triggerBehaviour.timelineInstanceConfig.name} director at {triggerBehaviour.timelineInstanceConfig.currentTime:F2}");
             }

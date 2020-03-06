@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro.Sequencing
 {
-    [CreateAssetMenu(menuName = "AltSalt/Sequencing/Fork")]
+    [CreateAssetMenu(menuName = "Maestro/Sequencing/Fork")]
     public class Fork : JoinerDestination
     {
         [SerializeField]

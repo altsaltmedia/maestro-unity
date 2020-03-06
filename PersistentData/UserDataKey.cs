@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Maestro
 {
     [Serializable]
-    [CreateAssetMenu(menuName = "AltSalt/User Data Key")]
+    [CreateAssetMenu(menuName = "Maestro/Data Keys/User Data Key")]
     public class UserDataKey : CustomKey
     {
 #if UNITY_EDITOR

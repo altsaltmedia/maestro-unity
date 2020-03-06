@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Sequencing
 {
-    [CreateAssetMenu(menuName = "AltSalt/Sequencing/Sequence")]
+    [CreateAssetMenu(menuName = "Maestro/Sequencing/Sequence")]
     public class Sequence : JoinerDestination
     {
         [SerializeField]

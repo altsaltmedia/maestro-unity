@@ -14,7 +14,7 @@ using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro
 {
-    [CreateAssetMenu(menuName = "AltSalt/Variables/Color Variable")]
+    [CreateAssetMenu(menuName = "Maestro/Variables/Color Variable")]
     [ExecuteInEditMode]
     public class ColorVariable : ModifiableEditorVariable
     {
