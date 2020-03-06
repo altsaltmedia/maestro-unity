@@ -11,7 +11,7 @@ namespace AltSalt.Maestro.Audio
     public class AudioLerpSnapshotTrack : LerpToTargetTrack
     {
         [SerializeField]
-        private DefaultSnapshotLerpType _defaultSnapshotLerpType;
+        private DefaultSnapshotLerpType _defaultSnapshotLerpType = DefaultSnapshotLerpType.Standard;
 
         public DefaultSnapshotLerpType defaultSnapshotLerpType
         {

@@ -5,6 +5,8 @@ using UnityEngine.Audio;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityEngine.UIElements;
+using UnityScript.Lang;
+using Array = System.Array;
 using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Audio
@@ -62,8 +64,9 @@ namespace AltSalt.Maestro.Audio
         {
             AudioFadePlayVolumeTrack,
             AudioForwardReverseTrack,
+            AudioLerpVolumeTrack,
             AudioLerpSnapshotTrack,
-            AudioLerpVolumeTrack
+            CrossFadeTrack
         }
 
         private void UpdateDisplay()
@@ -110,21 +113,6 @@ namespace AltSalt.Maestro.Audio
                     };
                     break;
 
-                case nameof(ButtonNames.AudioLerpSnapshotTrack):
-                    button.clickable.clicked += () =>
-                    {
-                        if (selectCreatedObject == true) {
-                            Selection.objects = CreateAudioLerpSnapshotTrack();
-                        }
-                        else {
-                            CreateAudioLerpSnapshotTrack();
-                        }
-
-                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
-                    };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.AudioMixerSelected, button);
-                    break;
-
                 case nameof(ButtonNames.AudioLerpVolumeTrack):
                     button.clickable.clicked += () =>
                     {
@@ -154,6 +142,37 @@ namespace AltSalt.Maestro.Audio
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.AudioSourceSelected, button);
                     break;
+                
+                case nameof(ButtonNames.AudioLerpSnapshotTrack):
+                    button.clickable.clicked += () =>
+                    {
+                        if (selectCreatedObject == true) {
+                            Selection.objects = CreateAudioLerpSnapshotTrack();
+                        }
+                        else {
+                            CreateAudioLerpSnapshotTrack();;
+                        }
+
+                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.AudioMixerSelected, button);
+                    break;
+                
+                case nameof(ButtonNames.CrossFadeTrack):
+                    button.clickable.clicked += () =>
+                    {
+                        if (selectCreatedObject == true) {
+                            Selection.objects = CreateCrossFadeTrack();
+                        }
+                        else {
+                            CreateCrossFadeTrack();
+                        }
+
+                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.AudioMixerSelected, button);
+                    break;
+                
             }
 
             return button;
@@ -191,11 +210,6 @@ namespace AltSalt.Maestro.Audio
         {
             return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(AudioFadePlayVolumeTrack), typeof(AudioSource), Selection.objects, TimelineEditor.selectedClips);
         }
-        public static TrackAsset[] CreateAudioLerpSnapshotTrack()
-        {
-            Object[] audioMixers = Utils.FilterSelection(Selection.objects, typeof(AudioMixer));
-            return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, audioMixers, typeof(AudioLerpSnapshotTrack), typeof(AudioMixer), Selection.objects, TimelineEditor.selectedClips);
-        }
         
         public static TrackAsset[] CreateAudioLerpVolumeTrack()
         {
@@ -206,6 +220,26 @@ namespace AltSalt.Maestro.Audio
         {
             return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(AudioForwardReverseTrack), typeof(AudioSource), Selection.objects, TimelineEditor.selectedClips);
         }
+        
+        public static TrackAsset[] CreateAudioLerpSnapshotTrack()
+        {
+            Object[] audioMixers = Utils.FilterSelection(Selection.objects, typeof(AudioMixer));
+            return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, audioMixers, typeof(AudioLerpSnapshotTrack), typeof(AudioMixer), Selection.objects, TimelineEditor.selectedClips);
+        }
+
+        public static TrackAsset[] CreateCrossFadeTrack()
+        {
+            Object[] audioMixers = Utils.FilterSelection(Selection.objects, typeof(AudioMixer));
+            TrackAsset[] trackAssets = TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, audioMixers, typeof(AudioLerpSnapshotTrack), typeof(AudioMixer), Selection.objects, TimelineEditor.selectedClips);
+            AudioLerpSnapshotTrack[] lerpSnapshotTracks = Array.ConvertAll(trackAssets, x => (AudioLerpSnapshotTrack) x);
+            
+            for (int i = 0; i < lerpSnapshotTracks.Length; i++) {
+                lerpSnapshotTracks[i].defaultSnapshotLerpType = DefaultSnapshotLerpType.Crossfade;
+            }
+
+            return lerpSnapshotTracks;
+        }
+
         
         private static TrackAsset OnTrackCreated(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject)
         {

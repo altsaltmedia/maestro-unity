@@ -34,8 +34,7 @@ xsi:schemaLocation="
 
                 <engine:VisualElement class="section___content">
                     <engine:Button text="Lerp Snapshot Track(s)" class="col-full" name="AudioLerpSnapshotTrack" />
-                    <engine:Button text="Fade In Track(s)" class="col-full" name="AudioLerpSnapshotFadeInTrack" />
-                    <engine:Button text="Fade Out Track(s)" class="col-full" name="AudioLerpSnapshotFadeOutTrack" />
+                    <engine:Button text="Cross Fade Track(s)" class="col-full" name="CrossFadeTrack" />
                 </engine:VisualElement>
 
             </engine:VisualElement>

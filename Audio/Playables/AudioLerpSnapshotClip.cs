@@ -13,7 +13,7 @@ namespace AltSalt.Maestro.Audio
         [SerializeField]
         private AudioLerpSnapshotBehaviour _template = new AudioLerpSnapshotBehaviour();
 
-        private AudioLerpSnapshotBehaviour template
+        public AudioLerpSnapshotBehaviour template
         {
             get => _template;
             set => _template = value;

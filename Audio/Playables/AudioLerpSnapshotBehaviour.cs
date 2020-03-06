@@ -255,7 +255,7 @@ namespace AltSalt.Maestro.Audio
         }
 
         [Button(ButtonSizes.Large)]
-        private void RefreshLabels()
+        public void RefreshLabels()
         {
             UpdateInitialLabels();
             UpdateTargetLabels();
