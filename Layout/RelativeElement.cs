@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,6 +10,7 @@ namespace AltSalt.Maestro.Layout {
         
         [FormerlySerializedAs("referenceObject")]
         [SerializeField]
+        [OnValueChanged(nameof(ExecuteRelativeAction))]
         private RectTransform _referenceObject;
 
         public RectTransform referenceObject
@@ -41,13 +43,6 @@ namespace AltSalt.Maestro.Layout {
         {
             rectTransform = GetComponent<RectTransform>();
         }
-        
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            ExecuteRelativeAction();
-        }
-#endif
 
         public virtual void ExecuteRelativeAction() { }
     }

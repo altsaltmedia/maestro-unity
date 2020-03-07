@@ -15,10 +15,20 @@ namespace AltSalt.Maestro.Sequencing.Touch
             var buttons = moduleWindowUXML.Query<Button>();
             buttons.ForEach(SetupButton);
             
+            UpdateDisplay();
+            ControlPanel.inspectorUpdateDelegate += UpdateDisplay;
+            ControlPanel.selectionChangedDelegate += UpdateDisplay;
+            
             return this;
         }
         
-        enum ButtonNames
+        private void OnDestroy()
+        {
+            ControlPanel.inspectorUpdateDelegate -= UpdateDisplay;
+            ControlPanel.selectionChangedDelegate -= UpdateDisplay;
+        }
+
+        private enum ButtonNames
         {
             AxisMarker,
             AxisJoinNext,
@@ -29,12 +39,30 @@ namespace AltSalt.Maestro.Sequencing.Touch
         
         private enum EnableCondition
         {
+            TimelineEditorActive,
             DirectoryAndNamePopulated
         }
 
         private string selectedObjectDirectory => controlPanel.objectCreation.selectedObjectDirectory;
 
         private string objectName => controlPanel.objectCreation.objectName;
+
+        private void UpdateDisplay()
+        {
+            if (TimelineEditor.inspectedAsset != null) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TimelineEditorActive, true);
+            }
+            else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TimelineEditorActive, false);
+            }
+            
+            if (string.IsNullOrEmpty(selectedObjectDirectory) == false && string.IsNullOrEmpty(objectName) == false) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectoryAndNamePopulated, true);
+            }
+            else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectoryAndNamePopulated, false);
+            }
+        }
 
         private Button SetupButton(Button button)
         {
@@ -47,6 +75,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                             typeof(AxisMarker), TimelineUtils.currentTime);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TimelineEditorActive, button);
                     break;
 
                 case nameof(ButtonNames.AxisJoinNext):
@@ -56,6 +85,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                             typeof(AxisMarker_JoinNext), TimelineEditor.inspectedAsset.duration);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TimelineEditorActive, button);
                     break;
 
                 case nameof(ButtonNames.AxisJoinPrevious):
@@ -65,12 +95,13 @@ namespace AltSalt.Maestro.Sequencing.Touch
                             typeof(AxisMarker_JoinPrevious), 0);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TimelineEditorActive, button);
                     break;
                 
                 case nameof(ButtonNames.TouchFork):
                     button.clickable.clicked += () =>
                     {
-                        Selection.activeObject = Utils.CreateScriptableObjectAsset(typeof(TouchFork), selectedObjectDirectory, objectName);
+                        Selection.activeObject = Utils.CreateScriptableObjectAsset(typeof(TouchFork), objectName, selectedObjectDirectory);
                         EditorUtility.FocusProjectWindow();
                         EditorGUIUtility.PingObject(Selection.activeObject);
                     };

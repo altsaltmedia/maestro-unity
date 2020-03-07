@@ -241,16 +241,14 @@ namespace AltSalt.Maestro.Layout {
         private static List<IDynamicLayoutElement> UpdateDynamicElements(List<IDynamicLayoutElement> dynamicElementsList,
             DynamicLayoutController dynamicLayoutController, int minPriority, int maxPriority = int.MaxValue)
         {
-            // Used to remove any elements that might be null
-            List<IDynamicLayoutElement> elementsToRemove = new List<IDynamicLayoutElement>();
-            
-            for (int i=0; i<dynamicElementsList.Count; i++) {
-                
-                if (dynamicElementsList[i] == null || dynamicElementsList[i].elementName.Length < 0) {
-                    elementsToRemove.Add(dynamicElementsList[i]);
-                    continue;
+            // Sanitize our list in case any elements have been removed
+            for (int i = 0; i < dynamicElementsList.Count; i++) {
+                if (dynamicElementsList[i] == null || dynamicElementsList[i].Equals(null)) {
+                    dynamicElementsList.Remove(dynamicElementsList[i]);
                 }
+            }
 
+            for (int i = 0; i < dynamicElementsList.Count; i++) {
                 if (dynamicElementsList[i].priority >= minPriority && dynamicElementsList[i].priority <= maxPriority) {
                     if (dynamicElementsList[i] is ISceneDimensionListener sceneDimensionListener) {
                         sceneDimensionListener.sceneAspectRatio = dynamicLayoutController.targetAspectRatio;
@@ -259,12 +257,6 @@ namespace AltSalt.Maestro.Layout {
                     }
                     dynamicElementsList[i].CallExecuteLayoutUpdate(dynamicLayoutController.gameObject);
                 }
-            }
-            
-            // Sanitize the list after we have iterated through it
-            // so we don't interfere with the loop during iteration
-            for (int i = 0; i < elementsToRemove.Count; i++) {
-                dynamicElementsList.Remove(elementsToRemove[i]);
             }
 
             return dynamicElementsList;

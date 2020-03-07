@@ -13,6 +13,24 @@ namespace AltSalt.Maestro.Layout
 
 #if UNITY_EDITOR
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            UpdateBreakpointDependencies();
+        }
+        
+        protected override void UpdateBreakpointDependencies()
+        {
+            base.UpdateBreakpointDependencies();
+            if (viewportValues.Count == 0) {
+                viewportValues.Add(thisCamera.rect);
+            }
+            
+            if (viewportValues.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(viewportValues, aspectRatioBreakpoints.Count);
+            }
+        }
+        
         [InfoBox("Saves the viewport value at the current breakpoint index.")]
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SaveValue()
@@ -27,12 +45,17 @@ namespace AltSalt.Maestro.Layout
             Utils.ExpandList(viewportValues, targetBreakpointIndex);
             viewportValues[targetBreakpointIndex] = thisCamera.rect;
         }
+        
 #endif
 
         public override void ExecuteResponsiveAction()
         {
             base.ExecuteResponsiveAction();
-            SetValue(breakpointIndex);
+            if(hasBreakpoints == true) {
+                SetValue(breakpointIndex);
+            } else {
+                SetValue(0);
+            }
         }
 
         public void SetValue(int activeIndex)

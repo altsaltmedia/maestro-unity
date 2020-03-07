@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace AltSalt.Maestro.Layout
@@ -10,6 +11,9 @@ namespace AltSalt.Maestro.Layout
     public class ResponsiveAutoScale : ResponsiveRectTransform
     {
         [SerializeField]
+        [InfoBox("Automatically sets the X scale to the current scene width, with option to " +
+                 "modify resulting value via a multiplier. (Height can also be modified, though height " +
+                 "is generally fixed and shouldn't need to be modified)")]
         List<float> widthMultipliers = new List<float>();
 
         [SerializeField]

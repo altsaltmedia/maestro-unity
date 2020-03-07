@@ -25,7 +25,8 @@ namespace AltSalt.Maestro.Layout
         [MenuItem("Tools/Maestro/Text Placement Utils")]
         public static void ShowWindow()
         {
-            var moduleWindow = CreateInstance<TextPlacementUtils>();
+            var moduleWindow = GetWindow<TextPlacementUtils>();
+            moduleWindow.rootVisualElement.Clear();
             moduleWindow.Init();
             moduleWindow.Show();
         }

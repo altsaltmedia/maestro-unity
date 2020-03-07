@@ -1,59 +1,159 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Layout
 {
-    public class ResponsiveAutoViewport : ResponsiveCamera
+    [ExecuteInEditMode]
+    public class ResponsiveAutoViewport : MonoBehaviour, ISceneDimensionListener, IDynamicLayoutElement
     {
+        [Required]
+        [SerializeField]
+        [ReadOnly]
+        private AppSettingsReference _appSettings = new AppSettingsReference();
+
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
+        
         private float deviceWidth => appSettings.GetDeviceWidth(this.gameObject);
 
         private float deviceHeight => appSettings.GetDeviceHeight(this.gameObject);
 
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneWidth = 4.65f;
+
+        public float sceneWidth
+        {
+            get => _sceneWidth;
+            set => _sceneWidth = value;
+        }
+
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneHeight = 4.594452f;
+
+        public float sceneHeight
+        {
+            get => _sceneHeight;
+            set => _sceneHeight = value;
+        }
+
+        [ShowInInspector]
+        [ReadOnly]
+        private float _sceneAspectRatio = 1.33f;
+
+        public float sceneAspectRatio
+        {
+            get => _sceneAspectRatio;
+            set => _sceneAspectRatio = value;
+        }
+        
         [SerializeField]
-        public List<Rect> viewportModifiers = new List<Rect>();
+        [ValidateInput(nameof(IsPopulated))]
+        private ComplexEventManualTrigger _enableDynamicElement = new ComplexEventManualTrigger();
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-#if UNITY_EDITOR
-            UpdateBreakpointDependencies();
-#endif
+        public ComplexEventManualTrigger enableDynamicElement => _enableDynamicElement;
+
+        [SerializeField]
+        [ValidateInput(nameof(IsPopulated))]
+        private ComplexEventManualTrigger _disableDynamicElement = new ComplexEventManualTrigger();
+
+        public ComplexEventManualTrigger disableDynamicElement => _disableDynamicElement;
+
+        public string elementName => this.name;
+        
+        [SerializeField]
+        protected bool _logElementOnLayoutUpdate;
+        
+        public bool logElementOnLayoutUpdate {
+            get
+            {
+                if (_logElementOnLayoutUpdate == true || AppSettings.logGlobalResponsiveElementActions == true) {
+                    return true;
+                }
+
+                return false;
+            }
         }
 
-        public override void ExecuteResponsiveAction()
+        public Scene parentScene => this.gameObject.scene;
+
+        [SerializeField]
+#if UNITY_EDITOR        
+        [OnValueChanged(nameof(ResetResponsiveElementData))]
+#endif
+        private int _priority;
+
+        public int priority => _priority; 
+
+        private Camera _camera;
+
+        private Camera camera
         {
-            base.ExecuteResponsiveAction();
-            SetValue(breakpointIndex);
+            get
+            {
+                if (_camera == null) {
+                    _camera = GetComponent<Camera>();
+                }
+                return _camera;
+            }
+            set => _camera = value;
         }
-#if UNITY_EDITOR
-        protected override void UpdateBreakpointDependencies()
+
+        private void Awake()
         {
-            base.UpdateBreakpointDependencies();
-            if (viewportModifiers.Count == 0) {
-                viewportModifiers.Add(new Rect(0,0,0,0));
+#if UNITY_EDITOR
+            _appSettings.PopulateVariable(this, nameof(_appSettings));
+            if (string.IsNullOrEmpty(_enableDynamicElement.referenceName) == true) {
+                _enableDynamicElement.referenceName = nameof(enableDynamicElement).Capitalize();
             }
-            if (viewportModifiers.Count <= aspectRatioBreakpoints.Count) {
-                Utils.ExpandList(viewportModifiers, aspectRatioBreakpoints.Count);
+            _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
+            if (string.IsNullOrEmpty(_disableDynamicElement.referenceName) == true) {
+                _disableDynamicElement.referenceName = nameof(disableDynamicElement).Capitalize();
             }
+            _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
+#endif
+            camera = GetComponent<Camera>();
+        }
+
+        private void OnEnable()
+        {
+            enableDynamicElement.RaiseEvent(this.gameObject, this);
+        }
+        
+        public void CallExecuteLayoutUpdate(Object callingObject)
+        {
+            if (logElementOnLayoutUpdate == true) {
+                Debug.Log("CallExecuteLayoutUpdate triggered!");
+                Debug.Log("Calling object : " + callingObject.name, callingObject);
+                Debug.Log("Triggered object : " + elementName, gameObject);
+                Debug.Log("Component : " + this.GetType().Name, gameObject);
+                Debug.Log("--------------------------");
+            }
+            ExecuteResponsiveAction();
+        }
+
+        [InfoBox("Automatically sets the viewport to the current scene's dimensions")]
+        [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+        private void ExecuteResponsiveAction()
+        {
+            camera.pixelRect = new Rect((deviceWidth - sceneWidth) / 2f, (deviceHeight - sceneHeight) / 2f, sceneWidth, sceneHeight);
+        }
+        
+        
+#if UNITY_EDITOR
+        private void ResetResponsiveElementData()
+        {
+            disableDynamicElement.RaiseEvent(this.gameObject, this);
+            enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
 #endif
 
-        public void SetValue(int activeIndex)
+        private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
-#if UNITY_EDITOR
-            if (activeIndex >= viewportModifiers.Count) {
-                LogBreakpointError();
-                return;
-            }
-#endif
-            Rect originalRect = new Rect((deviceWidth - sceneWidth) / 2f, (deviceHeight - sceneHeight) / 2f, sceneWidth, sceneHeight);
-            thisCamera.pixelRect = new Rect(originalRect.x, originalRect.y, originalRect.width, originalRect.height);
-            thisCamera.rect = new Rect(thisCamera.rect.x + viewportModifiers[activeIndex].x,
-                thisCamera.rect.y + viewportModifiers[activeIndex].y,
-                thisCamera.rect.width + viewportModifiers[activeIndex].width,
-                thisCamera.rect.height + viewportModifiers[activeIndex].height);
+            return Utils.IsPopulated(attribute);
         }
 
     }   

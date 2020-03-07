@@ -151,7 +151,7 @@ MonoBehaviour:
     _parentObject: {fileID: 5008149826027979688}
     _serializedPropertyPath: _actionTrigger
     _triggerOnStart: 0
-    _resetGameStateOnStart: 0
+    _resetGameStateOnExecute: 0
     _hasDelay: 0
     _delay: 0
     _genericActions:
@@ -294,7 +294,7 @@ MonoBehaviour:
     _parentObject: {fileID: 4240208615557826613}
     _serializedPropertyPath: _actionTrigger
     _triggerOnStart: 0
-    _resetGameStateOnStart: 0
+    _resetGameStateOnExecute: 0
     _hasDelay: 0
     _delay: 0
     _genericActions: []
@@ -505,7 +505,7 @@ MonoBehaviour:
     _parentObject: {fileID: 1317443500675848925}
     _serializedPropertyPath: _actionTrigger
     _triggerOnStart: 1
-    _resetGameStateOnStart: 0
+    _resetGameStateOnExecute: 0
     _hasDelay: 0
     _delay: 0
     _genericActions: []
@@ -543,7 +543,7 @@ MonoBehaviour:
           _referenceName: MainInput-ArrowIndicatorEnabled
           _useConstant: 0
           _constantValue: 0
-          _variable: {fileID: 0}
+          _variable: {fileID: 11400000, guid: 47ab50e69570c45c9be2457bf921e899, type: 2}
         _boolCondition:
           _isSystemReference: 0
           _referenceName: 
@@ -572,7 +572,7 @@ MonoBehaviour:
           _referenceName: MainInput-ScrubberEnabled
           _useConstant: 0
           _constantValue: 0
-          _variable: {fileID: 0}
+          _variable: {fileID: 11400000, guid: 53e0d133dd7144f118f13108e7cbe0c2, type: 2}
         _boolCondition:
           _isSystemReference: 0
           _referenceName: 

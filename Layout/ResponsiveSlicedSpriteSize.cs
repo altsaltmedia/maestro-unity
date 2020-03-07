@@ -31,9 +31,8 @@ namespace AltSalt.Maestro.Layout
             StoreInternalMarginVal();
         }
 
-        protected override void OnRenderObject()
+        protected void OnRenderObject()
         {
-            base.OnRenderObject();
             if (MarginChanged() == true) {
                 ExecuteResponsiveAction();
             }

@@ -71,26 +71,17 @@ namespace AltSalt.Maestro.Sequencing
         [TitleGroup("$"+nameof(defaultsTitle))]
         private bool _defaultStatus;
 
-        private bool defaultStatus => _defaultStatus;
+        public bool defaultStatus
+        {
+            get => _defaultStatus;
+            set => _defaultStatus = value;
+        }
 
         [SerializeField]
         [TitleGroup("$"+nameof(defaultsTitle))]
         private double _defaultTime;
 
-        private double defaultTime
-        {
-            get => _defaultTime;
-        }
-
-        [TitleGroup("Autopopulated Fields")]
-        [SerializeField]
-        private bool _videoSequenceActive;
-        
-        public bool videoSequenceActive
-        {
-            get => _videoSequenceActive; 
-            set => _videoSequenceActive = value;
-        }
+        private double defaultTime => _defaultTime;
 
         private string propertiesTitle => "Properties";
         
@@ -101,139 +92,10 @@ namespace AltSalt.Maestro.Sequencing
             active = targetStatus;
         }
 
-        public void SetDefaults()
+        public void SetToDefaults()
         {
             active = defaultStatus;
             currentTime = defaultTime;
-        }
-
-        public static Sequence ModifySequence(Sequence targetSequence, float timeModifier)
-        {
-            targetSequence.currentTime += timeModifier;
-            return targetSequence;
-//          
-//            RefreshVideoStatus(targetSequence, targetSequence.playbackModifiers.autoplayThresholds);
-//            RefreshPauseMomentum(targetSequence, targetSequence.playbackModifiers.pauseMomentumThresholds);
-        }
-
-//        public static Sequence RefreshPauseMomentum(Sequence targetSequence, List<StartEndThreshold> pauseMomentumThresholds)
-//        {
-//            if (PlaybackModifiers.TimeWithinThreshold(targetSequence.currentTime, pauseMomentumThresholds))
-//            {
-//                targetSequence.pauseMomentumActive = true;
-//            }
-//            else
-//            {
-//                targetSequence.pauseMomentumActive = false;
-//            }
-//
-//            return targetSequence;
-//        }
-//        
-//        public static Sequence RefreshVideoStatus(Sequence targetSequence, List<StartEndThreshold> autoplayThresholds)
-//        {
-//            if (PlaybackModifiers.TimeWithinVideoThreshold(targetSequence.currentTime, autoplayThresholds))
-//            {
-//                targetSequence.videoSequenceActive = true;
-//            }
-//            else
-//            {
-//                targetSequence.videoSequenceActive = false;
-//            }
-//
-//            return targetSequence;
-//        }
-        
-        // ==================== //
-        // ANDROID DEPENDENCIES //
-        // ==================== //
-        // On Android devices, we need to briefly pause the sequence to allow the device
-        // to catch up when in a video sequence and abruptly changing directions.
-        
-        [ReadOnly]
-        [TitleGroup("Android Dependencies")]
-        private bool _momentumDisabled;
-
-        public bool momentumDisabled
-        {
-            get => _momentumDisabled;
-            set => _momentumDisabled = value;
-        }
-        
-        [ValidateInput("IsPopulated")]
-        [BoxGroup("Android Dependencies")]
-        private BoolReference _isReversing;
-
-        [SerializeField]
-
-        public bool isReversing
-        {
-            get => _isReversing.GetValue();
-        }
-
-        [Required]
-        [BoxGroup("Android Dependencies")]
-        private SimpleEventTrigger _triggerSpinnerShow;
-
-        private SimpleEventTrigger triggerSpinnerShow
-        {
-            get => _triggerSpinnerShow;
-        }
-        
-        [SerializeField]
-        [Required]
-        [BoxGroup("Android Dependencies")]
-        private SimpleEventTrigger _triggerSpinnerHide;
-
-        private SimpleEventTrigger triggerSpinnerHide
-        {
-            get => _triggerSpinnerHide;
-        }
-
-        [SerializeField]
-        [Required]
-        [BoxGroup("Android dependencies")]
-        private SimpleEventTrigger _pauseSequenceComplete;
-
-        private SimpleEventTrigger pauseSequenceComplete
-        {
-            get => _pauseSequenceComplete;
-        }
-
-        private bool _internalIsReversingVal;
-
-        public bool internalIsReversingVal
-        {
-            get => _internalIsReversingVal;
-            set => _internalIsReversingVal = value;
-        }
-        
-        public static bool AndroidVideoOverride(Sequence targetSequence)
-        {
-            if (targetSequence.videoSequenceActive == true) {
-                
-                if (targetSequence.internalIsReversingVal != targetSequence.isReversing) {
-                    targetSequence.internalIsReversingVal = targetSequence.isReversing;
-                    targetSequence.sequenceController.StartCoroutine(PauseSequence(targetSequence));
-                    return true;
-                }
-            }
-
-            return false;
-        }
-        
-        public static IEnumerator PauseSequence(Sequence targetSequence)
-        {
-            targetSequence.active = false;
-            targetSequence.momentumDisabled = true;
-            targetSequence.triggerSpinnerShow.RaiseEvent(targetSequence.sequenceController.gameObject);
-            yield return new WaitForSeconds(.5f);
-            targetSequence.active = true;
-            targetSequence.pauseSequenceComplete.RaiseEvent(targetSequence.sequenceController.gameObject);
-            yield return new WaitForSeconds(.5f);
-            targetSequence.triggerSpinnerHide.RaiseEvent(targetSequence.sequenceController.gameObject);
-            yield return new WaitForSeconds(1f);
-            targetSequence.momentumDisabled = false;
         }
 
     }

@@ -29,10 +29,11 @@ xsi:schemaLocation="
                 <engine:VisualElement class="section___content">
                     <editor:PropertyField label="structure name :" class="col-full update-window-trigger" value="" binding-path="sequenceName" name="SequenceName"/>
                     <engine:Toggle text="select on creation" class="margin-bottom-5" binding-path="selectOnCreation"/>
-                    <engine:Button text="Master Sequence + Config" class="col-full" name="MasterSequencePlusConfig"/>
-                    <engine:Button text="Master Sequence" class="col-full" name="MasterSequence"/>
-                    <engine:Button text="Sequence Config" class="col-full" name="SequenceConfig" />
-                    <engine:Button text="Simple Playable Director" class="col-full" name="SimplePlayableDirector" />
+                    <engine:Button text="Master Sequence + Config + Sequence" class="col-full" name="MasterSequencePlusConfigPlusSequence"/>
+                    <engine:Button text="Blank Master Sequence" class="col-full" name="BlankMasterSequence"/>
+                    <engine:Button text="Sequence Config + Sequence" class="col-full" name="SequenceConfigPlusSequence" />
+                    <engine:Button text="Blank Sequence Config" class="col-full" name="BlankSequenceConfig" />
+                    <engine:Button text="Blank Playable Director" class="col-full" name="BlankPlayableDirector" />
                     <engine:Button text="Simple Playable Director + Timeline" class="col-full" name="SimplePlayableDirectorPlusTimeline" />
                 </engine:VisualElement>
 
@@ -58,18 +59,23 @@ xsi:schemaLocation="
                     <engine:Foldout class="foldout text-medium" text="Help" value="false">
 
                         <engine:VisualElement class="section___content">
-                            <engine:TextElement class="bold" text="Master Sequence + Config" />
+                            <engine:TextElement class="bold" text="Master Sequence + Config + Sequence" />
                             <engine:TextElement text="Select a RootConfig, name, and directory to activate." />
                         </engine:VisualElement>
 
                         <engine:VisualElement class="section___content">
-                            <engine:TextElement class="bold" text="Master Sequence"/>
+                            <engine:TextElement class="bold" text="Blank Master Sequence"/>
                             <engine:TextElement text="Select a RootConfig and name to activate."/>
                         </engine:VisualElement>
 
                         <engine:VisualElement class="section___content">
-                            <engine:TextElement class="bold" text="Sequence Config" />
-                            <engine:TextElement text="Select a RootConfig, name, and directory to activate." />
+                            <engine:TextElement class="bold" text="Sequence Config + Sequence" />
+                            <engine:TextElement text="Select a Master Sequence, name, and directory to activate." />
+                        </engine:VisualElement>
+
+                        <engine:VisualElement class="section___content">
+                            <engine:TextElement class="bold" text="Blank Sequence Config" />
+                            <engine:TextElement text="Select a Master Sequence and name to activate." />
                         </engine:VisualElement>
 
                         <engine:VisualElement class="section___content">

@@ -283,7 +283,7 @@ PrefabInstance:
     - target: {fileID: 4143621777924271494, guid: 0d33f0f33305b493db37a5dc9304d159,
         type: 3}
       propertyPath: m_Name
-      value: Fader - Scrubber Canvas
+      value: Fader - Progress Bar Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 4222898073442614294, guid: 0d33f0f33305b493db37a5dc9304d159,
         type: 3}

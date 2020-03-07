@@ -33,6 +33,7 @@ namespace AltSalt.Maestro
         
         protected virtual ModuleWindow Configure(ControlPanel controlPanel, string uxmlPath)
         {
+            rootVisualElement.viewDataKey = DateTime.Now.ToString();
             this.controlPanel = controlPanel;
 
             var uxmlTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxmlPath);

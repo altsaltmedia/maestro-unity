@@ -103,14 +103,14 @@ namespace AltSalt.Maestro
             ObjectsSelected
         }
 
-        void UpdateTime()
+        private static void UpdateTime()
         {
             if (currentTimeField != null && TimelineUtils.debugTrackCreated == true) {
                 currentTimeField.value = TimelineUtils.currentTime;
             }
         }
 
-        void UpdateDisplay()
+        private static void UpdateDisplay()
         {
             if (TimelineEditor.selectedClips.Length > 0) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ClipsSelected, true);

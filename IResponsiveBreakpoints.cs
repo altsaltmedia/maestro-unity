@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace AltSalt.Maestro {
+    
     public interface IResponsiveBreakpoints : ISceneDimensionListener
     {
         string elementName {

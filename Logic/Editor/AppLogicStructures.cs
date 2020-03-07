@@ -31,22 +31,35 @@ namespace AltSalt.Maestro.Logic
         private static VisualElementToggleData toggleData = new VisualElementToggleData();
 
         private string objectName => controlPanel.objectCreation.objectName;
+        
         public bool selectOnCreation => controlPanel.objectCreation.selectCreatedObject;
 
         private string selectedObjectDirectory => controlPanel.objectCreation.selectedObjectDirectory;
 
         private enum ButtonNames
         {
-            SimpleSignalListener,
-            ComplexEventListener,
-            ActionTrigger,
-            PrepareScene
+            AppSettings,
+            SystemSettings,
+            DebugPreferences,
+            InputData,
+            UserData,
+            Initializer,
+            AppUtils,
+            SystemDependencies,
+            FaderProgressBarCanvas,
+            FaderPanel,
+            ProgressBarPanel,
+            RequestAppUtils,
+            CurrentAspectRatioCamera,
+            SceneController,
+            UserDataController,
+            FrameRateController,
+            AnalyticsTrackers
         }
 
         private enum EnableCondition
         {
-            DirectorySelected,
-            GameObjectSelected
+            DirectorySelected
         }
 
         private void UpdateDisplay()
@@ -56,52 +69,201 @@ namespace AltSalt.Maestro.Logic
             } else {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectorySelected, false);
             }
-            
-            if (Selection.gameObjects.Length > 0) {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.GameObjectSelected, true);
-            } else {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.GameObjectSelected, false);
-            }
         }
 
         private Button SetupButton(Button button)
         {
             switch (button.name) {
+                
+                case nameof(ButtonNames.AppSettings):
+                    button.clickable.clicked += () =>  {
+                        if (selectOnCreation == true) {
+                            Selection.objects = new[] { Utils.CreateScriptableObjectAsset(typeof(AppSettings), objectName, selectedObjectDirectory) };
+                            EditorGUIUtility.PingObject(Selection.activeObject);
+                            EditorUtility.FocusProjectWindow();
+                        }
+                        else {
+                            Utils.CreateScriptableObjectAsset(typeof(AppSettings), objectName,
+                                selectedObjectDirectory);
+                        }
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectorySelected, button);
+                    break;
+                
+                case nameof(ButtonNames.SystemSettings):
+                    button.clickable.clicked += () =>  {
+                        if (selectOnCreation == true) {
+                            Selection.objects = new[] { Utils.CreateScriptableObjectAsset(typeof(SystemSettings), objectName, selectedObjectDirectory) };
+                            EditorGUIUtility.PingObject(Selection.activeObject);
+                            EditorUtility.FocusProjectWindow();
+                        }
+                        else {
+                            Utils.CreateScriptableObjectAsset(typeof(SystemSettings), objectName,
+                                selectedObjectDirectory);
+                        }
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectorySelected, button);
+                    break;
+                
+                case nameof(ButtonNames.DebugPreferences):
+                    button.clickable.clicked += () =>  {
+                        if (selectOnCreation == true) {
+                            Selection.objects = new[] { Utils.CreateScriptableObjectAsset(typeof(DebugPreferences), objectName, selectedObjectDirectory) };
+                            EditorGUIUtility.PingObject(Selection.activeObject);
+                            EditorUtility.FocusProjectWindow();
+                        }
+                        else {
+                            Utils.CreateScriptableObjectAsset(typeof(DebugPreferences), objectName,
+                                selectedObjectDirectory);
+                        }
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectorySelected, button);
+                    break;
+                
+                case nameof(ButtonNames.InputData):
+                    button.clickable.clicked += () =>  {
+                        if (selectOnCreation == true) {
+                            Selection.objects = new[] { Utils.CreateScriptableObjectAsset(typeof(InputData), objectName, selectedObjectDirectory) };
+                            EditorGUIUtility.PingObject(Selection.activeObject);
+                            EditorUtility.FocusProjectWindow();
+                        }
+                        else {
+                            Utils.CreateScriptableObjectAsset(typeof(InputData), objectName,
+                                selectedObjectDirectory);
+                        }
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectorySelected, button);
+                    break;
+                
+                case nameof(ButtonNames.UserData):
+                    button.clickable.clicked += () =>  {
+                        if (selectOnCreation == true) {
+                            Selection.objects = new[] { Utils.CreateScriptableObjectAsset(typeof(UserData), objectName, selectedObjectDirectory) };
+                            EditorGUIUtility.PingObject(Selection.activeObject);
+                            EditorUtility.FocusProjectWindow();
+                        }
+                        else {
+                            Utils.CreateScriptableObjectAsset(typeof(UserData), objectName,
+                                selectedObjectDirectory);
+                        }
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectorySelected, button);
+                    break;
 
-                case nameof(ButtonNames.SimpleSignalListener):
+                case nameof(ButtonNames.Initializer):
                     button.clickable.clicked += () =>
                     {
-                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.simpleSignalListenerPrefab, objectName);
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.initializerPrefab, objectName);
                         if (selectOnCreation == true) {
                             Selection.activeGameObject = createdGameObject;
                         }
                     };
                     break;
                 
-                case nameof(ButtonNames.ComplexEventListener):
+                case nameof(ButtonNames.AppUtils):
                     button.clickable.clicked += () =>
                     {
-                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.complexEventListenerPrefab, objectName);
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.appUtilsPrefab, objectName);
                         if (selectOnCreation == true) {
                             Selection.activeGameObject = createdGameObject;
                         }
                     };
                     break;
                 
-                case nameof(ButtonNames.ActionTrigger):
+                case nameof(ButtonNames.SystemDependencies):
                     button.clickable.clicked += () =>
                     {
-                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.actionTriggerPrefab, objectName);
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.systemDependenciesPrefab, objectName);
                         if (selectOnCreation == true) {
                             Selection.activeGameObject = createdGameObject;
                         }
                     };
                     break;
                 
-                case nameof(ButtonNames.PrepareScene):
+                case nameof(ButtonNames.FaderProgressBarCanvas):
                     button.clickable.clicked += () =>
                     {
-                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.prepareScenePrefab, objectName);
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.faderProgressBarCanvasPrefab, objectName);
+                        if (selectOnCreation == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+                
+                case nameof(ButtonNames.FaderPanel):
+                    button.clickable.clicked += () =>
+                    {
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.faderPanelPrefab, objectName);
+                        if (selectOnCreation == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+                
+                case nameof(ButtonNames.ProgressBarPanel):
+                    button.clickable.clicked += () =>
+                    {
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.progressBarPanelPrefab, objectName);
+                        if (selectOnCreation == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+                
+                case nameof(ButtonNames.RequestAppUtils):
+                    button.clickable.clicked += () =>
+                    {
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.requestAppUtilsPrefab, objectName);
+                        if (selectOnCreation == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+                
+                case nameof(ButtonNames.CurrentAspectRatioCamera):
+                    button.clickable.clicked += () =>
+                    {
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.currentAspectRatioCameraPrefab, objectName);
+                        if (selectOnCreation == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+                
+                case nameof(ButtonNames.SceneController):
+                    button.clickable.clicked += () =>
+                    {
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.sceneControllerPrefab, objectName);
+                        if (selectOnCreation == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+                
+                case nameof(ButtonNames.UserDataController):
+                    button.clickable.clicked += () =>
+                    {
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.userDataControllerPrefab, objectName);
+                        if (selectOnCreation == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+                
+                case nameof(ButtonNames.FrameRateController):
+                    button.clickable.clicked += () =>
+                    {
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.frameRateControllerPrefab, objectName);
+                        if (selectOnCreation == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+                
+                case nameof(ButtonNames.AnalyticsTrackers):
+                    button.clickable.clicked += () =>
+                    {
+                        GameObject createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.analyticsTrackersPrefab, objectName);
                         if (selectOnCreation == true) {
                             Selection.activeGameObject = createdGameObject;
                         }

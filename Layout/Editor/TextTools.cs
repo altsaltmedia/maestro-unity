@@ -34,12 +34,13 @@ namespace AltSalt.Maestro.Layout
         public static void ShowWindow()
         {
             var window = GetWindow<TextTools>();
+            window.Init();
             textTools = window;
         }
 
-        static void Init()
+        private void Init()
         {
-            EditorWindow.GetWindow(typeof(TextTools)).Show();
+            titleContent = new GUIContent("Text Tools");
         }
 
         protected override void OnGUI()

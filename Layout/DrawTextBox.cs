@@ -17,7 +17,7 @@ namespace AltSalt.Maestro.Layout
             base.OnDrawGizmos();
 
             if(drawWhenNotSelected == true && drawTextBox == true) {
-                Bounds textBounds = GetComponent<TextMeshPro>().textBounds;
+                Bounds textBounds = GetComponent<TMP_Text>().textBounds;
 
                 Gizmos.matrix = Matrix4x4.TRS(textBounds.center, transform.rotation, transform.lossyScale);
                 Gizmos.color = textBoxColor;
@@ -29,7 +29,7 @@ namespace AltSalt.Maestro.Layout
             base.OnDrawGizmosSelected();
 
             if(drawTextBox == true) {
-                Bounds textBounds = GetComponent<TextMeshPro>().textBounds;
+                Bounds textBounds = GetComponent<TMP_Text>().textBounds;
 
                 Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
                 Gizmos.color = textBoxColor;

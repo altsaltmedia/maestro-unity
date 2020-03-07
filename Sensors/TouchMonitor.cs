@@ -15,7 +15,7 @@ using Sirenix.OdinInspector;
 namespace AltSalt.Maestro.Sensors
 {
     [ExecuteInEditMode]
-    public class SwipeMonitor : MonoBehaviour
+    public class TouchMonitor : MonoBehaviour
     {
         [Required]
         [SerializeField]
@@ -148,11 +148,11 @@ namespace AltSalt.Maestro.Sensors
             set => _swipeHistoryIndex = value;
         }
         
-        private static SwipeMonitor ResetSwipeHistory(SwipeMonitor swipeMonitor)
+        private static TouchMonitor ResetSwipeHistory(TouchMonitor touchMonitor)
         {
-            swipeMonitor.swipeHistory = new Vector2[10];
-            swipeMonitor.swipeHistoryIndex = 0;
-            return swipeMonitor;
+            touchMonitor.swipeHistory = new Vector2[10];
+            touchMonitor.swipeHistoryIndex = 0;
+            return touchMonitor;
         }
         
 #if UNITY_EDITOR
@@ -224,11 +224,11 @@ namespace AltSalt.Maestro.Sensors
             onSwipe.RaiseEvent(this.gameObject);
         }
         
-        private static string GetSwipeDirection(SwipeMonitor swipeMonitor, Vector2 deltaPosition)
+        private static string GetSwipeDirection(TouchMonitor touchMonitor, Vector2 deltaPosition)
         {
-            UpdateSwipeHistory(swipeMonitor, deltaPosition);
-            Vector2 vectorDirection = Utils.GetVector2Direction(swipeMonitor.swipeHistory, swipeMonitor.invertXInput,
-                swipeMonitor.invertYInput);
+            UpdateSwipeHistory(touchMonitor, deltaPosition);
+            Vector2 vectorDirection = Utils.GetVector2Direction(touchMonitor.swipeHistory, touchMonitor.invertXInput,
+                touchMonitor.invertYInput);
                 
             if (Mathf.Abs(vectorDirection.x) > Mathf.Abs(vectorDirection.y)) {
                 return vectorDirection.x > 0 ? nameof(SwipeDirection.xPositive) : nameof(SwipeDirection.xNegative);
@@ -237,18 +237,18 @@ namespace AltSalt.Maestro.Sensors
             return vectorDirection.y > 0 ? nameof(SwipeDirection.yPositive) : nameof(SwipeDirection.yNegative);
         }
 
-        private static Vector2[] UpdateSwipeHistory(SwipeMonitor swipeMonitor, Vector2 deltaPosition)
+        private static Vector2[] UpdateSwipeHistory(TouchMonitor touchMonitor, Vector2 deltaPosition)
         {
-            if (swipeMonitor.swipeHistoryIndex < swipeMonitor.swipeHistory.Length - 1) {
-                swipeMonitor.swipeHistory[swipeMonitor.swipeHistoryIndex] = deltaPosition;
+            if (touchMonitor.swipeHistoryIndex < touchMonitor.swipeHistory.Length - 1) {
+                touchMonitor.swipeHistory[touchMonitor.swipeHistoryIndex] = deltaPosition;
             }
 
-            swipeMonitor.swipeHistoryIndex++;
-            if (swipeMonitor.swipeHistoryIndex > swipeMonitor.swipeHistory.Length - 1) {
-                swipeMonitor.swipeHistoryIndex = 0;
+            touchMonitor.swipeHistoryIndex++;
+            if (touchMonitor.swipeHistoryIndex > touchMonitor.swipeHistory.Length - 1) {
+                touchMonitor.swipeHistoryIndex = 0;
             }
             
-            return swipeMonitor.swipeHistory;
+            return touchMonitor.swipeHistory;
         }
 
         public void OnSwipeEnd(Gesture gesture)

@@ -50,7 +50,8 @@ namespace AltSalt.Maestro
         [MenuItem("Tools/Maestro/Responsive Breakpoint Utils")]
         public static void ShowWindow()
         {
-            var moduleWindow = CreateInstance<ResponsiveBreakpointUtils>();
+            var moduleWindow = GetWindow<ResponsiveBreakpointUtils>();
+            moduleWindow.rootVisualElement.Clear();
             moduleWindow.Init();
             moduleWindow.Show();
         }
@@ -69,7 +70,6 @@ namespace AltSalt.Maestro
 
         private void OnEnable()
         {
-            Init();
             Selection.selectionChanged += CallUpdateListView;
         }
 
@@ -83,7 +83,7 @@ namespace AltSalt.Maestro
             base.Configure(controlPanel, uxmlPath);
             
             listContainer = moduleWindowUXML.Query("ResponsiveElementListContainer");
-            screenResized.SetVariable(Utils.GetSimpleEvent(nameof(VarDependencies.ScreenResized)));
+            screenResized.SetVariable(Utils.GetSimpleEvent(nameof(VarDependencies.TriggerScreenResize)));
             
             UpdateListView(this);
             

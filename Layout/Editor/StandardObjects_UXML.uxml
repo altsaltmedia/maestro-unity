@@ -12,9 +12,9 @@ xsi:schemaLocation="
 "
 >
 
-	<engine:VisualElement name="create-core-elements">
+	<engine:VisualElement name="standard-objects">
 
-        <engine:Foldout class="foldout" text="Layout > Layout Objects" value="true">
+        <engine:Foldout class="foldout" text="Layout > Standard Objects" value="true">
 
             <engine:VisualElement class="section">
 
@@ -29,6 +29,8 @@ xsi:schemaLocation="
                     <engine:Button text="Empty Responsive Container" class="col-full" name="EmptyResponsiveContainer" />
                     <engine:Button text="Container" class="col-full" name="Container" />
                     <engine:Button text="Responsive Container" class="col-full" name="ResponsiveContainer" />
+                    <engine:Button text="Camera" class="col-full" name="Camera" />
+                    <engine:Button text="Responsive Camera" class="col-full" name="ResponsiveCamera" />
                 </engine:VisualElement>
 
                 <engine:VisualElement class="section___content">

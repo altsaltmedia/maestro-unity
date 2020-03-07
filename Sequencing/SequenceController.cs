@@ -176,7 +176,7 @@ namespace AltSalt.Maestro.Sequencing
         {
             this.masterSequence = masterSequence;
             sequence.sequenceController = this;
-            sequence.SetDefaults();
+            sequence.SetToDefaults();
             
             if (playableDirector == null) {
                 playableDirector = gameObject.GetComponent<PlayableDirector>();

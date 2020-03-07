@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+	<engine:VisualElement name="ui-objects">
+
+        <engine:Foldout class="foldout" text="Layout > UI Objects" value="true">
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="ui objects" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Canvas" class="col-full" name="Canvas" />
+                    <engine:Button text="Child Canvas" class="col-full" name="ChildCanvas" />
+                    <engine:Button text="Overlay Canvas" class="col-full" name="OverlayCanvas" />
+                    <engine:Button text="Image" class="col-full" name="Image" />
+                    <engine:Button text="Background" class="col-full" name="Background" />
+                    <engine:Button text="UI Text" class="col-full" name="UIText" />
+                    <engine:Button text="Button" class="col-full" name="Button" />
+                    <engine:Button text="Button With Text" class="col-full" name="ButtonWithText" />
+                    <engine:Button text="Slider" class="col-full" name="Slider" />
+                    <engine:Button text="Call Webview Button" class="col-full" name="CallWebviewButton" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

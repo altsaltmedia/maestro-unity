@@ -88,16 +88,28 @@ namespace AltSalt.Maestro
             get
             {
                 if (TimelineEditor.inspectedAsset == null) {
+                    Debug.LogError("Please select a timeline instance");
                     return null;
                 }
                 
-                if (_configTrack == null || currentTimelineAsset != TimelineEditor.inspectedAsset) {
-                    currentTimelineAsset = TimelineEditor.inspectedAsset;
-                    _configTrack = Utils.GetTrackFromTimelineAsset(currentTimelineAsset, typeof(ConfigTrack)) as ConfigTrack;
+                ConfigTrack currentConfigTrack = Utils.GetTrackFromTimelineAsset(TimelineEditor.inspectedAsset, typeof(ConfigTrack)) as ConfigTrack;
+
+                if (currentConfigTrack == null) {
+                    Debug.LogError("Timeline asset must contain a config track");
+                    return null;
                 }
 
-                return _configTrack;
+                return currentConfigTrack;
             }
+        }
+
+        public static MarkerTrack GetMarkerTrack()
+        {
+            if (TimelineEditor.inspectedAsset.markerTrack == null) {
+                TimelineEditor.inspectedAsset.CreateMarkerTrack();
+            }
+
+            return TimelineEditor.inspectedAsset.markerTrack;
         }
 
         public static void FocusTimelineWindow()

@@ -15,6 +15,10 @@ namespace AltSalt.Maestro.Layout
 #if UNITY_EDITOR
         [OnValueChanged(nameof(UpdateDimensions))]
 #endif
+        [InfoBox("Automatically scales the X and Y values while maintaining the specified " +
+                 "aspect ratio and using a scaling factor. Dependent dimensions are calculated using a " +
+                 "base dimension type for convenience when switching between horizontal and vertical orientations " +
+                 "within a scene. Also contains option to set a maximum value (ignored if value is 0)")]
         List<DimensionType> baseDimensionTypes = new List<DimensionType>();
 
         private ValueDropdownList<DimensionType> dimensionValues = new ValueDropdownList<DimensionType>(){

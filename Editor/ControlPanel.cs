@@ -34,7 +34,9 @@ namespace AltSalt.Maestro
 
         private enum ModuleNames
         {
-            LayoutObjects,
+            StandardObjects,
+            UIObjects,
+            LayoutComponents,
             EditObjectValues,
             TextPlacementUtils,
             ContentExtensionStructures,
@@ -69,7 +71,9 @@ namespace AltSalt.Maestro
         {
             {ModuleNamespace.Layout, new List<ModuleNames>
             {
-                ModuleNames.LayoutObjects,
+                ModuleNames.StandardObjects,
+                ModuleNames.UIObjects,
+                ModuleNames.LayoutComponents,
                 ModuleNames.EditObjectValues,
                 ModuleNames.TextPlacementUtils,
                 ModuleNames.TextTools,
@@ -133,7 +137,8 @@ namespace AltSalt.Maestro
         {
             { ModuleNames.ObjectCreation, new List<ModuleNames>()
             {
-                ModuleNames.LayoutObjects,
+                ModuleNames.StandardObjects,
+                ModuleNames.UIObjects,
                 ModuleNames.ContentExtensionStructures,
                 ModuleNames.SequencingStructures,
                 ModuleNames.TrackPlacement,
@@ -144,7 +149,8 @@ namespace AltSalt.Maestro
                 ModuleNames.AnimationStructures,
                 ModuleNames.AudioStructures,
                 ModuleNames.GameLogicStructures,
-                ModuleNames.AppLogicStructures
+                ModuleNames.AppLogicStructures,
+                ModuleNames.SensorStructures
             }},
             { ModuleNames.TrackPlacement, new List<ModuleNames>()
             {    
@@ -268,6 +274,7 @@ namespace AltSalt.Maestro
 
         public void RenderLayout()
         {
+            rootVisualElement.viewDataKey = DateTime.Now.ToString();
             Selection.objects = null;
             foreach (ModuleWindow moduleWindow in createdModuleWindows) {
                 DestroyImmediate(moduleWindow);

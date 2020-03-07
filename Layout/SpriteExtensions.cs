@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,29 +8,35 @@ namespace AltSalt.Maestro.Layout
 {
     public class SpriteExtensions : MonoBehaviour
     {
-        SpriteRenderer spriteRenderer;
+        private SpriteRenderer _spriteRenderer;
 
-        private void Start()
+        private SpriteRenderer spriteRenderer
         {
-            GetSpriteComponent();
-        }
+            get
+            {
+                if (_spriteRenderer == null) {
+                    _spriteRenderer = GetComponent<SpriteRenderer>();
+                }
 
-        private void GetSpriteComponent()
-        {
-            if (spriteRenderer == null) {
-                spriteRenderer = GetComponent<SpriteRenderer>();
+                return _spriteRenderer;
             }
+            set => _spriteRenderer = value;
         }
 
+        private void Awake()
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        [Button(ButtonSizes.Large)]
         public void SetColor(ColorVariable colorVariable)
         {
-            GetSpriteComponent();
             spriteRenderer.color = colorVariable.value;
         }
 
+        [Button(ButtonSizes.Large)]
         public void SetColor(Color color)
         {
-            GetSpriteComponent();
             spriteRenderer.color = color;
         }
     }

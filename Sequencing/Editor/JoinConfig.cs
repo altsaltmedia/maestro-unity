@@ -43,6 +43,7 @@ namespace AltSalt.Maestro.Sequencing
         
         private enum EnableCondition
         {
+            TimelineEditorActive,
             DirectoryAndNamePopulated
         }
         
@@ -52,6 +53,14 @@ namespace AltSalt.Maestro.Sequencing
         
         private void UpdateDisplay()
         {
+            if (TimelineEditor.inspectedAsset != null) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TimelineEditorActive, true);
+            }
+            else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TimelineEditorActive, false);
+            }
+
+            
             if (string.IsNullOrEmpty(selectedObjectDirectory) == false && string.IsNullOrEmpty(objectName) == false) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.DirectoryAndNamePopulated, true);
             } else {
@@ -70,6 +79,7 @@ namespace AltSalt.Maestro.Sequencing
                             typeof(JoinMarker_JoinNext), TimelineEditor.inspectedAsset.duration);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TimelineEditorActive, button);
                     break;
 
                 case nameof(ButtonNames.JoinPrevious):
@@ -79,6 +89,7 @@ namespace AltSalt.Maestro.Sequencing
                             typeof(JoinMarker_JoinPrevious), 0);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TimelineEditorActive, button);
                     break;
 
                 case nameof(ButtonNames.ForkJoinNext):
@@ -88,6 +99,7 @@ namespace AltSalt.Maestro.Sequencing
                             typeof(ForkMarker_JoinNext), TimelineEditor.inspectedAsset.duration);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TimelineEditorActive, button);
                     break;
                 
                 case nameof(ButtonNames.ForkJoinPrevious):
@@ -97,12 +109,13 @@ namespace AltSalt.Maestro.Sequencing
                             typeof(ForkMarker_JoinPrevious), 0);
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TimelineEditorActive, button);
                     break;
                 
                 case nameof(ButtonNames.SimpleFork):
                     button.clickable.clicked += () =>
                     {
-                        Selection.activeObject = Utils.CreateScriptableObjectAsset(typeof(Fork), selectedObjectDirectory, objectName);
+                        Selection.activeObject = Utils.CreateScriptableObjectAsset(typeof(Fork), objectName, selectedObjectDirectory);
                         EditorUtility.FocusProjectWindow();
                         EditorGUIUtility.PingObject(Selection.activeObject);
                     };

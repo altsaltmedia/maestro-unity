@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,26 +8,34 @@ namespace AltSalt.Maestro.Layout
 {
     public class ImageExtensions : MonoBehaviour
     {
-        Image image;
+        private Image _image;
 
-        void Start()
+        private Image image
+        {
+            get => _image;
+            set => _image = value;
+        }
+
+        private void Awake()
         {
             GetImageComponent();
         }
 
-        void GetImageComponent()
+        private void GetImageComponent()
         {
             if(image == null) {
                 image = GetComponent<Image>();
             }
         }
 
+        [Button(ButtonSizes.Large)]
         public void SetColor(ColorVariable colorVariable)
         {
             GetImageComponent();
             image.color = colorVariable.value;
         }
 
+        [Button(ButtonSizes.Large)]
         public void SetColor(Color color)
         {
             GetImageComponent();

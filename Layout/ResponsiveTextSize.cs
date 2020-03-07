@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEditor;
 
@@ -10,6 +9,25 @@ namespace AltSalt.Maestro.Layout
         public List<float> breakpointTextSize = new List<float>();
 
 #if UNITY_EDITOR
+        
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            UpdateBreakpointDependencies();
+        }
+        
+        protected override void UpdateBreakpointDependencies()
+        {
+            base.UpdateBreakpointDependencies();
+            if (breakpointTextSize.Count == 0) {
+                breakpointTextSize.Add(textMeshPro.fontSize);
+            }
+            
+            if (breakpointTextSize.Count <= aspectRatioBreakpoints.Count) {
+                Utils.ExpandList(breakpointTextSize, aspectRatioBreakpoints.Count);
+            }
+        }
+
         
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         [InfoBox("Saves the position at the current breakpoint index.")]

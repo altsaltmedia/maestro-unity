@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace AltSalt.Maestro.Layout
@@ -7,6 +8,8 @@ namespace AltSalt.Maestro.Layout
     public class ResponsiveAutoPosition : ResponsiveRectTransform
     {
         [SerializeField]
+        [InfoBox("Automatically sets the X position as a percentage of the container's width, i.e. a value of 0 " +
+                 "will set the X position to 0, wheras .5 will set X position to half the container's width.")]
         List<float> multiplier = new List<float>();
 
 #if UNITY_EDITOR
@@ -20,7 +23,7 @@ namespace AltSalt.Maestro.Layout
         {
             base.UpdateBreakpointDependencies();
             if (multiplier.Count == 0) {
-                multiplier.Add(1f);
+                multiplier.Add(0f);
             }
         }
 #endif
@@ -31,7 +34,7 @@ namespace AltSalt.Maestro.Layout
             SetValue(breakpointIndex);
         }
 
-        void SetValue(int activeIndex)
+        private void SetValue(int activeIndex)
         {
             double newDimension = Utils.GetResponsiveWidth(sceneHeight, sceneWidth);
 

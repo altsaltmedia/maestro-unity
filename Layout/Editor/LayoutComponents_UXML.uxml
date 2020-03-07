@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+	<engine:VisualElement name="layout-components">
+
+        <engine:Foldout class="foldout" text="Layout > Layout Components" value="true" name="LayoutComponents">    
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="relative rect transform" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Relative Page" class="col-full" name="RelativePage" />
+                    <engine:Button text="Relative Element Controller" class="col-full" name="RelativeElementController" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="responsive rect transform" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Auto Position" class="col-full" name="AutoPosition" />
+                    <engine:Button text="Auto Scale" class="col-full" name="AutoScale" />
+                    <engine:Button text="Auto Scale Dimensions" class="col-full" name="AutoScaleDimensions" />
+                    <engine:Button text="Auto Width Height" class="col-full" name="AutoWidthHeight" />
+                    <engine:Button text="Scale" class="col-full" name="Scale" />
+                    <engine:Button text="Width Height" class="col-full" name="WidthHeight" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="interactive" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Touchable" class="col-full" name="Touchable" />
+                    <!--<engine:Button text="Draggable (not implemented)" class="col-full" name="Draggable" />-->
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="miscellanous" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Text Size" class="col-full" name="TextSize" />
+                    <engine:Button text="Auto Viewport" class="col-full" name="AutoViewport" />
+                    <engine:Button text="Viewport" class="col-full" name="Viewport" />
+                    <engine:Button text="Sliced Sprite Size" class="col-full" name="SlicedSpriteSize" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="extensions" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Text Extensions" class="col-full" name="TextExtensions" />
+                    <engine:Button text="Rect Transform Extensions" class="col-full" name="RectTransformExtensions" />
+                    <engine:Button text="Sprite Extensions" class="col-full" name="SpriteExtensions" />
+                    <engine:Button text="Image Extensions" class="col-full" name="ImageExtensions" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="utilities" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Video Player Utils" class="col-full" name="VideoPlayerUtils" />
+                    <engine:Button text="Mesh Renderer Sorter" class="col-full" name="MeshRendererSorter" />
+                    <engine:Button text="Mesh Renderer Updater" class="col-full" name="MeshRendererUpdater" />
+                    <engine:Button text="Draw Bounding Box" class="col-full" name="DrawBoundingBox" />
+                    <engine:Button text="Draw Text Box" class="col-full" name="DrawTextBox" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

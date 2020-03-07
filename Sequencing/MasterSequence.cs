@@ -89,6 +89,19 @@ namespace AltSalt.Maestro.Sequencing
 
         public void Init()
         {
+            // Validate before generating sequence data
+            for (int i = 0; i < sequenceControllers.Count; i++) {
+                if (sequenceControllers[i] == null) {
+                    Debug.LogError("Sequence controller is missing", this);
+                    return;
+                }
+                    
+                if (sequenceControllers[i].sequence == null) {
+                    Debug.LogError("Sequence controller is missing a target sequence", sequenceControllers[i]);
+                    return;
+                }
+            }
+            
             // Generate master times for sequences
             masterTimeDataList = GenerateSequenceData(sequenceControllers);
 

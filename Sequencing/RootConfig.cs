@@ -81,6 +81,14 @@ namespace AltSalt.Maestro.Sequencing
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.4f, 1)]
         public void Configure()
         {
+            // Validate before proceeding with configuration 
+            for (int i = 0; i < masterSequences.Count; i++) {
+                if (masterSequences[i] == null) {
+                    Debug.LogError("Master Sequence is missing on RootConfig", this);
+                    return;
+                }
+            }
+
             for (int i = 0; i < masterSequences.Count; i++) {
                 masterSequences[i].rootConfig = this;
                 masterSequences[i].Init();

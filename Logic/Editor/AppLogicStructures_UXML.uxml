@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.UIElements ../../../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+"
+>
+
+	<engine:VisualElement name="app-logic-structures">
+
+        <engine:Foldout class="foldout" text="Logic > App Logic Structures" value="true" name="AppLogicStructures">    
+
+            <engine:VisualElement class="section">
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="settings" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="App Settings" class="col-full" name="AppSettings" />
+                    <engine:Button text="System Settings" class="col-full" name="SystemSettings" />
+                    <engine:Button text="Debug Preferences" class="col-full" name="DebugPreferences" />
+                    <engine:Button text="Input Data" class="col-full" name="InputData" />
+                    <engine:Button text="User Data" class="col-full" name="UserData" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Label class="bold" text="objects" />
+                </engine:VisualElement>
+
+                <engine:VisualElement class="section___content">
+                    <engine:Button text="Initializer" class="col-full" name="Initializer" />
+                    <engine:Button text="App Utils" class="col-full" name="AppUtils" />
+                    <engine:Button text="Current Aspect Ratio Camera" class="col-full" name="CurrentAspectRatioCamera" />
+                    <engine:Button text="System Dependencies" class="col-full" name="SystemDependencies" />
+                    <engine:Button text="Fader - Progress Bar Canvas" class="col-full" name="FaderProgressBarCanvas" />
+                    <engine:Button text="Fader Panel" class="col-full" name="FaderPanel" />
+                    <engine:Button text="Progress Bar Panel" class="col-full" name="ProgressBarPanel" />
+                    <engine:Button text="Request App Utils" class="col-full" name="RequestAppUtils" />
+                    <engine:Button text="Scene Controller" class="col-full" name="SceneController" />
+                    <engine:Button text="User Data Controller" class="col-full" name="UserDataController" />
+                    <engine:Button text="Frame Rate Controller" class="col-full" name="FrameRateController" />
+                    <engine:Button text="Analytics Trackers" class="col-full" name="AnalyticsTrackers" />
+                </engine:VisualElement>
+
+            </engine:VisualElement>
+        
+        </engine:Foldout>
+    </engine:VisualElement>
+
+</engine:UXML>

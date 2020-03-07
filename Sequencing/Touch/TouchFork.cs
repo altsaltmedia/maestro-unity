@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
@@ -110,13 +111,16 @@ namespace AltSalt.Maestro.Sequencing.Touch
             get => _xWestKey;
             set => _xWestKey = value;
         }
-        
+
         protected override bool readonlyBranchingPaths => true;
 
-        private List<BranchingPath> RefreshForkData()
+        private void OnEnable()
         {
-            branchingPaths.Clear();
+            PopulateBranchKeys();
+        }
 
+        public TouchFork PopulateBranchKeys()
+        {
 #if UNITY_EDITOR
             if (yNorthKey == null) {
                 yNorthKey = Utils.GetScriptableObject(nameof(VarDependencies.yNorthBranch)) as BranchKey;
@@ -150,7 +154,13 @@ namespace AltSalt.Maestro.Sequencing.Touch
                 branchingPaths.Add(new BranchingPath(xWestKey, xWestBranch, invertXWest));
             }
 #endif
+            return this;
+        }
 
+        private List<BranchingPath> RefreshForkData()
+        {
+            branchingPaths.Clear();
+            PopulateBranchKeys();
             return branchingPaths;
         }
 

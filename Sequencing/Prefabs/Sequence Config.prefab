@@ -40,7 +40,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1651845744537938}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f1c3d276d5274b029caedebcbfdf933, type: 3}
   m_Name: 
@@ -75,7 +75,7 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: AppSettings
     _variable: {fileID: 0}
-  _sequence: {fileID: 0}
+  _connectedToSequence: 0
   _inputGroupKey:
     _isSystemReference: 0
     _referenceName: MainInput

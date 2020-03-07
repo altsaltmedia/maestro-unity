@@ -70,7 +70,7 @@ namespace AltSalt.Maestro.Layout
             FontColor
         }
 
-        void UpdateDisplay()
+        private void UpdateDisplay()
         {
             bool dependencySelected = false;
 
@@ -85,7 +85,7 @@ namespace AltSalt.Maestro.Layout
             moduleChildUXML.value = dependencySelected;           
         }
 
-        PropertyField SetupPropertyField(PropertyField propertyField)
+        private PropertyField SetupPropertyField(PropertyField propertyField)
         {
             switch (propertyField.name) {
 
@@ -120,7 +120,7 @@ namespace AltSalt.Maestro.Layout
             return propertyField;
         }
 
-        Button SetupButton(Button button)
+        private Button SetupButton(Button button)
         {
             switch (button.name) {
 

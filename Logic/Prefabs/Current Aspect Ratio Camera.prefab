@@ -1,13 +1,13 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &5493616117406232224
+--- !u!114 &-1406359982930677564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7418774611178018253}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0c9caf06f4441c684ddfc0f96f2bff1, type: 3}
   m_Name: 
@@ -35,7 +35,7 @@ MonoBehaviour:
   _action:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5493616117406232224}
+      - m_Target: {fileID: -1406359982930677564}
         m_MethodName: RefreshViewport
         m_Mode: 1
         m_Arguments:
@@ -162,7 +162,7 @@ PrefabInstance:
     - target: {fileID: 768030734032267799, guid: 7e634be71c99846aaa2e65cf389dd3fb,
         type: 3}
       propertyPath: m_Name
-      value: Current Scene Camera
+      value: Current Aspect Ratio Camera
       objectReference: {fileID: 0}
     - target: {fileID: 768030734032267799, guid: 7e634be71c99846aaa2e65cf389dd3fb,
         type: 3}

@@ -44,6 +44,8 @@ namespace AltSalt.Maestro.Logic
             RefreshViewport();
         }
 
+        [InfoBox("Automatically refreshes viewport whenever the aspect ratio changes. This component listens " +
+                 "directly to the system settings and does not need a dynamic layout controller to function.")]
         [Button(ButtonSizes.Large)]
         public void RefreshViewport()
         {

@@ -54,6 +54,9 @@ namespace AltSalt.Maestro.Layout
         public Scene parentScene => gameObject.scene;
         
         [SerializeField]
+#if UNITY_EDITOR
+        [OnValueChanged(nameof(ResetResponsiveElementData))]
+#endif
         private int _priority;
 
         public int priority => _priority;
@@ -100,11 +103,6 @@ namespace AltSalt.Maestro.Layout
 #endif
             enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
-
-//        private void OnDisable()
-//        {
-//            dynamicElementDisable.RaiseEvent(this.gameObject, this);
-//        }
 
         private void RefreshElements()
         {
@@ -160,7 +158,6 @@ namespace AltSalt.Maestro.Layout
         }
 
 #if UNITY_EDITOR
-
         private void OnGUI()
         {
             if(ElementsChanged()) {
@@ -177,6 +174,12 @@ namespace AltSalt.Maestro.Layout
             }
 
             return false;
+        }
+        
+        private void ResetResponsiveElementData()
+        {
+            disableDynamicElement.RaiseEvent(this.gameObject, this);
+            enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
 #endif
         

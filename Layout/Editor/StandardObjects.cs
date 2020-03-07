@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace AltSalt.Maestro.Layout
 {
-    public class LayoutObjects : ModuleWindow
+    public class StandardObjects : ModuleWindow
     {
         protected override ModuleWindow Configure(ControlPanel controlPanel, string uxmlPath)
         {
@@ -14,10 +12,23 @@ namespace AltSalt.Maestro.Layout
 
             var buttons = moduleWindowUXML.Query<Button>();
             buttons.ForEach(SetupButton);
+
+            appSettings = Utils.GetAppSettings();
             
             return this;
         }
+
+        private AppSettings _appSettings;
+
+        private AppSettings appSettings
+        {
+            get => _appSettings;
+            set => _appSettings = value;
+        }
         
+        private float sceneHeight => appSettings.GetCurrentSceneHeight(this);
+        private float sceneWidth => appSettings.GetCurrentSceneWidth(this);
+
         static GameObject createdGameObject;
 
         private bool selectCreatedObject => controlPanel.objectCreation.selectCreatedObject;
@@ -32,6 +43,8 @@ namespace AltSalt.Maestro.Layout
             ResponsiveContainer,
             EmptyContainer,
             EmptyResponsiveContainer,
+            Camera,
+            ResponsiveCamera,
             SimpleVideoPlayer,
             ScrollSnapController,
             DynamicAppLayoutController,
@@ -45,6 +58,8 @@ namespace AltSalt.Maestro.Layout
                 case nameof(ButtonNames.Text):
                     button.clickable.clicked += () => {
                         createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.textPrefab, objectName);
+                        RectTransform rectTransform =  createdGameObject.GetComponent<RectTransform>();
+                        rectTransform.sizeDelta = new Vector2((float)Utils.GetResponsiveWidth(sceneHeight, sceneWidth), rectTransform.sizeDelta.y);
                         if (selectCreatedObject == true) {
                             Selection.activeGameObject = createdGameObject;
                         }
@@ -54,15 +69,6 @@ namespace AltSalt.Maestro.Layout
                 case nameof(ButtonNames.Sprite):
                     button.clickable.clicked += () => {
                         createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.spritePrefab, objectName);
-                        if (selectCreatedObject == true) {
-                            Selection.activeGameObject = createdGameObject;
-                        }
-                    };
-                    break;
-
-                case nameof(ButtonNames.Container):
-                    button.clickable.clicked += () => {
-                        createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.containerPrefab, objectName, true);
                         if (selectCreatedObject == true) {
                             Selection.activeGameObject = createdGameObject;
                         }
@@ -86,10 +92,37 @@ namespace AltSalt.Maestro.Layout
                         }
                     };
                     break;
+                
+                case nameof(ButtonNames.Container):
+                    button.clickable.clicked += () => {
+                        createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.containerPrefab, objectName, true);
+                        if (selectCreatedObject == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
 
                 case nameof(ButtonNames.ResponsiveContainer):
                     button.clickable.clicked += () => {
                         createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.responsiveContainerPrefab, objectName, true);
+                        if (selectCreatedObject == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+                
+                case nameof(ButtonNames.Camera):
+                    button.clickable.clicked += () => {
+                        createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.cameraPrefab, objectName);
+                        if (selectCreatedObject == true) {
+                            Selection.activeGameObject = createdGameObject;
+                        }
+                    };
+                    break;
+                
+                case nameof(ButtonNames.ResponsiveCamera):
+                    button.clickable.clicked += () => {
+                        createdGameObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.responsiveCameraPrefab, objectName);
                         if (selectCreatedObject == true) {
                             Selection.activeGameObject = createdGameObject;
                         }

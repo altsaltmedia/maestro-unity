@@ -18,7 +18,7 @@ namespace AltSalt.Maestro.Layout
         [ReadOnly]
         private AppSettingsReference _appSettings = new AppSettingsReference();
 
-        protected AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
+        private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
 
         [ShowInInspector]
         [ReadOnly]
@@ -142,13 +142,6 @@ namespace AltSalt.Maestro.Layout
             enableDynamicElement.RaiseEvent(this.gameObject, this);
         }
 
-#if UNITY_EDITOR
-        //void OnDisable()
-        //{
-        //    responsiveElementDisable.RaiseEvent(this.gameObject, this);
-        //}
-#endif
-
         public void CallExecuteLayoutUpdate(UnityEngine.Object callingObject)
         {
             RefreshActiveLayout();
@@ -198,7 +191,7 @@ namespace AltSalt.Maestro.Layout
             return ResponsiveUtilsCore.AddBreakpointToResponsiveElement(this, targetBreakpoint);
         }
 
-        void ResetResponsiveElementData()
+        private void ResetResponsiveElementData()
         {
             disableDynamicElement.RaiseEvent(this.gameObject, this);
             enableDynamicElement.RaiseEvent(this.gameObject, this);
@@ -237,14 +230,6 @@ namespace AltSalt.Maestro.Layout
             nonserializedProperties.Add(nameof(_appSettings));
             nonserializedProperties.Add(nameof(_enableDynamicElement));
             nonserializedProperties.Add(nameof(_disableDynamicElement));
-        }
-
-        protected virtual void OnRenderObject()
-        {
-            //Uncomment this if it's ever necessary to repopulate missing dependencies
-            //PopulateDependencies();
-            //PopulateNonSerializedProperties();
-            
         }
 
         protected override void OnGUI()

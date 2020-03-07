@@ -50,10 +50,11 @@ namespace AltSalt.Maestro.Sequencing
         private enum ButtonNames
         {
             RootConfig,
-            MasterSequencePlusConfig,
-            MasterSequence,
-            SequenceConfig,
-            SimplePlayableDirector,
+            MasterSequencePlusConfigPlusSequence,
+            BlankMasterSequence,
+            SequenceConfigPlusSequence,
+            BlankSequenceConfig,
+            BlankPlayableDirector,
             SimplePlayableDirectorPlusTimeline,
             Sequence,
             TimelineAsset,
@@ -63,9 +64,10 @@ namespace AltSalt.Maestro.Sequencing
 
         private enum EnableCondition
         {
-            MasterSequencePlusDependenciesPopulated,
             MasterSequenceDependenciesPopulated,
+            BlankMasterDependenciesPopulated,
             SequenceConfigDependenciesPopulated,
+            BlankSequenceDependenciesPopulated,
             SimpleDirectorDependenciesPopulated,
             DirectoryAndNamePopulated,
             PlayableDirectorSelected,
@@ -82,16 +84,16 @@ namespace AltSalt.Maestro.Sequencing
             if(Utils.FilterSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig)).Length > 0
                && string.IsNullOrEmpty(selectedObjectDirectory) == false
                && string.IsNullOrEmpty(sequenceName) == false) {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MasterSequencePlusDependenciesPopulated, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MasterSequenceDependenciesPopulated, true);
             } else {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MasterSequencePlusDependenciesPopulated, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MasterSequenceDependenciesPopulated, false);
             }
             
             if(Utils.FilterSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig)).Length > 0
                && string.IsNullOrEmpty(sequenceName) == false) {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MasterSequenceDependenciesPopulated, true);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.BlankMasterDependenciesPopulated, true);
             } else {
-                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.MasterSequenceDependenciesPopulated, false);
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.BlankMasterDependenciesPopulated, false);
             }
 
             if (Utils.FilterSelection(Selection.gameObjects, typeof(MasterSequence)).Length > 0
@@ -102,8 +104,14 @@ namespace AltSalt.Maestro.Sequencing
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SequenceConfigDependenciesPopulated, false);
             }
             
-            if (Selection.transforms.Length > 0 
-                && string.IsNullOrEmpty(selectedObjectDirectory) == false
+            if (Utils.FilterSelection(Selection.gameObjects, typeof(MasterSequence)).Length > 0
+                && string.IsNullOrEmpty(sequenceName) == false) {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.BlankSequenceDependenciesPopulated, true);
+            } else {
+                ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.BlankSequenceDependenciesPopulated, false);
+            }
+            
+            if (string.IsNullOrEmpty(selectedObjectDirectory) == false
                 && string.IsNullOrEmpty(sequenceName) == false) {
                 ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SimpleDirectorDependenciesPopulated, true);
             } else {
@@ -142,22 +150,22 @@ namespace AltSalt.Maestro.Sequencing
                     };
                     break;
                 
-                case nameof(ButtonNames.MasterSequencePlusConfig):
+                case nameof(ButtonNames.MasterSequencePlusConfigPlusSequence):
                     button.clickable.clicked += () => {
                         GameObject rootConfig = Utils.FilterSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig))[0] as GameObject;
                         GameObject masterSequence = CreateMasterSequence(rootConfig.GetComponent<RootConfig>(), sequenceName);
                         if (selectOnCreation == true) {
-                            Selection.activeObject = CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(), selectedObjectDirectory, sequenceName);
+                            Selection.activeObject = CreateSequenceConfigPlusSequence(masterSequence.GetComponent<MasterSequence>(), selectedObjectDirectory, sequenceName);
                         }
                         else {
-                            CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(), selectedObjectDirectory, sequenceName);
+                            CreateSequenceConfigPlusSequence(masterSequence.GetComponent<MasterSequence>(), selectedObjectDirectory, sequenceName);
                         }
                         ModuleUtils.FocusHierarchyWindow();
                     };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MasterSequencePlusDependenciesPopulated, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MasterSequenceDependenciesPopulated, button);
                     break;
                 
-                case nameof(ButtonNames.MasterSequence):
+                case nameof(ButtonNames.BlankMasterSequence):
                     button.clickable.clicked += () =>
                     {
                         GameObject rootConfig = Utils.FilterSelection(Utils.GetParentGameObjects(Selection.gameObjects, true), typeof(RootConfig))[0] as GameObject;
@@ -170,19 +178,19 @@ namespace AltSalt.Maestro.Sequencing
                         }
                         ModuleUtils.FocusHierarchyWindow();
                     };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.MasterSequenceDependenciesPopulated, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.BlankMasterDependenciesPopulated, button);
                     break;
                 
-                case nameof(ButtonNames.SequenceConfig):
+                case nameof(ButtonNames.SequenceConfigPlusSequence):
                     button.clickable.clicked += () =>
                     {
                         GameObject masterSequence = Utils.FilterSelection(Selection.gameObjects, typeof(MasterSequence))[0] as GameObject;
                         if (selectOnCreation == true) {
-                            Selection.activeObject = CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(),
+                            Selection.activeObject = CreateSequenceConfigPlusSequence(masterSequence.GetComponent<MasterSequence>(),
                                 selectedObjectDirectory, sequenceName);
                         }
                         else {
-                            CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(),
+                            CreateSequenceConfigPlusSequence(masterSequence.GetComponent<MasterSequence>(),
                                 selectedObjectDirectory, sequenceName);
                         }
                         ModuleUtils.FocusHierarchyWindow();
@@ -190,7 +198,22 @@ namespace AltSalt.Maestro.Sequencing
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SequenceConfigDependenciesPopulated, button);
                     break;
                 
-                case nameof(ButtonNames.SimplePlayableDirector):
+                case nameof(ButtonNames.BlankSequenceConfig):
+                    button.clickable.clicked += () =>
+                    {
+                        GameObject masterSequence = Utils.FilterSelection(Selection.gameObjects, typeof(MasterSequence))[0] as GameObject;
+                        if (selectOnCreation == true) {
+                            Selection.activeObject = CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(), sequenceName);
+                        }
+                        else {
+                            CreateSequenceConfig(masterSequence.GetComponent<MasterSequence>(), sequenceName);
+                        }
+                        ModuleUtils.FocusHierarchyWindow();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.BlankSequenceDependenciesPopulated, button);
+                    break;
+                
+                case nameof(ButtonNames.BlankPlayableDirector):
                     button.clickable.clicked += () => {
                         if (selectOnCreation == true) {
                             Selection.activeObject = ModuleUtils.CreateElement(Selection.transforms, ModuleUtils.moduleReferences.simplePlayableDirectorPrefab, sequenceName);
@@ -302,7 +325,7 @@ namespace AltSalt.Maestro.Sequencing
             return masterSequenceObject;
         }
         
-        public static GameObject CreateSequenceConfig(MasterSequence masterSequence, string targetDirectory, string name)
+        public static GameObject CreateSequenceConfigPlusSequence(MasterSequence masterSequence, string targetDirectory, string name)
         {
             var ( newSequence, newTimelineAsset ) = CreateSequenceTimelinePair(targetDirectory, name);
             if (newSequence != null) {
@@ -351,8 +374,9 @@ namespace AltSalt.Maestro.Sequencing
                     TimelineAsset newTimelineAsset = ScriptableObject.CreateInstance(typeof(TimelineAsset)) as TimelineAsset;
                     newTimelineAsset.editorSettings.fps = 100f;
                     Sequence newSequence = ScriptableObject.CreateInstance(typeof(Sequence)) as Sequence;
+                    newSequence.name = name;
                     
-                    PromptActivateSequence(newSequence);
+                    PromptSetSequenceDefault(newSequence);
                     AssetDatabase.CreateAsset(newSequence, sequencePath);
                     AssetDatabase.CreateAsset(newTimelineAsset, timelineAssetPath);
                     TimelineUtils.CreateDebugTrack(newTimelineAsset);
@@ -368,13 +392,29 @@ namespace AltSalt.Maestro.Sequencing
 
             return new Tuple<Sequence, TimelineAsset>(null, null);
         }
-
-        public static Sequence PromptActivateSequence(Sequence targetSequence)
+        
+        public static GameObject CreateSequenceConfig(MasterSequence masterSequence, string name)
         {
-            if (EditorUtility.DisplayDialog("Set sequence to active?", "Would you like to set sequence " + targetSequence.name + " to active?", "Yes", "No")) {
-                targetSequence.active = true;
+            
+            GameObject sequenceConfigObject = PrefabUtility.InstantiatePrefab(ModuleUtils.moduleReferences.sequenceConfig) as GameObject;
+            Undo.RegisterCreatedObjectUndo(sequenceConfigObject, "Create sequence config");
+
+            sequenceConfigObject.name = name;
+
+            masterSequence.sequenceControllers.Add(sequenceConfigObject.GetComponent<SequenceController>());
+            EditorUtility.SetDirty(masterSequence);
+
+            Undo.SetTransformParent(sequenceConfigObject.transform, masterSequence.gameObject.transform, "set parent on new element");
+
+            return sequenceConfigObject;
+        }
+        
+        public static Sequence PromptSetSequenceDefault(Sequence targetSequence)
+        {
+            if (EditorUtility.DisplayDialog("Set sequence default to active?", "Would you like to set sequence " + targetSequence.name + "'s default status to active?", "Yes", "No")) {
+                targetSequence.defaultStatus = true;
             } else {
-                targetSequence.active = false;
+                targetSequence.defaultStatus = false;
             }
 
             return targetSequence;
@@ -558,6 +598,10 @@ namespace AltSalt.Maestro.Sequencing
                 if (siblingSequence == null) {
                     return gameObjectSelection;
                 }
+
+                siblingSequence.defaultStatus = false;
+                PromptSetSequenceDefault(siblingSequence);
+                
                 siblingConfigComponent.sequence = siblingSequence;
 
                 TimelineAsset siblingTimelineAsset = CreateSiblingTimelineAsset(sourceConfigComponent);

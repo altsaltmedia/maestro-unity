@@ -60,7 +60,9 @@ xsi:schemaLocation="
                     </engine:VisualElement>
 
                     <engine:VisualElement class="section___content">
-                        <engine:Button text="Layout Objects" class="col-full" name="LayoutObjects" />
+                        <engine:Button text="Standard Objects" class="col-full" name="StandardObjects" />
+                        <engine:Button text="UI Objects" class="col-full" name="UIObjects" />
+                        <engine:Button text="Layout Components" class="col-full" name="LayoutComponents" />
                         <engine:Button text="Edit Object Values" class="col-full" name="EditObjectValues" />
                         <engine:Button text="Text Placement Utils" class="col-full" name="TextPlacementUtils" />
                     </engine:VisualElement>
@@ -70,9 +72,9 @@ xsi:schemaLocation="
                     </engine:VisualElement>
 
                     <engine:VisualElement class="section___content">
-                        <engine:Button text="Content Extension Structures" class="col-full" name="ContentExtensionStructures" />
                         <engine:Button text="Layout Tools" class="col-full" name="LayoutTools" />
                         <engine:Button text="Text Tools" class="col-full" name="TextTools" />
+                        <engine:Button text="Content Extension Structures" class="col-full" name="ContentExtensionStructures" />
                     </engine:VisualElement>
 
 

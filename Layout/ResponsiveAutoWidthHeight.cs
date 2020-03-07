@@ -13,6 +13,10 @@ namespace AltSalt.Maestro.Layout
     {
         [Range(0, 10)]
         [SerializeField]
+        [InfoBox("Automatically scales the width or height to match the current scene dimensions, " +
+                 "with option to modify via a scaling factor. Width or height is modified using a base " +
+                 "dimension type for convenience when switching between horizontal and vertical orientations " +
+                 "within a scene.")]
         List<float> multiplier = new List<float>();
 
         [ValueDropdown("dimensionValues")]
@@ -51,9 +55,8 @@ namespace AltSalt.Maestro.Layout
             }
         }
 
-        protected override void OnRenderObject()
+        protected void OnRenderObject()
         {
-            base.OnRenderObject();
             if (MarginChanged() == true) {
                 ExecuteResponsiveAction();
             }

@@ -25,12 +25,13 @@ namespace AltSalt.Maestro.Layout
         public static void ShowWindow()
         {
             var window = GetWindow<LayoutTools>();
+            window.Init();
             layoutTools = window;
         }
 
-        static void Init()
+        private void Init()
         {
-            EditorWindow.GetWindow(typeof(LayoutTools)).Show();
+            titleContent = new GUIContent("Layout Tools");
         }
 
         protected override void OnGUI()
