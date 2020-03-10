@@ -84,15 +84,42 @@ namespace AltSalt.Maestro
         public static string ComplexEventString = typeof(ComplexEvent).Name;
         public static string SimpleEventString = typeof(SimpleEvent).Name;
         static GUISkin altSaltSkin;
-
-        // Custom equation of an exponential function - equation is in the form y = a^x * b
-        // It is derived by taking two (X,Y) coordinates along the line, creating two equations
-        // in the form above, then dividing one equation by the other to solve for a and b.
-        // Values are converted to a double here to preserve precision.
+        
         public static double GetResponsiveWidth(float height, float width)
         {
-            double aspectRatio = height / width;
-            return Math.Pow(0.561993755433366d, aspectRatio) * 10.03014554127636d;
+            double aspectRatio;
+            
+            // The scaling equation for our responsive width is slightly different
+            // based on whether we're in vertical orientation or horizontal orientation.
+
+            // VERTICAL ORIENTATION
+            // If height is greater than width, that means the device is in its natural
+            // vertical orientation, so we calculate the aspect ratio using the standard
+            // height / width equation.
+            
+            if (height > width) {
+                aspectRatio = height / width;
+                
+                // Custom equation of an exponential function - equation is in the form y = a^x * b
+                // It is derived by taking two (X,Y) coordinates along the line, creating two equations
+                // in the form above, then dividing one equation by the other to solve for a and b.
+                // Values are converted to a double here to preserve precision.
+                return Math.Pow(0.561993755433366d, aspectRatio) * 10.03014554127636d;
+            }
+            
+            // HORIZONTAL ORIENTATION
+            // If width is greater than the height, that means the device is on its 
+            // horizontal axis, so we need to flip the height-width values when calculating
+            // aspect ratio.
+            
+            aspectRatio = width / height;
+            
+            // Custom equation of a linear function - equation is in the form y = mx + b
+            // It is derived by taking two (X,Y) coordinates along the line, calculating the slope m
+            // using y2 - y1 / x2 - x1, then substituting in a point along the line to find B.
+            // Note that the slope should actually be 6.201923076923077, however I may have modified
+            // it slightly to get better values for our use case.
+            return 6.201923076923077 * aspectRatio - 0.010769230769233;
         }
         
         public static string LimitLength(this string source, int maxLength)

@@ -139,7 +139,13 @@ namespace AltSalt.Maestro.Layout
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         private void ExecuteResponsiveAction()
         {
-            camera.pixelRect = new Rect((deviceWidth - sceneWidth) / 2f, (deviceHeight - sceneHeight) / 2f, sceneWidth, sceneHeight);
+            camera.pixelRect = new Rect(Mathf.Abs(deviceWidth - sceneWidth) / 2f, Mathf.Abs(deviceHeight - sceneHeight) / 2f, sceneWidth, sceneHeight);
+            if (camera.rect.width > 1 || camera.rect.height > 1) {
+                float modifiedWidth = camera.rect.width - camera.rect.x * 2;
+                float modifiedHeight = camera.rect.height - camera.rect.y * 2;
+                camera.rect = new Rect(camera.rect.x, camera.rect.y, modifiedWidth, modifiedHeight);
+                Debug.Log("Camera ratios are potentially invalid; please check to make sure your DynamicLayoutController is set correctly.");
+            }
         }
         
         

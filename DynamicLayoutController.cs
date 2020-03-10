@@ -70,6 +70,11 @@ namespace AltSalt.Maestro.Layout {
         }
 
         [SerializeField]
+        private DimensionType _primaryOrientation;
+        
+        private DimensionType primaryOrientation;
+        
+        [SerializeField]
         private List<float> _deviceBreakpoints = new List<float>();
 
         private List<float> deviceBreakpoints => _deviceBreakpoints;
@@ -105,11 +110,10 @@ namespace AltSalt.Maestro.Layout {
 
         private UnityEvent layoutRenderCompleteEvents => _layoutRenderCompleteEvents;
 
-        private enum ResizeType { VerticalPillarBox, HorizontalLetterBox, VerticalLetterBox, HorizontalPillarBox }
+        private enum ResizeType { PillarBox, HorizontalLetterBox, LetterBox, HorizontalPillarBox }
         
         private void Start()
 		{
-            SaveScreenValues();
             RefreshLayout();   
 		}
         
@@ -127,7 +131,7 @@ namespace AltSalt.Maestro.Layout {
             _targetWidth.PopulateVariable(this, nameof(_targetWidth));
             _targetHeight.PopulateVariable(this, nameof(_targetHeight));
 
-            
+
             EditorSceneManager.sceneSaved += scene =>
             {
                 if (TimelineEditor.inspectedDirector != null) {
@@ -146,7 +150,6 @@ namespace AltSalt.Maestro.Layout {
             }
             
             if (ScreenResized() == true) {
-                SaveScreenValues();
                 RefreshLayout();
             }
         }
@@ -168,9 +171,28 @@ namespace AltSalt.Maestro.Layout {
             // we don't use them when they do
             if (Screen.width <= 0 || Screen.height <= 0) return;
             
+            if (primaryOrientation == DimensionType.Vertical) {
+                Screen.orientation = ScreenOrientation.Portrait;
+            }
+            else {
+                Screen.orientation = ScreenOrientation.LandscapeLeft;
+            }
+            
             deviceWidth = Screen.width;
             deviceHeight = Screen.height;
-            deviceAspectRatio = (float)Screen.height / Screen.width;
+            
+            // Aspect ratio is calculated by dividing device height
+            // by device width. In the case of a horizontal orientation, however,
+            // then screen values will be reversed, so we need to account for
+            // that in order to get the correct aspect ratio value, i.e.
+            // (4:3 = 1.333, 16:9 = 1.777)
+            if (Screen.height > Screen.width) {
+                deviceAspectRatio = deviceHeight / deviceWidth;
+            }
+            else {
+                deviceAspectRatio = deviceWidth / deviceHeight;
+            }
+            
         }
 
         private void RefreshLayout()
@@ -222,6 +244,7 @@ namespace AltSalt.Maestro.Layout {
         [PropertyOrder(8)]
         public void CallExecuteLayoutUpdate()
         {
+            SaveScreenValues();
             PopulateSceneDimensions();
 
             if (appSettings.dynamicLayoutActive == false) {
@@ -271,7 +294,7 @@ namespace AltSalt.Maestro.Layout {
                 switch (sceneDimension.targetAspectRatio) {
 
                     case AspectRatioType.x9x16:
-                        if(sceneDimension.resizeType == ResizeType.VerticalPillarBox || sceneDimension.resizeType == ResizeType.HorizontalLetterBox) {
+                        if(sceneDimension.resizeType == ResizeType.PillarBox) {
                             sceneWidth = deviceWidth;
                             sceneHeight = (16f * sceneWidth) / 9f;
                         } else {
@@ -279,9 +302,19 @@ namespace AltSalt.Maestro.Layout {
                             sceneWidth = (9f * sceneHeight) / 16f;
                         }
                         break;
+                    
+                    case AspectRatioType.x16x9:
+                        if(sceneDimension.resizeType == ResizeType.PillarBox) {
+                            sceneWidth = deviceWidth;
+                            sceneHeight = (9f * sceneWidth) / 16f;
+                        } else {
+                            sceneHeight = deviceHeight;
+                            sceneWidth = (16f * sceneHeight) / 9f;
+                        }
+                        break;
 
                     case AspectRatioType.x3x4:
-                        if (sceneDimension.resizeType == ResizeType.VerticalPillarBox || sceneDimension.resizeType == ResizeType.HorizontalLetterBox) {
+                        if (sceneDimension.resizeType == ResizeType.PillarBox) {
                             sceneWidth = deviceWidth;
                             sceneHeight = (4f * sceneWidth) / 3f;
                         } else {
@@ -289,6 +322,17 @@ namespace AltSalt.Maestro.Layout {
                             sceneWidth = (3f * sceneHeight) / 4f;
                         }
                         break;
+                    
+                    case AspectRatioType.x4x3:
+                        if (sceneDimension.resizeType == ResizeType.PillarBox) {
+                            sceneWidth = deviceWidth;
+                            sceneHeight = (3f * sceneWidth) / 4f;
+                        } else {
+                            sceneHeight = deviceHeight;
+                            sceneWidth = (4f * sceneHeight) / 3f;
+                        }
+                        break;
+
                     case AspectRatioType.x1x1:
                         sceneWidth = deviceWidth;
                         sceneHeight = deviceWidth;
@@ -303,16 +347,24 @@ namespace AltSalt.Maestro.Layout {
                         Debug.Log("Specified aspect ratio " + nameof(sceneDimension.targetAspectRatio) + " is not supported.");
                         break;
                 }
-
-                targetAspectRatio = sceneHeight / sceneWidth;
-
+                
             } else {
-
                 sceneWidth = deviceWidth;
                 sceneHeight = deviceHeight;
-                targetAspectRatio = deviceHeight / deviceWidth;
-
             }
+            
+            // Aspect ratio is calculated by dividing device height
+            // by device width. In the case of a horizontal orientation, however,
+            // then screen values will be reversed, so we need to account for
+            // that in order to get the correct aspect ratio value, i.e.
+            // (4:3 = 1.333, 16:9 = 1.777)
+            if (sceneHeight > sceneWidth) {
+                targetAspectRatio = sceneHeight / sceneWidth;
+            }
+            else {
+                targetAspectRatio = sceneWidth / sceneHeight;
+            }
+            
         }
         
         [Serializable]
@@ -323,8 +375,10 @@ namespace AltSalt.Maestro.Layout {
             public AspectRatioType targetAspectRatio = AspectRatioType.x9x16;
 
             private ValueDropdownList<AspectRatioType> aspectRatioValues = new ValueDropdownList<AspectRatioType>(){
-                {"9 x 16 | 16 x 9", AspectRatioType.x9x16  },
-                {"3 x 4 | 4 x 3", AspectRatioType.x3x4 },
+                {"9 x 16", AspectRatioType.x9x16  },
+                {"16 x 9", AspectRatioType.x16x9  },
+                {"3 x 4", AspectRatioType.x3x4 },
+                {"4 x 3", AspectRatioType.x4x3 },
                 {"1 x 1 | Box", AspectRatioType.x1x1 },
                 {"None | Resize", AspectRatioType.Dynamic }
             };
@@ -332,13 +386,11 @@ namespace AltSalt.Maestro.Layout {
             [ValueDropdown(nameof(resizeTypeValues))]
             [SerializeField]
             [ShowIf(nameof(CanChooseCrop))]
-            public ResizeType resizeType = ResizeType.VerticalLetterBox;
+            public ResizeType resizeType = ResizeType.LetterBox;
 
             private ValueDropdownList<ResizeType> resizeTypeValues = new ValueDropdownList<ResizeType>(){
-                {"Vertical : Crop or box top and bottom", ResizeType.VerticalPillarBox  },
-                {"Vertical : Crop or box sides", ResizeType.VerticalLetterBox },
-                {"Horizontal: Crop or box top and bottom", ResizeType.HorizontalPillarBox},
-                {"Horizontal : Crop or box sides", ResizeType.HorizontalLetterBox  }
+                {"Pillarbox : Crop or box top and bottom", ResizeType.PillarBox  },
+                {"Letterbox : Crop or box sides", ResizeType.LetterBox }
             };
 
             private bool CanChooseCrop()
