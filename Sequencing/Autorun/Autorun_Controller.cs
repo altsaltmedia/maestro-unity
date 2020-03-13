@@ -25,13 +25,38 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         public Lerper lerper => _lerper;
 
+        [SerializeField]
+        private bool _pauseMomentumDuringAutorun = true;
+
+        public bool pauseMomentumDuringAutorun => _pauseMomentumDuringAutorun;
+
         public bool isReversing => appSettings.GetIsReversing(this.gameObject, inputGroupKey);
+        
+        public ComplexEventManualTrigger pauseMomentum => appSettings.GetPauseMomentum(this.gameObject, inputGroupKey);
+        
+        private bool _useFrameStepValue;
+
+        public bool useFrameStepValue
+        {
+            get => _useFrameStepValue;
+            set => _useFrameStepValue = value;
+        }
 
         [SerializeField]
         [InfoBox("Autorun data is populated dynamically from connected Master Sequences")]
         private List<Autorun_Data> _autorunData = new List<Autorun_Data>();
 
         public List<Autorun_Data> autorunData => _autorunData;
+
+        
+        private void Start()
+        {
+#if UNITY_EDITOR
+            useFrameStepValue = false;
+#else
+            useFrameStepValue = true;
+#endif
+        }
 
         //#if UNITY_EDITOR
 
@@ -161,6 +186,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         {
             autoplayer.RefreshAutoplayStatus(updatedSequence);
             lerper.RefreshLerpStatus(updatedSequence);
+        }
+
+        public void TriggerPauseMomentum(Sequence targetSequence)
+        {
+            pauseMomentum.RaiseEvent(this.gameObject, targetSequence);
         }
 
 //#endif

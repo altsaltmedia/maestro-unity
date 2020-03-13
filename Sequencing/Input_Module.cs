@@ -66,16 +66,17 @@ namespace AltSalt.Maestro.Sequencing
             
             moduleActive = false;
         }
-
+        
         public virtual void TriggerInputActionComplete()
         {
-            // ComplexPayload complexPayload = ComplexPayload.CreateInstance();
-            // complexPayload.Set(DataType.stringType, this.gameObject.name);
-            // inputActionComplete.RaiseEvent(this.gameObject, complexPayload);
-
             for (int i = 0; i < inputController.masterSequences.Count; i++) {
                 inputController.masterSequences[i].UnlockInputModule(this.gameObject);
             }
+        }
+
+        public virtual void TriggerInputActionComplete(MasterSequence targetMasterSequence)
+        {
+            targetMasterSequence.UnlockInputModule(this.gameObject);
         }
 
         private static bool IsPopulated(ComplexEventManualTrigger attribute)

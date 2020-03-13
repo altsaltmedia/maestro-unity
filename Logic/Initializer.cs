@@ -35,6 +35,7 @@ namespace AltSalt.Maestro.Logic
             
             Physics.autoSimulation = false;
             Application.targetFrameRate = 60;
+            appSettings.playStartedFromInitializer = true;
             
             if (appSettings.useAddressables == true) {
                 yield return new WaitForSeconds(1);

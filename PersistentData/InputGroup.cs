@@ -112,6 +112,13 @@ namespace AltSalt.Maestro
         private SimpleEventTrigger _onTouchStart = new SimpleEventTrigger();
 
         public SimpleEventTrigger onTouchStart => _onTouchStart;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private SimpleEventTrigger _onTouchUp = new SimpleEventTrigger();
+
+        public SimpleEventTrigger onTouchUp => _onTouchUp;
 
         [Required]
         [FoldoutGroup("Events")]
@@ -158,9 +165,23 @@ namespace AltSalt.Maestro
         [Required]
         [FoldoutGroup("Events")]
         [SerializeField]
-        private SimpleEventTrigger _boundaryReached = new SimpleEventTrigger();
+        private ComplexEventManualTrigger _pauseMomentum = new ComplexEventManualTrigger();
 
-        public SimpleEventTrigger boundaryReached => _boundaryReached;
+        public ComplexEventManualTrigger pauseMomentum => _pauseMomentum;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private ComplexEventManualTrigger _resumeMomentum = new ComplexEventManualTrigger();
+
+        public ComplexEventManualTrigger resumeMomentum => _resumeMomentum;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private ComplexEventManualTrigger _boundaryReached = new ComplexEventManualTrigger();
+
+        public ComplexEventManualTrigger boundaryReached => _boundaryReached;
 
         [Required]
         [FoldoutGroup("Events")]

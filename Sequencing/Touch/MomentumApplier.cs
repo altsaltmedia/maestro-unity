@@ -49,17 +49,6 @@ namespace AltSalt.Maestro.Sequencing.Touch
             get => _hasMomentum;
             set => _hasMomentum = value;
         }
-        
-        [SerializeField]
-        [Required]
-        [BoxGroup("Android dependencies")]
-        private SimpleEventTrigger _pauseSequenceComplete;
-
-        public SimpleEventTrigger pauseSequenceComplete
-        {
-            get => _pauseSequenceComplete;
-            set => _pauseSequenceComplete = value;
-        }
 
         private SwipeDirection _lastSwipeDirection;
 
@@ -208,6 +197,20 @@ namespace AltSalt.Maestro.Sequencing.Touch
             } 
             
             return new Vector2( 0, momentumForce.y);
+        }
+
+        public void OnPauseMomentum(ComplexPayload complexPayload)
+        {
+            Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
+            Touch_Data touchData = touchController.touchDataList.Find(x => x.sequence == targetSequence);
+            touchData.pauseMomentumActive = true;
+        }
+        
+        public void OnResumeMomentum(ComplexPayload complexPayload)
+        {
+            Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
+            Touch_Data touchData = touchController.touchDataList.Find(x => x.sequence == targetSequence);
+            touchData.pauseMomentumActive = false;
         }
     }
 }

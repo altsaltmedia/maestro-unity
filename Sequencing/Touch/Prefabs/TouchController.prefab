@@ -89,25 +89,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnTouchStart
     _variable: {fileID: 0}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4581706541368278684}
-        m_MethodName: CallResetBranchStates
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -122,8 +107,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &5339541314759043643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +120,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipe
@@ -144,20 +127,6 @@ MonoBehaviour:
   - _isSystemReference: 0
     _referenceName: MainInput-SequenceModified
     _variable: {fileID: 0}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4581706541368278684}
-        m_MethodName: RefreshAxes
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -172,8 +141,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!1 &2614246155531537207
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,6 +206,8 @@ GameObject:
   - component: {fileID: 8132643687515368099}
   - component: {fileID: 8140058799231212654}
   - component: {fileID: 4742324807908144558}
+  - component: {fileID: 2197923084440672639}
+  - component: {fileID: 9165632833466805269}
   m_Layer: 12
   m_Name: MomentumApplier
   m_TagString: Untagged
@@ -277,7 +247,7 @@ MonoBehaviour:
   _pauseSequenceComplete:
     _isSystemReference: 0
     _referenceName: PauseSequenceComplete
-    _variable: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
+    _variable: {fileID: 0}
 --- !u!114 &8132643687515368099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,25 +260,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipeEnd
     _variable: {fileID: 0}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2334433779831845473}
-        m_MethodName: RefreshLocalMomentum
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -323,8 +278,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &8140058799231212654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,7 +291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnLongTouch
@@ -345,31 +298,6 @@ MonoBehaviour:
   - _isSystemReference: 0
     _referenceName: MainInput-MomentumDepleted
     _variable: {fileID: 0}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2334433779831845473}
-        m_MethodName: HaltMomentum
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2334433779831845473}
-        m_MethodName: TriggerInputActionComplete
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -395,8 +323,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &4742324807908144558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,7 +336,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-MomentumDepleted
@@ -417,31 +343,6 @@ MonoBehaviour:
   - _isSystemReference: 0
     _referenceName: MainInput-AppUtilsRequested
     _variable: {fileID: 0}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2334433779831845473}
-        m_MethodName: HaltMomentum
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2334433779831845473}
-        m_MethodName: TriggerInputActionComplete
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -467,8 +368,71 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
+--- !u!114 &2197923084440672639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8771448038486601892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: MainInput-PauseMomentum
+    _variable: {fileID: 0}
+  DeveloperDescription: 
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2334433779831845473}
+        m_MethodName: OnPauseMomentum
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
+--- !u!114 &9165632833466805269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8771448038486601892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: MainInput-ResumeMomentum
+    _variable: {fileID: 0}
+  DeveloperDescription: 
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2334433779831845473}
+        m_MethodName: OnResumeMomentum
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
 --- !u!1 &8857081004071828522
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,10 +481,7 @@ MonoBehaviour:
   _priority: 5
   _moduleActive: 1
   _touchController: {fileID: 6351633449510160952}
-  pauseSequenceComplete:
-    _isSystemReference: 0
-    _referenceName: PauseSequenceComplete
-    _variable: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
+  _resumeMomentumOnTouchStart: 1
 --- !u!114 &7502520908444273291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,25 +494,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipe
     _variable: {fileID: 0}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1251530826959537226}
-        m_MethodName: UpdateSequenceWithSwipe
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -566,8 +512,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &5768031951818456644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -580,25 +525,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simpleSignal: {fileID: 0}
   _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipeEnd
     _variable: {fileID: 0}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1251530826959537226}
-        m_MethodName: TriggerInputActionComplete
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -613,5 +543,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0

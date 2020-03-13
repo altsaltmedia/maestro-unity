@@ -6,13 +6,12 @@ namespace AltSalt.Maestro
 {
 
     [Serializable]
-    [CreateAssetMenu(menuName = "Maestro/Events/Event Payload")]
-    public class ComplexPayload : ScriptableObject
+    public class ComplexPayload
     {
 #if UNITY_EDITOR
         [SerializeField]
         [Multiline]
-        [Header("Event Payload")]
+        [Header("Complex Payload")]
         string description;
 #endif
 
@@ -48,7 +47,7 @@ namespace AltSalt.Maestro
 
         private static ComplexPayload Init()
         {
-            ComplexPayload payloadInstance = ScriptableObject.CreateInstance(typeof(ComplexPayload)) as ComplexPayload;
+            ComplexPayload payloadInstance = new ComplexPayload();
             return payloadInstance;
         }
 

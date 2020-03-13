@@ -45,6 +45,17 @@ namespace AltSalt.Maestro.Sequencing
             get => _currentTime;
             set => _currentTime = value;
         }
+        
+        [SerializeField]
+        [TitleGroup("$"+nameof(propertiesTitle))]
+        [InfoBox("We cache the duration here because looking it up on the source playable is expensive")]
+        private double _duration;
+
+        public double duration
+        {
+            get => _duration;
+            set => _duration = value;
+        }
 
         [Required]
         [SerializeField]
@@ -96,6 +107,11 @@ namespace AltSalt.Maestro.Sequencing
         {
             active = defaultStatus;
             currentTime = defaultTime;
+            if (sourcePlayable == null) {
+                Debug.LogError("No source playable set on " + this.name, this);
+            }
+
+            duration = sourcePlayable.duration;
         }
 
     }

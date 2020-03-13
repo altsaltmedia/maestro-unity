@@ -79,6 +79,8 @@ namespace AltSalt.Maestro.Sensors
         }
 
         private SimpleEventTrigger onTouchStart => appSettings.GetOnTouchStart(this.gameObject, inputGroupKey);
+        
+        private SimpleEventTrigger onTouchUp => appSettings.GetOnTouchUp(this.gameObject, inputGroupKey);
 
         private SimpleEventTrigger onLongTouch => appSettings.GetOnLongTouch(this.gameObject, inputGroupKey);
 
@@ -194,6 +196,11 @@ namespace AltSalt.Maestro.Sensors
                 onLongTouch.RaiseEvent(this.gameObject);
                 HaltMomentum();
             }
+        }
+        
+        public void OnTouchUp(Gesture gesture)
+        {
+            onTouchUp.RaiseEvent(this.gameObject);
         }
 
         public void OnSwipeStart(Gesture gesture)

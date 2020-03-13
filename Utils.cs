@@ -88,7 +88,7 @@ namespace AltSalt.Maestro
         public static double GetResponsiveWidth(float height, float width)
         {
             double aspectRatio;
-            
+
             // The scaling equation for our responsive width is slightly different
             // based on whether we're in vertical orientation or horizontal orientation.
 
@@ -96,24 +96,24 @@ namespace AltSalt.Maestro
             // If height is greater than width, that means the device is in its natural
             // vertical orientation, so we calculate the aspect ratio using the standard
             // height / width equation.
-            
+        
             if (height > width) {
                 aspectRatio = height / width;
-                
+            
                 // Custom equation of an exponential function - equation is in the form y = a^x * b
                 // It is derived by taking two (X,Y) coordinates along the line, creating two equations
                 // in the form above, then dividing one equation by the other to solve for a and b.
                 // Values are converted to a double here to preserve precision.
                 return Math.Pow(0.561993755433366d, aspectRatio) * 10.03014554127636d;
             }
-            
+        
             // HORIZONTAL ORIENTATION
             // If width is greater than the height, that means the device is on its 
             // horizontal axis, so we need to flip the height-width values when calculating
             // aspect ratio.
-            
+        
             aspectRatio = width / height;
-            
+        
             // Custom equation of a linear function - equation is in the form y = mx + b
             // It is derived by taking two (X,Y) coordinates along the line, calculating the slope m
             // using y2 - y1 / x2 - x1, then substituting in a point along the line to find B.
@@ -196,20 +196,6 @@ namespace AltSalt.Maestro
                 return altSaltSkin;
             }
         }
-
-//        private static string CreateConfigFolder()
-//        {
-//            string[] subfolders = {nameof(AltSalt), nameof(MaestroConfig)};
-//            string currentFolder = "Assets";
-//            for (int i = 0; i < subfolders.Length; i++) {
-//                if (AssetDatabase.IsValidFolder(($"{currentFolder}/{subfolders[i]}")) == false) {
-//                    AssetDatabase.CreateFolder(currentFolder, subfolders[i]);
-//                }
-//                currentFolder += "/" + subfolders[i];
-//            }
-//
-//            return currentFolder + "/";
-//        }
 
         private static void GetConfigAsset()
         {
@@ -1125,12 +1111,6 @@ namespace AltSalt.Maestro
                 default:
                     return 0;
             }
-        }
-
-        public static ComplexPayload CreateEventPayload()
-        {
-            ComplexPayload payloadInstance = ScriptableObject.CreateInstance(typeof(ComplexPayload)) as ComplexPayload;
-            return payloadInstance;
         }
 
 #if UNITY_EDITOR

@@ -597,6 +597,11 @@ namespace AltSalt.Maestro
             return inputData.GetInputGroup(inputGroupKey).onTouchStart;
         }
         
+        public SimpleEventTrigger GetOnTouchUp(GameObject callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).onTouchUp;
+        }
+        
         public SimpleEventTrigger GetOnLongTouch(GameObject callingObject, InputGroupKey inputGroupKey)
         {
             return inputData.GetInputGroup(inputGroupKey).onLongTouch;
@@ -627,7 +632,17 @@ namespace AltSalt.Maestro
             return inputData.GetInputGroup(inputGroupKey).momentumDepleted;
         }
         
-        public SimpleEventTrigger GetBoundaryReached(GameObject callingObject, InputGroupKey inputGroupKey)
+        public ComplexEventManualTrigger GetPauseMomentum(GameObject callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).pauseMomentum;
+        }
+        
+        public ComplexEventManualTrigger GetResumeMomentum(GameObject callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).resumeMomentum;
+        }
+        
+        public ComplexEventManualTrigger GetBoundaryReached(GameObject callingObject, InputGroupKey inputGroupKey)
         {
             return inputData.GetInputGroup(inputGroupKey).boundaryReached;
         }
@@ -848,6 +863,12 @@ namespace AltSalt.Maestro
         public static bool logGlobalResponsiveElementActions => DebugPreferences.logResponsiveElementActions;
 
         public static bool logConditionResponses => DebugPreferences.logConditionResponses;
+
+        public bool playStartedFromInitializer
+        {
+            get => debugPreferences.playStartedFromInitializer;
+            set => debugPreferences.playStartedFromInitializer = value;
+        }
 
     #endregion
         

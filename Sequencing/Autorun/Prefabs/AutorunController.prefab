@@ -48,6 +48,7 @@ MonoBehaviour:
   _rootConfig: {fileID: 0}
   _autoplayer: {fileID: 3719720165695611221}
   _lerper: {fileID: 8343281159360016346}
+  _pauseMomentumDuringAutorun: 1
   _autorunData: []
 --- !u!1 &8653552950031489400
 GameObject:
@@ -60,6 +61,7 @@ GameObject:
   - component: {fileID: 8409089239683071894}
   - component: {fileID: 8343281159360016346}
   - component: {fileID: 7884193363350299396}
+  - component: {fileID: 1491765143839150688}
   m_Layer: 12
   m_Name: Lerper
   m_TagString: Untagged
@@ -131,6 +133,38 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _skipRegistration: 0
+--- !u!114 &1491765143839150688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8653552950031489400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: MainInput-BoundaryReached
+    _variable: {fileID: 0}
+  DeveloperDescription: 
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8343281159360016346}
+        m_MethodName: DeactivateLerp
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
 --- !u!1 &8733841028164870764
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,6 +177,7 @@ GameObject:
   - component: {fileID: 3719720165695611221}
   - component: {fileID: 4944100776945312249}
   - component: {fileID: 1133069145979638054}
+  - component: {fileID: 1405246104888845213}
   m_Layer: 12
   m_Name: Autoplayer
   m_TagString: Untagged
@@ -200,16 +235,13 @@ MonoBehaviour:
     _referenceName: MainInput-OnSwipeEnd
     _variable: {fileID: 0}
   - _isSystemReference: 0
-    _referenceName: PauseSequenceComplete
-    _variable: {fileID: 11400000, guid: 1c7407f82d2844122869a9043dfa483c, type: 2}
-  - _isSystemReference: 0
     _referenceName: MainInput-SequenceModified
     _variable: {fileID: 0}
   _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3719720165695611221}
-        m_MethodName: ActivateEligibleForAutoplay
+        m_MethodName: ActivateEligibleForAutoplayAndRefresh
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -245,6 +277,38 @@ MonoBehaviour:
       - m_Target: {fileID: 3719720165695611221}
         m_MethodName: DeactivateEligibleForAutoplay
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
+--- !u!114 &1405246104888845213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8733841028164870764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: MainInput-BoundaryReached
+    _variable: {fileID: 0}
+  DeveloperDescription: 
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3719720165695611221}
+        m_MethodName: DeactivateEligibleForAutoplay
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

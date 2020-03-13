@@ -8,9 +8,12 @@ namespace AltSalt.Maestro.Sequencing.Touch
     public class SwipeApplier : Touch_Module
     {
         [SerializeField]
-        [Required]
-        [BoxGroup("Android dependencies")]
-        SimpleEventTrigger pauseSequenceComplete;
+        private bool _resumeMomentumOnTouchStart = true;
+
+        private bool resumeMomentumOnTouchStart => _resumeMomentumOnTouchStart;
+
+        private ComplexEventManualTrigger resumeMomentum =>
+            touchController.appSettings.GetResumeMomentum(this.gameObject, touchController.inputGroupKey);
 
         public void UpdateSequenceWithSwipe()
         {
@@ -57,6 +60,10 @@ namespace AltSalt.Maestro.Sequencing.Touch
                     continue;
                 }
 
+                if (resumeMomentumOnTouchStart == true) {
+                    TriggerResumeMomentum(touchData.sequence);
+                }
+
                 if (touchData.forceForward == true) {
                     touchController.swipeModifierOutput = Mathf.Abs(touchController.swipeModifierOutput);
                 } else if (touchData.forceBackward == true) {
@@ -75,15 +82,10 @@ namespace AltSalt.Maestro.Sequencing.Touch
             return targetSequence;
         }
 
-        private static bool IsPopulated(V3Reference attribute)
+        public void TriggerResumeMomentum(Sequence targetSequence)
         {
-            return Utils.IsPopulated(attribute);
+            resumeMomentum.RaiseEvent(this.gameObject, targetSequence);
         }
 
-        private static bool IsPopulated(FloatReference attribute)
-        {
-            return Utils.IsPopulated(attribute);
-        }
-        
     }
 }

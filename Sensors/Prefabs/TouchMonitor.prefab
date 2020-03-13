@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 114194128393916672}
   - component: {fileID: 114697932136561384}
   m_Layer: 0
-  m_Name: SwipeMonitor
+  m_Name: TouchMonitor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
   _appSettings:
     _isSystemReference: 0
     _referenceName: AppSettings
-    _variable: {fileID: 11400000, guid: cdaa16febaab84716bcc56c0f7b539ae, type: 2}
+    _variable: {fileID: 0}
   _userDataKey:
     _isSystemReference: 0
     _referenceName: User1
@@ -118,4 +118,14 @@ MonoBehaviour:
     gameObjectReceiver: {fileID: 0}
     eventName: 1
     methodName: OnTouchStart
+    parameter: 1
+  - enable: 1
+    triggerType: 0
+    name: New trigger
+    restricted: 0
+    gameObject: {fileID: 0}
+    otherReceiver: 0
+    gameObjectReceiver: {fileID: 0}
+    eventName: 3
+    methodName: OnTouchUp
     parameter: 1

@@ -65,10 +65,10 @@ namespace AltSalt.Maestro.Sequencing
             _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
             _userKey.PopulateVariable(this, nameof(_userKey));
             
-            if (Application.isPlaying == false) {
+#endif
+            if (Application.isPlaying == false || appSettings.playStartedFromInitializer == false) {
                 Configure();
             }
-#endif
         }
 
         /// <summary>

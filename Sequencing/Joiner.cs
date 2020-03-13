@@ -34,7 +34,7 @@ namespace AltSalt.Maestro.Sequencing
         public float forkTransitionSpread =>
             rootConfig.appSettings.GetForkTransitionSpread(this.gameObject, inputGroupKey);
 
-        private SimpleEventTrigger boundaryReached =>
+        private ComplexEventManualTrigger boundaryReached =>
             rootConfig.appSettings.GetBoundaryReached(this.gameObject, inputGroupKey);
 
         private List<MasterSequence> masterSequences => rootConfig.masterSequences;
@@ -112,7 +112,7 @@ namespace AltSalt.Maestro.Sequencing
                 }
                 else if (sequenceSettings.previousDestination is Fork fork) {
                     if (fork.active == false || fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
-                        boundaryReached.RaiseEvent(this.gameObject);
+                        boundaryReached.RaiseEvent(this.gameObject, sourceSequence);
                     }
                     else {
                         previousSequence = destinationBranch.sequence;
@@ -138,7 +138,7 @@ namespace AltSalt.Maestro.Sequencing
             }
             else
             {
-                boundaryReached.RaiseEvent(this.gameObject);
+                boundaryReached.RaiseEvent(this.gameObject, sourceSequence);
             }
 
             return sourceSequence;
@@ -168,7 +168,7 @@ namespace AltSalt.Maestro.Sequencing
                 }
                 else if (sequenceSettings.nextDestination is Fork fork) {
                     if (fork.active == false || fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
-                        boundaryReached.RaiseEvent(this.gameObject);
+                        boundaryReached.RaiseEvent(this.gameObject, sourceSequence);
                     }
                     else {
                         nextSequence = destinationBranch.sequence;  
@@ -193,7 +193,7 @@ namespace AltSalt.Maestro.Sequencing
             }
             else
             {
-                boundaryReached.RaiseEvent(this.gameObject);
+                boundaryReached.RaiseEvent(this.gameObject, sourceSequence);
             }
 
             return sourceSequence;

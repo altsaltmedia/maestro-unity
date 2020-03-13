@@ -50,6 +50,7 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: AppSettings
     _variable: {fileID: 0}
+  _refreshLayoutOnStart: 1
   _targetAspectRatio:
     _isSystemReference: 0
     _referenceName: AppAspectRatio
@@ -68,6 +69,12 @@ MonoBehaviour:
     _useConstant: 0
     _constantValue: 0
     _variable: {fileID: 0}
+  _callbackEvent:
+    _isSystemReference: 0
+    _referenceName: 
+    _variable: {fileID: 0}
+  _setScreenOrientation: 1
+  _primaryOrientation: 0
   _deviceBreakpoints:
   - 1.77
   _sceneDimensions:
@@ -77,9 +84,6 @@ MonoBehaviour:
     resizeType: 0
   _delayStart: 0
   _delayAmount: 0
-  _layoutRenderCompleteEvents:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &4824492354251042838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,7 +168,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 801848713650947055}
-        m_MethodName: CallExecuteLayoutUpdate
+        m_MethodName: CallRefreshLayout
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

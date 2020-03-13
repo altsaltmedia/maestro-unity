@@ -104,6 +104,14 @@ namespace AltSalt.Maestro
             set => _logConditionResponses = value;
         }
 
+        private bool _playStartedFromInitializer;
+
+        public bool playStartedFromInitializer
+        {
+            get => _playStartedFromInitializer;
+            set => _playStartedFromInitializer = value;
+        }
+
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void SetDefaults()
         {

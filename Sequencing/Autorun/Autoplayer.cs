@@ -19,7 +19,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             }
             set => _moduleActive = value;
         }
-        
+
         private float frameStepValue => autorunController.appSettings.GetFrameStepValue(this.gameObject, inputGroupKey);
 
         private bool bookmarkLoadingCompleted =>
@@ -30,7 +30,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         private float _autoplayEaseThreshold = 0.25f;
 
         private float autoplayEaseThreshold => _autoplayEaseThreshold;
-        
+
         /// <summary>
         /// Given a target sequence, will search through our
         /// autorun data and either activate or deactivate autoplay.
@@ -52,7 +52,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             
             // Handling to activate the next timeline if we've reached the end of the current sequence
             if (autorunData.forwardUpdateActive == true && autorunData.loop == false && autorunController.isReversing == false &&
-                targetSequence.currentTime >= targetSequence.sourcePlayable.duration) {
+                targetSequence.currentTime >= targetSequence.duration) {
                 autorunController.rootConfig.joiner.ActivateNextSequence(targetSequence);
             }
 
@@ -126,6 +126,10 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     // sequence gets updated (see RefreshAutoplay() above)
                     autorunData.activeInterval = currentInterval;
                     autorunData.forwardUpdateActive = true;
+                    
+                    if (autorunController.pauseMomentumDuringAutorun == true) {
+                        autorunController.TriggerPauseMomentum(autorunData.sequence);
+                    }
                 }
             }
 
@@ -170,17 +174,23 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     autorunData.autorunIntervals, out var currentInterval) == false) {
                 return autorunData;
             }
+
+            if (autorunController.pauseMomentumDuringAutorun == true) {
+                autorunController.TriggerPauseMomentum(autorunData.sequence);
+            }
             
             MasterSequence targetMasterSequence = autorunData.sequence.sequenceController.masterSequence;
             autorunData.activeInterval = currentInterval;
 
             float autoplayModifer = 0f;
 
-#if UNITY_EDITOR
-            autoplayModifer = Time.smoothDeltaTime;
-#else
-            autoplayModifer = frameStepValue;
-#endif
+            if (autorunController.useFrameStepValue == false) {
+                autoplayModifer = Time.smoothDeltaTime;
+            }
+            else {
+                autoplayModifer = frameStepValue;
+            }
+            
             autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, autorunData.loop, true, autoplayEaseThreshold, autorunData.easingUtility);
             
             targetMasterSequence.RequestModifySequenceTime(autorunData.sequence, this.priority, this.gameObject.name, autoplayModifer);
@@ -287,6 +297,16 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 autorunData.forwardUpdateActive = false;
                 autorunData.easingUtility.Reset();
             }
+        }
+        
+        public void DeactivateEligibleForAutoplay(ComplexPayload complexPayload)
+        {
+            Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
+            Autorun_Data autorunData = autorunController.autorunData.Find(x => x.sequence == targetSequence);
+            autorunData.eligibleForAutoplay = false;
+            autorunData.backwardUpdateActive = false;
+            autorunData.forwardUpdateActive = false;
+            autorunData.easingUtility.Reset();
         }
 
         public void ActivateLoop(Sequence targetSequence)

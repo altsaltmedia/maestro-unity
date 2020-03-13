@@ -82,5 +82,36 @@ PrefabInstance:
       propertyPath: _targetHeight._referenceName
       value: CurrentSceneHeight
       objectReference: {fileID: 0}
+    - target: {fileID: 801848713650947055, guid: 3deee83047b8742e78c2ece3b8b6bd19,
+        type: 3}
+      propertyPath: _callbackEvent._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 840110f2c87ab4cb1af087c4d2ab60e1,
+        type: 2}
+    - target: {fileID: 801848713650947055, guid: 3deee83047b8742e78c2ece3b8b6bd19,
+        type: 3}
+      propertyPath: _callbackEvent._referenceName
+      value: DynamicLayoutRenderComplete
+      objectReference: {fileID: 0}
+    - target: {fileID: 801848713650947055, guid: 3deee83047b8742e78c2ece3b8b6bd19,
+        type: 3}
+      propertyPath: _refreshLayoutOnStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555745392276912937, guid: 3deee83047b8742e78c2ece3b8b6bd19,
+        type: 3}
+      propertyPath: _simpleSignalReferences.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555745392276912937, guid: 3deee83047b8742e78c2ece3b8b6bd19,
+        type: 3}
+      propertyPath: _simpleSignalReferences.Array.data[1]._referenceName
+      value: MainInput-BookmarkLoadingCompleted
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555745392276912937, guid: 3deee83047b8742e78c2ece3b8b6bd19,
+        type: 3}
+      propertyPath: _simpleSignalReferences.Array.data[1]._variable
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3deee83047b8742e78c2ece3b8b6bd19, type: 3}

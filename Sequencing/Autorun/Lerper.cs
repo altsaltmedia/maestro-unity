@@ -76,6 +76,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 autorunData.backwardUpdateActive = false;
                 autorunData.forwardUpdateActive = false;
                 targetMasterSequence.RequestDeactivateForwardAutoplay(targetSequence, this.priority, this.gameObject.name);
+                TriggerInputActionComplete(autorunData.sequence.sequenceController.masterSequence);
                 if (autorunData.lerpCoroutine != null) {
                     StopCoroutine(autorunData.lerpCoroutine);
                     autorunData.lerpCoroutine = null;
@@ -94,6 +95,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     autorunData.forwardUpdateActive = false;
                     autorunData.backwardUpdateActive = false;
                     targetMasterSequence.RequestDeactivateForwardAutoplay(targetSequence, this.priority, this.gameObject.name);
+                    TriggerInputActionComplete(autorunData.sequence.sequenceController.masterSequence);
                     if (autorunData.lerpCoroutine != null) {
                         StopCoroutine(autorunData.lerpCoroutine);
                         autorunData.lerpCoroutine = null;
@@ -154,11 +156,13 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
             float lerpModifier = 0f;
 
-#if UNITY_EDITOR
-            lerpModifier = Time.smoothDeltaTime;
-#else
-            lerpModifier = frameStepValue * lerpSpeed;
-#endif
+            if (autorunController.useFrameStepValue == false) {
+                lerpModifier = Time.smoothDeltaTime;
+            }
+            else {
+                lerpModifier = frameStepValue;
+            }
+            
             lerpModifier *= CalculateLerpModifier(autorunController.isReversing);
 
             autorunData.lerpCoroutine = LerpSequenceManually(autorunController, this, autorunData,
@@ -200,6 +204,16 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 }
                 autorunController.autorunData[i].isLerping = false;
             }
+        }
+        
+        public void DeactivateLerp(ComplexPayload complexPayload)
+        {
+            Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
+            Autorun_Data autorunData = autorunController.autorunData.Find(x => x.sequence == targetSequence);
+            if(autorunData.lerpCoroutine != null) {
+                StopCoroutine(autorunData.lerpCoroutine);
+            }
+            autorunData.isLerping = false;
         }
 
         private static bool IsPopulated(FloatReference attribute)

@@ -84,7 +84,7 @@ namespace AltSalt.Maestro
 
         private void SanitizeListenerList()
         {
-            listeners.RemoveAll(x => x == null);
+            listeners.RemoveAll(x => x == null || x.Equals(null));
         }
         
 #if UNITY_EDITOR
@@ -93,6 +93,8 @@ namespace AltSalt.Maestro
         [ShowInInspector]
         private void CallSignalChange()
         {
+            SanitizeListenerList();
+            
             StoreCaller(this, "editor", "editor");
             SignalChange();
         }        

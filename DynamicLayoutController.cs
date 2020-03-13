@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
@@ -23,7 +22,12 @@ namespace AltSalt.Maestro.Layout {
         private AppSettingsReference _appSettings = new AppSettingsReference();
 
         private AppSettings appSettings => _appSettings.GetVariable() as AppSettings;
-        
+
+        [SerializeField]
+        private bool _refreshLayoutOnStart;
+
+        private bool refreshLayoutOnStart => _refreshLayoutOnStart;
+
         private float deviceAspectRatio
         {
             get => appSettings.GetDeviceAspectRatio(this);
@@ -68,12 +72,23 @@ namespace AltSalt.Maestro.Layout {
             get => _targetHeight.GetValue();
             set => _targetHeight.SetValue(this.gameObject, value);
         }
+        
+        [SerializeField]
+        private SimpleEventTrigger _callbackEvent;
+
+        private SimpleEventTrigger callbackEvent => _callbackEvent;
+        
+        [SerializeField]
+        private bool _setScreenOrientation;
+
+        private bool setScreenOrientation => _setScreenOrientation;
 
         [SerializeField]
+        [ShowIf(nameof(setScreenOrientation))]
         private DimensionType _primaryOrientation;
-        
-        private DimensionType primaryOrientation;
-        
+
+        private DimensionType primaryOrientation => _primaryOrientation;
+
         [SerializeField]
         private List<float> _deviceBreakpoints = new List<float>();
 
@@ -105,16 +120,24 @@ namespace AltSalt.Maestro.Layout {
 
         private float delayAmount => _delayAmount;
 
-        [SerializeField]
-        private UnityEvent _layoutRenderCompleteEvents;
+        private enum ResizeType { PillarBox, LetterBox }
 
-        private UnityEvent layoutRenderCompleteEvents => _layoutRenderCompleteEvents;
+        private bool _editorMode;
 
-        private enum ResizeType { PillarBox, HorizontalLetterBox, LetterBox, HorizontalPillarBox }
-        
+        public bool editorMode
+        {
+            get => _editorMode;
+            set => _editorMode = value;
+        }
+
         private void Start()
 		{
-            RefreshLayout();   
+#if UNITY_EDITOR
+            editorMode = true;      
+#endif
+            if (Application.isPlaying == false || refreshLayoutOnStart == true) {
+                RefreshLayout();
+            }
 		}
         
         private void OnDisable()
@@ -130,7 +153,7 @@ namespace AltSalt.Maestro.Layout {
             _targetAspectRatio.PopulateVariable(this, nameof(_targetAspectRatio));
             _targetWidth.PopulateVariable(this, nameof(_targetWidth));
             _targetHeight.PopulateVariable(this, nameof(_targetHeight));
-
+            _callbackEvent.PopulateVariable(this, nameof(_callbackEvent));
 
             EditorSceneManager.sceneSaved += scene =>
             {
@@ -164,55 +187,6 @@ namespace AltSalt.Maestro.Layout {
             return false;
         }
 #endif
-        
-        private void SaveScreenValues()
-        {
-            // Sometimes these values are erroneous, so make sure
-            // we don't use them when they do
-            if (Screen.width <= 0 || Screen.height <= 0) return;
-            
-            if (primaryOrientation == DimensionType.Vertical) {
-                Screen.orientation = ScreenOrientation.Portrait;
-            }
-            else {
-                Screen.orientation = ScreenOrientation.LandscapeLeft;
-            }
-            
-            deviceWidth = Screen.width;
-            deviceHeight = Screen.height;
-            
-            // Aspect ratio is calculated by dividing device height
-            // by device width. In the case of a horizontal orientation, however,
-            // then screen values will be reversed, so we need to account for
-            // that in order to get the correct aspect ratio value, i.e.
-            // (4:3 = 1.333, 16:9 = 1.777)
-            if (Screen.height > Screen.width) {
-                deviceAspectRatio = deviceHeight / deviceWidth;
-            }
-            else {
-                deviceAspectRatio = deviceWidth / deviceHeight;
-            }
-            
-        }
-
-        private void RefreshLayout()
-        {
-            CallExecuteLayoutUpdate();
-
-            if (Application.isPlaying == true) {
-                if(delayStart == false) {
-                    layoutRenderCompleteEvents.Invoke();
-                } else {
-                    StartCoroutine(LayoutRenderCompleteTimeDelay());
-                }
-            }
-        }
-        
-        private IEnumerator LayoutRenderCompleteTimeDelay()
-        {
-            yield return new WaitForSeconds(delayAmount);
-            layoutRenderCompleteEvents.Invoke();
-        }
 
         public void RegisterDynamicElement(ComplexPayload complexPayload)
         {
@@ -242,23 +216,92 @@ namespace AltSalt.Maestro.Layout {
         
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         [PropertyOrder(8)]
-        public void CallExecuteLayoutUpdate()
+        public void CallRefreshLayout()
         {
-            SaveScreenValues();
-            PopulateSceneDimensions();
+            RefreshLayout();
+        }
 
-            if (appSettings.dynamicLayoutActive == false) {
-                return;
+        private void RefreshLayout()
+        {
+            StartCoroutine(SaveScreenValues(() =>
+            {
+                PopulateSceneDimensions();
+            
+                if (appSettings.dynamicLayoutActive == false) {
+                    return;
+                }
+
+                // We track all priority responsive elements separately
+                // because sorting is an expensive operation
+                priorityDynamicElements.Sort(new ResponsiveUtilsCore.DynamicElementSort());
+                List<IDynamicLayoutElement> elementsToRemove = new List<IDynamicLayoutElement>();
+
+                UpdateDynamicElements(priorityDynamicElements, this, 1);
+                UpdateDynamicElements(dynamicElements, this, int.MinValue);
+                UpdateDynamicElements(priorityDynamicElements, this, int.MinValue, 0);
+
+                if (Application.isPlaying == true) {
+                    if(delayStart == false) {
+                        if (callbackEvent.GetVariable() != null) {
+                            callbackEvent.RaiseEvent(this.gameObject);
+                        }
+                    } else {
+                        StartCoroutine(LayoutRenderCompleteTimeDelay());
+                    }
+                }
+            }));
+        }
+
+        private IEnumerator SaveScreenValues(Action callback)
+        {
+            // Sometimes these values are erroneous, so make sure
+            // we don't use them when they are
+            if (Screen.width <= 0 || Screen.height <= 0) yield break;
+            
+            // It takes a few moments for the screen orientation to
+            // update on device, so yield until the values have been updated
+            if (setScreenOrientation == true) {
+                if (primaryOrientation == DimensionType.Vertical) {
+                    Screen.autorotateToPortrait = true;
+                    Screen.autorotateToPortraitUpsideDown = false;
+                    Screen.autorotateToLandscapeLeft = false;
+                    Screen.autorotateToLandscapeRight = false;
+                    Screen.orientation = ScreenOrientation.Portrait;
+
+                    while (editorMode == false && Screen.height < Screen.width) {
+                        yield return null;
+                    }
+                    
+                }
+                else {
+                    Screen.autorotateToPortrait = false;
+                    Screen.autorotateToPortraitUpsideDown = false;
+                    Screen.autorotateToLandscapeLeft = true;
+                    Screen.autorotateToLandscapeRight = true;
+                    Screen.orientation = ScreenOrientation.AutoRotation;
+                    
+                    while (editorMode == false && Screen.width < Screen.height) {
+                        yield return null;
+                    }
+                }
             }
+            
+            deviceWidth = Screen.width;
+            deviceHeight = Screen.height;
 
-            // We track all priority responsive elements separately
-            // because sorting is an expensive operation
-            priorityDynamicElements.Sort(new ResponsiveUtilsCore.DynamicElementSort());
-            List<IDynamicLayoutElement> elementsToRemove = new List<IDynamicLayoutElement>();
-
-            UpdateDynamicElements(priorityDynamicElements, this, 1);
-            UpdateDynamicElements(dynamicElements, this, int.MinValue);
-            UpdateDynamicElements(priorityDynamicElements, this, int.MinValue, 0);
+            // Aspect ratio is calculated by dividing device height
+            // by device width. In the case of horizontal orientation
+            // in the editor, however, the screen values will be reversed,
+            // so we need to account for that in order to get the
+            // correct aspect ratio value, i.e. (4:3 = 1.333, 16:9 = 1.777)
+            if (Screen.height > Screen.width) {
+                 deviceAspectRatio = deviceHeight / deviceWidth;
+            }
+            else {
+                 deviceAspectRatio = deviceWidth / deviceHeight;
+            }
+            
+            callback();
         }
 
         private static List<IDynamicLayoutElement> UpdateDynamicElements(List<IDynamicLayoutElement> dynamicElementsList,
@@ -364,7 +407,14 @@ namespace AltSalt.Maestro.Layout {
             else {
                 targetAspectRatio = sceneWidth / sceneHeight;
             }
-            
+        }
+        
+        private IEnumerator LayoutRenderCompleteTimeDelay()
+        {
+            yield return new WaitForSeconds(delayAmount);
+            if (callbackEvent.GetVariable() != null) {
+                callbackEvent.RaiseEvent(this.gameObject);
+            }
         }
         
         [Serializable]

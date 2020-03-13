@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _simpleSignalReferences:
   - _isSystemReference: 0
-    _referenceName: MainInput-BookmarkLoadingCompleted
-    _variable: {fileID: 11400000, guid: 4bf630a44a3f943a797dbc82bca9d42d, type: 2}
+    _referenceName: DynamicLayoutRenderComplete
+    _variable: {fileID: 0}
   _action:
     m_PersistentCalls:
       m_Calls:

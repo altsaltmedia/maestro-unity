@@ -289,7 +289,7 @@ namespace AltSalt.Maestro.Sequencing
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                 rootConfig.joiner.ActivatePreviousSequence(sequence);
                 
-            } else if (sequence.currentTime > sequence.sourcePlayable.duration) {
+            } else if (sequence.currentTime > sequence.duration) {
                 sequence.sequenceController.SetSequenceTime(this, (float)sequence.sourcePlayable.duration);
                 sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
                 rootConfig.sequenceModified.RaiseEvent(this.gameObject);
