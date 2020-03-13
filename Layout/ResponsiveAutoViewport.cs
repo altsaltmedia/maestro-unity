@@ -144,7 +144,7 @@ namespace AltSalt.Maestro.Layout
                 // float modifiedWidth = camera.rect.width - camera.rect.x * 2;
                 // float modifiedHeight = camera.rect.height - camera.rect.y * 2;
                 // camera.rect = new Rect(camera.rect.x, camera.rect.y, modifiedWidth, modifiedHeight);
-                Debug.Log("Camera ratios are potentially invalid; please check to make sure your DynamicLayoutController is set correctly.");
+                // Debug.Log("Camera ratios are potentially invalid; please check to make sure your DynamicLayoutController is set correctly.");
             }
         }
         

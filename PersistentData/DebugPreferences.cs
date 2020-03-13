@@ -126,6 +126,11 @@ namespace AltSalt.Maestro
             logConditionResponses = false;
         }
 
+        private void OnEnable()
+        {
+            playStartedFromInitializer = false;
+        }
+
 #if UNITY_EDITOR
         [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
         public void RefreshDependencies()

@@ -34,6 +34,10 @@ MonoBehaviour:
     dataType: 2
     customKey: 1
     _customKey: {fileID: 11400000, guid: 2c55716c41b2a436586a35ca910ff9bc, type: 2}
+  - description: Color variable - target fade color
+    dataType: 4
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 47aaf992e82704916b530bc78671ba01, type: 2}
   - description: Fade to black speed
     dataType: 1
     customKey: 1
@@ -46,15 +50,11 @@ MonoBehaviour:
     dataType: 2
     customKey: 1
     _customKey: {fileID: 11400000, guid: 1594fc9b034664f2ead00079b1eb3272, type: 2}
-  - description: Simple event - callback
-    dataType: 4
-    customKey: 1
-    _customKey: {fileID: 11400000, guid: 420ddf56ca3e24f8bbd4453eb1c66057, type: 2}
-  - description: Color variable - target fade color
-    dataType: 4
-    customKey: 1
-    _customKey: {fileID: 11400000, guid: 47aaf992e82704916b530bc78671ba01, type: 2}
   - description: Show progress bar
     dataType: 2
     customKey: 1
     _customKey: {fileID: 11400000, guid: 14c3c0555ecf44e82a85491873cf054e, type: 2}
+  - description: Simple event - callback
+    dataType: 4
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 420ddf56ca3e24f8bbd4453eb1c66057, type: 2}
