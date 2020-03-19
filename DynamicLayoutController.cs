@@ -90,6 +90,14 @@ namespace AltSalt.Maestro.Layout {
         private DimensionType primaryOrientation => _primaryOrientation;
 
         [SerializeField]
+        private bool _hasBreakpoints;
+
+        private bool hasBreakpoints => _hasBreakpoints;
+
+        [SerializeField]
+        [ShowIf(nameof(hasBreakpoints))]
+        [InfoBox("You should always have x+1 breakpoint values; e.g., for 1 breakpoint at 1.34, you must specify 2 breakpoint values - one for aspect ratios wider than 1.34, and another for aspect ratios narrower than or equal to 1.34.")]
+        [InfoBox("Breakpoint examples: To target devices narrow than iPad (aspect ratio 1.33), specify a breakpoint of 1.34; to target narrower than iPhone (1.77), specify a breakpoint of 1.78.")]
         private List<float> _deviceBreakpoints = new List<float>();
 
         private List<float> deviceBreakpoints => _deviceBreakpoints;
@@ -122,18 +130,18 @@ namespace AltSalt.Maestro.Layout {
 
         private enum ResizeType { PillarBox, LetterBox }
 
-        private bool _editorMode;
+        private bool _mobilePlayerActive;
 
-        public bool editorMode
+        public bool mobilePlayerActive
         {
-            get => _editorMode;
-            set => _editorMode = value;
+            get => _mobilePlayerActive;
+            set => _mobilePlayerActive = value;
         }
 
         private void Start()
 		{
-#if UNITY_EDITOR
-            editorMode = true;      
+#if !UNITY_EDITOR && UNITY_IOS || UNITY_ANDROID
+            mobilePlayerActive = true;      
 #endif
             if (Application.isPlaying == false || refreshLayoutOnStart == true) {
                 RefreshLayout();
@@ -260,7 +268,7 @@ namespace AltSalt.Maestro.Layout {
             
             // It takes a few moments for the screen orientation to
             // update on device, so yield until the values have been updated
-            if (setScreenOrientation == true) {
+            if (mobilePlayerActive == true && setScreenOrientation == true) {
                 if (primaryOrientation == DimensionType.Vertical) {
                     Screen.autorotateToPortrait = true;
                     Screen.autorotateToPortraitUpsideDown = false;
@@ -268,7 +276,7 @@ namespace AltSalt.Maestro.Layout {
                     Screen.autorotateToLandscapeRight = false;
                     Screen.orientation = ScreenOrientation.Portrait;
 
-                    while (editorMode == false && Screen.height < Screen.width) {
+                    while (Screen.height < Screen.width) {
                         yield return null;
                     }
                     
@@ -280,7 +288,7 @@ namespace AltSalt.Maestro.Layout {
                     Screen.autorotateToLandscapeRight = true;
                     Screen.orientation = ScreenOrientation.AutoRotation;
                     
-                    while (editorMode == false && Screen.width < Screen.height) {
+                    while (Screen.width < Screen.height) {
                         yield return null;
                     }
                 }
@@ -330,55 +338,93 @@ namespace AltSalt.Maestro.Layout {
 
         private void PopulateSceneDimensions()
         {
-            if(deviceBreakpoints.Count > 0) {
-                int breakpointIndex = Utils.GetValueIndexInList(deviceAspectRatio, deviceBreakpoints);
-                SceneDimension sceneDimension = sceneDimensions[breakpointIndex];
+            if(sceneDimensions.Count > 0) {
                 
+                int breakpointIndex = 0;
+
+                if (hasBreakpoints == true) {
+                    Utils.GetValueIndexInList(deviceAspectRatio, deviceBreakpoints);
+                }
+                
+                SceneDimension sceneDimension = sceneDimensions[breakpointIndex];
+
                 switch (sceneDimension.targetAspectRatio) {
 
                     case AspectRatioType.x9x16:
-                        if(sceneDimension.resizeType == ResizeType.PillarBox) {
-                            sceneWidth = deviceWidth;
-                            sceneHeight = (16f * sceneWidth) / 9f;
-                        } else {
+                        if (deviceHeight > deviceWidth) {
+                            if (deviceAspectRatio > 1.77) {
+                                sceneWidth = deviceWidth;
+                                sceneHeight = (16f * sceneWidth) / 9f;
+                            }
+                            else {
+                                sceneHeight = deviceHeight;
+                                sceneWidth = (9f * sceneHeight) / 16f;
+                            }
+                        }
+                        else {
                             sceneHeight = deviceHeight;
                             sceneWidth = (9f * sceneHeight) / 16f;
                         }
                         break;
                     
                     case AspectRatioType.x16x9:
-                        if(sceneDimension.resizeType == ResizeType.PillarBox) {
+                        if (deviceWidth > deviceHeight) {
+                            if (deviceAspectRatio > 1.77) {
+                                sceneHeight = deviceHeight;
+                                sceneWidth = (16f * sceneHeight) / 9f;
+                            }
+                            else {
+                                sceneWidth = deviceWidth;
+                                sceneHeight = (9f * sceneWidth) / 16f;
+                            }
+                        }
+                        else {
                             sceneWidth = deviceWidth;
                             sceneHeight = (9f * sceneWidth) / 16f;
-                        } else {
-                            sceneHeight = deviceHeight;
-                            sceneWidth = (16f * sceneHeight) / 9f;
                         }
                         break;
 
                     case AspectRatioType.x3x4:
-                        if (sceneDimension.resizeType == ResizeType.PillarBox) {
-                            sceneWidth = deviceWidth;
-                            sceneHeight = (4f * sceneWidth) / 3f;
-                        } else {
+                        if (deviceHeight > deviceWidth) {
+                            if (deviceAspectRatio > 1.33) {
+                                sceneWidth = deviceWidth;
+                                sceneHeight = (4f * sceneWidth) / 3f;
+                            } else {
+                                sceneHeight = deviceHeight;
+                                sceneWidth = (3f * sceneHeight) / 4f;
+                            }
+                        }
+                        else {
                             sceneHeight = deviceHeight;
                             sceneWidth = (3f * sceneHeight) / 4f;
                         }
                         break;
                     
                     case AspectRatioType.x4x3:
-                        if (sceneDimension.resizeType == ResizeType.PillarBox) {
+                        if (deviceWidth > deviceHeight) {
+                            if (deviceAspectRatio > 1.33) {
+                                sceneHeight = deviceHeight;
+                                sceneWidth = (4f * sceneHeight) / 3f;
+                            } else {
+                                sceneWidth = deviceWidth;
+                                sceneHeight = (3f * sceneWidth) / 4f;
+                            }
+                        }
+                        else {
                             sceneWidth = deviceWidth;
                             sceneHeight = (3f * sceneWidth) / 4f;
-                        } else {
-                            sceneHeight = deviceHeight;
-                            sceneWidth = (4f * sceneHeight) / 3f;
                         }
                         break;
 
                     case AspectRatioType.x1x1:
-                        sceneWidth = deviceWidth;
-                        sceneHeight = deviceWidth;
+                        if (deviceHeight > deviceWidth) {
+                            sceneWidth = deviceWidth;
+                            sceneHeight = deviceWidth;
+                        }
+                        else {
+                            sceneHeight = deviceHeight;
+                            sceneWidth = deviceHeight;
+                        }
                         break;
 
                     case AspectRatioType.Dynamic:
@@ -436,6 +482,7 @@ namespace AltSalt.Maestro.Layout {
             [ValueDropdown(nameof(resizeTypeValues))]
             [SerializeField]
             [ShowIf(nameof(CanChooseCrop))]
+            [HideInInspector]
             public ResizeType resizeType = ResizeType.LetterBox;
 
             private ValueDropdownList<ResizeType> resizeTypeValues = new ValueDropdownList<ResizeType>(){

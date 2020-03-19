@@ -2921,6 +2921,21 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3364190833857133776, guid: 12fe947e51a2442c18ae4147895585db,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364190833857133776, guid: 12fe947e51a2442c18ae4147895585db,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364190833857133776, guid: 12fe947e51a2442c18ae4147895585db,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3365361745759241650, guid: 12fe947e51a2442c18ae4147895585db,
         type: 3}
       propertyPath: m_OverrideSorting

@@ -69,6 +69,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 801848713650947055, guid: 3deee83047b8742e78c2ece3b8b6bd19,
         type: 3}
+      propertyPath: _deviceBreakpoints.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 801848713650947055, guid: 3deee83047b8742e78c2ece3b8b6bd19,
+        type: 3}
+      propertyPath: _sceneDimensions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 801848713650947055, guid: 3deee83047b8742e78c2ece3b8b6bd19,
+        type: 3}
       propertyPath: _targetAspectRatio._referenceName
       value: CurrentSceneAspectRatio
       objectReference: {fileID: 0}
@@ -96,6 +106,11 @@ PrefabInstance:
     - target: {fileID: 801848713650947055, guid: 3deee83047b8742e78c2ece3b8b6bd19,
         type: 3}
       propertyPath: _refreshLayoutOnStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 801848713650947055, guid: 3deee83047b8742e78c2ece3b8b6bd19,
+        type: 3}
+      propertyPath: _hasBreakpoints
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5555745392276912937, guid: 3deee83047b8742e78c2ece3b8b6bd19,

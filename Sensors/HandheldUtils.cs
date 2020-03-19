@@ -8,7 +8,7 @@ namespace AltSalt.Maestro.Sensors
         [Button(ButtonSizes.Large)]
         public void TriggerVibrate()
         {
-#if !UNITY_STANDALONE
+#if !UNITY_STANDALONE && !UNITY_WEBGL
             Handheld.Vibrate();
 #endif
         }

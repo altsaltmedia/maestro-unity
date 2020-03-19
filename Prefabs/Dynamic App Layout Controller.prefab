@@ -75,13 +75,11 @@ MonoBehaviour:
     _variable: {fileID: 0}
   _setScreenOrientation: 1
   _primaryOrientation: 0
-  _deviceBreakpoints:
-  - 1.77
+  _hasBreakpoints: 0
+  _deviceBreakpoints: []
   _sceneDimensions:
   - targetAspectRatio: 1
     resizeType: 1
-  - targetAspectRatio: 1
-    resizeType: 0
   _delayStart: 0
   _delayAmount: 0
 --- !u!114 &4824492354251042838
