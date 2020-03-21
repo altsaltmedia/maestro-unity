@@ -20,5 +20,17 @@ namespace AltSalt.Maestro.Layout
         {
             rectTransform.position = targetPosition.value;
         }
+        
+        [Button(ButtonSizes.Large)]
+        public void SetRotation(RectTransform targetValue)
+        {
+            rectTransform.localEulerAngles = targetValue.localEulerAngles;
+        }
+        
+        [Button(ButtonSizes.Large)]
+        public void SetRotation(V3Variable targetValue)
+        {
+            rectTransform.localEulerAngles = targetValue.value;
+        }
     }
 }
