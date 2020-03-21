@@ -84,14 +84,18 @@ namespace AltSalt.Maestro
             ComplexEventTimelineTriggerMixerBehaviour mixerBehaviour,
             ComplexEventTimelineTriggerBehaviour triggerBehaviour)
         {
-            if (mixerBehaviour.timelineInstanceConfig.bookmarkLoadingCompleted == false &&
-                triggerBehaviour.executeWhileLoadingBookmarks == false) {
-                return triggerBehaviour;
-            }
+            if (mixerBehaviour.timelineInstanceConfig.connectedToSequence == true) {
+                
+                if (mixerBehaviour.timelineInstanceConfig.bookmarkLoadingCompleted == false &&
+                    triggerBehaviour.executeWhileLoadingBookmarks == false) {
+                    return triggerBehaviour;
+                }
 
-            if (mixerBehaviour.appUtilsRequested == true &&
-                triggerBehaviour.executeWhileAppUtilsRequested == false) {
-                return triggerBehaviour;
+                if (mixerBehaviour.appUtilsRequested == true &&
+                    triggerBehaviour.executeWhileAppUtilsRequested == false) {
+                    return triggerBehaviour;
+                }
+                
             }
             
             for (int q = 0; q < triggerBehaviour.complexEventConfigurableTriggers.Count; q++) {
