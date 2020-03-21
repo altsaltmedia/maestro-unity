@@ -141,7 +141,11 @@ namespace AltSalt.Maestro
                 var referenceFieldValue = fields[i].GetValue(this) as ReferenceBase;
                 referenceFieldValue.isSystemReference = true;
             }
-#endif            
+#endif
+
+            (deviceHeight.GetVariable() as FloatVariable).resetOnGameRefresh = false;
+            (deviceWidth.GetVariable() as FloatVariable).resetOnGameRefresh = false;
+            (deviceAspectRatio.GetVariable() as FloatVariable).resetOnGameRefresh = false;
             
             (hasBeenOpened.GetVariable() as BoolVariable).defaultValue = false;
             (volumeEnabled.GetVariable() as BoolVariable).defaultValue = true;
@@ -157,7 +161,7 @@ namespace AltSalt.Maestro
             (lastOpenedScene.GetVariable() as StringVariable).defaultValue = "";
             (lastLoadedSequence.GetVariable() as StringVariable).defaultValue = "";
             (lastLoadedSequenceTime.GetVariable() as FloatVariable).defaultValue = 0;
-            
+
             // Scene Loading Progress
             
             (sceneLoadingProgress.GetVariable() as FloatVariable).defaultValue = 0;
@@ -171,7 +175,6 @@ namespace AltSalt.Maestro
                 var variableValue = variableField.GetValue(referenceValue);
 
                 if (variableValue is ModifiableEditorVariable modifiableEditorVariable) {
-                    modifiableEditorVariable.hasDefault = true;
                     modifiableEditorVariable.StoreCaller(this, "updating from system settings", "app settings");
                     modifiableEditorVariable.SetToDefaultValue();
 #if UNITY_EDITOR
