@@ -7,6 +7,7 @@ using UnityEditor.Timeline;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Animation
 {
@@ -61,6 +62,7 @@ namespace AltSalt.Maestro.Animation
             TextSelected,
             RectTransformSelected,
             SpriteSelected,
+            TransformSelected,
             ManualVideoPlayerSelected,
             FloatVarPopulated,
             ColorVarPopulated
@@ -70,11 +72,12 @@ namespace AltSalt.Maestro.Animation
         {
             TMProColorTrack,
             TMProCharSpacingTrack,
-            RectTransformPosTrack,
             SpriteColorTrack,
+            RectTransformPosTrack,
             RectTransformScaleTrack,
             RectTransformRotationTrack,
             ManualVideoPlayerTimeTrack,
+            TransformPosTrack,
             FloatVarTrack,
             ColorVarTrack,
         };
@@ -120,6 +123,13 @@ namespace AltSalt.Maestro.Animation
                     ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, false);
                 }
                 
+                if (Utils.TargetComponentSelected(Selection.gameObjects, typeof(Transform))) {
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TransformSelected, true);
+                }
+                else {
+                    ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.TransformSelected, false);
+                }
+                
                 if (Utils.TargetComponentSelected(Selection.gameObjects, typeof(ManualVideoPlayer))) {
                     ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ManualVideoPlayerSelected, true);
                 }
@@ -162,6 +172,21 @@ namespace AltSalt.Maestro.Animation
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TextSelected, button);
                     break;
 
+                case nameof(ButtonNames.SpriteColorTrack):
+                    button.clickable.clicked += () =>
+                    {
+                        if (selectCreatedObject == true) {
+                            Selection.objects = CreateSpriteColorTrack();
+                        }
+                        else {
+                            CreateSpriteColorTrack();
+                        }
+
+                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SpriteSelected, button);
+                    break;
+                
                 case nameof(ButtonNames.RectTransformPosTrack):
                     button.clickable.clicked += () =>
                     {
@@ -179,21 +204,6 @@ namespace AltSalt.Maestro.Animation
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
-                    break;
-
-                case nameof(ButtonNames.SpriteColorTrack):
-                    button.clickable.clicked += () =>
-                    {
-                        if (selectCreatedObject == true) {
-                            Selection.objects = CreateSpriteColorTrack();
-                        }
-                        else {
-                            CreateSpriteColorTrack();
-                        }
-
-                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
-                    };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SpriteSelected, button);
                     break;
 
                 case nameof(ButtonNames.RectTransformScaleTrack):
@@ -234,6 +244,25 @@ namespace AltSalt.Maestro.Animation
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.RectTransformSelected, button);
+                    break;
+                
+                case nameof(ButtonNames.TransformPosTrack):
+                    button.clickable.clicked += () =>
+                    {
+                        if (selectCreatedObject == true) {
+                            Selection.objects = TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset,
+                                TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TransformPosTrack),
+                                typeof(Transform), Selection.objects, TimelineEditor.selectedClips);
+                        }
+                        else {
+                            TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector,
+                                Selection.gameObjects, typeof(TransformPosTrack), typeof(Transform),
+                                Selection.objects, TimelineEditor.selectedClips);
+                        }
+
+                        TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
+                    };
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.TransformSelected, button);
                     break;
                 
                 case nameof(ButtonNames.ManualVideoPlayerTimeTrack):
@@ -375,7 +404,10 @@ namespace AltSalt.Maestro.Animation
             bool selectCreatedObject = animationTracks.selectCreatedObject;
 
             if(selectCreatedObject == true) {
-                Selection.objects = CreateRectTransformPosTrack();
+                List<Object> newSelection = new List<Object>();
+                newSelection.AddRange(CreateRectTransformPosTrack());
+                newSelection.AddRange(CreateTransformPosTrack());
+                Selection.objects = newSelection.ToArray();
             } else {
                 CreateRectTransformPosTrack();
             }
@@ -398,6 +430,11 @@ namespace AltSalt.Maestro.Animation
             return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(RectTransformPosTrack), typeof(RectTransform), Selection.objects, TimelineEditor.selectedClips);
         }
         
+        public static TrackAsset[] CreateTransformPosTrack()
+        {
+            return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TransformPosTrack), typeof(Transform), Selection.objects, TimelineEditor.selectedClips);
+        }
+        
         private static TrackAsset OnTrackCreated(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject)
         {
             foreach (PlayableBinding playableBinding in targetTrack.outputs) {
@@ -417,6 +454,10 @@ namespace AltSalt.Maestro.Animation
 
                     case nameof(SpriteColorTrack):
                         targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<SpriteRenderer>());
+                        break;
+                    
+                    case nameof(TransformPosTrack):
+                        targetDirector.SetGenericBinding(playableBinding.sourceObject, ((GameObject)targetObject).GetComponent<Transform>());
                         break;
                     
                     case nameof(ManualVideoPlayerTimeTrack):

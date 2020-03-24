@@ -53,9 +53,9 @@ namespace AltSalt.Maestro.Animation
                 inputPlayable = (ScriptPlayable<TMProColorBehaviour>)playable.GetInput(i);
                 input = inputPlayable.GetBehaviour ();
 
+                percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration());
+                
                 if (inputWeight >= 1f) {
-                    
-                    percentageComplete = (float)(inputPlayable.GetTime() / inputPlayable.GetDuration()); 
 
                     switch (input.textAnimationStyle) {
 
@@ -67,39 +67,64 @@ namespace AltSalt.Maestro.Animation
                             if (sanitizedCharacterCount == 0) {
                                 sanitizedCharacterCount = GetSanitizedCharacterCount(trackBinding);
                             }
-                            AnimateCharacters(trackBinding, sanitizedCharacterCount);
+                            AnimateCharacters(trackBinding);
                             break;
 
                     }
                 }
                 else {
                     if(timelineInstanceConfig.currentTime >= input.endTime) {
-                        trackBinding.color = input.targetValue;
+                        
+                        switch (input.textAnimationStyle) {
+                            
+                            case TextAnimationStyle.Whole:
+                                trackBinding.color = input.targetValue;
+                                break;
+
+                            case TextAnimationStyle.Character:
+                                for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
+                                    SetCharacterColor(trackBinding, input.targetValue, j);
+                                }
+                                break;
+                        }
+                        
                     } else if (i == 0 && timelineInstanceConfig.currentTime <= input.startTime) {
-                        trackBinding.color = input.initialValue;
+                        
+                        switch (input.textAnimationStyle) {
+                            
+                            case TextAnimationStyle.Whole:
+                                trackBinding.color = input.initialValue;
+                                break;
+
+                            case TextAnimationStyle.Character:
+                                for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
+                                    SetCharacterColor(trackBinding, input.initialValue, j);
+                                }
+                                break;
+                        }
                     }
                 }
             }
         }
         
-        private void AnimateCharacters(TMP_Text textMeshPro, int sanitizedCharacterCount)
+        private void AnimateCharacters(TMP_Text textMeshPro)
         {
             TMP_TextInfo textInfo = textMeshPro.textInfo;
             int characterCount = textMeshPro.textInfo.characterCount;
-            int sanitizedCharacterIndex = 1;
+            //int sanitizedCharacterIndex = 1;
             
-            float baseAnimationLength = 1f / sanitizedCharacterCount;
-            double intervalLength = 1f / sanitizedCharacterCount + (baseAnimationLength * input.blendValue);
+            float baseAnimationLength = 1f / characterCount;
+            double intervalLength = 1f / characterCount + (baseAnimationLength * input.blendValue);
             
             
             for (int j = 0; j < characterCount; j++) {
                         
-                if (textInfo.characterInfo[j].isVisible == false) {
-                    continue;
-                }
+                // if (textInfo.characterInfo[j].isVisible == false) {
+                //     continue;
+                // }
                         
-                double intervalComplete = percentageComplete - (sanitizedCharacterIndex * baseAnimationLength - (baseAnimationLength * input.blendValue));
-                sanitizedCharacterIndex++;
+                double intervalComplete = percentageComplete - (j * baseAnimationLength - (baseAnimationLength * input.blendValue));
+                //sanitizedCharacterIndex++;
 
                 if (Mathf.Abs((float)intervalComplete) <= input.blendValue)
                 {

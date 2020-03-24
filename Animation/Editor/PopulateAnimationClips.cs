@@ -71,6 +71,17 @@ namespace AltSalt.Maestro.Animation
                         return asset;
                     }
                 
+                case nameof(TransformPosTrack): {
+                    ResponsiveVector3Clip asset = timelineClip.asset as ResponsiveVector3Clip;
+                    Transform component = sourceObject as Transform;
+                    if (component != null) {
+                        asset.template.breakpointInitialValue.Add(component.localPosition);
+                        asset.template.breakpointTargetValue.Add(component.localPosition);
+                    }
+                    asset.template.ease = easeType;
+                    return asset;
+                }
+                
                 case nameof(ManualVideoPlayerTimeTrack): {
                     ManualVideoPlayerTimeClip asset = timelineClip.asset as ManualVideoPlayerTimeClip;
                     ManualVideoPlayer component = sourceObject as ManualVideoPlayer;
