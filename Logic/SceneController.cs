@@ -353,6 +353,11 @@ namespace AltSalt.Maestro.Logic
             sceneLoadingProgress = 0;
         }
 
+        public void QuitApplication()
+        {
+            Application.Quit();
+        }
+
         private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);

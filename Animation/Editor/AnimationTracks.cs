@@ -126,7 +126,7 @@ namespace AltSalt.Maestro.Animation
                     ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.SpriteSelected, false);
                 }
                 
-                if (Utils.TargetComponentSelected(Selection.gameObjects, typeof(Image))) {
+                if (Utils.TargetComponentSelected(Selection.gameObjects, typeof(UnityEngine.UI.Image))) {
                     ModuleUtils.ToggleVisualElements(toggleData, EnableCondition.ImageSelected, true);
                 }
                 else {
@@ -201,15 +201,15 @@ namespace AltSalt.Maestro.Animation
                     button.clickable.clicked += () =>
                     {
                         if (selectCreatedObject == true) {
-                            Selection.objects = CreateSpriteColorTrack();
+                            Selection.objects = CreateImageUIColorTrack();
                         }
                         else {
-                            CreateSpriteColorTrack();
+                            CreateImageUIColorTrack();
                         }
 
                         TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
                     };
-                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.SpriteSelected, button);
+                    ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.ImageSelected, button);
                     break;
                 
                 case nameof(ButtonNames.RectTransformPosTrack):
@@ -419,7 +419,7 @@ namespace AltSalt.Maestro.Animation
             bool selectCreatedObject = animationTracks.selectCreatedObject;
 
             List<TrackAsset> newTracks = new List<TrackAsset>();
-            Type[] types = { typeof(TMP_Text), typeof(SpriteRenderer) };
+            Type[] types = { typeof(TMP_Text), typeof(SpriteRenderer), typeof(UnityEngine.UI.Image) };
 
             UnityEngine.Object[] culledSelection = Utils.FilterSelection(Selection.gameObjects, types);
             GameObject[] selectionAsGameObjects = Array.ConvertAll(culledSelection, item => (GameObject)item);
@@ -432,6 +432,10 @@ namespace AltSalt.Maestro.Animation
 
                 if (Utils.TargetComponentSelected(sortedSelection[i], typeof(SpriteRenderer))) {
                     newTracks.AddRange(TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new GameObject[] { sortedSelection[i] }, typeof(SpriteColorTrack), typeof(SpriteRenderer), Selection.objects, TimelineEditor.selectedClips));
+                }
+                
+                if (Utils.TargetComponentSelected(sortedSelection[i], typeof(UnityEngine.UI.Image))) {
+                    newTracks.AddRange(TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new GameObject[] { sortedSelection[i] }, typeof(ImageUIColorTrack), typeof(UnityEngine.UI.Image), Selection.objects, TimelineEditor.selectedClips));
                 }
             }
 

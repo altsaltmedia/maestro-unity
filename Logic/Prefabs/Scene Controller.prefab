@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7973420083374359232}
   - component: {fileID: 3517205928990522322}
   - component: {fileID: 8936868205621349410}
+  - component: {fileID: 8864252400816659069}
   m_Layer: 8
   m_Name: Scene Controller
   m_TagString: Untagged
@@ -205,6 +206,37 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7973420083374359235}
         m_MethodName: ResetSceneLoadingProgress
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
+--- !u!114 &8864252400816659069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7973420083374359238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: QuitApplication
+    _variable: {fileID: 11400000, guid: 526d327f52ea9473ba2283bfb259f4f7, type: 2}
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7973420083374359235}
+        m_MethodName: QuitApplication
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

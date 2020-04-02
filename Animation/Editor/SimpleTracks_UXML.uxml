@@ -25,7 +25,7 @@ xsi:schemaLocation="
                         <engine:Button text="RectTransform Scale Track(s)" class="col-full" name="RectTransformScaleTrack" />
                         <engine:Button text="RectTransform Rotation Track(s)" class="col-full" name="RectTransformRotationTrack" />
                         <engine:Button text="Transform Pos Track(s)" class="col-full" name="TransformPosTrack" />
-                        <engine:Button text="Transform Rotations Track(s)" class="col-full" name="TransformRotationTrack" />
+                        <engine:Button text="Transform Rotation Track(s)" class="col-full" name="TransformRotationTrack" />
                         <engine:Button text="ManualVideoPlayer Time Track(s)" class="col-full margin-bottom-0" name="ManualVideoPlayerTimeTrack" />
                     </engine:VisualElement>
                 </engine:VisualElement>
