@@ -79,6 +79,9 @@ namespace AltSalt.Maestro.Animation
                             
                             case TextAnimationStyle.Whole:
                                 trackBinding.color = input.targetValue;
+                                for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
+                                    SetCharacterColor(trackBinding, input.targetValue, j);
+                                }
                                 break;
 
                             case TextAnimationStyle.Character:
@@ -111,19 +114,23 @@ namespace AltSalt.Maestro.Animation
         {
             TMP_TextInfo textInfo = textMeshPro.textInfo;
             int characterCount = textMeshPro.textInfo.characterCount;
-            //int sanitizedCharacterIndex = 1;
+            int visibleCount = 0;
             
             float baseAnimationLength = 1f / characterCount;
             double intervalLength = 1f / characterCount + (baseAnimationLength * input.blendValue);
             
             
-            for (int j = 0; j < characterCount; j++) {
-                        
-                // if (textInfo.characterInfo[j].isVisible == false) {
-                //     continue;
-                // }
-                        
+            while (visibleCount < characterCount) {
+
+                int j = visibleCount;
+                
+                if (textInfo.characterInfo[j].isVisible == false) {
+                    visibleCount++;
+                    continue;
+                }
+
                 double intervalComplete = percentageComplete - (j * baseAnimationLength - (baseAnimationLength * input.blendValue));
+
                 //sanitizedCharacterIndex++;
 
                 if (Mathf.Abs((float)intervalComplete) <= input.blendValue)
@@ -148,6 +155,8 @@ namespace AltSalt.Maestro.Animation
                 else {
                     SetCharacterColor(trackBinding, input.initialValue, j);
                 }
+
+                visibleCount++;
             }
         }
 

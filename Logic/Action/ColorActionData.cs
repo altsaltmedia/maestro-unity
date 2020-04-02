@@ -20,7 +20,7 @@ namespace AltSalt.Maestro.Logic
 
         [PropertySpace]
         
-        private enum ColorActionType { SetValue }
+        private enum ColorActionType { SetValue, SetAlpha }
 
         [SerializeField]
         private ColorActionType _colorActionType;
@@ -35,9 +35,17 @@ namespace AltSalt.Maestro.Logic
 
         [SerializeField]
         [HideReferenceObjectPicker]
+        [ShowIf(nameof(colorActionType), ColorActionType.SetValue)]
         private ColorReference _targetValue = new ColorReference();
 
         private ColorReference targetValue => _targetValue;
+        
+        [SerializeField]
+        [HideReferenceObjectPicker]
+        [ShowIf(nameof(colorActionType), ColorActionType.SetAlpha)]
+        private FloatReference _targetAlpha = new FloatReference();
+
+        private FloatReference targetAlpha => _targetAlpha;
 
         public ColorActionData(int priority) : base(priority) { }
         
@@ -54,6 +62,10 @@ namespace AltSalt.Maestro.Logic
                 case ColorActionType.SetValue:
                     colorReference.SetValue(callingObject, targetValue.GetValue());
                     break;
+                
+                case ColorActionType.SetAlpha:
+                    colorReference.SetAlpha(callingObject, targetAlpha.GetValue());
+                    break;
             }
         }
 
@@ -63,9 +75,16 @@ namespace AltSalt.Maestro.Logic
                 return false;
             }
             
-            if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
-                return false;
+            if (colorActionType == ColorActionType.SetValue) {
+                if (targetValue.useConstant == false && targetValue.GetVariable() == null) {
+                    return false;
+                }
             }
+            // else {
+            //     if (targetAlpha.useConstant == false && targetAlpha.GetVariable() == null) {
+            //         return false;
+            //     }
+            // }
 
             return true;
         }

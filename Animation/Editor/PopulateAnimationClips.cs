@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.UIElements;
 
 namespace AltSalt.Maestro.Animation
 {
@@ -48,6 +49,17 @@ namespace AltSalt.Maestro.Animation
                         asset.template.ease = easeType;
                         return asset;
                     }
+                
+                case nameof(ImageUIColorTrack): {
+                    ColorClip asset = timelineClip.asset as ColorClip;
+                    UnityEngine.UI.Image component = sourceObject as UnityEngine.UI.Image;
+                    if (component != null) {
+                        asset.template.initialValue = component.color;
+                        asset.template.targetValue = component.color;
+                    }
+                    asset.template.ease = easeType;
+                    return asset;
+                }
 
                 case nameof(RectTransformScaleTrack): {
                         ResponsiveVector3Clip asset = timelineClip.asset as ResponsiveVector3Clip;
@@ -77,6 +89,17 @@ namespace AltSalt.Maestro.Animation
                     if (component != null) {
                         asset.template.breakpointInitialValue.Add(component.localPosition);
                         asset.template.breakpointTargetValue.Add(component.localPosition);
+                    }
+                    asset.template.ease = easeType;
+                    return asset;
+                }
+                
+                case nameof(TransformRotationTrack): {
+                    ResponsiveVector3Clip asset = timelineClip.asset as ResponsiveVector3Clip;
+                    Transform component = sourceObject as Transform;
+                    if (component != null) {
+                        asset.template.breakpointInitialValue.Add(component.localEulerAngles);
+                        asset.template.breakpointTargetValue.Add(component.localEulerAngles);
                     }
                     asset.template.ease = easeType;
                     return asset;

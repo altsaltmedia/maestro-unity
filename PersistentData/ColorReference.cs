@@ -87,6 +87,32 @@ namespace AltSalt.Maestro
             return colorVariable;
         }
         
+        public ColorVariable SetAlpha(GameObject callingObject, float targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            ColorVariable colorVariable = GetVariable() as ColorVariable;
+            colorVariable.StoreCaller(callingObject);
+            colorVariable.SetAlpha(targetValue);
+            return colorVariable;
+        }
+        
+        public ColorVariable SetAlpha(GameObject callingObject, FloatVariable targetValue)
+        {
+            if (useConstant == true) {
+                LogDefaultChangeError(callingObject);
+                return null;
+            }
+
+            ColorVariable colorVariable = GetVariable() as ColorVariable;
+            colorVariable.StoreCaller(callingObject);
+            colorVariable.SetAlpha(targetValue.value);
+            return colorVariable;
+        }
+        
 #if UNITY_EDITOR        
         protected override bool ShouldPopulateReference()
         {

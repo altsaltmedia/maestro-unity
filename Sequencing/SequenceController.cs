@@ -386,6 +386,12 @@ namespace AltSalt.Maestro.Sequencing
 #endif
         }
 
+        [Button(ButtonSizes.Large)]
+        public void CallSetSequenceTime(float targetTime)
+        {
+            SetSequenceTime(this, targetTime);
+        }
+
         private static bool IsPopulated(ComplexEventManualTrigger attribute)
         {
             return Utils.IsPopulated(attribute);

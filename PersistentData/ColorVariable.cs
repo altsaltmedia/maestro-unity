@@ -58,6 +58,24 @@ namespace AltSalt.Maestro
             SignalChange();
         }
         
+        public void SetAlpha(GameObject callingObject, float targetValue)
+        {
+            StoreCaller(callingObject);
+            
+            this.value = new Color(this.value.r, this.value.g, this.value.b, targetValue);
+            
+            SignalChange();
+        }
+
+        public void SetAlpha(float targetValue)
+        {
+            if (CallerRegistered() == false) return;
+            
+            this.value = new Color(this.value.r, this.value.g, this.value.b, targetValue);
+            
+            SignalChange();
+        }
+        
         public void SetTransparent()
         {
             if (CallerRegistered() == false) return;

@@ -20,10 +20,12 @@ xsi:schemaLocation="
                         <engine:Button text="TextMeshPro Color Track(s)" class="col-full" name="TMProColorTrack" />
                         <engine:Button text="TextMeshPro Character Spacing Track(s)" class="col-full" name="TMProCharSpacingTrack" />
                         <engine:Button text="SpriteColor Track(s)" class="col-full" name="SpriteColorTrack" />
+                        <engine:Button text="ImageUIColor Track(s)" class="col-full" name="ImageUIColorTrack" />
                         <engine:Button text="RectTransform Pos Track(s)" class="col-full" name="RectTransformPosTrack" />
                         <engine:Button text="RectTransform Scale Track(s)" class="col-full" name="RectTransformScaleTrack" />
                         <engine:Button text="RectTransform Rotation Track(s)" class="col-full" name="RectTransformRotationTrack" />
                         <engine:Button text="Transform Pos Track(s)" class="col-full" name="TransformPosTrack" />
+                        <engine:Button text="Transform Rotations Track(s)" class="col-full" name="TransformRotationTrack" />
                         <engine:Button text="ManualVideoPlayer Time Track(s)" class="col-full margin-bottom-0" name="ManualVideoPlayerTimeTrack" />
                     </engine:VisualElement>
                 </engine:VisualElement>
