@@ -162,6 +162,13 @@ namespace AltSalt.Maestro
                 TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
             }
 
+            if (Utils.TargetTypeSelected(Selection.objects, typeof(ScriptableObject)) == true) {
+                Object[] filteredSelection =
+                    Utils.FilterSelection(Selection.objects, typeof(ScriptableObject));
+                ScriptableObject[] scriptableObjectSelection = Array.ConvertAll(filteredSelection, x => (ScriptableObject) x);
+                newSelection.AddRange(Utils.DuplicateScriptableObject(scriptableObjectSelection));
+            }
+
             Selection.objects = newSelection.ToArray();
         }
 

@@ -176,6 +176,7 @@ GameObject:
   - component: {fileID: 7493842464391128962}
   - component: {fileID: 3719720165695611221}
   - component: {fileID: 4944100776945312249}
+  - component: {fileID: 7979425930517679716}
   - component: {fileID: 1133069145979638054}
   - component: {fileID: 1405246104888845213}
   m_Layer: 12
@@ -234,6 +235,34 @@ MonoBehaviour:
   - _isSystemReference: 0
     _referenceName: MainInput-OnSwipeEnd
     _variable: {fileID: 0}
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3719720165695611221}
+        m_MethodName: ActivateEligibleForAutoplayAndRefresh
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
+--- !u!114 &7979425930517679716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8733841028164870764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _simpleSignalReferences:
   - _isSystemReference: 0
     _referenceName: MainInput-SequenceModified
     _variable: {fileID: 0}
@@ -241,7 +270,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3719720165695611221}
-        m_MethodName: ActivateEligibleForAutoplayAndRefresh
+        m_MethodName: ActivateEligibleForAutoplay
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

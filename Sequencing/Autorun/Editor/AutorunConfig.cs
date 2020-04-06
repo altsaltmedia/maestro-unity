@@ -8,7 +8,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 {
     public class AutorunConfig : ModuleWindow
     {
-        
         protected override ModuleWindow Configure(ControlPanel controlPanel, string uxmlPath)
         {
             base.Configure(controlPanel, uxmlPath);

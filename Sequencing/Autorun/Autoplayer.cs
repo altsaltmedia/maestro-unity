@@ -47,20 +47,17 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             var autorunData = autorunController.autorunData.Find(x => x.sequence == targetSequence);
 
             if (autorunData == null) return;
-
-            MasterSequence targetMasterSequence = targetSequence.sequenceController.masterSequence;
             
             // Handling to activate the next timeline if we've reached the end of the current sequence
-            if (autorunData.forwardUpdateActive == true && autorunData.loop == false && autorunController.isReversing == false &&
-                targetSequence.currentTime >= targetSequence.duration) {
+            if (ShouldActivateNextSequence(autorunData, autorunController.isReversing)) {
                 autorunController.rootConfig.joiner.ActivateNextSequence(targetSequence);
             }
 
             // Autoplay may be overriden by game conditions; if so, deactivate
-            if (targetSequence.active == false || autorunData.eligibleForAutoplay == false || autorunData.isLerping == true) {
+            if (SequenceOrAutoplayDeactivated(autorunData)) {
                 autorunData.backwardUpdateActive = false;
                 autorunData.forwardUpdateActive = false;
-                targetMasterSequence.RequestDeactivateForwardAutoplay(targetSequence, this.priority, this.gameObject.name);
+                targetSequence.sequenceController.masterSequence.RequestDeactivateForwardAutoplay(targetSequence, this.priority, this.gameObject.name);
                 return;
             }
             
@@ -68,14 +65,13 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             // beyond the thresholds of the extents where the autoplay originated.
             // (This is how we pause autoplay between intervals).
             // Note that, if looping is activated, we ignore intervals.
-            if(autorunData.loop == false && autorunData.activeInterval != null) {
-                if (Extents.TimeBeyondThresholdInclusive(targetSequence.currentTime, autorunData.activeInterval)) {
-                    autorunData.activeInterval = null;
-                    autorunData.forwardUpdateActive = false;
-                    autorunData.backwardUpdateActive = false;
-                    targetMasterSequence.RequestDeactivateForwardAutoplay(targetSequence, this.priority, this.gameObject.name);
-                    return;
-                }
+            if(HasValidActiveInterval(autorunData) &&
+               Extents.TimeBeyondThresholdBothBoundsInclusive(autorunData.sequence.currentTime, autorunData.activeInterval)) {
+                autorunData.activeInterval = null;
+                autorunData.forwardUpdateActive = false;
+                autorunData.backwardUpdateActive = false;
+                targetSequence.sequenceController.masterSequence.RequestDeactivateForwardAutoplay(targetSequence, this.priority, this.gameObject.name);
+                return;
             }
             
             // Note that the conditions for forward vs backward autoplay are different.
@@ -85,7 +81,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 // don't want to activate it again until the autoplay is either
                 // interrupted or completed.
                 if (autorunData.forwardUpdateActive == false) {
-                    AttemptForwardAutoplay(autorunData);
+                    AttemptForwardAutoplay(this, autorunData);
                 }
                 autorunData.backwardUpdateActive = false;
             }
@@ -97,7 +93,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 autorunData.backwardUpdateActive = true;
             }
         }
-
+        
         /// <summary>
         /// We need to make a single explicit call to the MasterSequence
         /// in order to set the speed and trigger forward autoplay.
@@ -106,16 +102,16 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// </summary>
         /// <param name="autorunData"></param>
         /// <returns></returns>
-        private Autorun_Data AttemptForwardAutoplay(Autorun_Data autorunData)
+        private static Autorun_Data AttemptForwardAutoplay(Autoplayer autoplayer, Autorun_Data autorunData)
         {
             MasterSequence targetMasterSequence = autorunData.sequence.sequenceController.masterSequence;
             Sequence targetSequence = autorunData.sequence; 
             
-            if (AutorunExtents.TimeWithinThresholdInclusive(targetSequence.currentTime,
+            if (AutorunExtents.TimeWithinThresholdLowerBoundsInclusive(targetSequence.currentTime,
                     autorunData.autorunIntervals, out var currentInterval) == true) {
                 
                 targetMasterSequence.RequestActivateForwardAutoplay(targetSequence,
-                    this.priority, this.gameObject.name, 1, out bool requestSuccessful);
+                    autoplayer.priority, autoplayer.gameObject.name, 1, out bool requestSuccessful);
               
                 // We should only store the interval and activate autoplay
                 // once our request has been accepted by the MasterSequence
@@ -126,10 +122,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     // sequence gets updated (see RefreshAutoplay() above)
                     autorunData.activeInterval = currentInterval;
                     autorunData.forwardUpdateActive = true;
-                    
-                    if (autorunController.pauseMomentumDuringAutorun == true) {
-                        autorunController.TriggerPauseMomentum(autorunData.sequence);
-                    }
+
+                    CheckPauseMomentum(autoplayer.autorunController, autorunData);
                 }
             }
 
@@ -150,7 +144,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 var autorunData = autorunController.autorunData[q];
                 
                 if (autorunData.backwardUpdateActive == true) {
-                    AttemptReverseAutoplay(autorunData);
+                    AttemptReverseAutoplay(autorunData, this);
                 }
             }
         }
@@ -164,38 +158,87 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// </summary>
         /// <param name="autorunData"></param>
         /// <returns></returns>
-        private Autorun_Data AttemptReverseAutoplay(Autorun_Data autorunData)
+        private static Autorun_Data AttemptReverseAutoplay(Autorun_Data autorunData, Autoplayer autoplayer)
         {
-            if (autorunData.eligibleForAutoplay == false || autorunData.isLerping == true || autorunData.sequence.active == false) {
+            if (SequenceOrAutoplayDeactivated(autorunData)) {
                 return autorunData;
             }
 
-            if (AutorunExtents.TimeWithinThresholdInclusive(autorunData.sequence.currentTime,
-                    autorunData.autorunIntervals, out var currentInterval) == false) {
+            if (!AutorunExtents.TimeWithinThresholdLowerBoundsInclusive(autorunData.sequence.currentTime,
+                    autorunData.autorunIntervals, out var currentInterval)) {
+                autoplayer.RefreshAutoplayStatus(autorunData.sequence);
                 return autorunData;
             }
 
-            if (autorunController.pauseMomentumDuringAutorun == true) {
-                autorunController.TriggerPauseMomentum(autorunData.sequence);
+            Autorun_Controller autorunController = autoplayer.autorunController;
+            CheckPauseMomentum(autorunController, autorunData);
+
+            autorunData.activeInterval = currentInterval;
+
+            float autoplayModifer = GetAutoplayModifier(autoplayer);
+            if (SequenceWithinEaseThreshold(autorunData.sequence, currentInterval, true, autoplayer.autoplayEaseThreshold)) {
+                autoplayModifer *= CalculateModifierEase(autorunData.loop, autorunData.easingUtility);
             }
             
             MasterSequence targetMasterSequence = autorunData.sequence.sequenceController.masterSequence;
-            autorunData.activeInterval = currentInterval;
+            targetMasterSequence.RequestModifySequenceTime(autorunData.sequence, autoplayer.priority, autoplayer.gameObject.name, autoplayModifer);
 
-            float autoplayModifer = 0f;
+            return autorunData;
+        }
+        
+        private static bool ShouldActivateNextSequence(Autorun_Data autorunData, bool isReversing)
+        {
+            if (autorunData.forwardUpdateActive == true && autorunData.sequence.currentTime >= autorunData.sequence.duration &&
+                autorunData.loop == false && isReversing == false && autorunData.isLerping == false) {
+                return true;
+            }
 
-            if (autorunController.useFrameStepValue == false) {
+            return false;
+        }
+        
+        private static bool SequenceOrAutoplayDeactivated(Autorun_Data autorunData)
+        {
+            if (autorunData.sequence.active == false || autorunData.eligibleForAutoplay == false && autorunData.isLerping == false) {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool HasValidActiveInterval(Autorun_Data autorunData)
+        {
+            if (autorunData.loop == false && autorunData.activeInterval != null && autorunData.isLerping == false) {
+                return true;
+            }
+
+            return false;
+        }
+        
+        private static Autorun_Controller CheckPauseMomentum(Autorun_Controller autorunController, Autorun_Data autorunData)
+        {
+            if (autorunController.pauseMomentumDuringAutorun == true) {
+                autorunController.TriggerPauseMomentum(autorunData.sequence);
+            }
+
+            return autorunController;
+        }
+        
+        private static float GetAutoplayModifier(Autoplayer autoplayer)
+        {
+            float autoplayModifer;
+            
+            if (autoplayer.autorunController.useFrameStepValue == false) {
                 autoplayModifer = Time.smoothDeltaTime;
             }
             else {
-                autoplayModifer = frameStepValue;
+                autoplayModifer = autoplayer.frameStepValue;
             }
-            
-            autoplayModifer *= CalculateAutoplayModifier(autorunData.sequence, currentInterval, autorunData.loop, true, autoplayEaseThreshold, autorunData.easingUtility);
-            
-            targetMasterSequence.RequestModifySequenceTime(autorunData.sequence, this.priority, this.gameObject.name, autoplayModifer);
 
-            return autorunData;
+            if (autoplayer.autorunController.isReversing == true) {
+                autoplayModifer *= -1f;
+            }
+
+            return autoplayModifer;
         }
 
         /// <summary>
@@ -212,19 +255,14 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// <param name="easeThreshold"></param>
         /// <param name="easingUtility"></param>
         /// <returns></returns>
-        private static float CalculateAutoplayModifier(Sequence targetSequence, Extents currentInterval, bool loop,
-            bool isReversing, float easeThreshold, EasingUtility easingUtility)
+        private static float CalculateModifierEase(bool loop, EasingUtility easingUtility)
         {
-            float timeModifier = 0f;
+            float timeModifier;
 
-            if (loop == false && SequenceWithinEaseThreshold(targetSequence, currentInterval, isReversing, easeThreshold)) {
+            if (loop == false) {
                 timeModifier = easingUtility.GetMultiplier();
             } else {
                 timeModifier = 1f;
-            }
-            
-            if (isReversing == true) {
-                timeModifier *= -1f;
             }
 
             return timeModifier;
@@ -241,16 +279,16 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         private static bool SequenceWithinEaseThreshold(Sequence targetSequence, Extents currentInterval,
             bool isReversing, float easeThreshold)
         {
-            if (isReversing == true)
+            if (isReversing == false)
             {
-                if (targetSequence.currentTime - currentInterval.startTime <= easeThreshold)
+                if (currentInterval.endTime - targetSequence.currentTime <= easeThreshold)
                 {
                     return true;
                 }
             }
             else
             {
-                if (currentInterval.endTime - targetSequence.currentTime <= easeThreshold)
+                if (targetSequence.currentTime - currentInterval.startTime <= easeThreshold)
                 {
                     return true;
                 }

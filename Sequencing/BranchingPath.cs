@@ -17,21 +17,21 @@ namespace AltSalt.Maestro.Sequencing
         }
 
         [SerializeField]
-        private bool _invert;
-
-        public bool invert
-        {
-            get => _invert;
-            private set => _invert = value;
-        }
-
-        [SerializeField]
         private Sequence _sequence;
 
         public Sequence sequence
         {
             get => _sequence;
             set => _sequence = value;
+        }
+        
+        [SerializeField]
+        private bool _invert;
+
+        public bool invert
+        {
+            get => _invert;
+            private set => _invert = value;
         }
 
         public BranchingPath(BranchKey branchKey, Sequence sequence)

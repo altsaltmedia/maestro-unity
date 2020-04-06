@@ -1007,6 +1007,37 @@ namespace AltSalt.Maestro
             return duplicate;
         }
 
+        public static ScriptableObject[] DuplicateScriptableObject(ScriptableObject scriptableObject)
+        {
+            return DuplicateScriptableObject(new[] {scriptableObject} );
+        }
+        
+        public static ScriptableObject[] DuplicateScriptableObject(ScriptableObject[] scriptableObjects)
+        {
+            List<ScriptableObject> createdObjects = new List<ScriptableObject>();
+            
+            for (int i = 0; i < scriptableObjects.Length; i++) {
+                string originalAssetPath = AssetDatabase.GetAssetPath(scriptableObjects[i]);
+                string newAssetPath = Path.GetFileName(originalAssetPath) + "(Copy).asset";
+                bool createAsset = true;
+                
+                if (File.Exists(Path.GetFullPath(newAssetPath))) {
+                    if (EditorUtility.DisplayDialog("Overwrite existing file?", 
+                            "This will overwrite the existing file(s) at " + newAssetPath, 
+                            "Proceed", "Cancel") == false) {
+                        createAsset = false;
+                    }
+                }
+
+                if (createAsset == true) {
+                    AssetDatabase.CopyAsset(originalAssetPath, newAssetPath);
+                    createdObjects.Add(AssetDatabase.LoadAssetAtPath<ScriptableObject>(newAssetPath));
+                }
+            }
+
+            return createdObjects.ToArray();
+        }
+
         public class ClipTimeSort : Comparer<TimelineClip>
         {
             public override int Compare(TimelineClip x, TimelineClip y)

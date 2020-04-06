@@ -127,13 +127,11 @@ namespace AltSalt.Maestro.Sequencing
         [ShowInInspector]
         [DisplayAsString]
         private float currentSpeed;
-        
-        private enum SequenceUpdateState { ForwardAutoplay, ManualUpdate }
 
         [ShowInInspector]
         private SequenceUpdateState _sequenceUpdateState = SequenceUpdateState.ManualUpdate;
 
-        private SequenceUpdateState sequenceUpdateState
+        public SequenceUpdateState sequenceUpdateState
         {
             get => _sequenceUpdateState;
             set => _sequenceUpdateState = value;
@@ -194,9 +192,9 @@ namespace AltSalt.Maestro.Sequencing
 
         private void OnDisable()
         {
-            timelineInstanceConfig.timelineUpdated -= OnTimelineUpdated;
-            timelineInstanceConfig.pauseSequenceRequested -= OnPauseSequenceRequested;
-            timelineInstanceConfig.resumeSequenceRequested -= OnResumeSequenceRequested;
+            // timelineInstanceConfig.timelineUpdated -= OnTimelineUpdated;
+            // timelineInstanceConfig.pauseSequenceRequested -= OnPauseSequenceRequested;
+            // timelineInstanceConfig.resumeSequenceRequested -= OnResumeSequenceRequested;
 //            dynamicElementDisable.RaiseEvent(this.gameObject, this);
         }
 
@@ -247,6 +245,7 @@ namespace AltSalt.Maestro.Sequencing
             if (sequenceUpdateState == SequenceUpdateState.ManualUpdate ||
                 rootPlayable.GetPlayState() != PlayState.Playing || rootPlayable.GetSpeed() < 1) {
                 playableDirector.Play();
+                playableDirector.time = sequence.currentTime;
                 SetSpeed(targetSpeed);
                 sequenceUpdateState = SequenceUpdateState.ForwardAutoplay;
             }

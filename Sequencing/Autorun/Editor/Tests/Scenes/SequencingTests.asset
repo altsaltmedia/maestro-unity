@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb4d0413057af4072ae54014a737c892, type: 3}
+  m_Name: SequencingTests
+  m_EditorClassIdentifier: 
+  _active: 1
+  _paused: 0
+  _canBeScrubbed: 1
+  _currentTime: 0
+  _duration: 3.3399999999989998
+  _sourcePlayable: {fileID: 11400000, guid: e01aa3f6fce7b428ea9e0e3b26748569, type: 2}
+  _sequenceController: {fileID: 0}
+  _defaultStatus: 1
+  _defaultTime: 0

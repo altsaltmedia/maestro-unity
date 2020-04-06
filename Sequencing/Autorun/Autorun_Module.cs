@@ -9,7 +9,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         [SerializeField]
         private Autorun_Controller _autorunController;
 
-        protected Autorun_Controller autorunController => _autorunController;
+        public Autorun_Controller autorunController => _autorunController;
 
         protected override Input_Controller inputController => autorunController;
         

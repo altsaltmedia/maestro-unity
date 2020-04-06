@@ -34,6 +34,9 @@ namespace AltSalt.Maestro.Sequencing
         public float forkTransitionSpread =>
             rootConfig.appSettings.GetForkTransitionSpread(this.gameObject, inputGroupKey);
 
+        private SimpleEventTrigger autoplayActivate =>
+            rootConfig.appSettings.GetAutoplayActivate(this.gameObject, inputGroupKey);
+        
         private ComplexEventManualTrigger boundaryReached =>
             rootConfig.appSettings.GetBoundaryReached(this.gameObject, inputGroupKey);
 
@@ -43,21 +46,13 @@ namespace AltSalt.Maestro.Sequencing
         [ReadOnly]
         private JoinerDataCollection _joinerDataCollection;
 
-        private JoinerDataCollection joinerDataCollection
-        {
-            get => _joinerDataCollection;
-            set => _joinerDataCollection = value;
-        }
+        private JoinerDataCollection joinerDataCollection => _joinerDataCollection;
 
         [SerializeField]
         [ReadOnly]
         private ForkDataCollection _forkDataCollection;
 
-        public ForkDataCollection forkDataCollection
-        {
-            get => _forkDataCollection;
-            private set => _forkDataCollection = value;
-        }
+        public ForkDataCollection forkDataCollection => _forkDataCollection;
 
         [SerializeField]
         [Required]
@@ -134,7 +129,7 @@ namespace AltSalt.Maestro.Sequencing
                         }
                     }
                 }
-
+                autoplayActivate.RaiseEvent(this.gameObject);
             }
             else
             {
@@ -190,6 +185,7 @@ namespace AltSalt.Maestro.Sequencing
                         }    
                     }
                 }
+                autoplayActivate.RaiseEvent(this.gameObject);
             }
             else
             {
