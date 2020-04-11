@@ -11,7 +11,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         public Autorun_Controller autorunController => _autorunController;
 
+        protected float autorunThreshold => autorunController.appSettings.GetAutorunThreshold(this.gameObject, autorunController.inputGroupKey);
+
         protected override Input_Controller inputController => autorunController;
-        
     }
 }

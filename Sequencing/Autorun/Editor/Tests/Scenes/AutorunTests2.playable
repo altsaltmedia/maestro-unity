@@ -24,6 +24,7 @@ MonoBehaviour:
   m_Markers:
     m_Objects:
     - {fileID: -5068657246619798789}
+    - {fileID: -6502378856420301885}
 --- !u!114 &-7535426786785578191
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -64,7 +65,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: -5279581732136049727}
-    m_Duration: 1.64
+    m_Duration: 1.89
     m_TimeScale: 1
     m_ParentTrack: {fileID: -7403484377573351000}
     m_EaseInDuration: 0
@@ -132,6 +133,21 @@ MonoBehaviour:
   m_Markers:
     m_Objects: []
   _requiredForSiblingSequence: 0
+--- !u!114 &-6502378856420301885
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c946444e6c14435e8b33b46293e198a9, type: 3}
+  m_Name: JoinMarker_JoinNext
+  m_EditorClassIdentifier: 
+  m_Time: 1.89
+  _description: 
+  _nextDestination: {fileID: 11400000, guid: 33766f24d1ebd4385b0e0032a28c77f4, type: 2}
 --- !u!114 &-5343842301882208092
 MonoBehaviour:
   m_ObjectHideFlags: 1

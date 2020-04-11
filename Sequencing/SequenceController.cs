@@ -18,7 +18,7 @@ namespace AltSalt.Maestro.Sequencing
     [ExecuteInEditMode]
     [RequireComponent(typeof(PlayableDirector))]
     [RequireComponent(typeof(TimelineInstanceConfig))]
-    public class SequenceController : MonoBehaviour, IDynamicLayoutElement
+    public partial class SequenceController : MonoBehaviour, IDynamicLayoutElement
     {
         private bool isReversing =>
             masterSequence.rootConfig.appSettings.GetIsReversing(this, masterSequence.rootConfig.inputGroupKey);
@@ -137,22 +137,6 @@ namespace AltSalt.Maestro.Sequencing
             set => _sequenceUpdateState = value;
         }
 
-        public delegate void SequenceUpdatedHandler(object sender, Sequence updatedSequence);
-
-        private event SequenceUpdatedHandler _sequenceUpdated = (sender, updatedSequence) => { };
-        
-        public event SequenceUpdatedHandler sequenceUpdated
-        {
-            add
-            {
-                if (_sequenceUpdated == null
-                    || _sequenceUpdated.GetInvocationList().Contains(value) == false) {
-                    _sequenceUpdated += value;
-                }
-            }
-            remove => _sequenceUpdated -= value;
-        }
-
 #if UNITY_EDITOR
         private void Awake()
         {
@@ -183,6 +167,15 @@ namespace AltSalt.Maestro.Sequencing
                 playableDirector.playableAsset = sequence.sourcePlayable;
             }
             
+        }
+
+        /// <summary>
+        /// This must be on OnEnable because the SequenceController gets enabled
+        /// and disabled as we traverse to adjacent sequences, and these events need
+        /// to get registered again whenever that happens 
+        /// </summary>
+        private void OnEnable()
+        {
             timelineInstanceConfig = gameObject.GetComponent<TimelineInstanceConfig>();
             timelineInstanceConfig.connectedToSequence = true;
             timelineInstanceConfig.timelineUpdated += OnTimelineUpdated;
@@ -192,9 +185,9 @@ namespace AltSalt.Maestro.Sequencing
 
         private void OnDisable()
         {
-            // timelineInstanceConfig.timelineUpdated -= OnTimelineUpdated;
-            // timelineInstanceConfig.pauseSequenceRequested -= OnPauseSequenceRequested;
-            // timelineInstanceConfig.resumeSequenceRequested -= OnResumeSequenceRequested;
+            timelineInstanceConfig.timelineUpdated -= OnTimelineUpdated;
+            timelineInstanceConfig.pauseSequenceRequested -= OnPauseSequenceRequested;
+            timelineInstanceConfig.resumeSequenceRequested -= OnResumeSequenceRequested;
 //            dynamicElementDisable.RaiseEvent(this.gameObject, this);
         }
 
@@ -210,8 +203,16 @@ namespace AltSalt.Maestro.Sequencing
             
             if (sequenceUpdateState == SequenceUpdateState.ForwardAutoplay) {
                 sequence.currentTime = currentTime;
+                
+                if (sequence.currentTime >= sequence.duration) {
+                    sequence.sequenceController.masterSequence.TriggerSequenceBoundaryReached(sequence);
+                    masterSequence.rootConfig.joiner.ActivateNextSequence(sequence);
+                }
+                else {
+                    sequence.sequenceController.masterSequence.TriggerSequenceUpdated(sequence);
+                }
+
                 sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
-                OnSequenceUpdated();
             }
         }
 
@@ -227,13 +228,6 @@ namespace AltSalt.Maestro.Sequencing
             if (activateForwardAutoplay == true) {
                 ActivateForwardAutoplayState(1);
             }
-        }
-
-        private void OnSequenceUpdated()
-        {
-            if (Application.isPlaying == false) return;
-            
-            _sequenceUpdated.Invoke(this, sequence);
         }
 
         public void ActivateForwardAutoplayState(float targetSpeed)
@@ -280,28 +274,29 @@ namespace AltSalt.Maestro.Sequencing
             sequence.currentTime += timeModifier;
             RootConfig rootConfig = sequence.sequenceController.masterSequence.rootConfig;
             
-            ActivateManualUpdateState();
-
             if (sequence.currentTime < 0) {
-                sequence.sequenceController.SetSequenceTime(this, 0);
-                sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
-                rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                rootConfig.joiner.ActivatePreviousSequence(sequence);
-                
+                SetStartBoundaryReached(this);
+
+                // sequence.sequenceController.SetSequenceTimeWithoutCallbacks(this, 0);
+                // sequence.sequenceController.masterSequence.TriggerSequenceBoundaryReached(sequence);
+                //
+                // // rootConfig.sequenceModified.RaiseEvent(this.gameObject);
+                // rootConfig.joiner.ActivatePreviousSequence(sequence);
+
             } else if (sequence.currentTime > sequence.duration) {
-                sequence.sequenceController.SetSequenceTime(this, (float)sequence.sourcePlayable.duration);
-                sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
-                rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                rootConfig.joiner.ActivateNextSequence(sequence);
-                
+                SetEndBoundaryReached(this);
+                // sequence.sequenceController.SetSequenceTimeWithoutCallbacks(this, (float)sequence.sourcePlayable.duration);
+                // sequence.sequenceController.masterSequence.TriggerSequenceBoundaryReached(sequence);
+                //
+                // //sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
+                // //rootConfig.sequenceModified.RaiseEvent(this.gameObject);
+                // rootConfig.joiner.ActivateNextSequence(sequence);
+
             } else {
-                playableDirector.time = sequence.currentTime;
-                playableDirector.Evaluate();
-                sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
-                rootConfig.sequenceModified.RaiseEvent(this.gameObject);
+                sequence.sequenceController.SetSequenceTime(this, (float)sequence.currentTime);
+                //rootConfig.sequenceModified.RaiseEvent(this.gameObject);
             }
             
-            OnSequenceUpdated();
             return sequence;
         }
 
@@ -314,9 +309,40 @@ namespace AltSalt.Maestro.Sequencing
             sequence.currentTime = targetTime;
             playableDirector.time = sequence.currentTime;
             playableDirector.Evaluate();
+            sequence.sequenceController.masterSequence.TriggerSequenceUpdated(sequence);
             sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
-             
-            OnSequenceUpdated();
+            sequence.sequenceController.masterSequence.rootConfig.sequenceModified.RaiseEvent(this.gameObject);
+            
+            return sequence;
+        }
+        
+        public Sequence SetSequenceTimeWithoutCallbacks(UnityEngine.Object caller, float targetTime)
+        {
+            if (sequence.paused == true) return sequence;
+            
+            ActivateManualUpdateState();
+            
+            sequence.currentTime = targetTime;
+            playableDirector.time = sequence.currentTime;
+            playableDirector.Evaluate();
+            sequence.sequenceController.masterSequence.RefreshElapsedTime(sequence);
+
+            return sequence;
+        }
+
+        public Sequence SetStartBoundaryReached(UnityEngine.Object caller)
+        {
+            SetSequenceTimeWithoutCallbacks(this, 0);
+            masterSequence.TriggerSequenceBoundaryReached(sequence);
+            masterSequence.rootConfig.joiner.ActivatePreviousSequence(sequence);
+            return sequence;
+        }
+        
+        public Sequence SetEndBoundaryReached(UnityEngine.Object caller)
+        {
+            SetSequenceTimeWithoutCallbacks(this, (float)sequence.duration);
+            masterSequence.TriggerSequenceBoundaryReached(sequence);
+            masterSequence.rootConfig.joiner.ActivateNextSequence(sequence);
             return sequence;
         }
 

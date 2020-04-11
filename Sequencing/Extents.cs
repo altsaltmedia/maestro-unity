@@ -126,7 +126,25 @@ namespace AltSalt.Maestro.Sequencing
             return false;
         }
 
-        public static bool TimeBeyondThresholdBothBoundsInclusive(double sourceTime, Extents interval)
+        public static bool TimeBeyondStartThresholdExclusive(double sourceTime, Extents interval)
+        {
+            if (sourceTime < interval.startTime) {
+                return true;
+            }
+
+            return false;
+        }
+        
+        public static bool TimeBeyondEndThresholdExclusive(double sourceTime, Extents interval)
+        {
+            if (sourceTime > interval.endTime) {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool TimeBeyondBothThresholdsInclusive(double sourceTime, Extents interval)
         {
             // Special case for 0 - we don't want to count beginnings
             // of sequences as beyond the threshold bounds

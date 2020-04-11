@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -85,6 +86,34 @@ namespace AltSalt.Maestro.Sequencing
         {
             get => _hasActiveSequence;
             set => _hasActiveSequence = value;
+        }
+        
+        private event SequenceUpdatedHandler _sequenceUpdated = (sender, updatedSequence) => { };
+        
+        public event SequenceUpdatedHandler sequenceUpdated
+        {
+            add
+            {
+                if (_sequenceUpdated == null
+                    || _sequenceUpdated.GetInvocationList().Contains(value) == false) {
+                    _sequenceUpdated += value;
+                }
+            }
+            remove => _sequenceUpdated -= value;
+        }
+        
+        private event SequenceUpdatedHandler _sequenceBoundaryReached = (sender, updatedSequence) => { };
+        
+        public event SequenceUpdatedHandler sequenceBoundaryReached
+        {
+            add
+            {
+                if (_sequenceBoundaryReached == null
+                    || _sequenceBoundaryReached.GetInvocationList().Contains(value) == false) {
+                    _sequenceBoundaryReached += value;
+                }
+            }
+            remove => _sequenceBoundaryReached -= value;
         }
 
         public void Init()
@@ -225,6 +254,28 @@ namespace AltSalt.Maestro.Sequencing
             }
         }
 
+        public MasterSequence TriggerSequenceUpdated(Sequence modifiedSequence)
+        {
+            MasterTimeData sequenceTimeData = this.masterTimeDataList.Find(x => x.sequence == modifiedSequence);
+
+            if (sequenceTimeData != null) {
+                _sequenceUpdated.Invoke(this.gameObject, modifiedSequence);
+            }
+
+            return this;
+        }
+        
+        public MasterSequence TriggerSequenceBoundaryReached(Sequence modifiedSequence)
+        {
+            MasterTimeData sequenceTimeData = this.masterTimeDataList.Find(x => x.sequence == modifiedSequence);
+
+            if (sequenceTimeData != null) {
+                _sequenceBoundaryReached.Invoke(this.gameObject, modifiedSequence);
+            }
+
+            return this;
+        }
+        
         /// <summary>
         /// We need to refresh elapsed time whenever a child sequence is modified
         /// in order to make sure the scrubber and other navigation modules

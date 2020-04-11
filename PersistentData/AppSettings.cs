@@ -791,6 +791,14 @@ namespace AltSalt.Maestro
         }
         
         
+        // Autorun Threshold
+        
+        public float GetAutorunThreshold(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).autorunThreshold.GetValue();
+        }
+        
+        
         // Y Axes
 
         public AxisReference GetYSwipeAxisReference(Object callingObject, InputGroupKey inputGroupKey)

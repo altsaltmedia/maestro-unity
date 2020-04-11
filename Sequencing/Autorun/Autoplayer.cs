@@ -38,7 +38,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// is updated. 
         /// </summary>
         /// <param name="targetSequence"></param>
-        public void RefreshAutoplayStatus(Sequence targetSequence)
+        public void OnSequenceUpdated(Sequence targetSequence)
         {
             if (moduleActive == false || appUtilsRequested == true || bookmarkLoadingCompleted == false) {
                 return;
@@ -47,31 +47,45 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             var autorunData = autorunController.autorunData.Find(x => x.sequence == targetSequence);
 
             if (autorunData == null) return;
-            
-            // Handling to activate the next timeline if we've reached the end of the current sequence
-            if (ShouldActivateNextSequence(autorunData, autorunController.isReversing)) {
-                autorunController.rootConfig.joiner.ActivateNextSequence(targetSequence);
-            }
 
-            // Autoplay may be overriden by game conditions; if so, deactivate
-            if (SequenceOrAutoplayDeactivated(autorunData)) {
-                autorunData.backwardUpdateActive = false;
-                autorunData.forwardUpdateActive = false;
-                targetSequence.sequenceController.masterSequence.RequestDeactivateForwardAutoplay(targetSequence, this.priority, this.gameObject.name);
-                return;
-            }
-            
             // If autoplay is currently active, deactivate and return if we're
             // beyond the thresholds of the extents where the autoplay originated.
             // (This is how we pause autoplay between intervals).
             // Note that, if looping is activated, we ignore intervals.
-            if(HasValidActiveInterval(autorunData) &&
-               Extents.TimeBeyondThresholdBothBoundsInclusive(autorunData.sequence.currentTime, autorunData.activeInterval)) {
-                autorunData.activeInterval = null;
-                autorunData.forwardUpdateActive = false;
-                autorunData.backwardUpdateActive = false;
-                targetSequence.sequenceController.masterSequence.RequestDeactivateForwardAutoplay(targetSequence, this.priority, this.gameObject.name);
-                return;
+            if(HasValidAutoplayInterval(autorunData)) {
+                
+                if(autorunController.isReversing == false &&
+                   Extents.TimeBeyondEndThresholdExclusive(targetSequence.currentTime + autorunThreshold, autorunData.activeInterval)) {
+                    
+                    AutorunExtents currentInterval = autorunData.activeInterval;
+                    TriggerAutoplayIntervalComplete(this, autorunData);
+                    
+                    if (currentInterval.endTime >= targetSequence.duration) {
+                        autorunData.sequence.sequenceController.SetEndBoundaryReached(this);
+                    }
+                    else {
+                        autorunData.sequence.sequenceController.SetSequenceTimeWithoutCallbacks(this, (float)currentInterval.endTime);
+                    }
+                    
+                    return;
+                }
+                
+                if (autorunController.isReversing == true &&
+                         Extents.TimeBeyondStartThresholdExclusive(targetSequence.currentTime - autorunThreshold, autorunData.activeInterval)) {
+                    
+                    AutorunExtents currentInterval = autorunData.activeInterval;
+                    TriggerAutoplayIntervalComplete(this, autorunData);
+                    
+                    if (currentInterval.startTime == 0) {
+                        autorunData.sequence.sequenceController.SetStartBoundaryReached(this);
+                    }
+                    else {
+                        autorunData.sequence.sequenceController.SetSequenceTimeWithoutCallbacks(this, (float)currentInterval.startTime);
+                    }
+                    
+                    return;
+                }
+                
             }
             
             // Note that the conditions for forward vs backward autoplay are different.
@@ -93,6 +107,21 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 autorunData.backwardUpdateActive = true;
             }
         }
+
+        private static Autorun_Data TriggerAutoplayIntervalComplete(Autoplayer autoplayer, Autorun_Data autorunData)
+        {
+            Sequence targetSequence = autorunData.sequence;
+            MasterSequence targetMasterSequence = targetSequence.sequenceController.masterSequence;
+            
+            autorunData.activeInterval = null;
+            autorunData.forwardUpdateActive = false;
+            autorunData.backwardUpdateActive = false;
+            autorunData.eligibleForAutoplay = false;
+            targetMasterSequence.RequestDeactivateForwardAutoplay(targetSequence,
+                autoplayer.priority, autoplayer.gameObject.name);
+
+            return autorunData;
+        }
         
         /// <summary>
         /// We need to make a single explicit call to the MasterSequence
@@ -107,7 +136,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             MasterSequence targetMasterSequence = autorunData.sequence.sequenceController.masterSequence;
             Sequence targetSequence = autorunData.sequence; 
             
-            if (AutorunExtents.TimeWithinThresholdLowerBoundsInclusive(targetSequence.currentTime,
+            if (AutorunExtents.TimeWithinThresholdBothBoundsInclusive(targetSequence.currentTime,
                     autorunData.autorunIntervals, out var currentInterval) == true) {
                 
                 targetMasterSequence.RequestActivateForwardAutoplay(targetSequence,
@@ -164,9 +193,9 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 return autorunData;
             }
 
-            if (!AutorunExtents.TimeWithinThresholdLowerBoundsInclusive(autorunData.sequence.currentTime,
-                    autorunData.autorunIntervals, out var currentInterval)) {
-                autoplayer.RefreshAutoplayStatus(autorunData.sequence);
+            if (AutorunExtents.TimeWithinThresholdBothBoundsInclusive(autorunData.sequence.currentTime,
+                    autorunData.autorunIntervals, out var currentInterval) == false) {
+                autoplayer.OnSequenceUpdated(autorunData.sequence);
                 return autorunData;
             }
 
@@ -185,27 +214,17 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
             return autorunData;
         }
-        
-        private static bool ShouldActivateNextSequence(Autorun_Data autorunData, bool isReversing)
-        {
-            if (autorunData.forwardUpdateActive == true && autorunData.sequence.currentTime >= autorunData.sequence.duration &&
-                autorunData.loop == false && isReversing == false && autorunData.isLerping == false) {
-                return true;
-            }
 
-            return false;
-        }
-        
         private static bool SequenceOrAutoplayDeactivated(Autorun_Data autorunData)
         {
-            if (autorunData.sequence.active == false || autorunData.eligibleForAutoplay == false && autorunData.isLerping == false) {
+            if (autorunData.sequence.active == false || autorunData.eligibleForAutoplay == false) {
                 return true;
             }
 
             return false;
         }
 
-        private static bool HasValidActiveInterval(Autorun_Data autorunData)
+        private static bool HasValidAutoplayInterval(Autorun_Data autorunData)
         {
             if (autorunData.loop == false && autorunData.activeInterval != null && autorunData.isLerping == false) {
                 return true;
@@ -317,7 +336,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 autorunController.autorunData[q].eligibleForAutoplay = true;
                 Sequence sequence = autorunController.autorunData[q].sequence;
                 if (sequence.active == true) {
-                    RefreshAutoplayStatus(sequence);
+                    OnSequenceUpdated(sequence);
                 }
             }
         }

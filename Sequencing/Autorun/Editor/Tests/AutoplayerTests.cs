@@ -82,7 +82,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             rootPlayable = playableDirector.playableGraph.GetRootPlayable(0);
             
             initialSequence.sequenceController.SetSequenceTime(initialSequence.sequenceController.gameObject, 0);
-            appSettings.SetIsReversing(rootConfig.gameObject, rootConfig.inputGroupKey, false);;
+            appSettings.SetIsReversing(rootConfig.gameObject, rootConfig.inputGroupKey, false);
             
             // Play once
             autoplayer.ActivateEligibleForAutoplayAndRefresh();
@@ -95,7 +95,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             // Check that we paused at first interval
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, initialSequence.sequenceController.sequenceUpdateState);
             Assert.AreEqual(0, rootPlayable.GetSpeed());
-            Assert.AreEqual(0.5f, (float)initialSequence.currentTime, .015f);
+            Assert.AreEqual(0.5f, (float)initialSequence.currentTime);
 
             // Play again
             autoplayer.ActivateEligibleForAutoplayAndRefresh();
@@ -108,7 +108,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             // Check that we paused at 2nd interval
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, initialSequence.sequenceController.sequenceUpdateState);
             Assert.AreEqual(0, rootPlayable.GetSpeed());
-            Assert.AreEqual(1f, initialSequence.currentTime, .015f);
+            Assert.AreEqual(1f, initialSequence.currentTime);
         }
 
         [UnityTest]
@@ -122,6 +122,9 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             
             initialSequence.sequenceController.SetSequenceTime(initialSequence.sequenceController.gameObject, 1.5f);
             appSettings.SetIsReversing(rootConfig.gameObject, rootConfig.inputGroupKey, true);
+            
+            startTime = DateTime.UtcNow;
+            while ((DateTime.UtcNow - startTime).TotalSeconds < .6) { yield return null; }
 
             autoplayer.ActivateEligibleForAutoplayAndRefresh();
             
@@ -129,7 +132,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             Assert.AreEqual(0, rootPlayable.GetSpeed());
             
             startTime = DateTime.UtcNow;
-            while ((DateTime.UtcNow - startTime).TotalSeconds < .2) { yield return null; }
+            while ((DateTime.UtcNow - startTime).TotalSeconds < .6) { yield return null; }
             
             Assert.Less(initialSequence.currentTime, 1.5);
         }
@@ -143,12 +146,12 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             playableDirector.RebuildGraph();
             rootPlayable = playableDirector.playableGraph.GetRootPlayable(0);
             
-            initialSequence.sequenceController.SetSequenceTime(initialSequence.sequenceController.gameObject, 1.4f);
+            initialSequence.sequenceController.SetSequenceTime(initialSequence.sequenceController.gameObject, 1.5f);
             appSettings.SetIsReversing(rootConfig.gameObject, rootConfig.inputGroupKey, true);
             
             // Give the scene time to set up before starting
             startTime = DateTime.UtcNow;
-            while ((DateTime.UtcNow - startTime).TotalSeconds < .5) { yield return null; };
+            while ((DateTime.UtcNow - startTime).TotalSeconds < .6) { yield return null; };
 
             // Play once
             autoplayer.ActivateEligibleForAutoplayAndRefresh();
@@ -160,7 +163,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             // Check that we paused at first interval
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, initialSequence.sequenceController.sequenceUpdateState);
             Assert.AreEqual(0, rootPlayable.GetSpeed());
-            Assert.AreEqual(1f, (float)initialSequence.currentTime, .03f);
+            Assert.AreEqual(1f, (float)initialSequence.currentTime);
             
             // Play again
             autoplayer.ActivateEligibleForAutoplayAndRefresh();
@@ -172,7 +175,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             // Check that we paused at 2nd interval
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, initialSequence.sequenceController.sequenceUpdateState);
             Assert.AreEqual(0, rootPlayable.GetSpeed());
-            Assert.AreEqual(.5f, (float)initialSequence.currentTime, .03f);
+            Assert.AreEqual(.5f, (float)initialSequence.currentTime);
         }
         
         [UnityTest]
@@ -209,8 +212,12 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             
             adjacentSequence.active = false;
 
-            initialSequence.sequenceController.SetSequenceTime(initialSequence.sequenceController.gameObject, .4f);
+            initialSequence.sequenceController.SetSequenceTime(initialSequence.sequenceController.gameObject, .5f);
             appSettings.SetIsReversing(rootConfig.gameObject, rootConfig.inputGroupKey, true);
+            
+            startTime = DateTime.UtcNow;
+            while ((DateTime.UtcNow - startTime).TotalSeconds < 1) { yield return null; }
+            
             autoplayer.ActivateEligibleForAutoplayAndRefresh();
             
             startTime = DateTime.UtcNow;

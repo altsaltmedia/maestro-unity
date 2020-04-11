@@ -58,7 +58,7 @@ namespace AltSalt.Maestro.Sequencing
 
         public bool appUtilsRequested => appSettings.GetAppUtilsRequested(this.gameObject, inputGroupKey);
 
-        private void Awake()
+        private void OnEnable()
         {
 #if UNITY_EDITOR
             _appSettings.PopulateVariable(this, nameof(_appSettings));

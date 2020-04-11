@@ -91,7 +91,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             // Check that we paused at first interval
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, sequenceControllers[0].sequenceUpdateState);
             Assert.AreEqual(0, rootPlayable.GetSpeed());
-            Assert.AreEqual(0.5f, (float)sequenceControllers[0].sequence.currentTime, .015f);
+            Assert.AreEqual(0.5f, (float)sequenceControllers[0].sequence.currentTime);
 
             // Play again
             lerper.TriggerLerpSequences();
@@ -104,7 +104,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             // Check that we paused at 2nd interval
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, sequenceControllers[0].sequenceUpdateState);
             Assert.AreEqual(0, rootPlayable.GetSpeed());
-            Assert.AreEqual(1f, (float)sequenceControllers[0].sequence.currentTime, .015f);
+            Assert.AreEqual(1f, (float)sequenceControllers[0].sequence.currentTime);
         }
         
         [UnityTest]
@@ -155,7 +155,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             // Check that we paused at first interval
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, sequenceControllers[0].sequenceUpdateState);
             Assert.AreEqual(0, rootPlayable.GetSpeed());
-            Assert.AreEqual(1, (float)sequenceControllers[0].sequence.currentTime, .03);
+            Assert.AreEqual(1, (float)sequenceControllers[0].sequence.currentTime);
             
             // Play again
             lerper.TriggerLerpSequences();
@@ -167,7 +167,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             // Check that we paused at 2nd interval
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, sequenceControllers[0].sequenceUpdateState);
             Assert.AreEqual(0, rootPlayable.GetSpeed());
-            Assert.AreEqual(.5, (float)sequenceControllers[0].sequence.currentTime, .03);
+            Assert.AreEqual(.5, (float)sequenceControllers[0].sequence.currentTime);
         }
 
         [UnityTest]
@@ -244,7 +244,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             lerper.TriggerLerpSequences();
             
             startTime = DateTime.UtcNow;
-            while ((DateTime.UtcNow - startTime).TotalSeconds < 2.5) { yield return null; }
+            while ((DateTime.UtcNow - startTime).TotalSeconds < 1) { yield return null; }
             
             Assert.AreEqual(false, initialSequence.sequenceController.gameObject.active);
             Assert.AreEqual(true, adjacentSequence.sequenceController.gameObject.active);
@@ -255,7 +255,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             lerper.TriggerLerpSequences();
             
             startTime = DateTime.UtcNow;
-            while ((DateTime.UtcNow - startTime).TotalSeconds < 2.5) { yield return null; }
+            while ((DateTime.UtcNow - startTime).TotalSeconds < 1) { yield return null; }
             
             Assert.AreEqual(true, initialSequence.sequenceController.gameObject.active);
             Assert.AreEqual(false, adjacentSequence.sequenceController.gameObject.active);
@@ -266,7 +266,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             lerper.TriggerLerpSequences();
             
             startTime = DateTime.UtcNow;
-            while ((DateTime.UtcNow - startTime).TotalSeconds < 2.5) { yield return null; }
+            while ((DateTime.UtcNow - startTime).TotalSeconds < 1) { yield return null; }
             
             Assert.AreEqual(false, initialSequence.sequenceController.gameObject.active);
             Assert.AreEqual(true, adjacentSequence.sequenceController.gameObject.active);

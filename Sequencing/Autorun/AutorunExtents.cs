@@ -41,7 +41,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             this.isVideoSequence = isVideoSequence;
             this.description = description;
         }
-        
+
         public static bool TimeWithinThresholdLowerBoundsInclusive(double sourceTime, List<AutorunExtents> intervals)
         {
             // Check if we're inside a pauseMomentumThreshold
@@ -65,6 +65,21 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 if(Mathf.Approximately((float)sourceTime, (float)intervals[q].startTime) ||
                     sourceTime > intervals[q].startTime &&
                    sourceTime < intervals[q].endTime) {
+                    currentExtents = intervals[q];
+                    return true;
+                }
+            }
+            currentExtents = null;
+            return false;
+        }
+        
+        public static bool TimeWithinThresholdBothBoundsInclusive(double sourceTime, List<AutorunExtents> intervals, out AutorunExtents currentExtents)
+        {
+            for (int q = 0; q < intervals.Count; q++) {
+                if(Mathf.Approximately((float)sourceTime, (float)intervals[q].startTime) ||
+                   sourceTime > intervals[q].startTime &&
+                   sourceTime < intervals[q].endTime ||
+                   Mathf.Approximately((float)sourceTime, (float)intervals[q].endTime)) {
                     currentExtents = intervals[q];
                     return true;
                 }

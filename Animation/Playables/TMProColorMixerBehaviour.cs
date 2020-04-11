@@ -79,9 +79,9 @@ namespace AltSalt.Maestro.Animation
                             
                             case TextAnimationStyle.Whole:
                                 trackBinding.color = input.targetValue;
-                                for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
-                                    SetCharacterColor(trackBinding, input.targetValue, j);
-                                }
+                                // for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
+                                //     SetCharacterColor(trackBinding, input.targetValue, j);
+                                // }
                                 break;
 
                             case TextAnimationStyle.Character:

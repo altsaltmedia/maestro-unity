@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb4d0413057af4072ae54014a737c892, type: 3}
-  m_Name: AutorunTests2
+  m_Name: AutorunTests3
   m_EditorClassIdentifier: 
   _active: 0
   _paused: 0
   _canBeScrubbed: 1
   _currentTime: 0
   _duration: 1.639999999999
-  _sourcePlayable: {fileID: 11400000, guid: cb6696f57ef9e4f84a8fcfdc38770f67, type: 2}
+  _sourcePlayable: {fileID: 11400000, guid: afa30f2f160ad497d99b363891441afe, type: 2}
   _sequenceController: {fileID: 0}
   _defaultStatus: 0
   _defaultTime: 0

@@ -348,6 +348,11 @@ namespace AltSalt.Maestro
         private FloatReference _frameStepValue = new FloatReference();
         
         public FloatReference frameStepValue => _frameStepValue;
+        
+        [SerializeField, Required]
+        private FloatReference _autorunThreshold = new FloatReference();
+        
+        public FloatReference autorunThreshold => _autorunThreshold;
 
     #endregion
 
@@ -426,6 +431,7 @@ namespace AltSalt.Maestro
             (forkTransitionSpread.GetVariable() as FloatVariable).defaultValue = 2f;
             (lerpSpeed.GetVariable() as FloatVariable).defaultValue = 1f;
             (frameStepValue.GetVariable() as FloatVariable).defaultValue = .02f;
+            (autorunThreshold.GetVariable() as FloatVariable).defaultValue = .03f;
 
             // Every scene should set the following
             (ySwipeAxis.GetVariable() as Axis).SetAxisType(inputData, AxisType.Y);

@@ -104,6 +104,7 @@ namespace AltSalt.Maestro.Sequencing
                     if (previousSequence != sourceSequence) {
                         sourceSequence.sequenceController.gameObject.SetActive(false);
                     }
+                    autoplayActivate.RaiseEvent(this.gameObject);
                 }
                 else if (sequenceSettings.previousDestination is Fork fork) {
                     if (fork.active == false || fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
@@ -122,14 +123,11 @@ namespace AltSalt.Maestro.Sequencing
                             previousSequence.sequenceController.SetSequenceTime(this, (float) targetTime);
                             previousSequence.sequenceController.masterSequence.RefreshElapsedTime(previousSequence);
                             rootConfig.sequenceModified.RaiseEvent(this.gameObject);
-                            
-                            if (previousSequence != sourceSequence) {
-                                sourceSequence.sequenceController.gameObject.SetActive(false);
-                            }
+                            sourceSequence.sequenceController.gameObject.SetActive(false);
+                            autoplayActivate.RaiseEvent(this.gameObject);
                         }
                     }
                 }
-                autoplayActivate.RaiseEvent(this.gameObject);
             }
             else
             {
@@ -160,6 +158,7 @@ namespace AltSalt.Maestro.Sequencing
                     if (nextSequence != sourceSequence) {
                         sourceSequence.sequenceController.gameObject.SetActive(false);
                     }
+                    autoplayActivate.RaiseEvent(this.gameObject);
                 }
                 else if (sequenceSettings.nextDestination is Fork fork) {
                     if (fork.active == false || fork.TryGetDestinationBranch(out BranchingPath destinationBranch) == false) {
@@ -179,13 +178,11 @@ namespace AltSalt.Maestro.Sequencing
                             nextSequence.sequenceController.masterSequence.RefreshElapsedTime(nextSequence);
                             rootConfig.sequenceModified.RaiseEvent(this.gameObject);
                             
-                            if (nextSequence != sourceSequence) {
-                                sourceSequence.sequenceController.gameObject.SetActive(false);
-                            }
+                            sourceSequence.sequenceController.gameObject.SetActive(false);
+                            autoplayActivate.RaiseEvent(this.gameObject);
                         }    
                     }
                 }
-                autoplayActivate.RaiseEvent(this.gameObject);
             }
             else
             {

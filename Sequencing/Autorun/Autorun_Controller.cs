@@ -93,6 +93,14 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 #endif
         }
 
+        private void OnDisable()
+        {
+            for (int i = 0; i < autorunData.Count; i++) {
+                autorunData[i].sequence.sequenceController.masterSequence.sequenceUpdated -= OnSequenceUpdated;
+                autorunData[i].sequence.sequenceController.masterSequence.sequenceBoundaryReached -= OnSequenceBoundaryReached;
+            }
+        }
+
         private static Tuple<List<double>, List<double>, List<int>, List<string>, List<int>> GetConfigTimes(IEnumerable<IMarker> markers)
         {
             List<double> autoplayStarts = new List<double>();
@@ -178,14 +186,45 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         public void CreateAutorunCallbacks(List<Autorun_Data> autorunData)
         {
             for (int i = 0; i < autorunData.Count; i++) {
-                autorunData[i].sequence.sequenceController.sequenceUpdated += OnSequenceUpdated;
+                autorunData[i].sequence.sequenceController.masterSequence.sequenceUpdated += OnSequenceUpdated;
+                autorunData[i].sequence.sequenceController.masterSequence.sequenceBoundaryReached += OnSequenceBoundaryReached;
             }
         }
 
         private void OnSequenceUpdated(object sender, Sequence updatedSequence)
         {
-            autoplayer.RefreshAutoplayStatus(updatedSequence);
-            lerper.RefreshLerpStatus(updatedSequence);
+            if (updatedSequence.active == true) {
+                autoplayer.OnSequenceUpdated(updatedSequence);
+                lerper.OnSequenceUpdated(updatedSequence);
+            }
+            else {
+                OnSequenceBoundaryReached(sender, updatedSequence);
+            }
+        }
+        
+        public void OnSequenceBoundaryReached(object sender, Sequence updatedSequence)
+        {
+            var updatedData = autorunData.Find(x => x.sequence == updatedSequence);
+
+            if (updatedData == null) return;
+
+            updatedData.eligibleForAutoplay = false;
+            updatedData.backwardUpdateActive = false;
+            updatedData.forwardUpdateActive = false;
+            updatedData.isLerping = false;
+            
+            if (updatedData.lerpCoroutine != null) {
+                StopCoroutine(updatedData.lerpCoroutine);
+                updatedData.lerpCoroutine = null;
+            }
+
+            updatedSequence.sequenceController.masterSequence.
+                RequestDeactivateForwardAutoplay(updatedSequence, autoplayer.priority, autoplayer.name);
+            updatedSequence.sequenceController.masterSequence.
+                RequestDeactivateForwardAutoplay(updatedSequence, lerper.priority, lerper.name);
+            
+            autoplayer.TriggerInputActionComplete(updatedSequence.sequenceController.masterSequence);
+            lerper.TriggerInputActionComplete(updatedSequence.sequenceController.masterSequence);
         }
 
         public void TriggerPauseMomentum(Sequence targetSequence)

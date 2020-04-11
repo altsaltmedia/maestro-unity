@@ -166,6 +166,13 @@ namespace AltSalt.Maestro.Sensors
         
         private void Update()
         {
+            if (Input.touchCount > 0) {
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began) {
+                    onTouchStart.RaiseEvent(this.gameObject);
+                }
+            }
+            
             if(hasMomentum == true) {
                 // All momentum is executed through momentumForce. However, we calculate the momentumForce
                 // via a momentumCache, which is modified dynamically based on swipe input, decay value, etc.

@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb4d0413057af4072ae54014a737c892, type: 3}
-  m_Name: SequencingTests
+  m_Name: AutorunTests4
   m_EditorClassIdentifier: 
   _active: 1
   _paused: 0
   _canBeScrubbed: 1
   _currentTime: 0
-  _duration: 3.3399999999989998
-  _sourcePlayable: {fileID: 11400000, guid: e01aa3f6fce7b428ea9e0e3b26748569, type: 2}
+  _duration: 1.639999999999
+  _sourcePlayable: {fileID: 11400000, guid: f29a98b5a6eb549018607574185a6cfc, type: 2}
   _sequenceController: {fileID: 0}
-  _defaultStatus: 1
+  _defaultStatus: 0
   _defaultTime: 0

@@ -73,7 +73,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2293772597486834399}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 929d37e19ba34a21a3b6ca7396c28202, type: 3}
   m_Name: 
@@ -350,14 +350,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2482685240502513279}
     m_Modifications:
-    - target: {fileID: 0}
-      propertyPath: _complexEventReference._parentObject
-      value: 
-      objectReference: {fileID: 2670429561480060543}
-    - target: {fileID: 0}
-      propertyPath: _complexEventReference._variable
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 2364722153129588570, guid: 105b53ea87dd04ce095228865dda57bc,
         type: 3}
       propertyPath: m_Name
@@ -1167,78 +1159,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2482685240502513279}
     m_Modifications:
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _complexEventReference._parentObject
-      value: 
-      objectReference: {fileID: 134381654221151000}
-    - target: {fileID: 0}
-      propertyPath: _complexEventReference._variable
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _simpleSignalReference._parentObject
-      value: 
-      objectReference: {fileID: 134381654221151000}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 5437714518085294113}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ActivateAutoplay
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _migrated
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _simpleSignalReference._parentObject
-      value: 
-      objectReference: {fileID: 134381654221151000}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 5437714518085294113}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ActivateAutoplay
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _action.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _migrated
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2061094698163370185, guid: 97feac8a06fe740d99eeffdc9dd3352e,
         type: 3}
       propertyPath: _rootConfig
@@ -1327,23 +1247,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5ba7635fbed4f8aac8fb74dc6bdd546, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &134381654221151000 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8733841028164870764, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-    type: 3}
-  m_PrefabInstance: {fileID: 8712703050194729332}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5437714518085294113 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3719720165695611221, guid: 97feac8a06fe740d99eeffdc9dd3352e,
-    type: 3}
-  m_PrefabInstance: {fileID: 8712703050194729332}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134381654221151000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 528675d467ef74060bd2099765db9b2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
