@@ -62,7 +62,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             initialSequence.sequenceController.SetSequenceTime(initialSequence.sequenceController.gameObject, 0);
             appSettings.SetIsReversing(rootConfig.gameObject, rootConfig.inputGroupKey, false);
             
-            autoplayer.ActivateEligibleForAutoplayAndRefresh();
+            autoplayer.AutoplayAllSequences();
             Assert.AreEqual(SequenceUpdateState.ForwardAutoplay, initialSequence.sequenceController.sequenceUpdateState);
             Assert.Greater(rootPlayable.GetSpeed(), 0);
             
@@ -85,7 +85,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             appSettings.SetIsReversing(rootConfig.gameObject, rootConfig.inputGroupKey, false);
             
             // Play once
-            autoplayer.ActivateEligibleForAutoplayAndRefresh();
+            autoplayer.AutoplayAllSequences();
             Assert.AreEqual(SequenceUpdateState.ForwardAutoplay, initialSequence.sequenceController.sequenceUpdateState);;
             Assert.Greater(rootPlayable.GetSpeed(), 0);
             
@@ -98,7 +98,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             Assert.AreEqual(0.5f, (float)initialSequence.currentTime);
 
             // Play again
-            autoplayer.ActivateEligibleForAutoplayAndRefresh();
+            autoplayer.AutoplayAllSequences();
             Assert.AreEqual(SequenceUpdateState.ForwardAutoplay, initialSequence.sequenceController.sequenceUpdateState);
             Assert.Greater(rootPlayable.GetSpeed(), 0);
             
@@ -126,7 +126,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             startTime = DateTime.UtcNow;
             while ((DateTime.UtcNow - startTime).TotalSeconds < .6) { yield return null; }
 
-            autoplayer.ActivateEligibleForAutoplayAndRefresh();
+            autoplayer.AutoplayAllSequences();
             
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, initialSequence.sequenceController.sequenceUpdateState);
             Assert.AreEqual(0, rootPlayable.GetSpeed());
@@ -154,7 +154,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             while ((DateTime.UtcNow - startTime).TotalSeconds < .6) { yield return null; };
 
             // Play once
-            autoplayer.ActivateEligibleForAutoplayAndRefresh();
+            autoplayer.AutoplayAllSequences();
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, initialSequence.sequenceController.sequenceUpdateState);
 
             startTime = DateTime.UtcNow;
@@ -166,7 +166,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             Assert.AreEqual(1f, (float)initialSequence.currentTime);
             
             // Play again
-            autoplayer.ActivateEligibleForAutoplayAndRefresh();
+            autoplayer.AutoplayAllSequences();
             Assert.AreEqual(SequenceUpdateState.ManualUpdate, initialSequence.sequenceController.sequenceUpdateState);
             
             startTime = DateTime.UtcNow;
@@ -191,7 +191,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             
             initialSequence.sequenceController.SetSequenceTime(initialSequence.sequenceController.gameObject, 1.6f);
             appSettings.SetIsReversing(rootConfig.gameObject, rootConfig.inputGroupKey, false);
-            autoplayer.ActivateEligibleForAutoplayAndRefresh();
+            autoplayer.AutoplayAllSequences();
             
             startTime = DateTime.UtcNow;
             while ((DateTime.UtcNow - startTime).TotalSeconds < 1) { yield return null; }
@@ -218,7 +218,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             startTime = DateTime.UtcNow;
             while ((DateTime.UtcNow - startTime).TotalSeconds < 1) { yield return null; }
             
-            autoplayer.ActivateEligibleForAutoplayAndRefresh();
+            autoplayer.AutoplayAllSequences();
             
             startTime = DateTime.UtcNow;
             while ((DateTime.UtcNow - startTime).TotalSeconds < 1) { yield return null; }

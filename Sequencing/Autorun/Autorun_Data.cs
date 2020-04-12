@@ -20,6 +20,16 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         }
 
         [ShowInInspector]
+        [ReadOnly]
+        private Autorun_Module _activeAutorunModule;
+
+        public Autorun_Module activeAutorunModule
+        {
+            get => _activeAutorunModule;
+            set => _activeAutorunModule = value;
+        }
+
+        [ShowInInspector]
         private AutorunExtents _activeInterval;
 
         public AutorunExtents activeInterval

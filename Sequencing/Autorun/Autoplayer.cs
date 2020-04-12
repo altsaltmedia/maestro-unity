@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -38,7 +39,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// is updated. 
         /// </summary>
         /// <param name="targetSequence"></param>
-        public void OnSequenceUpdated(Sequence targetSequence)
+        public override void OnSequenceUpdated(Sequence targetSequence)
         {
             if (moduleActive == false || appUtilsRequested == true || bookmarkLoadingCompleted == false) {
                 return;
@@ -48,6 +49,10 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
             if (autorunData == null) return;
 
+            AttemptRegisterAutorunModule(this, autorunData, out bool registrationSuccessful);
+            
+            if (registrationSuccessful == false) return;
+
             // If autoplay is currently active, deactivate and return if we're
             // beyond the thresholds of the extents where the autoplay originated.
             // (This is how we pause autoplay between intervals).
@@ -56,33 +61,13 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 
                 if(autorunController.isReversing == false &&
                    Extents.TimeBeyondEndThresholdExclusive(targetSequence.currentTime + autorunThreshold, autorunData.activeInterval)) {
-                    
-                    AutorunExtents currentInterval = autorunData.activeInterval;
-                    TriggerAutoplayIntervalComplete(this, autorunData);
-                    
-                    if (currentInterval.endTime >= targetSequence.duration) {
-                        autorunData.sequence.sequenceController.SetEndBoundaryReached(this);
-                    }
-                    else {
-                        autorunData.sequence.sequenceController.SetSequenceTimeWithoutCallbacks(this, (float)currentInterval.endTime);
-                    }
-                    
+                    FinishForwardAutoplay(this, autorunData);
                     return;
                 }
                 
                 if (autorunController.isReversing == true &&
                          Extents.TimeBeyondStartThresholdExclusive(targetSequence.currentTime - autorunThreshold, autorunData.activeInterval)) {
-                    
-                    AutorunExtents currentInterval = autorunData.activeInterval;
-                    TriggerAutoplayIntervalComplete(this, autorunData);
-                    
-                    if (currentInterval.startTime == 0) {
-                        autorunData.sequence.sequenceController.SetStartBoundaryReached(this);
-                    }
-                    else {
-                        autorunData.sequence.sequenceController.SetSequenceTimeWithoutCallbacks(this, (float)currentInterval.startTime);
-                    }
-                    
+                    FinishBackwardAutoplay(this, autorunData);
                     return;
                 }
                 
@@ -103,26 +88,53 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 
                 // For backwards autoplay, we set the appropriate flags,
                 // then the update is handled each frame via the Update() function.
+                autorunData.activeAutorunModule = this;
                 autorunData.forwardUpdateActive = false;
                 autorunData.backwardUpdateActive = true;
             }
         }
 
-        private static Autorun_Data TriggerAutoplayIntervalComplete(Autoplayer autoplayer, Autorun_Data autorunData)
+        private static bool HasValidAutoplayInterval(Autorun_Data autorunData)
+        {
+            if (autorunData.loop == false && autorunData.activeInterval != null) {
+                return true;
+            }
+
+            return false;
+        }
+        
+        private static Autorun_Data FinishForwardAutoplay(Autoplayer autoplayer, Autorun_Data autorunData)
         {
             Sequence targetSequence = autorunData.sequence;
-            MasterSequence targetMasterSequence = targetSequence.sequenceController.masterSequence;
             
-            autorunData.activeInterval = null;
-            autorunData.forwardUpdateActive = false;
-            autorunData.backwardUpdateActive = false;
-            autorunData.eligibleForAutoplay = false;
-            targetMasterSequence.RequestDeactivateForwardAutoplay(targetSequence,
-                autoplayer.priority, autoplayer.gameObject.name);
-
+            AutorunExtents currentInterval = autorunData.activeInterval;
+            TriggerAutorunIntervalComplete(autoplayer, autorunData);
+                    
+            if (currentInterval.endTime >= targetSequence.duration) {
+                autorunData.sequence.sequenceController.SetEndBoundaryReached(autoplayer);
+            }
+            else {
+                autorunData.sequence.sequenceController.SetSequenceTimeWithoutCallbacks(autoplayer, (float)currentInterval.endTime);
+            }
+            
             return autorunData;
         }
         
+        private static Autorun_Data FinishBackwardAutoplay(Autoplayer autoplayer, Autorun_Data autorunData)
+        {
+            AutorunExtents currentInterval = autorunData.activeInterval;
+            TriggerAutorunIntervalComplete(autoplayer, autorunData);
+                    
+            if (currentInterval.startTime == 0) {
+                autorunData.sequence.sequenceController.SetStartBoundaryReached(autoplayer);
+            }
+            else {
+                autorunData.sequence.sequenceController.SetSequenceTimeWithoutCallbacks(autoplayer, (float)currentInterval.startTime);
+            }
+            
+            return autorunData;
+        }
+
         /// <summary>
         /// We need to make a single explicit call to the MasterSequence
         /// in order to set the speed and trigger forward autoplay.
@@ -136,7 +148,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             MasterSequence targetMasterSequence = autorunData.sequence.sequenceController.masterSequence;
             Sequence targetSequence = autorunData.sequence; 
             
-            if (AutorunExtents.TimeWithinThresholdBothBoundsInclusive(targetSequence.currentTime,
+            if (AutorunExtents.TimeWithinThresholdLowerBoundsInclusiveDescending(targetSequence.currentTime,
                     autorunData.autorunIntervals, out var currentInterval) == true) {
                 
                 targetMasterSequence.RequestActivateForwardAutoplay(targetSequence,
@@ -149,10 +161,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                     // Once the active interval has been cached, we will use
                     // it to determine whether autoplay should halt whenever the
                     // sequence gets updated (see RefreshAutoplay() above)
+                    autorunData.activeAutorunModule = autoplayer;
                     autorunData.activeInterval = currentInterval;
                     autorunData.forwardUpdateActive = true;
 
-                    CheckPauseMomentum(autoplayer.autorunController, autorunData);
+                    PauseMomentumIfNeeded(autoplayer.autorunController, autorunData);
                 }
             }
 
@@ -200,7 +213,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             }
 
             Autorun_Controller autorunController = autoplayer.autorunController;
-            CheckPauseMomentum(autorunController, autorunData);
+            PauseMomentumIfNeeded(autorunController, autorunData);
 
             autorunData.activeInterval = currentInterval;
 
@@ -214,7 +227,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
             return autorunData;
         }
-
+        
         private static bool SequenceOrAutoplayDeactivated(Autorun_Data autorunData)
         {
             if (autorunData.sequence.active == false || autorunData.eligibleForAutoplay == false) {
@@ -224,16 +237,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             return false;
         }
 
-        private static bool HasValidAutoplayInterval(Autorun_Data autorunData)
-        {
-            if (autorunData.loop == false && autorunData.activeInterval != null && autorunData.isLerping == false) {
-                return true;
-            }
-
-            return false;
-        }
-        
-        private static Autorun_Controller CheckPauseMomentum(Autorun_Controller autorunController, Autorun_Data autorunData)
+        private static Autorun_Controller PauseMomentumIfNeeded(Autorun_Controller autorunController, Autorun_Data autorunData)
         {
             if (autorunController.pauseMomentumDuringAutorun == true) {
                 autorunController.TriggerPauseMomentum(autorunData.sequence);
@@ -323,14 +327,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// either with our without explicit input (an example of the
         /// latter: a joiner activating a preceding or following sequence)
         /// </summary>
-        public void ActivateEligibleForAutoplay()
-        {
-            for (int q = 0; q < autorunController.autorunData.Count; q++) {
-                autorunController.autorunData[q].eligibleForAutoplay = true;
-            }
-        }
-        
-        public void ActivateEligibleForAutoplayAndRefresh()
+        public void AutoplayAllSequences()
         {
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
                 autorunController.autorunData[q].eligibleForAutoplay = true;
@@ -340,30 +337,55 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 }
             }
         }
+        
+        public void AutoplaySequence(Sequence targetSequence)
+        {
+            if (appUtilsRequested == true || moduleActive == false) return;
+            
+            if (HasAutorunData(targetSequence, autorunController, out var autorunData) == false) return;
+
+            autorunData.eligibleForAutoplay = true;
+            OnSequenceUpdated(targetSequence);
+        }
+        
+        private static bool HasAutorunData(Sequence targetSequence, Autorun_Controller autorunController, out Autorun_Data autorunData)
+        {
+            for (int i = 0; i < autorunController.autorunData.Count; i++)
+            {
+                if (targetSequence == autorunController.autorunData[i].sequence)
+                {
+                    autorunData = autorunController.autorunData[i];
+                    return true;
+                }
+            }
+            
+            throw new Exception("Target sequence not found. Did you forget to assign an InputController or MasterController?");
+        }
 
         /// <summary>
         /// By default, we disable autoplay when app utils get requested,
         /// or a swipe begins.
         /// </summary>
-        public void DeactivateEligibleForAutoplay()
+        public void DeactivateAutoplayAllSequences()
         {
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
-                Autorun_Data autorunData = autorunController.autorunData[q];
-                autorunData.eligibleForAutoplay = false;
-                autorunData.backwardUpdateActive = false;
-                autorunData.forwardUpdateActive = false;
-                autorunData.easingUtility.Reset();
+                TriggerAutorunIntervalComplete(this, autorunController.autorunData[q]);
+                
+                // Autorun_Data autorunData = autorunController.autorunData[q];
+                // autorunData.eligibleForAutoplay = false;
+                // autorunData.backwardUpdateActive = false;
+                // autorunData.forwardUpdateActive = false;
+                // autorunData.easingUtility.Reset();
             }
         }
         
-        public void DeactivateEligibleForAutoplay(ComplexPayload complexPayload)
+        public void DeactivateAutoplaySequence(ComplexPayload complexPayload)
         {
             Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
-            Autorun_Data autorunData = autorunController.autorunData.Find(x => x.sequence == targetSequence);
-            autorunData.eligibleForAutoplay = false;
-            autorunData.backwardUpdateActive = false;
-            autorunData.forwardUpdateActive = false;
-            autorunData.easingUtility.Reset();
+
+            if (targetSequence == null || HasAutorunData(targetSequence, autorunController, out var autorunData) == false) return;
+
+            TriggerAutorunIntervalComplete(this, autorunData);
         }
 
         public void ActivateLoop(Sequence targetSequence)

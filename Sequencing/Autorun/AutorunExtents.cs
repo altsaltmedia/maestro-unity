@@ -42,7 +42,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             this.description = description;
         }
 
-        public static bool TimeWithinThresholdLowerBoundsInclusive(double sourceTime, List<AutorunExtents> intervals)
+        public static bool TimeWithinThresholdLowerBoundsInclusiveAscending(double sourceTime, List<AutorunExtents> intervals)
         {
             // Check if we're inside a pauseMomentumThreshold
             bool withinThreshold = false;
@@ -59,11 +59,39 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             return withinThreshold;
         }
         
-        public static bool TimeWithinThresholdLowerBoundsInclusive(double sourceTime, List<AutorunExtents> intervals, out AutorunExtents currentExtents)
+        public static bool TimeWithinThresholdUpperBoundsInclusive(double sourceTime, List<AutorunExtents> intervals, out AutorunExtents currentExtents)
+        {
+            for (int q = 0; q < intervals.Count; q++) {
+                if(sourceTime > intervals[q].startTime &&
+                   sourceTime < intervals[q].endTime || 
+                   Mathf.Approximately((float)sourceTime, (float)intervals[q].endTime)) {
+                    currentExtents = intervals[q];
+                    return true;
+                }
+            }
+            currentExtents = null;
+            return false;
+        }
+        
+        public static bool TimeWithinThresholdLowerBoundsInclusiveAscending(double sourceTime, List<AutorunExtents> intervals, out AutorunExtents currentExtents)
         {
             for (int q = 0; q < intervals.Count; q++) {
                 if(Mathf.Approximately((float)sourceTime, (float)intervals[q].startTime) ||
                     sourceTime > intervals[q].startTime &&
+                   sourceTime < intervals[q].endTime) {
+                    currentExtents = intervals[q];
+                    return true;
+                }
+            }
+            currentExtents = null;
+            return false;
+        }
+        
+        public static bool TimeWithinThresholdLowerBoundsInclusiveDescending(double sourceTime, List<AutorunExtents> intervals, out AutorunExtents currentExtents)
+        {
+            for (int q = intervals.Count - 1; q >= 0; q--) {
+                if(Mathf.Approximately((float)sourceTime, (float)intervals[q].startTime) ||
+                   sourceTime > intervals[q].startTime &&
                    sourceTime < intervals[q].endTime) {
                     currentExtents = intervals[q];
                     return true;

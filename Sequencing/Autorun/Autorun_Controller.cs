@@ -16,14 +16,9 @@ namespace AltSalt.Maestro.Sequencing.Autorun
     public class Autorun_Controller : Input_Controller
     {
         [SerializeField]
-        private Autoplayer _autoplayer;
+        private List<Autorun_Module> _autorunModules = new List<Autorun_Module>();
 
-        private Autoplayer autoplayer => _autoplayer;
-
-        [SerializeField]
-        private Lerper _lerper;
-
-        public Lerper lerper => _lerper;
+        private List<Autorun_Module> autorunModules => _autorunModules;
 
         [SerializeField]
         private bool _pauseMomentumDuringAutorun = true;
@@ -86,6 +81,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 }
             }
             
+            autorunModules.Sort((x, y) => x.priority.CompareTo(y.priority));
             CreateAutorunCallbacks(autorunData);
 
 #if UNITY_EDITOR
@@ -194,8 +190,9 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         private void OnSequenceUpdated(object sender, Sequence updatedSequence)
         {
             if (updatedSequence.active == true) {
-                autoplayer.OnSequenceUpdated(updatedSequence);
-                lerper.OnSequenceUpdated(updatedSequence);
+                for (int i = 0; i < autorunModules.Count; i++) {
+                    autorunModules[i].OnSequenceUpdated(updatedSequence);
+                }
             }
             else {
                 OnSequenceBoundaryReached(sender, updatedSequence);
@@ -218,13 +215,13 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 updatedData.lerpCoroutine = null;
             }
 
-            updatedSequence.sequenceController.masterSequence.
-                RequestDeactivateForwardAutoplay(updatedSequence, autoplayer.priority, autoplayer.name);
-            updatedSequence.sequenceController.masterSequence.
-                RequestDeactivateForwardAutoplay(updatedSequence, lerper.priority, lerper.name);
-            
-            autoplayer.TriggerInputActionComplete(updatedSequence.sequenceController.masterSequence);
-            lerper.TriggerInputActionComplete(updatedSequence.sequenceController.masterSequence);
+            if (updatedData.activeAutorunModule != null) {
+                updatedSequence.sequenceController.masterSequence.
+                    RequestDeactivateForwardAutoplay(updatedSequence, updatedData.activeAutorunModule.priority, updatedData.activeAutorunModule.name);
+            }
+
+            // autoplayer.TriggerInputActionComplete(updatedSequence.sequenceController.masterSequence);
+            // lerper.TriggerInputActionComplete(updatedSequence.sequenceController.masterSequence);
         }
 
         public void TriggerPauseMomentum(Sequence targetSequence)

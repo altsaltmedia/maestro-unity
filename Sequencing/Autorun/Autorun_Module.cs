@@ -14,5 +14,40 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         protected float autorunThreshold => autorunController.appSettings.GetAutorunThreshold(this.gameObject, autorunController.inputGroupKey);
 
         protected override Input_Controller inputController => autorunController;
+
+        public abstract void OnSequenceUpdated(Sequence updatedSequence);
+
+        public static Autorun_Data TriggerAutorunIntervalComplete(Autorun_Module autorunModule, Autorun_Data autorunData)
+        {
+            Sequence targetSequence = autorunData.sequence;
+            MasterSequence targetMasterSequence = targetSequence.sequenceController.masterSequence;
+            
+            autorunData.activeInterval = null;
+            autorunData.forwardUpdateActive = false;
+            autorunData.backwardUpdateActive = false;
+            autorunData.eligibleForAutoplay = false;
+            targetMasterSequence.RequestDeactivateForwardAutoplay(targetSequence,
+                autorunModule.priority, autorunModule.gameObject.name);
+            autorunData.easingUtility.Reset();
+
+            return autorunData;
+        }
+
+        public static Autorun_Data AttemptRegisterAutorunModule(Autorun_Module autorunModule, Autorun_Data autorunData, out bool registrationSuccessful)
+        {
+            registrationSuccessful = false;
+            
+            if (autorunData.activeAutorunModule == null ||
+                autorunModule.priority > autorunData.activeAutorunModule.priority) {
+                autorunData.activeAutorunModule = autorunModule;
+                registrationSuccessful = true;
+            }
+
+            if (autorunData.activeAutorunModule == autorunModule) {
+                registrationSuccessful = true;
+            }
+
+            return autorunData;
+        }
     }
 }
