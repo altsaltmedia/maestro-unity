@@ -172,11 +172,19 @@ namespace AltSalt.Maestro
         [MenuItem("Edit/Maestro/Timeline/Create New Clip(s)", false, 0)]
         public static void HotkeyTriggerCreateClips()
         {
-            bool selectCreatedClip = clipPlacement.selectCreatedClip;
-            bool advancePlayhead = clipPlacement.advancePlayhead;
-            float newClipDuration = clipPlacement.newClipDuration;
-            string clipName = clipPlacement.clipName;
-            EasingFunction.Ease clipEaseType = clipPlacement.clipEaseType;
+            bool selectCreatedClip = true;
+            bool advancePlayhead = true;
+            float newClipDuration = .5f;
+            string clipName = "";
+            EasingFunction.Ease clipEaseType = EasingFunction.Ease.EaseInOutQuad;
+            
+            if (clipPlacement != null) {
+                selectCreatedClip = clipPlacement.selectCreatedClip;
+                advancePlayhead = clipPlacement.advancePlayhead;
+                newClipDuration = clipPlacement.newClipDuration;
+                clipName = clipPlacement.clipName;
+                clipEaseType = clipPlacement.clipEaseType;
+            }
 
             TriggerCreateClips(selectCreatedClip, advancePlayhead, newClipDuration, clipName, clipEaseType);
         }

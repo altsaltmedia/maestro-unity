@@ -416,8 +416,6 @@ namespace AltSalt.Maestro.Animation
         [MenuItem("Edit/Maestro/Animation/Create Color Track", false, 0)]
         public static void HotkeyCreateColorTrack()
         {
-            bool selectCreatedObject = animationTracks.selectCreatedObject;
-
             List<TrackAsset> newTracks = new List<TrackAsset>();
             Type[] types = { typeof(TMP_Text), typeof(SpriteRenderer), typeof(UnityEngine.UI.Image) };
 
@@ -438,10 +436,8 @@ namespace AltSalt.Maestro.Animation
                     newTracks.AddRange(TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, new GameObject[] { sortedSelection[i] }, typeof(ImageUIColorTrack), typeof(UnityEngine.UI.Image), Selection.objects, TimelineEditor.selectedClips));
                 }
             }
-
-            if(selectCreatedObject == true) {
-                Selection.objects = newTracks.ToArray();
-            }
+            
+            Selection.objects = newTracks.ToArray();
 
             TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
         }
@@ -449,16 +445,10 @@ namespace AltSalt.Maestro.Animation
         [MenuItem("Edit/Maestro/Animation/Create Position Track", false, 0)]
         public static void HotkeyCreatePositionTrack()
         {
-            bool selectCreatedObject = animationTracks.selectCreatedObject;
-
-            if(selectCreatedObject == true) {
-                List<Object> newSelection = new List<Object>();
-                newSelection.AddRange(CreateRectTransformPosTrack());
-                newSelection.AddRange(CreateTransformPosTrack());
-                Selection.objects = newSelection.ToArray();
-            } else {
-                CreateRectTransformPosTrack();
-            }
+            List<Object> newSelection = new List<Object>();
+            newSelection.AddRange(CreateRectTransformPosTrack());
+            newSelection.AddRange(CreateTransformPosTrack());
+            Selection.objects = newSelection.ToArray();
 
             TimelineUtils.RefreshTimelineContentsAddedOrRemoved();
         }
@@ -485,7 +475,8 @@ namespace AltSalt.Maestro.Animation
         
         public static TrackAsset[] CreateTransformPosTrack()
         {
-            return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, Selection.gameObjects, typeof(TransformPosTrack), typeof(Transform), Selection.objects, TimelineEditor.selectedClips);
+            Object[] filteredSelection = Utils.CullSelection(Selection.gameObjects, typeof(RectTransform));
+            return TrackPlacement.TriggerCreateTrack(TimelineEditor.inspectedAsset, TimelineEditor.inspectedDirector, filteredSelection, typeof(TransformPosTrack), typeof(Transform), Selection.objects, TimelineEditor.selectedClips);
         }
         
         private static TrackAsset OnTrackCreated(PlayableDirector targetDirector, TrackAsset targetTrack, UnityEngine.Object targetObject)

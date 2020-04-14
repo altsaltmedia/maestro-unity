@@ -343,7 +343,7 @@ namespace AltSalt.Maestro.Layout {
                 int breakpointIndex = 0;
 
                 if (hasBreakpoints == true) {
-                    Utils.GetValueIndexInList(deviceAspectRatio, deviceBreakpoints);
+                    breakpointIndex = Utils.GetValueIndexInList(deviceAspectRatio, deviceBreakpoints);
                 }
                 
                 SceneDimension sceneDimension = sceneDimensions[breakpointIndex];

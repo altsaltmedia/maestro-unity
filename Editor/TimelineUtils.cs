@@ -359,6 +359,30 @@ namespace AltSalt.Maestro
             return clipSelection.ToArray();
         }
 
+        public static Marker[] SelectMarkersEndingBefore(Object[] selection, float targetTime)
+        {
+            List<Marker> markerSelection = new List<Marker>();
+            foreach (Marker marker in GetMarkersFromSelection(selection)) {
+                if (marker.time <= targetTime) {
+                    markerSelection.Add(marker);
+                }
+            }
+
+            return markerSelection.ToArray();
+        }
+        
+        public static Marker[] SelectMarkersStartingAfter(Object[] selection, float targetTime)
+        {
+            List<Marker> markerSelection = new List<Marker>();
+            foreach (Marker marker in GetMarkersFromSelection(selection)) {
+                if (marker.time >= targetTime) {
+                    markerSelection.Add(marker);
+                }
+            }
+
+            return markerSelection.ToArray();
+        }
+
         public static TimelineClip[] SelectClipsStartingAfter(Object[] selection, float targetTime)
         {
             List<TimelineClip> clipSelection = new List<TimelineClip>();
@@ -424,6 +448,51 @@ namespace AltSalt.Maestro
                 return GetAllTimelineClips();
             }
         }
+        
+        public static Marker[] GetMarkersFromSelection(Object[] selection)
+        {
+            List<IMarker> selectedMarkers = new List<IMarker>();
+            bool trackAssetSelected = false;
+
+            List<TrackAsset> selectedTrackAssets = new List<TrackAsset>();
+
+            if (selection != null && selection.Length > 0) {
+                for (int i = 0; i < selection.Length; i++) {
+                    if (selection[i] is TrackAsset) {
+                        trackAssetSelected = true;
+                        TrackAsset trackAsset = selection[i] as TrackAsset;
+
+                        selectedTrackAssets.Add(trackAsset);
+                        selectedTrackAssets.AddRange(TimelineUtils.GetChildTracks(trackAsset));
+                    }
+                }
+            }
+
+            if (trackAssetSelected == true) {
+                for(int z=0; z<selectedTrackAssets.Count; z++) {
+                    foreach (var marker in selectedTrackAssets[z].GetMarkers()) {
+                        if(marker is JoinMarker_IJoinSequence == false)
+                        {
+                            selectedMarkers.Add(marker);
+                        }
+                    }
+                }
+                
+                TrackAsset markerTrack = TimelineEditor.inspectedAsset.markerTrack;
+                foreach (var marker in markerTrack.GetMarkers()) {
+                    if(marker is JoinMarker_IJoinSequence == false)
+                    {
+                        selectedMarkers.Add(marker);
+                    }
+                }
+
+                List<Marker> convertedMarkers = selectedMarkers.ConvertAll(x => (Marker) x);
+                return convertedMarkers.ToArray();
+
+            } else {
+                return GetAllMarkers();
+            }
+        }
 
         public static TimelineClip[] GetAllTimelineClips()
         {
@@ -452,6 +521,49 @@ namespace AltSalt.Maestro
             }
 
             return allClips.ToArray();
+        }
+        
+        public static Marker[] GetAllMarkers()
+        {
+            return GetAllMarkers(new Utils.IMarkerTimeSort());
+        }
+        
+        public static Marker[] GetAllMarkers(Comparer<IMarker> comparer)
+        {
+            IEnumerable<PlayableBinding> playableBindings = TimelineEditor.inspectedAsset.outputs;
+
+            List<IMarker> allMarkers = new List<IMarker>();
+
+            foreach (PlayableBinding playableBinding in playableBindings) {
+                TrackAsset trackAsset = playableBinding.sourceObject as TrackAsset;
+
+                // Skip playable bindings that don't contain track assets (e.g. markers)
+                if (trackAsset == null || trackAsset.hasClips == false || trackAsset is TimelineUtilsTrack) {
+                    continue;
+                }
+
+                foreach (var marker in trackAsset.GetMarkers()) {
+                    if(marker is JoinMarker_IJoinSequence == false)
+                    {
+                        allMarkers.Add(marker);
+                    }
+                }
+            }
+
+            TrackAsset markerTrack = TimelineEditor.inspectedAsset.markerTrack;
+            foreach (var marker in markerTrack.GetMarkers()) {
+                if(marker is JoinMarker_IJoinSequence == false)
+                {
+                    allMarkers.Add(marker);
+                }
+            }
+
+            if (comparer != null) {
+                allMarkers.Sort(comparer);
+            }
+
+            List<Marker> convertedMarkers = allMarkers.ConvertAll(x => (Marker) x);
+            return convertedMarkers.ToArray();
         }
     }
 }

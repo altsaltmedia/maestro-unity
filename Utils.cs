@@ -1045,6 +1045,22 @@ namespace AltSalt.Maestro
                 return x.start.CompareTo(y.start);
             }
         }
+        
+        public class IMarkerTimeSort : Comparer<IMarker>
+        {
+            public override int Compare(IMarker x, IMarker y)
+            {
+                return x.time.CompareTo(y.time);
+            }
+        }
+        
+        public class MarkerTimeSort : Comparer<Marker>
+        {
+            public override int Compare(Marker x, Marker y)
+            {
+                return x.time.CompareTo(y.time);
+            }
+        }
 #endif
         public static TrackAsset GetTrackFromTimelineAsset(TimelineAsset timelineAsset, Type trackType)
         {

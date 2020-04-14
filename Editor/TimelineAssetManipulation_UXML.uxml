@@ -20,6 +20,13 @@ xsi:schemaLocation="
 		  	<engine:VisualElement class="section___title">
 				<engine:Label text="select" />
 		  	</engine:VisualElement>
+
+			<engine:VisualElement class="section___content">
+				<engine:Toggle text="select config markers" value="true" class="manipulate-toggle-transpose" binding-path="selectConfigMarkerss"/>
+				<engine:Label text="" class="col-1 placeholder" />
+		  		<engine:Label text="" class="col-15-percent placeholder"/>
+		  	</engine:VisualElement>
+
 		    <!-- Instantiates the template multiple times. Each time, we give it a name and a class for future reference. -->
 
 			<engine:VisualElement class="section___content">
@@ -57,7 +64,7 @@ xsi:schemaLocation="
 		  	</engine:VisualElement>
 
 		  	<engine:VisualElement class="section___content">
-				<engine:Toggle text="transpose unselected clips" class="manipulate-toggle-transpose" binding-path="callTransposeUnselectedClips"/>
+				<engine:Toggle text="transpose unselected assets" class="manipulate-toggle-transpose" binding-path="transposeUnselectedAssets"/>
 				<engine:Label text="" class="col-1 placeholder" />
 		  		<engine:Label text="" class="col-15-percent placeholder"/>
 		  	</engine:VisualElement>

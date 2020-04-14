@@ -4,7 +4,7 @@ using UnityEngine.Timeline;
 namespace AltSalt.Maestro.Sequencing.Autorun
 {
     [CustomStyle(nameof(AutorunMarker_Start))]
-    public class AutorunMarker_Start : ConfigMarker, IVideoConfigurator, IMarkerDescription
+    public class AutorunMarker_Start : ConfigMarker, IMarker, IVideoConfigurator, IMarkerDescription
     {
         [SerializeField]
         private string _description;

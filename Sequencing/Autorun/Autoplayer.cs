@@ -330,9 +330,9 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         public void AutoplayAllSequences()
         {
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
-                autorunController.autorunData[q].eligibleForAutoplay = true;
                 Sequence sequence = autorunController.autorunData[q].sequence;
                 if (sequence.active == true) {
+                    autorunController.autorunData[q].eligibleForAutoplay = true;
                     OnSequenceUpdated(sequence);
                 }
             }
@@ -340,11 +340,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         
         public void AutoplaySequence(Sequence targetSequence)
         {
-            if (appUtilsRequested == true || moduleActive == false) return;
+            if (appUtilsRequested == true || moduleActive == false || targetSequence.active == false) return;
             
             if (HasAutorunData(targetSequence, autorunController, out var autorunData) == false) return;
-
             autorunData.eligibleForAutoplay = true;
+            
             OnSequenceUpdated(targetSequence);
         }
         
@@ -369,8 +369,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         public void DeactivateAutoplayAllSequences()
         {
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
-                TriggerAutorunIntervalComplete(this, autorunController.autorunData[q]);
-                
+                Sequence sequence = autorunController.autorunData[q].sequence;
+                if (sequence.active == true) {
+                    TriggerAutorunIntervalComplete(this, autorunController.autorunData[q]);
+                }
+
                 // Autorun_Data autorunData = autorunController.autorunData[q];
                 // autorunData.eligibleForAutoplay = false;
                 // autorunData.backwardUpdateActive = false;
@@ -382,8 +385,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         public void DeactivateAutoplaySequence(ComplexPayload complexPayload)
         {
             Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
-
-            if (targetSequence == null || HasAutorunData(targetSequence, autorunController, out var autorunData) == false) return;
+            
+            if (targetSequence == null || targetSequence.active == false || HasAutorunData(targetSequence, autorunController, out var autorunData) == false) return;
 
             TriggerAutorunIntervalComplete(this, autorunData);
         }

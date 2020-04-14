@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro.Sequencing.Touch
 {
-    public class AxisMarker_JoinNext : AxisMarker, JoinMarker_IJoinSequence
+    public class AxisMarker_JoinNext : AxisMarker, IMarker, JoinMarker_IJoinSequence
     {
         [SerializeField]
         private Sequence _nextSequence;
