@@ -58,6 +58,13 @@ namespace AltSalt.Maestro
             get => _dragSensitivity;
             set => _dragSensitivity = value;
         }
+        
+        [SerializeField]
+        [FoldoutGroup("Calculations")]
+        private FloatReference _mouseScrollSensitivity = new FloatReference();
+
+        public FloatReference mouseScrollSensitivity => _mouseScrollSensitivity;
+        
 
         [SerializeField, Required]
         private BoolReference _userAutoplayEnabled = new BoolReference();
@@ -101,6 +108,7 @@ namespace AltSalt.Maestro
             (invertYInput.GetVariable() as BoolVariable).defaultValue = false;
             (xSensitivity.GetVariable() as FloatVariable).defaultValue = 0.0054f;
             (invertXInput.GetVariable() as BoolVariable).defaultValue = true;
+            (mouseScrollSensitivity.GetVariable() as FloatVariable).defaultValue = 0.0027f;
             (userAutoplayEnabled.GetVariable() as BoolVariable).defaultValue = true;
             (userMomentumEnabled.GetVariable() as BoolVariable).defaultValue = true;
             

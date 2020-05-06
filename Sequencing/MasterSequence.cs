@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using AltSalt.Maestro.Sequencing.Autorun;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -161,7 +162,7 @@ namespace AltSalt.Maestro.Sequencing
 
             if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
             {
-                activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
+                activeInputModule = LockInputModule(this, moduleName, requestPriority);
                 
                 sequenceController.ModifySequenceTime(timeModifier);
             }
@@ -191,7 +192,7 @@ namespace AltSalt.Maestro.Sequencing
 
             if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
             {
-                activeInputModule = LockInputModule(activeInputModule, moduleName, requestPriority);
+                activeInputModule = LockInputModule(this, moduleName, requestPriority);
                 
                 sequenceController.ActivateForwardAutoplayState(targetSpeed);
                 requestSuccessful = true;
@@ -231,12 +232,12 @@ namespace AltSalt.Maestro.Sequencing
         /// <param name="moduleName"></param>
         /// <param name="priority"></param>
         /// <returns></returns>
-        private static ActiveInputModuleData LockInputModule(ActiveInputModuleData activeInputModule, string moduleName, int priority)
+        public static ActiveInputModuleData LockInputModule(MasterSequence masterSequence, string moduleName, int priority)
         {
-            activeInputModule.name = moduleName;
-            activeInputModule.priority = priority;
+            masterSequence.activeInputModule.name = moduleName;
+            masterSequence.activeInputModule.priority = priority;
 
-            return activeInputModule;
+            return masterSequence.activeInputModule;
         }
 
         /// <summary>

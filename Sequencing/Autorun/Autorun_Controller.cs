@@ -18,7 +18,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         [SerializeField]
         private List<Autorun_Module> _autorunModules = new List<Autorun_Module>();
 
-        private List<Autorun_Module> autorunModules => _autorunModules;
+        public List<Autorun_Module> autorunModules => _autorunModules;
 
         [SerializeField]
         private bool _pauseMomentumDuringAutorun = true;
@@ -208,16 +208,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             updatedData.eligibleForAutoplay = false;
             updatedData.backwardUpdateActive = false;
             updatedData.forwardUpdateActive = false;
-            updatedData.isLerping = false;
-            
-            if (updatedData.lerpCoroutine != null) {
-                StopCoroutine(updatedData.lerpCoroutine);
-                updatedData.lerpCoroutine = null;
-            }
 
             if (updatedData.activeAutorunModule != null) {
                 updatedSequence.sequenceController.masterSequence.
                     RequestDeactivateForwardAutoplay(updatedSequence, updatedData.activeAutorunModule.priority, updatedData.activeAutorunModule.name);
+                updatedData.activeAutorunModule = null;
             }
 
             // autoplayer.TriggerInputActionComplete(updatedSequence.sequenceController.masterSequence);

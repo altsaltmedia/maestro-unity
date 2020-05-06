@@ -158,7 +158,7 @@ namespace AltSalt.Maestro.Sensors
         }
         
 #if UNITY_EDITOR
-        private void OnEnable()
+        private void Awake()
         {
             _appSettings.PopulateVariable(this, nameof(_appSettings));
         }

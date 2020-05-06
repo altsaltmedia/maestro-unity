@@ -66,15 +66,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         }
 
         [ShowInInspector]
-        private bool _isLerping;
-
-        public bool isLerping
-        {
-            get => _isLerping;
-            set => _isLerping = value;
-        }
-
-        [ShowInInspector]
         private bool _loop;
 
         public bool loop
@@ -87,13 +78,6 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         private EasingUtility _easingUtility = new EasingUtility();
 
         public EasingUtility easingUtility => _easingUtility;
-
-        private IEnumerator _lerpCoroutine;
-
-        public IEnumerator lerpCoroutine {
-            get => _lerpCoroutine;
-            set => _lerpCoroutine = value;
-        }
 
         protected override string dataTitle => sequence.name;
 

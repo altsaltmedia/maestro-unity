@@ -23,7 +23,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
         private float frameStepValue => autorunController.appSettings.GetFrameStepValue(this.gameObject, inputGroupKey);
 
-        private bool bookmarkLoadingCompleted =>
+        protected bool bookmarkLoadingCompleted =>
             autorunController.appSettings.GetBookmarkLoadingCompleted(this.gameObject, inputGroupKey);
 
         [SerializeField]
@@ -60,13 +60,15 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             if(HasValidAutoplayInterval(autorunData)) {
                 
                 if(autorunController.isReversing == false &&
-                   Extents.TimeBeyondEndThresholdExclusive(targetSequence.currentTime + autorunThreshold, autorunData.activeInterval)) {
+                   (targetSequence.currentTime + autorunThreshold > targetSequence.duration ||
+                    Extents.TimeBeyondEndThresholdExclusive(targetSequence.currentTime + autorunThreshold, autorunData.activeInterval))) {
                     FinishForwardAutoplay(this, autorunData);
                     return;
                 }
                 
                 if (autorunController.isReversing == true &&
-                         Extents.TimeBeyondStartThresholdExclusive(targetSequence.currentTime - autorunThreshold, autorunData.activeInterval)) {
+                    (targetSequence.currentTime - autorunThreshold <= 0 ||
+                     Extents.TimeBeyondStartThresholdExclusive(targetSequence.currentTime - autorunThreshold, autorunData.activeInterval))) {
                     FinishBackwardAutoplay(this, autorunData);
                     return;
                 }
@@ -94,7 +96,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             }
         }
 
-        private static bool HasValidAutoplayInterval(Autorun_Data autorunData)
+        protected static bool HasValidAutoplayInterval(Autorun_Data autorunData)
         {
             if (autorunData.loop == false && autorunData.activeInterval != null) {
                 return true;
@@ -103,12 +105,13 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             return false;
         }
         
-        private static Autorun_Data FinishForwardAutoplay(Autoplayer autoplayer, Autorun_Data autorunData)
+        protected static Autorun_Data FinishForwardAutoplay(Autoplayer autoplayer, Autorun_Data autorunData)
         {
             Sequence targetSequence = autorunData.sequence;
             
             AutorunExtents currentInterval = autorunData.activeInterval;
             TriggerAutorunIntervalComplete(autoplayer, autorunData);
+            autoplayer.TriggerInputActionComplete(autorunData.sequence.sequenceController.masterSequence);
                     
             if (currentInterval.endTime >= targetSequence.duration) {
                 autorunData.sequence.sequenceController.SetEndBoundaryReached(autoplayer);
@@ -120,10 +123,11 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             return autorunData;
         }
         
-        private static Autorun_Data FinishBackwardAutoplay(Autoplayer autoplayer, Autorun_Data autorunData)
+        protected static Autorun_Data FinishBackwardAutoplay(Autoplayer autoplayer, Autorun_Data autorunData)
         {
             AutorunExtents currentInterval = autorunData.activeInterval;
             TriggerAutorunIntervalComplete(autoplayer, autorunData);
+            autoplayer.TriggerInputActionComplete(autorunData.sequence.sequenceController.masterSequence);
                     
             if (currentInterval.startTime == 0) {
                 autorunData.sequence.sequenceController.SetStartBoundaryReached(autoplayer);
@@ -143,7 +147,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// </summary>
         /// <param name="autorunData"></param>
         /// <returns></returns>
-        private static Autorun_Data AttemptForwardAutoplay(Autoplayer autoplayer, Autorun_Data autorunData)
+        protected static Autorun_Data AttemptForwardAutoplay(Autoplayer autoplayer, Autorun_Data autorunData)
         {
             MasterSequence targetMasterSequence = autorunData.sequence.sequenceController.masterSequence;
             Sequence targetSequence = autorunData.sequence; 
@@ -167,6 +171,28 @@ namespace AltSalt.Maestro.Sequencing.Autorun
 
                     PauseMomentumIfNeeded(autoplayer.autorunController, autorunData);
                 }
+            }
+
+            return autorunData;
+        }
+        
+        public override Autorun_Data AttemptRegisterAutorunModule(Autorun_Module autorunModule, Autorun_Data autorunData, out bool registrationSuccessful)
+        {
+            registrationSuccessful = false;
+            
+            if (autorunData.activeAutorunModule == null) {
+                autorunData.activeAutorunModule = autorunModule;
+                registrationSuccessful = true;
+            }
+            
+            else if (autorunData.activeAutorunModule != null &&
+                     autorunModule.priority > autorunData.activeAutorunModule.priority) {
+                autorunData.activeAutorunModule = autorunModule;
+                registrationSuccessful = true;
+            }
+
+            else if (autorunData.activeAutorunModule == autorunModule) {
+                registrationSuccessful = true;
             }
 
             return autorunData;
@@ -327,7 +353,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         /// either with our without explicit input (an example of the
         /// latter: a joiner activating a preceding or following sequence)
         /// </summary>
-        public void AutoplayAllSequences()
+        public virtual void AutoplayAllSequences()
         {
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
                 Sequence sequence = autorunController.autorunData[q].sequence;
@@ -338,7 +364,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             }
         }
         
-        public void AutoplaySequence(Sequence targetSequence)
+        public virtual void AutoplaySequence(Sequence targetSequence)
         {
             if (appUtilsRequested == true || moduleActive == false || targetSequence.active == false) return;
             
@@ -348,7 +374,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             OnSequenceUpdated(targetSequence);
         }
         
-        private static bool HasAutorunData(Sequence targetSequence, Autorun_Controller autorunController, out Autorun_Data autorunData)
+        protected static bool HasAutorunData(Sequence targetSequence, Autorun_Controller autorunController, out Autorun_Data autorunData)
         {
             for (int i = 0; i < autorunController.autorunData.Count; i++)
             {

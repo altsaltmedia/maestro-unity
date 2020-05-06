@@ -38,7 +38,7 @@ MonoBehaviour:
     dataType: 4
     customKey: 1
     _customKey: {fileID: 11400000, guid: 47aaf992e82704916b530bc78671ba01, type: 2}
-  - description: Fade to black speed
+  - description: Fade speed
     dataType: 1
     customKey: 1
     _customKey: {fileID: 11400000, guid: 0fe2559813b3b44729bbac89e8e0af81, type: 2}

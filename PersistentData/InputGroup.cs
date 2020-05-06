@@ -100,6 +100,21 @@ namespace AltSalt.Maestro
         private BoolReference _forkTransitionActive = new BoolReference();
 
         public BoolReference forkTransitionActive => _forkTransitionActive;
+        
+        
+        [SerializeField]
+        [FoldoutGroup("Calculations")]
+        private V2Reference _keyboardInputForce = new V2Reference();
+
+        public V2Reference keyboardInputForce => _keyboardInputForce;
+
+
+        [SerializeField]
+        [FoldoutGroup("Calculations")]
+        private FloatReference _mouseScrollDelta = new FloatReference();
+
+        public FloatReference mouseScrollDelta => _mouseScrollDelta;
+        
 
     #endregion
 
@@ -175,6 +190,13 @@ namespace AltSalt.Maestro
         private ComplexEventManualTrigger _resumeMomentum = new ComplexEventManualTrigger();
 
         public ComplexEventManualTrigger resumeMomentum => _resumeMomentum;
+        
+        [Required]
+        [FoldoutGroup("Events")]
+        [SerializeField]
+        private SimpleEventTrigger _onScrollEnd = new SimpleEventTrigger();
+
+        public SimpleEventTrigger onScrollEnd => _onScrollEnd;
         
         [Required]
         [FoldoutGroup("Events")]

@@ -26,13 +26,13 @@ MonoBehaviour:
     _customKey: {fileID: 0}
   - description: Color variable - initial fade color
     dataType: 4
-    customKey: 0
-    _customKey: {fileID: 0}
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 47aaf992e82704916b530bc78671ba01, type: 2}
   - description: Show loading spinner
     dataType: 2
     customKey: 0
     _customKey: {fileID: 0}
   - description: Simple event - callback
     dataType: 4
-    customKey: 0
-    _customKey: {fileID: 0}
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 420ddf56ca3e24f8bbd4453eb1c66057, type: 2}

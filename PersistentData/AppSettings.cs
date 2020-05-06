@@ -359,7 +359,14 @@ namespace AltSalt.Maestro
             return userData.GetUserPreferences(userKey).invertXInput.GetValue();
         }
         
+        // Mouse Scroll Sensitivity
         
+        public float GetMouseScrollSensitivity(GameObject callingObject, UserDataKey userKey)
+        {
+            return userData.GetUserPreferences(userKey).mouseScrollSensitivity.GetValue();
+        }
+
+
         // Autoplay Enabled
         
         public bool GetUserAutoplayEnabled(Object callingObject, UserDataKey userKey)
@@ -458,7 +465,33 @@ namespace AltSalt.Maestro
         {
             return inputData.GetInputGroup(inputGroupKey).forkTransitionActive.SetValue(callingObject, targetValue);
         }
+        
+        
+        // Keyboard Input Force
+        
+        public Vector2 GetKeyboardInputForce(GameObject callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).keyboardInputForce.GetValue();
+        }
+        
+        public V2Variable SetKeyboardInputFoce(GameObject callingObject, InputGroupKey inputGroupKey, Vector2 targetValue)
+        {
+            return inputData.GetInputGroup(inputGroupKey).keyboardInputForce.SetValue(callingObject, targetValue);
+        }
+        
+        
+        // Mouse Scroll Delta
 
+        public float GetMouseScrollDelta(GameObject callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).mouseScrollDelta.GetValue();
+        }
+        
+        public FloatVariable SetMouseScrollDelta(GameObject callingObject, InputGroupKey inputGroupKey, float targetValue)
+        {
+            return inputData.GetInputGroup(inputGroupKey).mouseScrollDelta.SetValue(callingObject, targetValue);
+        }
+        
 
         // Axis Transition Spread
 
@@ -640,6 +673,11 @@ namespace AltSalt.Maestro
         public ComplexEventManualTrigger GetResumeMomentum(GameObject callingObject, InputGroupKey inputGroupKey)
         {
             return inputData.GetInputGroup(inputGroupKey).resumeMomentum;
+        }
+        
+        public SimpleEventTrigger GetOnScrollEnd(GameObject callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).onScrollEnd;
         }
         
         public ComplexEventManualTrigger GetBoundaryReached(GameObject callingObject, InputGroupKey inputGroupKey)

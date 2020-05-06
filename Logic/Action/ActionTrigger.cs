@@ -189,6 +189,12 @@ namespace AltSalt.Maestro.Logic
         private List<ComplexEventActionData> _complexEventActions = new List<ComplexEventActionData>();
 
         private List<ComplexEventActionData> complexEventActions => _complexEventActions;
+        
+        [SerializeField]
+        [ShowIf(nameof(debugMode))]
+        private List<PlatformActionData> _platformActions = new List<PlatformActionData>();
+
+        private List<PlatformActionData> platformActions => _platformActions;
 
         private enum ActionType
         {
@@ -200,7 +206,8 @@ namespace AltSalt.Maestro.Logic
             Color,
             ConditionResponse,
             SimpleEventTrigger,
-            ComplexEventTrigger
+            ComplexEventTrigger,
+            Platform
         }
 
         [SerializeField]
@@ -257,6 +264,7 @@ namespace AltSalt.Maestro.Logic
             actionData.AddRange(conditionResponseActions);
             actionData.AddRange(simpleEventActions);
             actionData.AddRange(complexEventActions);
+            actionData.AddRange(platformActions);
             
             actionData.Sort((x, y) => x.priority.CompareTo(y.priority) );
         }
@@ -272,6 +280,7 @@ namespace AltSalt.Maestro.Logic
             conditionResponseActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             simpleEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
             complexEventActions.Sort((x, y) => x.priority.CompareTo(y.priority));
+            platformActions.Sort((x, y) => x.priority.CompareTo(y.priority));
         }
         
 #if UNITY_EDITOR
@@ -357,6 +366,15 @@ namespace AltSalt.Maestro.Logic
                     complexEventActions.Add(action);
                     break;
                 }
+
+                case ActionType.Platform:
+                {
+                    var action = new PlatformActionData(actionData.Count + 1);
+                    actionData.Add(action);
+                    platformActions.Add(action);
+                    break;
+                }
+
             }
         }
         
@@ -389,6 +407,13 @@ namespace AltSalt.Maestro.Logic
                     .FindPropertyRelative(nameof(_genericActions))
                     .GetArrayElementAtIndex(i);
                 (genericActions[i] as ISyncUnityEventHeadings).SyncUnityEventHeadings(serializedActionData);
+            }
+            
+            for (int i = 0; i < platformActions.Count; i++) {
+                SerializedProperty serializedActionData = serializedActionTrigger
+                    .FindPropertyRelative(nameof(_platformActions))
+                    .GetArrayElementAtIndex(i);
+                (platformActions[i] as ISyncUnityEventHeadings).SyncUnityEventHeadings(serializedActionData);
             }
         }
 
@@ -484,6 +509,15 @@ namespace AltSalt.Maestro.Logic
                         }
                         break;
                     }
+
+                    case PlatformActionData actionData:
+                    {
+                        if (platformActions.Contains(actionData) == false) {
+                            platformActions.Add(actionData);
+                        }
+                        break;
+                    }
+
                 }
             }
             
@@ -512,6 +546,7 @@ namespace AltSalt.Maestro.Logic
             conditionResponseActions.RemoveAll(predicate);
             simpleEventActions.RemoveAll(predicate);
             complexEventActions.RemoveAll(predicate);
+            platformActions.RemoveAll(predicate);
             
             // Update priorities for all items based on their order
             // of appearance in the editor

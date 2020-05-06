@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5586192104068589373}
-  - component: {fileID: 4827785789869763722}
+  - component: {fileID: 434613236708063138}
   - component: {fileID: 4930552352443239110}
   - component: {fileID: 7723423724919345670}
   m_Layer: 12
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 3277510321888057679}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4827785789869763722
+--- !u!114 &434613236708063138
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7296299751573170500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 528675d467ef74060bd2099765db9b2b, type: 3}
+  m_Script: {fileID: 11500000, guid: cfb7d5eb44f14d0893cb5961a942c86e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _priority: 5
@@ -71,7 +71,7 @@ MonoBehaviour:
   _action:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4827785789869763722}
+      - m_Target: {fileID: 434613236708063138}
         m_MethodName: DeactivateAutoplayAllSequences
         m_Mode: 1
         m_Arguments:
@@ -103,7 +103,7 @@ MonoBehaviour:
   _action:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4827785789869763722}
+      - m_Target: {fileID: 434613236708063138}
         m_MethodName: DeactivateAutoplaySequence
         m_Mode: 0
         m_Arguments:
@@ -163,7 +163,7 @@ MonoBehaviour:
   _rootConfig: {fileID: 0}
   _autorunModules:
   - {fileID: 3719720165695611221}
-  - {fileID: 4827785789869763722}
+  - {fileID: 434613236708063138}
   _pauseMomentumDuringAutorun: 1
   _autorunData: []
 --- !u!1 &8733841028164870764
@@ -268,6 +268,9 @@ MonoBehaviour:
     _variable: {fileID: 0}
   - _isSystemReference: 0
     _referenceName: MainInput-AppUtilsRequested
+    _variable: {fileID: 0}
+  - _isSystemReference: 0
+    _referenceName: MainInput-MouseScrollDelta
     _variable: {fileID: 0}
   _action:
     m_PersistentCalls:

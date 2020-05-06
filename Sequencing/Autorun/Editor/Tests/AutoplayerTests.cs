@@ -43,7 +43,8 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
                 
             rootConfig = Object.FindObjectOfType<RootConfig>();
             rootConfig.Configure();
-            autoplayer = rootConfig.GetComponentInChildren<Autoplayer>();
+            Autorun_Controller autorunController = rootConfig.GetComponentInChildren<Autorun_Controller>();
+            autoplayer = autorunController.GetComponentInChildren<Autoplayer>();
             sequenceControllers = rootConfig.masterSequences[0].sequenceControllers;
 
             sequenceControllers[0].sequence.active = true;
@@ -198,7 +199,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             
             Assert.AreEqual(false, initialSequence.sequenceController.gameObject.active);
             Assert.AreEqual(true, adjacentSequence.sequenceController.gameObject.active);
-            Assert.Greater(adjacentSequence.currentTime, 0);
+            Assert.AreEqual(.5f, (float)adjacentSequence.currentTime);
         }
         
         [UnityTest]
@@ -225,7 +226,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun.Tests
             
             Assert.AreEqual(false, initialSequence.sequenceController.gameObject.active);
             Assert.AreEqual(true, adjacentSequence.sequenceController.gameObject.active);
-            Assert.Less(adjacentSequence.currentTime, adjacentSequence.duration);
+            Assert.AreEqual(1.5f, (float)adjacentSequence.currentTime);
         }
     }
 }

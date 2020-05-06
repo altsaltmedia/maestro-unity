@@ -49,7 +49,6 @@ namespace AltSalt.Maestro.Layout
             // Make sure not only that we're active, but
             // that the user isn't pressing a UI element
             if(active == true && EventSystem.current.currentSelectedGameObject == null) {
-                Debug.Log("Button being pressed");
                 action.Invoke(this.gameObject);
             }
         }

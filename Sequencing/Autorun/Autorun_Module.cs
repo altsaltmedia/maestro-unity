@@ -26,6 +26,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             autorunData.forwardUpdateActive = false;
             autorunData.backwardUpdateActive = false;
             autorunData.eligibleForAutoplay = false;
+            autorunData.activeAutorunModule = null;
             targetMasterSequence.RequestDeactivateForwardAutoplay(targetSequence,
                 autorunModule.priority, autorunModule.gameObject.name);
             autorunData.easingUtility.Reset();
@@ -33,21 +34,7 @@ namespace AltSalt.Maestro.Sequencing.Autorun
             return autorunData;
         }
 
-        public static Autorun_Data AttemptRegisterAutorunModule(Autorun_Module autorunModule, Autorun_Data autorunData, out bool registrationSuccessful)
-        {
-            registrationSuccessful = false;
-            
-            if (autorunData.activeAutorunModule == null ||
-                autorunModule.priority > autorunData.activeAutorunModule.priority) {
-                autorunData.activeAutorunModule = autorunModule;
-                registrationSuccessful = true;
-            }
-
-            if (autorunData.activeAutorunModule == autorunModule) {
-                registrationSuccessful = true;
-            }
-
-            return autorunData;
-        }
+        public abstract Autorun_Data AttemptRegisterAutorunModule(Autorun_Module autorunModule,
+            Autorun_Data autorunData, out bool registrationSuccessful);
     }
 }
