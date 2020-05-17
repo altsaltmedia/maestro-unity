@@ -33,7 +33,7 @@ namespace AltSalt.Maestro.Audio
         public void PlayAudioClip(ComplexPayload complexPayload)
         {
             AudioClipBundle audioClipBundle = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
-            for (int i = 0; i < audioClipBundle.audioClipData.Count; i++) {
+            for (int i = 0; i < audioClipBundle.audioClipDataList.Count; i++) {
 
                 bool loopClip = complexPayload.GetBoolValue(loopAudioKey) == true;
 
@@ -49,7 +49,7 @@ namespace AltSalt.Maestro.Audio
                     volume = complexPayload.GetFloatValue(pitchKey);
                 }
 
-                AudioElement audioElement = new AudioElement(audioPrefab, transform, audioClipBundle.audioClipData[i], loopClip, volume, pitch, audioClipBundle);
+                AudioElement audioElement = new AudioElement(audioPrefab, transform, audioClipBundle.audioClipDataList[i], loopClip, volume, pitch, audioClipBundle);
                 audioElements.Add(audioElement);
             }
         }
@@ -57,7 +57,7 @@ namespace AltSalt.Maestro.Audio
         public void PlayOneShot(ComplexPayload complexPayload)
         {
             AudioClipBundle audioClipBundle = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
-            for (int i = 0; i < audioClipBundle.audioClipData.Count; i++) {
+            for (int i = 0; i < audioClipBundle.audioClipDataList.Count; i++) {
 
                 float volume = 1f;
 
@@ -65,8 +65,14 @@ namespace AltSalt.Maestro.Audio
                     volume = complexPayload.GetFloatValue(volumeKey);
                 }
                 
-                oneShotHandler.PlayOneShot(audioClipBundle.audioClipData[i].audioClip, volume);
+                oneShotHandler.PlayOneShot(audioClipBundle.audioClipDataList[i].audioClip, volume);
             }
+        }
+        
+        public void PlayOneShotOverride(ComplexPayload complexPayload)
+        {
+            oneShotHandler.Stop();
+            PlayOneShot(complexPayload);
         }
 
         public void FadeOutAudioClips(ComplexPayload complexPayload)

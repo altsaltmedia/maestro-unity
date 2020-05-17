@@ -593,8 +593,6 @@ namespace AltSalt.Maestro
 
         public static Object[] RenameElements(string newName, Object[] targetObjects)
         {
-            Array.Sort(targetObjects, new Utils.GameObjectSort());
-
             for (int i = 0; i < targetObjects.Length; i++) {
                 if (newName.Contains("{x}")) {
                     targetObjects[i].name = newName.Replace("{x}", (i + 1).ToString());

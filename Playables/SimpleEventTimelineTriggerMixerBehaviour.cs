@@ -39,6 +39,10 @@ namespace AltSalt.Maestro
                     inputWeight = playable.GetInputWeight(i);
                     inputPlayable = (ScriptPlayable<SimpleEventTimelineTriggerBehaviour>)playable.GetInput(i);
                     input = inputPlayable.GetBehaviour ();
+                    
+                    if (input.disableOnForward == true) {
+                        continue;
+                    }
 
                     if (inputWeight >= 1 && input.triggered == false) {
                         input.triggered = true;

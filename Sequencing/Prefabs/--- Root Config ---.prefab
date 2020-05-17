@@ -74,7 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69b4f672e736460cac69b1756a87408a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rootConfig: {fileID: 0}
+  _rootConfig: {fileID: 6155791989548499805}
   _genericInputModules:
   - {fileID: 4972696258038752415}
 --- !u!1 &2293772597486834399
@@ -138,8 +138,7 @@ MonoBehaviour:
     _referenceName: User1
     _variable: {fileID: 11400000, guid: fb3e0d4ca475e400798c9ffb07637101, type: 2}
   _masterSequenceContainer: {fileID: 1228805381023720773}
-  _masterSequences:
-  - {fileID: 0}
+  _masterSequences: []
   _joiner: {fileID: 1208249485442221154}
   _rootDataCollectors:
   - {fileID: 7238348885761343933}

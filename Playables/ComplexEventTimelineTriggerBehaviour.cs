@@ -27,6 +27,11 @@ namespace AltSalt.Maestro
         public override bool disableOnReverse => _disableOnReverse;
         
         [SerializeField]
+        private bool _disableOnForward = false;
+
+        public override bool disableOnForward => _disableOnForward;
+        
+        [SerializeField]
         private bool _executeWhileLoadingBookmarks = false;
 
         public override bool executeWhileLoadingBookmarks => _executeWhileLoadingBookmarks;

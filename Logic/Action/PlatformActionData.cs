@@ -135,7 +135,7 @@ namespace AltSalt.Maestro.Logic
 #endif
             
 #if UNITY_ANDROID
-            ifiandroid == true) {
+            if(android == true) {
                 action.Invoke(callingObject);
             }
 #endif

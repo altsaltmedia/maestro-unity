@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 5805219683874016661}
   - component: {fileID: 93205174341385747}
   - component: {fileID: 2811190935158469212}
+  - component: {fileID: 6987131799620042802}
+  - component: {fileID: 4591119677114800505}
   m_Layer: 8
   m_Name: EventSystem
   m_TagString: Untagged
@@ -66,3 +68,46 @@ MonoBehaviour:
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
+--- !u!114 &6987131799620042802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4206146555576179860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37bc76dd2ad745b484789e1552b5496d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4591119677114800505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4206146555576179860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: ResetSelectedGameObject
+    _variable: {fileID: 11400000, guid: 6fba7f2eca317496195f078981e4d1a7, type: 2}
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6987131799620042802}
+        m_MethodName: ResetSelectedGameObject
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0

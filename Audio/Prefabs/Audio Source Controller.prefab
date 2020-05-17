@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 1665444724315265664}
   - component: {fileID: 1665444724315265665}
   - component: {fileID: -6483300248613923237}
+  - component: {fileID: 4229745903401209102}
   - component: {fileID: 1665444724871226524}
+  - component: {fileID: 6526065413387573963}
   - component: {fileID: -5602970116745558848}
   m_Layer: 0
   m_Name: Audio Source Controller
@@ -65,13 +67,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: 149e99f5110164b58a5eedc546849b72, type: 2}
   _complexEventReference:
     _isSystemReference: 0
-    _referenceName: 
+    _referenceName: PlayAudio
     _variable: {fileID: 11400000, guid: 149e99f5110164b58a5eedc546849b72, type: 2}
   DeveloperDescription: 
-  _response:
+  _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1665444724315265664}
@@ -85,8 +86,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
 --- !u!114 &-6483300248613923237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,13 +99,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: d131a8a07250a4b9c8f5e808b6860e32, type: 2}
   _complexEventReference:
     _isSystemReference: 0
-    _referenceName: 
+    _referenceName: PlayOneShot
     _variable: {fileID: 11400000, guid: d131a8a07250a4b9c8f5e808b6860e32, type: 2}
   DeveloperDescription: 
-  _response:
+  _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1665444724315265664}
@@ -119,8 +118,39 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
+--- !u!114 &4229745903401209102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665444724315265679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _complexEventReference:
+    _isSystemReference: 0
+    _referenceName: PlayOneShotOverride
+    _variable: {fileID: 11400000, guid: def9401cd91094bd39fa8b505e81217b, type: 2}
+  DeveloperDescription: 
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1665444724315265664}
+        m_MethodName: PlayOneShotOverride
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
 --- !u!114 &1665444724871226524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,13 +163,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9831e0dd466d346fd9be556ae539bf26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _complexEvent: {fileID: 11400000, guid: cac00581d12b345fea4dbf502eed37ef, type: 2}
   _complexEventReference:
     _isSystemReference: 0
-    _referenceName: 
+    _referenceName: FadeOutAudio
     _variable: {fileID: 11400000, guid: cac00581d12b345fea4dbf502eed37ef, type: 2}
   DeveloperDescription: 
-  _response:
+  _action:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1665444724315265664}
@@ -153,8 +182,38 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _doNotRecord: 0
-  _migrated: 1
+  _skipRegistration: 0
+--- !u!114 &6526065413387573963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665444724315265679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4e675eab794499cad90dfbffee07cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _simpleSignalReferences:
+  - _isSystemReference: 0
+    _referenceName: StopOneShot
+    _variable: {fileID: 11400000, guid: af6a04f881c1246f5a11aa6f94bcdb16, type: 2}
+  _action:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -5602970116745558848}
+        m_MethodName: Stop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _skipRegistration: 0
 --- !u!82 &-5602970116745558848
 AudioSource:
   m_ObjectHideFlags: 0
@@ -164,7 +223,8 @@ AudioSource:
   m_GameObject: {fileID: 1665444724315265679}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 71ac4b15493a541ca817f8fd8271e4ec,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1

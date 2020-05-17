@@ -165,7 +165,7 @@ namespace AltSalt.Maestro
             // Scene Loading Progress
             
             (sceneLoadingProgress.GetVariable() as FloatVariable).defaultValue = 0;
-            (sceneLoadingProgress.GetVariable() as FloatVariable).resetOnGameRefresh = true;
+            (sceneLoadingProgress.GetVariable() as FloatVariable).resetOnGameRefresh = false;
 
             for (int i = 0; i < fields.Length; i++) {
                 var variableReference = fields[i].GetValue(this);

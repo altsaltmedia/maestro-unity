@@ -125,6 +125,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
+      propertyPath: _actionTrigger._simpleEventActions.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._simpleEventActions.Array.data[0]._simpleEventTriggers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._simpleEventActions.Array.data[1]._simpleEventTriggers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
       propertyPath: _actionTrigger._boolActions.Array.data[0]._priority
       value: 5
       objectReference: {fileID: 0}
@@ -236,7 +251,7 @@ PrefabInstance:
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._complexEventActions.Array.data[0]._priority
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
@@ -252,7 +267,7 @@ PrefabInstance:
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
       propertyPath: _actionTrigger._actionType
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
         type: 3}
@@ -319,6 +334,38 @@ PrefabInstance:
         type: 3}
       propertyPath: _actionTrigger._resetGameStateOnExecute
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._simpleEventActions.Array.data[0]._priority
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._simpleEventActions.Array.data[0]._simpleEventTriggers.Array.data[0]._referenceName
+      value: ResetSelectedGameObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._simpleEventActions.Array.data[0]._simpleEventTriggers.Array.data[0]._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 6fba7f2eca317496195f078981e4d1a7,
+        type: 2}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._simpleEventActions.Array.data[1]._priority
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._simpleEventActions.Array.data[1]._simpleEventTriggers.Array.data[0]._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: 6fba7f2eca317496195f078981e4d1a7,
+        type: 2}
+    - target: {fileID: 5746869645302786098, guid: 8da0bd6e170714552929b26bf7311610,
+        type: 3}
+      propertyPath: _actionTrigger._simpleEventActions.Array.data[1]._simpleEventTriggers.Array.data[0]._referenceName
+      value: ResetSelectedGameObject
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8da0bd6e170714552929b26bf7311610, type: 3}

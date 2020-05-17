@@ -10,13 +10,21 @@ namespace AltSalt.Maestro
     [Serializable]
     public class SimpleEventReference : ReferenceBase
     {
-        [Required]
+        [Required("Field not populated - make sure this is intentional", InfoMessageType.Warning)]
         [SerializeField]
         [FormerlySerializedAs("_simpleEvent")]
         [FormerlySerializedAs("simpleEvent")]
         [OnValueChanged(nameof(UpdateReferenceName))]
         [PropertySpace(SpaceBefore = 0, SpaceAfter = 5)]
         protected SimpleEvent _variable;
+
+        private bool _isRequired;
+        
+        public bool isRequired
+        {
+            get => _isRequired;
+            set => _isRequired = value;
+        } 
         
         public override ScriptableObject GetVariable()
         {

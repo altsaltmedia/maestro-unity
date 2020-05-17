@@ -79,9 +79,9 @@ namespace AltSalt.Maestro.Animation
                             
                             case TextAnimationStyle.Whole:
                                 trackBinding.color = input.targetValue;
-                                // for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
-                                //     SetCharacterColor(trackBinding, input.targetValue, j);
-                                // }
+                                for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
+                                    SetCharacterColor(trackBinding, input.targetValue, j);
+                                }
                                 break;
 
                             case TextAnimationStyle.Character:
@@ -97,6 +97,9 @@ namespace AltSalt.Maestro.Animation
                             
                             case TextAnimationStyle.Whole:
                                 trackBinding.color = input.initialValue;
+                                for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
+                                    SetCharacterColor(trackBinding, input.initialValue, j);
+                                }
                                 break;
 
                             case TextAnimationStyle.Character:
@@ -108,6 +111,7 @@ namespace AltSalt.Maestro.Animation
                     }
                 }
             }
+            trackBinding.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
         }
         
         private void AnimateCharacters(TMP_Text textMeshPro)
@@ -192,7 +196,7 @@ namespace AltSalt.Maestro.Animation
             characterColors[vertexIndex + 2] = targetColor32;
             characterColors[vertexIndex + 3] = targetColor32;
 
-            textComponent.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
+//            textComponent.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
 
             return textComponent;
         }

@@ -1,6 +1,10 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace AltSalt.Maestro.Audio
 {
@@ -62,7 +66,7 @@ namespace AltSalt.Maestro.Audio
                 
                 case nameof(ButtonNames.AudioClipBundle):
                     button.clickable.clicked += () =>  {
-                        Selection.objects = new[] { Utils.CreateScriptableObjectAsset(typeof(AudioClipBundle), objectName, selectedObjectDirectory) };
+                        Selection.objects = CreateAudioClipBundle(Selection.objects, selectedObjectDirectory, objectName);
                     };
                     ModuleUtils.AddToVisualElementToggleData(toggleData, EnableCondition.DirectoryAndNamePopulated, button);
                     break;
@@ -86,6 +90,28 @@ namespace AltSalt.Maestro.Audio
             }
 
             return button;
+        }
+
+        private static AudioClipBundle[] CreateAudioClipBundle(Object[] selection, string targetPath, string objectName = "AudioClipBundle")
+        {
+            List<AudioClipBundle> newSelection = new List<AudioClipBundle>();
+            AudioClip[] audioClips = Array.ConvertAll(Utils.FilterSelection(selection, typeof(AudioClip)), x => (AudioClip)x);
+            if (audioClips.Length > 0) {
+                for (int i = 0; i < audioClips.Length; i++) {
+                    AudioClipBundle audioClipBundle = Utils.CreateScriptableObjectAsset(typeof(AudioClipBundle), audioClips[i].name, targetPath) as AudioClipBundle;
+                    
+                    AudioClipData audioClipData = new AudioClipData(audioClips[i]);
+                    audioClipBundle.audioClipDataList.Add(audioClipData);
+                    EditorUtility.SetDirty(audioClipBundle);
+                    
+                    newSelection.Add(audioClipBundle);
+                }
+            }
+            else {
+                newSelection.Add(Utils.CreateScriptableObjectAsset(typeof(AudioClipBundle), objectName, targetPath) as AudioClipBundle);
+            }
+
+            return newSelection.ToArray();
         }
 
         private static AudioMixer CreateAudioMixer(AudioMixer audioMixerTemplate, string targetName, string targetDirectory)

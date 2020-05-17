@@ -46,6 +46,8 @@ namespace AltSalt.Maestro
         public bool executeWhileAppUtilsRequested => _executeWhileAppUtilsRequested;
         
         public abstract bool disableOnReverse { get; }
+
+        public abstract bool disableOnForward { get; }
         
         public abstract bool executeWhileLoadingBookmarks { get; }
         

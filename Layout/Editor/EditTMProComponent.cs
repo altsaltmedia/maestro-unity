@@ -57,6 +57,11 @@ namespace AltSalt.Maestro.Layout
             AlignCenter,
             AlignRight,
             Justify,
+            Bold,
+            Italic,
+            Underline,
+            Uppercase,
+            Lowercase,
             Flush,
             AddResponsiveTextSize,
             SetSortingLayer,
@@ -386,6 +391,22 @@ namespace AltSalt.Maestro.Layout
                     Undo.RecordObject(textMeshPro, "set text alignment");
                     componentList.Add(textMeshPro);
                     textMeshPro.alignment = textAlignment;
+                }
+            }
+
+            return componentList.ToArray();
+        }
+        
+        public static TMP_Text[] SetFontStyle(GameObject[] objectSelection, FontStyles fontStyle)
+        {
+            List<TMP_Text> componentList = new List<TMP_Text>();
+
+            for (int i = 0; i < objectSelection.Length; i++) {
+                TMP_Text textMeshPro = objectSelection[i].GetComponent<TMP_Text>();
+                if (textMeshPro != null) {
+                    Undo.RecordObject(textMeshPro, "set text alignment");
+                    componentList.Add(textMeshPro);
+                    textMeshPro.fontStyle = fontStyle;
                 }
             }
 

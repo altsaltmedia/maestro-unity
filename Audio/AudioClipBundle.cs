@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Serialization;
 
 namespace AltSalt.Maestro.Audio
 {
@@ -15,8 +16,8 @@ namespace AltSalt.Maestro.Audio
         [Header("Audio Clip Bundle")]
         string description = "";
 #endif
-        [SerializeField]
-        public List<AudioClipData> audioClipData = new List<AudioClipData>();
+        [FormerlySerializedAs("audioClipData"),SerializeField]
+        public List<AudioClipData> audioClipDataList = new List<AudioClipData>();
     }
 
     [Serializable]
@@ -28,6 +29,10 @@ namespace AltSalt.Maestro.Audio
         [SerializeField]
         public AudioMixerGroup targetMixerGroup;
 
+        public AudioClipData(AudioClip audioClip)
+        {
+            this.audioClip = audioClip;
+        }
     }
 
 }

@@ -45,6 +45,13 @@ xsi:schemaLocation="
                     <engine:Button text="F" class="col-15-percent" name="Flush"/>
                     <engine:Button text="Trim Text Box " class="col-full" name="TrimTextBox" />
 
+                    <engine:Label text="Font Style: " class="col-1" />
+                    <engine:Button text="B" class="col-15-percent" name="Bold"/>
+                    <engine:Button text="I" class="col-15-percent" name="Italic"/>
+                    <engine:Button text="U" class="col-15-percent" name="Underline"/>
+                    <engine:Button text="ab" class="col-15-percent" name="Lowercase"/>
+                    <engine:Button text="AB" class="col-15-percent" name="Uppercase"/>
+
                     <!-- Layer -->
                     <editor:PropertyField label="Target Sorting Layer :" class="col-full" value="" binding-path="targetLayer"/>
                     <engine:Button text="Set Sorting Layer" class="col-full" name="SetSortingLayer"/>

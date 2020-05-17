@@ -23,9 +23,23 @@ namespace AltSalt.Maestro.Sequencing
         private UserDataKeyReference _userKey = new UserDataKeyReference();
 
         public UserDataKey userKey => _userKey.GetVariable() as UserDataKey;
-        
-        private SimpleEventTrigger configurationCompleted =>
-            appSettings.GetConfigurationCompleted(this, inputGroupKey);
+
+        [SerializeField]
+        private SimpleEventTrigger _customConfigurationCompletedEvent = new SimpleEventTrigger();
+
+        private SimpleEventTrigger customConfigurationCompletedEvent => _customConfigurationCompletedEvent;
+
+        private SimpleEventTrigger configurationCompleted
+        {
+            get
+            {
+                if (customConfigurationCompletedEvent.GetVariable() != null) {
+                    return customConfigurationCompletedEvent;
+                }
+                
+                return appSettings.GetConfigurationCompleted(this, inputGroupKey);
+            }
+        }
         
         public SimpleEventTrigger sequenceModified =>
             appSettings.GetSequenceModified(this.gameObject, inputGroupKey);
@@ -64,7 +78,8 @@ namespace AltSalt.Maestro.Sequencing
             _appSettings.PopulateVariable(this, nameof(_appSettings));
             _inputGroupKey.PopulateVariable(this, nameof(_inputGroupKey));
             _userKey.PopulateVariable(this, nameof(_userKey));
-            
+            _customConfigurationCompletedEvent.PopulateVariable(this, nameof(_customConfigurationCompletedEvent));
+            _customConfigurationCompletedEvent.isRequired = false;
 #endif
             if (Application.isPlaying == false || appSettings.playStartedFromInitializer == false) {
                 Configure();

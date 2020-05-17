@@ -246,6 +246,7 @@ namespace AltSalt.Maestro.Logic
         
         private IEnumerator HideActivityIndicator()
         {
+            Debug.Log("Hiding activity indicator");
 #if UNITY_IPHONE
             Handheld.StopActivityIndicator();
 #elif UNITY_ANDROID
