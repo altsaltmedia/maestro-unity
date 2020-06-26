@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 using UnityEngine.Video;
 
 namespace AltSalt.Maestro.Layout
@@ -7,6 +8,18 @@ namespace AltSalt.Maestro.Layout
     [RequireComponent(typeof(VideoPlayer))]
     public class SimpleVideoPlayer : MonoBehaviour
     {
+        [SerializeField]
+        private bool _useStreamingAssets;
+
+        public bool useStreamingAssets => _useStreamingAssets;
+
+        [FilePath(ParentFolder = "Assets/StreamingAssets")]
+        [SerializeField]
+        [ShowIf(nameof(useStreamingAssets))]
+        private string _videoPath;
+        
+        public string videoPath => _videoPath;
+    
         [SerializeField]
         private double _startTime;
 
@@ -38,6 +51,9 @@ namespace AltSalt.Maestro.Layout
         private void Awake()
         {
             videoPlayer = GetComponent<VideoPlayer>();
+            if (useStreamingAssets == true) {
+                videoPlayer.url = System.IO.Path.Combine ( Application.streamingAssetsPath, videoPath);
+            }
             videoPlayer.prepareCompleted += PrepareCompletedCallback; 
             videoPlayer.started += FireStartedCallback;
             videoPlayer.loopPointReached += FireLoopPointReachedCallback;
