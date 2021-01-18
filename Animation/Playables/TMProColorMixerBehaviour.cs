@@ -74,21 +74,35 @@ namespace AltSalt.Maestro.Animation
                 }
                 else {
                     if(timelineInstanceConfig.currentTime >= input.endTime) {
-                        
-                        switch (input.textAnimationStyle) {
-                            
-                            case TextAnimationStyle.Whole:
-                                trackBinding.color = input.targetValue;
-                                for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
-                                    SetCharacterColor(trackBinding, input.targetValue, j);
-                                }
-                                break;
 
-                            case TextAnimationStyle.Character:
-                                for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
-                                    SetCharacterColor(trackBinding, input.targetValue, j);
-                                }
-                                break;
+                        bool inResetZone = false;
+                        
+                        if (i < inputCount - 1) {
+                            var followingInputPlayable = (ScriptPlayable<TMProColorBehaviour>)playable.GetInput(i);
+                            var followinginput = followingInputPlayable.GetBehaviour ();
+
+                            if (timelineInstanceConfig.currentTime < followinginput.startTime) {
+                                inResetZone = true;
+                            }
+                        }
+
+                        if (i == inputCount - 1 || inResetZone == true) {
+                            
+                            switch (input.textAnimationStyle) {
+                            
+                                case TextAnimationStyle.Whole:
+                                    trackBinding.color = input.targetValue;
+                                    for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
+                                        SetCharacterColor(trackBinding, input.targetValue, j);
+                                    }
+                                    break;
+
+                                case TextAnimationStyle.Character:
+                                    for (int j = 0; j < trackBinding.textInfo.characterCount; j++) {
+                                        SetCharacterColor(trackBinding, input.targetValue, j);
+                                    }
+                                    break;
+                            }
                         }
                         
                     } else if (i == 0 && timelineInstanceConfig.currentTime <= input.startTime) {
