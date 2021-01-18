@@ -161,7 +161,7 @@ namespace AltSalt.Maestro.Sequencing.Touch
                     touchExtentsData.Add(new TouchForkExtents(axisMonitor, touchData, forkDataCollection[touchData.sequence][i]));
                 }
             }
-
+            
             touchExtentsData.Sort(new AxisExtentsSort());
             return touchExtentsData;
         }
@@ -178,6 +178,8 @@ namespace AltSalt.Maestro.Sequencing.Touch
                         return x2.markerMasterTime.CompareTo(y2.startTime);
                     case TouchForkExtents x3 when y is AxisExtents y3:
                         return x3.startTime.CompareTo(y3.markerMasterTime);
+                    case TouchForkExtents x4 when y is TouchForkExtents y4:
+                        return x4.startTime.CompareTo(y4.startTime);
                 }
                 
                 throw new System.Exception("Unable to sort axis extents");

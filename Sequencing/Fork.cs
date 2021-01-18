@@ -74,13 +74,17 @@ namespace AltSalt.Maestro.Sequencing
 
         public bool TryGetDestinationBranch(out BranchingPath branchingPath)
         {
-            if (destinationBranch.sequence != null) {
-                branchingPath = destinationBranch;
-                return true;
-            }
-            
             branchingPath = null;
-            return false;
+            bool hasDestination = false;
+            try {
+                if (destinationBranch.sequence != null) {
+                    branchingPath = destinationBranch;
+                    hasDestination = true;
+                }
+            }
+            catch { }
+
+            return hasDestination;
         }
             
         private static bool IsPopulated(List<BranchingPath> attribute)

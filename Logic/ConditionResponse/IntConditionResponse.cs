@@ -54,6 +54,12 @@ namespace AltSalt.Maestro.Logic
                         return true;
                     }
                     break;
+                    
+                case ComparisonValues.NotEqualTo:
+                    if (intReference.GetValue() != intConditionVar.GetValue()) {
+                        return true;
+                    }
+                    break;
 
                 case ComparisonValues.GreaterThan:
                     if (intReference.GetValue() > intConditionVar.GetValue()) {

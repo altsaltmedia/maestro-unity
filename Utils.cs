@@ -47,7 +47,7 @@ namespace AltSalt.Maestro
 
     public enum DataType { stringType, floatType, boolType, intType, scriptableObjectType, systemObjectType }
 
-    public enum ComparisonValues { GreaterThan, LessThan, EqualTo }
+    public enum ComparisonValues { GreaterThan, LessThan, EqualTo, NotEqualTo }
     
     public enum VarDependencies {
         SceneAspectRatio,
