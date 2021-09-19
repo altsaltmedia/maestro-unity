@@ -275,13 +275,18 @@ namespace AltSalt.Maestro.Sequencing.Autorun
         private static float GetAutoplayModifier(Autoplayer autoplayer)
         {
             float autoplayModifer;
-            
-            if (autoplayer.autorunController.useFrameStepValue == false) {
-                autoplayModifer = Time.smoothDeltaTime;
-            }
-            else {
-                autoplayModifer = autoplayer.frameStepValue;
-            }
+
+            autoplayModifer = Time.smoothDeltaTime;
+
+            // No longer needed as of Unity 2020.2, which now has a reliable
+            // Time.deltatime
+            // 
+            //if (autoplayer.autorunController.useFrameStepValue == false) {
+            //    autoplayModifer = Time.smoothDeltaTime;
+            //}
+            //else {
+            //    autoplayModifer = autoplayer.frameStepValue;
+            //}
 
             if (autoplayer.autorunController.isReversing == true) {
                 autoplayModifer *= -1f;

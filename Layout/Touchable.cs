@@ -10,9 +10,9 @@ namespace AltSalt.Maestro.Layout
     {
         [FormerlySerializedAs("active")]
         [SerializeField]
-        private bool _active = true;
+        public bool _active = true;
 
-        private bool active {
+        public bool active {
             get => _active;
             set => _active = value;
         }
