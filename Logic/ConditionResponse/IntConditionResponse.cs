@@ -73,6 +73,13 @@ namespace AltSalt.Maestro.Logic
                         return true;
                     }
                     break;
+
+                case ComparisonValues.MultipleOf:
+
+                    if (intReference.GetValue() % intConditionVar.GetValue() == 0) {
+                        return true;
+                    }
+                    break;
             }
 
             return false;
