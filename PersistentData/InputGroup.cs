@@ -314,7 +314,13 @@ namespace AltSalt.Maestro
         
         public FloatReference momentumSensitivity => _momentumSensitivity;
 
-        
+        [SerializeField]
+        [FoldoutGroup("Configuration")]
+        private FloatReference _momentumDepletionThreshold = new FloatReference();
+
+        public FloatReference momentumDepletionThreshold => _momentumDepletionThreshold;
+
+
         [SerializeField]
         [FoldoutGroup("Configuration")]
         private FloatReference _gestureTimeMultiplier = new FloatReference();
@@ -444,6 +450,7 @@ namespace AltSalt.Maestro
             (momentumMinMax.GetVariable() as FloatVariable).defaultValue = 2000f;
             (momentumDecay.GetVariable() as FloatVariable).defaultValue = .95f;
             (momentumSensitivity.GetVariable() as FloatVariable).defaultValue = 1f;
+            (momentumDepletionThreshold.GetVariable() as FloatVariable).defaultValue = .00001f;
             (gestureTimeMultiplier.GetVariable() as FloatVariable).defaultValue = 50f;
             (cancelMomentumTimeThreshold.GetVariable() as FloatVariable).defaultValue = .2f;
             (cancelMomentumMagnitudeThreshold.GetVariable() as FloatVariable).defaultValue = 815f;

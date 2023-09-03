@@ -539,8 +539,14 @@ namespace AltSalt.Maestro
         {
             return inputData.GetInputGroup(inputGroupKey).momentumSensitivity.GetValue();
         }
-        
-        
+
+        // Momentum Depletion Threshold
+
+        public float GetMomentumDepletionThreshold(Object callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).momentumDepletionThreshold.GetValue();
+        }
+
         // Gesture Time Multiplier
 
         public float GetGestureTimeMultiplier(Object callingObject, InputGroupKey inputGroupKey)

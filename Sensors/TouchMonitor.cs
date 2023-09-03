@@ -9,7 +9,7 @@ https://www.altsalt.com / ricky@altsalt.com
 **********************************************/
 
 using UnityEngine;
-using HedgehogTeam.EasyTouch;
+using UnityEngine.InputSystem;
 using Sirenix.OdinInspector;
 
 namespace AltSalt.Maestro.Sensors
@@ -17,6 +17,7 @@ namespace AltSalt.Maestro.Sensors
     [ExecuteInEditMode]
     public class TouchMonitor : MonoBehaviour
     {
+
         [Required]
         [SerializeField]
         [ReadOnly]
@@ -110,6 +111,8 @@ namespace AltSalt.Maestro.Sensors
 
         private float momentumSensitivity => appSettings.GetMomentumSensitivity(this.gameObject, inputGroupKey);
 
+        private float momentumDepletionThreshold => appSettings.GetMomentumDepletionThreshold(this.gameObject, inputGroupKey);
+
         private float gestureTimeMultiplier => appSettings.GetGestureTimeMultiplier(this.gameObject, inputGroupKey);
 
         private float cancelMomentumTimeThreshold => appSettings.GetCancelMomentumTimeThreshold(this.gameObject, inputGroupKey);
@@ -156,22 +159,50 @@ namespace AltSalt.Maestro.Sensors
             touchMonitor.swipeHistoryIndex = 0;
             return touchMonitor;
         }
-        
-#if UNITY_EDITOR
+
+        [SerializeField]
+        private TouchInputManager inputManager;
+
         private void Awake()
         {
+#if UNITY_EDITOR
             _appSettings.PopulateVariable(this, nameof(_appSettings));
+#endif
         }
-#endif        
-        
+
+        private void OnEnable()
+        {
+            inputManager.TouchStart += OnTouchStart;
+            inputManager.TouchDown += OnTouchDown;
+            inputManager.TouchUp += OnTouchUp;
+            inputManager.Swipe += OnSwipe;
+            inputManager.SwipeEnd += OnSwipeEnd;
+        }
+
+        private void OnDisable()
+        {
+            inputManager.TouchStart -= OnTouchStart;
+            inputManager.TouchDown -= OnTouchDown;
+            inputManager.TouchUp -= OnTouchUp;
+            inputManager.Swipe -= OnSwipe;
+            inputManager.SwipeEnd -= OnSwipeEnd;
+        }
+
+        private void TestTouch(Gesture gesture)
+        {
+            Debug.Log("getting called back");
+            Debug.Log(gesture.position);
+        }
+
+
         private void Update()
         {
-            if (Input.touchCount > 0) {
-                Touch touch = Input.GetTouch(0);
-                if (touch.phase == TouchPhase.Began) {
-                    onTouchStart.RaiseEvent(this.gameObject);
-                }
-            }
+            //if (Input.touchCount > 0) {
+            //    UnityEngine.InputSystem.Touch touch = Input.GetTouch(0);
+            //    if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began) {
+            //        onTouchStart.RaiseEvent(this.gameObject);
+            //    }
+            //}
             
             if(hasMomentum == true) {
                 // All momentum is executed through momentumForce. However, we calculate the momentumForce
@@ -180,7 +211,7 @@ namespace AltSalt.Maestro.Sensors
 				
 				momentumUpdate.RaiseEvent(this.gameObject);
 				
-				if (swipeMonitorMomentum.sqrMagnitude < .00001f) {
+				if (swipeMonitorMomentum.sqrMagnitude < momentumDepletionThreshold) {
                     momentumDepleted.RaiseEvent(this.gameObject);
                     swipeMonitorMomentumCache = new Vector2(0, 0);
                     hasMomentum = false;
@@ -267,45 +298,20 @@ namespace AltSalt.Maestro.Sensors
 
         public void OnSwipeEnd(Gesture gesture)
         {
-            // Raise flick event
-            if (gesture.deltaPosition.sqrMagnitude > flickThreshold) {
-                isFlicked = true;
-            } else {
-                isFlicked = false;
-            }
 
-//            // Debug
-//            /**/ swipeMagnitudeDebug.GetVariable(this.gameObject).SetValue(gesture.deltaPosition.sqrMagnitude);
-//            /**/ swipeVectorDebug.GetVariable(this.gameObject).SetValue(gesture.swipeVector);
-//            /**/ swipeDeltaDebug.GetVariable(this.gameObject).SetValue(gesture.deltaPosition);
-//            /**/ gestureActionTimeDebug.GetVariable(this.gameObject).SetValue(gesture.actionTime);
-//            /**/ UpdateVarsDebug.RaiseEvent(this.gameObject);
+            Vector2 displacement = gesture.position - gesture.startPosition;
+            Vector2 velocity = displacement / gesture.actionTime;
 
-            gestureActionTime = gesture.actionTime;
+            // Define a time threshold for the swipe and maximum modifier value
+            float maxGestureTime = 0.5f; // Adjust this value based on your needs
+            
+            // Calculate the modifier based on the gesture time
+            float modifier = Mathf.Clamp(gesture.actionTime / maxGestureTime, 0, 1);
 
-            // Cancel momentum on certain long swipe gestures with low delta at the end of the movement.
-            if(gesture.deltaPosition.sqrMagnitude < cancelMomentumMagnitudeThreshold && gesture.actionTime > cancelMomentumTimeThreshold) {
-                momentumDepleted.RaiseEvent(this.gameObject);
-                onSwipeEnd.RaiseEvent(this.gameObject);
-                return;
-            }
+            // Apply the modifier to the velocity
+            Vector2 modifiedVelocity = velocity * (1 - modifier);;
 
-            Vector2 swipeVector = gesture.position - gesture.startPosition;
-
-            // We use momentumMinMax to clamp the value, but as of this writing that
-            // value is set to 1000, which means that most swipes won't get clamped at all.
-            // I leave this functionality here in case we do need to use it at some point.
-            Vector2 swipeEndForce = NormalizeVectorInfo(swipeVector, momentumMinMax);
-
-            // Using swipeEndForce, run through a function that
-            // allows us to adjust momentum sensitivity, if desired
-            Vector2 swipeMomentum = Utils.ExponentiateV2(swipeEndForce, momentumSensitivity);
-
-            // Our swipe time generally comes back less than 1 - so let's multiply
-            // by 100, because dividing by a decimal makes our swipe too intense
-            float normalizedGestureTime = gesture.actionTime * gestureTimeMultiplier;
-
-            AddMomentum(swipeMomentum / normalizedGestureTime);
+            AddMomentum(modifiedVelocity * momentumSensitivity);
 
 			isSwiping = false;
             
