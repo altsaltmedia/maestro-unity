@@ -82,6 +82,11 @@ namespace AltSalt.Maestro
         public BoolReference musicEnabled => _musicEnabled;
 
         [SerializeField, Required]
+        private FloatReference _masterVolume = new FloatReference();
+
+        public FloatReference masterVolume => _masterVolume;
+
+        [SerializeField, Required]
         private BoolReference _soundEffectsEnabled = new BoolReference();
 
         public BoolReference soundEffectsEnabled => _soundEffectsEnabled;

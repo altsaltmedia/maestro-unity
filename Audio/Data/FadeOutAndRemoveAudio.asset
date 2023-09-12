@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df7551c54cc6d4969a45a8d769935a8e, type: 3}
-  m_Name: PlayAudio
+  m_Name: FadeOutAndRemoveAudio
   m_EditorClassIdentifier: 
   registrationNotice: This object and its dependents will be registered whenever
     the RegisterDependencies tool is used.
@@ -18,17 +18,5 @@ MonoBehaviour:
   _logListenersOnRegister: 0
   _logListenersOnRaise: 0
   _description: 
-  requiredParameters:
-  - description: AudioClipBundle containing audio clip
-    dataType: 4
-    customKey: 0
-    _customKey: {fileID: 0}
-  optionalParameters:
-  - description: Whether to loop the audio
-    dataType: 2
-    customKey: 1
-    _customKey: {fileID: 11400000, guid: 1ebc7f3fa274d463a8256066c48e2089, type: 2}
-  - description: The volume of the clip
-    dataType: 1
-    customKey: 1
-    _customKey: {fileID: 11400000, guid: 8b9af6247445a4d8d89fb45f6fa8e470, type: 2}
+  requiredParameters: []
+  optionalParameters: []

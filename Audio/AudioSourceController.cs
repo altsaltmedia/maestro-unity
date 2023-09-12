@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 namespace AltSalt.Maestro.Audio
 {
@@ -49,8 +50,11 @@ namespace AltSalt.Maestro.Audio
                     volume = complexPayload.GetFloatValue(pitchKey);
                 }
 
-                AudioElement audioElement = new AudioElement(audioPrefab, transform, audioClipBundle.audioClipDataList[i], loopClip, volume, pitch, audioClipBundle);
-                audioElements.Add(audioElement);
+                // Do not play the clip if it's already been registered
+                if(!audioElements.Exists( x => x.audioClipBundle == audioClipBundle)) {
+                    AudioElement audioElement = new AudioElement(audioPrefab, transform, audioClipBundle.audioClipDataList[i], loopClip, volume, pitch, audioClipBundle);
+                    audioElements.Add(audioElement);
+                }
             }
         }
 
@@ -86,6 +90,33 @@ namespace AltSalt.Maestro.Audio
             }
         }
 
+        public void CallFadeOutAndRemoveAudioClips(ComplexPayload complexPayload) {
+            StartCoroutine(FadeOutAndRemoveAudioClips(complexPayload));
+        }
+
+
+        private IEnumerator FadeOutAndRemoveAudioClips(ComplexPayload complexPayload)
+        {
+            AudioClipBundle audioClipBundle = complexPayload.GetScriptableObjectValue(DataType.scriptableObjectType) as AudioClipBundle;
+
+            for (int i = 0; i < audioElements.Count; i++)
+            {
+                if (audioElements[i].audioClipBundle == audioClipBundle)
+                {
+                    yield return StartCoroutine(audioElements[i].FadeOut());
+                }
+            }
+
+            for (int i = audioElements.Count - 1; i >= 0; i--)
+            {    
+                if (audioElements[i].audioClipBundle == audioClipBundle)
+                {
+                    Destroy(audioElements[i].audioSource.gameObject);
+                    audioElements.RemoveAt(i);
+                }   
+            }
+        }
+
         [Serializable]
         class AudioElement
         {
@@ -108,9 +139,18 @@ namespace AltSalt.Maestro.Audio
                 audioClipBundle = referenceBundle;
             }
 
-            public void FadeOut()
+            public IEnumerator FadeOut(Action callback = null)
             {
-                DOTween.To(() => audioSource.volume, x => audioSource.volume = x, 0, 5f).OnComplete(StopAudio);
+                bool isFadingOut = true;
+
+                DOTween.To(() => audioSource.volume, x => audioSource.volume = x, 0, 1f).OnComplete(() => {
+                    StopAudio();
+                    isFadingOut = false;
+                });
+
+                while (isFadingOut == true) {
+                    yield return null;
+                }
             }
 
             void StopAudio()

@@ -14,5 +14,10 @@ namespace AltSalt.Maestro.Audio
         {
             AudioListener.volume = 0;
         }
+
+        public void SetVolume(FloatVariable floatVariable)
+        {
+            AudioListener.volume = floatVariable.value;
+        }
     }
-}
+}   
