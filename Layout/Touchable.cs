@@ -6,7 +6,7 @@ namespace AltSalt.Maestro.Layout
 {
     [RequireComponent(typeof(ResizableBoxCollider2D))]
     [ExecuteInEditMode]
-    public class Touchable : MonoBehaviour
+    public class Touchable : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         [FormerlySerializedAs("active")]
         [SerializeField]
@@ -22,7 +22,12 @@ namespace AltSalt.Maestro.Layout
 
         private GameObjectGenericAction action => _action;
 
-        
+        [SerializeField]
+        private GameObjectGenericAction _mouseUpAction;
+
+        private GameObjectGenericAction mouseUpAction => _mouseUpAction;
+
+
         private BoxCollider2D _boxCollider;
 
         private BoxCollider2D boxCollider
@@ -44,15 +49,22 @@ namespace AltSalt.Maestro.Layout
         }
         
 
-        public void OnMouseDown()
+        public void OnPointerDown(PointerEventData pointerEventData)
         {
             // Make sure not only that we're active, but
             // that the user isn't pressing a UI element
-            if(active == true && EventSystem.current.currentSelectedGameObject == null) {
+            if(active == true) {
                 action.Invoke(this.gameObject);
             }
         }
-        
+
+        public void OnPointerUp(PointerEventData pointerEventData)
+        {
+            if (active == true) {
+                mouseUpAction.Invoke(this.gameObject);
+            }
+        }
+
         private void Start()
         {
             if (active == false) {
