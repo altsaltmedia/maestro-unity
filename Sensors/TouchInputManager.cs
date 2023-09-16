@@ -14,6 +14,8 @@ namespace AltSalt.Maestro.Sensors {
         public event Action<Gesture> Swipe;
         public event Action<Gesture> SwipeEnd;
 
+        public event Action<Vector2> Scroll;
+
         private bool gestureStarted = false;
         private Vector2 startPosition;
         private Vector2 previousPosition;
@@ -24,10 +26,11 @@ namespace AltSalt.Maestro.Sensors {
         private void Awake()
         {
             playerInput = GetComponent<PlayerInput>();
-            playerInput.actions["InputStart"].performed += OnAction;
+            playerInput.actions["PointerInputStart"].performed += OnPointerInputAction;
+            playerInput.actions["ScrollInput"].performed += OnScrollAction;
         }
 
-        protected void OnAction(InputAction.CallbackContext context)
+        protected void OnPointerInputAction(InputAction.CallbackContext context)
         {
             var control = context.control;
             var device = control.device;
@@ -50,15 +53,18 @@ namespace AltSalt.Maestro.Sensors {
                     TouchStart?.Invoke(new Gesture { position = pointerInput.Position });
                 }
 
-                TouchDown?.Invoke(new Gesture { position = pointerInput.Position, actionTime = currentTime - gestureStartTime });
+                //TouchDown?.Invoke(new Gesture { position = pointerInput.Position, actionTime = currentTime - gestureStartTime });
 
-                if(isDragging == false && startPosition.Equals(pointerInput.Position) == false ) {
+                if (isDragging == false && startPosition.Equals(pointerInput.Position) == false)
+                {
                     isDragging = true;
                 }
 
-                if(isDragging) {
+                if (isDragging)
+                {
                     Swipe?.Invoke(
-                        new Gesture {
+                        new Gesture
+                        {
                             position = pointerInput.Position,
                             deltaPosition = pointerInput.Position - previousPosition,
                             actionTime = currentTime - gestureStartTime,
@@ -66,13 +72,17 @@ namespace AltSalt.Maestro.Sensors {
                         }
                     );
                 }
-                
-            } else {
+
+            }
+            else
+            {
                 TouchUp?.Invoke(new Gesture { });
 
-                if(isDragging) {
+                if (isDragging)
+                {
                     SwipeEnd?.Invoke(
-                        new Gesture {
+                        new Gesture
+                        {
                             position = pointerInput.Position,
                             deltaPosition = pointerInput.Position - previousPosition,
                             actionTime = currentTime - gestureStartTime,
@@ -85,6 +95,12 @@ namespace AltSalt.Maestro.Sensors {
             }
             previousTime = currentTime;
             previousPosition = pointerInput.Position;
+        }
+
+        protected void OnScrollAction(InputAction.CallbackContext context)
+        {
+            var value = context.ReadValue<Vector2>();
+            Scroll?.Invoke(value);
         }
     }
 }

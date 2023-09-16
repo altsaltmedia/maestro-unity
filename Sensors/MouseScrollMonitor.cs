@@ -33,6 +33,9 @@ namespace AltSalt.Maestro.Sensors
             set => appSettings.SetMouseScrollDelta(this.gameObject, inputGroupKey, value);
         }
 
+        [SerializeField]
+        private TouchInputManager inputManager;
+
         private SimpleEvent onScrollEnd => appSettings.GetOnScrollEnd(this.gameObject, inputGroupKey).GetVariable() as SimpleEvent;
             
         private float mouseScrollSensitivity => appSettings.GetMouseScrollSensitivity(this.gameObject, userDataKey);
@@ -52,9 +55,19 @@ namespace AltSalt.Maestro.Sensors
         }
 #endif
 
-        private void Update()
+        private void OnEnable()
         {
-            float delta = Input.mouseScrollDelta.y * mouseScrollSensitivity * -1f;
+            inputManager.Scroll += OnScroll;
+        }
+
+        private void OnDisable()
+        {
+            inputManager.Scroll -= OnScroll;
+        }
+
+        private void OnScroll(Vector2 scroll)
+        {
+            float delta = scroll.y * mouseScrollSensitivity * -1f;
 
             if (Mathf.Abs(delta) > 0) {
                 mouseScrollDelta = delta;

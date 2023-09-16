@@ -1,5 +1,5 @@
 {
-    "name": "TestControls",
+    "name": "MaestroControls",
     "maps": [
         {
             "name": "Player",
@@ -967,7 +967,7 @@
             "id": "3e37d5d5-8d39-4854-8c76-fc8d0dcb6af9",
             "actions": [
                 {
-                    "name": "InputStart",
+                    "name": "PointerInputStart",
                     "type": "PassThrough",
                     "id": "9c9008c2-0103-4578-91c8-6933feef449a",
                     "expectedControlType": "",
@@ -976,18 +976,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "InputStartOld",
+                    "name": "ScrollInput",
                     "type": "PassThrough",
-                    "id": "9bbdd0b2-866c-4cff-af1b-3f586783463c",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Scroll",
-                    "type": "PassThrough",
-                    "id": "5530ca80-eafa-4181-a124-e7f0c28bbb63",
+                    "id": "29e0ec40-e596-4094-b2aa-0fdb66b474b7",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -1002,7 +993,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "InputStart",
+                    "action": "PointerInputStart",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1013,7 +1004,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse;Touch",
-                    "action": "InputStart",
+                    "action": "PointerInputStart",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1024,86 +1015,20 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse;Touch",
-                    "action": "InputStart",
+                    "action": "PointerInputStart",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "",
-                    "id": "109b3bef-c606-4cf4-9e33-90d9ffbbbef3",
-                    "path": "<Touchscreen>/primaryTouch/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Touch",
-                    "action": "Scroll",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b1edecc8-864d-4d68-9574-da060ca199f2",
-                    "path": "<Mouse>/position",
+                    "id": "a21885de-f6e1-42df-aeb5-67f612d91227",
+                    "path": "<Mouse>/scroll",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Scroll",
+                    "action": "ScrollInput",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1660db08-9f41-4122-880d-1485e2051955",
-                    "path": "<Touchscreen>/primaryTouch/press",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": "Touch",
-                    "action": "InputStartOld",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d7cb99c0-bb5c-415f-86db-83520354e43a",
-                    "path": "<Mouse>/press",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "InputStartOld",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "PointerInput",
-                    "id": "9dc80c1f-f067-47eb-af98-a4aeb757dd4a",
-                    "path": "PointerInput",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "InputStartOld",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "contact",
-                    "id": "2437157d-2158-4d96-9ffa-9cbd1aaf84ae",
-                    "path": "<Pointer>/press",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "InputStartOld",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "position",
-                    "id": "e7d2f624-c36b-4734-9e14-152f197b93e8",
-                    "path": "<Pointer>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "InputStartOld",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         }
