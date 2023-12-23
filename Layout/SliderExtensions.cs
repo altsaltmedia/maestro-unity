@@ -25,9 +25,15 @@ namespace AltSalt.Maestro.Layout
             set => _slider = value;
         }
 
-        public void SetValue(FloatVariable targetVariable)
+        public void SetSliderValueToVariable(FloatVariable targetVariable)
         {
             slider.value = targetVariable.value;
+        }
+
+        public void SetVariableToSliderValue(FloatVariable targetVariable)
+        {
+            targetVariable.StoreCaller(this.gameObject);
+            targetVariable.SetValue(slider.value);
         }
     }
 }
