@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace AltSalt.Maestro
 {
+    [CreateAssetMenu(menuName = "Maestro/Maestro Config")]
     public class MaestroConfig : ScriptableObject
     {
         [SerializeField]

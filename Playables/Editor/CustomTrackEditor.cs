@@ -10,7 +10,7 @@ namespace AltSalt.Maestro
         public override TrackDrawOptions GetTrackOptions(TrackAsset track, Object binding)
         {
             TrackDrawOptions drawOptions = base.GetTrackOptions(track, binding);
-            drawOptions.minimumHeight = 15f;
+            drawOptions.minimumHeight = 14f;
             return drawOptions;
         }
     }

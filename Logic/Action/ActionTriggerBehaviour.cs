@@ -65,6 +65,13 @@ namespace AltSalt.Maestro.Logic
 
         public void CallPerformActions(GameObject callingObject)
         {
+            if (logCallersOnRaise == true || AppSettings.logEventCallersAndListeners == true)
+            {
+                Debug.Log($"Action Trigger on {this.gameObject.name} called!", this.gameObject);
+                Debug.Log($"Call executed by {callingObject.name}", callingObject);
+                Debug.Log("--------------------------");
+            }
+
             if (callingObject == null) {
                 throw new UnassignedReferenceException("You must specify a calling game object.");
             }
