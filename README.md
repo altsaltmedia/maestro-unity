@@ -11,6 +11,7 @@ Dependencies
 Currently, the following paid third party Unity plugin must be installed for Maestro to work:
 
 [Sirenix Odin Inspector](https://odininspector.com/)
+
 [DoTween Pro](https://dotween.demigiant.com/pro.php)
 
 Other Maestro Versions
