@@ -32,5 +32,11 @@ namespace AltSalt.Maestro.Layout
         {
             rectTransform.localEulerAngles = targetValue.value;
         }
+
+        [Button(ButtonSizes.Large)]
+        public void SetHeight(float targetValue)
+        {
+            rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, targetValue);
+        }
     }
 }
