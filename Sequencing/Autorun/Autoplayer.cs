@@ -390,14 +390,16 @@ namespace AltSalt.Maestro.Sequencing.Autorun
                 }
             }
             
-            throw new Exception("Target sequence not found. Did you forget to assign an InputController or MasterController?");
+            Debug.Log("Target sequence not found. Did you forget to assign an InputController or MasterController?");
+            autorunData = null;
+            return false;
         }
 
         /// <summary>
         /// By default, we disable autoplay when app utils get requested,
         /// or a swipe begins.
         /// </summary>
-        public void DeactivateAutoplayAllSequences()
+        public void DeactivateAutoplayAllSequences(GameObject callingObject)
         {
             for (int q = 0; q < autorunController.autorunData.Count; q++) {
                 Sequence sequence = autorunController.autorunData[q].sequence;
