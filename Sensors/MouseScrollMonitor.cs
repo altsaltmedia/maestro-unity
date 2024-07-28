@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.UIElements;
+#if UNITY_IOS
+using UnityEngine.iOS;
+#endif
 
 namespace AltSalt.Maestro.Sensors
 {
@@ -48,6 +52,31 @@ namespace AltSalt.Maestro.Sensors
             set => _previousMouseScroll = value;
         }
 
+//#if UNITY_IOS
+//        private void Update()
+//        {
+//            if (Device.iosAppOnMac)
+//            {
+//                Debug.Log("on mac");
+//                float delta = Input.GetAxis("Mouse ScrollWheel") * mouseScrollSensitivity * -1f;
+//                Debug.Log(delta);
+
+//                if (Mathf.Abs(delta) > 0)
+//                {
+//                    mouseScrollDelta = delta;
+//                }
+
+//                if (Mathf.Abs(previousMouseScroll) > 0 && delta == 0)
+//                {
+//                    onScrollEnd.StoreCaller(this.gameObject);
+//                    onScrollEnd.SignalChange();
+//                }
+
+//                previousMouseScroll = delta;
+//            }
+//        }
+//#endif
+
 #if UNITY_EDITOR
         private void Awake()
         {
@@ -57,6 +86,10 @@ namespace AltSalt.Maestro.Sensors
 
         private void OnEnable()
         {
+            if (!inputManager)
+            {
+                inputManager = GameObject.Find("TouchInputManager").GetComponent<TouchInputManager>();
+            }
             inputManager.Scroll += OnScroll;
         }
 
@@ -66,19 +99,21 @@ namespace AltSalt.Maestro.Sensors
         }
 
         private void OnScroll(Vector2 scroll)
-        {
+        {            
             float delta = scroll.y * mouseScrollSensitivity * -1f;
 
-            if (Mathf.Abs(delta) > 0) {
+            if (Mathf.Abs(delta) > 0)
+            {
                 mouseScrollDelta = delta;
             }
-            
-            if (Mathf.Abs(previousMouseScroll) > 0 && delta == 0) {
+
+            if (Mathf.Abs(previousMouseScroll) > 0 && delta == 0)
+            {
                 onScrollEnd.StoreCaller(this.gameObject);
                 onScrollEnd.SignalChange();
             }
-            
-            previousMouseScroll = delta;
+
+            previousMouseScroll = delta;      
         }
     }
     
