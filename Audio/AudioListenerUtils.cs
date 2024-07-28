@@ -5,9 +5,23 @@ namespace AltSalt.Maestro.Audio
 {
     public class AudioListenerUtils : MonoBehaviour
     {
+        [SerializeField]
+        public float _initialVolume = 1;
+
+        public float initialVolume
+        {
+            get => _initialVolume;
+            set => _initialVolume = value;
+        }
+
+        private void Start()
+        {
+            AudioListener.volume = initialVolume;
+        }
+
         public void ActivateVolume(GameObject callingObject)
         {
-            AudioListener.volume = 1;
+            AudioListener.volume = initialVolume;
         }
 
         public void DeactivateVolume(GameObject callingObject)
