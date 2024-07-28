@@ -114,13 +114,19 @@ namespace AltSalt.Maestro
         private FloatReference _mouseScrollDelta = new FloatReference();
 
         public FloatReference mouseScrollDelta => _mouseScrollDelta;
-        
 
-    #endregion
+        [SerializeField]
+        [FoldoutGroup("Calculations")]
+        private FloatReference _currentMasterElapsedTime = new FloatReference();
 
-    
-    #region Events
-    
+        public FloatReference currentMasterElapsedTime => _currentMasterElapsedTime;
+
+
+        #endregion
+
+
+        #region Events
+
         [Required]
         [FoldoutGroup("Events")]
         [SerializeField]

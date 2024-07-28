@@ -491,7 +491,20 @@ namespace AltSalt.Maestro
         {
             return inputData.GetInputGroup(inputGroupKey).mouseScrollDelta.SetValue(callingObject, targetValue);
         }
-        
+
+
+        // Current Master Sequence Elapsed Time
+
+        public float GetCurrentMasterElapsedTime(GameObject callingObject, InputGroupKey inputGroupKey)
+        {
+            return inputData.GetInputGroup(inputGroupKey).currentMasterElapsedTime.GetValue();
+        }
+
+        public FloatVariable SetCurrentMasterElapsedTime(GameObject callingObject, InputGroupKey inputGroupKey, float targetValue)
+        {
+            return inputData.GetInputGroup(inputGroupKey).currentMasterElapsedTime.SetValue(callingObject, targetValue);
+        }
+
 
         // Axis Transition Spread
 
