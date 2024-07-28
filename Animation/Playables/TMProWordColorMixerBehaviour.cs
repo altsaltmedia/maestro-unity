@@ -20,19 +20,11 @@ namespace AltSalt.Maestro.Animation
             set => _textInfo = value;
         }
 
-        private int _wordCount;
-
-        private int wordCount
-        {
-            get => _wordCount;
-            set => _wordCount = value;
-        }
-
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
             trackBinding = playerData as TMP_Text;
 
-            if (!trackBinding)
+            if (!trackBinding || trackBinding.gameObject.activeInHierarchy == false)
                 return;
 
             if (trackBindingComponent == null) {
@@ -41,8 +33,7 @@ namespace AltSalt.Maestro.Animation
             }
 
             textInfo = trackBinding.textInfo;
-            wordCount = textInfo.wordCount;
-
+            
             inputCount = playable.GetInputCount ();
             
             for (int i = 0; i < inputCount; i++)

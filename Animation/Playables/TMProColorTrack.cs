@@ -13,8 +13,8 @@ namespace AltSalt.Maestro.Animation
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
             StoreClipProperties(go);
-            ScriptPlayable<TMProColorMixerBehaviour> trackPlayable = ScriptPlayable<TMProColorMixerBehaviour>.Create(graph, inputCount);
-            TMProColorMixerBehaviour behaviour = trackPlayable.GetBehaviour();
+            ScriptPlayable<TMProWordColorMixerBehaviour> trackPlayable = ScriptPlayable<TMProWordColorMixerBehaviour>.Create(graph, inputCount);
+            TMProWordColorMixerBehaviour behaviour = trackPlayable.GetBehaviour();
             StoreMixerProperties(go, behaviour);
             return trackPlayable;
         }
