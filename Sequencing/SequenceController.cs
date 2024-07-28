@@ -137,16 +137,25 @@ namespace AltSalt.Maestro.Sequencing
             set => _sequenceUpdateState = value;
         }
 
-#if UNITY_EDITOR
+
         private void Awake()
         {
+            EnableAudioTracks();
+#if UNITY_EDITOR
             _enableDynamicElement.PopulateVariable(this, nameof(_enableDynamicElement));
             _disableDynamicElement.PopulateVariable(this, nameof(_disableDynamicElement));
             
             enableDynamicElement.RaiseEvent(this.gameObject, this);
+#endif
+        }
+
+#if UNITY_EDITOR
+        private void OnDestroy()
+        {
+            EnableAudioTracks();
         }
 #endif
-        
+
         /// <summary>
         /// Since scriptable objects by default cannot serialize references to
         /// game objects and Monobehaviours, we set the sequence controller
@@ -181,6 +190,12 @@ namespace AltSalt.Maestro.Sequencing
             timelineInstanceConfig.timelineUpdated += OnTimelineUpdated;
             timelineInstanceConfig.pauseSequenceRequested += OnPauseSequenceRequested;
             timelineInstanceConfig.resumeSequenceRequested += OnResumeSequenceRequested;
+
+            if(masterSequence.rootConfig.appSettings.GetIsScrubbing(this.gameObject, masterSequence.rootConfig.inputGroupKey) == true) {
+                DisableAudioTracks();
+            } else {
+                EnableAudioTracks();
+            }
         }
 
         private void OnDisable()
@@ -232,10 +247,6 @@ namespace AltSalt.Maestro.Sequencing
 
         public void ActivateForwardAutoplayState(float targetSpeed)
         {
-            if (audioMuted == true) {
-                EnableAudioSources();
-            }
-            
             if (sequenceUpdateState == SequenceUpdateState.ManualUpdate ||
                 rootPlayable.GetPlayState() != PlayState.Playing || rootPlayable.GetSpeed() < 1) {
                 playableDirector.Play();
@@ -247,10 +258,6 @@ namespace AltSalt.Maestro.Sequencing
         
         public void ActivateManualUpdateState()
         {
-            if (audioMuted == false) {
-                MuteAudioSources();
-            }
-            
             // We must be playing in manual update state in order
             // for timeline to evaluate animation tracks
             playableDirector.Play();
@@ -346,47 +353,74 @@ namespace AltSalt.Maestro.Sequencing
             return sequence;
         }
 
-        public void EnableAudioSources()
+        public void EnableAudioAndRebuildGraph(UnityEngine.Object caller)
         {
-            audioMuted = false;
-            
-            var timelineAsset = playableDirector.playableAsset as TimelineAsset;
-            
-            foreach (var track in timelineAsset.GetOutputTracks()) {
-                
-                if (track is AudioTrack audioTrack) {
-            
-                    foreach (var playableBinding in audioTrack.outputs) {
-                        
-                        Object objectBinding = playableDirector.GetGenericBinding(playableBinding.sourceObject);
-            
-                        if (objectBinding is AudioSource audioSource) {
-                            audioSource.mute = false;
-                        }
-                        
-                    }
-                }
+            EnableAudioTracks();
+
+            // We must rebuild the graph to recreate
+            // the playable with the audio enabled
+            playableDirector.Stop();
+            playableDirector.RebuildGraph();
+            if(playableDirector.gameObject.activeSelf == true) {
+                ActivateManualUpdateState();
             }
         }
         
-        public void MuteAudioSources()
+        public void DisableAudioAndRebuildGraph(UnityEngine.Object caller)
         {
-            audioMuted = true;
-            
+            DisableAudioTracks();
+
+            // We must rebuild the graph to remove the playable from
+            // memory, otherwise the audio will continue playing in WebGL
+            playableDirector.Stop();
+            playableDirector.RebuildGraph();
+        }
+
+        public static void EnableAudioTracks(TimelineAsset timelineAsset)
+        {
+            foreach (var track in timelineAsset.GetOutputTracks())
+            {
+                if (track is AudioTrack audioTrack)
+                {
+                    audioTrack.muted = false;
+                }
+            }
+        }
+
+        private void EnableAudioTracks()
+        {
             var timelineAsset = playableDirector.playableAsset as TimelineAsset;
-            
-            foreach (var track in timelineAsset.GetOutputTracks()) {
-                
-                if (track is AudioTrack audioTrack) {
-            
-                    foreach (var playableBinding in audioTrack.outputs) {
-                        
-                        Object objectBinding = playableDirector.GetGenericBinding(playableBinding.sourceObject);
-            
-                        if (objectBinding is AudioSource audioSource) {
-                            audioSource.mute = true;
-                        }
-                    }
+
+            foreach (var track in timelineAsset.GetOutputTracks())
+            {
+                if (track is AudioTrack audioTrack)
+                {
+                    audioTrack.muted = false;
+                }
+            }
+        }
+
+        private void DisableAudioTracks(TimelineAsset timelineAsset)
+        {
+
+            foreach (var track in timelineAsset.GetOutputTracks())
+            {
+                if (track is AudioTrack audioTrack)
+                {
+                    audioTrack.muted = true;
+                }
+            }
+        }
+
+        private void DisableAudioTracks()
+        {
+            var timelineAsset = playableDirector.playableAsset as TimelineAsset;
+
+            foreach (var track in timelineAsset.GetOutputTracks())
+            {
+                if (track is AudioTrack audioTrack)
+                {
+                    audioTrack.muted = true;
                 }
             }
         }
