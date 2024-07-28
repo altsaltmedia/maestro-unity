@@ -193,6 +193,11 @@ namespace AltSalt.Maestro.Sequencing
 
         }
 
+        public void CallActivateNextSequence(Sequence sourceSequence)
+        {
+            ActivateNextSequence(sourceSequence);
+        }
+
         public void UpdateFork(ComplexPayload complexPayload)
         {
             Fork targetFork = complexPayload.GetScriptableObjectValue(forkKey) as Fork;
