@@ -23,11 +23,16 @@ namespace AltSalt.Maestro.Sequencing
             set => _rootConfig = value;
         }
 
+        private float currentMasterElapsedTime
+        {
+            set => rootConfig.appSettings.SetCurrentMasterElapsedTime(this.gameObject, rootConfig.inputGroupKey, value);
+        }
+
         [SerializeField]
         [ReadOnly]
         private ActiveInputModuleData _activeInputModule = new ActiveInputModuleData();
 
-        private ActiveInputModuleData activeInputModule
+        public ActiveInputModuleData activeInputModule
         {
             get => _activeInputModule;
             set => _activeInputModule = value;
@@ -62,6 +67,7 @@ namespace AltSalt.Maestro.Sequencing
                     Init();
                 }
                 _elapsedTime = value;
+                currentMasterElapsedTime = (float) value;
             }
         }
 
@@ -160,7 +166,7 @@ namespace AltSalt.Maestro.Sequencing
             
             SequenceController sequenceController = sequenceControllers.Find(x => x.sequence == targetSequence);
 
-            if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority > activeInputModule.priority)
+            if (string.IsNullOrEmpty(activeInputModule.name) || activeInputModule.name == moduleName || requestPriority >= activeInputModule.priority)
             {
                 activeInputModule = LockInputModule(this, moduleName, requestPriority);
                 
@@ -312,6 +318,19 @@ namespace AltSalt.Maestro.Sequencing
             this.hasActiveSequence = false;
         }
 
+        public void RebuildPlayableGraphs()
+        {
+            if(rootConfig.appSettings.GetIsScrubbing(this.gameObject, rootConfig.inputGroupKey) == false)
+            {
+                for (int i = 0; i < sequenceControllers.Count; i++)
+                {
+                    SequenceController.EnableAudioTracks(sequenceControllers[i].sequence.sourcePlayable as TimelineAsset);
+                    sequenceControllers[i].playableDirector.RebuildGraph();
+                    sequenceControllers[i].ActivateManualUpdateState();
+                }
+            }
+        }
+
         /// <summary>
         /// For now, modules setting elapsed time directly on the MasterSequence
         /// (scrubber and bookmarker) bypass the normal module registration
@@ -358,6 +377,8 @@ namespace AltSalt.Maestro.Sequencing
 
                     targetSequence = sequenceData[targetID].sequence;
                     targetSequence.active = true;
+                    // Mute the audio while we're scrubbing
+                    targetSequence.sequenceController.DisableAudioAndRebuildGraph(caller);
                     targetSequence.sequenceController.gameObject.SetActive(true);
                     
                     // If applicable, evaluate all of the preceding sequences,
@@ -386,6 +407,8 @@ namespace AltSalt.Maestro.Sequencing
 
                         if (z != targetID) {
                             sequenceData[z].sequence.active = false;
+                            // Enable the audio sources so they're ready for playback
+                            // if activated via regular input and not scrubbing
                             sequenceData[z].sequence.sequenceController.gameObject.SetActive(false);
                         }
                     }
