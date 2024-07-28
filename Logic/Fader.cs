@@ -233,7 +233,7 @@ namespace AltSalt.Maestro.Logic
         
         private IEnumerator ShowActivityIndicator()
         {
-            Debug.Log("Showing activity indicator");
+            //Debug.Log("Showing activity indicator");
 #if UNITY_IPHONE
             Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.WhiteLarge);
             Handheld.StartActivityIndicator();
@@ -246,7 +246,7 @@ namespace AltSalt.Maestro.Logic
         
         private IEnumerator HideActivityIndicator()
         {
-            Debug.Log("Hiding activity indicator");
+            //Debug.Log("Hiding activity indicator");
 #if UNITY_IPHONE
             Handheld.StopActivityIndicator();
 #elif UNITY_ANDROID
