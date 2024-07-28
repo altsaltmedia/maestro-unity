@@ -15,21 +15,25 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             set => _activeMasterSequence = value;
         }
 
-        private ComplexEventManualTrigger refreshAppUtils => 
+        private ComplexEventManualTrigger refreshAppUtils =>
             appSettings.GetRefreshAppUtils(this, inputGroupKey);
 
         public override void ConfigureData()
         {
             if (Application.isPlaying == true) return;
-            
+
             // Eventually, likely implement user-defined bookmarks here
+        }
+
+        public void RefreshActiveMasterSequence() {
+            activeMasterSequence =
+                masterSequences.Find(x => x.sequenceControllers.Find(
+                    y => y.sequence.active && y.sequence.canBeScrubbed == true));
         }
 
         public void ActivateNavigationModules()
         {
-            activeMasterSequence = 
-                masterSequences.Find(x => x.sequenceControllers.Find(
-                    y => y.sequence.active && y.sequence.canBeScrubbed == true));
+            RefreshActiveMasterSequence();
 
             if (activeMasterSequence != null) {
                 refreshAppUtils.RaiseEvent(this.gameObject, this);

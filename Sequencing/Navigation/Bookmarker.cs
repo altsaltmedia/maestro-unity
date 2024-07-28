@@ -64,20 +64,6 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             get => lastLoadedSequenceTimeReference.GetValue();
             set => lastLoadedSequenceTimeReference.SetValue(this.gameObject, value);
         }
-        
-        private void OnApplicationPause(bool paused)
-        {
-            if (Application.isPlaying == false) return;
-            
-            SaveBookmark();
-        }
-
-        private void OnApplicationQuit()
-        {
-            if (Application.isPlaying == false) return;
-            
-            SaveBookmark();
-        }
 
         public void ActivateBookmark()
         {
@@ -127,7 +113,26 @@ namespace AltSalt.Maestro.Sequencing.Navigation
                     storeData.RaiseEvent(this.gameObject, complexPayload);
                     break;
                 }
+
+                break;
             }
+        }
+
+        public void DeleteBookmark()
+        {
+            if (moduleActive == false) return;
+
+            hasBookmark = false;
+            lastOpenedScene = "";
+            lastLoadedSequence = "";
+            lastLoadedSequenceTime = 0f;
+
+            ComplexPayload complexPayload = ComplexPayload.CreateInstance();
+            complexPayload.scriptableObjectDictionary.Add(0, hasBookmarkReference.GetVariable());
+            complexPayload.scriptableObjectDictionary.Add(1, lastOpenedSceneReference.GetVariable());
+            complexPayload.scriptableObjectDictionary.Add(2, lastLoadedSequenceReference.GetVariable());
+            complexPayload.scriptableObjectDictionary.Add(3, lastLoadedSequenceTimeReference.GetVariable());
+            storeData.RaiseEvent(this.gameObject, complexPayload);
         }
     }
 }

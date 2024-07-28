@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5286326379595216151}
   - component: {fileID: 6688961520195211194}
+  - component: {fileID: 6961017373590155935}
   - component: {fileID: 749544140532562687}
   m_Layer: 8
   m_Name: Bookmarker
@@ -28,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5308574500125922695}
   m_RootOrder: 0
@@ -51,6 +53,50 @@ MonoBehaviour:
     _isSystemReference: 0
     _referenceName: StoreData
     _variable: {fileID: 11400000, guid: db7806a5976574da4ad42f2d8b4b17ae, type: 2}
+--- !u!114 &6961017373590155935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868510078636146610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 075395367dc814ca381c40bddce961b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onApplicationPause:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6688961520195211194}
+        m_TargetAssemblyTypeName: AltSalt.Maestro.Sequencing.Navigation.Bookmarker,
+          Assembly-CSharp
+        m_MethodName: SaveBookmark
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _onApplicationQuit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6688961520195211194}
+        m_TargetAssemblyTypeName: AltSalt.Maestro.Sequencing.Navigation.Bookmarker,
+          Assembly-CSharp
+        m_MethodName: SaveBookmark
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &749544140532562687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,6 +117,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6688961520195211194}
+        m_TargetAssemblyTypeName: 
         m_MethodName: ActivateBookmark
         m_Mode: 1
         m_Arguments:
@@ -110,6 +157,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5286326379595216151}
   m_Father: {fileID: 0}
@@ -148,6 +196,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3136450081857097390}
+        m_TargetAssemblyTypeName: 
         m_MethodName: ActivateNavigationModules
         m_Mode: 1
         m_Arguments:

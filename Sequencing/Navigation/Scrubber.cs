@@ -9,8 +9,9 @@ namespace AltSalt.Maestro.Sequencing.Navigation
     [RequireComponent(typeof(Slider))]
     public class Scrubber : NavigationModule, IPointerDownHandler, IPointerUpHandler
     {
-        [ReadOnly]
+        
         [ShowInInspector]
+        [SerializeField]
         private NavigationController _navigationController;
 
         protected override NavigationController navigationController
@@ -21,6 +22,7 @@ namespace AltSalt.Maestro.Sequencing.Navigation
         
         private bool isScrubbing
         {
+            get => navigationController.appSettings.GetIsScrubbing(this.gameObject, inputGroupKey);
             set => navigationController.appSettings.SetIsScrubbing(this.gameObject, inputGroupKey, value);
         }
         
@@ -40,9 +42,19 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             get => _slider;
             set => _slider = value;
         }
-        
+
+        [SerializeField]
+        protected GameObjectGenericAction _pointerDownAction;
+
+        private GameObjectGenericAction pointerDownAction => _pointerDownAction;
+
+        [SerializeField]
+        protected GameObjectGenericAction _pointerUpAction;
+
+        private GameObjectGenericAction pointerUpAction => _pointerUpAction;
+
         [ShowInInspector]
-        [ReadOnly]
+        [SerializeField]
         private MasterSequence _activeMasterSequence;
 
         private MasterSequence activeMasterSequence
@@ -64,6 +76,12 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             slider = GetComponent<Slider>();
         }
 
+        private void OnEnable()
+        {
+            slider.maxValue = (float)activeMasterSequence.duration;
+            slider.value = (float)activeMasterSequence.elapsedTime;
+        }
+
         public void RefreshScrubber(ComplexPayload complexPayload)
         {
             navigationController = complexPayload.GetObjectValue(DataType.systemObjectType) as NavigationController;
@@ -73,18 +91,34 @@ namespace AltSalt.Maestro.Sequencing.Navigation
             slider.value = (float)activeMasterSequence.elapsedTime;
         }
 
+        public void RefreshScrubberUsingActiveMasterSequence()
+        {
+            if(isScrubbing == true) {
+                return;
+            }
+
+            slider.value = (float)activeMasterSequence.elapsedTime;
+        }
+
         public void OnPointerDown(PointerEventData eventData)
         {
             isScrubbing = true;
+            activeMasterSequence.SetElapsedTime(this.gameObject, slider.value);
+            pointerDownAction.Invoke(this.gameObject);
         }
         
         public void OnPointerUp(PointerEventData eventData)
         {
             isScrubbing = false;
+            pointerUpAction.Invoke(this.gameObject);
         }
 
         public void ScrubSequence(float newValue)
         {
+            if(isScrubbing == false) {
+                return;
+            }
+
             if (newValue > previousValue) {
                 isReversing = false;
             }
