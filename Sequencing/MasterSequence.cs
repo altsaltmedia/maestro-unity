@@ -5,6 +5,7 @@ using AltSalt.Maestro.Sequencing.Autorun;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.Timeline;
 
 namespace AltSalt.Maestro.Sequencing
 {
