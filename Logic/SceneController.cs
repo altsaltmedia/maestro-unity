@@ -297,6 +297,12 @@ namespace AltSalt.Maestro.Logic
         public void TriggerUnloadScene(ComplexPayload complexPayload)
         {
             string unloadSceneName = complexPayload.GetStringValue(DataType.stringType);
+            
+            if (SceneManager.GetSceneByName(unloadSceneName).IsValid() == false )
+            {
+                return;
+            }
+
             var payloadEvent = complexPayload.GetScriptableObjectValue(this.eventCallbackKey) as SimpleEvent;
             SimpleEvent eventCallback;
             if (payloadEvent != null) {
