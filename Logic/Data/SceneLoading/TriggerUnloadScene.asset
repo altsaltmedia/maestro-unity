@@ -23,4 +23,8 @@ MonoBehaviour:
     dataType: 0
     customKey: 0
     _customKey: {fileID: 0}
-  optionalParameters: []
+  optionalParameters:
+  - description: Simple event - callback
+    dataType: 4
+    customKey: 1
+    _customKey: {fileID: 11400000, guid: 420ddf56ca3e24f8bbd4453eb1c66057, type: 2}
