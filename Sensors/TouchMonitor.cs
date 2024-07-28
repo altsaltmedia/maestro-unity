@@ -170,22 +170,52 @@ namespace AltSalt.Maestro.Sensors
 #endif
         }
 
+        private bool _isTouching = false;
+
+        private bool isTouching
+        {
+            get => _isTouching;
+            set => _isTouching = value;
+        }
+
+        private float _touchStartTime;
+
+        private float touchStartTime
+        {
+            get => _touchStartTime;
+            set => _touchStartTime = value;
+        }
+
         private void OnEnable()
         {
-            inputManager.TouchStart += OnTouchStart;
-            inputManager.TouchDown += OnTouchDown;
-            inputManager.TouchUp += OnTouchUp;
-            inputManager.Swipe += OnSwipe;
-            inputManager.SwipeEnd += OnSwipeEnd;
+            if ( !inputManager )
+            {
+                GameObject inputManagerObject = GameObject.Find("TouchInputManager");
+                if( inputManagerObject ) {
+                    inputManager = inputManagerObject.GetComponent<TouchInputManager>();
+                }
+            }
+
+            if (inputManager)
+            {
+                inputManager.TouchStart += OnTouchStart;
+                //inputManager.TouchDown += OnTouchDown;
+                inputManager.TouchUp += OnTouchUp;
+                inputManager.Swipe += OnSwipe;
+                inputManager.SwipeEnd += OnSwipeEnd;
+            }
         }
 
         private void OnDisable()
         {
-            inputManager.TouchStart -= OnTouchStart;
-            inputManager.TouchDown -= OnTouchDown;
-            inputManager.TouchUp -= OnTouchUp;
-            inputManager.Swipe -= OnSwipe;
-            inputManager.SwipeEnd -= OnSwipeEnd;
+            if (inputManager)
+            {
+                inputManager.TouchStart -= OnTouchStart;
+                //inputManager.TouchDown -= OnTouchDown;
+                inputManager.TouchUp -= OnTouchUp;
+                inputManager.Swipe -= OnSwipe;
+                inputManager.SwipeEnd -= OnSwipeEnd;
+            }
         }
 
         private void TestTouch(Gesture gesture)
@@ -219,6 +249,11 @@ namespace AltSalt.Maestro.Sensors
 					swipeMonitorMomentumCache = new Vector2(swipeMonitorMomentumCache.x * momentumDecay, swipeMonitorMomentumCache.y * momentumDecay);            
 				}
             }
+
+            if(isTouching && (Time.time - touchStartTime) >= pauseMomentumThreshold) {
+                onLongTouch.RaiseEvent(this.gameObject);
+                HaltMomentum();
+            }
         }
 
         public void OnTouchStart(Gesture gesture)
@@ -226,18 +261,22 @@ namespace AltSalt.Maestro.Sensors
             ResetSwipeHistory(this);
             touchStartPosition = gesture.position;
             onTouchStart.RaiseEvent(this.gameObject);
+            isTouching = true;
+            touchStartTime = Time.time;
         }
 
-        public void OnTouchDown(Gesture gesture)
-        {
-            if (!isSwiping && gesture.actionTime >= pauseMomentumThreshold) {
-                onLongTouch.RaiseEvent(this.gameObject);
-                HaltMomentum();
-            }
-        }
+        //public void OnTouchDown(Gesture gesture)
+        //{
+        //    if (!isSwiping && gesture.actionTime >= pauseMomentumThreshold) {
+        //        onLongTouch.RaiseEvent(this.gameObject);
+        //        HaltMomentum();
+        //    }
+        //}
         
         public void OnTouchUp(Gesture gesture)
         {
+            isTouching = false;
+            isSwiping = false;
             onTouchUp.RaiseEvent(this.gameObject);
         }
 

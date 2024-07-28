@@ -203,14 +203,18 @@ namespace AltSalt.Maestro.Sequencing.Touch
         {
             Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
             Touch_Data touchData = touchController.touchDataList.Find(x => x.sequence == targetSequence);
-            touchData.pauseMomentumActive = true;
+            if(touchData != null) {
+                touchData.pauseMomentumActive = true;
+            }
         }
         
         public void OnResumeMomentum(ComplexPayload complexPayload)
         {
             Sequence targetSequence = complexPayload.GetScriptableObjectValue() as Sequence;
             Touch_Data touchData = touchController.touchDataList.Find(x => x.sequence == targetSequence);
-            touchData.pauseMomentumActive = false;
+            if (touchData != null) {
+                touchData.pauseMomentumActive = false;
+            }
         }
     }
 }
