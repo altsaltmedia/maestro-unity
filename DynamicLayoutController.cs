@@ -138,6 +138,14 @@ namespace AltSalt.Maestro.Layout {
             set => _mobilePlayerActive = value;
         }
 
+        private bool _isFullscreen;
+
+        private bool isFullscreen
+        {
+            get => _isFullscreen;
+            set => _isFullscreen = value;
+        }
+
         private void Start()
 		{
 #if !UNITY_EDITOR && UNITY_IOS || UNITY_ANDROID
@@ -146,6 +154,8 @@ namespace AltSalt.Maestro.Layout {
             if (Application.isPlaying == false || refreshLayoutOnStart == true) {
                 RefreshLayout();
             }
+
+            isFullscreen = Screen.fullScreen;
 		}
         
         private void OnDisable()
@@ -172,15 +182,17 @@ namespace AltSalt.Maestro.Layout {
                 }
             };
         }
+#endif
 
         private void Update()
         {
+#if UNITY_EDITOR
             // Do not execute if we are in prefab editing mode
             if (PrefabStageUtility.GetCurrentPrefabStage() != null) {
                 return;
             }
-            
-            if (ScreenResized() == true) {
+#endif
+            if (ScreenResized() == true || isFullscreen != Screen.fullScreen) {
                 RefreshLayout();
             }
         }
@@ -194,7 +206,6 @@ namespace AltSalt.Maestro.Layout {
 
             return false;
         }
-#endif
 
         public void RegisterDynamicElement(ComplexPayload complexPayload)
         {
@@ -302,13 +313,19 @@ namespace AltSalt.Maestro.Layout {
             // in the editor, however, the screen values will be reversed,
             // so we need to account for that in order to get the
             // correct aspect ratio value, i.e. (4:3 = 1.333, 16:9 = 1.777)
-            if (Screen.height > Screen.width) {
-                 deviceAspectRatio = deviceHeight / deviceWidth;
-            }
-            else {
-                 deviceAspectRatio = deviceWidth / deviceHeight;
-            }
-            
+#if UNITY_IOS || UNITY_ANDROID
+                    if (Screen.height > Screen.width) {
+                         deviceAspectRatio = deviceHeight / deviceWidth;
+                    }
+                    else {
+                         deviceAspectRatio = deviceWidth / deviceHeight;
+                    }
+#endif
+#if PLATFORM_STANDALONE_OSX
+            deviceWidth = Screen.safeArea.width;
+            deviceHeight = Screen.safeArea.height;
+            deviceAspectRatio = deviceHeight / deviceWidth;
+#endif
             callback();
         }
 

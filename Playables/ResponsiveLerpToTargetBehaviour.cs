@@ -31,11 +31,7 @@ namespace AltSalt.Maestro
         {
             get
             {
-                if (_sceneAspectRatio == 0) {
-                    _sceneAspectRatio = timelineInstanceConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
-                }
-
-                return _sceneAspectRatio;
+                return timelineInstanceConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack); ;
             }
             set => _sceneAspectRatio = value;
         }
@@ -48,11 +44,7 @@ namespace AltSalt.Maestro
         {
             get
             {
-                if (_sceneWidth == 0) {
-                    _sceneWidth = timelineInstanceConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
-                }
-
-                return _sceneWidth;
+                return timelineInstanceConfig.appSettings.GetCurrentSceneWidth(parentTrack); ;
             }
             set => _sceneWidth = value;
         }
@@ -65,11 +57,7 @@ namespace AltSalt.Maestro
         {
             get
             {
-                if (_sceneHeight == 0) {
-                    _sceneHeight = timelineInstanceConfig.appSettings.GetCurrentSceneAspectRatio(parentTrack);
-                }
-
-                return _sceneHeight;
+                return timelineInstanceConfig.appSettings.GetCurrentSceneHeight(parentTrack); ;
             }
             set => _sceneHeight = value;
         }

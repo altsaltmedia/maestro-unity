@@ -28,6 +28,7 @@ namespace AltSalt.Maestro.Sensors {
             playerInput = GetComponent<PlayerInput>();
             playerInput.actions["PointerInputStart"].performed += OnPointerInputAction;
             playerInput.actions["ScrollInput"].performed += OnScrollAction;
+            playerInput.actions["ExitFullscreen"].performed += OnExitFullscreenAction;
         }
 
         protected void OnPointerInputAction(InputAction.CallbackContext context)
@@ -101,6 +102,11 @@ namespace AltSalt.Maestro.Sensors {
         {
             var value = context.ReadValue<Vector2>();
             Scroll?.Invoke(value);
+        }
+
+        protected void OnExitFullscreenAction(InputAction.CallbackContext context)
+        {
+            Screen.fullScreen = false;
         }
     }
 }
